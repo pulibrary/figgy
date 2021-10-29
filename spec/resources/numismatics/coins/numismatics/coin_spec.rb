@@ -25,6 +25,14 @@ RSpec.describe Numismatics::Coin do
     expect(coin.identifier).to eq ["ark:/99999/fk4"]
   end
 
+  it "stores coin_number as an integer" do
+    change_set = ChangeSet.for(coin)
+    change_set.validate(coin_number: "200")
+    csp = ChangeSetPersister.default
+    coin = csp.save(change_set: change_set)
+    expect(coin.coin_number).to eq 200
+  end
+
   describe "#pdf_file" do
     let(:file_metadata) { FileMetadata.new mime_type: ["application/pdf"], use: [Valkyrie::Vocab::PCDMUse.OriginalFile] }
     it "retrieves only PDF FileSets" do
