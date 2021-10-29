@@ -106,7 +106,7 @@ RSpec.feature "Numismatics::Coins" do
         find_description: "test value",
         find_feature: "test value",
         find_locus: "test value",
-        find_number: "test value",
+        find_number: "101",
         find_place_id: find_place.id,
         loan: loan,
         private_note: "test value",
@@ -132,7 +132,7 @@ RSpec.feature "Numismatics::Coins" do
       expect(page).to have_css ".attribute.find_description", text: "test value"
       expect(page).to have_css ".attribute.find_feature", text: "test value"
       expect(page).to have_css ".attribute.find_locus", text: "test value"
-      expect(page).to have_css ".attribute.find_number", text: "test value"
+      expect(page).to have_css ".attribute.find_number", text: "101"
       expect(page).to have_css ".attribute.find_place", text: "city, state, region"
       expect(page).to have_css ".attribute.loan", text: "type, exhibit, note"
       expect(page).to have_css ".attribute.numismatic_collection", text: "test value"

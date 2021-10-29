@@ -37,6 +37,10 @@ module Numismatics
 
     delegate :id, :label, to: :accession, prefix: true
 
+    def find_number
+      Array.wrap(super.to_s)
+    end
+
     def call_number
       "Coin #{coin_number}"
     end
