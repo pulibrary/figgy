@@ -55,6 +55,7 @@ RSpec.describe LinkedData::LinkedSimpleResource do
         jsonld = linked_resource.as_jsonld
         expect(jsonld["latitude"]).to eq [lat]
         expect(jsonld["longitude"]).to eq [lon]
+        expect { jsonld.fetch("coverage_point") }.to raise_error(KeyError)
       end
     end
   end
