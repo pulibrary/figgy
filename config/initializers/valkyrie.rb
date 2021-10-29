@@ -253,16 +253,28 @@ Rails.application.config.to_prepare do
     TitleIndexer,
     TrackIndexer
   )
-  # Registers a metadata adapter for storing and indexing resource metadata into Solr
-  # (see Valkyrie::Persistence::Solr::MetadataAdapter)
-  Valkyrie::MetadataAdapter.register(
-    Valkyrie::Persistence::Solr::MetadataAdapter.new(
-      connection: Blacklight.default_index.connection,
-      resource_indexer: indexer,
-      write_only: true
-    ),
-    :index_solr
+
+  solr_adapter = Valkyrie::Persistence::Solr::MetadataAdapter.new(
+    connection: Blacklight.default_index.connection,
+    resource_indexer: indexer,
+    write_only: true
   )
+  if Figgy.index_read_only?
+    # Solr adapter will error to rollback database writes via composite adapter
+    # Use this when doing a long reindexing process to make sure that CDL
+    # continues to work but new items aren't added to the database
+    Valkyrie::MetadataAdapter.register(
+      ReadOnlyAdapter.new(solr_adapter),
+      :index_solr
+    )
+  else
+    # Registers a metadata adapter for storing and indexing resource metadata into Solr
+    # (see Valkyrie::Persistence::Solr::MetadataAdapter)
+    Valkyrie::MetadataAdapter.register(
+      solr_adapter,
+      :index_solr
+    )
+  end
 
   # Adapter for reindexing - disables commits
   Valkyrie::MetadataAdapter.register(

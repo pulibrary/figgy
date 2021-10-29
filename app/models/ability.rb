@@ -12,6 +12,7 @@ class Ability
       send "#{role}_permissions" if current_user.send "#{role}?"
     end
     cannot [:create, :update, :destroy], :all if Figgy.read_only_mode
+    cannot [:create, :update, :destroy], :all if Figgy.index_read_only?
   end
 
   # Abilities that should only be granted to admin users

@@ -183,5 +183,28 @@ To set this up in development, do the following:
 1. `lpass login <email>`
 1. `bundle exec rake setup_keys`
 
+## Read-only Maintenance Windows
+
+There are two types of read-only mode.
+
+### Read-only Mode
+
+This disables writing to the Postgres database. There's a playbook to switch it
+on and off in Ansible. Documentation can be found here:
+[https://github.com/pulibrary/princeton_ansible/blob/9d63e9b7f5c7af358ec439d0226372e241d490d6/playbooks/figgy_toggle_readonly.yml#L5](https://github.com/pulibrary/princeton_ansible/blob/9d63e9b7f5c7af358ec439d0226372e241d490d6/playbooks/figgy_toggle_readonly.yml#L5)
+
+### Index Read-Only
+
+This disables writing to the Solr index, but allows writes to the Postgres
+database which don't get indexed, such as CDL charges or new user creation. This
+is most useful for long reindexing operations where we want to minimally impact
+our patrons.
+
+To enable:
+
+1. Create a PR which configures `index_read_only` in `config/config.yml` for
+   production or staging and deploy the branch.
+1. Deploy `main` again when reindexing is complete.
+
 ## More
 For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
