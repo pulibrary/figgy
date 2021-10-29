@@ -346,3 +346,6 @@ Style/IfUnlessModifier:
 Lint/HandleExceptions:
   Exclude:
     - 'lib/tasks/performance.rake'
+Naming/ConstantName:
+  Exclude:
+    - 'app/types/types.rb'
