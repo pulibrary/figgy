@@ -28,11 +28,11 @@ module LinkedData
     end
 
     def latitude
-      Array.wrap(resource.coverage_point).map(&:lat)
+      Array.wrap(resource.coverage_point).map(&:lat).map(&:to_s)
     end
 
     def longitude
-      Array.wrap(resource.coverage_point).map(&:lon)
+      Array.wrap(resource.coverage_point).map(&:lon).map(&:to_s)
     end
 
     private
