@@ -108,7 +108,7 @@ class GeoResourceReindexer
     end
 
     def messenger
-      @messenger ||= EventGenerator.new
+      EventGenerator.new
     end
 
     def query_service
