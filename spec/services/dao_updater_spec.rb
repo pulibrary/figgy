@@ -40,7 +40,7 @@ RSpec.describe DaoUpdater do
 
         updater = described_class.new(change_set: ChangeSet.for(resource), change_set_persister: change_set_persister)
 
-        updater.update!
+        expect { updater.update! }.to raise_error(Aspace::Client::ArchivalObjectNotFound)
       end
     end
   end

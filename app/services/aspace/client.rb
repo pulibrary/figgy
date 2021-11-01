@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Aspace
   class Client < ArchivesSpace::Client
+    class ArchivalObjectNotFound < StandardError; end
+
     def self.config
       ArchivesSpace::Configuration.new(
         base_uri: Figgy.config["archivespace_url"],
@@ -20,6 +22,7 @@ module Aspace
       # Check every repository, we don't store things by repository in Figgy.
       repositories.each do |repository|
         archival_object = get("#{repository['uri']}/find_by_id/archival_objects?ref_id[]=#{component_id}").parsed
+        raise ArchivalObjectNotFound if archival_object.empty?
         if archival_object["archival_objects"]&.first.present?
           return find_archival_object_by_ref(ref: archival_object["archival_objects"].first["ref"])
         end
