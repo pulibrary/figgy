@@ -23,19 +23,19 @@ end
 # end
 
 every :day, at: "9:00 PM", roles: [:db] do
-  rake "fixity:request_daily_cloud_fixity"
+  rake "figgy:fixity:request_daily_cloud_fixity"
 end
 
 every 10.minutes, roles: [:db] do
-  rake "cdl:bulk_hold_process"
+  rake "figgy:cdl:bulk_hold_process"
 end
 
 every 1.hour, roles: [:db] do
-  rake "cdl:automatic_ingest"
+  rake "figgy:cdl:automatic_ingest"
 end
 
 every :hour, roles: [:db] do
-  rake "cdl:automatic_completion"
+  rake "figgy:cdl:automatic_completion"
 end
 
 # Example:

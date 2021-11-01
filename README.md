@@ -181,7 +181,7 @@ Figgy will persist DAOs to ArchivesSpace on completion of finding aid resources.
 To set this up in development, do the following:
 
 1. `lpass login <email>`
-1. `bundle exec rake setup_keys`
+1. `bundle exec rake figgy:setup_keys`
 
 ## Read-only Maintenance Windows
 
