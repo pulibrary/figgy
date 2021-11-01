@@ -4,6 +4,8 @@ class UpdateDaoJob < ApplicationJob
   def perform(id)
     change_set = ChangeSet.for(change_set_persister.metadata_adapter.query_service.find_by(id: id))
     DaoUpdater.new(change_set: change_set, change_set_persister: change_set_persister).update!
+  rescue Aspace::Client::ArchivalObjectNotFound => error
+    Aspace.logger.error("Archival object not found: #{error}")
   end
 
   private
