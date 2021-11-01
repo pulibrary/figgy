@@ -3,6 +3,8 @@ require "rails_helper"
 include FixtureFileUpload
 
 RSpec.describe ScannedMapsController, type: :controller do
+  include Rails.application.routes.url_helpers
+
   let(:user) { nil }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }

@@ -74,6 +74,7 @@ Rails.application.routes.draw do
   end
 
   get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
+  get "/manifests/:id/v3", to: "manifests#v3", as: :manifest_v3, defaults: { format: :json }
 
   scope "/concern" do
     resources :file_sets do

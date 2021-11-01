@@ -58,7 +58,7 @@ RSpec.describe "Playlist requests", type: :request do
       expect(manifest_values).to include("type" => "Manifest")
       expect(manifest_values).to include("items")
       expect(manifest_values["items"]).not_to be_empty
-      expect(manifest_values["items"].first).to include("label" => { "@none" => ["audio_file.wav"] })
+      expect(manifest_values["items"].first).to include("label" => { "eng" => ["audio_file.wav"] })
     end
 
     context "when the auth. token is nil or invalid" do

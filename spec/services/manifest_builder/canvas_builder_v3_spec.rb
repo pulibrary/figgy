@@ -35,7 +35,7 @@ RSpec.describe ManifestBuilder::CanvasBuilderV3 do
       it "appends the transformed metadata to the Manifest" do
         expect(canvases).not_to be_empty
         canvas = canvases.first
-        expect(canvas.label).to eq("@none" => ["example.tif"])
+        expect(canvas.label).to eq("eng" => ["example.tif"])
         expect(canvas.inner_hash["local_identifier"]).to eq "li1"
         expect(canvas.inner_hash["viewingHint"]).to eq "individuals"
         expect(canvas.items).not_to be_empty
