@@ -61,4 +61,8 @@ class Resource < Valkyrie::Resource
   def loaded
     @loaded ||= {}
   end
+
+  def linked_resource
+    LinkedData::LinkedResource.new(resource: self)
+  end
 end

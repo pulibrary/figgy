@@ -15,6 +15,7 @@ module LinkedData
       else
         resource_node = resource
       end
+      return Literal.new(value: nil) if resource_node.nil?
       return LinkedSimpleResource.new(resource: resource_node) if resource_node.try(:change_set) == "simple"
       # Ideal replacement: resource_node.linked_resource
       # This is called Replace Conditional with Polymorphism:
@@ -28,10 +29,8 @@ module LinkedData
         LinkedEphemeraTerm.new(resource: resource_node)
       when ScannedResource || ScannedMap || VectorResource
         LinkedImportedResource.new(resource: resource_node)
-      when NilClass
-        Literal.new(value: resource_node)
       else
-        LinkedResource.new(resource: resource_node)
+        resource_node.linked_resource
       end
     end
     # rubocop:enable all

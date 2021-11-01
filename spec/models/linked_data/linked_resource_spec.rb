@@ -38,7 +38,7 @@ RSpec.describe LinkedData::LinkedResource do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
 
       it "builds an object modeling the resource graph generalizing all resources" do
-        expect(linked_resource).to be_a described_class
+        expect(linked_resource).to be_a LinkedData::LinkedImportedResource
         expect(linked_resource.resource).to eq resource
       end
     end
