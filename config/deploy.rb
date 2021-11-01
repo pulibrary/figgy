@@ -110,14 +110,14 @@ namespace :deploy do
   namespace :geoblacklight do
     desc "Reindex Geospatial Resources (for synchronized GeoBlacklight installations)"
     task :reindex do
-      execute :rake, "geoblacklight:reindex"
+      execute :rake, "figgy:geoblacklight:reindex"
     end
   end
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       within release_path do
-        execute :rake, 'cache:clear'
+        execute :rake, 'figgy:cache:clear'
       end
     end
   end
