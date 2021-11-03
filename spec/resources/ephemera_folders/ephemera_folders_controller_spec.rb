@@ -377,8 +377,8 @@ RSpec.describe EphemeraFoldersController, type: :controller do
     context "with a subject field" do
       let(:user) { FactoryBot.create(:admin) }
       let(:vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "test vocabulary") }
-      let(:term) { FactoryBot.create_for_repository(:ephemera_term, label: "test term", member_of_vocabulary_id: vocab.id) }
-      let(:field) { FactoryBot.create_for_repository(:ephemera_field, field_name: "5", member_of_vocabulary_id: vocab.id) }
+      let(:term) { FactoryBot.create_for_repository(:ephemera_term, label: "test term", member_of_vocabulary_id: child_vocab.id) }
+      let(:field) { FactoryBot.create_for_repository(:ephemera_field, field_name: "5", member_of_vocabulary_id: vocab.id, rarely_used_term_ids: [term.id]) }
       let(:box) { FactoryBot.create_for_repository(:ephemera_box) }
       let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, field.id]) }
       let(:child_vocab) { FactoryBot.create_for_repository(:ephemera_vocabulary, label: "test child vocabulary") }
@@ -405,9 +405,11 @@ RSpec.describe EphemeraFoldersController, type: :controller do
 
         expect(assigns(:subject)).not_to be_empty
         expect(assigns(:subject).first.label).to eq "Favorites"
-        expect(assigns(:subject).second).to be_an EphemeraVocabularyDecorator
         expect(assigns(:subject).second.label).to eq "test child vocabulary"
         expect(assigns(:subject).last.label).to eq "Rarely Used"
+        # Ensure rarely used terms fall out of their categories.
+        expect(assigns(:subject).second.terms.length).to eq 0
+        expect(assigns(:subject).last.terms.length).to eq 1
       end
     end
   end

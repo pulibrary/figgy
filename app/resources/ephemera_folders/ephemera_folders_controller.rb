@@ -112,10 +112,24 @@ class EphemeraFoldersController < ResourceController
     fields.each do |field|
       case field.attribute_name
       when "subject"
-        @subject = [favorite_category(field)] + field.vocabulary.categories + [rarely_used_category(field)]
+        @subject = [favorite_category(field)] + filtered_categories(field) + [rarely_used_category(field)]
       else
         instance_variable_set("@#{field.attribute_name}", sorted_terms(field))
       end
+    end
+  end
+
+  # Returns categories without rarely used terms in them so they appear at the
+  # bottom of the list.
+  def filtered_categories(field)
+    field.vocabulary.categories.map do |category|
+      terms = category.terms.select do |term|
+        !field.rarely_used_term_ids.include?(term.id)
+      end
+      OpenStruct.new(
+        label: category.label,
+        terms: terms
+      )
     end
   end
 
