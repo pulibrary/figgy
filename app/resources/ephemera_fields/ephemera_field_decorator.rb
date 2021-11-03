@@ -25,6 +25,42 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
     wayfinder.decorated_rarely_used_terms
   end
 
+  def sorted_terms
+    return subject_sorted_categories if attribute_name == "subject"
+    non_favorite_terms = vocabulary.terms.select { |x| !favorite_term_ids.include?(x.id) && !rarely_used_term_ids.include?(x.id) }
+    favorite_terms + non_favorite_terms + rarely_used_terms
+  end
+
+  def subject_sorted_categories
+    [favorite_category] + filtered_categories + [rarely_used_category]
+  end
+
+  def filtered_categories
+    vocabulary.categories.map do |category|
+      terms = category.terms.select do |term|
+        !rarely_used_term_ids.include?(term.id)
+      end
+      OpenStruct.new(
+        label: category.label,
+        terms: terms
+      )
+    end
+  end
+
+  def favorite_category
+    OpenStruct.new(
+      label: "Favorites",
+      terms: favorite_terms
+    )
+  end
+
+  def rarely_used_category
+    OpenStruct.new(
+      label: "Rarely Used",
+      terms: rarely_used_terms
+    )
+  end
+
   # Retrieves the label for the field name
   # @return [String]
   def name_label
