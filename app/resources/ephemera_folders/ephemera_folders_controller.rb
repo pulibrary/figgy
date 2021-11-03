@@ -110,7 +110,7 @@ class EphemeraFoldersController < ResourceController
   def load_fields
     @parent_box_number = ephemera_box.box_number.first if ephemera_box
     fields.each do |field|
-      instance_variable_set("@#{field.attribute_name}", field.sorted_terms)
+      instance_variable_set("@#{field.attribute_name}", field.sorted_terms_or_categories)
     end
   end
 

@@ -25,17 +25,21 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
     wayfinder.decorated_rarely_used_terms
   end
 
-  def sorted_terms
-    return subject_sorted_categories if attribute_name == "subject"
+  # Returns categories or terms with rarely used terms at the end and favorite
+  # terms at the beginning.
+  def sorted_terms_or_categories
+    return sorted_categories if attribute_name == "subject"
     non_favorite_terms = vocabulary.terms.select { |x| !favorite_term_ids.include?(x.id) && !rarely_used_term_ids.include?(x.id) }
     favorite_terms + non_favorite_terms + rarely_used_terms
   end
 
-  def subject_sorted_categories
-    [favorite_category] + filtered_categories + [rarely_used_category]
+  # Returns categories where favorite terms appear at the top and rarely used
+  # terms are removed from categories and placed at the bottom.
+  def sorted_categories
+    [favorite_category] + categories_without_rare_terms + [rarely_used_category]
   end
 
-  def filtered_categories
+  def categories_without_rare_terms
     vocabulary.categories.map do |category|
       terms = category.terms.select do |term|
         !rarely_used_term_ids.include?(term.id)
