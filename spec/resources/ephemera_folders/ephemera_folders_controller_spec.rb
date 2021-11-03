@@ -407,6 +407,7 @@ RSpec.describe EphemeraFoldersController, type: :controller do
         expect(assigns(:subject).first.label).to eq "Favorites"
         expect(assigns(:subject).second).to be_an EphemeraVocabularyDecorator
         expect(assigns(:subject).second.label).to eq "test child vocabulary"
+        expect(assigns(:subject).last.label).to eq "Rarely Used"
       end
     end
   end

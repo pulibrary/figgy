@@ -112,7 +112,7 @@ class EphemeraFoldersController < ResourceController
     fields.each do |field|
       case field.attribute_name
       when "subject"
-        @subject = [favorite_category(field)] + field.vocabulary.categories
+        @subject = [favorite_category(field)] + field.vocabulary.categories + [rarely_used_category(field)]
       else
         instance_variable_set("@#{field.attribute_name}", sorted_terms(field))
       end
@@ -121,14 +121,22 @@ class EphemeraFoldersController < ResourceController
 
   def sorted_terms(field)
     favorite_terms = field.favorite_terms
-    non_favorite_terms = field.vocabulary.terms.select { |x| !field.favorite_term_ids.include?(x.id) }
-    favorite_terms + non_favorite_terms
+    rarely_used_terms = field.rarely_used_terms
+    non_favorite_terms = field.vocabulary.terms.select { |x| !field.favorite_term_ids.include?(x.id) && !field.rarely_used_term_ids.include?(x.id) }
+    favorite_terms + non_favorite_terms + rarely_used_terms
   end
 
   def favorite_category(field)
     OpenStruct.new(
       label: "Favorites",
       terms: field.favorite_terms
+    )
+  end
+
+  def rarely_used_category(field)
+    OpenStruct.new(
+      label: "Rarely Used",
+      terms: field.rarely_used_terms
     )
   end
 
