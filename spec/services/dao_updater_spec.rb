@@ -28,5 +28,20 @@ RSpec.describe DaoUpdater do
         updater.update!
       end
     end
+    context "when no resource is found in aspace" do
+      it "throws an error" do
+        stub_aspace_login
+
+        stub_aspace(pulfa_id: "MC230_c117")
+        stub_find_archival_object_not_found(component_id: "MC230_c117")
+
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "MC230_c117")
+        change_set_persister = instance_double(ChangeSetPersister)
+
+        updater = described_class.new(change_set: ChangeSet.for(resource), change_set_persister: change_set_persister)
+
+        expect { updater.update! }.to raise_error(Aspace::Client::ArchivalObjectNotFound)
+      end
+    end
   end
 end
