@@ -33,38 +33,6 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
     favorite_terms + non_favorite_terms + rarely_used_terms
   end
 
-  # Returns categories where favorite terms appear at the top and rarely used
-  # terms are removed from categories and placed at the bottom.
-  def sorted_categories
-    [favorite_category] + categories_without_rare_terms + [rarely_used_category]
-  end
-
-  def categories_without_rare_terms
-    vocabulary.categories.map do |category|
-      terms = category.terms.select do |term|
-        !rarely_used_term_ids.include?(term.id)
-      end
-      OpenStruct.new(
-        label: category.label,
-        terms: terms
-      )
-    end
-  end
-
-  def favorite_category
-    OpenStruct.new(
-      label: "Favorites",
-      terms: favorite_terms
-    )
-  end
-
-  def rarely_used_category
-    OpenStruct.new(
-      label: "Rarely Used",
-      terms: rarely_used_terms
-    )
-  end
-
   # Retrieves the label for the field name
   # @return [String]
   def name_label
@@ -122,5 +90,38 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
     # @return [ControlledVocabulary::EphemeraField::Term]
     def name_term
       @name_term ||= ControlledVocabulary.for(:ephemera_field).find(field_name.first)
+    end
+
+    # Returns categories where favorite terms appear at the top and rarely used
+    # terms are removed from categories and placed at the bottom. Favorite terms
+    # appear in both their respective category and in "favorites"
+    def sorted_categories
+      [favorite_category] + categories_without_rare_terms + [rarely_used_category]
+    end
+
+    def categories_without_rare_terms
+      vocabulary.categories.map do |category|
+        terms = category.terms.select do |term|
+          !rarely_used_term_ids.include?(term.id)
+        end
+        OpenStruct.new(
+          label: category.label,
+          terms: terms
+        )
+      end
+    end
+
+    def favorite_category
+      OpenStruct.new(
+        label: "Favorites",
+        terms: favorite_terms
+      )
+    end
+
+    def rarely_used_category
+      OpenStruct.new(
+        label: "Rarely Used",
+        terms: rarely_used_terms
+      )
     end
 end
