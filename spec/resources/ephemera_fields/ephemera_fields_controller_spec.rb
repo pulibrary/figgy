@@ -123,6 +123,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
 
         expect(response.body).to have_field "Name", with: "1"
         expect(response.body).to have_field "Favorite Terms"
+        expect(response.body).to have_field "Rarely Used Terms"
         expect(response.body).to have_button "Save"
       end
     end
@@ -138,6 +139,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
 
         expect(response.body).to have_field "Name", with: "1"
         expect(response.body).to have_field "Favorite Terms"
+        expect(response.body).to have_field "Rarely Used Terms"
         expect(response.body).to have_button "Save"
       end
     end

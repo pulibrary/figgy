@@ -1,0 +1,29 @@
+<% if f.object.member_of_vocabulary_id.present? %>
+  <% vocabulary = decorated_change_set_resource.wayfinder.decorated_ephemera_vocabulary %>
+  <% if vocabulary.categories.present? %>
+    <%= f.input :rarely_used_term_ids,
+                label: 'Rarely Used Terms',
+                as: :grouped_select,
+                collection: vocabulary.categories,
+                group_method: :terms,
+                group_label_method: :label,
+                label_method: :label,
+                value_method: :id,
+                input_html: { multiple: f.object.multiple?(key),
+                              data: {
+                                live_search: true
+                              }
+                            },
+                required: f.object.required?(key) %>
+  <% else %>
+    <%= f.input :rarely_used_term_ids,
+                label: 'Rarely Used Terms',
+                as: :select,
+                collection: vocabulary.terms,
+                label_method: :label,
+                value_method: :id,
+                input_html: { multiple: f.object.multiple?(key) },
+                include_blank: true,
+                required: f.object.required?(key) %>
+  <% end %>
+<% end %>
