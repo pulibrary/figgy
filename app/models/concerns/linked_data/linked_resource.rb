@@ -4,19 +4,10 @@
 # `#properties`
 module LinkedData
   class LinkedResource
+    # @param resource [Valkyrie::Resource]
     def self.for(resource:)
-      if resource.is_a? Valkyrie::ID
-        begin
-          resource_node = ChangeSetPersister.default.query_service.find_by(id: resource)
-        rescue Valkyrie::Persistence::ObjectNotFoundError
-          resource_node = nil
-        end
-      else
-        resource_node = resource
-      end
-      return Literal.new(value: nil) if resource_node.nil?
-      return LinkedSimpleResource.new(resource: resource_node) if resource_node.try(:change_set) == "simple"
-      resource_node.linked_resource
+      return LinkedSimpleResource.new(resource: resource) if resource.try(:change_set) == "simple"
+      resource.linked_resource
     end
 
     attr_reader :resource

@@ -72,15 +72,5 @@ RSpec.describe LinkedData::LinkedResource do
         expect(linked_resource.resource).to eq resource
       end
     end
-
-    context "with a Valkyrie resource which doesnt exist" do
-      let(:linked_resource) { described_class.for(resource: resource) }
-      let(:resource) { Valkyrie::ID.new("test") }
-
-      it "builds a literal for a nil Object" do
-        expect(linked_resource).to be_a LinkedData::Literal
-        expect(linked_resource.value).to eq nil
-      end
-    end
   end
 end
