@@ -4,7 +4,6 @@
 # `#properties`
 module LinkedData
   class LinkedResource
-    # rubocop:disable all
     def self.for(resource:)
       if resource.is_a? Valkyrie::ID
         begin
@@ -17,23 +16,8 @@ module LinkedData
       end
       return Literal.new(value: nil) if resource_node.nil?
       return LinkedSimpleResource.new(resource: resource_node) if resource_node.try(:change_set) == "simple"
-      # Ideal replacement: resource_node.linked_resource
-      # This is called Replace Conditional with Polymorphism:
-      # https://refactoring.guru/replace-conditional-with-polymorphism
-      case resource_node
-      when EphemeraFolder
-        LinkedEphemeraFolder.new(resource: resource_node)
-      when EphemeraVocabulary
-        LinkedEphemeraVocabulary.new(resource: resource_node)
-      when EphemeraTerm
-        LinkedEphemeraTerm.new(resource: resource_node)
-      when ScannedResource || ScannedMap || VectorResource
-        LinkedImportedResource.new(resource: resource_node)
-      else
-        resource_node.linked_resource
-      end
+      resource_node.linked_resource
     end
-    # rubocop:enable all
 
     attr_reader :resource
     delegate(

@@ -49,4 +49,8 @@ class ScannedResource < Resource
   def recording?
     change_set == "recording"
   end
+
+  def linked_resource
+    LinkedData::LinkedImportedResource.new(resource: self)
+  end
 end

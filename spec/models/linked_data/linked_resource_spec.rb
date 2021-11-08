@@ -33,9 +33,39 @@ RSpec.describe LinkedData::LinkedResource do
       end
     end
 
-    context "with all other Valkyrie resources" do
+    context "with a scanned resource" do
       let(:linked_resource) { described_class.for(resource: resource) }
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource) }
+
+      it "builds an object modeling the resource graph generalizing all resources" do
+        expect(linked_resource).to be_a LinkedData::LinkedImportedResource
+        expect(linked_resource.resource).to eq resource
+      end
+    end
+
+    context "with a VectorResource" do
+      let(:linked_resource) { described_class.for(resource: resource) }
+      let(:resource) { FactoryBot.create_for_repository(:vector_resource) }
+
+      it "builds an object modeling the resource graph generalizing all resources" do
+        expect(linked_resource).to be_a LinkedData::LinkedImportedResource
+        expect(linked_resource.resource).to eq resource
+      end
+    end
+
+    context "with a ScannedMap" do
+      let(:linked_resource) { described_class.for(resource: resource) }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_map) }
+
+      it "builds an object modeling the resource graph generalizing all resources" do
+        expect(linked_resource).to be_a LinkedData::LinkedImportedResource
+        expect(linked_resource.resource).to eq resource
+      end
+    end
+
+    context "with a Raster Resource" do
+      let(:linked_resource) { described_class.for(resource: resource) }
+      let(:resource) { FactoryBot.create_for_repository(:raster_resource) }
 
       it "builds an object modeling the resource graph generalizing all resources" do
         expect(linked_resource).to be_a LinkedData::LinkedImportedResource
