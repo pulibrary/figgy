@@ -14,4 +14,5 @@ defmodule Figx.Resource do
 
   def description(%{metadata: %{"imported_metadata" => [%{"description" => description}]}}), do: description
   def description(%{metadata: %{"description" => description}}), do: description
+  def description(_), do: nil
 end
