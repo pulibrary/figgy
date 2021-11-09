@@ -348,3 +348,4 @@ Style/IfUnlessModifier:
 Lint/HandleExceptions:
   Exclude:
     - 'lib/tasks/performance.rake'
+    - 'lib/tasks/figx.rake'
