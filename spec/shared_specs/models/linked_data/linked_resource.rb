@@ -35,6 +35,10 @@ RSpec.shared_examples "LinkedData::Resource" do
     before do
       class MyCustomResource < Valkyrie::Resource
         attribute :title, Valkyrie::Types::Set
+
+        def linked_resource
+          LinkedData::LinkedResource.new(resource: self)
+        end
       end
     end
 
