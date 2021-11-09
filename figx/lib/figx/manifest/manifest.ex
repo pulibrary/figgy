@@ -20,23 +20,18 @@ defmodule Figx.Manifest do
       },
       manifests: member_manifests(resource)
     }
-    |> add_rendering(resource)
+    |> put_if_present([:rendering], rendering(resource))
   end
   def from_resource(_resource), do: %{}
 
-  # Add rendering property if the identifier property exists.
-  def add_rendering(manifest, %{metadata: %{"identifier" => [identifier | _rest]}}) do
-    manifest
-    |> Map.put(
-      :rendering,
-      %{
+  def rendering(%{metadata: %{"identifier" => [identifier | _rest]}}) do
+    %{
         "@id" => "https://arks.princeton.edu/#{identifier}",
-        "format" => "text/html"
-      }
-    )
+      "format" => "text/html"
+    }
   end
 
-  def add_rendering(manifest, _resource), do: manifest
+  def rendering(_resource), do: nil
 
   def member_manifests(resource) do
     Collection.members(resource.id)
@@ -49,7 +44,17 @@ defmodule Figx.Manifest do
        "@type" => "sc:Manifest",
        "@id" => "#{FigxWeb.Endpoint.url()}/concern/#{Macro.underscore(resource.internal_resource)}s/#{resource.id}/manifest",
       "label" => resource |> Resource.title,
-      "description" => resource |> Resource.description
+      # "description" => resource |> Resource.description
     }
+    |> put_if_present(["description"], Resource.description(resource))
+  end
+
+  defp put_if_present(map, _, ""), do: map
+  defp put_if_present(map, _, []), do: map
+  defp put_if_present(map, _, [""]), do: map
+  defp put_if_present(map, _, nil), do: map
+  defp put_if_present(map, keys, value) do
+    map
+    |> put_in(keys, value)
   end
 end
