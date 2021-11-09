@@ -6,11 +6,11 @@ use Mix.Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :figx, Figx.Repo,
-  username: "postgres",
+  username: System.get_env("FIGGY_DB_USERNAME") || "postgres",
   password: "",
   database: "figgy_test",
   hostname: "localhost",
-  port: 32787,
+  port: System.get_env("FIGGY_DB_PORT") || 32787,
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
