@@ -92,14 +92,13 @@ namespace :figx do
   task :build_release do
     on roles(:app) do
       within release_path do
-        execute("cd #{release_path}/figx && MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} mix release")
+        execute("cd #{release_path}/figx && podman run -v $(pwd):/build -w /build --user root --rm -e MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} docker.io/cimg/elixir:1.10.4 bash -c \"mix local.hex --force && mix local.rebar --force && mix deps.get --only=prod && mix release\"")
       end
     end
   end
 end
 
-after "bundler:install", "figx:get_deps"
-after "figx:get_deps", "figx:build_release"
+after "bundler:install", "figx:build_release"
 
 namespace :deploy do
   desc "Run rake yarn install"
