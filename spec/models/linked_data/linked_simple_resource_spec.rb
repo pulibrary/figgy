@@ -11,6 +11,16 @@ RSpec.describe LinkedData::LinkedSimpleResource do
   it_behaves_like "LinkedData::Resource"
 
   describe "as_jsonld" do
+    context "when it has a start canvas" do
+      it "doesn't display it" do
+        resource = FactoryBot.create_for_repository(
+          :simple_resource,
+          start_canvas: SecureRandom.uuid
+        )
+
+        expect(LinkedData::LinkedResource.for(resource: resource).as_jsonld["start_canvas"]).to be_nil
+      end
+    end
     context "when it has an actor field with Strings, Groupings and RDF literals" do
       let(:resource) do
         FactoryBot.create_for_repository(

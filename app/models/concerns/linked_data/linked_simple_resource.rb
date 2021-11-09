@@ -82,7 +82,8 @@ module LinkedData
         [
           :pdf_type,
           :thumbnail_id,
-          :coverage_point
+          :coverage_point,
+          :start_canvas
         ]
       end
   end
