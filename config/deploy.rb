@@ -92,14 +92,9 @@ namespace :figx do
   task :build_release do
     on roles(:app) do
       within release_path do
-        execute("cd #{release_path}/figx && mkdir _build deps && chown deploy:deploy _build deps && chmod 777 _build deps && docker run -v $(pwd):/build -w /build -e MIX_ENV=#{fetch(:stage, "staging")} cimg/elixir:1.10.4 bash -c \"mix local.hex --force && mix local.rebar --force && mix deps.get --only=prod && mix release && sudo chown -R 1001:1001 _build\" && chmod 755 deps _build")
+        execute("cd #{release_path}/figx && podman run -v $(pwd):/build -w /build --user root --rm -e MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} docker.io/cimg/elixir:1.10.4 bash -c \"mix local.hex --force && mix local.rebar --force && mix deps.get --only=prod && mix release\"")
       end
     end
-    # on roles(:app) do
-    #   within release_path do
-    #     execute("cd #{release_path}/figx && MIX_ENV=#{fetch(:rails_env, fetch(:stage, 'staging'))} mix release")
-    #   end
-    # end
   end
 end
 
