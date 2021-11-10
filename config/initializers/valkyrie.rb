@@ -388,7 +388,6 @@ Rails.application.config.to_prepare do
     FindEphemeraTermByLabel,
     FindEphemeraVocabularyByLabel,
     MemoryEfficientAllQuery,
-    FindProjectFolders,
     FindIdentifiersToReconcile,
     FileSetsSortedByUpdated,
     FindFixityFailures,

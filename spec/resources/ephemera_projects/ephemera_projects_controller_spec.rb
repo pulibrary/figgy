@@ -214,38 +214,15 @@ RSpec.describe EphemeraProjectsController, type: :controller do
   end
 
   describe "GET /concern/ephemera_project/:id/manifest", manifest: true do
-    let(:ephemera_project) { FactoryBot.create_for_repository(:ephemera_project) }
+    let(:ephemera_project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [FactoryBot.create_for_repository(:ephemera_field).id]) }
 
-    it "returns a IIIF manifest for an ephemera project", manifest: true do
+    it "returns a IIIF manifest for an ephemera project (from figx)", manifest: true do
+      stub_figx_collection_manifest
       get :manifest, params: { id: ephemera_project.id.to_s, format: :json }
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
       expect(response.headers["Content-Type"]).to include "application/json"
       expect(manifest_response[:metadata]).not_to be_empty
-      expect(manifest_response[:metadata][0]).to include label: "Exhibit", value: [ephemera_project.decorate.slug]
-    end
-
-    context "when the project has folders" do
-      let(:ephemera_box1) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder1.id) }
-      let(:ephemera_box2) { FactoryBot.create_for_repository(:ephemera_box) }
-      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder) }
-      let(:ephemera_project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id, ephemera_box2.id]) }
-
-      before do
-        ephemera_box1
-        ephemera_box2
-      end
-
-      it "returns manifests for the ephemera boxes", manifest: true do
-        get :manifest, params: { id: ephemera_project.id.to_s, format: :json }
-        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
-
-        expect(response.headers["Content-Type"]).to include "application/json"
-        expect(manifest_response[:metadata]).not_to be_empty
-        expect(manifest_response[:metadata][0]).to include label: "Exhibit", value: [ephemera_project.decorate.slug]
-        expect(manifest_response[:manifests].length).to eq 1
-        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/ephemera_folders/#{folder1.id}/manifest"
-      end
     end
   end
 

@@ -122,57 +122,31 @@ RSpec.describe CollectionsController, type: :controller do
     end
 
     describe "GET /concern/collections/:id/manifest" do
-      it "returns a IIIF manifest for a collection" do
+      it "asks figx for a collection manifest" do
+        stub_figx_collection_manifest
         collection = FactoryBot.create_for_repository(:collection)
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
 
         get :manifest, params: { id: collection.id.to_s, format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
         expect(response.headers["Content-Type"]).to include "application/json"
-        expect(manifest_response[:manifests].length).to eq 1
-        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
-      end
-      it "doesn't run a query for every member of the collection" do
-        file = fixture_file_upload("files/example.tif", "image/tiff")
-        collection = FactoryBot.create_for_repository(:collection)
-        5.times do
-          FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, files: [file])
-        end
-        metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
-        allow(metadata_adapter.query_service).to receive(:find_by).and_call_original
-
-        get :manifest, params: { id: collection.id.to_s, format: :json }
-
-        expect(metadata_adapter.query_service).to have_received(:find_by).exactly(1).times
-        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
-
-        expect(manifest_response[:manifests].length).to eq 5
-      end
-    end
-
-    describe "GET /concern/collections/:id/manifest anonymously" do
-      let(:user) { FactoryBot.create(:user) }
-      it "returns a IIIF manifest for publically accessible manifests" do
-        collection = FactoryBot.create_for_repository(:collection)
-        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
-        scanned_resource2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id)
-
-        get :manifest, params: { id: collection.id.to_s, format: :json }
-        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
-
-        expect(response.headers["Content-Type"]).to include "application/json"
-        expect(manifest_response[:manifests].length).to eq 1
-        expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource2.id}/manifest"
+        expect(manifest_response[:manifests].length).to eq 2
+        expect(manifest_response[:manifests][0][:@id]).to eq "https://figgy-staging.princeton.edu/concern/scanned_resources/01c995f9-019e-4e90-a9bf-dc4d46835719/manifest"
       end
     end
 
     describe "GET /iiif/collections" do
       let(:collection) { FactoryBot.create_for_repository(:collection) }
-      before do
-        collection
+      it "works if there are no collections" do
+        get :index_manifest, params: { format: :json }
+        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+        expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
+        expect(manifest_response[:@type]).to eq "sc:Collection"
+        expect(manifest_response[:label]).to eq "Figgy Collections"
       end
       it "returns a IIIF manifest of all collections" do
+        collection
         get :index_manifest, params: { format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
