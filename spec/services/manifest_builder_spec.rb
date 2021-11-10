@@ -669,29 +669,6 @@ RSpec.describe ManifestBuilder do
     end
   end
 
-  context "when given an ephemera project" do
-    subject(:manifest_builder) { described_class.new(query_service.find_by(id: ephemera_project.id)) }
-    let(:ephemera_project) do
-      FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, ephemera_term.id, folder2.id])
-    end
-    let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term) }
-    let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id) }
-    let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
-    let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, member_ids: folder3.id) }
-    let(:folder3) { FactoryBot.create_for_repository(:ephemera_folder) }
-    let(:change_set) { EphemeraProjectChangeSet.new(ephemera_project) }
-    it "builds a IIIF document" do
-      output = manifest_builder.build
-      expect(output).to be_kind_of Hash
-      expect(output["metadata"]).to be_kind_of Array
-      expect(output["metadata"]).not_to be_empty
-      expect(output["metadata"].first).to include "label" => "Exhibit", "value" => [ephemera_project.decorate.slug]
-      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/ephemera_folders/#{folder.id}/manifest"
-      expect(output["manifests"][1]["@id"]).to eq "http://www.example.com/concern/ephemera_folders/#{folder2.id}/manifest"
-      expect(output["manifests"].length).to eq 2
-    end
-  end
-
   context "when given a scanned resource with audio files" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
     let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file], downloadable: "none") }
@@ -868,47 +845,6 @@ RSpec.describe ManifestBuilder do
         # A default table of contents should display
         expect(output["structures"][0]["items"][0]["id"]).to include "#t="
         expect(output["structures"][0]["label"]["eng"]).to eq ["32101047382401_1_pm.wav"]
-      end
-    end
-  end
-
-  context "when given a collection" do
-    subject(:manifest_builder) { described_class.new(query_service.find_by(id: collection.id), nil, ability) }
-    let(:ability) { Ability.new(user) }
-    let(:user) { FactoryBot.create(:admin) }
-    let(:collection) { FactoryBot.create_for_repository(:collection) }
-    let(:change_set) { CollectionChangeSet.new(collection) }
-    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id], member_ids: scanned_resource_2.id, thumbnail_id: scanned_resource_2.id) }
-    let(:scanned_resource_2) { FactoryBot.create_for_repository(:scanned_resource) }
-
-    before do
-      scanned_resource
-      output = change_set_persister.save(change_set: change_set)
-      change_set = CollectionChangeSet.new(output)
-      change_set_persister.save(change_set: change_set)
-    end
-    it "builds a IIIF document" do
-      output = manifest_builder.build
-      expect(output).to be_kind_of Hash
-      expect(output["@type"]).to eq "sc:Collection"
-      expect(output["metadata"]).to be_kind_of Array
-      expect(output["metadata"]).not_to be_empty
-      expect(output["metadata"].first).to include "label" => "Exhibit", "value" => [collection.decorate.slug]
-      expect(output["manifests"].length).to eq 1
-      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
-      expect(output["viewingDirection"]).to eq nil
-    end
-    context "when given a user without access to the manifest" do
-      let(:user) { FactoryBot.create(:user) }
-      it "doesn't display those child manifests" do
-        output = manifest_builder.build
-        expect(output).to be_kind_of Hash
-        expect(output["@type"]).to eq "sc:Collection"
-        expect(output["metadata"]).to be_kind_of Array
-        expect(output["metadata"]).not_to be_empty
-        expect(output["metadata"].first).to include "label" => "Exhibit", "value" => [collection.decorate.slug]
-        expect(output["manifests"].length).to eq 0
-        expect(output["viewingDirection"]).to eq nil
       end
     end
   end
