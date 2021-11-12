@@ -85,9 +85,12 @@ defmodule FigxWeb.ManifestsControllerTest do
         %{
           "@context" => "http://iiif.io/api/presentation/2/context.json",
           "@type" => "sc:Manifest",
-          "@id" => "http://localhost:4002/concern/ephemera_folders/50913689-440e-4335-ae86-5d9c851b0958/manifest",
+          "@id" => "http://localhost:4002/concern/ephemera_folders/1d1fe5f0-03aa-4f3e-bfb7-97e0cb4fcf68/manifest",
           "label" => [
-            "Ephemera Box"
+            "Ephemera Folder2"
+          ],
+          "description" => [
+            "test description"
           ]
         }
       ]

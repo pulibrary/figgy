@@ -38,8 +38,6 @@ class ManifestBuilder
         else
           CollectionNode.new(resource, nil, current_ability)
         end
-      when EphemeraProject
-        EphemeraProjectNode.new(resource)
       when EphemeraFolder
         EphemeraFolderNode.new(resource)
       when IndexCollection
@@ -330,12 +328,6 @@ class ManifestBuilder
 
     def collection?
       true
-    end
-  end
-
-  class EphemeraProjectNode < CollectionNode
-    def members
-      @members ||= query_service.custom_queries.find_project_folders(resource: resource).to_a
     end
   end
 

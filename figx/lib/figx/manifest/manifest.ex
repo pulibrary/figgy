@@ -41,9 +41,21 @@ defmodule Figx.Manifest do
     |> Enum.map(&render_collection_member/1)
   end
   def member_manifests(resource = %{internal_resource: "EphemeraProject"}) do
-    Member.members(resource.id)
+    manifest_members(resource)
     |> Enum.map(&render_collection_member/1)
   end
+
+  # Ephemera Projects add their boxes' folders as well as their own direct
+  # "boxless folders"
+  defp manifest_members(resource = %{internal_resource: "EphemeraProject"}) do
+    direct_members = Member.members(resource.id)
+    direct_members
+    |> Enum.flat_map(&folders_or_self/1)
+    |> Enum.filter(fn(resource) -> resource.internal_resource == "EphemeraFolder" end)
+  end
+
+  defp folders_or_self(resource = %{internal_resource: "EphemeraFolder"}), do: [resource]
+  defp folders_or_self(resource = %{internal_resource: "EphemeraBox"}), do: Member.members(resource.id)
 
   def render_collection_member(resource = %Resource{}) do
     %{
