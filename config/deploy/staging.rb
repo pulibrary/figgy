@@ -12,6 +12,7 @@ set :google_fixity_request_topic, "figgy-staging-fixity-request"
 set :google_service_account, "figgy-staging@pulibrary-figgy-storage-1.iam.gserviceaccount.com"
 set :google_fixity_bucket, "figgy-staging-preservation"
 set :google_fixity_status_topic, "figgy-staging-fixity-status"
+set :mix_env, "staging"
 
 # role-based syntax
 # ==================
