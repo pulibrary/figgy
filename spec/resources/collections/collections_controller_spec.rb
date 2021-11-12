@@ -137,10 +137,16 @@ RSpec.describe CollectionsController, type: :controller do
 
     describe "GET /iiif/collections" do
       let(:collection) { FactoryBot.create_for_repository(:collection) }
-      before do
-        collection
+      it "works if there are no collections" do
+        get :index_manifest, params: { format: :json }
+        manifest_response = MultiJson.load(response.body, symbolize_keys: true)
+
+        expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
+        expect(manifest_response[:@type]).to eq "sc:Collection"
+        expect(manifest_response[:label]).to eq "Figgy Collections"
       end
       it "returns a IIIF manifest of all collections" do
+        collection
         get :index_manifest, params: { format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
