@@ -39,7 +39,7 @@ class ManifestBuilder
           CollectionNode.new(resource, nil, current_ability)
         end
       when EphemeraProject
-        EphemeraProjectNode.new(resource)
+        CollectionNode.new(resource, nil, current_ability)
       when EphemeraFolder
         EphemeraFolderNode.new(resource)
       when IndexCollection
@@ -330,12 +330,6 @@ class ManifestBuilder
 
     def collection?
       true
-    end
-  end
-
-  class EphemeraProjectNode < CollectionNode
-    def members
-      @members ||= query_service.custom_queries.find_project_folders(resource: resource).to_a
     end
   end
 
@@ -801,11 +795,20 @@ class ManifestBuilder
           IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
         # If not multi-part and a collection, it's not a MVW
         elsif @resource.viewing_hint.blank? && @resource.collection?
-          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
+          collection_manifest
         else
           # note this assumes audio resources use flat modeling
           IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
         end
+      end
+    end
+
+    def collection_manifest
+      # Numismatics/All Collections not supported by Figx yet.
+      if @resource.is_a?(Numismatics::IssueNode) || @resource.is_a?(IndexCollectionNode)
+        IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
+      else
+        FigxManifest.new(@resource)
       end
     end
 

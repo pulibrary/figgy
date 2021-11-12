@@ -1,0 +1,48 @@
+{
+    "@context": "http://iiif.io/api/presentation/2/context.json",
+    "@type": "sc:Collection",
+    "@id": "https://figgy-staging.princeton.edu/collections/fe3ff369-8a17-426c-8255-3a5b963aeed5/manifest",
+    "label": [
+        "Princeton Prosody Collection"
+    ],
+    "metadata": [
+        {
+            "label": "Exhibit",
+            "value": [
+                "Prosody"
+            ]
+        }
+    ],
+    "manifests": [
+        {
+            "@context": "http://iiif.io/api/presentation/2/context.json",
+            "@type": "sc:Manifest",
+            "@id": "https://figgy-staging.princeton.edu/concern/scanned_resources/01c995f9-019e-4e90-a9bf-dc4d46835719/manifest",
+            "label": [
+                "Lazarus laughed (1925-26); a play for an imaginative theatre"
+            ],
+            "description": [
+                "At head of title: Eugene O'Neill.",
+                "Imprint varies.",
+                "(Ex)3879.673.356.11: Limited ed., signed by the author."
+            ]
+        },
+        {
+            "@context": "http://iiif.io/api/presentation/2/context.json",
+            "@type": "sc:Manifest",
+            "@id": "https://figgy-staging.princeton.edu/concern/scanned_resources/4dd3400a-26ca-4c99-acd1-79f5d7428065/manifest",
+            "label": [
+                "Christabel, &c"
+            ],
+            "description": [
+                "RHT 19th-172: Has MSS corrections and additions to Christabel evidently in the hand of Coleridge.",
+                "RHT 19th-173: Inscribed by Coleridge on title-page below 'Second Edition' : \"with MSS corrections and additions by the Author. 25 Novr 1824 Ramsgate.\"",
+                "RHT 19th-173: Has label and holograph notes, on separate sheet, of E.F. Stratton Reader, of Sandwich, Kent."
+            ]
+        }
+    ],
+    "seeAlso": {
+        "@id": "https://figgy-staging.princeton.edu/catalog/fe3ff369-8a17-426c-8255-3a5b963aeed5.jsonld",
+        "format": "application/ld+json"
+    }
+}
