@@ -214,7 +214,7 @@ RSpec.describe EphemeraProjectsController, type: :controller do
   end
 
   describe "GET /concern/ephemera_project/:id/manifest", manifest: true do
-    let(:ephemera_project) { FactoryBot.create_for_repository(:ephemera_project) }
+    let(:ephemera_project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [FactoryBot.create_for_repository(:ephemera_field).id]) }
 
     it "returns a IIIF manifest for an ephemera project (from figx)", manifest: true do
       stub_figx_collection_manifest

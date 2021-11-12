@@ -38,6 +38,8 @@ class ManifestBuilder
         else
           CollectionNode.new(resource, nil, current_ability)
         end
+      when EphemeraProject
+        CollectionNode.new(resource, nil, current_ability)
       when EphemeraFolder
         EphemeraFolderNode.new(resource)
       when IndexCollection
