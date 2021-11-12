@@ -56,6 +56,7 @@ defmodule Figx.Manifest do
 
   defp folders_or_self(resource = %{internal_resource: "EphemeraFolder"}), do: [resource]
   defp folders_or_self(resource = %{internal_resource: "EphemeraBox"}), do: Member.members(resource.id)
+  defp folders_or_self(resource), do: [resource]
 
   def render_collection_member(resource = %Resource{}) do
     %{
