@@ -64,6 +64,41 @@ defmodule FigxWeb.ManifestsControllerTest do
       assert json["rendering"] == nil
     end
 
+    test "works for an ephemera project", %{conn: conn} do
+      resource_id = "c2062eb2-cf61-412f-be29-43e944ec17e9"
+      conn = get(conn, "/manifest/#{resource_id}")
+      json = json_response(conn, 200)
+
+      assert json["metadata"] == [%{"label" => "Exhibit", "value" => ["sae"]}]
+      assert json["manifests"] == [
+        %{
+          "@context" => "http://iiif.io/api/presentation/2/context.json",
+          "@type" => "sc:Manifest",
+          "@id" => "http://localhost:4002/concern/ephemera_folders/02f7dad6-cbaa-47e8-913e-b89bdd16bb17/manifest",
+          "label" => [
+            "Ephemera Folder"
+          ],
+          "description" => [
+            "I'm ephemera."
+          ]
+        },
+        %{
+          "@context" => "http://iiif.io/api/presentation/2/context.json",
+          "@type" => "sc:Manifest",
+          "@id" => "http://localhost:4002/concern/ephemera_folders/50913689-440e-4335-ae86-5d9c851b0958/manifest",
+          "label" => [
+            "Ephemera Box"
+          ]
+        }
+      ]
+
+      assert json["seeAlso"] == %{
+               "@id" =>
+                 "http://localhost:4002/catalog/c2062eb2-cf61-412f-be29-43e944ec17e9.jsonld",
+               "format" => "application/ld+json"
+             }
+    end
+
     test "returns 400 for a resource manifest request", %{conn: conn} do
       resource_id = "abd5f5a2-7caa-435a-924e-d5982b0a6260"
       conn = get(conn, "/manifest/#{resource_id}")

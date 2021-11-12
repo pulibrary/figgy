@@ -40,6 +40,18 @@ namespace :figx do
         title: ["Ephemera Folder"],
         description: ["I'm ephemera."]
       )
+      FactoryBot.create_for_repository(
+        :ephemera_box,
+        id: "50913689-440e-4335-ae86-5d9c851b0958",
+        title: ["Ephemera Box"]
+      )
+      FactoryBot.create_for_repository(
+        :ephemera_project,
+        id: "c2062eb2-cf61-412f-be29-43e944ec17e9",
+        title: ["Example Project"],
+        member_ids: [Valkyrie::ID.new("02f7dad6-cbaa-47e8-913e-b89bdd16bb17"), Valkyrie::ID.new("50913689-440e-4335-ae86-5d9c851b0958")],
+        slug: "sae"
+      )
     rescue LoadError
     end
   end
