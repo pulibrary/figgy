@@ -265,7 +265,7 @@ test:
 
 production:
   <<: *defaults
-  index_read_only: false # set to true if doing a long reindex process.
+  index_read_only: true # set to true if doing a long reindex process.
   archivespace_url: <%= ENV["ASPACE_URL"] || "https://aspace.princeton.edu/staff/api" %>
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
