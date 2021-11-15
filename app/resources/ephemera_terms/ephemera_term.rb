@@ -7,4 +7,8 @@ class EphemeraTerm < Resource
   attribute :tgm_label
   attribute :lcsh_label
   attribute :member_of_vocabulary_id, Valkyrie::Types::Set
+
+  def linked_resource
+    LinkedData::LinkedEphemeraTerm.new(resource: self)
+  end
 end

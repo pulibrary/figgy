@@ -5,4 +5,8 @@ class EphemeraVocabulary < Resource
   attribute :uri
   attribute :definition
   attribute :member_of_vocabulary_id, Valkyrie::Types::Set
+
+  def linked_resource
+    LinkedData::LinkedEphemeraVocabulary.new(resource: self)
+  end
 end

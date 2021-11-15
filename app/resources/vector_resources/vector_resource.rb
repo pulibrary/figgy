@@ -29,4 +29,8 @@ class VectorResource < Resource
     imported_title = primary_imported_metadata.title.present? ? primary_imported_metadata.title : []
     attributes[:title].present? ? attributes[:title] : imported_title
   end
+
+  def linked_resource
+    LinkedData::LinkedImportedResource.new(resource: self)
+  end
 end

@@ -79,4 +79,8 @@ class EphemeraFolder < Resource
     return self[:edit_users] unless persisted?
     (self[:edit_users] + (Wayfinder.for(self).ephemera_project&.edit_users || [])).uniq
   end
+
+  def linked_resource
+    LinkedData::LinkedEphemeraFolder.new(resource: self)
+  end
 end
