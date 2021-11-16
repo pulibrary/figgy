@@ -832,6 +832,16 @@ RSpec.describe CatalogController do
 
         expect(assigns(:document_list)).not_to be_empty
       end
+      it "displays private resources even in index read-only mode" do
+        user = FactoryBot.create(:admin)
+        persister.save(resource: FactoryBot.build(:pending_private_scanned_resource))
+        allow(Figgy).to receive(:index_read_only?).and_return(true)
+
+        sign_in user
+        get :index, params: { q: "" }
+
+        expect(assigns(:document_list)).not_to be_empty
+      end
     end
     context "when logged in" do
       it "displays resources which the user can edit" do
