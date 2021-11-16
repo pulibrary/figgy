@@ -12,6 +12,9 @@ class CheckFixityJob < ApplicationJob
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
+  rescue Valkyrie::StorageAdapter::FileNotFound
+    raise if file_set.decorate.parent
+    metadata_adapter.persister.delete(resource: file_set)
   end
 
   private

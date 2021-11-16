@@ -49,5 +49,25 @@ RSpec.describe CheckFixityJob do
         expect(Valkyrie.logger).to have_received(:warn).with "#{described_class}: Valkyrie::Persistence::ObjectNotFoundError: Failed to find the resource #{file_set_id}"
       end
     end
+
+    context "when FileNotFound on a non-orphaned file set" do
+      it "raises a FileNotFound error" do
+        allow(Valkyrie::StorageAdapter).to receive(:find_by).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+
+        expect { described_class.perform_now(file_set_id) }.to raise_error(Valkyrie::StorageAdapter::FileNotFound)
+      end
+    end
+
+    context "when FileNotFound on an orphaned file set" do
+      it "deletes the fileset" do
+        change_set = ChangeSet.for(scanned_resource)
+        change_set_persister.delete(change_set: change_set)
+        allow(Valkyrie::StorageAdapter).to receive(:find_by).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+
+        described_class.perform_now(file_set_id)
+
+        expect { query_service.find_by(id: file_set_id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
   end
 end
