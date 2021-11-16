@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 # Generated with `rails generate valkyrie:model ScannedResource`
+
+# A scanned resource is the parent object for most digital objects that
+# go into figgy.
+# A ScannedResource might have one of 3 different change sets to allow different
+# metadata or workflow:
+#   - ScannedResourceChangeSet - metadata from an external system
+#   - RecordingChangeSet - external metadata, unique workflow
+#   - SimpleResourceChangeSet - local-only metadata, unique workflow
 class ScannedResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
@@ -11,6 +19,7 @@ class ScannedResource < Resource
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
+  # Store the type of change set used to create the resource
   attribute :change_set, Valkyrie::Types::String
   attribute :archival_collection_code, Valkyrie::Types::String
   attribute :date_range
@@ -51,6 +60,11 @@ class ScannedResource < Resource
   end
 
   def linked_resource
-    LinkedData::LinkedImportedResource.new(resource: self)
+    case change_set
+    when "simple"
+      LinkedData::LinkedSimpleResource.new(resource: self)
+    else
+      LinkedData::LinkedImportedResource.new(resource: self)
+    end
   end
 end

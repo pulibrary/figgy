@@ -6,7 +6,6 @@ module LinkedData
   class LinkedResource
     # @param resource [Valkyrie::Resource]
     def self.for(resource:)
-      return LinkedSimpleResource.new(resource: resource) if resource.try(:change_set) == "simple"
       resource.linked_resource
     end
 
