@@ -1,23 +1,26 @@
 # frozen_string_literal: true
 class FgdcUpdateService
+  def self.insert_onlink(file_set)
+    new(file_set: file_set).insert_onlink
+  end
+
+  attr_reader :file_set
   def initialize(file_set:)
     @file_set = file_set
   end
 
-  def insert_onlink(url:)
+  def insert_onlink(url: download_url)
     onlink = find_or_create_node("//idinfo/citation/citeinfo/onlink")
     onlink.content = url
-    save_changes
-    update_checksum
+    doc.to_xml
   end
 
   private
 
-    def change_set_persister
-      ::ChangeSetPersister.new(
-        metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-        storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
-      )
+    def download_url
+      return unless parent_resource && geo_member_file_set
+      path = url_helpers.download_path(resource_id: geo_member_file_set.id, id: geo_member_file_set.original_file.id)
+      "#{protocol}://#{host}#{path}"
     end
 
     def doc
@@ -44,20 +47,27 @@ class FgdcUpdateService
       doc.at_xpath(xpath_string)
     end
 
+    def geo_member_file_set
+      @geo_member_file_set ||= parent_resource.geo_members.try(:first)
+    end
+
+    def host
+      Figgy.default_url_options[:host]
+    end
+
     def original_file
       @file_set.original_file
     end
 
-    def save_changes
-      filepath = file_object.io.path
-      File.write(filepath, doc.to_xml)
+    def protocol
+      Figgy.default_url_options[:protocol] || "http"
     end
 
-    def update_checksum
-      original_file.checksum = MultiChecksum.for(file_object)
-      updated_change_set = ChangeSet.for(@file_set)
-      change_set_persister.buffer_into_index do |buffered_persister|
-        buffered_persister.save(change_set: updated_change_set)
-      end
+    def parent_resource
+      @parent_resource ||= file_set.decorate.parent
+    end
+
+    def url_helpers
+      Rails.application.routes.url_helpers
     end
 end

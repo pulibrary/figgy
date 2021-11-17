@@ -214,5 +214,33 @@ RSpec.describe DownloadsController do
         expect(response.body).to eq(sample_file.read)
       end
     end
+
+    context "with an FGDC metadata file" do
+      with_queue_adapter :inline
+      let(:parent_resource) do
+        change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [fgdc_file], member_ids: [vector_file_set.id]))
+      end
+      let(:fgdc_file) { fixture_file_upload("files/geo_metadata/fgdc-no-onlink.xml", "application/xml") }
+      let(:fgdc_file_set) { Wayfinder.for(parent_resource).geo_metadata_members.first }
+      let(:vector_file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: vector_file_metadata) }
+      let(:vector_file_id) { "1234567" }
+      let(:vector_file_metadata) do
+        FileMetadata.new(
+          id: Valkyrie::ID.new(vector_file_id),
+          use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
+          mime_type: 'application/zip; ogr-format="ESRI Shapefile"'
+        )
+      end
+      # Shared output context for stubbing tika
+      let(:tika_output) { tika_xml_output }
+
+      it "modifies inserts an onlink value into the file" do
+        get :show, params: { resource_id: fgdc_file_set.id.to_s, id: fgdc_file_set.file_metadata.first.id.to_s }
+
+        expect(response).to be_successful
+        doc = Nokogiri::XML(response.body)
+        expect(doc.at_xpath("//idinfo/citation/citeinfo/onlink").text).to match(/#{vector_file_set.id}\/file\/#{vector_file_id}/)
+      end
+    end
   end
 end

@@ -15,13 +15,18 @@ class DownloadsController < ApplicationController
     # Only append auth tokens to HLS if necessary, otherwise let normal behavior
     # take care of sending it.
     return send_hls if file_desc.mime_type.first.to_s == "application/x-mpegURL" && params[:auth_token].present?
-    prepare_file_headers
     # Necessary until a Rack version is released which allows for multiple
     # HTTP_X_ACCEL_MAPPING. When this commit is in a released version:
     # https://github.com/rack/rack/commit/f2361997623e5141e6baa907d79f1212b36fbb8b
     # remove this line and move it to the nginx configuration.
     request.env["HTTP_X_ACCEL_MAPPING"] = "/opt/repository/=/restricted_repository/"
-    send_file(load_file.file.disk_path, filename: load_file.original_name, type: load_file.mime_type, disposition: :inline)
+    # Insert onlink url into FGDC document before downloading
+    if file_desc.mime_type.first.to_s == "application/xml; schema=fgdc"
+      send_fgdc
+    else
+      prepare_file_headers
+      send_file(load_file.file.disk_path, filename: load_file.original_name, type: load_file.mime_type, disposition: :inline)
+    end
   end
 
   def send_hls
@@ -30,6 +35,18 @@ class DownloadsController < ApplicationController
       item.segment = "#{item.segment}?auth_token=#{params[:auth_token]}"
     end
     render plain: playlist.to_s
+  end
+
+  def send_fgdc
+    response.headers["Content-Type"] = file_desc.mime_type.first.to_s
+    response.headers["Content-Length"] ||= transformed_fgdc.size.to_s
+    # Prevent Rack::ETag from calculating a digest over body
+    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT") unless file_desc.updated_at.blank?
+    send_data(transformed_fgdc, filename: load_file.original_name, type: "application/xml", disposition: :inline)
+  end
+
+  def transformed_fgdc
+    @transformed_fgdc ||= FgdcUpdateService.insert_onlink(resource)
   end
 
   def resource
