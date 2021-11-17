@@ -4,7 +4,7 @@
 #
 ---
 fast_file_system:
-  home: <%= ENV["INGEST_FOLDER_PATH"] || Rails.root.join("staged_files") %>
+  home: <%= Figgy.config["ingest_folder_path"] %>
 google_drive:
   client_id: <%= ENV["GOOGLE_CLIENT_ID"] || 'client_id' %>
   client_secret: <%= ENV["GOOGLE_CLIENT_SECRET"] || 'client_secret' %>

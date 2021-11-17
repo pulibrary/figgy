@@ -3,16 +3,6 @@ require "rails_helper"
 
 RSpec.describe "Numismatic Ingest", js: true do
   describe "auto-ingest" do
-    let(:upload_path_value) { Rails.root.join("spec", "fixtures", "staged_files") }
-
-    before do
-      allow(BrowseEverything).to receive(:config).and_return(
-        fast_file_system: {
-          home: upload_path_value
-        }
-      )
-    end
-
     context "when there are matching files" do
       it "displays an auto-ingest button" do
         user = FactoryBot.create(:admin)

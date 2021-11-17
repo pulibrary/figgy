@@ -116,15 +116,13 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
   describe "auto ingest" do
     let(:user) { FactoryBot.create(:admin) }
     let(:coin) { FactoryBot.create_for_repository(:complete_open_coin, coin_number: coin_number) }
-    let(:staged_files) { Rails.root.join("spec", "fixtures", "staged_files") }
     before do
-      allow(BrowseEverything).to receive(:config).and_return(fast_file_system: { home: staged_files.to_s })
       allow(IngestFolderJob).to receive(:perform_later)
     end
 
     context "when a folder exists" do
       let(:coin_number) { 1234 }
-      let(:ingest_dir) { staged_files.join("numismatics", "1234") }
+      let(:ingest_dir) { Pathname.new(Figgy.config["ingest_folder_path"]).join("numismatics", "1234") }
       let(:args) { { directory: ingest_dir.to_s, property: "id", id: coin.id.to_s } }
 
       it "returns JSON for whether a directory exists" do
