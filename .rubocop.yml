@@ -38,6 +38,7 @@ Metrics/AbcSize:
     - 'app/exporters/hathi/submission_information_package.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/services/file_appender.rb'
+    - 'app/resources/cdl/charge_manager.rb'
 Metrics/BlockLength:
   Exclude:
     - '**/*.rake'
@@ -194,6 +195,7 @@ Metrics/MethodLength:
     - 'app/services/manifest_builder_v3/nav_place_builder.rb'
     - 'spec/support/stub_aspace.rb'
     - 'spec/services/manifest_builder_v3_spec.rb'
+    - 'app/resources/cdl/charge_manager.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'

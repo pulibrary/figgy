@@ -16,6 +16,12 @@ module CDL
       charged_items.map(&:netid).include? netid
     end
 
+    def charge_for(netid:)
+      charged_items.find do |charged_item|
+        charged_item.netid == netid
+      end
+    end
+
     # Hold Queries
 
     def active_hold?(netid:)

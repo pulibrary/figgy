@@ -286,6 +286,24 @@ describe CDL::ChargeManager do
       end
     end
 
+    context "the user already has the item charged" do
+      it "doesn't add a new charge" do
+        eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
+        stub_bibdata(bib_id: "123456")
+        resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+
+        resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+
+        charge_manager.create_charge(netid: "skye")
+        charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
+        charged_item = charge_manager.create_charge(netid: "skye")
+        expect(charged_item).to be_a CDL::ChargedItem
+        reloaded_charges = Valkyrie.config.metadata_adapter.query_service.find_by(id: resource_charge_list.id)
+        expect(reloaded_charges.charged_items.length).to eq 1
+      end
+    end
+
     context "it is not available for charge" do
       it "raises a CDL::UnavailableForCharge" do
         eligible_item_service = EligibleItemService.new(item_ids: [])
