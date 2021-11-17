@@ -39,6 +39,8 @@ module CDL
     end
 
     def create_charge(netid:)
+      existing_charge = resource_charge_list.charge_for(netid: netid)
+      return existing_charge if existing_charge.present?
       raise CDL::UnavailableForCharge unless available_for_charge?(netid: netid)
       charge = CDL::ChargedItem.new(item_id: available_item_ids.first, netid: netid, expiration_time: Time.current + 3.hours)
       change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
