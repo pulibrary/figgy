@@ -134,11 +134,6 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
     context "when asked to save and import" do
       before do
-        allow(BrowseEverything).to receive(:config).and_return(
-          fast_file_system: {
-            home: Rails.root.join("spec", "fixtures", "staged_files").to_s
-          }
-        )
         stub_bibdata(bib_id: "123456")
         stub_bibdata(bib_id: "4609321")
         stub_bibdata(bib_id: "1791261")
@@ -523,13 +518,6 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
   describe "GET /concern/scanned_resources/save_and_ingest/:id" do
     let(:user) { FactoryBot.create(:admin) }
-    before do
-      allow(BrowseEverything).to receive(:config).and_return(
-        fast_file_system: {
-          home: Rails.root.join("spec", "fixtures", "staged_files").to_s
-        }
-      )
-    end
     it "returns JSON for whether a directory exists" do
       get :save_and_ingest, params: { format: :json, id: "123456" }
 

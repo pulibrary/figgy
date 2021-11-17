@@ -1,4 +1,5 @@
 defaults: &defaults
+  ingest_folder_path: <%= ENV["INGEST_FOLDER_PATH"] || Rails.root.join("staged_files") %>
   index_read_only: false
   archivespace_url: <%= ENV["ASPACE_URL"] || "https://aspace-staging.princeton.edu/staff/api" %>
   archivespace_user: <%= ENV["ASPACE_USER"] %>
@@ -232,6 +233,7 @@ development:
 
 test:
   <<: *defaults
+  ingest_folder_path: <%= Rails.root.join("spec", "fixtures", "staged_files") %>
   archivespace_url: "https://aspace.test.org/staff/api"
   archivespace_user: "test"
   archivespace_password: "password"

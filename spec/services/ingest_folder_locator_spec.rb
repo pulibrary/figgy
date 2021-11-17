@@ -4,13 +4,7 @@ require "rails_helper"
 describe IngestFolderLocator do
   subject(:locator) { described_class.new(id: id) }
   let(:id) { "123456" }
-  let(:upload_path_value) { Rails.root.join("spec", "fixtures", "staged_files") }
-
-  before do
-    allow(BrowseEverything).to receive(:config).and_return(fast_file_system: {
-                                                             home: upload_path_value
-                                                           })
-  end
+  let(:upload_path_value) { Rails.root.join("spec", "fixtures", "staged_files").to_s }
 
   describe "#upload_path_value" do
     it "parses the upload path from the BrowseEverything config." do

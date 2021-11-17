@@ -3,7 +3,7 @@ export default class AutoIngestHandler {
     this.button_element = $('#auto-ingest-button')
     this.info_element = $('#auto-ingest-info')
     if (this.button_element.length) {
-      $.getJSON(`/concern/coins/${this.button_element.attr("data-id")}/discover_files`)
+      $.getJSON(`/concern/numismatics/coins/${this.button_element.attr("data-id")}/discover_files.json`)
         .done((data) => {
           if(data.exists == true) {
             this.button_element.prop('disabled', false)
