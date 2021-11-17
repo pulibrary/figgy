@@ -61,6 +61,26 @@ RSpec.describe Cdl::CdlController, type: :controller do
         charge_list = Wayfinder.for(resource).resource_charge_list
         expect(charge_list.hold_queue.first.netid).to eq user.uid
       end
+      context "and it raises a stale error" do
+        it "retries" do
+          user = FactoryBot.create(:user)
+          stub_bibdata(bib_id: "123456")
+          resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
+          charge_manager = instance_double(CDL::ChargeManager)
+          # Raise first time, return second time.
+          call_count = 0
+          allow(charge_manager).to receive(:create_hold) do
+            call_count += 1
+            call_count.odd? ? raise(Valkyrie::Persistence::StaleObjectError) : true
+          end
+          allow(CDL::ChargeManager).to receive(:new).and_return(charge_manager)
+          sign_in user
+
+          post :hold, params: { id: resource.id.to_s }
+
+          expect(response).to redirect_to "/viewer/#{resource.id}/auth"
+        end
+      end
     end
   end
 
@@ -112,6 +132,26 @@ RSpec.describe Cdl::CdlController, type: :controller do
           expect(resource_charge_list.charged_items[0].netid).to eq user.uid
           expect(response).to redirect_to "/viewer/#{resource.id}/auth"
           expect(CDL::EligibleItemService).to have_received(:item_ids).exactly(1).times
+        end
+        context "and it raises a stale error" do
+          it "retries" do
+            user = FactoryBot.create(:user)
+            stub_bibdata(bib_id: "123456")
+            resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
+            charge_manager = instance_double(CDL::ChargeManager)
+            # Raise first time, return second time.
+            call_count = 0
+            allow(charge_manager).to receive(:create_charge) do
+              call_count += 1
+              call_count.odd? ? raise(Valkyrie::Persistence::StaleObjectError) : true
+            end
+            allow(CDL::ChargeManager).to receive(:new).and_return(charge_manager)
+            sign_in user
+
+            post :charge, params: { id: resource.id.to_s }
+
+            expect(response).to redirect_to "/viewer/#{resource.id}/auth"
+          end
         end
       end
     end
@@ -221,6 +261,27 @@ RSpec.describe Cdl::CdlController, type: :controller do
         expect(flash[:notice]).to eq "Thank you for returning this item."
         charge_list = Wayfinder.for(resource).resource_charge_list
         expect(charge_list.charged_items.map(&:netid)).not_to include user.uid
+      end
+
+      context "and it raises a stale error" do
+        it "retries" do
+          user = FactoryBot.create(:user)
+          stub_bibdata(bib_id: "123456")
+          resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
+          charge_manager = instance_double(CDL::ChargeManager)
+          # Raise first time, return second time.
+          call_count = 0
+          allow(charge_manager).to receive(:return) do
+            call_count += 1
+            call_count.odd? ? raise(Valkyrie::Persistence::StaleObjectError) : true
+          end
+          allow(CDL::ChargeManager).to receive(:new).and_return(charge_manager)
+          sign_in user
+
+          post :return, params: { id: resource.id.to_s }
+
+          expect(response).to redirect_to "/viewer/#{resource.id}/auth"
+        end
       end
     end
 
