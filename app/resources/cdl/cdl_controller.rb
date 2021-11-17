@@ -9,8 +9,10 @@ module Cdl
 
     def charge
       return forbidden unless current_user
-      @charge_manager = charge_manager(params[:id])
-      @charge_manager.create_charge(netid: current_user.uid)
+      retry_stale do
+        @charge_manager = charge_manager(params[:id])
+        @charge_manager.create_charge(netid: current_user.uid)
+      end
       redirect_to auth_viewer_path(params[:id])
     rescue CDL::UnavailableForCharge
       flash[:alert] = "This item is not currently available for check out."
@@ -19,8 +21,10 @@ module Cdl
 
     def hold
       return forbidden unless current_user
-      @charge_manager = charge_manager(params[:id])
-      @charge_manager.create_hold(netid: current_user.uid)
+      retry_stale do
+        @charge_manager = charge_manager(params[:id])
+        @charge_manager.create_hold(netid: current_user.uid)
+      end
       redirect_to auth_viewer_path(params[:id])
     rescue CDL::HoldExists
       flash[:alert] = "You have already reserved this item."
@@ -29,8 +33,10 @@ module Cdl
 
     def return
       return forbidden unless current_user
-      @charge_manager = charge_manager(params[:id])
-      @charge_manager.return(netid: current_user.uid)
+      retry_stale do
+        @charge_manager = charge_manager(params[:id])
+        @charge_manager.return(netid: current_user.uid)
+      end
       flash[:notice] = "Thank you for returning this item."
       redirect_to auth_viewer_path(params[:id])
     rescue CDL::NotCharged
@@ -55,5 +61,15 @@ module Cdl
         storage_adapter: Valkyrie.config.storage_adapter
       )
     end
+
+    private
+
+      def retry_stale(times: 5)
+        count ||= 1
+        yield
+      rescue Valkyrie::Persistence::StaleObjectError
+        count += 1
+        retry if count < times
+      end
   end
 end
