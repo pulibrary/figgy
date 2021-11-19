@@ -13,4 +13,9 @@ class Ark
   def uri
     "http://arks.princeton.edu/#{ark}"
   end
+
+  # remove any path past the shoulder and blade, e.g. `/pdf`
+  def minimal_identifier
+    identifier.split("/")[0..2].join("/")
+  end
 end
