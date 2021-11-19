@@ -29,7 +29,7 @@ module Numismatics
     attribute :denomination
     attribute :edge
     attribute :era
-    attribute :issue_number, Valkyrie::Types::Coercible::Integer.optional
+    attribute :issue_number, Valkyrie::Types::Anything
     attribute :metal
     attribute :object_date
     attribute :object_type
