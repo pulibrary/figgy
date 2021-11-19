@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Types
-  include Dry.Types()
+  include Dry.Types(default: :nominal)
   URI = Dry::Types::Definition
         .new(RDF::URI)
         .constructor do |input|
@@ -10,6 +10,4 @@ module Types
       input
     end
   end
-
-  BetterParamsInteger = (Types::Params::Nil | Types::Params::Integer.optional)
 end
