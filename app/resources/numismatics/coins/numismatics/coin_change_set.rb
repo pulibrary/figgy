@@ -18,8 +18,6 @@ module Numismatics
     property :find_date, multiple: false, required: false
     property :find_feature, multiple: false, required: false
     property :find_locus, multiple: false, required: false
-    # We could use a validator if we get values that fail even here, such as
-    # string characters
     property :find_number, multiple: false, required: false, type: ::Types::BetterParamsInteger
     property :find_description, multiple: false, required: false
     property :die_axis, multiple: false, required: false
