@@ -11,7 +11,7 @@ module Numismatics
     attribute :numismatic_citation, Valkyrie::Types::Array.of(Numismatics::Citation).meta(ordered: true)
 
     # descriptive metadata
-    attribute :accession_number, Valkyrie::Types::Coercible::Integer.optional
+    attribute :accession_number, Valkyrie::Types::Integer
     attribute :account
     attribute :cost
     attribute :date
