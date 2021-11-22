@@ -22,10 +22,6 @@ class Preserver
         binary_node.checksum == preservation_node.checksum
     end
 
-    def needs_updated?
-      preservation_node.persisted? && checksum.present? && preservation_node.checksum != checksum
-    end
-
     def preservation_node
       @preservation_node ||=
         preservation_object.binary_nodes.find { |x| x.preservation_copy_of_id == binary_node.id } ||

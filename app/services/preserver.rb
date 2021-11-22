@@ -39,7 +39,7 @@ class Preserver
         next unless resource_binary_node.uploaded_content?
         preserve_binary_node(resource_binary_node, file_metadata) if force
         next if resource_binary_node.preserved?
-        next unless !file_metadata.persisted? || resource_binary_node.needs_updated?
+        next if file_metadata.persisted?
         preserve_binary_node(resource_binary_node, file_metadata)
       end
     end
