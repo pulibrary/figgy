@@ -2,6 +2,8 @@
 class ChangeSetPersister
   class ApplyRemoteMetadata
     attr_reader :change_set_persister, :change_set
+    delegate :query_service, to: :change_set_persister
+
     def initialize(change_set_persister:, change_set:, post_save_resource: nil)
       @change_set = change_set
       @change_set_persister = change_set_persister
@@ -29,10 +31,18 @@ class ChangeSetPersister
       end
 
       # Determines whether or not an identifier value is an ARK identifier
+      #   that has not already been used by another figgy object
       # @param identifier [String]
       # @return [Boolean]
-      def ark?(identifier)
-        identifier.start_with?(Ark.new(identifier).uri)
+      def unique_ark?(identifier)
+        ark = Ark.new(identifier)
+        return false unless identifier.start_with?(ark.uri)
+
+        ark_resources = query_service.custom_queries.find_by_property(
+          property: :identifier,
+          value: ark.minimal_identifier
+        )
+        ark_resources.empty?
       end
 
       # Determines whether or not an identifier has been modified in the ChangeSet
@@ -45,7 +55,7 @@ class ChangeSetPersister
       # @param attributes [Hash]
       def apply(attributes)
         change_set.model.imported_metadata = ImportedMetadata.new(attributes)
-        return unless attributes[:identifier] && !geo_resource? && !identifier_exists? && ark?(attributes[:identifier])
+        return unless attributes[:identifier] && !geo_resource? && !identifier_exists? && unique_ark?(attributes[:identifier])
         change_set.model.identifier = Ark.new(attributes[:identifier]).identifier
       end
   end

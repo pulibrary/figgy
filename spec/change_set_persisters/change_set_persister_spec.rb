@@ -27,6 +27,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_bibdata(bib_id: "123456")
     end
+
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
@@ -40,6 +41,7 @@ RSpec.describe ChangeSetPersister do
       # doesn't populate an archival_collection_code field
       expect(output.archival_collection_code).to be_nil
     end
+
     it "applies electronic locations" do
       stub_bibdata(bib_id: "9106203")
       resource = FactoryBot.build(:scanned_resource, title: [])
@@ -50,6 +52,20 @@ RSpec.describe ChangeSetPersister do
       expect(output.primary_imported_metadata.electronic_locations).to eq [
         LabeledURI.new(uri: RDF::URI("http://lib-dbserver.princeton.edu/music/programs/2015-04-24-25.pdf"), label: "Program.")
       ]
+    end
+
+    it "doesn't add an identifier that's already on another figgy resource" do
+      ark = "ark:/88435/d504rt69g"
+      FactoryBot.create_for_repository(:scanned_resource, title: ["Listing of contents"], identifier: ark)
+
+      resource = FactoryBot.build(:scanned_resource, title: [])
+      alma_id = "9919685413506421"
+      stub_bibdata(bib_id: alma_id)
+      change_set = ChangeSet.for(resource)
+      change_set.validate(source_metadata_identifier: alma_id)
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.identifier).to be nil
     end
   end
 
