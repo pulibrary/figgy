@@ -50,4 +50,14 @@ RSpec.describe ScannedResource do
       expect(scanned_resource.cached_parent_id).to be_nil
     end
   end
+
+  describe "#linked_resource" do
+    it "builds an object modeling the resource graph generalizing all resources" do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      linked_resource = resource.linked_resource
+
+      expect(linked_resource).to be_a LinkedData::LinkedImportedResource
+      expect(linked_resource.resource).to eq resource
+    end
+  end
 end
