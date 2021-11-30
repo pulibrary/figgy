@@ -13,16 +13,6 @@ class RasterResourceDerivativeService
     end
   end
 
-  class IoDecorator < SimpleDelegator
-    attr_reader :original_filename, :content_type, :use
-    def initialize(io, original_filename, content_type, use)
-      @original_filename = original_filename
-      @content_type = content_type
-      @use = use
-      super(io)
-    end
-  end
-
   attr_reader :id, :change_set_persister
   delegate :mime_type, to: :original_file
   delegate :query_service, to: :change_set_persister
@@ -41,11 +31,11 @@ class RasterResourceDerivativeService
   end
 
   def build_display_file
-    IoDecorator.new(temporary_display_output, "display_raster.tif", "image/tiff; gdal-format=GTiff", use_display)
+    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_display, copyable: true)
   end
 
   def build_thumbnail_file
-    IoDecorator.new(temporary_thumbnail_output, "thumbnail.png", "image/png", use_thumbnail)
+    IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copyable: true)
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
@@ -78,7 +68,7 @@ class RasterResourceDerivativeService
   end
 
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+    return Pathname.new(file_object.disk_path) if file_object.respond_to?(:disk_path) && File.exist?(file_object.disk_path)
   end
 
   def instructions_for_display
