@@ -32,7 +32,7 @@ class GeoserverMessageGenerator
     # @return [String]
     def derivative_file_path
       local_derivative = resource.derivative_files.find do |derivative_file|
-        derivative_file.file_identifiers.first.to_s.include?(Figgy.config["geoserver"]["derivatives_path"])
+        derivative_file.file_identifiers.first.to_s.include?(Figgy.config["geo_derivative_path"])
       end
       derivative_id = local_derivative.file_identifiers.first
       Valkyrie::StorageAdapter.find_by(id: derivative_id).io.path
