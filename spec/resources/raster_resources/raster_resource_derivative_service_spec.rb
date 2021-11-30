@@ -36,14 +36,16 @@ RSpec.describe RasterResourceDerivativeService do
   end
 
   context "with a valid geotiff" do
-    it "creates a display raster intermediate file and a thumbnail in the geo derivatives directory" do
+    it "creates a display raster intermediate file and a thumbnail in the geo derivatives directory, and also stores to the cloud" do
       resource = query_service.find_by(id: valid_resource.id)
       rasters = resource.file_metadata.find_all { |f| f.label == ["display_raster.tif"] }
       thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
       raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.first.file_identifiers.first)
       thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
+      cloud_raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.last.file_identifiers.first)
       expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+      expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
     end
   end
 

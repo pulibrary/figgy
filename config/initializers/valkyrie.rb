@@ -199,6 +199,22 @@ Rails.application.config.to_prepare do
       ),
       :cloud_geo_derivatives
     )
+  else
+    # Fall back to disk storage for development/test or if S3 is not
+    # configured.
+    Valkyrie::StorageAdapter.register(
+      InstrumentedStorageAdapter.new(
+        storage_adapter: Valkyrie::Storage::Disk.new(
+          base_path: Figgy.config["test_cloud_geo_derivative_path"],
+          file_mover: lambda { |old_path, new_path|
+            FileUtils.mv(old_path, new_path)
+            FileUtils.chmod(0o644, new_path)
+          }
+        ),
+        tracer: Datadog.tracer
+      ),
+      :cloud_geo_derivatives
+    )
   end
 
   # Registers a storage adapter for storing a Bag on a *NIX file system

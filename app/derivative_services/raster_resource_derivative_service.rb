@@ -31,7 +31,7 @@ class RasterResourceDerivativeService
   end
 
   def build_display_file
-    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_display, copyable: true)
+    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_display, copyable: false)
   end
 
   def build_thumbnail_file
@@ -57,10 +57,26 @@ class RasterResourceDerivativeService
     change_set_persister.buffer_into_index do |buffered_persister|
       @resource = buffered_persister.save(change_set: change_set)
     end
+    # Persist a second copy of the display file to the cloud.
+    create_cloud_derivatives
     update_error_message(message: nil) if original_file.error_message.present?
   rescue StandardError => error
     update_error_message(message: error.message)
     raise error
+  end
+
+  def create_cloud_derivatives
+    @change_set = ChangeSet.for(resource)
+    change_set.files = [build_display_file]
+    change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
+      cloud_persister.buffer_into_index do |buffered_persister|
+        @resource = buffered_persister.save(change_set: change_set)
+      end
+    end
+  end
+
+  def cloud_storage_adapter
+    Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
   end
 
   def file_object
