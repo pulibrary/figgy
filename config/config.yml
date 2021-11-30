@@ -11,6 +11,9 @@ defaults: &defaults
   pyramidals_region: "us-east-1"
   aws_access_key_id: <%= ENV["FIGGY_AWS_ACCESS_KEY_ID"] %>
   aws_secret_access_key: <%= ENV["FIGGY_AWS_SECRET_ACCESS_KEY"] %>
+  cloud_geo_region: "us-east-1"
+  cloud_geo_bucket: <%= ENV["FIGGY_CLOUD_GEO_BUCKET"] %>
+  test_cloud_geo_derivative_path: <%= Rails.root.join("tmp", "cloud_geo_derivatives") %>
   preservation_bucket: "figgy-staging-preservation"
   fixity_status_topic: "figgy-staging-fixity-status"
   fixity_request_topic: "figgy-staging-fixity-request"
@@ -279,6 +282,7 @@ production:
   fixity_status_topic: "figgy-production-fixity-status"
   fixity_request_topic: "figgy-production-fixity-request"
   pyramidals_bucket: "iiif-image-production"
+  cloud_geo_bucket: "figgy-geo-production"
   enable_pyramidal_access: <%= ENV["FIGGY_PYRAMIDAL_ACCESS"].present? || false %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
@@ -293,6 +297,7 @@ staging:
   index_read_only: false # set to true if doing a long reindex process.
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
+  cloud_geo_bucket: "figgy-geo-staging"
   pyramidal_derivative_path: "/opt/repository/derivatives/pyramidals"
   geo_derivative_path: "/opt/repository/geo_derivatives"
   stream_derivatives_path: "/opt/repository/stream_derivatives"
