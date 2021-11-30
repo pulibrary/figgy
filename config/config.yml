@@ -11,6 +11,8 @@ defaults: &defaults
   pyramidals_region: "us-east-1"
   aws_access_key_id: <%= ENV["FIGGY_AWS_ACCESS_KEY_ID"] %>
   aws_secret_access_key: <%= ENV["FIGGY_AWS_SECRET_ACCESS_KEY"] %>
+  cloud_geo_region: "us-east-1"
+  cloud_geo_bucket: "figgy-geo-staging"
   preservation_bucket: "figgy-staging-preservation"
   fixity_status_topic: "figgy-staging-fixity-status"
   fixity_request_topic: "figgy-staging-fixity-request"

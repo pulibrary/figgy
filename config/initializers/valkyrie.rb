@@ -180,6 +180,27 @@ Rails.application.config.to_prepare do
     :geo_derivatives
   )
 
+  if Figgy.config["cloud_geo_bucket"].present? && !Rails.env.test?
+    require "shrine/storage/s3"
+    Shrine.storages = (Shrine.storages || {}).merge(
+      cloud_geo_storage: Shrine::Storage::S3.new(
+        bucket: Figgy.config["cloud_geo_bucket"],
+        region: Figgy.config["cloud_geo_region"],
+        access_key_id: Figgy.config["aws_access_key_id"],
+        secret_access_key: Figgy.config["aws_secret_access_key"]
+      )
+    )
+    Valkyrie::StorageAdapter.register(
+      Valkyrie::Storage::Shrine.new(
+        Shrine.storages[:cloud_geo_storage],
+        Shrine::NullVerifier,
+        Valkyrie::Storage::Disk::BucketedStorage,
+        identifier_prefix: "cloud-geo-derivatives"
+      ),
+      :cloud_geo_derivatives
+    )
+  end
+
   # Registers a storage adapter for storing a Bag on a *NIX file system
   # @see https://tools.ietf.org/html/draft-kunze-bagit-14
   Valkyrie::StorageAdapter.register(
