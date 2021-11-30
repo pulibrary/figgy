@@ -282,6 +282,7 @@ production:
   fixity_status_topic: "figgy-production-fixity-status"
   fixity_request_topic: "figgy-production-fixity-request"
   pyramidals_bucket: "iiif-image-production"
+  cloud_geo_bucket: "figgy-geo-production"
   enable_pyramidal_access: <%= ENV["FIGGY_PYRAMIDAL_ACCESS"].present? || false %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
