@@ -1,14 +1,14 @@
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h2 class="panel-title">Child Raster Resources</h2>
+      <h2 class="panel-title">Child <%= member_type.titleize.pluralize %></h2>
     </div>
-    <div class="panel-body member-resources">
+    <div class="panel-body member-resources" id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
       <%= simple_form_for @change_set do |f| %>
         <div class="row">
           <div class="col-md-12">
             <div class="loading-status hidden">Loading...</div>
-            <table id="members-raster-resources"
-            class="table table-striped member-resources member-raster-resources"
+            <table id="<%= "members-#{member_type.pluralize.dasherize}" %>"
+                   class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize}" %>"
             data-update-url="<%= polymorphic_url([resource]) %>"
             data-query-url="<%= solr_document_path(id: resource.id) %>"
             data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
@@ -25,17 +25,17 @@
               </thead>
 
               <tbody>
-                <% unless decorated_resource.decorated_raster_resources.empty? %>
-                  <% decorated_resource.decorated_raster_resources.each do |raster_resource| %>
-                    <% raster_resource_url = parent_solr_document_path(parent_id: resource.id, id: raster_resource.id) %>
-                    <tr data-resource-id="<%= raster_resource.id.to_s %>">
-                      <td><%= link_to figgy_thumbnail_path(raster_resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), raster_resource_url %></td>
-                      <td><%= raster_resource.first_title %></td>
-                      <td><%= raster_resource.created_at %></td>
-                      <td><%= raster_resource.visibility_badge.first.html_safe %></td>
+                <% unless decorated_members.empty? %>
+                  <% decorated_members.each do |resource| %>
+                    <% resource_url = parent_solr_document_path(parent_id: decorated_resource.id, id: resource.id) %>
+                    <tr data-resource-id="<%= resource.id.to_s %>">
+                      <td><%= link_to figgy_thumbnail_path(resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), resource_url %></td>
+                      <td><%= resource.first_title %></td>
+                      <td><%= resource.created_at %></td>
+                      <td><%= resource.visibility_badge.first.html_safe %></td>
                       <td>
-                        <%= link_to 'View', raster_resource_url, class: 'btn btn-default' %>
-                        <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-default' %>
+                        <%= link_to 'View', resource_url, class: 'btn btn-default' %>
+                        <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
                         <span class="input-group-btn">
                           <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
                         </span>
@@ -43,7 +43,7 @@
                   <% end %>
                 <% else %>
                   <tr>
-                    <td>This work has no raster resources attached.  Click "Attach Child" to attach raster resources.</td>
+                    <td><%= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -62,11 +62,11 @@
           </div>
           <div class="col-md-4">
             <%= f.input :member_ids,
-                        placeholder: 'Child raster resource identifier...',
+                        placeholder: "Child #{member_type.humanize(capitalize: false)} identifier...",
                         label: false,
                         required: false,
                         input_html: {
-                          id: "child_raster_resource_id_input",
+                          id: "child_#{member_type}_id_input",
                           class: [
                             'related_resource_ids',
                             'resource_member_ids',
@@ -77,7 +77,7 @@
           </div>
           <div class="col-md-2">
             <span class="input-group-btn">
-              <%= f.button :button, "Attach", id: "child_raster_resource_button", class: ["btn","btn-primary","btn-add-row"] %>
+              <%= f.button :button, "Attach", id: "child_#{member_type}_button", class: ["btn","btn-primary","btn-add-row"] %>
             </span>
           </div>
         </div>

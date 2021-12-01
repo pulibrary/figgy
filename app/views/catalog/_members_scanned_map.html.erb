@@ -1,3 +1,5 @@
   <%= render partial: 'member_resources_scanned_map' %>
-  <%= render partial: 'member_resources_raster_resource' %>
+  <%= render partial: 'member_resources',
+    locals: { member_type: "raster_resource",
+              decorated_members: decorated_resource.decorated_raster_resources } %>
   <%= render partial: 'parent_resources_scanned_map' %>

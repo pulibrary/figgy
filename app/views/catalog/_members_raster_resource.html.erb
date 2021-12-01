@@ -1,4 +1,8 @@
-  <%= render partial: 'member_resources_raster_resource' %>
-  <%= render partial: 'member_resources_vector_resource' %>
+  <%= render partial: 'member_resources',
+    locals: { member_type: "raster_resource",
+              decorated_members: decorated_resource.decorated_raster_resources } %>
+  <%= render partial: 'member_resources',
+    locals: { member_type: "vector_resource",
+              decorated_members: decorated_resource.decorated_vector_resources } %>
   <%= render partial: 'parent_resources_scanned_map' %>
   <%= render partial: 'parent_resources_raster_resource' %>

@@ -1,3 +1,5 @@
-  <%= render partial: 'member_resources_vector_resource' %>
+  <%= render partial: 'member_resources',
+    locals: { member_type: "vector_resource",
+              decorated_members: decorated_resource.decorated_vector_resources } %>
   <%= render partial: 'parent_resources_raster_resource' %>
   <%= render partial: 'parent_resources_vector_resource' %>
