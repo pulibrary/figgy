@@ -37,7 +37,7 @@ export default class Initializer {
     Blacklight.ajaxModal.setup_modal()
     $("optgroup:not([label=Favorites])").addClass("closed")
     $("select:not(.select2)").selectpicker({'liveSearch': true})
-    $(".datatable").DataTable()
+    this.datatable = $(".datatable").DataTable()
     // Set an initial sort order of data table for coins
     $(".coin-datatable").DataTable({
       "order": [[ 2, "asc" ]]
@@ -46,6 +46,7 @@ export default class Initializer {
     $("#requests-table").DataTable({
       order: [[1, "desc"]],
     })
+    this.initialize_related_resources()
   }
 
   initialize_timepicker() {
@@ -64,6 +65,20 @@ export default class Initializer {
     })
   }
 
+  initialize_related_resources() {
+    $(".document div.member-resources").each((_i, element) => {
+      const $element = $(element)
+      const $form = $element.parent('form')
+      new MemberResourcesTables($element, $form, this.datatable)
+    })
+
+    $(".document div.parent-resources").each((_i, element) => {
+      const $element = $(element)
+      const $form = $element.parent('form')
+      new ParentResourcesTables($element, $form, this.datatable)
+    })
+  }
+
   initialize_form() {
     if($("#form-progress").length > 0) {
       new SaveWorkControl($("#form-progress"))
@@ -76,18 +91,6 @@ export default class Initializer {
     $("form.edit_file_set.admin_controls").each((_i, element) =>
       new FileSetForm($(element))
     )
-
-    $(".document div.member-resources").each((_i, element) => {
-      const $element = $(element)
-      const $form = $element.parent('form')
-      new MemberResourcesTables($element, $form)
-    })
-
-    $(".document div.parent-resources").each((_i, element) => {
-      const $element = $(element)
-      const $form = $element.parent('form')
-      new ParentResourcesTables($element, $form)
-    })
 
     $('select.select2').select2({
       tags: true,

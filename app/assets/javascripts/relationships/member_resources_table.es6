@@ -5,8 +5,8 @@ import RelatedResourcesTable from 'relationships/related_resources_table';
 */
 export default class MemberResourcesTable extends RelatedResourcesTable {
 
-  constructor(element, form) {
-    super(element, form);
+  constructor(element, form, datatable) {
+    super(element, form, datatable);
     this.attribute = 'member_ids';
   }
 
@@ -47,6 +47,7 @@ export default class MemberResourcesTable extends RelatedResourcesTable {
       } else if ($.inArray(attachedId, $this.members) > -1) {
         $this.setWarningMessage($row, 'Resource is already related.');
       } else {
+        $this.datatable.destroy();
         $this.members.push(attachedId);
         $this.hideWarningMessage($row);
         $element.prop('disabled', true)

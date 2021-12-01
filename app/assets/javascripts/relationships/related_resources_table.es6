@@ -1,9 +1,9 @@
 /**
- * Provides basic functionality to add and remove member works.
+ * Superclass for adding and removing member and parent works.
  * Adapted from the related_works.es6 module in https://github.com/samvera-labs/geo_works
  */
 export default class RelatedResourcesTable {
-  constructor(element, form) {
+  constructor(element, form, datatable) {
     this.element = $(element)
     this.table = this.element.find('table')
     this.$tbody = this.table.find('tbody')
@@ -20,6 +20,7 @@ export default class RelatedResourcesTable {
     this.$authenticityToken = this.$form.find('input[name="authenticity_token"]');
     this.authenticityToken = this.$authenticityToken.val();
 
+    this.datatable = datatable
     this.$select = this.table.find('input.related_resource_ids')
 
     this.members = this.table.data('members');
@@ -49,6 +50,17 @@ export default class RelatedResourcesTable {
   }
 
   /**
+   * Unbind buttons and then bind again to member works table.
+   * Prevents click events from firing twice
+   */
+  reBindButtons() {
+    const $this = this;
+    $this.element.find('.btn-add-row').unbind("click")
+    $this.element.find('.btn-remove-row').unbind("click")
+    $this.bindButtons();
+  }
+
+  /**
    * Bind buttons to member works table.
    */
   bindButtons() {
@@ -73,6 +85,7 @@ export default class RelatedResourcesTable {
       } else if ($.inArray(attachedId, $this.members) > -1) {
         $this.setWarningMessage($row, 'Resource is already related.');
       } else {
+        $this.datatable.destroy();
         $this.members.push(attachedId);
         $this.hideWarningMessage($row);
         $element.prop('disabled', true)
@@ -110,6 +123,7 @@ export default class RelatedResourcesTable {
       const memberId = $row.data('resource-id');
       const index = $this.members.indexOf(memberId);
 
+      $this.datatable.destroy();
       $this.members.splice(index, 1);
       $element.prop('disabled', true)
       $this.setLoading(true)
@@ -191,9 +205,11 @@ export default class RelatedResourcesTable {
 
     $this.$tbody.load(`${$this.query_url} #${this.table[0].id} tbody > *`, () => {
       $this.setLoading(false)
-      $this.bindButtons();
+      $this.reBindButtons();
       // Clear existing resource input value
       $this.element.find('.related_resource_ids').val('')
+      // reload the datatable
+      $this.datatable = $(".datatable").DataTable()
     });
   }
 
