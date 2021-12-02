@@ -1,6 +1,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h2 class="panel-title">Child <%= member_type.titleize.pluralize %></h2>
+      <% panel_title ||= "Child #{member_type.titleize.pluralize}" %>
+      <h2 class="panel-title"><%= panel_title %></h2>
     </div>
     <div class="panel-body member-resources" id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
       <%= simple_form_for @change_set do |f| %>
@@ -20,6 +21,7 @@
                 <th>Title</th>
                 <th>Date Uploaded</th>
                 <th>Visibility</th>
+                <th>Local Fixity</th>
                 <th>Actions</th>
                 </tr>
               </thead>
@@ -33,6 +35,7 @@
                       <td><%= resource.first_title %></td>
                       <td><%= resource.created_at %></td>
                       <td><%= resource.visibility_badge.first.html_safe %></td>
+                      <td><%= resource.fixity_badges.html_safe %></td>
                       <td>
                         <%= link_to 'View', resource_url, class: 'btn btn-default' %>
                         <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
