@@ -17,7 +17,7 @@ describe('MemberResourcesTable', () => {
           data-param-key="scanned_resource">
           </table>
           <input type="text" name="scanned_resource[member_ids]"
-          id="scanned_resource_member_ids" class="related_resource_ids">
+          id="child_scanned_resource_id_input" class="related_resource_ids">
           <button name="button" type="submit" class="btn-add-row">Attach</button>
         </div>`
       document.body.innerHTML = initialHTML
@@ -32,7 +32,7 @@ describe('MemberResourcesTable', () => {
       const jqxhr = { getResponseHeader: () => null }
       const ajax_spy = jest.spyOn($, 'ajax').mockImplementation(() => { return jQ.Deferred().resolve(data, status, jqxhr) } )
 
-      document.getElementById('scanned_resource_member_ids').value = newMemberId
+      document.getElementById('child_scanned_resource_id_input').value = newMemberId
       document.getElementsByClassName('btn-add-row')[0].click()
 
       expect(ajax_spy).toBeCalledWith(

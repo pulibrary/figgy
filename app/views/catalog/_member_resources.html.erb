@@ -45,8 +45,9 @@
                     </tr>
                   <% end %>
                 <% else %>
+                  <% empty_text ||= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %>
                   <tr>
-                    <td><%= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %></td>
+                    <td><%= empty_text %></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -64,8 +65,9 @@
             </table>
           </div>
           <div class="col-md-4">
+            <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
             <%= f.input :member_ids,
-                        placeholder: "Child #{member_type.humanize(capitalize: false)} identifier...",
+                        placeholder: placeholder_text,
                         label: false,
                         required: false,
                         input_html: {
