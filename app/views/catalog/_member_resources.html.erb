@@ -3,18 +3,21 @@
       <% panel_title ||= "Child #{member_type.titleize.pluralize}" %>
       <h2 class="panel-title"><%= panel_title %></h2>
     </div>
-    <div class="panel-body member-resources" id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
+    <div class="panel-body member-resources"
+      id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
       <%= simple_form_for @change_set do |f| %>
         <div class="row">
+
           <div class="col-md-12">
             <div class="loading-status hidden">Loading...</div>
+
             <table id="<%= "members-#{member_type.pluralize.dasherize}" %>"
                    class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize}" %>"
-            data-update-url="<%= polymorphic_url([resource]) %>"
-            data-query-url="<%= solr_document_path(id: resource.id) %>"
-            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-            data-resource-id="<%= resource.id.to_s %>"
-            data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+                    data-update-url="<%= polymorphic_url([resource]) %>"
+                    data-query-url="<%= solr_document_path(id: resource.id) %>"
+                    data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
+                    data-resource-id="<%= resource.id.to_s %>"
+                    data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
               <thead>
                 <tr>
                 <th>Thumbnail</th>
@@ -27,7 +30,6 @@
               </thead>
 
               <tbody>
-                <% unless decorated_members.empty? %>
                   <% decorated_members.each do |resource| %>
                     <% resource_url = parent_solr_document_path(parent_id: decorated_resource.id, id: resource.id) %>
                     <tr data-resource-id="<%= resource.id.to_s %>">
@@ -42,28 +44,29 @@
                         <span class="input-group-btn">
                           <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
                         </span>
+                      </td>
                     </tr>
                   <% end %>
-                <% else %>
-                  <% empty_text ||= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %>
-                  <tr>
-                    <td><%= empty_text %></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                <% end %>
-                <tr class="message has-warning hidden">
-                  <td class="alert-warning"></td>
-                  <td id="warning-message" class="alert-warning"></td>
-                  <td class="alert-warning"></td>
-                  <td class="alert-warning"></td>
-                  <td class="alert-warning"></td>
-                </tr>
               </tbody>
             </table>
+
           </div>
+
+          <% if decorated_members.empty? %>
+            <div class="col-md-6">
+              <% empty_text ||= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %>
+              <p><%= empty_text %></p>
+            </div>
+          <% end %>
+        </div><!-- row -->
+
+        <div class="row">
+          <div class="message has-warning hidden col-md-6">
+            <p id="warning-message" class="alert-warning"></p>
+          </div>
+        </div><!-- row -->
+
+        <div class="row">
           <div class="col-md-4">
             <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
             <%= f.input :member_ids,
@@ -85,7 +88,8 @@
               <%= f.button :button, "Attach", id: "child_#{member_type}_button", class: ["btn","btn-primary","btn-add-row"] %>
             </span>
           </div>
-        </div>
+
+        </div><!-- row -->
       <% end %>
     </div>
   </div>

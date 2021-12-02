@@ -16,7 +16,7 @@ RSpec.describe "catalog/_members_scanned_resource" do
     it "allows you to attach them" do
       expect(rendered).to have_selector "input#child_scanned_resource_id_input"
       expect(rendered).to have_selector "button", text: "Attach"
-      expect(rendered).to have_selector "td", text: 'This work has no volumes attached. Click "Attach Scanned Resource" or attach existing resource.'
+      expect(rendered).to have_selector "p", text: 'This work has no volumes attached. Click "Attach Scanned Resource" or attach an existing resource.'
     end
   end
 end
