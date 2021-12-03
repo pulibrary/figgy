@@ -5,12 +5,14 @@
   */
 
 export default class MemberResourcesTable {
-  constructor(element, form, datatable) {
+  constructor(element, form) {
     this.element = $(element)
     this.table = this.element.find('table')
     this.$tbody = this.table.find('tbody')
     this.members = this.table.data('members');
-    this.datatable = datatable
+    // We initialize datatables here instead of in figgy_boot because we need
+    // to hold a specific reference to each one
+    this.initializeDataTable()
 
     this.update_url = this.table.data('update-url')
     this.query_url = this.table.data('query-url')
@@ -212,8 +214,12 @@ export default class MemberResourcesTable {
       // Clear existing resource input value
       $this.element.find('.related_resource_ids').val('')
       // reload the datatable
-      $this.datatable = $(".datatable").DataTable()
+      $this.initializeDataTable()
     });
+  }
+
+  initializeDataTable() {
+    this.datatable = this.element.find('.member-resources-datatable').DataTable()
   }
 
   /**

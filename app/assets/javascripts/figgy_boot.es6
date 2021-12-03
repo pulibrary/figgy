@@ -37,16 +37,8 @@ export default class Initializer {
     Blacklight.ajaxModal.setup_modal()
     $("optgroup:not([label=Favorites])").addClass("closed")
     $("select:not(.select2)").selectpicker({'liveSearch': true})
-    this.datatable = $(".datatable").DataTable()
-    // Set an initial sort order of data table for coins
-    $(".coin-datatable").DataTable({
-      "order": [[ 2, "asc" ]]
-    })
-    // Set an initial sort order of data table for ocr requests
-    $("#requests-table").DataTable({
-      order: [[1, "desc"]],
-    })
-    this.initialize_related_resources()
+
+    this.initialize_datatables()
   }
 
   initialize_timepicker() {
@@ -65,17 +57,17 @@ export default class Initializer {
     })
   }
 
-  initialize_related_resources() {
-    $(".document div.member-resources").each((_i, element) => {
-      const $element = $(element)
-      const $form = $element.parent('form')
-      new MemberResourcesTables($element, $form, this.datatable)
+  // most datatables can be initialized here
+  // note that member resources datatables are initialized in that class
+  initialize_datatables() {
+    $(".datatable").DataTable()
+    // Set an initial sort order of data table for coins
+    $(".coin-datatable").DataTable({
+      "order": [[ 2, "asc" ]]
     })
-
-    $(".document div.parent-resources").each((_i, element) => {
-      const $element = $(element)
-      const $form = $element.parent('form')
-      new ParentResourcesTables($element, $form)
+    // Set an initial sort order of data table for ocr requests
+    $("#requests-table").DataTable({
+      order: [[1, "desc"]],
     })
   }
 
@@ -96,6 +88,18 @@ export default class Initializer {
       tags: true,
       placeholder: "Nothing selected",
       allowClear: true
+    })
+
+    $(".document div.member-resources").each((_i, element) => {
+      const $element = $(element)
+      const $form = $element.parent('form')
+      new MemberResourcesTables($element, $form)
+    })
+
+    $(".document div.parent-resources").each((_i, element) => {
+      const $element = $(element)
+      const $form = $element.parent('form')
+      new ParentResourcesTables($element, $form)
     })
   }
 

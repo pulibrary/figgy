@@ -22,7 +22,7 @@
 
             <table
               id="<%= "members-#{member_type.pluralize.dasherize}" %>"
-              class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize}" %>"
+              class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize} member-resources-datatable" %>"
               data-update-url="<%= polymorphic_url([resource]) %>"
               data-query-url="<%= solr_document_path(id: resource.id) %>"
               data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
