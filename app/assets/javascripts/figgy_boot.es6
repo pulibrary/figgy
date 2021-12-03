@@ -75,7 +75,7 @@ export default class Initializer {
     $(".document div.parent-resources").each((_i, element) => {
       const $element = $(element)
       const $form = $element.parent('form')
-      new ParentResourcesTables($element, $form, this.datatable)
+      new ParentResourcesTables($element, $form)
     })
   }
 
