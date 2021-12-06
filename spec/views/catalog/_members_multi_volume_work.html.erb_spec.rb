@@ -27,7 +27,7 @@ RSpec.describe "catalog/_members_multi_volume_work" do
       expect(rendered).to have_link "View", href: parent_solr_document_path(parent, child.id)
       expect(rendered).to have_link "Edit", href: edit_scanned_resource_path(child.id)
       expect(rendered).to have_selector "button", text: "Detach"
-      expect(rendered).to have_selector "input#scanned_resource_member_ids"
+      expect(rendered).to have_selector "input#child_scanned_resource_id_input"
       expect(rendered).to have_selector "button", text: "Attach"
     end
   end

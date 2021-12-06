@@ -37,15 +37,8 @@ export default class Initializer {
     Blacklight.ajaxModal.setup_modal()
     $("optgroup:not([label=Favorites])").addClass("closed")
     $("select:not(.select2)").selectpicker({'liveSearch': true})
-    $(".datatable").DataTable()
-    // Set an initial sort order of data table for coins
-    $(".coin-datatable").DataTable({
-      "order": [[ 2, "asc" ]]
-    })
-    // Set an initial sort order of data table for ocr requests
-    $("#requests-table").DataTable({
-      order: [[1, "desc"]],
-    })
+
+    this.initialize_datatables()
   }
 
   initialize_timepicker() {
@@ -64,6 +57,20 @@ export default class Initializer {
     })
   }
 
+  // most datatables can be initialized here
+  // note that member resources datatables are initialized in that class
+  initialize_datatables() {
+    $(".datatable").DataTable()
+    // Set an initial sort order of data table for coins
+    $(".coin-datatable").DataTable({
+      "order": [[ 2, "asc" ]]
+    })
+    // Set an initial sort order of data table for ocr requests
+    $("#requests-table").DataTable({
+      order: [[1, "desc"]],
+    })
+  }
+
   initialize_form() {
     if($("#form-progress").length > 0) {
       new SaveWorkControl($("#form-progress"))
@@ -77,6 +84,12 @@ export default class Initializer {
       new FileSetForm($(element))
     )
 
+    $('select.select2').select2({
+      tags: true,
+      placeholder: "Nothing selected",
+      allowClear: true
+    })
+
     $(".document div.member-resources").each((_i, element) => {
       const $element = $(element)
       const $form = $element.parent('form')
@@ -87,12 +100,6 @@ export default class Initializer {
       const $element = $(element)
       const $form = $element.parent('form')
       new ParentResourcesTables($element, $form)
-    })
-
-    $('select.select2').select2({
-      tags: true,
-      placeholder: "Nothing selected",
-      allowClear: true
     })
   }
 

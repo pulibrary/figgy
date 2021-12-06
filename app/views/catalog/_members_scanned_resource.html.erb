@@ -1,1 +1,6 @@
-  <%= render partial: 'member_resources_scanned_resource' %>
+  <%= render partial: 'member_resources',
+    locals: { member_type: "scanned_resource",
+              decorated_members: decorated_resource.volumes,
+              panel_title: "Members",
+              placeholder_text: 'Attach an existing resource by ID...',
+              empty_text: 'This work has no volumes attached. Click "Attach Scanned Resource" or attach an existing resource.' } %>

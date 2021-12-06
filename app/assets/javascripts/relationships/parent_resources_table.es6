@@ -1,35 +1,41 @@
-import RelatedResourcesTable from 'relationships/related_resources_table';
-
 /**
-* Provides functionality to add and remove parent works.
-*/
-export default class ParentResourcesTable extends RelatedResourcesTable {
+  * Provides functionality to add and remove parent resources.
+  * Companion to MemberResourcesTable
+  * Adapted from the related_works.es6 module in https://github.com/samvera-labs/geo_works
+  */
 
+export default class ParentResourcesTable {
   constructor(element, form) {
-    super(element, form)
-    this.attribute = 'member_ids'
+    this.element = $(element)
+    this.table = this.element.find('table')
+    this.$tbody = this.table.find('tbody')
     this.parents = this.table.data('parents')
-    this.resourceId = this.table.data('resource-id')
-  }
+    this.members = this.table.data('members');
 
-  buildAddFormData(parentId) {
-    return {
-      [this.model]: {
-        ["append_id"]: parentId
-      }
-    }
+    this.update_url = this.table.data('update-url')
+    this.query_url = this.table.data('query-url')
+    if (!this.query_url) { return }
+
+    this.$form = $(form);
+    $(this.$form).submit((e) => e.preventDefault());
+    this.$authenticityToken = this.$form.find('input[name="authenticity_token"]');
+    this.authenticityToken = this.$authenticityToken.val();
+
+    this.model = this.table.data('param-key');
+    this.resourceId = this.table.data('resource-id')
+
+    this.loading = false
+    this.$loading = this.table.prev('.loading-status')
+    this.bindButtons();
   }
 
   /**
-  * Builds form data strings.
-  */
-  buildRemoveFormData(parentId) {
-    return {
-      'authenticity_token': this.authenticityToken,
-      'parent_resource': {
-        id: parentId
-      }
-    };
+   * Bind click events to buttons
+   */
+  bindButtons() {
+    const $this = this;
+    $this.bindAddButton();
+    $this.bindRemoveButton();
   }
 
   /**
@@ -57,7 +63,7 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
           url: $this.update_url,
           element: $element,
           object: $this,
-          data: $this.buildAddFormData(parentId),
+          data: { [this.model]: { ["append_id"]: parentId }},
           on_error: $this.handleError,
           on_success: $this.reloadTable
         });
@@ -87,7 +93,10 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
         row: $row,
         members: null,
         member: null,
-        data: $this.buildRemoveFormData(parentId),
+        data: {
+          'authenticity_token': this.authenticityToken,
+          'parent_resource': { id: parentId }
+        },
         url: update_url,
         element: $element,
         object: $this,
@@ -96,5 +105,91 @@ export default class ParentResourcesTable extends RelatedResourcesTable {
       })
       event.preventDefault()
     });
+  }
+
+  setLoading(state) {
+    this.loading = state
+    this.update()
+  }
+
+  update() {
+    if(this.loading) {
+      this.$loading.removeClass('hidden')
+      this.table.addClass('loading')
+    } else {
+      this.$loading.addClass('hidden')
+      this.table.removeClass('loading')
+    }
+  }
+
+  /**
+   * Set the warning message related to the appropriate row in the table
+   * @param {jQuery} row the row containing the warning message to display
+   * @param {String} message the warning message text to set
+   */
+  setWarningMessage(row, message) {
+    const $this = this;
+    const $warning = $this.element.find('#warning-message');
+    $warning.text(message);
+    $warning.parent().removeClass('hidden');
+  }
+
+  /**
+   * Hide the warning message on the appropriate row
+   * @param {jQuery} row the row containing the warning message to hide
+   */
+  hideWarningMessage(row) {
+    const $this = this;
+    $this.element.find('.message.has-warning').addClass('hidden');
+  }
+
+  /**
+  * Call the server, then call the appropriate callbacks to handle success and errors
+  * @param {Object} args the table, row, input, url, and callbacks
+  */
+  callAjax(args) {
+    const $this = this;
+    $.ajax({
+      type: 'patch',
+      contentType: 'application/json',
+      dataType: 'json',
+      url: args.url,
+      data: JSON.stringify(args.data),
+    }).done(() => {
+        args.element.prop('disabled', false)
+        args.on_success.call($this, args);
+    }).fail((jqxhr) => {
+        args.element.prop('disabled', false)
+        args.on_error.call($this, args, jqxhr);
+    });
+  }
+
+  /**
+  * Reloads the table after ajax call
+  * Rebinds the add and remove buttons to the updated table.
+  */
+  reloadTable() {
+    const $this = this;
+
+    $this.$tbody.load(`${$this.query_url} #${this.table[0].id} tbody > *`, () => {
+      $this.setLoading(false)
+      $this.bindButtons();
+      // Clear existing resource input value
+      $this.element.find('.related_resource_ids').val('')
+    });
+  }
+
+  /**
+  * Set a warning message to alert the user on an error
+  * @param {Object} args the table, row, input, url, and callbacks
+  * @param {Object} jqxhr the jQuery XHR response object
+  */
+  handleError(args, jqxhr) {
+    this.setLoading(false)
+    let message = jqxhr.statusText;
+    if (jqxhr.responseJSON) {
+      message = jqxhr.responseJSON.description;
+    }
+    this.setWarningMessage(args.row, message);
   }
 }

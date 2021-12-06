@@ -305,8 +305,8 @@ RSpec.feature "Related Resources", js: true do
 
       # attach
       visit "/catalog/#{parent.id}"
-      fill_in("child_scanned_map_resource_id_input", with: child.id.to_s)
-      click_on("child_scanned_map_resource_button")
+      fill_in("child_scanned_map_id_input", with: child.id.to_s)
+      click_on("child_scanned_map_button")
 
       new_row = page.find("tr[data-resource-id]")
 

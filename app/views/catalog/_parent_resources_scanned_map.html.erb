@@ -25,42 +25,42 @@
               </thead>
 
               <tbody>
-                <% unless decorated_resource.decorated_scanned_map_parents.empty? %>
-                  <% decorated_resource.decorated_scanned_map_parents.each do |scanned_map| %>
-                    <% scanned_map_url = solr_document_path(scanned_map.id) %>
-                    <tr data-resource-id="<%= scanned_map.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
-                      <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>
-                      <td><%= scanned_map.first_title %></td>
-                      <td><%= scanned_map.created_at %></td>
-                      <td><%= scanned_map.visibility_badge.first.html_safe %></td>
-                      <td>
-                        <%= link_to 'View', scanned_map_url, class: 'btn btn-default' %>
-                        <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-default' %>
-                        <span class="input-group-btn">
-                          <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
-                        </span>
-                      </td>
-                    </tr>
-                  <% end %>
-                <% else %>
-                  <tr>
-                    <td>This work is not attached to any scanned maps.  Click "Attach" to attach to an existing scanned map.</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                <% decorated_resource.decorated_scanned_map_parents.each do |scanned_map| %>
+                  <% scanned_map_url = solr_document_path(scanned_map.id) %>
+                  <tr data-resource-id="<%= scanned_map.id.to_s %>" data-update-url="<%= polymorphic_path([ActiveModel::Naming.route_key(resource.class), :remove_from_parent], id: resource.id) %>">
+                    <td><%= link_to figgy_thumbnail_path(scanned_map, { class: 'thumbnail-inner', onerror: default_icon_fallback }), scanned_map_url %></td>
+                    <td><%= scanned_map.first_title %></td>
+                    <td><%= scanned_map.created_at %></td>
+                    <td><%= scanned_map.visibility_badge.first.html_safe %></td>
+                    <td>
+                      <%= link_to 'View', scanned_map_url, class: 'btn btn-default' %>
+                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-default' %>
+                      <span class="input-group-btn">
+                        <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
+                      </span>
+                    </td>
                   </tr>
                 <% end %>
-                <tr class="message has-warning hidden">
-                  <td id="warning-message" class="alert-warning"></td>
-                  <td class="alert-warning"></td>
-                  <td class="alert-warning"></td>
-                  <td class="alert-warning"></td>
-                  <td class="alert-warning"></td>
-                </tr>
               </tbody>
             </table>
           </div>
+        </div><!-- row -->
+
+        <% if decorated_resource.decorated_scanned_map_parents.empty? %>
+          <div class="row">
+            <div class="col-md-6">
+              <p>This work is not attached to any scanned maps.  Click "Attach" to attach to an existing scanned map.</p>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="row">
+          <div class="message has-warning hidden col-md-6">
+            <p id="warning-message" class="alert-warning"></p>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-md-4">
             <%= f.input :member_ids,
                         placeholder: 'Parent scanned map resource identifier...',
