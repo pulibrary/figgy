@@ -1,9 +1,9 @@
 development:
-  host: localhost
-  port: 6379
+  host: <%= ENV["lando_redis_conn_host"] || "localhost" %>
+  port: <%= ENV["lando_redis_conn_port"] || 6379 %>
 test:
-  host: localhost
-  port: 6379
+  host: <%= ENV["lando_redis_conn_host"] || "localhost" %>
+  port: <%= ENV["lando_redis_conn_port"] || 6379 %>
 production: &production
   host: <%= ENV['FIGGY_REDIS_URL'] || 'localhost' %>
   port: <%= ENV['FIGGY_REDIS_PORT'] || '6379' %>
