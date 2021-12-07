@@ -48,6 +48,14 @@ RSpec.describe ScannedResourceChangeSet do
     end
   end
 
+  describe "#series" do
+    it "validates series property" do
+      series_title = "The Subway Sun Volume 3 Number 15"
+      change_set.validate(series: series_title)
+      expect(change_set.series).to eq series_title
+    end
+  end
+
   describe "#workflow" do
     it "has a workflow" do
       expect(change_set.workflow).to be_a(BookWorkflow)
