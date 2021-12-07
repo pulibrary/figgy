@@ -63,7 +63,7 @@ class AudioDerivativeService
     change_set = ChangeSet.for(output)
     change_set.files = [build_file(hls_file, filename: "hls.m3u8")]
     change_set_persister.buffer_into_index do |buffered_persister|
-      buffered_persister.save(change_set: change_set)
+      @resource = buffered_persister.save(change_set: change_set)
     end
   end
 

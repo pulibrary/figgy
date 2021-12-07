@@ -41,7 +41,7 @@ class HocrDerivativeService
       reloaded_change_set = ChangeSet.for(reloaded)
       reloaded_change_set.hocr_content = result.hocr_content
       reloaded_change_set.ocr_content = result.ocr_content
-      buffered_persister.save(change_set: reloaded_change_set)
+      @resource = buffered_persister.save(change_set: reloaded_change_set)
     end
   end
 
