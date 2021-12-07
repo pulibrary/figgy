@@ -58,7 +58,7 @@ class SimpleChangeSet < ChangeSet
   property :date_copyright, multiple: true, required: false, default: []
   property :source, multiple: true, required: false, default: []
   property :subject, multiple: true, required: false, default: []
-
+  property :series, multiple: true, required: false
   property :ocr_language, multiple: true, require: false, default: []
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
   property :holding_location, multiple: false, required: false, type: ::Types::URI
