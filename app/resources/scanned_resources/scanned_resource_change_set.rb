@@ -31,6 +31,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :ocr_language, multiple: true, require: false, default: []
   property :replaces, multiple: true, require: false
   property :identifier, multiple: false, require: false
+  property :series, multiple: true, required: false
 
   # MARCRelator attributes
   Schema::MARCRelators.attributes.each { |field| property field }
