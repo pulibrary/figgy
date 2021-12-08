@@ -9,6 +9,8 @@ module OrangelightDocumentController
           render json: orangelight_document
         end
       end
+    rescue OrangelightCoinBuilder::NoParentException => e
+      render json: e.message, status: 500
     end
   end
 

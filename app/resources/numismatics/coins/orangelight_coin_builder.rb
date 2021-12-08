@@ -19,12 +19,10 @@ class OrangelightCoinBuilder
     end
 
     def clean_document(hash)
-      if hash.nil?
-        coin_builder_error
-      else
-        hash.delete_if do |_k, v|
-          v.nil? || v.try(:empty?)
-        end
+      raise NoParentException, coin_builder_error.to_json if hash.nil?
+
+      hash.delete_if do |_k, v|
+        v.nil? || v.try(:empty?)
       end
     end
 
@@ -160,4 +158,6 @@ class OrangelightCoinBuilder
       return unless value
       return value.map(&:upcase_first) if value.is_a? Array
     end
+
+    class NoParentException < StandardError; end
 end

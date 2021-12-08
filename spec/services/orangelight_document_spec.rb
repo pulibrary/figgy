@@ -192,7 +192,7 @@ describe OrangelightDocument do
       let(:coin) { FactoryBot.create_for_repository(:coin) }
 
       it "will display an error" do
-        expect(builder.to_h[:error]).to eq("#{coin.title.first} with id: #{coin.id} has no parent numismatic issue and cannot build an OL document.")
+        expect { builder.to_h[:error] }.to raise_error(OrangelightCoinBuilder::NoParentException, /#{coin.title.first} with id: #{coin.id}/)
       end
     end
   end
