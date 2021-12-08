@@ -724,7 +724,7 @@ RSpec.describe ManifestBuilder do
       canvases = output["items"]
       expect(canvases.length).to eq 2
       expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
-      expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 0.255
+      expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 0.256
     end
 
     context "when given a multi-volume recording", run_real_characterization: true, run_real_derivatives: true do
