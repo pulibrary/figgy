@@ -41,7 +41,8 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
         {
           "options" =>
           {
-            "immediateRender" => true
+            "immediateRender" => true,
+            "maxZoomPixelRatio" => 1.0
           }
         }
       }

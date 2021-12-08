@@ -84,7 +84,7 @@ class VIPSDerivativeService
       compression: :jpeg,
       tile: true,
       pyramid: true,
-      Q: 75,
+      Q: 90,
       tile_width: 1024,
       tile_height: 1024,
       strip: true
