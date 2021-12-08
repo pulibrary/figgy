@@ -162,6 +162,16 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
       doc = JSON.parse(response.body)
       expect(doc["id"]).to eq "coin-#{coin.coin_number}"
     end
+
+    context "when a coin has no parent" do
+      it "returns an error message with status code 500" do
+        coin = FactoryBot.create_for_repository(:coin)
+        get :orangelight, params: { id: coin.id, format: :json }
+        doc = JSON.parse(response.body)
+        expect(response.status).to eq 500
+        expect(doc["error"]).to include "has no parent numismatic issue"
+      end
+    end
   end
 
   # Copied from ephemera_folders_controller_spec.rb:434. Similarly the test will fail if the stubbing is not included.
