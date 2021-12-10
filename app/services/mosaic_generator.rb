@@ -33,7 +33,7 @@ class MosaicGenerator
   end
 
   def mosaic_command
-    "echo \"#{raster_paths}\" | #{access_key} #{secret_access_key} cogeo-mosaic create - -o #{tmp_file.path}"
+    "echo \"#{raster_paths}\" | #{access_key} #{secret_access_key} LC_ALL=C.UTF-8 LANG=C.UTF-8 cogeo-mosaic create - -o #{tmp_file.path}"
   end
 
   def access_key
