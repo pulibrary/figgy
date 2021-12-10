@@ -240,6 +240,7 @@ Rails.application.routes.draw do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
         post :browse_everything_files
+        get :mosaic
       end
     end
     get "/raster_resources/:parent_id/new", to: "raster_resources#new", as: :parent_new_raster_resource

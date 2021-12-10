@@ -33,4 +33,10 @@ class RasterResource < Resource
   def linked_resource
     LinkedData::LinkedImportedResource.new(resource: self)
   end
+
+  def mosaic_file
+    file_metadata.find do |file|
+      file.mime_type == ["application/json"]
+    end
+  end
 end

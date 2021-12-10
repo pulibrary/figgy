@@ -47,6 +47,10 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     false
   end
 
+  def raster_set?
+    !decorated_raster_resources.empty?
+  end
+
   def rendered_coverage
     display_coverage = Array.wrap(coverage).first || imported_metadata.try(:first).try(:coverage)
     h.bbox_display(display_coverage)

@@ -81,12 +81,26 @@ class FileMetadata < Valkyrie::Resource
     use.include?(Valkyrie::Vocab::PCDMUse.IntermediateFile)
   end
 
+  def cloud_derivative?
+    use.include?(Valkyrie::Vocab::PCDMUse.CloudDerivative)
+  end
+
   def image?
     mime_type.first.include?("image")
   end
 
   def pdf?
     mime_type.first == "application/pdf"
+  end
+
+  def cloud_url
+    return unless cloud_derivative?
+    file_id = file_identifiers.first.to_s
+    if file_id.include?("shrine")
+      file_id.gsub("cloud-geo-derivatives-shrine://", "s3://#{Figgy.config['cloud_geo_bucket']}")
+    else
+      file_id.gsub("disk://", "")
+    end
   end
 
   # Populates FileMetadata with fixity check results
