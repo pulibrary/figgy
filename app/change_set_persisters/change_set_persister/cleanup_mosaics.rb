@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Remove stale PDFs from ScannedResources when the resource has changed
+# Remove stale mosaic documnets from RasterResources when the resource has changed
 class ChangeSetPersister
   class CleanupMosaics
     attr_reader :resource, :change_set
@@ -47,7 +47,7 @@ class ChangeSetPersister
         mosaic_file_binary = storage_adapter.find_by(id: mosaic_file_identifier)
         !mosaic_file_binary.nil?
       rescue Valkyrie::StorageAdapter::FileNotFound => error
-        Valkyrie.logger.error("Failed to locate the file for the PDF FileMetadata: #{pdf_file_identifier}: #{error}")
+        Valkyrie.logger.error("Failed to locate the file for the Mosaic FileMetadata: #{mosaic_file_identifier}: #{error}")
         false
       end
   end
