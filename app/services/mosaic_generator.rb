@@ -29,6 +29,7 @@ class MosaicGenerator
   def generate_mosaic
     _stdout_str, error_str, status = Open3.capture3(mosaic_command)
     raise StandardError, error_str unless status.success?
+    true
   end
 
   def mosaic_command
