@@ -27,9 +27,12 @@ class MosaicGenerator
   end
 
   def generate_mosaic
-    cmd = "#{access_key} #{secret_access_key} echo \"#{raster_paths}\" | cogeo-mosaic create - -o #{tmp_file.path}"
-    _stdout_str, _error_str, status = Open3.capture3(cmd)
-    return true if status.success?
+    _stdout_str, error_str, status = Open3.capture3(mosaic_command)
+    raise StandardError, error_str unless status.success?
+  end
+
+  def mosaic_command
+    "echo \"#{raster_paths}\" | #{access_key} #{secret_access_key} cogeo-mosaic create - -o #{tmp_file.path}"
   end
 
   def access_key
