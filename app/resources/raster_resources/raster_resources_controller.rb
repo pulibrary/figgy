@@ -17,7 +17,7 @@ class RasterResourcesController < ResourceController
   def mosaic
     cloud_persister = ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
     )
 
     change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param)

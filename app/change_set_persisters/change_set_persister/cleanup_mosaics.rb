@@ -40,7 +40,7 @@ class ChangeSetPersister
       end
 
       def storage_adapter
-        Valkyrie::StorageAdapter.find(:geo_derivatives)
+        Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
       end
 
       def mosaic_file_exists?
