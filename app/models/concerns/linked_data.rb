@@ -16,7 +16,7 @@ module LinkedData
   # @return [String] JSON-LD representation of the resource.
   # @see LinkedData::LinkedResource#to_jsonld
   def export_as_jsonld
-    LinkedResource.for(resource: resource).to_jsonld
+    resource.linked_resource.to_jsonld
   end
 
   def export_as_nt
