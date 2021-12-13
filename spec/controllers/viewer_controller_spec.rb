@@ -51,7 +51,7 @@ RSpec.describe ViewerController do
           get :auth, params: { id: resource.id.to_s }
 
           expect(response).to be_successful
-          expect(response.body).to have_content "Access to this material is limited to specific classes. Use your Princeton credentials to login."
+          expect(response.body).to have_content "Please contact Special Collections staff through the Ask Us! form for access to this collection. Use your Princeton credentials to login."
           expect(response.body).to have_link "Login"
         end
       end
