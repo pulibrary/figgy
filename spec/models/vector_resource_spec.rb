@@ -15,4 +15,14 @@ RSpec.describe VectorResource do
   it "is a geo resource" do
     expect(vector_resource.geo_resource?).to be true
   end
+
+  describe "#linked_resource" do
+    it "builds an object modeling the resource graph generalizing all resources" do
+      resource = FactoryBot.create_for_repository(:vector_resource)
+      linked_resource = resource.linked_resource
+
+      expect(linked_resource).to be_a LinkedData::LinkedImportedResource
+      expect(linked_resource.resource).to eq resource
+    end
+  end
 end

@@ -58,4 +58,14 @@ RSpec.describe EphemeraFolder do
       expect(resource.pdf_file).to be_a FileMetadata
     end
   end
+
+  describe "#linked_resource" do
+    it "builds an object modeling the resource graph for ephemera folders" do
+      resource = FactoryBot.build(:ephemera_folder)
+      linked_ephemera_folder = resource.linked_resource
+
+      expect(linked_ephemera_folder).to be_a LinkedData::LinkedEphemeraFolder
+      expect(linked_ephemera_folder.resource).to eq resource
+    end
+  end
 end
