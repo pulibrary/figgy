@@ -5,23 +5,25 @@ RSpec.describe ManifestBuilder do
   with_queue_adapter :inline
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
   let(:scanned_resource) do
-    FactoryBot.create_for_repository(:scanned_resource,
-                                     title: "test title1",
-                                     label: "test label",
-                                     actor: "test person",
-                                     sort_title: "test title2",
-                                     portion_note: "test value1",
-                                     rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
-                                     call_number: "test value2",
-                                     edition: "test edition",
-                                     nav_date: "test date",
-                                     identifier: "ark:/88435/abc1234de",
-                                     source_metadata_identifier: "123456",
-                                     imported_metadata: [{
-                                       description: "Test Description",
-                                       location: ["RCPPA BL980.G7 B66 1982"]
-                                     }],
-                                     viewing_direction: ["right-to-left"])
+    FactoryBot.create_for_repository(
+      :scanned_resource,
+      title: "test title1",
+      label: "test label",
+      actor: "test person",
+      sort_title: "test title2",
+      portion_note: "test value1",
+      rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
+      call_number: "test value2",
+      edition: "test edition",
+      nav_date: "test date",
+      identifier: "ark:/88435/abc1234de",
+      source_metadata_identifier: "123456",
+      imported_metadata: [{
+        description: "Test Description",
+        location: ["RCPPA BL980.G7 B66 1982"]
+      }],
+      viewing_direction: ["right-to-left"]
+    )
   end
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
   let(:logical_structure) do

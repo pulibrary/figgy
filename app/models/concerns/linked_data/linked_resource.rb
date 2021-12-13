@@ -4,11 +4,6 @@
 # `#properties`
 module LinkedData
   class LinkedResource
-    # @param resource [Valkyrie::Resource]
-    def self.for(resource:)
-      resource.linked_resource
-    end
-
     attr_reader :resource
     delegate(
       :collections,

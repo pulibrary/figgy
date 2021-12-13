@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "LinkedData::Resource" do
-  subject(:linked_resource) { LinkedData::LinkedResource.for(resource: resource) }
+  subject(:linked_resource) { resource.linked_resource }
 
   before do
     raise "resource must be set with `let(:resource)`" unless
@@ -31,7 +31,7 @@ RSpec.shared_examples "LinkedData::Resource" do
   end
 
   describe ".new" do
-    subject(:linked_resource) { LinkedData::LinkedResource.for(resource: custom_resource) }
+    subject(:linked_resource) { custom_resource.linked_resource }
     before do
       class MyCustomResource < Valkyrie::Resource
         attribute :title, Valkyrie::Types::Set
