@@ -85,4 +85,12 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     return ["#{super.first} (#{portion_note.first})"] unless portion_note.blank?
     super
   end
+
+  def human_readable_type
+    if model.id.present? && wayfinder.raster_resources_count.positive?
+      I18n.translate("models.raster_set", default: "Raster Set")
+    else
+      model.human_readable_type
+    end
+  end
 end
