@@ -9,6 +9,10 @@ class RasterResourceWayfinder < BaseWayfinder
   inverse_relationship_by_property :raster_resource_parents, property: :member_ids, model: RasterResource
   inverse_relationship_by_property :scanned_map_parents, property: :member_ids, model: ScannedMap
 
+  def raster_resources_count
+    @raster_resources_count ||= query_service.custom_queries.count_members(resource: resource, model: RasterResource)
+  end
+
   def geo_members
     @geo_members ||=
       begin

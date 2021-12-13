@@ -10,6 +10,17 @@ RSpec.describe HumanReadableTypeIndexer do
       expect(output[:human_readable_type_ssim]).to eq "Scanned Resource"
     end
 
+    context "when a raster resource has child raster members" do
+      it "indexes it as a Raster Set" do
+        member_raster = FactoryBot.create_for_repository(:raster_resource)
+        parent_raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [member_raster.id])
+
+        output = described_class.new(resource: parent_raster).to_solr
+
+        expect(output[:human_readable_type_ssim]).to eq "Raster Set"
+      end
+    end
+
     context "when a scanned resource has multiple volumes" do
       let(:child_volume) { FactoryBot.create_for_repository(:scanned_resource) }
       let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [child_volume.id]) }
