@@ -107,6 +107,10 @@ class DownloadsController < ApplicationController
   end
 
   def storage_adapter
-    Valkyrie.config.storage_adapter
+    if file_desc&.cloud_derivative?
+      Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
+    else
+      Valkyrie.config.storage_adapter
+    end
   end
 end

@@ -45,7 +45,7 @@ class MosaicGenerator
   end
 
   def build_node
-    file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: "mosaic.json")
+    file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: "mosaic.json", use: [Valkyrie::Vocab::PCDMUse.CloudDerivative])
     node = FileMetadata.for(file: file).new(id: SecureRandom.uuid)
     stored_file = storage_adapter.upload(resource: node, file: file, original_filename: Array.wrap(node.original_filename).first)
     node.file_identifiers = stored_file.id
