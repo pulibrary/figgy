@@ -301,9 +301,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       values = Array.wrap(@value)
       values.map do |element|
         return element unless element.is_a?(EphemeraTerm)
-
-        resource = LinkedData::LinkedResource.for(resource: element).without_context
-        resource.fetch("pref_label")
+        element.linked_resource.without_context.fetch("pref_label")
       end
     end
 

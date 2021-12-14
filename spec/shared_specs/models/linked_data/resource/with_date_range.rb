@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "LinkedData::Resource::WithDateRange" do
-  subject(:linked_resource) { LinkedData::LinkedResource.for(resource: resource) }
+  subject(:linked_resource) { resource.linked_resource }
   before do
     raise "resource must be set with `let(:resource)`" unless defined? resource
     raise "resource_factory must be set with `let(:resource_factory)`" unless defined? resource_factory
