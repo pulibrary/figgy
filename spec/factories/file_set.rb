@@ -32,6 +32,15 @@ FactoryBot.define do
       file_metadata FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_vector_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile)
     end
 
+    factory :geo_raster_cloud_file do
+      file_metadata FileMetadata.new(
+        id: Valkyrie::ID.new(SecureRandom.uuid),
+        mime_type: "image/tiff; gdal-format=GTiff",
+        use: Valkyrie::Vocab::PCDMUse.CloudDerivative,
+        original_filename: "display_raster.tif"
+      )
+    end
+
     factory :intermediate_image_file_set do
       file_metadata FileMetadata.new(mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.IntermediateFile)
     end
