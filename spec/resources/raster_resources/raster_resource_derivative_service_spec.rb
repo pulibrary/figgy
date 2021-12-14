@@ -42,7 +42,10 @@ RSpec.describe RasterResourceDerivativeService do
       thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
       raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.first.file_identifiers.first)
       thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
-      cloud_raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.last.file_identifiers.first)
+      cloud_raster_file_set = resource.file_metadata.find(&:cloud_derivative?)
+      cloud_raster_file = Valkyrie::StorageAdapter.find_by(id: cloud_raster_file_set.file_identifiers.first)
+
+      expect(cloud_raster_file_set.use).to eq([Valkyrie::Vocab::PCDMUse.CloudDerivative])
       expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)

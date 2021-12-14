@@ -26,6 +26,12 @@
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
+  <% resource.cloud_derivative_files.each do |file| %>
+    <tr>
+      <td><span class="label label-info">Cloud Derivative File</span>&nbsp;<%= file.label.first %></td>
+      <td><%= file.updated_at %></td><td></td><td></td><td></td>
+    </tr>
+  <% end %>
   <% resource.intermediate_files.each do |file| %>
     <tr>
       <td><span class="label label-info">Intermediate File</span>&nbsp;<%= file.label.first %></td>

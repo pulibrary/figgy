@@ -48,6 +48,10 @@ class FileSet < Resource
     file_metadata.select(&:derivative?)
   end
 
+  def cloud_derivative_files
+    file_metadata.select(&:cloud_derivative?)
+  end
+
   def pyramidal_derivative
     derivative_files.find do |derivative|
       derivative.mime_type.include?("image/tiff")

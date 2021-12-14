@@ -34,6 +34,10 @@ class RasterResourceDerivativeService
     IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_display, copyable: false)
   end
 
+  def build_cloud_file
+    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_cloud_derivative, copyable: false)
+  end
+
   def build_thumbnail_file
     IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copyable: true)
   end
@@ -67,7 +71,7 @@ class RasterResourceDerivativeService
 
   def create_cloud_derivatives
     @change_set = ChangeSet.for(resource)
-    change_set.files = [build_display_file]
+    change_set.files = [build_cloud_file]
     change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
       cloud_persister.buffer_into_index do |buffered_persister|
         @resource = buffered_persister.save(change_set: change_set)
@@ -140,6 +144,10 @@ class RasterResourceDerivativeService
 
   def use_thumbnail
     [Valkyrie::Vocab::PCDMUse.ThumbnailImage]
+  end
+
+  def use_cloud_derivative
+    [Valkyrie::Vocab::PCDMUse.CloudDerivative]
   end
 
   def valid?
