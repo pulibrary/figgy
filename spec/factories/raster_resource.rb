@@ -67,5 +67,24 @@ FactoryBot.define do
     factory :complete_raster_resource do
       state "complete"
     end
+
+    factory :raster_resource_with_cloud_derivative do
+      state "complete"
+      after(:build) do |resource, _evaluator|
+        resource.member_ids ||= []
+        resource.member_ids += [FactoryBot.create_for_repository(:geo_raster_cloud_file).id]
+      end
+    end
+
+    factory :raster_set do
+      state "complete"
+      after(:build) do |resource, _evaluator|
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:raster_resource_with_cloud_derivative).id,
+          FactoryBot.create_for_repository(:raster_resource_with_cloud_derivative).id
+        ]
+      end
+    end
   end
 end
