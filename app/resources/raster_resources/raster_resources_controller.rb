@@ -15,6 +15,11 @@ class RasterResourcesController < ResourceController
   end
 
   def mosaic
+    # calculate the path, including fingerprint
+    # check to see if it exists in s3
+    # if so, return the path
+    # if not, generate it and return the new path
+
     # path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: "s3://figgy-geo-staging").generate(resource: resource, original_filename: "mosaic.json", file: nil)
 
     mosaic_path = MosaicGenerator.new(resource: resource).generate
