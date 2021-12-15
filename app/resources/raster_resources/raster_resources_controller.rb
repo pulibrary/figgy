@@ -13,4 +13,15 @@ class RasterResourcesController < ResourceController
   def load_thumbnail_members
     @thumbnail_members = resource.decorate.thumbnail_members
   end
+
+  def mosaic
+    # path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: "s3://figgy-geo-staging").generate(resource: resource, original_filename: "mosaic.json", file: nil)
+
+    mosaic_path = MosaicGenerator.new(resource: resource).generate
+    respond_to do |f|
+      f.json do
+        render json: { uri: mosaic_path }
+      end
+    end
+  end
 end
