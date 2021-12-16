@@ -41,6 +41,8 @@ RSpec.describe MosaicGenerator do
         puts path
         expect(File.exist?(path)).to be true
         # Cleanup mosaic file
+        File.delete(path)
+        expect(File.exist?(path)).to be false
       end
     end
 
