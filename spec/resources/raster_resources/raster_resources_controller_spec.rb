@@ -287,15 +287,10 @@ RSpec.describe RasterResourcesController, type: :controller do
   describe "#mosaic" do
     context "with a RasterSet that has not generated a mosaic manifest" do
       it "generates a mosaic to s3 and returns its s3 uri" do
-        raster_set = FactoryBot.create_for_repository(:raster_set)
-        path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: "s3://figgy-geo-staging").generate(resource: raster_set, original_filename: "mosaic.json", file: nil)
-        mosaic_generator = instance_double(MosaicGenerator)
-        allow(mosaic_generator).to receive(:generate).and_return(path.to_s)
-        allow(MosaicGenerator).to receive(:new).and_return(mosaic_generator)
-
+        raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         get :mosaic, params: { id: raster_set.id, format: :json }
 
-        expect(JSON.parse(response.body)).to eq("uri" => path.to_s)
+        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
       end
     end
 

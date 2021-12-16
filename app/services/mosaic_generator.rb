@@ -7,7 +7,7 @@ class MosaicGenerator
     @resource = resource.decorate
   end
 
-  def generate
+  def path
     Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
   end
 

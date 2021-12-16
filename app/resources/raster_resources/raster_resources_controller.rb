@@ -20,9 +20,7 @@ class RasterResourcesController < ResourceController
     # if so, return the path
     # if not, generate it and return the new path
 
-    # path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: "s3://figgy-geo-staging").generate(resource: resource, original_filename: "mosaic.json", file: nil)
-
-    mosaic_path = MosaicGenerator.new(resource: resource).generate
+    mosaic_path = MosaicGenerator.new(resource: resource).path
     respond_to do |f|
       f.json do
         render json: { uri: mosaic_path }
