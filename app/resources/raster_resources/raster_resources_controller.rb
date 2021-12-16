@@ -15,11 +15,6 @@ class RasterResourcesController < ResourceController
   end
 
   def mosaic
-    # calculate the path, including fingerprint
-    # check to see if it exists in s3
-    # if so, return the path
-    # if not, generate it and return the new path
-
     mosaic_path = MosaicGenerator.new(resource: resource).path
     respond_to do |f|
       f.json do
