@@ -30,15 +30,17 @@ RSpec.describe MosaicGenerator do
       end
     end
 
-    # TODO add a test for a raster set where the members don't have any files
+    # TODO: add a test for a raster set where the members don't have any files
 
     context "when the file does not exist on the storage adapter" do
+      with_queue_adapter :inline
       it "generates the file and returns the path" do
-        raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
         path = generator.path
         puts path
         expect(File.exist?(path)).to be true
+        # Cleanup mosaic file
       end
     end
 

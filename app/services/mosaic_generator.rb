@@ -12,10 +12,10 @@ class MosaicGenerator
 
   # calculate the path for the non-fingerprinted version of the file
   def path
-    Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
     # check whether it exists
     generate_mosaic
     build_node
+    Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
   end
 
   private
@@ -36,7 +36,7 @@ class MosaicGenerator
       file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: "mosaic.json", use: [Valkyrie::Vocab::PCDMUse.CloudDerivative])
       # the storage adapter will use this id as the storage location
       node = FileMetadata.for(file: file).new(id: resource.id)
-      stored_file = storage_adapter.upload(resource: node, file: file, original_filename: Array.wrap(node.original_filename).first)
+      storage_adapter.upload(resource: node, file: file, original_filename: Array.wrap(node.original_filename).first)
     end
 
     def tmp_file
