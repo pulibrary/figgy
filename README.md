@@ -50,6 +50,10 @@ Other dependencies:
     * Start with rabbitmq-server
     * Used for publishing create/update/delete events for systems such as
       [Pomegranate](https://github.com/pulibrary/pomegranate)
+* [cogeo-mosaic]() for mosaic manifest generation
+    * `pip install cogeo-mosaic`
+    * `asdf reshim python`
+    * validate with `cogeo-mosaic --help`
 
 ### Troubleshooting
 
