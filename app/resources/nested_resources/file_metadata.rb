@@ -97,9 +97,9 @@ class FileMetadata < Valkyrie::Resource
     return unless cloud_derivative?
     file_id = file_identifiers.first.to_s
     if file_id.include?("shrine")
-      file_id.gsub("cloud-geo-derivatives-shrine://", "s3://#{Figgy.config['cloud_geo_bucket']}/")
+      file_id.gsub("cloud-geo-derivatives-shrine://", "s3:/#{Figgy.config['cloud_geo_bucket']}/")
     else
-      file_id.gsub("disk://", "")
+      file_id.gsub("disk:/", "")
     end
   end
 

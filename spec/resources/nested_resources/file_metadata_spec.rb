@@ -35,6 +35,7 @@ describe FileMetadata do
       expect(file_metadata.derivative?).to be true
     end
   end
+
   describe "#derivative_partial?" do
     let(:use) { Valkyrie::Vocab::PCDMUse.ServiceFilePartial }
 
@@ -42,6 +43,7 @@ describe FileMetadata do
       expect(file_metadata.derivative_partial?).to be true
     end
   end
+
   describe "#original_file?" do
     let(:use) { Valkyrie::Vocab::PCDMUse.OriginalFile }
 
@@ -49,6 +51,7 @@ describe FileMetadata do
       expect(file_metadata.original_file?).to be true
     end
   end
+
   describe "thumbnail_file?" do
     let(:use) { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
 
@@ -56,6 +59,7 @@ describe FileMetadata do
       expect(file_metadata.thumbnail_file?).to be true
     end
   end
+
   describe "preservation_file?" do
     let(:use) { Valkyrie::Vocab::PCDMUse.PreservationMasterFile }
 
@@ -63,6 +67,7 @@ describe FileMetadata do
       expect(file_metadata.preservation_file?).to be true
     end
   end
+
   describe "preserved_metadata?" do
     let(:use) { Valkyrie::Vocab::PCDMUse.PreservedMetadata }
 
@@ -70,6 +75,7 @@ describe FileMetadata do
       expect(file_metadata.preserved_metadata?).to be true
     end
   end
+
   describe "preservation_copy?" do
     let(:use) { Valkyrie::Vocab::PCDMUse.PreservationCopy }
 
@@ -77,11 +83,38 @@ describe FileMetadata do
       expect(file_metadata.preservation_copy?).to be true
     end
   end
+
   describe "intermediate_file?" do
     let(:use) { Valkyrie::Vocab::PCDMUse.IntermediateFile }
 
     it "determines if the FileMetadata is for an intermediate file" do
       expect(file_metadata.intermediate_file?).to be true
+    end
+  end
+
+  describe "#cloud_derivative?" do
+    let(:use) { Valkyrie::Vocab::PCDMUse.CloudDerivative }
+
+    it "determines if the FileMetadata is for a derivative file" do
+      expect(file_metadata.cloud_derivative?).to be true
+    end
+  end
+
+  describe "#cloud_uri" do
+    let(:use) { Valkyrie::Vocab::PCDMUse.CloudDerivative }
+
+    context "with a file stored in s3" do
+      it "returns the uri" do
+        file_metadata.file_identifiers = ["cloud-geo-derivatives-shrine://33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json"]
+        expect(file_metadata.cloud_uri).to start_with("s3://33/1d/70/33")
+      end
+    end
+
+    context "with a file stored locally" do
+      it "returns the uri" do
+        file_metadata.file_identifiers = ["disk://tmp/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json"]
+        expect(file_metadata.cloud_uri).to start_with("/tmp/33/1d/70/33")
+      end
     end
   end
 end
