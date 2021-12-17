@@ -6,6 +6,8 @@ class InstrumentedStorageAdapter
     @tracer = tracer
   end
 
+  delegate :path_generator, to: :storage_adapter
+
   def upload(file:, original_filename:, resource: nil, **extra_args)
     trace("valkyrie.storage.upload") do |span|
       span.set_tag("param.original_filename", original_filename)
