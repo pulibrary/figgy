@@ -34,8 +34,9 @@ class MosaicService
 
   def mosaic_file_id
     if storage_adapter.is_a? Valkyrie::Storage::Shrine
+      "#{storage_adapter.send(:protocol_with_prefix)}#{storage_adapter.path_generator.generate(resource: resource, original_filename: 'mosaic.json', file: nil)}"
     else
-      "disk://#{storage_adapter.path_generator.generate(resource: resource, original_filename: "mosaic.json", file: nil)}"
+      "disk://#{storage_adapter.path_generator.generate(resource: resource, original_filename: 'mosaic.json', file: nil)}"
     end
   end
 
