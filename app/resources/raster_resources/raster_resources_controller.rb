@@ -15,10 +15,16 @@ class RasterResourcesController < ResourceController
   end
 
   def mosaic
-    mosaic_path = MosaicGenerator.new(resource: resource).path
-    respond_to do |f|
-      f.json do
-        render json: { uri: mosaic_path }
+    if resource.decorate.raster_set?
+      mosaic_path = MosaicGenerator.new(resource: resource).path
+      respond_to do |f|
+        f.json do
+          render json: { uri: mosaic_path }
+        end
+      end
+    else
+      respond_to do |f|
+        f.json { head :not_found }
       end
     end
   end

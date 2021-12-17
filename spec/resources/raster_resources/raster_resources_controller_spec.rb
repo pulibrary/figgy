@@ -303,6 +303,10 @@ RSpec.describe RasterResourcesController, type: :controller do
 
     context "with a Raster Resource that's not a Set" do
       it "returns a 404" do
+        raster_resource = FactoryBot.create_for_repository(:raster_resource)
+        get :mosaic, params: { id: raster_resource.id, format: :json }
+
+        expect(response.status).to eq 404
       end
     end
   end
