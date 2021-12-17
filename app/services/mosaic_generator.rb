@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class MosaicGenerator
+  class Error < StandardError; end
   attr_reader :resource
   # @param resource [RasterResource]
   def initialize(resource:)
@@ -12,10 +13,12 @@ class MosaicGenerator
 
   # calculate the path for the non-fingerprinted version of the file
   def path
-    # check whether it exists
+    # TODO: check whether the file already exists
+    raise Error if raster_file_sets.empty?
     generate_mosaic
     build_node
     Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
+
   end
 
   # This should be private, but we have to test the S3 code path
@@ -51,7 +54,7 @@ class MosaicGenerator
     end
 
     def raster_file_sets
-      resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
+      @raster_file_sets ||= resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
     end
 
     def generate_mosaic

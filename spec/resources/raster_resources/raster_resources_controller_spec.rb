@@ -309,5 +309,13 @@ RSpec.describe RasterResourcesController, type: :controller do
         expect(response.status).to eq 404
       end
     end
+
+    context "when there's no such resource" do
+      it "returns a 404" do
+        get :mosaic, params: { id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd", format: :json }
+
+        expect(response.status).to eq 404
+      end
+    end
   end
 end

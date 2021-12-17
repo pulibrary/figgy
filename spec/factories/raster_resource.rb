@@ -81,8 +81,8 @@ FactoryBot.define do
       after(:build) do |resource, _evaluator|
         resource.member_ids ||= []
         resource.member_ids += [
-          FactoryBot.create_for_repository(:raster_resource_with_cloud_derivative).id,
-          FactoryBot.create_for_repository(:raster_resource_with_cloud_derivative).id
+          FactoryBot.create_for_repository(:raster_resource).id,
+          FactoryBot.create_for_repository(:raster_resource).id
         ]
       end
     end
