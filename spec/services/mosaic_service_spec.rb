@@ -7,15 +7,16 @@ RSpec.describe MosaicService do
   # check to see if it exists in our storage adapter
   # if so, return the path
   # if not, generate it and return the new path
-
   describe "#path" do
     context "when the file does not exist on the storage adapter" do
       with_queue_adapter :inline
       it "generates the file and returns the path" do
+        allow(MosaicGenerator).to receive(:new).and_call_original
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
         path = generator.path
         expect(File.exist?(path)).to be true
+        expect(MosaicGenerator).to have_received(:new)
         # Cleanup mosaic file
         File.delete(path)
       end
@@ -32,8 +33,11 @@ RSpec.describe MosaicService do
 
       it "returns the path" do
         allow(MosaicGenerator).to receive(:new)
-        described_class.new(resource: raster_set).path
+        path = described_class.new(resource: raster_set).path
         expect(MosaicGenerator).not_to have_received(:new)
+        expect(path).to eq(Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s)
+        # Cleanup mosaic file
+        File.delete(path)
       end
     end
 

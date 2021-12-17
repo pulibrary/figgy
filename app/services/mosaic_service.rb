@@ -13,13 +13,11 @@ class MosaicService
 
   # calculate the path for the non-fingerprinted version of the file
   def path
-    mosaic_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
-    # storage_adapter.find(id: mosaic_file_id)
-    # if it errors, generate
-    # TODO: check whether the file already exists
     raise Error if raster_file_sets.empty?
-    MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
-    build_node
+    mosaic_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
+    return mosaic_path if storage_adapter.find_by(id: mosaic_file_id)
+  rescue Valkyrie::StorageAdapter::FileNotFound
+    build_node if MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
     mosaic_path
   end
 

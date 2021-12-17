@@ -285,10 +285,13 @@ RSpec.describe RasterResourcesController, type: :controller do
   end
 
   describe "#mosaic" do
-    with_queue_adapter :inline
-
     context "with a RasterSet" do
+      with_queue_adapter :inline
+
       it "returns json with mosaic uri" do
+        mosaic_generator = instance_double(MosaicGenerator)
+        allow(mosaic_generator).to receive(:run).and_return(true)
+        allow(MosaicGenerator).to receive(:new).and_return(mosaic_generator)
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         get :mosaic, params: { id: raster_set.id, format: :json }
 
