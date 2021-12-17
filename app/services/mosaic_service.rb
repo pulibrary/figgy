@@ -51,6 +51,7 @@ class MosaicService
       # the storage adapter will use this id as the storage location
       node = FileMetadata.for(file: file).new(id: resource.id)
       storage_adapter.upload(resource: node, file: file, original_filename: Array.wrap(node.original_filename).first) unless File.zero?(tmp_file.path)
+      tmp_file.close
     end
 
     def tmp_file
