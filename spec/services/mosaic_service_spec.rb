@@ -18,12 +18,22 @@ RSpec.describe MosaicService do
         expect(File.exist?(path)).to be true
         # Cleanup mosaic file
         File.delete(path)
-        expect(File.exist?(path)).to be false
       end
     end
 
     context "when the file already exists on the storage adapter" do
+      with_queue_adapter :inline
+
+      let(:raster_set) { FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd") }
+
+      before do
+        described_class.new(resource: raster_set).path
+      end
+
       it "returns the path" do
+        allow(MosaicGenerator).to receive(:new)
+        described_class.new(resource: raster_set).path
+        expect(MosaicGenerator).not_to have_received(:new)
       end
     end
 
@@ -31,7 +41,7 @@ RSpec.describe MosaicService do
       it "raises MosaicService::Error" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect{ generator.path }.to raise_error("MosaicService::Error")
+        expect { generator.path }.to raise_error("MosaicService::Error")
       end
     end
   end

@@ -15,10 +15,9 @@ class MosaicService
   def path
     # TODO: check whether the file already exists
     raise Error if raster_file_sets.empty?
-    generate_mosaic
+    MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
     build_node
     Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
-
   end
 
   # This should be private, but we have to test the S3 code path
@@ -55,24 +54,5 @@ class MosaicService
 
     def raster_file_sets
       @raster_file_sets ||= resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
-    end
-
-    def generate_mosaic
-      _stdout_str, error_str, status = Open3.capture3(mosaic_command)
-      raise StandardError, error_str unless status.success?
-      true
-    end
-
-    # need the key to read the images
-    def mosaic_command
-      "echo \"#{raster_paths}\" | #{access_key} #{secret_access_key} LC_ALL=C.UTF-8 LANG=C.UTF-8 cogeo-mosaic create - -o #{tmp_file.path}"
-    end
-
-    def access_key
-      "AWS_ACCESS_KEY_ID=#{Figgy.config['aws_access_key_id']}"
-    end
-
-    def secret_access_key
-      "AWS_SECRET_ACCESS_KEY=#{Figgy.config['aws_secret_access_key']}"
     end
 end
