@@ -39,6 +39,7 @@ The following dependencies will be installed via homebrew by `./bin/setup`:
 * [FFMpeg](http://www.ffmpeg.org/) (for AV derivatives)
 * [VIPS]
 * [OCRmyPDF](https://ocrmypdf.readthedocs.io/)
+* [cogeo-mosaic](https://github.com/developmentseed/cogeo-mosaic) for mosaic manifest generation
 
 Other dependencies:
 
@@ -50,10 +51,6 @@ Other dependencies:
     * Start with rabbitmq-server
     * Used for publishing create/update/delete events for systems such as
       [Pomegranate](https://github.com/pulibrary/pomegranate)
-* [cogeo-mosaic]() for mosaic manifest generation
-    * `pip install cogeo-mosaic`
-    * `asdf reshim python`
-    * validate with `cogeo-mosaic --help`
 
 ### Troubleshooting
 
