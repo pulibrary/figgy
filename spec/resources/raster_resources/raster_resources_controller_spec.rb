@@ -12,6 +12,11 @@ RSpec.describe RasterResourcesController, type: :controller do
     sign_in user if user
   end
 
+  after(:all) do
+    # Clean up mosaic.json documents and cloud rasters after test suite
+    FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
+  end
+
   describe "new" do
     it_behaves_like "an access controlled new request"
 
