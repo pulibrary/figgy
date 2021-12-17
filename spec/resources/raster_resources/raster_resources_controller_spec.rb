@@ -285,9 +285,11 @@ RSpec.describe RasterResourcesController, type: :controller do
   end
 
   describe "#mosaic" do
+    with_queue_adapter :inline
+
     context "with a RasterSet that has not generated a mosaic manifest" do
-      it "generates a mosaic to s3 and returns its s3 uri" do
-        raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+      it "generates a mosaic and returns its uri" do
+        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         get :mosaic, params: { id: raster_set.id, format: :json }
 
         expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")

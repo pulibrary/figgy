@@ -18,15 +18,16 @@ class MosaicGenerator
     Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
   end
 
-  private
-
-    def base_path
-      if storage_adapter.is_a? Valkyrie::Storage::Shrine
-        "s3://#{storage_adapter.shrine.bucket.name}"
-      else
-        storage_adapter.storage_adapter.base_path.to_s
-      end
+  # This should be private, but we have to test the S3 code path
+  def base_path
+    if storage_adapter.is_a? Valkyrie::Storage::Shrine
+      "s3://#{storage_adapter.shrine.bucket.name}"
+    else
+      storage_adapter.storage_adapter.base_path.to_s
     end
+  end
+
+  private
 
     def storage_adapter
       @storage_adapter ||= Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)

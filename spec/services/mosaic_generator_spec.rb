@@ -9,11 +9,33 @@ RSpec.describe MosaicGenerator do
   # if not, generate it and return the new path
 
   describe "#path" do
+    # TODO: add a test for a raster set where the members don't have any files
+
+    context "when the file does not exist on the storage adapter" do
+      with_queue_adapter :inline
+      it "generates the file and returns the path" do
+        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+        generator = described_class.new(resource: raster_set)
+        path = generator.path
+        expect(File.exist?(path)).to be true
+        # Cleanup mosaic file
+        File.delete(path)
+        expect(File.exist?(path)).to be false
+      end
+    end
+
+    context "when the file already exists on the storage adapter" do
+      it "returns the path" do
+      end
+    end
+  end
+
+  describe "#base_path" do
     context "when using the disk storage adapter" do
       it "returns a local path" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect(generator.path).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
+        expect(generator.base_path).to end_with("tmp/cloud_geo_derivatives")
       end
     end
 
@@ -26,28 +48,7 @@ RSpec.describe MosaicGenerator do
         allow(Valkyrie::StorageAdapter).to receive(:find).and_return(shrine_adapter)
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect(generator.path).to eq("s3://figgy-bucket/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
-      end
-    end
-
-    # TODO: add a test for a raster set where the members don't have any files
-
-    context "when the file does not exist on the storage adapter" do
-      with_queue_adapter :inline
-      it "generates the file and returns the path" do
-        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        generator = described_class.new(resource: raster_set)
-        path = generator.path
-        puts path
-        expect(File.exist?(path)).to be true
-        # Cleanup mosaic file
-        File.delete(path)
-        expect(File.exist?(path)).to be false
-      end
-    end
-
-    context "when the file already exists on the storage adapter" do
-      it "returns the path" do
+        expect(generator.base_path).to eq("s3://figgy-bucket")
       end
     end
   end
