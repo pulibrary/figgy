@@ -2,7 +2,7 @@
 require "rails_helper"
 require "shrine/storage/s3"
 
-RSpec.describe MosaicGenerator do
+RSpec.describe MosaicService do
   # calculate the path, including fingerprint
   # check to see if it exists in our storage adapter
   # if so, return the path
@@ -28,10 +28,10 @@ RSpec.describe MosaicGenerator do
     end
 
     context "when there aren't any files on the raster members" do
-      it "raises MosaicGenerator::Error" do
+      it "raises MosaicService::Error" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect{ generator.path }.to raise_error("MosaicGenerator::Error")
+        expect{ generator.path }.to raise_error("MosaicService::Error")
       end
     end
   end

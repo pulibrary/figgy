@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MosaicGenerator
+class MosaicService
   class Error < StandardError; end
   attr_reader :resource
   # @param resource [RasterResource]
