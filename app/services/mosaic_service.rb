@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# This class provides mosaic manifest uris, and calls out to the
+# MosaicGenerator as needed
 class MosaicService
   class Error < StandardError; end
   attr_reader :resource
@@ -7,9 +9,6 @@ class MosaicService
   def initialize(resource:)
     @resource = resource.decorate
   end
-
-  # def fingerprinted_path
-  # end
 
   # calculate the path for the non-fingerprinted version of the file
   def path
@@ -21,7 +20,8 @@ class MosaicService
     mosaic_path
   end
 
-  # This should be private, but we have to test the S3 code path
+  # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
+  #   and make private if possible
   def base_path
     if storage_adapter.is_a? Valkyrie::Storage::Shrine
       "s3://#{storage_adapter.shrine.bucket.name}"
@@ -30,6 +30,8 @@ class MosaicService
     end
   end
 
+  # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
+  #   and make private if possible
   def mosaic_file_id
     if storage_adapter.is_a? Valkyrie::Storage::Shrine
       "#{storage_adapter.send(:protocol_with_prefix)}#{storage_adapter.path_generator.generate(resource: resource, original_filename: 'mosaic.json', file: nil)}"
@@ -57,7 +59,7 @@ class MosaicService
 
     def raster_paths
       raster_file_sets.map do |fs|
-        fs.file_metadata.map(&:cloud_url)
+        fs.file_metadata.map(&:cloud_uri)
       end.flatten.compact.join("\n")
     end
 

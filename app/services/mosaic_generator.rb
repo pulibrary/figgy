@@ -3,7 +3,8 @@
 # A class to wrap a call to cogeo-mosaic
 class MosaicGenerator
   attr_reader :output_path, :raster_paths
-  # @param resource [RasterResource]
+  # @param output_path [String] where to write the mosaic manifest file
+  # @param raster_paths [Array<String>] paths to raster images to compute over
   def initialize(output_path:, raster_paths:)
     @output_path = output_path
     @raster_paths = raster_paths

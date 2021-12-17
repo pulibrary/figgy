@@ -93,7 +93,7 @@ class FileMetadata < Valkyrie::Resource
     mime_type.first == "application/pdf"
   end
 
-  def cloud_url
+  def cloud_uri
     return unless cloud_derivative?
     file_id = file_identifiers.first.to_s
     if file_id.include?("shrine")
