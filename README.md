@@ -39,6 +39,7 @@ The following dependencies will be installed via homebrew by `./bin/setup`:
 * [FFMpeg](http://www.ffmpeg.org/) (for AV derivatives)
 * [VIPS]
 * [OCRmyPDF](https://ocrmypdf.readthedocs.io/)
+* [cogeo-mosaic](https://github.com/developmentseed/cogeo-mosaic) for mosaic manifest generation
 
 Other dependencies:
 

@@ -13,4 +13,19 @@ class RasterResourcesController < ResourceController
   def load_thumbnail_members
     @thumbnail_members = resource.decorate.thumbnail_members
   end
+
+  def mosaic
+    if resource.decorate.raster_set?
+      mosaic_path = MosaicService.new(resource: resource).path
+      respond_to do |f|
+        f.json do
+          render json: { uri: mosaic_path }
+        end
+      end
+    else
+      respond_to do |f|
+        f.json { head :not_found }
+      end
+    end
+  end
 end

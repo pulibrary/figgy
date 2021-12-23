@@ -93,6 +93,16 @@ class FileMetadata < Valkyrie::Resource
     mime_type.first == "application/pdf"
   end
 
+  def cloud_uri
+    return unless cloud_derivative?
+    file_id = file_identifiers.first.to_s
+    if file_id.include?("shrine")
+      file_id.gsub("cloud-geo-derivatives-shrine://", "s3:/#{Figgy.config['cloud_geo_bucket']}/")
+    else
+      file_id.gsub("disk:/", "")
+    end
+  end
+
   # Populates FileMetadata with fixity check results
   # @return [FileMetadata] you'll need to save this node after running the fixity
   def run_fixity

@@ -67,5 +67,28 @@ FactoryBot.define do
     factory :complete_raster_resource do
       state "complete"
     end
+
+    factory :raster_set do
+      state "complete"
+      after(:build) do |resource, _evaluator|
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:raster_resource).id,
+          FactoryBot.create_for_repository(:raster_resource).id
+        ]
+      end
+    end
+
+    factory :raster_set_with_files do
+      state "complete"
+      after(:build) do |resource, _evaluator|
+        file = Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"), "image/tif")
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:raster_resource, files: [file]).id,
+          FactoryBot.create_for_repository(:raster_resource, files: [file]).id
+        ]
+      end
+    end
   end
 end

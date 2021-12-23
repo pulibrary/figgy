@@ -10,6 +10,8 @@ asdf plugin-add ruby || true
 asdf plugin-add java || true
 asdf plugin-add nodejs || true
 asdf install
+pip install cogeo-mosaic
+asdf reshim python
 gem install bundler:2.2.16
 brew install imagemagick gdal simple-tiles tesseract-lang mediainfo ffmpeg vips ocrmypdf lastpass-cli
 brew install --cask lando
@@ -20,3 +22,4 @@ lpass login $USERNAME
 ./bin/setup_keys
 bundle install
 yarn install
+
