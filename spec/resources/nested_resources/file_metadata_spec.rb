@@ -106,7 +106,7 @@ describe FileMetadata do
     context "with a file stored in s3" do
       it "returns the uri" do
         file_metadata.file_identifiers = ["cloud-geo-derivatives-shrine://33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json"]
-        expect(file_metadata.cloud_uri).to start_with("s3://33/1d/70/33")
+        expect(file_metadata.cloud_uri).to start_with("s3://test-geo/33/1d/70/33")
       end
     end
 
