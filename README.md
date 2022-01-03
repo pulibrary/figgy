@@ -208,4 +208,9 @@ To enable:
 1. Deploy `main` again when reindexing is complete.
 
 ## More
-For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
+Valkyrie Documentation:
+- For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
+
+User documentation is maintained in Google Drive:
+- [Figgy_work > Demos and Documentation](https://drive.google.com/drive/u/2/folders/1--EaoC-9fCpJx2tW4ej0-SyNNbEBX4MX)
+- [Controlled Digital Lending workflow documentation](https://docs.google.com/document/d/1zX-V93TGy-2U2AF-cZb6GBrrz-J6onF1yo8UgMoSzes/edit#heading=h.up07nmqm707q)
