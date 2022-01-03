@@ -236,6 +236,7 @@ development:
 
 test:
   <<: *defaults
+  cloud_geo_bucket: "test-geo"
   ingest_folder_path: <%= Rails.root.join("spec", "fixtures", "staged_files") %>
   archivespace_url: "https://aspace.test.org/staff/api"
   archivespace_user: "test"
