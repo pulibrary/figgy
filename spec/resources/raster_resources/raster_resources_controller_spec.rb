@@ -300,16 +300,20 @@ RSpec.describe RasterResourcesController, type: :controller do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         get :mosaic, params: { id: raster_set.id, format: :json }
 
-        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
+        doc = JSON.parse(response.body)
+        expect(doc["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
+        expect(doc["visibility"]).to eq "open"
       end
     end
 
     context "with a Raster Resource that's not a Set" do
-      it "returns a 404" do
-        raster_resource = FactoryBot.create_for_repository(:raster_resource)
+      it "returns json with only the visibility" do
+        raster_resource = FactoryBot.create_for_repository(:raster_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
         get :mosaic, params: { id: raster_resource.id, format: :json }
 
-        expect(response.status).to eq 404
+        doc = JSON.parse(response.body)
+        expect(doc["uri"]).to be_nil
+        expect(doc["visibility"]).to eq "authenticated"
       end
     end
 

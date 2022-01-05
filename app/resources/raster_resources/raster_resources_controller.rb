@@ -19,12 +19,14 @@ class RasterResourcesController < ResourceController
       mosaic_path = MosaicService.new(resource: resource).path
       respond_to do |f|
         f.json do
-          render json: { uri: mosaic_path }
+          render json: { uri: mosaic_path, visibility: resource.visibility&.first }
         end
       end
     else
       respond_to do |f|
-        f.json { head :not_found }
+        f.json do
+          render json: { visibility: resource.visibility&.first }
+        end
       end
     end
   end
