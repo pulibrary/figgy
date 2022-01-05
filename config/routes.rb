@@ -239,7 +239,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
-        get :mosaic, defaults: { format: :json }
+        get :titiler, defaults: { format: :json }
         post :browse_everything_files
       end
     end

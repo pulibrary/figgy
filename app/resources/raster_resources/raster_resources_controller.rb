@@ -14,7 +14,7 @@ class RasterResourcesController < ResourceController
     @thumbnail_members = resource.decorate.thumbnail_members
   end
 
-  def mosaic
+  def titiler
     if resource.decorate.raster_set?
       mosaic_path = MosaicService.new(resource: resource).path
       respond_to do |f|

@@ -289,7 +289,7 @@ RSpec.describe RasterResourcesController, type: :controller do
     end
   end
 
-  describe "#mosaic" do
+  describe "#titiler" do
     context "with a RasterSet" do
       with_queue_adapter :inline
 
@@ -298,7 +298,7 @@ RSpec.describe RasterResourcesController, type: :controller do
         allow(mosaic_generator).to receive(:run).and_return(true)
         allow(MosaicGenerator).to receive(:new).and_return(mosaic_generator)
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        get :mosaic, params: { id: raster_set.id, format: :json }
+        get :titiler, params: { id: raster_set.id, format: :json }
 
         doc = JSON.parse(response.body)
         expect(doc["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
@@ -309,7 +309,7 @@ RSpec.describe RasterResourcesController, type: :controller do
     context "with a Raster Resource that's not a Set" do
       it "returns json with only the visibility" do
         raster_resource = FactoryBot.create_for_repository(:raster_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
-        get :mosaic, params: { id: raster_resource.id, format: :json }
+        get :titiler, params: { id: raster_resource.id, format: :json }
 
         doc = JSON.parse(response.body)
         expect(doc["uri"]).to be_nil
@@ -319,7 +319,7 @@ RSpec.describe RasterResourcesController, type: :controller do
 
     context "when there's no such resource" do
       it "returns a 404" do
-        get :mosaic, params: { id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd", format: :json }
+        get :titiler, params: { id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd", format: :json }
 
         expect(response.status).to eq 404
       end
