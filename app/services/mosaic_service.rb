@@ -10,26 +10,17 @@ class MosaicService
     @resource = resource.decorate
   end
 
-  # calculate the path for the non-fingerprinted version of the file
   def path
     raise Error if raster_file_sets.empty?
     mosaic_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
     return mosaic_path if storage_adapter.find_by(id: mosaic_file_id)
   rescue Valkyrie::StorageAdapter::FileNotFound
+    # build default mosaic file
+    build_node(default_filename) if MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+
+    # build fingerprinted mosaic file
     build_node(fingerprinted_filename) if MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
     mosaic_path
-  end
-
-  def fingerprint
-    @fingerprint ||= query_service.custom_queries.mosaic_fingerprint_for(id: resource.id)
-  end
-
-  def fingerprinted_filename
-    "mosaic-#{fingerprint}.json"
-  end
-
-  def default_filename
-    "mosaic.json"
   end
 
   # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
@@ -54,10 +45,6 @@ class MosaicService
 
   private
 
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
-    end
-
     def build_node(file_name)
       file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: file_name, use: [Valkyrie::Vocab::PCDMUse.CloudDerivative])
       # the storage adapter will use this id as the storage location
@@ -66,8 +53,24 @@ class MosaicService
       tmp_file.close
     end
 
-    def tmp_file
-      @tmp_file ||= Tempfile.new("mosaic")
+    def default_filename
+      "mosaic.json"
+    end
+
+    def fingerprint
+      @fingerprint ||= query_service.custom_queries.mosaic_fingerprint_for(id: resource.id)
+    end
+
+    def fingerprinted_filename
+      "mosaic-#{fingerprint}.json"
+    end
+
+    def query_service
+      ChangeSetPersister.default.query_service
+    end
+
+    def raster_file_sets
+      @raster_file_sets ||= resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
     end
 
     def raster_paths
@@ -76,11 +79,11 @@ class MosaicService
       end.flatten.compact.join("\n")
     end
 
-    def raster_file_sets
-      @raster_file_sets ||= resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
+    def storage_adapter
+      @storage_adapter ||= Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
     end
 
-    def query_service
-      ChangeSetPersister.default.query_service
+    def tmp_file
+      @tmp_file ||= Tempfile.new("mosaic")
     end
 end

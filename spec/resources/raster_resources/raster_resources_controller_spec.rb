@@ -321,7 +321,6 @@ RSpec.describe RasterResourcesController, type: :controller do
         child = Wayfinder.for(raster_set).members.first
         grandchild = Wayfinder.for(child).members.first
         ChangeSetPersister.default.metadata_adapter.persister.delete(resource: grandchild)
-
         second_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
 
         get :mosaic, params: { id: raster_set.id, format: :json }

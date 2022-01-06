@@ -17,13 +17,15 @@ RSpec.describe MosaicService do
     end
 
     context "when the file does not exist on the storage adapter" do
-      it "generates the file and returns the path" do
+      it "generates a default mosaic file and a fingerprinted mosaic file and returns the fingerprinted path" do
         allow(MosaicGenerator).to receive(:new).and_call_original
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        path = generator.path
-        expect(File.exist?(path)).to be true
-        expect(MosaicGenerator).to have_received(:new)
+        fingerprinted_path = generator.path
+        default_path = Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
+        expect(MosaicGenerator).to have_received(:new).twice
+        expect(File.exist?(fingerprinted_path)).to be true
+        expect(File.exist?(default_path)).to be true
       end
     end
 
