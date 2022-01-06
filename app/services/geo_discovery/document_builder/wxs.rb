@@ -40,6 +40,13 @@ module GeoDiscovery
         "#{path}/#{@config[visibility][:workspace]}/wcs"
       end
 
+      # Returns the wmts server url.
+      # @return [String] wmts server url
+      def wmts_path
+        return unless resource_decorator.object.decorate.try(:raster_set?)
+        "#{tileserver_path}/mosaicjson/WMTSCapabilities.xml?id=#{resource_decorator.id}"
+      end
+
       private
 
         # Gets the representative file set.
@@ -69,6 +76,11 @@ module GeoDiscovery
         # @return [String] geoserver base url
         def path
           @config[:url].chomp("/rest")
+        end
+
+        # @return [String] tile server base url
+        def tileserver_path
+          Figgy.config["tileserver"][:url]
         end
 
         # Tests if the file set is a valid raster format.

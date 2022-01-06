@@ -216,6 +216,8 @@ defaults: &defaults
       workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
     authenticated:
       workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
+  tileserver:
+    url: <%= ENV['TILESERVER_URL'] %>
   characterization:
     imagemagick:
       supported_mime_types:
@@ -268,6 +270,8 @@ test:
       workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
     authenticated:
       workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
+  tileserver:
+    url: "https://map-tiles-test.example.com"
 
 production:
   <<: *defaults
