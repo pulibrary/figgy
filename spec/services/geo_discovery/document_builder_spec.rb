@@ -5,6 +5,9 @@ require "rails_helper"
 describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   with_queue_adapter :inline
   subject(:document_builder) { described_class.new(query_service.find_by(id: geo_work.id), document_class) }
+  let(:document_class) { GeoDiscovery::GeoblacklightDocument.new }
+  let(:document) { JSON.parse(document_builder.to_json(nil)) }
+
   let(:geo_work) do
     FactoryBot.create_for_repository(:vector_resource,
                                      coverage: coverage.to_s,
@@ -16,8 +19,6 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
                                      visibility: visibility,
                                      identifier: "ark:/99999/fk4")
   end
-
-  let(:document_class) { GeoDiscovery::GeoblacklightDocument.new }
   let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
   let(:issued) { "2013" }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
@@ -27,7 +28,6 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   let(:query_service) { metadata_adapter.query_service }
   let(:file) { fixture_file_upload("files/vector/shapefile.zip") }
   let(:metadata_file) { fixture_file_upload("files/geo_metadata/iso.xml") }
-  let(:document) { JSON.parse(document_builder.to_json(nil)) }
 
   describe "vector resource", run_real_characterization: true do
     before do
@@ -82,6 +82,8 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://schema.org/downloadUrl"]).to match(/downloads/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to match(/geoserver\/public-figgy\/wfs/)
+      # wmts only exists for a raster set
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
       expect(refs["http://schema.org/url"]).to be nil
@@ -394,6 +396,21 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         refs = JSON.parse(document["dct_references_s"])
         expect(refs["https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification"]).to eq "https://geoserver.princeton.edu/{z}/{x}/{y}"
       end
+    end
+  end
+
+  describe "raster set" do
+    let(:geo_work) do
+      FactoryBot.create_for_repository(
+        :raster_set,
+        coverage: coverage.to_s
+      )
+    end
+
+    it "has a wmts reference" do
+      geo_work
+      refs = JSON.parse(document["dct_references_s"])
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/mosaicjson/WMTSCapabilities.xml?id=#{geo_work.id}"
     end
   end
 end
