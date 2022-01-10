@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class MosaicJob < ApplicationJob
   discard_on MosaicService::Error
+  queue_as :low
   delegate :query_service, to: :metadata_adapter
 
   def perform(resource_id)
