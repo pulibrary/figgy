@@ -24,6 +24,10 @@ RSpec.describe RasterResourceDerivativeService do
   let(:tika_output) { tika_geotiff_output }
   let(:valid_id) { valid_change_set.id }
 
+  before do
+    allow(MosaicJob).to receive(:perform_later)
+  end
+
   describe "#valid?" do
     let(:valid_file) { derivative_service.new(id: valid_change_set.id) }
 
@@ -49,6 +53,7 @@ RSpec.describe RasterResourceDerivativeService do
       expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
+      expect(MosaicJob).not_to have_received(:perform_later)
     end
   end
 
@@ -59,6 +64,28 @@ RSpec.describe RasterResourceDerivativeService do
       expect { valid_resource }.to raise_error(RuntimeError)
       file_set = query_service.find_all_of_model(model: FileSet).first
       expect(file_set.original_file.error_message).to include(/gdalwarp -q -t_srs EPSG:3857/)
+    end
+  end
+
+  context "with a complete raster_set parent" do
+    it "runs a mosaic generation job" do
+      raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "complete")
+      child = Wayfinder.for(raster_set).members.first
+      change_set = ChangeSet.for(child)
+      change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
+      change_set_persister.save(change_set: change_set)
+      expect(MosaicJob).to have_received(:perform_later)
+    end
+  end
+
+  context "with a non-complete raster_set parent" do
+    it "does not run a mosaic generation job" do
+      raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "pending")
+      child = Wayfinder.for(raster_set).members.first
+      change_set = ChangeSet.for(child)
+      change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
+      change_set_persister.save(change_set: change_set)
+      expect(MosaicJob).not_to have_received(:perform_later)
     end
   end
 
@@ -78,5 +105,13 @@ RSpec.describe RasterResourceDerivativeService do
       resource = query_service.find_by(id: valid_resource.id)
       expect(resource.original_file.error_message).to be_empty
     end
+  end
+
+  it "runs a mosaic generation job" do
+    raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "complete")
+    child = Wayfinder.for(raster_set).members.first
+    file_set_id = child.member_ids.first
+    derivative_service.new(id: file_set_id).cleanup_derivatives
+    expect(MosaicJob).to have_received(:perform_later)
   end
 end

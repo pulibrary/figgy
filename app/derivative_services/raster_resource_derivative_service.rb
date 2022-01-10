@@ -53,6 +53,7 @@ class RasterResourceDerivativeService
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
+    generate_mosaic
   end
 
   def create_derivatives
@@ -63,6 +64,7 @@ class RasterResourceDerivativeService
     end
     # Persist a second copy of the display file to the cloud.
     create_cloud_derivatives
+    generate_mosaic
     update_error_message(message: nil) if original_file.error_message.present?
   rescue StandardError => error
     update_error_message(message: error.message)
@@ -180,5 +182,13 @@ class RasterResourceDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
+    end
+
+    def generate_mosaic
+      parent = resource.decorate.parent
+      grandparent = parent.parents.first
+      return unless grandparent.is_a? RasterResource
+      return unless grandparent.state == ["complete"]
+      MosaicJob.perform_later(grandparent.id)
     end
 end
