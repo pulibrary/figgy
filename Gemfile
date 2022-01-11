@@ -2,6 +2,7 @@
 source "https://rubygems.org"
 
 gem "autoprefixer-rails"
+gem "aws-sdk"
 gem "bagit", "~> 0.4"
 gem "blacklight"
 gem "blacklight_range_limit", "~> 6.0"

@@ -301,6 +301,7 @@ RSpec/VerifiedDoubles:
     - 'spec/derivative_services/jp2_derivative_service_spec.rb'
     - 'spec/derivative_services/vips_derivative_service_spec.rb'
     - 'spec/jobs/ingest_intermediate_file_job_spec.rb'
+    - 'spec/services/mosaic_cache_service_spec.rb'
 Naming/FileName:
   Enabled: true
   Exclude:
