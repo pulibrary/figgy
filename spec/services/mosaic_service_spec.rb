@@ -17,13 +17,15 @@ RSpec.describe MosaicService do
     end
 
     context "when the file does not exist on the storage adapter" do
-      it "generates the file and returns the path" do
+      it "generates a default mosaic file and a fingerprinted mosaic file and returns the fingerprinted path" do
         allow(MosaicGenerator).to receive(:new).and_call_original
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        path = generator.path
-        expect(File.exist?(path)).to be true
+        fingerprinted_path = generator.path
+        default_path = Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
         expect(MosaicGenerator).to have_received(:new)
+        expect(File.exist?(fingerprinted_path)).to be true
+        expect(File.exist?(default_path)).to be true
       end
     end
 
@@ -36,9 +38,11 @@ RSpec.describe MosaicService do
 
       it "returns the path" do
         allow(MosaicGenerator).to receive(:new)
+        query_service = ChangeSetPersister.default.query_service
         path = described_class.new(resource: raster_set).path
+        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         expect(MosaicGenerator).not_to have_received(:new)
-        expect(path).to eq(Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s)
+        expect(path).to eq(Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic-#{fingerprint}.json").to_s)
       end
     end
 
@@ -75,12 +79,15 @@ RSpec.describe MosaicService do
   end
 
   describe "#mosaic_file_id" do
+    let(:query_service) { ChangeSetPersister.default.query_service }
+
     context "when using the disk storage adapter" do
       it "returns a disk id" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         generator = described_class.new(resource: raster_set)
 
-        expect(generator.mosaic_file_id).to eq("disk://#{Rails.root.join('tmp', 'cloud_geo_derivatives', '33', '1d', '70', '331d70a54bd94a6580e4763c8f6b34fd', 'mosaic.json')}")
+        expect(generator.mosaic_file_id).to eq("disk://#{Rails.root.join('tmp', 'cloud_geo_derivatives', '33', '1d', '70', '331d70a54bd94a6580e4763c8f6b34fd', "mosaic-#{fingerprint}.json")}")
       end
     end
 
@@ -94,8 +101,9 @@ RSpec.describe MosaicService do
         )
         allow(Valkyrie::StorageAdapter).to receive(:find).and_return(shrine_adapter)
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         generator = described_class.new(resource: raster_set)
-        expect(generator.mosaic_file_id).to eq("cloud-geo-derivatives-shrine://33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
+        expect(generator.mosaic_file_id).to eq("cloud-geo-derivatives-shrine://33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{fingerprint}.json")
       end
     end
   end

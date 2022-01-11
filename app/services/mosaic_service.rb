@@ -10,13 +10,18 @@ class MosaicService
     @resource = resource.decorate
   end
 
-  # calculate the path for the non-fingerprinted version of the file
   def path
     raise Error if raster_file_sets.empty?
-    mosaic_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
+    mosaic_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
     return mosaic_path if storage_adapter.find_by(id: mosaic_file_id)
   rescue Valkyrie::StorageAdapter::FileNotFound
-    build_node if MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+
+    # build default mosaic file
+    build_node(default_filename)
+
+    # save copy of mosaic file with fingerprinted file name
+    build_node(fingerprinted_filename)
     mosaic_path
   end
 
@@ -34,28 +39,40 @@ class MosaicService
   #   and make private if possible
   def mosaic_file_id
     if storage_adapter.is_a? Valkyrie::Storage::Shrine
-      "#{storage_adapter.send(:protocol_with_prefix)}#{storage_adapter.path_generator.generate(resource: resource, original_filename: 'mosaic.json', file: nil)}"
+      "#{storage_adapter.send(:protocol_with_prefix)}#{storage_adapter.path_generator.generate(resource: resource, original_filename: fingerprinted_filename, file: nil)}"
     else
-      "disk://#{storage_adapter.path_generator.generate(resource: resource, original_filename: 'mosaic.json', file: nil)}"
+      "disk://#{storage_adapter.path_generator.generate(resource: resource, original_filename: fingerprinted_filename, file: nil)}"
     end
   end
 
   private
 
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
-    end
-
-    def build_node
-      file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: "mosaic.json", use: [Valkyrie::Vocab::PCDMUse.CloudDerivative])
+    def build_node(file_name)
+      file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: file_name, use: [Valkyrie::Vocab::PCDMUse.CloudDerivative])
       # the storage adapter will use this id as the storage location
       node = FileMetadata.for(file: file).new(id: resource.id)
       storage_adapter.upload(resource: node, file: file, original_filename: Array.wrap(node.original_filename).first) unless File.zero?(tmp_file.path)
       tmp_file.close
     end
 
-    def tmp_file
-      @tmp_file ||= Tempfile.new("mosaic")
+    def default_filename
+      "mosaic.json"
+    end
+
+    def fingerprint
+      @fingerprint ||= query_service.custom_queries.mosaic_fingerprint_for(id: resource.id)
+    end
+
+    def fingerprinted_filename
+      "mosaic-#{fingerprint}.json"
+    end
+
+    def query_service
+      ChangeSetPersister.default.query_service
+    end
+
+    def raster_file_sets
+      @raster_file_sets ||= resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
     end
 
     def raster_paths
@@ -64,7 +81,11 @@ class MosaicService
       end.flatten.compact.join("\n")
     end
 
-    def raster_file_sets
-      @raster_file_sets ||= resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
+    def storage_adapter
+      @storage_adapter ||= Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
+    end
+
+    def tmp_file
+      @tmp_file ||= Tempfile.new("mosaic")
     end
 end
