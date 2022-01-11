@@ -15,11 +15,13 @@ class MosaicService
     mosaic_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
     return mosaic_path if storage_adapter.find_by(id: mosaic_file_id)
   rescue Valkyrie::StorageAdapter::FileNotFound
-    # build default mosaic file
-    build_node(default_filename) if MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
 
-    # build fingerprinted mosaic file
-    build_node(fingerprinted_filename) if MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+    # build default mosaic file
+    build_node(default_filename)
+
+    # save copy of mosaic file with fingerprinted file name
+    build_node(fingerprinted_filename)
     mosaic_path
   end
 

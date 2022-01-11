@@ -23,7 +23,7 @@ RSpec.describe MosaicService do
         generator = described_class.new(resource: raster_set)
         fingerprinted_path = generator.path
         default_path = Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
-        expect(MosaicGenerator).to have_received(:new).twice
+        expect(MosaicGenerator).to have_received(:new)
         expect(File.exist?(fingerprinted_path)).to be true
         expect(File.exist?(default_path)).to be true
       end
