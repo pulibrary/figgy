@@ -25,7 +25,7 @@ RSpec.describe RasterResourceDerivativeService do
   let(:valid_id) { valid_change_set.id }
 
   before do
-    allow(MosaicJob).to receive(:perform_later)
+    allow(MosaicCacheJob).to receive(:perform_later)
   end
 
   describe "#valid?" do
@@ -53,7 +53,7 @@ RSpec.describe RasterResourceDerivativeService do
       expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
-      expect(MosaicJob).not_to have_received(:perform_later)
+      expect(MosaicCacheJob).not_to have_received(:perform_later)
     end
   end
 
@@ -74,7 +74,7 @@ RSpec.describe RasterResourceDerivativeService do
       change_set = ChangeSet.for(child)
       change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
       change_set_persister.save(change_set: change_set)
-      expect(MosaicJob).to have_received(:perform_later)
+      expect(MosaicCacheJob).to have_received(:perform_later)
     end
   end
 
@@ -85,7 +85,7 @@ RSpec.describe RasterResourceDerivativeService do
       change_set = ChangeSet.for(child)
       change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
       change_set_persister.save(change_set: change_set)
-      expect(MosaicJob).not_to have_received(:perform_later)
+      expect(MosaicCacheJob).not_to have_received(:perform_later)
     end
   end
 
@@ -112,6 +112,6 @@ RSpec.describe RasterResourceDerivativeService do
     child = Wayfinder.for(raster_set).members.first
     file_set_id = child.member_ids.first
     derivative_service.new(id: file_set_id).cleanup_derivatives
-    expect(MosaicJob).to have_received(:perform_later)
+    expect(MosaicCacheJob).to have_received(:perform_later)
   end
 end

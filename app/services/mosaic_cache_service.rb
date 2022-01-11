@@ -4,9 +4,9 @@ class MosaicCacheService
   class Error < StandardError; end
   attr_reader :resource
   # @param resource [RasterResource]
-  attr_reader :mosaic_only
-  def initialize(resource:, mosaic_only: true)
-    @resource = resource.decorate
+  attr_reader :resource_id, :mosaic_only
+  def initialize(resource_id:, mosaic_only: true)
+    @resource_id = resource_id
     @mosaic_only = mosaic_only
   end
 
@@ -19,7 +19,7 @@ class MosaicCacheService
           quantity: 1,
           items: [path]
         },
-        caller_reference: resource.id.to_s
+        caller_reference: resource_id
       }
     )
   end
@@ -48,9 +48,9 @@ class MosaicCacheService
 
     def path
       if mosaic_only
-        "/resources/#{resource.id}"
+        "/resources/#{resource_id}"
       else
-        "*#{resource.id}*"
+        "*#{resource_id}*"
       end
     end
 end

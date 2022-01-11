@@ -42,8 +42,7 @@ RSpec.describe MosaicCacheService do
       let(:path) { "/resources/331d70a5-4bd9-4a65-80e4-763c8f6b34fd" }
 
       it "makes a call to the Cloudfront API to invalidate only the mosaic path" do
-        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        described_class.new(resource: raster_set).invalidate
+        described_class.new(resource_id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd").invalidate
         expect(aws_client).to have_received(:create_invalidation).with(params)
       end
     end
@@ -52,8 +51,7 @@ RSpec.describe MosaicCacheService do
       let(:path) { "*331d70a5-4bd9-4a65-80e4-763c8f6b34fd*" }
 
       it "makes a call to the Cloudfront API to invalidate all paths that match the resource id" do
-        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        described_class.new(resource: raster_set, mosaic_only: false).invalidate
+        described_class.new(resource_id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd", mosaic_only: false).invalidate
         expect(aws_client).to have_received(:create_invalidation).with(params)
       end
     end
