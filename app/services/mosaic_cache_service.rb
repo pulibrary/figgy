@@ -19,12 +19,16 @@ class MosaicCacheService
           quantity: 1,
           items: [path]
         },
-        caller_reference: resource_id
+        caller_reference: caller_reference
       }
     )
   end
 
   private
+
+    def caller_reference
+      "#{resource_id}-#{Time.now.to_i}"
+    end
 
     def client
       @client ||= Aws::CloudFront::Client.new(
