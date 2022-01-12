@@ -189,6 +189,6 @@ class RasterResourceDerivativeService
       grandparent = parent.parents.first
       return unless grandparent.is_a? RasterResource
       return unless grandparent.decorate.public_readable_state?
-      MosaicCacheJob.perform_later(grandparent.id)
+      MosaicCacheJob.perform_later(grandparent.id.to_s)
     end
 end
