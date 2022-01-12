@@ -47,10 +47,11 @@ class MosaicCacheService
     end
 
     def path
+      id = resource_id.delete("-")
       if mosaic_only
-        "/resources/#{resource_id}"
+        "/resources/#{id}"
       else
-        "*#{resource_id}*"
+        "*#{id}*"
       end
     end
 end
