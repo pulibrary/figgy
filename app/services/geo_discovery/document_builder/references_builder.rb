@@ -30,6 +30,7 @@ module GeoDiscovery
           document.wmts_path = wmts_path
           document.wfs_path = wfs_path
           document.wcs_path = wcs_path
+          document.xyz_path = xyz_path
           document.tile_layer_url = resource_decorator.tile_layer_url
         end
 
@@ -109,6 +110,12 @@ module GeoDiscovery
         # @return [String] wmts server url
         def wmts_path
           wxs.wmts_path
+        end
+
+        # Returns the xyz server url.
+        # @return [String] xyz server url
+        def xyz_path
+          wxs.xyz_path
         end
     end
   end

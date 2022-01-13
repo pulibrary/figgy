@@ -400,17 +400,38 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   end
 
   describe "raster set" do
-    let(:geo_work) do
-      FactoryBot.create_for_repository(
-        :raster_set,
-        coverage: coverage.to_s
-      )
+    context "with an open raster set" do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(
+          :raster_set,
+          coverage: coverage.to_s
+        )
+      end
+
+      it "has wmts and xyz references" do
+        geo_work
+        id = geo_work.id.to_s.delete("-")
+        refs = JSON.parse(document["dct_references_s"])
+        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/mosaicjson/WMTSCapabilities.xml?id=#{id}"
+        expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to eq "https://map-tiles-test.example.com/mosaicjson/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png?id=#{id}"
+      end
     end
 
-    it "has a wmts reference" do
-      geo_work
-      refs = JSON.parse(document["dct_references_s"])
-      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/mosaicjson/WMTSCapabilities.xml?id=#{geo_work.id}"
+    context "with an authenticated raster set" do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(
+          :raster_set,
+          coverage: coverage.to_s,
+          visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        )
+      end
+
+      it "does not have wmts and xyz references" do
+        geo_work
+        refs = JSON.parse(document["dct_references_s"])
+        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be_nil
+        expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to be_nil
+      end
     end
   end
 end

@@ -136,7 +136,8 @@ module GeoDiscovery
           "https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification" => tile_layer_url,
           "http://iiif.io/api/image" => iiif,
           "http://iiif.io/api/presentation#manifest" => iiif_manifest,
-          "http://www.opengis.net/def/serviceType/ogc/wmts" => wmts_path
+          "http://www.opengis.net/def/serviceType/ogc/wmts" => wmts_path,
+          "https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames" => xyz_path
         }
       end
 

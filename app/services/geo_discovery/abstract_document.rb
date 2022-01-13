@@ -9,7 +9,7 @@ module GeoDiscovery
                   :held_by, :publisher, :resource_type, :slug, :solr_coverage,
                   :source, :spatial, :subject, :suppressed, :temporal, :thumbnail,
                   :tile_layer_url, :title, :url, :wcs_path, :wfs_path, :wms_path,
-                  :wxs_identifier, :wmts_path
+                  :wxs_identifier, :wmts_path, :xyz_path
 
     # Cleans the document hash by removing unused fields.
     # @param [Hash] document hash
