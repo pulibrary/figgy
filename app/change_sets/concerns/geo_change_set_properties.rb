@@ -19,7 +19,6 @@ module GeoChangeSetProperties
     property :cartographic_projection, multiple: false, required: false
     property :wms_url, multiple: false, required: false
     property :wfs_url, multiple: false, required: false
-    property :tile_layer_url, multiple: false, required: false
     property :layer_name, multiple: false, required: false
   end
 end

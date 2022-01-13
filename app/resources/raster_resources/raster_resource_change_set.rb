@@ -63,7 +63,6 @@ class RasterResourceChangeSet < ChangeSet
       ],
       "Geospatial Web Service Overrides" => [
         :wms_url,
-        :tile_layer_url,
         :layer_name
       ]
     }

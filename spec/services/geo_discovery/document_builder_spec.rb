@@ -384,21 +384,6 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         expect(document["uuid"]).to eq "other-institution-fk4"
       end
     end
-
-    context "with a populated tile layer url property" do
-      let(:geo_work) do
-        FactoryBot.create_for_repository(:raster_resource,
-                                         coverage: coverage.to_s,
-                                         visibility: visibility,
-                                         identifier: "ark:/99999/fk4",
-                                         tile_layer_url: "https://geoserver.princeton.edu/{z}/{x}/{y}")
-      end
-
-      it "includes a tms reference" do
-        refs = JSON.parse(document["dct_references_s"])
-        expect(refs["https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification"]).to eq "https://geoserver.princeton.edu/{z}/{x}/{y}"
-      end
-    end
   end
 
   describe "raster set" do

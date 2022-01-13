@@ -29,7 +29,6 @@ module Schema
       # Used to build records for manually created GeoServer raster mosaics, for example.
       attribute :wms_url, Valkyrie::Types::String
       attribute :wfs_url, Valkyrie::Types::String
-      attribute :tile_layer_url, Valkyrie::Types::String
       attribute :layer_name, Valkyrie::Types::String
     end
   end
