@@ -82,7 +82,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://schema.org/downloadUrl"]).to match(/downloads/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to match(/geoserver\/public-figgy\/wfs/)
-      # wmts only exists for a raster set
+      # wmts only exists for a rasters and raster sets
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
@@ -361,6 +361,8 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       refs = JSON.parse(document["dct_references_s"])
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wcs"]).to match(/geoserver\/public-figgy\/wcs/)
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to match(/WMTSCapabilities/)
+      expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to match(/tiles/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to be_nil
 
       # Subjects filtered by FGDC topics
