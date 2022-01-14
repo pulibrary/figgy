@@ -82,8 +82,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://schema.org/downloadUrl"]).to match(/downloads/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to match(/geoserver\/public-figgy\/wfs/)
-      # wmts only exists for a raster set
-      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil # only exists for rasters and raster sets
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
       expect(refs["http://schema.org/url"]).to be nil
@@ -361,6 +360,8 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       refs = JSON.parse(document["dct_references_s"])
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wcs"]).to match(/geoserver\/public-figgy\/wcs/)
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to match(/WMTSCapabilities/)
+      expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to match(/tiles/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to be_nil
 
       # Subjects filtered by FGDC topics
@@ -382,35 +383,41 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         expect(document["uuid"]).to eq "other-institution-fk4"
       end
     end
-
-    context "with a populated tile layer url property" do
-      let(:geo_work) do
-        FactoryBot.create_for_repository(:raster_resource,
-                                         coverage: coverage.to_s,
-                                         visibility: visibility,
-                                         identifier: "ark:/99999/fk4",
-                                         tile_layer_url: "https://geoserver.princeton.edu/{z}/{x}/{y}")
-      end
-
-      it "includes a tms reference" do
-        refs = JSON.parse(document["dct_references_s"])
-        expect(refs["https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification"]).to eq "https://geoserver.princeton.edu/{z}/{x}/{y}"
-      end
-    end
   end
 
   describe "raster set" do
-    let(:geo_work) do
-      FactoryBot.create_for_repository(
-        :raster_set,
-        coverage: coverage.to_s
-      )
+    context "with an open raster set" do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(
+          :raster_set,
+          coverage: coverage.to_s
+        )
+      end
+
+      it "has wmts and xyz references" do
+        geo_work
+        id = geo_work.id.to_s.delete("-")
+        refs = JSON.parse(document["dct_references_s"])
+        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/mosaicjson/WMTSCapabilities.xml?id=#{id}"
+        expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to eq "https://map-tiles-test.example.com/mosaicjson/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png?id=#{id}"
+      end
     end
 
-    it "has a wmts reference" do
-      geo_work
-      refs = JSON.parse(document["dct_references_s"])
-      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/mosaicjson/WMTSCapabilities.xml?id=#{geo_work.id}"
+    context "with an authenticated raster set" do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(
+          :raster_set,
+          coverage: coverage.to_s,
+          visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        )
+      end
+
+      it "does not have wmts and xyz references" do
+        geo_work
+        refs = JSON.parse(document["dct_references_s"])
+        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be_nil
+        expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to be_nil
+      end
     end
   end
 end
