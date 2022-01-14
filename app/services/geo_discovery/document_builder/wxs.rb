@@ -48,8 +48,8 @@ module GeoDiscovery
         "#{tileserver_path}/mosaicjson/WMTSCapabilities.xml?id=#{id}"
       end
 
-      # Returns the wmts server url.
-      # @return [String] wmts server url
+      # Returns the xzy tile server url.
+      # @return [String] xyz server url
       def xyz_path
         return unless visibility == "open" && (raster_set? || raster_file_set?)
         id = resource_decorator.id.to_s.delete("-")

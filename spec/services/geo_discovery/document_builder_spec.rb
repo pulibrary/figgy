@@ -82,8 +82,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://schema.org/downloadUrl"]).to match(/downloads/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to match(/geoserver\/public-figgy\/wfs/)
-      # wmts only exists for a rasters and raster sets
-      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil # only exists for rasters and raster sets
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
       expect(refs["http://schema.org/url"]).to be nil
