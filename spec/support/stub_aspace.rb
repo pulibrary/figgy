@@ -12,7 +12,44 @@ module AspaceStubbing
       .to_return(status: 200, body: File.open(path), headers: { "Content-Type": "application/json" })
   end
 
+  def stub_find_digital_object_by_figgy_id(already_exists: false)
+    response =
+      if already_exists
+        stub_digital_object_update
+        {
+          "digital_objects" => [{
+            "ref" => "/repositories/3/digital_objects/56588",
+            "_resolved" => {
+              "lock_version" => 0,
+              "digital_object_id" => "ceac2cb6-2c33-4104-aff6-8c8b5411ebd3",
+              "uri" => "/repositories/3/digital_objects/56588"
+            }
+          }]
+        }
+      else
+        {
+          "digital_objects" => []
+        }
+      end
+    stub_request(:get, /https:\/\/aspace.test.org\/staff\/api\/repositories\/3\/find_by_id\/digital_objects\?digital_object_id\[\]=.*&resolve\[\]=digital_objects/)
+      .to_return(status: 200, body: response.to_json, headers: { "Content-Type": "application/json" })
+  end
+
+  def stub_digital_object_update
+    response = {
+      "status" => "Updated",
+      "id" => 56_588,
+      "lock_version" => 1,
+      "stale" => true,
+      "uri" => "/repositories/3/digital_objects/56588",
+      "warnings" => []
+    }
+    stub_request(:post, "https://aspace.test.org/staff/api/repositories/3/digital_objects/56588")
+      .to_return(status: 200, body: response.to_json, headers: { "Content-Type": "application/json" })
+  end
+
   def stub_create_digital_object
+    stub_find_digital_object_by_figgy_id(already_exists: false)
     response = {
       "status" => "Created",
       "id" => 56_588,

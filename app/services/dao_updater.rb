@@ -10,12 +10,17 @@ class DaoUpdater
   def update!
     return unless decorated_resource.public_readable_state?
     return if decorated_resource.private_visibility?
-    archival_object = aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
 
-    # Create digital object.
-    digital_object = create_digital_object(archival_object)
     # Assign digital object to Archival Object.
-    link_digital_object(archival_object: archival_object, digital_object: digital_object)
+    link_digital_object
+  end
+
+  def archival_object
+    @archival_object ||= aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
+  end
+
+  def digital_object
+    @digital_object ||= update_or_create_digital_object
   end
 
   def decorated_resource
@@ -24,24 +29,34 @@ class DaoUpdater
 
   # Add a new instance to the existing Archival Object to link the new digital
   # object to it.
-  def link_digital_object(archival_object:, digital_object:)
-    instance = new_instance(digital_object["uri"])
+  def link_digital_object
     payload = archival_object.source
     payload["instances"] = archival_object.non_figgy_instances
-    payload["instances"] += [instance]
+    payload["instances"] += [new_instance]
     aspace_client.post(archival_object.uri, payload.to_json)
   end
 
-  def new_instance(dao_uri)
+  def new_instance
     {
       "instance_type" => "digital_object",
       "jsonmodel_type" => "instance",
       "is_representative" => false,
-      "digital_object" => { "ref" => dao_uri }
+      "digital_object" => { "ref" => digital_object["uri"] }
     }
   end
 
-  def create_digital_object(archival_object)
+  def update_or_create_digital_object
+    found = aspace_client.get("/repositories/#{archival_object.repository_id}/find_by_id/digital_objects?digital_object_id[]=#{change_set.resource.id}&resolve[]=digital_objects").parsed
+    found = found["digital_objects"].first&.fetch("_resolved")
+    return update_digital_object(found) if found
+    create_digital_object
+  end
+
+  def update_digital_object(found_digital_object)
+    aspace_client.post(found_digital_object["uri"], new_dao.merge("lock_version" => found_digital_object["lock_version"]).to_json).parsed
+  end
+
+  def create_digital_object
     result = aspace_client.post("/repositories/#{archival_object.repository_id}/digital_objects", new_dao.to_json)
     result.parsed
   end

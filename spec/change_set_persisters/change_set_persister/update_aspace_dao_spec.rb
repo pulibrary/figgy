@@ -27,6 +27,27 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     # Ensure the archival object was linked to the digital object.
     expect(mocked_archival_object_update).to have_been_made
   end
+  it "updates ASpace even if a digital object already exists" do
+    stub_aspace_login
+    stub_find_archival_object(component_id: "MC001.01_c000001")
+    stub_aspace(pulfa_id: "MC001.01_c000001")
+    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_find_digital_object_by_figgy_id(already_exists: true)
+    mocked_digital_object_update = stub_digital_object_update
+    mocked_archival_object_update = stub_archival_object_update(archival_object_id: "260330")
+    change_set_persister = ChangeSetPersister.default
+    resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "MC001.01_c000001")
+    change_set = ChangeSet.for(resource)
+    change_set.validate(state: "complete")
+    expect(change_set).to be_valid
+
+    change_set_persister.save(change_set: change_set)
+
+    # Ensure the existing digital object is updated.
+    expect(mocked_digital_object_update).to have_been_made
+    # Ensure the archival object was linked to the digital object.
+    expect(mocked_archival_object_update).to have_been_made
+  end
   it "adds a download link as the DAO if it's a zip file" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")
