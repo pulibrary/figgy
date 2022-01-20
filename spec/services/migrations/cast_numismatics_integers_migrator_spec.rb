@@ -10,6 +10,8 @@ RSpec.describe Migrations::CastNumismaticsIntegersMigrator do
       issue = FactoryBot.create_for_repository(:numismatic_issue, issue_number: 400, member_ids: [coin.id])
 
       adapter = Valkyrie::MetadataAdapter.find(:postgres)
+      logger = instance_double(Logger)
+      allow(logger).to receive(:info)
 
       # save them as strings
       accession_resource = adapter.resources.where(id: accession.id.to_s)
@@ -27,11 +29,15 @@ RSpec.describe Migrations::CastNumismaticsIntegersMigrator do
       issue_attributes[:metadata]["issue_number"] = ["400"]
       issue_resource.returning.update(issue_attributes)
 
-      described_class.run
+      described_class.run(logger: logger)
 
       accession_attributes = adapter.resources.where(id: accession.id.to_s).first
       coin_attributes = adapter.resources.where(id: coin.id.to_s).first
       issue_attributes = adapter.resources.where(id: issue.id.to_s).first
+
+      expect(logger).to have_received(:info).with "migrated Numismatics::Accession objects"
+      expect(logger).to have_received(:info).with "migrated Numismatics::Issue objects"
+      expect(logger).to have_received(:info).with "migrated Numismatics::Coin objects"
 
       expect(accession_attributes[:metadata]["accession_number"]).to eq [100]
       expect(coin_attributes[:metadata]["coin_number"]).to eq [200]
