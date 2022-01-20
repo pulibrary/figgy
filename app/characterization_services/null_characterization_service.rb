@@ -21,6 +21,6 @@ class NullCharacterizationService
   end
 
   def target_file
-    @file_set.original_file || @file_set.intermediate_files.first
+    @file_set.primary_file
   end
 end
