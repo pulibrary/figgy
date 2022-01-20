@@ -34,4 +34,20 @@ RSpec.describe NullCharacterizationService do
       end
     end
   end
+
+  context "with a pdf preservation file" do
+    let(:pdf_file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
+    describe "#valid?" do
+      it "returns false" do
+        resource = FactoryBot.create_for_repository(:scanned_resource, files: [pdf_file])
+        file_set = resource.decorate.members.first
+        pdf_file_metadata = file_set.file_metadata.first
+        pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
+        file_set.file_metadata = [pdf_file_metadata]
+        file_set = adapter.persister.save(resource: file_set)
+
+        expect(described_class.new(file_set: file_set, persister: persister).valid?).to be false
+      end
+    end
+  end
 end
