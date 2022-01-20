@@ -17,7 +17,7 @@ module Numismatics
     attribute :provenance, Valkyrie::Types::Array.of(Numismatics::Provenance).meta(ordered: true)
 
     # descriptive metadata
-    attribute :coin_number, Valkyrie::Types::Anything
+    attribute :coin_number, Valkyrie::Types::Coercible::Integer.optional
     attribute :number_in_accession, Valkyrie::Types::Integer
     attribute :counter_stamp
     attribute :analysis

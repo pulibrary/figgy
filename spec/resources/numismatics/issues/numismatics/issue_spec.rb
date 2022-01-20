@@ -21,4 +21,12 @@ describe Numismatics::Issue do
     issue.downloadable = ["public"]
     expect(issue.downloadable).to eq ["public"]
   end
+
+  it "stores issue_number as an integer" do
+    change_set = ChangeSet.for(issue)
+    change_set.validate(issue_number: "105")
+    csp = ChangeSetPersister.default
+    issue = csp.save(change_set: change_set)
+    expect(issue.issue_number).to eq 105
+  end
 end
