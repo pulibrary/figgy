@@ -8,6 +8,22 @@ class CatalogController < ApplicationController
   include TokenAuth
   layout "application"
 
+  before_action :notify_read_only, :notify_index_read_only
+
+  def notify_index_read_only
+    return unless Figgy.index_read_only?
+    message = ["Figgy is currently undergoing maintenance and resource ingest and editing is disabled."]
+    message << flash[:notice] if flash[:notice]
+    flash[:notice] = message.join(" ")
+  end
+
+  def notify_read_only
+    return unless Figgy.read_only_mode
+    message = ["The site is currently in read-only mode."]
+    message << flash[:notice] if flash[:notice]
+    flash[:notice] = message.join(" ")
+  end
+
   def self.search_config
     {
       "qf" => %w[identifier_tesim

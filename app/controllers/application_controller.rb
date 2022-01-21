@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :authorize_mini_profiler
-  before_action :notify_read_only, :notify_index_read_only
   before_action :store_user_location!, if: :storable_location?
 
   def after_sign_out_path_for(_resource)
@@ -17,20 +16,6 @@ class ApplicationController < ActionController::Base
 
   def current_ability
     Ability.new(current_user, ip_address: request.remote_ip)
-  end
-
-  def notify_index_read_only
-    return unless Figgy.index_read_only?
-    message = ["Figgy is currently undergoing maintenance and resource ingest and editing is disabled."]
-    message << flash[:notice] if flash[:notice]
-    flash[:notice] = message.join(" ")
-  end
-
-  def notify_read_only
-    return unless Figgy.read_only_mode
-    message = ["The site is currently in read-only mode."]
-    message << flash[:notice] if flash[:notice]
-    flash[:notice] = message.join(" ")
   end
 
   def after_sign_in_path_for(resource_or_scope)
