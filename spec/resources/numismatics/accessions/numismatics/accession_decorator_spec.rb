@@ -21,6 +21,11 @@ RSpec.describe Numismatics::AccessionDecorator do
       accession.date = "1/17/2007"
       expect { decorator.formatted_date }.not_to raise_error
     end
+
+    it "can handle a single year or other unexpected string format" do
+      accession.date = "2007"
+      expect { decorator.formatted_date }.not_to raise_error
+    end
   end
 
   describe "#label" do
