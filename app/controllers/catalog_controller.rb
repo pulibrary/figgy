@@ -12,12 +12,16 @@ class CatalogController < ApplicationController
 
   def notify_index_read_only
     return unless Figgy.index_read_only?
-    flash[:notice] = "Figgy is currently undergoing maintenance and resource ingest and editing is disabled."
+    message = ["Figgy is currently undergoing maintenance and resource ingest and editing is disabled."]
+    message << flash[:notice] if flash[:notice] && flash[:notice] != message.first
+    flash[:notice] = message.join(" ")
   end
 
   def notify_read_only
     return unless Figgy.read_only_mode
-    flash[:notice] = "The site is currently in read-only mode."
+    message = ["The site is currently in read-only mode."]
+    message << flash[:notice] if flash[:notice] && flash[:notice] != message.first
+    flash[:notice] = message.join(" ")
   end
 
   def self.search_config
