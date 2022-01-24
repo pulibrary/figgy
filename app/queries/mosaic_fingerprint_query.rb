@@ -18,20 +18,28 @@ class MosaicFingerprintQuery
     output[0][:fingerprint]
   end
 
-  # Concatenate all grandchild cloud FileMetadata node IDs and MD5 them.
-  # This fingerprint can be used as an identifier for whether on not a new
-  # mosaic should be generated for a RasterSet.
+  # Get all FileSets in the entire hierarchy, find the FileMetadata nodes which
+  # are CloudDerivatives, then MD5 their IDs together.
   def fingerprint_query
     <<-SQL
-      select md5(string_agg(grandchild_metadata->'id'->>'id', ',' order by grandchild_metadata->'id'->>'id')) AS fingerprint FROM orm_resources a,
-      jsonb_array_elements_text(public.get_ids(a.metadata, 'member_ids')) AS b(id)
-      JOIN orm_resources c ON (b.id)::uuid = c.id,
-      jsonb_array_elements_text(public.get_ids(c.metadata, 'member_ids')) AS d(id)
-      JOIN orm_resources e ON (d.id)::uuid = e.id,
-      jsonb_array_elements(e.metadata->'file_metadata') AS grandchild_metadata
-      WHERE a.id = ?
-      AND grandchild_metadata @> '{"use": [{"@id": "http://pcdm.org/use#CloudDerivative"}]}'
-      GROUP BY a.id
+        WITH RECURSIVE deep_members AS (
+          select a.id AS original_id, c.*
+          FROM orm_resources a,
+          jsonb_array_elements_text(public.get_ids(a.metadata, 'member_ids')) AS b(id)
+          JOIN orm_resources c ON (b.id)::uuid = c.id
+          WHERE a.id = ?
+          UNION
+          SELECT f.original_id, mem.*
+          FROM deep_members f,
+          jsonb_array_elements_text(public.get_ids(f.metadata, 'member_ids')) AS g(id)
+          JOIN orm_resources mem ON (g.id)::uuid = mem.id
+          WHERE f.metadata @> '{"member_ids": [{}]}'
+        )
+        select md5(string_agg(file_metadata_element->'id'->>'id', ',' order by file_metadata_element->'id'->>'id')) AS fingerprint FROM deep_members,
+        jsonb_array_elements(deep_members.metadata->'file_metadata') AS file_metadata_element
+        WHERE deep_members.internal_resource = 'FileSet'
+        AND file_metadata_element @> '{"use": [{"@id": "http://pcdm.org/use#CloudDerivative"}]}'
+        GROUP BY deep_members.original_id
     SQL
   end
 end
