@@ -43,7 +43,7 @@ module GeoDiscovery
       # Returns the wmts server url.
       # @return [String] wmts server url
       def wmts_path
-        return unless visibility == "open" && (raster_set? || raster_file_set?)
+        return unless generate_wmts_path?
         id = resource_decorator.id.to_s.delete("-")
         "#{tileserver_path}/mosaicjson/WMTSCapabilities.xml?id=#{id}"
       end
@@ -79,6 +79,15 @@ module GeoDiscovery
         # @return [Boolean]
         def generate_wms_path?
           @config && visibility && file_set && (raster_file_set? || vector_file_set?)
+        end
+
+        # Determines if the wmts path should be generated
+        # @return [Boolean]
+        def generate_wmts_path?
+          return false unless visibility == "open"
+          return true if raster_set?
+          return true if raster_file_set?
+          resource_decorator.object.decorate.try(:mosaic_file_set_count).positive?
         end
 
         # Geoserver base url.

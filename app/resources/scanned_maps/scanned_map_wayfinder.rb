@@ -39,6 +39,10 @@ class ScannedMapWayfinder < BaseWayfinder
     @logical_structure_members ||= generate_logical_structure_members
   end
 
+  def mosaic_file_set_count
+    query_service.custom_queries.find_deep_children_with_property(resource: resource, model: FileSet, property: :service_targets, value: "mosaic", count: true)
+  end
+
   private
 
     # To display and save logical order correctly, this method replaces ScannedMap members that have no ScannedMap children
