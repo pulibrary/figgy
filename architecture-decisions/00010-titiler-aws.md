@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-We want to provide a Web Map Tile Service to allow display of several rasters at
+We want to provide raster tile services to allow display of several rasters at
 once without downloading all of the raster files. There are a few options for
 implementation:
 
@@ -40,6 +40,5 @@ Project](https://github.com/pulibrary/titiler-aws).
 1. This is another application to support.
 1. The software's written in Python - if we need customizations or adjustments
    they'll have to be done in Python, which our team doesn't use.
-1. This service will cost potentially infinite amounts of money if given
-   infinite traffic. Our history with the IIIF server has shown that to not be
-   an issue, however.
+1. The costs scale directly with traffic with no upper limit. However, our
+   experience with the IIIF lambda server has shown this to not to be a problem.
