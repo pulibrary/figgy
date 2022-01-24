@@ -212,7 +212,9 @@ RSpec.describe BulkIngestService do
         ingester.attach_dir(
           base_directory: Rails.root.join("spec", "fixtures", "ingest_scanned_raster_map", "123456")
         )
-        map = ChangeSetPersister.default.query_service.find_all_of_model(model: ScannedMap).first
+        map = ChangeSetPersister.default.query_service.find_all_of_model(model: ScannedMap).find do |m|
+          m.title == ["123456"]
+        end
         child_maps = Wayfinder.for(map).members
 
         expect(child_maps.map(&:class)).to eq [ScannedMap, ScannedMap]
