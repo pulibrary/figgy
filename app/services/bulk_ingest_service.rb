@@ -61,6 +61,17 @@ class BulkIngestService
       Pathname.new(path_value)
     end
 
+    # When creating children during bulk ingest, if the directory is named
+    # "Raster" it should create a Raster Resource. This is to support
+    # ScannedMaps with rasters, see [docs/mosaic.md](docs/mosaic.md).
+    def child_klass(parent_class:, title:)
+      if title.to_s.casecmp("raster").zero?
+        RasterResource
+      else
+        parent_class
+      end
+    end
+
     # For a given directory and root resource, iterate through the directory file children and ingest them
     # If a subdirectory is found, create a new resource, append this to the parent resource, and recurse through this subdirectory
     # If a file is found, append this to the parent resource
@@ -69,11 +80,10 @@ class BulkIngestService
     # @param file_filters [Array] the filter used for matching against the filename extension
     def attach_children(path:, resource:, file_filters: [], **attributes)
       child_attributes = attributes.except(:collection)
-
       child_resources = dirs(path: path).map do |subdir_path|
         attach_children(
           path: subdir_path,
-          resource: new_resource(klass: resource.class, **child_attributes.merge(title: [subdir_path.basename])),
+          resource: new_resource(klass: child_klass(parent_class: resource.class, title: subdir_path.basename), **child_attributes.merge(title: [subdir_path.basename])),
           file_filters: file_filters
         )
       end
@@ -157,6 +167,10 @@ class BulkIngestService
         @file_paths = file_paths.sort
       end
 
+      def cropped_path_exists?
+        @has_cropped ||= file_paths.any? { |f| File.basename(f).include?("_cropped") }
+      end
+
       def to_a
         nodes = []
         file_paths.each_with_index do |f, idx|
@@ -165,16 +179,20 @@ class BulkIngestService
           mime_type = mime_types.first
           title = if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
                     basename
+                  elsif cropped_path_exists?
+                    basename
                   else
                     (idx + 1).to_s
                   end
+          service_targets = "mosaic" if basename.include?("_cropped")
           nodes << IngestableFile.new(
             file_path: f,
             mime_type: mime_type.content_type,
             original_filename: basename,
             copyable: true,
             container_attributes: {
-              title: title
+              title: title,
+              service_targets: service_targets
             }
           )
         end

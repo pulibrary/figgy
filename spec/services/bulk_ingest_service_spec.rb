@@ -206,6 +206,38 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "with a subdirectory named Raster" do
+      subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: ScannedMap) }
+      it "ingests a RasterSet child" do
+        ingester.attach_dir(
+          base_directory: Rails.root.join("spec", "fixtures", "ingest_scanned_raster_map", "123456")
+        )
+        map = ChangeSetPersister.default.query_service.find_all_of_model(model: ScannedMap).find do |m|
+          m.title == ["123456"]
+        end
+        child_maps = Wayfinder.for(map).members
+
+        expect(child_maps.map(&:class)).to eq [ScannedMap, ScannedMap]
+        sheet1_children = Wayfinder.for(child_maps.first).members
+        sheet2_children = Wayfinder.for(child_maps.last).members
+
+        expect(sheet1_children.map(&:class)).to eq [RasterResource, FileSet]
+        expect(sheet2_children.map(&:class)).to eq [RasterResource, FileSet]
+
+        sheet1_raster_children = Wayfinder.for(sheet1_children.first).members
+        sheet2_raster_children = Wayfinder.for(sheet2_children.first).members
+
+        expect(sheet1_raster_children.map(&:class)).to eq [FileSet, FileSet]
+        expect(sheet1_raster_children.first.title).to eq ["sheet1.tif"]
+        expect(sheet1_raster_children.last.title).to eq ["sheet1_cropped.tif"]
+        expect(sheet1_raster_children.last.service_targets).to eq ["mosaic"]
+        expect(sheet2_raster_children.map(&:class)).to eq [FileSet, FileSet]
+        expect(sheet2_raster_children.first.title).to eq ["sheet2.tif"]
+        expect(sheet2_raster_children.last.title).to eq ["sheet2_cropped.tif"]
+        expect(sheet2_raster_children.last.service_targets).to eq ["mosaic"]
+      end
+    end
+
     context "with invalid property arguments" do
       let(:logger) { instance_double(Logger) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
