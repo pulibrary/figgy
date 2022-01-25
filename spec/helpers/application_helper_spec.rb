@@ -102,6 +102,26 @@ RSpec.describe ApplicationHelper, type: :helper do
         expect(helper).to have_received(:url_for).with(page: 1, q: "")
       end
     end
+
+    context "when the query is async" do
+      # Scope objects are just anonymous objects
+      let(:scope) { double }
+      let(:blacklight_config) { Blacklight::Configuration.new }
+      let(:search_session) do
+        {
+          "id" => 16,
+          "counter" => 1,
+          "page" => 1
+        }
+      end
+
+      it "generates the search URL from a record" do
+        allow(helper).to receive(:blacklight_config).and_return(blacklight_config)
+        allow(current_search_session).to receive(:query_params).and_return("async" => "true")
+
+        expect(helper.link_back_to_catalog).to eq '<a href="/catalog">Back to Search</a>'
+      end
+    end
   end
 
   describe "#universal_viewer_path" do
