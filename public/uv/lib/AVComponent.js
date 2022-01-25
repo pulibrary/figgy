@@ -537,7 +537,7 @@ var IIIFComponents;
             this._checkMediaSynchronization();
             var range = this._getRangeForCurrentTime();
             if (range && !this._data.limitToRange && (!this._data.range || (this._data.range && range.id !== this._data.range.id))) {
-                if(this._canvasClockTime <= this._data.range.getDuration().end && this._canvasClockTime >= this._data.range.getDuration().start) {
+                if(this._data.range && this._canvasClockTime <= this._data.range.getDuration().end && this._canvasClockTime >= this._data.range.getDuration().start) {
                   return
                 }
                 this.set({
