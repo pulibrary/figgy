@@ -235,15 +235,22 @@ module ApplicationHelper
     scope = opts.delete(:route_set) || self
     # Filter for cases where the query params were cached by AJAX queries from
     # the client
-    query_params = search_state.reset(current_query_params).to_hash unless current_query_async?
 
-    if search_session["counter"]
-      per_page = (search_session["per_page"] || default_per_page).to_i
-      counter = search_session["counter"].to_i
+    if current_query_async?
+      query_params = {}
+    else
+      query_params = search_state.reset(current_query_params).to_hash
 
-      query_params[:per_page] = per_page unless search_session["per_page"].to_i == default_per_page
-      query_params[:page] = ((counter - 1) / per_page) + 1
+      if search_session["counter"]
+        per_page = (search_session["per_page"] || default_per_page).to_i
+        counter = search_session["counter"].to_i
+
+        query_params[:per_page] = per_page unless search_session["per_page"].to_i == default_per_page
+        query_params[:page] = ((counter - 1) / per_page) + 1
+      end
     end
+
+    # query_params = search_state.reset(current_query_params).to_hash unless current_query_async?
 
     link_url = if query_params.blank?
                  search_action_path(only_path: true)
@@ -252,10 +259,9 @@ module ApplicationHelper
                  query_params[:q] = "" unless query_params.key?("q")
                  scope.url_for(query_params)
                end
+
     label = opts.delete(:label)
-
     label ||= t("blacklight.back_to_bookmarks") if link_url =~ /bookmarks/
-
     label ||= t("blacklight.back_to_search")
 
     link_to label, link_url, opts
