@@ -75,7 +75,7 @@ Rails.application.routes.draw do
 
   get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
   get "/manifests/:id/v3", to: "manifests#v3", as: :manifest_v3, defaults: { format: :json }
-  get "/tilemetadata/:id", to: "tile_metadata#metadata", as: :tile_metadata
+  get "/tilemetadata/:id", to: "tile_metadata#metadata", as: :tile_metadata, defaults: { format: :json }
 
   scope "/concern" do
     resources :file_sets do
@@ -240,7 +240,6 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
-        get :mosaic, defaults: { format: :json }
         post :browse_everything_files
       end
     end
