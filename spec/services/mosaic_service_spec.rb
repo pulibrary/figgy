@@ -29,6 +29,23 @@ RSpec.describe MosaicService do
       end
     end
 
+    context "when given a ScannedMap with RasterResources" do
+      it "generates a mosaic with the nested raster resource file sets marked as service_targets: mosaic" do
+        file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        image_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
+        raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [image_file_set.id, raster.id])
+        map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
+        generator = instance_double(MosaicGenerator, run: "fingerprint")
+        allow(MosaicGenerator).to receive(:new).and_return(generator)
+
+        generator = described_class.new(resource: map_set)
+
+        generator.path
+        expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: file_set.file_metadata.first.cloud_uri)
+      end
+    end
+
     context "when the file already exists on the storage adapter" do
       let(:raster_set) { FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd") }
 

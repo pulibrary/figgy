@@ -72,7 +72,7 @@ class MosaicService
     end
 
     def raster_file_sets
-      @raster_file_sets ||= resource.decorated_raster_resources.map { |r| r.decorate.geo_members }.flatten
+      @raster_file_sets ||= query_service.custom_queries.mosaic_file_sets_for(id: resource.id)
     end
 
     def raster_paths
