@@ -11,9 +11,12 @@ RSpec.describe MosaicFingerprintQuery do
   end
 
   def create_raster_scanned_map
+    # Cloud file - "clipped", service_targets: mosaic
     raster_file_set1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+    # Unclipped, no service target.
+    raster_file_set2 = FactoryBot.create_for_repository(:geo_raster_cloud_file, service_targets: nil)
     scanned_map_file_set1 = FactoryBot.create_for_repository(:geo_image_file_set)
-    raster1 = FactoryBot.create_for_repository(:raster_resource, member_ids: [raster_file_set1.id])
+    raster1 = FactoryBot.create_for_repository(:raster_resource, member_ids: [raster_file_set1.id, raster_file_set2.id])
     FactoryBot.create_for_repository(:scanned_map, member_ids: [raster1.id, scanned_map_file_set1.id])
   end
 
@@ -32,6 +35,19 @@ RSpec.describe MosaicFingerprintQuery do
 
       start_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
       ChangeSetPersister.default.persister.delete(resource: Wayfinder.for(scanned_map).file_sets.first)
+
+      expect(start_fingerprint).to eq query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
+    end
+    it "doesn't change the fingerprint after deleting the unclipped resource" do
+      scanned_map = create_raster_scanned_map
+      map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
+
+      start_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
+      raster_resource = Wayfinder.for(scanned_map).raster_resources.first
+      unclipped_file_set = Wayfinder.for(raster_resource).file_sets.find do |file_set|
+        !file_set.service_targets.include?("mosaic")
+      end
+      ChangeSetPersister.default.persister.delete(resource: unclipped_file_set)
 
       expect(start_fingerprint).to eq query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
     end
