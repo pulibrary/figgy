@@ -206,6 +206,28 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "when ingesting a RasterSet" do
+      subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: RasterResource) }
+      it "ingests a RasterSet with file_sets marked as mosaic service targets" do
+        ingester.attach_dir(
+          base_directory: Rails.root.join("spec", "fixtures", "ingest_raster_set", "123456")
+        )
+        raster_resource = ChangeSetPersister.default.query_service.find_all_of_model(model: RasterResource).find do |m|
+          m.title == ["123456"]
+        end
+        child_rasters = Wayfinder.for(raster_resource).members
+
+        expect(child_rasters.map(&:class)).to eq [RasterResource, RasterResource]
+        sheet1_children = Wayfinder.for(child_rasters.first).members
+        sheet2_children = Wayfinder.for(child_rasters.last).members
+
+        expect(sheet1_children.map(&:class)).to eq [FileSet]
+        expect(sheet2_children.map(&:class)).to eq [FileSet]
+
+        expect(sheet1_children.first.service_targets).to eq ["mosaic"]
+        expect(sheet2_children.first.service_targets).to eq ["mosaic"]
+      end
+    end
     context "with a subdirectory named Raster" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: ScannedMap) }
       it "ingests a RasterSet child" do
@@ -231,10 +253,12 @@ RSpec.describe BulkIngestService do
         expect(sheet1_raster_children.first.title).to eq ["sheet1.tif"]
         expect(sheet1_raster_children.last.title).to eq ["sheet1_cropped.tif"]
         expect(sheet1_raster_children.last.service_targets).to eq ["mosaic"]
+        expect(sheet1_raster_children.first.service_targets).to eq []
         expect(sheet2_raster_children.map(&:class)).to eq [FileSet, FileSet]
         expect(sheet2_raster_children.first.title).to eq ["sheet2.tif"]
         expect(sheet2_raster_children.last.title).to eq ["sheet2_cropped.tif"]
         expect(sheet2_raster_children.last.service_targets).to eq ["mosaic"]
+        expect(sheet1_raster_children.first.service_targets).to eq []
       end
     end
 

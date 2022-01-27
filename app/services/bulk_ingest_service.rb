@@ -87,7 +87,7 @@ class BulkIngestService
           file_filters: file_filters
         )
       end
-      child_files = files(path: path, file_filters: file_filters)
+      child_files = files(path: path, file_filters: file_filters, parent_resource: resource)
 
       change_set = ChangeSet.for(resource, change_set_param: change_set_param)
       change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
@@ -146,8 +146,10 @@ class BulkIngestService
     # Retrieve the files within a given directory
     # @param path [Pathname] the path to the directory containing the files
     # @param file_filter [String] the filter used for matching against the filename extension
+    # @param parent_resource [Valkyrie::Resource] Parent that the files will be
+    #   attached to.
     # @return [Array<Pathname>] the paths to any files
-    def files(path:, file_filters: [])
+    def files(path:, file_filters: [], parent_resource:)
       file_paths = path.children.select(&:file?)
       if file_filters.present?
         file_paths = file_paths.select do |file|
@@ -158,17 +160,23 @@ class BulkIngestService
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
 
-      BulkFilePathConverter.new(file_paths: file_paths).to_a
+      BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource).to_a
     end
 
+    # Converts file paths to IngestableFiles to attach to a parent.
     class BulkFilePathConverter
-      attr_reader :file_paths
-      def initialize(file_paths:)
+      attr_reader :file_paths, :parent_resource
+      def initialize(file_paths:, parent_resource:)
         @file_paths = file_paths.sort
+        @parent_resource = parent_resource
       end
 
-      def cropped_path_exists?
-        @has_cropped ||= file_paths.any? { |f| File.basename(f).include?("_cropped") }
+      # Mosaic target if creating a raster and there's either one file or the
+      # given file has _cropped in the name.
+      def mosaic_service_target?(file_basename)
+        return false unless raster_resource_parent?
+        return true if file_paths.length == 1
+        file_basename.to_s.include?("_cropped")
       end
 
       def to_a
@@ -179,12 +187,12 @@ class BulkIngestService
           mime_type = mime_types.first
           title = if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
                     basename
-                  elsif cropped_path_exists?
+                  elsif raster_resource_parent?
                     basename
                   else
                     (idx + 1).to_s
                   end
-          service_targets = "mosaic" if basename.include?("_cropped")
+          service_targets = "mosaic" if raster_resource_parent? && mosaic_service_target?(basename)
           nodes << IngestableFile.new(
             file_path: f,
             mime_type: mime_type.content_type,
@@ -197,6 +205,10 @@ class BulkIngestService
           )
         end
         nodes
+      end
+
+      def raster_resource_parent?
+        parent_resource.is_a?(RasterResource)
       end
 
       def preserved_file_name_mime_types
