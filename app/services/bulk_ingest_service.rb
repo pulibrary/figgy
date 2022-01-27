@@ -146,7 +146,7 @@ class BulkIngestService
     # Retrieve the files within a given directory
     # @param path [Pathname] the path to the directory containing the files
     # @param file_filter [String] the filter used for matching against the filename extension
-    # @param parent_resource [Class] Class of the parent that the files will be
+    # @param parent_resource [Valkyrie::Resource] Parent that the files will be
     #   attached to.
     # @return [Array<Pathname>] the paths to any files
     def files(path:, file_filters: [], parent_resource:)
