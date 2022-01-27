@@ -275,9 +275,6 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
 
     it "exposes the attributes for serialization into JSON-LD" do
-      ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [resource.id])
-      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
-
       jsonld = linked_ephemera_folder.as_jsonld
       expect(jsonld).not_to be_empty
 
@@ -301,9 +298,10 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         "@type" => "pcdm:Collection",
         "title" => collection.title.first
       )
-      project_json = jsonld["memberOf"].find { |x| x["title"] == project.title.first }
+      project_json = jsonld["memberOf"].find { |x| x["title"] == ephemera_project.title.first }
       expect(project_json).not_to be_blank
     end
+
     context "with the title of a series specified" do
       it "exposes the attribute in JSON-LD", series: true do
         ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [resource.id])
