@@ -32,3 +32,4 @@ yarn-debug.log*
 /cloud_fixity/node_modules
 gdrive.yml
 /storage
+/profiles
