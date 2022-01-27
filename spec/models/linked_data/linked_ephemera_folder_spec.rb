@@ -268,11 +268,9 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         description: "test description",
         date_created: "1970/01/01",
         source_url: "http://example.com",
-        dspace_url: "http://example.com",
-        member_of_collection_ids: [collection.id]
+        dspace_url: "http://example.com"
       )
     end
-    let(:collection) { FactoryBot.create_for_repository(:collection) }
 
     it "exposes the attributes for serialization into JSON-LD" do
       jsonld = linked_ephemera_folder.as_jsonld
@@ -291,13 +289,6 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       expect(jsonld["description"]).to eq ["test description"]
       expect(jsonld["provenance"]).to eq "test provenance"
 
-      expect(jsonld["member_of_collections"]).to be_nil
-      collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
-      expect(collection_json).to eq(
-        "@id" => "http://www.example.com/catalog/#{collection.id}",
-        "@type" => "pcdm:Collection",
-        "title" => collection.title.first
-      )
       project_json = jsonld["memberOf"].find { |x| x["title"] == ephemera_project.title.first }
       expect(project_json).not_to be_blank
     end
@@ -309,6 +300,31 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
         expect(linked_ephemera_folder.as_jsonld).not_to be_empty
         expect(linked_ephemera_folder.as_jsonld["series"]).to eq "test series"
+      end
+    end
+
+    context "when a member of a collection" do
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :ephemera_folder,
+          member_of_collection_ids: [collection.id]
+        )
+      end
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
+
+      it "has memberOf for both the collection and the ephemera project" do
+        jsonld = linked_ephemera_folder.as_jsonld
+
+        expect(jsonld["member_of_collections"]).to be_nil
+        collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
+        expect(collection_json).to eq(
+          "@id" => "http://www.example.com/catalog/#{collection.id}",
+          "@type" => "pcdm:Collection",
+          "title" => collection.title.first
+        )
+
+        project_json = jsonld["memberOf"].find { |x| x["title"] == ephemera_project.title.first }
+        expect(project_json).not_to be_blank
       end
     end
   end
