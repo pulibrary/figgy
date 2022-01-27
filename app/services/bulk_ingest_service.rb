@@ -87,7 +87,7 @@ class BulkIngestService
           file_filters: file_filters
         )
       end
-      child_files = files(path: path, file_filters: file_filters, resource: resource)
+      child_files = files(path: path, file_filters: file_filters, parent_resource: resource)
 
       change_set = ChangeSet.for(resource, change_set_param: change_set_param)
       change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
@@ -146,8 +146,10 @@ class BulkIngestService
     # Retrieve the files within a given directory
     # @param path [Pathname] the path to the directory containing the files
     # @param file_filter [String] the filter used for matching against the filename extension
+    # @param parent_resource [Class] Class of the parent that the files will be
+    #   attached to.
     # @return [Array<Pathname>] the paths to any files
-    def files(path:, file_filters: [], resource:)
+    def files(path:, file_filters: [], parent_resource:)
       file_paths = path.children.select(&:file?)
       if file_filters.present?
         file_paths = file_paths.select do |file|
@@ -158,14 +160,15 @@ class BulkIngestService
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
 
-      BulkFilePathConverter.new(file_paths: file_paths, resource: resource).to_a
+      BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource).to_a
     end
 
+    # Converts file paths to IngestableFiles to attach to a parent.
     class BulkFilePathConverter
-      attr_reader :file_paths, :resource
-      def initialize(file_paths:, resource:)
+      attr_reader :file_paths, :parent_resource
+      def initialize(file_paths:, parent_resource:)
         @file_paths = file_paths.sort
-        @resource = resource
+        @parent_resource = parent_resource
       end
 
       # Mosaic target if creating a raster and there's either one file or the
@@ -205,7 +208,7 @@ class BulkIngestService
       end
 
       def raster_resource_parent?
-        resource.is_a?(RasterResource)
+        parent_resource.is_a?(RasterResource)
       end
 
       def preserved_file_name_mime_types
