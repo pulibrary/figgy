@@ -72,6 +72,19 @@ class BulkIngestService
       end
     end
 
+    # Determine if the given path looks like a remote identifier, assign it if
+    # so - otherwise use it as the title.
+    # @note We only check for BibIDs here because there's no way to tell via
+    #   regex if a string is title or a component ID, and we don't currently
+    #   have a use case for them to be component IDs.
+    def title_or_identifier(klass, path_basename)
+      if klass.attribute_names.include?(:source_metadata_identifier) && RemoteRecord.bibdata?(path_basename.to_s)
+        { source_metadata_identifier: path_basename.to_s }
+      else
+        { title: path_basename }
+      end
+    end
+
     # For a given directory and root resource, iterate through the directory file children and ingest them
     # If a subdirectory is found, create a new resource, append this to the parent resource, and recurse through this subdirectory
     # If a file is found, append this to the parent resource
@@ -81,9 +94,10 @@ class BulkIngestService
     def attach_children(path:, resource:, file_filters: [], **attributes)
       child_attributes = attributes.except(:collection)
       child_resources = dirs(path: path).map do |subdir_path|
+        child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
         attach_children(
           path: subdir_path,
-          resource: new_resource(klass: child_klass(parent_class: resource.class, title: subdir_path.basename), **child_attributes.merge(title: [subdir_path.basename])),
+          resource: new_resource(klass: child_klass, title: subdir_path.basename, **child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))),
           file_filters: file_filters
         )
       end
