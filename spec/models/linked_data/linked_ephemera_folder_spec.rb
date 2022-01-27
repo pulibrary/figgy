@@ -244,6 +244,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
     it "exposes date_created values" do
       expect(linked_ephemera_folder.date_created.first).to eq "2012"
+      linked_ephemera_folder.resource.id # ensures the resource id exists for an intermittent test failure on seed 7335
       expect(linked_ephemera_folder.as_jsonld["date_created"]).to eq linked_ephemera_folder.date_created
     end
   end
