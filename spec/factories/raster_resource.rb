@@ -82,8 +82,13 @@ FactoryBot.define do
     factory :raster_set_with_files do
       state "complete"
       after(:build) do |resource, _evaluator|
-        file = Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"), "image/tif")
-        file2 = Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"), "image/tif")
+        file = IngestableFile.new(
+          file_path: Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"),
+          mime_type: "image/tif",
+          original_filename: "geotiff.tif",
+          container_attributes: { service_targets: "mosaic" }
+        )
+        file2 = file.new({}) # Duplicates file.
         resource.member_ids ||= []
         resource.member_ids += [
           FactoryBot.create_for_repository(:raster_resource, files: [file]).id,
