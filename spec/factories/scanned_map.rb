@@ -67,5 +67,21 @@ FactoryBot.define do
     factory :complete_scanned_map do
       state "complete"
     end
+
+    factory :scanned_map_with_raster_children do
+      state "complete"
+      after(:build) do |resource, _evaluator|
+        # Cloud file - "clipped", service_targets: mosaic
+        raster_file_set1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        # Unclipped, no service target.
+        raster_file_set2 = FactoryBot.create_for_repository(:geo_raster_cloud_file, service_targets: nil)
+        scanned_map_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:raster_resource, member_ids: [raster_file_set1.id, raster_file_set2.id]).id,
+          scanned_map_file_set.id
+        ]
+      end
+    end
   end
 end

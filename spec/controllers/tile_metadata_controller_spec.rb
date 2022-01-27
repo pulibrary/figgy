@@ -70,18 +70,8 @@ RSpec.describe TileMetadataController, type: :controller do
     end
 
     context "with a MapSet that has Raster grandchildren" do
-      def create_raster_scanned_map
-        # Cloud file - "clipped", service_targets: mosaic
-        raster_file_set1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
-        # Unclipped, no service target.
-        raster_file_set2 = FactoryBot.create_for_repository(:geo_raster_cloud_file, service_targets: nil)
-        scanned_map_file_set1 = FactoryBot.create_for_repository(:geo_image_file_set)
-        raster1 = FactoryBot.create_for_repository(:raster_resource, member_ids: [raster_file_set1.id, raster_file_set2.id])
-        FactoryBot.create_for_repository(:scanned_map, member_ids: [raster1.id, scanned_map_file_set1.id])
-      end
-
       it "returns json with the fingerprinted mosaic uri" do
-        scanned_map = create_raster_scanned_map
+        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
         map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id], id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         mosaic_generator = instance_double(MosaicGenerator)
         allow(mosaic_generator).to receive(:run).and_return(true)
