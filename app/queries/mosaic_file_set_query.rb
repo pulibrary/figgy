@@ -19,8 +19,8 @@ class MosaicFileSetQuery
     run_query(query, id.to_s)
   end
 
-  # Get all FileSets in the entire hierarchy with service_targets: mosaic, find
-  # the FileMetadata nodes which are CloudDerivatives, then MD5 their IDs together.
+  # Get all FileSets in the entire hierarchy with service_targets: mosaic and
+  # which have FileMetadata nodes which are CloudDerivatives
   def query
     <<-SQL
         WITH RECURSIVE deep_members AS (

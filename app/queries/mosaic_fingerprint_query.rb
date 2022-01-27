@@ -19,7 +19,7 @@ class MosaicFingerprintQuery
   end
 
   # Get all FileSets in the entire hierarchy, find the FileMetadata nodes which
-  # are CloudDerivatives, then MD5 their IDs together.
+  # are CloudDerivatives and have service_targets: mosaic, then MD5 their IDs together.
   def fingerprint_query
     <<-SQL
         WITH RECURSIVE deep_members AS (
@@ -38,6 +38,7 @@ class MosaicFingerprintQuery
         select md5(string_agg(file_metadata_element->'id'->>'id', ',' order by file_metadata_element->'id'->>'id')) AS fingerprint FROM deep_members,
         jsonb_array_elements(deep_members.metadata->'file_metadata') AS file_metadata_element
         WHERE deep_members.internal_resource = 'FileSet'
+        AND deep_members.metadata @> '{"service_targets": ["mosaic"]}'
         AND file_metadata_element @> '{"use": [{"@id": "http://pcdm.org/use#CloudDerivative"}]}'
         GROUP BY deep_members.original_id
     SQL
