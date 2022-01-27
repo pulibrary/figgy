@@ -231,15 +231,19 @@ RSpec.describe BulkIngestService do
     context "with a subdirectory named Raster" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: ScannedMap) }
       it "ingests a RasterSet child" do
+        stub_bibdata(bib_id: "123456")
+        stub_bibdata(bib_id: "123456789")
         ingester.attach_dir(
-          base_directory: Rails.root.join("spec", "fixtures", "ingest_scanned_raster_map", "123456")
+          base_directory: Rails.root.join("spec", "fixtures", "ingest_scanned_raster_map", "123456"),
+          source_metadata_identifier: "123456"
         )
         map = ChangeSetPersister.default.query_service.find_all_of_model(model: ScannedMap).find do |m|
-          m.title == ["123456"]
+          m.source_metadata_identifier == ["123456"]
         end
         child_maps = Wayfinder.for(map).members
 
         expect(child_maps.map(&:class)).to eq [ScannedMap, ScannedMap]
+        expect(child_maps.first.source_metadata_identifier).to eq ["123456789"]
         sheet1_children = Wayfinder.for(child_maps.first).members
         sheet2_children = Wayfinder.for(child_maps.last).members
 
