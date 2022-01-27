@@ -10,27 +10,17 @@ RSpec.describe MosaicFingerprintQuery do
     FactoryBot.create_for_repository(:raster_resource, member_ids: [child.id])
   end
 
-  def create_raster_scanned_map
-    # Cloud file - "clipped", service_targets: mosaic
-    raster_file_set1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
-    # Unclipped, no service target.
-    raster_file_set2 = FactoryBot.create_for_repository(:geo_raster_cloud_file, service_targets: nil)
-    scanned_map_file_set1 = FactoryBot.create_for_repository(:geo_image_file_set)
-    raster1 = FactoryBot.create_for_repository(:raster_resource, member_ids: [raster_file_set1.id, raster_file_set2.id])
-    FactoryBot.create_for_repository(:scanned_map, member_ids: [raster1.id, scanned_map_file_set1.id])
-  end
-
   let(:query_service) { ChangeSetPersister.default.query_service }
 
   context "when given a Scanned Map with Rasters" do
     it "returns a uniquely identifiable fingerprint" do
-      scanned_map = create_raster_scanned_map
+      scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
       map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
 
       expect(query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)).to eq query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
     end
     it "has the same fingerprint after deleting the scanned map file set" do
-      scanned_map = create_raster_scanned_map
+      scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
       map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
 
       start_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
@@ -39,7 +29,7 @@ RSpec.describe MosaicFingerprintQuery do
       expect(start_fingerprint).to eq query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
     end
     it "doesn't change the fingerprint after deleting the unclipped resource" do
-      scanned_map = create_raster_scanned_map
+      scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
       map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
 
       start_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
@@ -52,11 +42,11 @@ RSpec.describe MosaicFingerprintQuery do
       expect(start_fingerprint).to eq query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
     end
     it "has a different fingerprint after adding a new raster" do
-      scanned_map1 = create_raster_scanned_map
+      scanned_map1 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
       map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map1.id])
 
       start_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
-      scanned_map2 = create_raster_scanned_map
+      scanned_map2 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
       map_set.member_ids += [scanned_map2.id]
       ChangeSetPersister.default.persister.save(resource: map_set)
 
