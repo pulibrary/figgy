@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 class TileMetadataController < ApplicationController
   attr_reader :resource
+
+  # If the mosaic service finds no raster file sets, it will raise
+  # a MosaicService::Error exception. This ensures we don't run an expensive
+  # query multiple times. Rescue the exception and return a 404 rather
+  # than a 500 server error. An example of when this might happen is when
+  # you pass the id for a MapSet that has no RasterResource grandchildren.
   rescue_from MosaicService::Error, with: :not_found
 
   def metadata
