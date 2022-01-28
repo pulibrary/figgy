@@ -65,10 +65,10 @@ class RasterResourceDerivativeService
     # Persist a second copy of the display file to the cloud.
     create_cloud_derivatives
     generate_mosaic
-    update_error_message(message: nil) if original_file.error_message.present?
-  rescue StandardError => error
-    update_error_message(message: error.message)
-    raise error
+  #   update_error_message(message: nil) if original_file.error_message.present?
+  # rescue StandardError => error
+  #   update_error_message(message: error.message)
+  #   raise error
   end
 
   def create_cloud_derivatives
