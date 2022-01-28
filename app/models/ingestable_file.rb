@@ -36,10 +36,19 @@ class IngestableFile < Valkyrie::Resource
 
     def copied_file_name
       return @copied_file_name if @copied_file_name
-      basename = Pathname.new(file.path).basename
-      @copied_file_name = Tempfile.new([basename.to_s.split(".").first, basename.extname]).tap do |f|
+      @copied_file_name = copied_temp_file.tap do |f|
         FileUtils.cp(File.open(file.path).path, f.path)
       end.path
+    end
+
+    # It's important to keep the temp file in an instance variable so Ruby
+    # doesn't delete the file before we're done with it.
+    def copied_temp_file
+      @copied_temp_file ||=
+        begin
+          basename = Pathname.new(file.path).basename
+          Tempfile.new([basename.to_s.split(".").first, basename.extname])
+        end
     end
 
     def file
