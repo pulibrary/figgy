@@ -7,8 +7,8 @@ RSpec.describe FileSetChangeSet do
   let(:file_set) { FactoryBot.build(:file_set) }
 
   describe "#primary_terms" do
-    it "is just the title" do
-      expect(change_set.primary_terms).to eq [:title]
+    it "is the title and service targets" do
+      expect(change_set.primary_terms).to eq [:title, :service_targets]
     end
   end
 end

@@ -11,11 +11,15 @@ class FileSetChangeSet < ChangeSet
   property :ocr_content, multiple: false, required: false
   property :read_groups, multiple: true, required: false
   property :file_metadata
+  property :service_targets, multiple: true, required: false
 
   delegate :thumbnail_id, to: :model
 
   def primary_terms
-    [:title]
+    [
+      :title,
+      :service_targets
+    ]
   end
 
   def preserve?
