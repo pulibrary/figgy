@@ -97,7 +97,7 @@ class BulkIngestService
         child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
         attach_children(
           path: subdir_path,
-          resource: new_resource(klass: child_klass, title: subdir_path.basename, **child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))),
+          resource: new_resource(klass: child_klass, **child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))),
           file_filters: file_filters
         )
       end

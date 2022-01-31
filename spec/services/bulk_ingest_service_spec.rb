@@ -244,6 +244,7 @@ RSpec.describe BulkIngestService do
 
         expect(child_maps.map(&:class)).to eq [ScannedMap, ScannedMap]
         expect(child_maps.first.source_metadata_identifier).to eq ["123456789"]
+        expect(child_maps.first.title.first.to_s).to start_with "Earth rites"
         sheet1_children = Wayfinder.for(child_maps.first).members
         sheet2_children = Wayfinder.for(child_maps.last).members
 
