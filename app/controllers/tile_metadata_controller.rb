@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class TileMetadataController < ApplicationController
-  attr_reader :resource
-
   # If the mosaic service finds no raster file sets, it will raise
   # a MosaicService::Error exception. This ensures we don't run an expensive
   # query multiple times. Rescue the exception and return a 404 rather
@@ -10,11 +8,11 @@ class TileMetadataController < ApplicationController
   rescue_from MosaicService::Error, with: :not_found
 
   def metadata
-    @resource = find_resource(params[:id])
-    if resource.is_a?(RasterResource) || resource.is_a?(ScannedMap)
+    mosaic_path = cached_mosaic_path
+    if mosaic_path
       respond_to do |f|
         f.json do
-          render json: { uri: cached_mosaic_path }
+          render json: { uri: mosaic_path }
         end
       end
     else
@@ -29,7 +27,9 @@ class TileMetadataController < ApplicationController
       # the fingerprinted mosaic is not found in S3, then it is generated on the
       # fly which can take some time. This multiple calls to the endpoint from
       # generating the document at the same time.
-      Rails.cache.fetch("mosaic-manifest-#{resource.id}", expires_in: 600, race_condition_ttl: 60) do
+      Rails.cache.fetch("mosaic-manifest-#{params[:id]}", expires_in: 600, race_condition_ttl: 60) do
+        resource = find_resource(params[:id])
+        return nil unless resource.is_a?(RasterResource) || resource.is_a?(ScannedMap)
         MosaicService.new(resource: resource).path
       end
     end
