@@ -244,6 +244,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
     it "exposes date_created values" do
       expect(linked_ephemera_folder.date_created.first).to eq "2012"
+      linked_ephemera_folder.resource.id # ensures the resource id exists for an intermittent test failure on seed 7335
       expect(linked_ephemera_folder.as_jsonld["date_created"]).to eq linked_ephemera_folder.date_created
     end
   end
@@ -268,16 +269,11 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
         description: "test description",
         date_created: "1970/01/01",
         source_url: "http://example.com",
-        dspace_url: "http://example.com",
-        member_of_collection_ids: [collection.id]
+        dspace_url: "http://example.com"
       )
     end
-    let(:collection) { FactoryBot.create_for_repository(:collection) }
 
     it "exposes the attributes for serialization into JSON-LD" do
-      ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [resource.id])
-      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box.id])
-
       jsonld = linked_ephemera_folder.as_jsonld
       expect(jsonld).not_to be_empty
 
@@ -294,16 +290,10 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       expect(jsonld["description"]).to eq ["test description"]
       expect(jsonld["provenance"]).to eq "test provenance"
 
-      expect(jsonld["member_of_collections"]).to be_nil
-      collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
-      expect(collection_json).to eq(
-        "@id" => "http://www.example.com/catalog/#{collection.id}",
-        "@type" => "pcdm:Collection",
-        "title" => collection.title.first
-      )
-      project_json = jsonld["memberOf"].find { |x| x["title"] == project.title.first }
+      project_json = jsonld["memberOf"].find { |x| x["title"] == ephemera_project.title.first }
       expect(project_json).not_to be_blank
     end
+
     context "with the title of a series specified" do
       it "exposes the attribute in JSON-LD", series: true do
         ephemera_box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [resource.id])
@@ -311,6 +301,31 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
 
         expect(linked_ephemera_folder.as_jsonld).not_to be_empty
         expect(linked_ephemera_folder.as_jsonld["series"]).to eq "test series"
+      end
+    end
+
+    context "when a member of a collection" do
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :ephemera_folder,
+          member_of_collection_ids: [collection.id]
+        )
+      end
+      let(:collection) { FactoryBot.create_for_repository(:collection) }
+
+      it "has memberOf for both the collection and the ephemera project" do
+        jsonld = linked_ephemera_folder.as_jsonld
+
+        expect(jsonld["member_of_collections"]).to be_nil
+        collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
+        expect(collection_json).to eq(
+          "@id" => "http://www.example.com/catalog/#{collection.id}",
+          "@type" => "pcdm:Collection",
+          "title" => collection.title.first
+        )
+
+        project_json = jsonld["memberOf"].find { |x| x["title"] == ephemera_project.title.first }
+        expect(project_json).not_to be_blank
       end
     end
   end

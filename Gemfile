@@ -67,7 +67,7 @@ group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
   gem "rails-controller-testing"
-  gem "rspec-rails", "~> 3.5"
+  gem "rspec-rails", "~> 4.1"
 end
 
 group :test do
