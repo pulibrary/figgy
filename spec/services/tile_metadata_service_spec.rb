@@ -2,7 +2,7 @@
 require "rails_helper"
 require "shrine/storage/s3"
 
-RSpec.describe MosaicService do
+RSpec.describe TileMetadataService do
   after(:all) do
     # Clean up mosaic.json documents and cloud rasters after test suite
     FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
@@ -46,15 +46,6 @@ RSpec.describe MosaicService do
       end
     end
 
-    context "when given a RasterResource with a GeoTiff FileSet" do
-      it "returns a path to the cloud derivative file" do
-        file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
-        raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])
-        generator = described_class.new(resource: raster)
-        expect(generator.path).to eq "s3://test-geo/test-geo/example.tif"
-      end
-    end
-
     context "when the file already exists on the storage adapter" do
       let(:raster_set) { FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd") }
 
@@ -73,10 +64,10 @@ RSpec.describe MosaicService do
     end
 
     context "when there aren't any files on the raster members" do
-      it "raises MosaicService::Error" do
+      it "raises TileMetadataService::Error" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect { generator.path }.to raise_error("MosaicService::Error")
+        expect { generator.path }.to raise_error("TileMetadataService::Error")
       end
     end
   end

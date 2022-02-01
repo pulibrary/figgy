@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Returns all file sets which are marked for the mosaic service at any level
-# underneath the given resource and has a generated cloud URI. Used in MosaicService.
+# underneath the given resource and has a generated cloud URI. Used in TileMetadataService.
 class MosaicFileSetQuery
   def self.queries
     [:mosaic_file_sets_for]

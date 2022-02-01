@@ -83,6 +83,16 @@ RSpec.describe TileMetadataController, type: :controller do
       end
     end
 
+    context "with a RasterResouce with a GeoTiff FileSet" do
+      it "returns json with a path to the cloud derivative file" do
+        file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])
+        get :metadata, params: { id: raster.id, format: :json }
+
+        expect(JSON.parse(response.body)["uri"]).to end_with("s3://test-geo/test-geo/example.tif")
+      end
+    end
+
     context "with a ScannedResource" do
       it "returns a 404" do
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource)

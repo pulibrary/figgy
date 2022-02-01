@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-# This class provides mosaic manifest uris, and calls out to the
-# MosaicGenerator as needed
-class MosaicService
+# This class provides uris for mosaic manifests and cloud rasters.
+# It calls out to the MosaicGenerator as needed.
+class TileMetadataService
   class Error < StandardError; end
   attr_reader :resource
   # @param resource [RasterResource, ScannedMap]
