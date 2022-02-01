@@ -46,6 +46,15 @@ RSpec.describe MosaicService do
       end
     end
 
+    context "when given a RasterResource with a GeoTiff FileSet" do
+      it "returns a path to the cloud derivative file" do
+        file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])
+        generator = described_class.new(resource: raster)
+        expect(generator.path).to eq "s3://test-geo/test-geo/example.tif"
+      end
+    end
+
     context "when the file already exists on the storage adapter" do
       let(:raster_set) { FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd") }
 

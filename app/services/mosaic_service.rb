@@ -5,24 +5,38 @@
 class MosaicService
   class Error < StandardError; end
   attr_reader :resource
-  # @param resource [RasterResource]
+  # @param resource [RasterResource, ScannedMap]
   def initialize(resource:)
     @resource = resource.decorate
   end
 
   def path
+    if mosaic?
+      mosaic_path
+    else
+      raster_paths.first
+    end
+  end
+
+  def mosaic?
+    return true unless resource.is_a?(RasterResource)
+    return true if resource.decorate.decorated_raster_resources.count.positive?
+    false
+  end
+
+  def mosaic_path
     raise Error if raster_file_sets.empty?
-    mosaic_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
-    return mosaic_path if storage_adapter.find_by(id: mosaic_file_id)
+    document_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
+    return document_path if storage_adapter.find_by(id: mosaic_file_id)
   rescue Valkyrie::StorageAdapter::FileNotFound
-    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths.join("\n")).run
 
     # build default mosaic file
     build_node(default_filename)
 
     # save copy of mosaic file with fingerprinted file name
     build_node(fingerprinted_filename)
-    mosaic_path
+    document_path
   end
 
   # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
@@ -78,7 +92,7 @@ class MosaicService
     def raster_paths
       raster_file_sets.map do |fs|
         fs.file_metadata.map(&:cloud_uri)
-      end.flatten.compact.join("\n")
+      end.flatten.compact
     end
 
     def storage_adapter
