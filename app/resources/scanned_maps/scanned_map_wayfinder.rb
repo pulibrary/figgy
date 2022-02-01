@@ -8,6 +8,10 @@ class ScannedMapWayfinder < BaseWayfinder
   inverse_relationship_by_property :scanned_map_parents, property: :member_ids, model: ScannedMap
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
 
+  def scanned_maps_count
+    @scanned_maps_count ||= query_service.custom_queries.count_members(resource: resource, model: ScannedMap)
+  end
+
   def geo_members
     @geo_members ||=
       begin

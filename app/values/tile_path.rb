@@ -32,6 +32,7 @@ class TilePath
     def valid?
       file_count = resource.decorate.try(:mosaic_file_count)
       return false unless file_count&.positive?
+      return false if resource.is_a?(ScannedMap) && resource.decorate.scanned_maps_count <= 1
       true
     end
 
