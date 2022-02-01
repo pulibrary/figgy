@@ -33,7 +33,8 @@ class ChangeSetPersister
         CleanupPdfs,
         CreateProxyFileSets,
         ApplyAuthToken,
-        CacheParentId
+        CacheParentId,
+        GenerateMosaic
       ],
       after_save: [
         AppendToParent,
