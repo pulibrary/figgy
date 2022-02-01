@@ -11,6 +11,16 @@ class TilePath
     "#{tileserver}/#{endpoint}/tilejson.json?id=#{id}"
   end
 
+  def wmts
+    return unless valid?
+    "#{tileserver}/#{endpoint}/WMTSCapabilities.xml?id=#{id}"
+  end
+
+  def xyz
+    return unless valid?
+    "#{tileserver}/#{endpoint}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png?id=#{id}"
+  end
+
   private
 
     def endpoint

@@ -12,8 +12,10 @@ class TileMetadataService
 
   def path
     if mosaic?
+      # Path to mosaic.json file
       mosaic_path
     else
+      # Path to cloud raster file
       raster_paths.first
     end
   end
