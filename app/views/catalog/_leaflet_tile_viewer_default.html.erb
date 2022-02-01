@@ -1,4 +1,4 @@
-<% service_url = TileService.new(resource).tilejson_path %>
+<% service_url = TilePath.new(resource).tilejson %>
 <% if service_url %>
   <div id="leaflet-tile-viewer" data-url=<%= service_url %> >
   </div>
