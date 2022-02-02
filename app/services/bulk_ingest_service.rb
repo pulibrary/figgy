@@ -206,7 +206,7 @@ class BulkIngestService
                   else
                     (idx + 1).to_s
                   end
-          service_targets = "mosaic" if raster_resource_parent? && mosaic_service_target?(basename)
+          service_targets = "tiles" if raster_resource_parent? && mosaic_service_target?(basename)
           nodes << IngestableFile.new(
             file_path: f,
             mime_type: mime_type.content_type,

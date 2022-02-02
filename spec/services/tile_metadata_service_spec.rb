@@ -30,7 +30,7 @@ RSpec.describe TileMetadataService do
     end
 
     context "when given a ScannedMap with RasterResources" do
-      it "generates a mosaic with the nested raster resource file sets marked as service_targets: mosaic" do
+      it "generates a mosaic with the nested raster resource file sets marked as service_targets: tiles" do
         file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
         image_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
         raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])

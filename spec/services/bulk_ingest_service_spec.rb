@@ -224,8 +224,8 @@ RSpec.describe BulkIngestService do
         expect(sheet1_children.map(&:class)).to eq [FileSet]
         expect(sheet2_children.map(&:class)).to eq [FileSet]
 
-        expect(sheet1_children.first.service_targets).to eq ["mosaic"]
-        expect(sheet2_children.first.service_targets).to eq ["mosaic"]
+        expect(sheet1_children.first.service_targets).to eq ["tiles"]
+        expect(sheet2_children.first.service_targets).to eq ["tiles"]
       end
     end
     context "with a subdirectory named Raster" do
@@ -257,12 +257,12 @@ RSpec.describe BulkIngestService do
         expect(sheet1_raster_children.map(&:class)).to eq [FileSet, FileSet]
         expect(sheet1_raster_children.first.title).to eq ["sheet1.tif"]
         expect(sheet1_raster_children.last.title).to eq ["sheet1_cropped.tif"]
-        expect(sheet1_raster_children.last.service_targets).to eq ["mosaic"]
+        expect(sheet1_raster_children.last.service_targets).to eq ["tiles"]
         expect(sheet1_raster_children.first.service_targets).to eq []
         expect(sheet2_raster_children.map(&:class)).to eq [FileSet, FileSet]
         expect(sheet2_raster_children.first.title).to eq ["sheet2.tif"]
         expect(sheet2_raster_children.last.title).to eq ["sheet2_cropped.tif"]
-        expect(sheet2_raster_children.last.service_targets).to eq ["mosaic"]
+        expect(sheet2_raster_children.last.service_targets).to eq ["tiles"]
         expect(sheet1_raster_children.first.service_targets).to eq []
       end
     end

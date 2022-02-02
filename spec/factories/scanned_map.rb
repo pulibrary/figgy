@@ -71,7 +71,7 @@ FactoryBot.define do
     factory :scanned_map_with_raster_children do
       state "complete"
       after(:build) do |resource, _evaluator|
-        # Cloud file - "clipped", service_targets: mosaic
+        # Cloud file - "clipped", service_targets: tiles
         raster_file_set1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
         # Unclipped, no service target.
         raster_file_set2 = FactoryBot.create_for_repository(:geo_raster_cloud_file, service_targets: nil)
