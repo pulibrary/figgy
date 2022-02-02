@@ -17,6 +17,8 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
            :geo_metadata_members,
            :members,
            :parents,
+           :mosaic_file_count,
+           :raster_resources_count,
            to: :wayfinder
 
   def imported_attribute(attribute_key)

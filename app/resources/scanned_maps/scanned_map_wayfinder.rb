@@ -8,6 +8,10 @@ class ScannedMapWayfinder < BaseWayfinder
   inverse_relationship_by_property :scanned_map_parents, property: :member_ids, model: ScannedMap
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
 
+  def scanned_maps_count
+    @scanned_maps_count ||= query_service.custom_queries.count_members(resource: resource, model: ScannedMap)
+  end
+
   def geo_members
     @geo_members ||=
       begin
@@ -37,6 +41,10 @@ class ScannedMapWayfinder < BaseWayfinder
 
   def logical_structure_members
     @logical_structure_members ||= generate_logical_structure_members
+  end
+
+  def mosaic_file_count
+    query_service.custom_queries.find_deep_children_with_property(resource: resource, model: FileSet, property: :service_targets, value: "mosaic", count: true)
   end
 
   private

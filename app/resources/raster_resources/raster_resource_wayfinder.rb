@@ -39,4 +39,8 @@ class RasterResourceWayfinder < BaseWayfinder
       member
     end
   end
+
+  def mosaic_file_count
+    query_service.custom_queries.find_deep_children_with_property(resource: resource, model: FileSet, property: :service_targets, value: "mosaic", count: true)
+  end
 end

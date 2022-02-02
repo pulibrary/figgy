@@ -43,17 +43,15 @@ module GeoDiscovery
       # Returns the wmts server url.
       # @return [String] wmts server url
       def wmts_path
-        return unless visibility == "open" && (raster_set? || raster_file_set?)
-        id = resource_decorator.id.to_s.delete("-")
-        "#{tileserver_path}/mosaicjson/WMTSCapabilities.xml?id=#{id}"
+        return unless visibility == "open"
+        TilePath.new(resource_decorator).wmts
       end
 
       # Returns the xzy tile server url.
       # @return [String] xyz server url
       def xyz_path
-        return unless visibility == "open" && (raster_set? || raster_file_set?)
-        id = resource_decorator.id.to_s.delete("-")
-        "#{tileserver_path}/mosaicjson/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png?id=#{id}"
+        return unless visibility == "open"
+        TilePath.new(resource_decorator).xyz
       end
 
       private
@@ -87,20 +85,11 @@ module GeoDiscovery
           @config[:url].chomp("/rest")
         end
 
-        # @return [String] tile server base url
-        def tileserver_path
-          Figgy.config["tileserver"][:url]
-        end
-
         # Tests if the file set is a valid raster format.
         # @return [Bool]
         def raster_file_set?
           return unless file_set
           ControlledVocabulary.for(:geo_raster_format).include? file_set_mime_type
-        end
-
-        def raster_set?
-          resource_decorator.object.decorate.try(:raster_set?)
         end
 
         # Tests if the file set is a valid vector format.

@@ -2,7 +2,7 @@
 require "rails_helper"
 require "shrine/storage/s3"
 
-RSpec.describe MosaicService do
+RSpec.describe TileMetadataService do
   after(:all) do
     # Clean up mosaic.json documents and cloud rasters after test suite
     FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
@@ -64,10 +64,10 @@ RSpec.describe MosaicService do
     end
 
     context "when there aren't any files on the raster members" do
-      it "raises MosaicService::Error" do
+      it "raises TileMetadataService::Error" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect { generator.path }.to raise_error("MosaicService::Error")
+        expect { generator.path }.to raise_error("TileMetadataService::Error")
       end
     end
   end

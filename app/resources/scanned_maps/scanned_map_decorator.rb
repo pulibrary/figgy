@@ -50,6 +50,8 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
            :geo_metadata_members,
            :members,
            :parents,
+           :mosaic_file_count,
+           :scanned_maps_count,
            to: :wayfinder
 
   def collection_slugs

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 class MosaicJob < ApplicationJob
-  discard_on MosaicService::Error
+  discard_on TileMetadataService::Error
   queue_as :low
   delegate :query_service, to: :metadata_adapter
 
   def perform(resource_id)
     resource = query_service.find_by(id: Valkyrie::ID.new(resource_id))
     return unless resource.decorate.raster_set?
-    MosaicService.new(resource: resource).path
+    TileMetadataService.new(resource: resource).path
   end
 
   private

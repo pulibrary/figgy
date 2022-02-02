@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 class TileMetadataController < ApplicationController
-  # If the mosaic service finds no raster file sets, it will raise
-  # a MosaicService::Error exception. This ensures we don't run an expensive
+  # If the tile metadata service finds no raster file sets, it will raise
+  # a TileMetadataService::Error exception. This ensures we don't run an expensive
   # query multiple times. Rescue the exception and return a 404 rather
   # than a 500 server error. An example of when this might happen is when
   # you pass the id for a MapSet that has no RasterResource grandchildren.
-  rescue_from MosaicService::Error, with: :not_found
+  rescue_from TileMetadataService::Error, with: :not_found
 
   def metadata
     mosaic_path = cached_mosaic_path
@@ -30,7 +30,7 @@ class TileMetadataController < ApplicationController
       Rails.cache.fetch("mosaic-manifest-#{params[:id]}", expires_in: 600, race_condition_ttl: 60) do
         resource = find_resource(params[:id])
         return nil unless resource.is_a?(RasterResource) || resource.is_a?(ScannedMap)
-        MosaicService.new(resource: resource).path
+        TileMetadataService.new(resource: resource).path
       end
     end
 

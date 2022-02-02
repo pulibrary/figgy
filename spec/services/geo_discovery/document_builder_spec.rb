@@ -340,6 +340,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
                                        visibility: visibility)
     end
     let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
+
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
 
     before do
@@ -347,6 +348,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       file_set_id = output.member_ids[0]
       file_set = query_service.find_by(id: file_set_id)
       file_set.original_file.mime_type = "image/tiff; gdal-format=GTiff"
+      file_set.service_targets = ["mosaic"]
       metadata_adapter.persister.save(resource: file_set)
     end
 
@@ -389,7 +391,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     context "with an open raster set" do
       let(:geo_work) do
         FactoryBot.create_for_repository(
-          :raster_set,
+          :raster_set_with_files,
           coverage: coverage.to_s
         )
       end
@@ -406,7 +408,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     context "with an authenticated raster set" do
       let(:geo_work) do
         FactoryBot.create_for_repository(
-          :raster_set,
+          :raster_set_with_files,
           coverage: coverage.to_s,
           visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
         )

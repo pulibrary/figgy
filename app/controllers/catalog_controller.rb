@@ -127,6 +127,7 @@ class CatalogController < ApplicationController
     config.show.partials = config.show.partials.insert(1, :parent_breadcrumb)
     config.show.partials = config.show.partials.insert(1, :in_process_notification)
     config.show.partials += [:universal_viewer]
+    config.show.partials += [:leaflet_tile_viewer]
     config.show.partials += [:resource_attributes]
     config.show.partials += [:auth_link]
     config.show.partials += [:workflow_controls]
