@@ -365,7 +365,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         file_set_id = child.member_ids[0]
         file_set = query_service.find_by(id: file_set_id)
         file_set.original_file.mime_type = "image/tiff; gdal-format=GTiff"
-        file_set.service_targets = ["mosaic"]
+        file_set.service_targets = ["tiles"]
         metadata_adapter.persister.save(resource: file_set)
       end
 
