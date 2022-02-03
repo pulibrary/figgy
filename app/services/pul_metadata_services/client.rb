@@ -38,6 +38,9 @@ module PulMetadataServices
       # @param source_metadata_id [String] the remote metadata identifier
       # @return [Boolean]
       def bibdata?(source_metadata_id)
+        # 3506421 will be in all alma IDs, and old Voyager records are
+        # converted.
+        return unless source_metadata_id.to_s.length > 4
         source_metadata_id =~ /\A\d+\z/
       end
 
