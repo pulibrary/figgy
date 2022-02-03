@@ -12,11 +12,10 @@ describe TilePath do
       end
     end
 
-    context "with a ScannedMap that has one child ScannedMap and Raster grandchildren" do
+    context "with a ScannedMap that has a child RasterResource" do
       it "returns nil" do
         scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
-        map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id], id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        expect(described_class.new(map_set).tilejson).to be_nil
+        expect(described_class.new(scanned_map).tilejson).to be_nil
       end
     end
 
