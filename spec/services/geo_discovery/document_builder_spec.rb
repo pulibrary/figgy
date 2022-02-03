@@ -101,23 +101,25 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     context "with remote metadata" do
       let(:issued) { "2013" }
       let(:geo_work) do
-        FactoryBot.create_for_repository(:scanned_map,
-                                         title: [],
-                                         source_metadata_identifier: "5144620",
-                                         coverage: coverage.to_s,
-                                         subject: ["Sanborn", "Mount Holly (N.J.)—Maps"],
-                                         visibility: visibility,
-                                         identifier: "ark:/99999/fk4",
-                                         portion_note: "Sheet 1",
-                                         imported_metadata: [{
-                                           title: ["Mount Holly, N.J."],
-                                           subject: ["Mount Holly (N.J.)—Maps"],
-                                           identifier: "http://arks.princeton.edu/ark:/99999/fk4",
-                                           call_number: [
-                                             "HMC04 (Mount Holly)",
-                                             "Electronic Resource"
-                                           ]
-                                         }])
+        FactoryBot.create_for_repository(
+          :scanned_map,
+          title: [],
+          source_metadata_identifier: "5144620",
+          coverage: coverage.to_s,
+          subject: ["Sanborn", "Mount Holly (N.J.)—Maps"],
+          visibility: visibility,
+          identifier: "ark:/99999/fk4",
+          portion_note: "Sheet 1",
+          imported_metadata: [{
+            title: ["Mount Holly, N.J."],
+            subject: ["Mount Holly (N.J.)—Maps"],
+            identifier: "http://arks.princeton.edu/ark:/99999/fk4",
+            call_number: [
+              "HMC04 (Mount Holly)",
+              "Electronic Resource"
+            ]
+          }]
+        )
       end
 
       it "merges and deduplicates direct and imported attributes; does not merge identifier" do
@@ -140,13 +142,15 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
     context "with imported date" do
       let(:geo_work) do
-        FactoryBot.create_for_repository(:scanned_map,
-                                         source_metadata_identifier: "5144620",
-                                         coverage: coverage.to_s,
-                                         visibility: visibility,
-                                         imported_metadata: [{
-                                           date: ["1884"]
-                                         }])
+        FactoryBot.create_for_repository(
+          :scanned_map,
+          source_metadata_identifier: "5144620",
+          coverage: coverage.to_s,
+          visibility: visibility,
+          imported_metadata: [{
+            date: ["1884"]
+          }]
+        )
       end
 
       it "sets solr year using the date value" do
@@ -172,6 +176,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         expect(refs["http://iiif.io/api/image"]).to match(/image-service/)
         expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to be nil
         expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to be nil
+        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil
       end
 
       it "has layer info fields" do
@@ -190,6 +195,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         expect(refs).to have_key "http://schema.org/thumbnailUrl"
         expect(refs).not_to have_key "http://schema.org/downloadUrl"
         expect(refs).not_to have_key "http://iiif.io/api/image"
+        expect(refs).not_to have_key "http://www.opengis.net/def/serviceType/ogc/wmts"
         expect(document["dc_rights_s"]).to eq "Restricted"
       end
     end
@@ -204,6 +210,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         expect(refs).to have_key "http://schema.org/thumbnailUrl"
         expect(refs).not_to have_key "http://schema.org/downloadUrl"
         expect(refs).not_to have_key "http://iiif.io/api/image"
+        expect(refs).not_to have_key "http://www.opengis.net/def/serviceType/ogc/wmts"
         expect(document["dc_rights_s"]).to eq "Restricted"
       end
     end
@@ -240,13 +247,15 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     context "with a valid coverage and an invalid imported coverge" do
       let(:invalid_coverage) { "northlimit=15.744444; eastlimit=088.566667; southlimit=15.675000; westlimit=088.627778; units=degrees; projection=EPSG:4326" }
       let(:geo_work) do
-        FactoryBot.create_for_repository(:scanned_map,
-                                         source_metadata_identifier: "5144620",
-                                         coverage: coverage.to_s,
-                                         visibility: visibility,
-                                         imported_metadata: [{
-                                           coverage: [invalid_coverage]
-                                         }])
+        FactoryBot.create_for_repository(
+          :scanned_map,
+          source_metadata_identifier: "5144620",
+          coverage: coverage.to_s,
+          visibility: visibility,
+          imported_metadata: [{
+            coverage: [invalid_coverage]
+          }]
+        )
       end
 
       it "sets solr_geom using the valid coverage value" do
@@ -257,11 +266,13 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
   describe "scanned map set" do
     let(:geo_work) do
-      FactoryBot.create_for_repository(:scanned_map,
-                                       member_ids: child.id,
-                                       coverage: coverage.to_s,
-                                       visibility: visibility,
-                                       identifier: "ark:/99999/fk4")
+      FactoryBot.create_for_repository(
+        :scanned_map,
+        member_ids: child.id,
+        coverage: coverage.to_s,
+        visibility: visibility,
+        identifier: "ark:/99999/fk4"
+      )
     end
     let(:child) { FactoryBot.create_for_repository(:scanned_map, coverage: coverage.to_s, visibility: visibility, gbl_suppressed_override: "0") }
     let(:parent_change_set) { ScannedMapChangeSet.new(geo_work, files: []) }
@@ -328,6 +339,39 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         refs = JSON.parse(document["dct_references_s"])
         expect(refs["http://schema.org/thumbnailUrl"]).to be_nil
         expect(refs["http://iiif.io/api/presentation#manifest"]).to be_nil
+      end
+    end
+
+    context "when it has a raster resource member" do
+      let(:geo_work) do
+        FactoryBot.create_for_repository(
+          :scanned_map,
+          member_ids: child.id,
+          coverage: coverage.to_s,
+          visibility: visibility
+        )
+      end
+      let(:child) do
+        FactoryBot.create_for_repository(
+          :raster_resource,
+          coverage: coverage.to_s,
+          files: [file]
+        )
+      end
+      let(:child_change_set) { ChangeSet.for(child) }
+      let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
+
+      before do
+        file_set_id = child.member_ids[0]
+        file_set = query_service.find_by(id: file_set_id)
+        file_set.original_file.mime_type = "image/tiff; gdal-format=GTiff"
+        file_set.service_targets = ["mosaic"]
+        metadata_adapter.persister.save(resource: file_set)
+      end
+
+      it "returns document wmts reference" do
+        refs = JSON.parse(document["dct_references_s"])
+        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to match(/WMTSCapabilities/)
       end
     end
   end
