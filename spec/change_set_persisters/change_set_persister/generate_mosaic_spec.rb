@@ -2,11 +2,14 @@
 require "rails_helper"
 
 RSpec.describe ChangeSetPersister::GenerateMosaic do
-  subject(:hook) { described_class.new(change_set_persister: change_set_persister, change_set: change_set) }
-  let(:change_set_persister) { instance_double(ChangeSetPersister::Basic, query_service: query_service) }
-  let(:query_service) { instance_double(Valkyrie::Persistence::Memory::QueryService) }
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
+  let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+  let(:shoulder) { "99999/fk4" }
+  let(:blade) { "123456" }
 
   before do
+    stub_ezid(shoulder: shoulder, blade: blade)
     allow(MosaicJob).to receive(:perform_later)
   end
 
@@ -18,9 +21,7 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
         map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map1.id, scanned_map2.id])
         change_set = ChangeSet.for(map_set)
         change_set.validate(state: "complete")
-
-        hook = described_class.new(change_set_persister: change_set_persister, change_set: change_set)
-        hook.run
+        change_set_persister.save(change_set: change_set)
 
         expect(MosaicJob).to have_received(:perform_later)
       end
@@ -31,9 +32,7 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
         scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children, state: "pending")
         change_set = ChangeSet.for(scanned_map)
         change_set.validate(state: "complete")
-
-        hook = described_class.new(change_set_persister: change_set_persister, change_set: change_set)
-        hook.run
+        change_set_persister.save(change_set: change_set)
 
         expect(MosaicJob).not_to have_received(:perform_later)
       end
@@ -44,9 +43,7 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "pending")
         change_set = ChangeSet.for(raster_set)
         change_set.validate(state: "complete")
-
-        hook = described_class.new(change_set_persister: change_set_persister, change_set: change_set)
-        hook.run
+        change_set_persister.save(change_set: change_set)
 
         expect(MosaicJob).to have_received(:perform_later)
       end
@@ -56,10 +53,8 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
       it "does not run a MosaicJob" do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "complete")
         change_set = ChangeSet.for(raster_set)
-        change_set.validate(state: "complete")
-
-        hook = described_class.new(change_set_persister: change_set_persister, change_set: change_set)
-        hook.run
+        change_set.validate(title: "new title")
+        change_set_persister.save(change_set: change_set)
 
         expect(MosaicJob).not_to have_received(:perform_later)
       end
@@ -72,9 +67,7 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
         raster_set = FactoryBot.create_for_repository(:raster_resource, member_ids: [raster1.id, raster2.id], state: "pending")
         change_set = ChangeSet.for(raster_set)
         change_set.validate(state: "complete")
-
-        hook = described_class.new(change_set_persister: change_set_persister, change_set: change_set)
-        hook.run
+        change_set_persister.save(change_set: change_set)
 
         expect(MosaicJob).not_to have_received(:perform_later)
       end
