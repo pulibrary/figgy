@@ -35,7 +35,7 @@ RSpec.describe MosaicFingerprintQuery do
       start_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
       raster_resource = Wayfinder.for(scanned_map).raster_resources.first
       unclipped_file_set = Wayfinder.for(raster_resource).file_sets.find do |file_set|
-        !file_set.service_targets.include?("mosaic")
+        !file_set.service_targets.include?("tiles")
       end
       ChangeSetPersister.default.persister.delete(resource: unclipped_file_set)
 

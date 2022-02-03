@@ -40,7 +40,7 @@ FactoryBot.define do
         original_filename: "display_raster.tif",
         file_identifiers: ["cloud-geo-derivatives-shrine://#{Figgy.config['cloud_geo_bucket']}/example.tif"]
       )
-      service_targets "mosaic"
+      service_targets "tiles"
     end
 
     factory :intermediate_image_file_set do

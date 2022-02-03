@@ -39,7 +39,7 @@ class MosaicFileSetQuery
         select deep_members.* FROM deep_members,
         jsonb_array_elements(deep_members.metadata->'file_metadata') AS file_metadata_element
         WHERE deep_members.internal_resource = 'FileSet'
-        AND deep_members.metadata @> '{"service_targets": ["mosaic"]}'
+        AND deep_members.metadata @> '{"service_targets": ["tiles"]}'
         AND file_metadata_element @> '{"use": [{"@id": "http://pcdm.org/use#CloudDerivative"}]}'
     SQL
   end
