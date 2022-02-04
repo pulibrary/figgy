@@ -3,6 +3,16 @@ require "rails_helper"
 
 RSpec.describe IngestFolderJob do
   describe "#perform" do
+    context "when given a multi-volume work to ingest into" do
+      it "ingests" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_multi_simple"), property: :id, id: resource.id.to_s)
+
+        resource = ChangeSetPersister.default.query_service.find_by(id: resource.id)
+        expect(resource.member_ids.length).to eq 2
+      end
+    end
+
     context "when using an unsupported class for ingesting files" do
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
       let(:bib) { "4609321" }

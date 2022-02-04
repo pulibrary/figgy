@@ -23,6 +23,18 @@ RSpec.describe RemoteRecord, type: :model do
       end
     end
 
+    context "with an Alma ID" do
+      it "is true" do
+        expect(described_class.bibdata?("994241263506421")).to be_truthy
+      end
+    end
+
+    context "with a tiny ID" do
+      it "is not true" do
+        expect(described_class.bibdata?("1")).to be_falsey
+      end
+    end
+
     context "with a PULFA record ID" do
       it "validates that this is a not a bib. ID" do
         expect(described_class.bibdata?("AC044_c0003")).to be_falsy
