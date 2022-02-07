@@ -37,7 +37,8 @@ class ChangeSetPersister
       ],
       after_save: [
         AppendToParent,
-        UpdateAuthToken
+        UpdateAuthToken,
+        GenerateMosaic
       ],
       after_save_commit: [
         PublishMessage::Factory.new(operation: :update),
