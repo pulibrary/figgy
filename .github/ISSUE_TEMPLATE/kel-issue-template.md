@@ -19,7 +19,7 @@ _Please include hard deadlines, if the exhibit is part of an event, the issue is
 - [ ] PO will prioritize
 
 ## Sudden Priority Justification
-_Required if "asap" or "within the next 3 weeks" is checked_
+_Required if "asap" or "within the next 3 weeks" is checked. Add "Sudden Priority" and "Maintenance/Research" labels_
 
 ### Expected behaviour
 
