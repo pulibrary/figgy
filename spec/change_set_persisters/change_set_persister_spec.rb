@@ -502,9 +502,10 @@ RSpec.describe ChangeSetPersister do
       context "when the download fails" do
         before do
           allow(upload_file).to receive(:download).and_raise(StandardError)
+          allow(Honeybadger).to receive(:notify)
         end
 
-        it "does not append files when the upload fails", run_real_derivatives: true do
+        it "does not append that file", run_real_derivatives: true do
           resource = FactoryBot.build(:scanned_resource)
           change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
           change_set.files = [file]
@@ -512,6 +513,7 @@ RSpec.describe ChangeSetPersister do
           output = change_set_persister.save(change_set: change_set)
           members = query_service.find_members(resource: output)
 
+          expect(Honeybadger).to have_received(:notify)
           expect(members.to_a.length).to eq 0
         end
       end

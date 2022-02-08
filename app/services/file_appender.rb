@@ -123,7 +123,9 @@ class FileAppender
       node.file_identifiers = node.file_identifiers + [stored_file.id]
       node
     rescue StandardError => error
-      Valkyrie.logger.error "#{self.class}: Failed to append the new file #{original_filename} for #{node.id}: #{error}"
+      message = "#{self.class}: Failed to append the new file #{original_filename} for #{node.id} to resource #{parent.id}: #{error}"
+      Valkyrie.logger.error message
+      Honeybadger.notify message
       nil
     end
 
