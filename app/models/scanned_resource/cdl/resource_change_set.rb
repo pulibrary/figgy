@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module CDL
+module ScannedResource::CDL
   class ResourceChangeSet < ChangeSet
     apply_workflow(DraftCompleteWorkflow)
     core_resource(change_set: "CDL::Resource", remote_metadata: true)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module CDL
-  class ResourceChargeListChangeSet < Valkyrie::ChangeSet
+  class ResourceChargeList::ChangeSet < Valkyrie::ChangeSet
     property :charged_items
     property :hold_queue
     property :optimistic_lock_token,

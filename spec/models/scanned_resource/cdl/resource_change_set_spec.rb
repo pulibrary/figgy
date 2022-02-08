@@ -2,8 +2,9 @@
 
 require "rails_helper"
 
-RSpec.describe CDL::ResourceChangeSet do
+RSpec.describe ScannedResource::CDL::ResourceChangeSet do
   it "can be realized from ChangeSet.for" do
+    expect(ChangeSet.for(ScannedResource.new(change_set: "ScannedResource::CDL::Resource"))).to be_a described_class
     expect(ChangeSet.for(ScannedResource.new(change_set: "CDL::Resource"))).to be_a described_class
   end
 

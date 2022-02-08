@@ -21,10 +21,12 @@ class ChangeSet < Valkyrie::ChangeSet
 
   # Used by controllers that need to dynamically instantitate new change sets
   def self.class_from_param(param)
-    "#{param.camelize}ChangeSet".constantize
-  rescue NameError
-    Valkyrie.logger.error("Failed to find the ChangeSet class for #{param}.")
-    nil
+    klass = "#{param.camelize}ChangeSet".safe_constantize ||
+            # Add support for old CDL ChangeSet, moved to ScannedResource.
+            "ScannedResource::#{param.camelize}ChangeSet".safe_constantize ||
+            "#{param.camelize}::ChangeSet".safe_constantize
+    Valkyrie.logger.error("Failed to find the ChangeSet class for #{param}.") if klass.nil?
+    klass
   end
 
   # Delegating the to_hash method to the resource is a workaround that allows

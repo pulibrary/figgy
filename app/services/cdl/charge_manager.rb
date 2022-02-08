@@ -43,7 +43,7 @@ module CDL
       return existing_charge if existing_charge.present?
       raise CDL::UnavailableForCharge unless available_for_charge?(netid: netid)
       charge = CDL::ChargedItem.new(item_id: available_item_ids.first, netid: netid, expiration_time: Time.current + 3.hours)
-      change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
+      change_set = CDL::ResourceChargeList::ChangeSet.new(resource_charge_list)
       updated_hold_queue = resource_charge_list.hold_queue.reject do |hold|
         hold.netid == netid
       end
@@ -59,7 +59,7 @@ module CDL
 
     def return(netid:)
       raise CDL::NotCharged unless resource_charge_list.active_charge?(netid: netid)
-      change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
+      change_set = CDL::ResourceChargeList::ChangeSet.new(resource_charge_list)
       new_charged_items = resource_charge_list.charged_items.reject { |i| i.netid == netid }
       change_set.validate(charged_items: new_charged_items)
       change_set_persister.save(change_set: change_set)
@@ -74,7 +74,7 @@ module CDL
       raise CDL::HoldExists if hold?(netid: netid)
       return create_charge(netid: netid) if available_for_charge?(netid: netid)
       hold = CDL::Hold.new(netid: netid)
-      change_set = CDL::ResourceChargeListChangeSet.new(resource_charge_list)
+      change_set = CDL::ResourceChargeList::ChangeSet.new(resource_charge_list)
       change_set.validate(hold_queue: resource_charge_list.hold_queue + [hold])
       change_set_persister.save(change_set: change_set).tap do |list|
         CDL::EventLogging.google_hold_event(netid: netid, source_metadata_identifier: source_metadata_identifier, hold_queue_size: list.pending_or_active_holds.size)
