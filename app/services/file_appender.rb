@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 # Creates file sets to be added to resources via a changeset
 class FileAppender
-  # Class for capturing file creation errors
-  class CreateFileError < StandardError; end
-
-  # Class for capturing file upload errors
-  class UpdateFileError < StandardError; end
-
   attr_reader :files
   attr_reader :change_set_persister
   delegate :storage_adapter, to: :change_set_persister
