@@ -77,7 +77,6 @@ module AspaceStubbing
 
   def stub_find_archival_object_not_found(component_id:)
     Aspace::Client.new.repositories.each do |repository|
-      repository_id = repository["uri"].split("/").last
       uri = "#{repository['uri']}/find_by_id/archival_objects?ref_id%5B%5D=#{component_id}"
       stub_request(:get, "https://aspace.test.org/staff/api#{uri}")
         .to_return(status: 200, body: "{}", headers: { "Content-Type": "application/json" })
