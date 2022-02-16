@@ -7,6 +7,8 @@ namespace :figgy do
       require "ruby-prof"
       require "factory_bot"
       require_relative "../../spec/support/create_for_repository"
+
+      desc "RubyProf test reindex_all"
       task reindex_profile: :environment do
         raise unless Rails.env.test?
         DataSeeder.new.wipe_metadata!
@@ -20,6 +22,8 @@ namespace :figgy do
         printer = RubyProf::CallStackPrinter.new(result)
         printer.print(File.open("tmp/output.html", "w"))
       end
+
+      desc "Benchmark reindex_all"
       task reindex_benchmark: :environment do
         require "benchmark/ips"
         raise unless Rails.env.test?
@@ -34,6 +38,8 @@ namespace :figgy do
           end
         end
       end
+
+      desc "RubyProf test indexing"
       task conversion_profile: :environment do
         raise unless Rails.env.test?
         DataSeeder.new.wipe_metadata!
@@ -46,6 +52,8 @@ namespace :figgy do
         printer = RubyProf::CallStackPrinter.new(result)
         printer.print(File.open("tmp/output.html", "w"))
       end
+
+      desc "Benchmark indexing a single item"
       task conversion_benchmark: :environment do
         require "benchmark/ips"
         raise unless Rails.env.test?

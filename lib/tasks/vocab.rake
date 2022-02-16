@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 namespace :figgy do
   namespace :vocab do
+    desc "import vocab"
     task load: :environment do
       file = ENV["CSV"]
       name = ENV["NAME"]
