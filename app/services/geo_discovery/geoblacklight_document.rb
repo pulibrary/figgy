@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "json-schema"
 
 module GeoDiscovery
@@ -42,7 +43,6 @@ module GeoDiscovery
         document_hash_required.merge(document_hash_optional)
       end
 
-      # rubocop:disable Metrics/MethodLength
       def document_hash_optional
         {
           dc_description_s: description,
@@ -164,7 +164,7 @@ module GeoDiscovery
       # Returns a hash of errors from json schema validation.
       # @return [Hash] json schema validation errors
       def schema_errors(doc)
-        { error: JSON::Validator.fully_validate(schema, doc, fragment: "#/definitions/layer") }
+        {error: JSON::Validator.fully_validate(schema, doc, fragment: "#/definitions/layer")}
       end
 
       # Returns a path to the geoblackligh schema document

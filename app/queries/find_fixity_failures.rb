@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindFixityFailures
   def self.queries
     [:find_fixity_failures]
@@ -13,7 +14,7 @@ class FindFixityFailures
   end
 
   def find_fixity_failures
-    internal_array = { file_metadata: [{ fixity_success: 0 }] }.to_json
+    internal_array = {file_metadata: [{fixity_success: 0}]}.to_json
     run_query(query, internal_array)
   end
 

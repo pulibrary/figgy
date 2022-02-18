@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe OcrRequestsController, type: :controller do
@@ -35,7 +36,7 @@ RSpec.describe OcrRequestsController, type: :controller do
   describe "GET #show" do
     it "returns a success response" do
       ocr_request = OcrRequest.create! valid_params
-      get :show, params: { id: ocr_request.to_param }
+      get :show, params: {id: ocr_request.to_param}
       expect(response).to be_successful
     end
   end
@@ -44,13 +45,13 @@ RSpec.describe OcrRequestsController, type: :controller do
     it "destroys the requested ocr_request" do
       ocr_request = OcrRequest.create! valid_params
       expect do
-        delete :destroy, params: { id: ocr_request.to_param }
+        delete :destroy, params: {id: ocr_request.to_param}
       end.to change(OcrRequest, :count).by(-1)
     end
 
     it "redirects to the ocr_requests list" do
       ocr_request = OcrRequest.create! valid_params
-      delete :destroy, params: { id: ocr_request.to_param }
+      delete :destroy, params: {id: ocr_request.to_param}
       expect(response).to redirect_to(ocr_requests_url)
     end
   end
@@ -63,7 +64,7 @@ RSpec.describe OcrRequestsController, type: :controller do
     end
 
     it "creates an OcrRequest resource and initiates an OCR job" do
-      post :upload_file, params: { file: file }
+      post :upload_file, params: {file: file}
       ocr_request = OcrRequest.all.first
       expect(ocr_request.filename).to eq file.original_filename
       expect(ocr_request.state).to eq "Enqueued"
@@ -80,7 +81,7 @@ RSpec.describe OcrRequestsController, type: :controller do
       end
 
       it "returns errors" do
-        post :upload_file, params: { file: file }
+        post :upload_file, params: {file: file}
         expect(response.body).to eq "errors"
         expect(response).not_to be_successful
       end

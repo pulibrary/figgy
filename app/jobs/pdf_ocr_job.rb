@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PdfOcrJob < ApplicationJob
   include ActiveStorage::Downloading
   queue_as :high

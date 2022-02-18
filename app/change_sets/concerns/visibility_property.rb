@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A base mixin for resources that hold files
 module VisibilityProperty
   extend ActiveSupport::Concern

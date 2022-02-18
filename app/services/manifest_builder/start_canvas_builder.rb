@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilder
   class StartCanvasBuilder
     attr_reader :resource, :canvas_builder

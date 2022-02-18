@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module LinkedData
   class LinkedEphemeraTerm < LinkedVocabularyBase
     def self.new(resource:)

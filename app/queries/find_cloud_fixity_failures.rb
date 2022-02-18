@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindCloudFixityFailures
   def self.queries
     [:find_cloud_fixity_failures]
@@ -30,7 +31,7 @@ class FindCloudFixityFailures
   end
 
   def find_cloud_fixity_failures(sort: "ASC", limit: 50, order_by_property: "updated_at", status: "FAILURE", model: Event)
-    internal_array = { "status" => [status] }
+    internal_array = {"status" => [status]}
     run_query(query(order_by_property: order_by_property, order_by: sort), internal_array.to_json, model.to_s, limit)
   end
 end

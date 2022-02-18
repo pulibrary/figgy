@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::FirmsController, type: :controller do
@@ -31,7 +32,7 @@ RSpec.describe Numismatics::FirmsController, type: :controller do
     end
     it "creates a firm" do
       FactoryBot.create_for_repository(:numismatic_firm)
-      post :create, params: { numismatics_firm: valid_params }
+      post :create, params: {numismatics_firm: valid_params}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/firms"
       firm = query_service.find_all_of_model(model: Numismatics::Firm).select { |n| n["city"] == "city" }.first
@@ -56,12 +57,12 @@ RSpec.describe Numismatics::FirmsController, type: :controller do
 
     context "html access control" do
       let(:factory) { :numismatic_firm }
-      let(:extra_params) { { numismatics_firm: { city: "city1" } } }
+      let(:extra_params) { {numismatics_firm: {city: "city1"}} }
       it_behaves_like "an access controlled update request"
     end
     it "saves and redirects" do
       numismatic_firm = FactoryBot.create_for_repository(:numismatic_firm)
-      patch :update, params: { id: numismatic_firm.id.to_s, numismatics_firm: { name: "name" } }
+      patch :update, params: {id: numismatic_firm.id.to_s, numismatics_firm: {name: "name"}}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/firms"
     end

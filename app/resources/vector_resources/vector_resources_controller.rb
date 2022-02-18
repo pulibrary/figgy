@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class VectorResourcesController < ResourceController
   include GeoResourceController
   include GeoblacklightDocumentController

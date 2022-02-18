@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Preserver::BlindImporter
   class FileMetadataAdapter
     attr_reader :storage_adapter, :resource_processor

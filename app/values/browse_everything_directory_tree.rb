@@ -13,11 +13,9 @@ class BrowseEverythingDirectoryTree
 
   def child_lookup
     @child_lookup ||=
-      begin
-        {}.tap do |hsh|
-          container_ids.each do |container_id|
-            hsh[container_id] = container_ids.select { |x| x.dirname == container_id }
-          end
+      {}.tap do |hsh|
+        container_ids.each do |container_id|
+          hsh[container_id] = container_ids.select { |x| x.dirname == container_id }
         end
       end
   end

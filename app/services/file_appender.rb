@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Creates file sets to be added to resources via a changeset
 class FileAppender
   attr_reader :files, :parent
@@ -70,9 +71,9 @@ class FileAppender
     # @param filename [String]
     # @return [String] title
     def coin_image_title(filename)
-      if filename =~ /R/
+      if /R/.match?(filename)
         "Reverse"
-      elsif filename =~ /O/
+      elsif /O/.match?(filename)
         "Obverse"
       else
         filename
@@ -122,7 +123,7 @@ class FileAppender
       stored_file = storage_adapter.upload(file: file, resource: node, original_filename: original_filename, **upload_options)
       node.file_identifiers = node.file_identifiers + [stored_file.id]
       node
-    rescue StandardError => error
+    rescue => error
       message = "#{self.class}: Failed to append the new file #{original_filename} for #{node.id} to resource #{parent.id}: #{error}"
       Valkyrie.logger.error message
       Honeybadger.notify message

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ManifestBuilder do
@@ -37,16 +38,16 @@ RSpec.describe ManifestBuilder do
   def logical_structure(file_set_id)
     [
       {
-        "label": "Table of Contents",
-        "nodes": [
+        label: "Table of Contents",
+        nodes: [
           {
-            "label": "Chapter 1",
-            "nodes": [
+            label: "Chapter 1",
+            nodes: [
               {
-                "label": "Chapter 1a",
-                "nodes": [
+                label: "Chapter 1a",
+                nodes: [
                   {
-                    "proxy": file_set_id
+                    proxy: file_set_id
                   }
                 ]
               }
@@ -166,7 +167,7 @@ RSpec.describe ManifestBuilder do
       expect(first_image["resource"]["data"]).to eq nil
       expect(first_image["resource"]["service"]["@id"]).not_to be_nil
       expect(output["thumbnail"]).not_to be_blank
-      expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
+      expect(output["thumbnail"]["@id"]).to eq "#{first_image["resource"]["service"]["@id"]}/full/!200,150/0/default.jpg"
       expect(output["thumbnail"]["service"]["@id"]).to eq first_image["resource"]["service"]["@id"]
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
       expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png")
@@ -179,7 +180,7 @@ RSpec.describe ManifestBuilder do
     context "when it's a cicognara item" do
       let(:scanned_resource) do
         FactoryBot.create_for_repository(:scanned_resource,
-                                         rights_statement: RDF::URI("http://cicognara.org/microfiche_copyright"))
+          rights_statement: RDF::URI("http://cicognara.org/microfiche_copyright"))
       end
       it "provides the vatican logo" do
         output = manifest_builder.build
@@ -239,20 +240,20 @@ RSpec.describe ManifestBuilder do
             :playlist,
             member_ids: [proxy1.id, proxy2.id, proxy3.id],
             logical_structure: [
-              { label: "Test",
-                nodes: [
-                  { label: "Chapter 1", nodes:
-                    [
-                      { proxy: proxy1.id },
-                      { label: "Chapter 1a", nodes:
-                        [
-                          { proxy: proxy2.id }
-                        ] },
-                      {
-                        proxy: proxy3.id
-                      }
-                    ] }
-                ] }
+              {label: "Test",
+               nodes: [
+                 {label: "Chapter 1", nodes:
+                   [
+                     {proxy: proxy1.id},
+                     {label: "Chapter 1a", nodes:
+                       [
+                         {proxy: proxy2.id}
+                       ]},
+                     {
+                       proxy: proxy3.id
+                     }
+                   ]}
+               ]}
             ]
           )
         end
@@ -399,26 +400,26 @@ RSpec.describe ManifestBuilder do
     context "when a thumbnail_id doesn't exist" do
       let(:scanned_resource) do
         FactoryBot.create_for_repository(:scanned_resource,
-                                         title: "test title1",
-                                         label: "test label",
-                                         actor: "test person",
-                                         sort_title: "test title2",
-                                         portion_note: "test value1",
-                                         rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
-                                         call_number: "test value2",
-                                         edition: "test edition",
-                                         nav_date: "test date",
-                                         identifier: "ark:/88435/abc1234de",
-                                         thumbnail_id: Valkyrie::ID.new("blablabla"),
-                                         imported_metadata: [{
-                                           description: "Test Description"
-                                         }])
+          title: "test title1",
+          label: "test label",
+          actor: "test person",
+          sort_title: "test title2",
+          portion_note: "test value1",
+          rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
+          call_number: "test value2",
+          edition: "test edition",
+          nav_date: "test date",
+          identifier: "ark:/88435/abc1234de",
+          thumbnail_id: Valkyrie::ID.new("blablabla"),
+          imported_metadata: [{
+            description: "Test Description"
+          }])
       end
       it "uses the first canvas as the thumbnail" do
         output = manifest_builder.build
         first_image = output["sequences"][0]["canvases"][0]["images"][0]
         expect(output["thumbnail"]).not_to be_blank
-        expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
+        expect(output["thumbnail"]["@id"]).to eq "#{first_image["resource"]["service"]["@id"]}/full/!200,150/0/default.jpg"
       end
     end
 
@@ -516,9 +517,9 @@ RSpec.describe ManifestBuilder do
   context "when given a nested child" do
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource,
-                                       member_ids: child.id,
-                                       identifier: "ark:/88435/5m60qr98h",
-                                       viewing_direction: "right-to-left")
+        member_ids: child.id,
+        identifier: "ark:/88435/5m60qr98h",
+        viewing_direction: "right-to-left")
     end
     let(:child) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
     it "builds a IIIF collection" do
@@ -578,9 +579,9 @@ RSpec.describe ManifestBuilder do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
     let(:scanned_map) do
       FactoryBot.create_for_repository(:scanned_map,
-                                       description: "Test Description",
-                                       references: { "http://www.jstor.org/stable/1797655": ["www.jstor.org"] }.to_json,
-                                       electronic_locations: ["@id": "http://arks.princeton.edu/ark:/88435/1234567"])
+        description: "Test Description",
+        references: {"http://www.jstor.org/stable/1797655": ["www.jstor.org"]}.to_json,
+        electronic_locations: ["@id": "http://arks.princeton.edu/ark:/88435/1234567"])
     end
     let(:change_set) { ScannedMapChangeSet.new(scanned_map, files: [file]) }
 
@@ -751,32 +752,32 @@ RSpec.describe ManifestBuilder do
         expect(output["items"].length).to eq 2
 
         first_canvas = output["items"].first
-        expect(first_canvas).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+        expect(first_canvas).to include "label" => {"eng" => ["32101047382401_1_pm.wav"]}
 
         last_canvas = output["items"].last
-        expect(last_canvas).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+        expect(last_canvas).to include "label" => {"eng" => ["32101047382401_1_pm.wav"]}
 
         expect(output).to include "structures"
         ranges = output["structures"]
         expect(ranges.length).to eq 2
 
         expect(ranges.first["items"].length).to eq 1
-        expect(ranges.first["items"].first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+        expect(ranges.first["items"].first).to include "label" => {"eng" => ["32101047382401_1_pm.wav"]}
         child_ranges = ranges.first["items"]
         expect(child_ranges.length).to eq 1
         expect(child_ranges.first).to include "items"
         range_canvases = child_ranges.first["items"]
         expect(range_canvases.length).to eq 1
-        expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
+        expect(range_canvases.first).to include "label" => [{"eng" => ["32101047382401_1_pm.wav"]}]
 
         expect(ranges.last["items"].length).to eq 1
-        expect(ranges.last["items"].first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+        expect(ranges.last["items"].first).to include "label" => {"eng" => ["32101047382401_1_pm.wav"]}
         child_ranges = ranges.last["items"]
         expect(child_ranges.length).to eq 1
         expect(child_ranges.first).to include "items"
         range_canvases = child_ranges.first["items"]
         expect(range_canvases.length).to eq 1
-        expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
+        expect(range_canvases.first).to include "label" => [{"eng" => ["32101047382401_1_pm.wav"]}]
       end
     end
 
@@ -803,7 +804,7 @@ RSpec.describe ManifestBuilder do
         expect(output["type"]).to eq "Manifest"
         expect(output["items"].length).to eq 2
         first_item = output["items"].first
-        expect(first_item).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+        expect(first_item).to include "label" => {"eng" => ["32101047382401_1_pm.wav"]}
 
         expect(output).to include("posterCanvas")
         poster_canvas = output["posterCanvas"]
@@ -836,19 +837,19 @@ RSpec.describe ManifestBuilder do
         expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
         expect(output["type"]).to eq "Manifest"
         expect(output["items"].length).to eq 2
-        expect(output["items"].first).to include "label" => { "eng" => ["32101047382401_1"] }
-        expect(output["items"].last).to include "label" => { "eng" => ["32101047382401_2"] }
+        expect(output["items"].first).to include "label" => {"eng" => ["32101047382401_1"]}
+        expect(output["items"].last).to include "label" => {"eng" => ["32101047382401_2"]}
 
         expect(output["structures"].length).to eq 2
-        expect(output["structures"].first).to include "label" => { "eng" => ["32101047382401_1"] }
-        expect(output["structures"].last).to include "label" => { "eng" => ["32101047382401_2"] }
+        expect(output["structures"].first).to include "label" => {"eng" => ["32101047382401_1"]}
+        expect(output["structures"].last).to include "label" => {"eng" => ["32101047382401_2"]}
       end
     end
 
     it "builds a presentation 3 manifest", run_real_characterization: true do
       output = change_set_persister.save(change_set: change_set)
       output.logical_structure = [
-        { label: "Logical", nodes: [{ proxy: output.member_ids.last }, { label: "Bla", nodes: [{ proxy: output.member_ids.first }] }] }
+        {label: "Logical", nodes: [{proxy: output.member_ids.last}, {label: "Bla", nodes: [{proxy: output.member_ids.first}]}]}
       ]
 
       change_set_persister.persister.save(resource: output)
@@ -860,7 +861,7 @@ RSpec.describe ManifestBuilder do
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
       expect(output["behavior"]).to eq ["auto-advance"]
       # downloading is blocked
-      expect(output["service"][0]).to eq ({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
+      expect(output["service"][0]).to eq({"@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"]})
     end
     context "with no logical structure", run_real_characterization: true do
       let(:logical_structure) { nil }

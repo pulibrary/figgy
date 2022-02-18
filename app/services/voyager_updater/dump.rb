@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module VoyagerUpdater
   class Dump
     attr_reader :url
@@ -19,10 +20,8 @@ module VoyagerUpdater
     # @return [Array<String>]
     def ids_needing_updated
       @ids_needing_updated ||=
-        begin
-          relevant_ids&.each_slice(100)&.flat_map do |ids|
-            ids.map { |bib_id| resource(bib_id) }.compact.map { |resource| resource.id.to_s }
-          end
+        relevant_ids&.each_slice(100)&.flat_map do |ids|
+          ids.map { |bib_id| resource(bib_id) }.compact.map { |resource| resource.id.to_s }
         end
     end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe BulkUpdateJob do
@@ -9,9 +10,9 @@ describe BulkUpdateJob do
   let(:resource1) { FactoryBot.create_for_repository(:scanned_resource, state: "pending") }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, state: "pending") }
   let(:ids) { [resource1.id, resource2.id] }
-  let(:args) { { mark_complete: true } }
-  let(:more_args) { { mark_complete: true, ocr_language: "eng" } }
-  let(:all_args) { { mark_complete: true, ocr_language: "eng", rights_statement: "http://rightsstatements.org/vocab/NoC-OKLR/1.0/", visibility: "reading_room" } }
+  let(:args) { {mark_complete: true} }
+  let(:more_args) { {mark_complete: true, ocr_language: "eng"} }
+  let(:all_args) { {mark_complete: true, ocr_language: "eng", rights_statement: "http://rightsstatements.org/vocab/NoC-OKLR/1.0/", visibility: "reading_room"} }
   describe "#perform" do
     before do
       resource1
@@ -31,7 +32,7 @@ describe BulkUpdateJob do
 
     it "appends to collections" do
       collection = FactoryBot.create_for_repository(:collection)
-      described_class.perform_now(ids: ids, args: { append_collection_ids: [collection.id.to_s] })
+      described_class.perform_now(ids: ids, args: {append_collection_ids: [collection.id.to_s]})
       r1 = query_service.find_by(id: resource1.id)
       r2 = query_service.find_by(id: resource2.id)
       expect(r1.member_of_collection_ids).to eq [collection.id]

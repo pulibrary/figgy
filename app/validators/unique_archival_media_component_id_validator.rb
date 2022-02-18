@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class UniqueArchivalMediaComponentIdValidator < ActiveModel::Validator
   def validate(record)
     duplicates = find_duplicates(record)
     return if duplicates.count.zero?
     record.errors.add(:source_metadata_identifier,
-                      "Value already in use on another Archival Media Collection. Ingest to #{link_to_duplicate(duplicates.first)}?".html_safe)
+      "Value already in use on another Archival Media Collection. Ingest to #{link_to_duplicate(duplicates.first)}?".html_safe)
   end
 
   private

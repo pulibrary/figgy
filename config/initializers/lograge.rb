@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "lograge/sql/extension"
 Rails.application.configure do
   # Lograge config
@@ -9,8 +10,8 @@ Rails.application.configure do
 
   # This is is useful if you want to log query parameters
   config.lograge.custom_options = lambda do |event|
-    { ddsource: ["ruby"],
-      params: event.payload[:params].reject { |k| %w[controller action].include? k } }
+    {ddsource: ["ruby"],
+     params: event.payload[:params].reject { |k| %w[controller action].include? k }}
   end
   Lograge::ActiveRecordLogSubscriber.attach_to :sequel
 end

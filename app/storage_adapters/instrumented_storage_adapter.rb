@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class InstrumentedStorageAdapter
   attr_reader :storage_adapter, :tracer
   def initialize(storage_adapter:, tracer:)

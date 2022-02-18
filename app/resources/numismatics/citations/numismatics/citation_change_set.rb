@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class CitationChangeSet < ChangeSet
     delegate :human_readable_type, to: :model

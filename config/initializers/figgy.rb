@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Figgy
   def config
     @config ||= config_yaml.with_indifferent_access
@@ -30,15 +31,13 @@ module Figgy
 
   def global_protect_ips
     @global_protect_ips ||= config[:access_control][:global_protect_fqdns].map do |fqdn|
-      begin
-        address = Dnsruby::Resolver.new.query(fqdn).answer[0]&.address
-        if address.present?
-          IPAddr.new(address.to_s)
-        end
-      rescue
-        Rails.logger.debug("Unable to resolve #{fqdn}")
-        nil
+      address = Dnsruby::Resolver.new.query(fqdn).answer[0]&.address
+      if address.present?
+        IPAddr.new(address.to_s)
       end
+    rescue
+      Rails.logger.debug("Unable to resolve #{fqdn}")
+      nil
     end.compact
   end
 

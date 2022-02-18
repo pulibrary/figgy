@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Types::VectorResourceType < Types::BaseObject
   implements Types::Resource
 

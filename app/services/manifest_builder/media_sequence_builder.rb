@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilder
   class MediaSequenceBuilder
     attr_reader :resource
@@ -33,8 +34,8 @@ class ManifestBuilder
         {
           "@id": id,
           "@type": "foaf:Document",
-          "format": "application/pdf",
-          "label": resource.to_s.first
+          format: "application/pdf",
+          label: resource.to_s.first
         }
       end
 

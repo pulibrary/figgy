@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddEphemeraToCollection
   attr_reader :project_id, :collection_id, :change_set_persister, :logger, :query_service
   def initialize(project_id:, collection_id:, change_set_persister:, logger: Valkyrie.logger)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe DataSeeder do
@@ -27,14 +28,14 @@ RSpec.describe DataSeeder do
     end
     it "generates lots of objects" do
       n_files = mvw_volumes + # each volume member has a fileset
-                sammel_vols + #  each volume member has a fileset
-                sammel_files +
-                many_files +
-                15 # geo files created
+        sammel_vols + #  each volume member has a fileset
+        sammel_files +
+        many_files +
+        15 # geo files created
       n_scanned_resources = mvw_volumes + sammel_vols +
-                            1 + # the mvw parent
-                            1 + # the many files parent
-                            1 # the sammelband parent
+        1 + # the mvw parent
+        1 + # the many files parent
+        1 # the sammelband parent
 
       seeder.generate_dev_data(many_files: many_files, mvw_volumes: mvw_volumes, sammel_files: sammel_files, sammel_vols: sammel_vols)
       expect(query_service.find_all_of_model(model: FileSet).count).to eq n_files

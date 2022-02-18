@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ImportedMetadataIndexer
   attr_reader :resource
   def initialize(resource:)

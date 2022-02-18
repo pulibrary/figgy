@@ -7,9 +7,9 @@ class IIIFManifest::V3::ManifestBuilder
   def self.obj_to_language_map(obj)
     if obj.is_a?(Array) && obj.first.is_a?(RDF::Literal)
       language = obj.first.language.to_s
-      { language.to_s => obj.map(&:to_s) }
+      {language.to_s => obj.map(&:to_s)}
     else
-      { "eng" => Array(obj) }
+      {"eng" => Array(obj)}
     end
   end
 end

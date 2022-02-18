@@ -153,7 +153,7 @@ class METSDocument
   # @return [Hash]
   def file_opts(file)
     return {} if @mets.xpath("count(//mets:div/mets:fptr[@FILEID='#{file[:id]}'])").positive?
-    { viewing_hint: "non-paged" }
+    {viewing_hint: "non-paged"}
   end
 
   # Construct an IngestableFile object given a Hash containing file attributes
@@ -188,7 +188,6 @@ class METSDocument
 
   # Generate the metadata attributes for the resource being described
   # @return [Hash]
-  # rubocop:disable Metrics/AbcSize
   def attributes
     return {} if mods.nil?
     {

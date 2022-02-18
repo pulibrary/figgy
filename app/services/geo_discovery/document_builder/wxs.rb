@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GeoDiscovery
   class DocumentBuilder
     class Wxs
@@ -109,7 +110,7 @@ module GeoDiscovery
 
         def valid_visibilities
           [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-           Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED]
+            Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED]
         end
     end
   end

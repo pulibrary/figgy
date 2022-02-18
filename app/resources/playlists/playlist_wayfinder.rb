@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PlaylistWayfinder < BaseWayfinder
   # All valid relationships for a Playlist
   relationship_by_property :members, property: :member_ids

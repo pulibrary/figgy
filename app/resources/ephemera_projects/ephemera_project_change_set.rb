@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   property :title, multiple: false
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)

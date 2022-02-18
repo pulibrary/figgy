@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ThumbnailDerivativeService
   class Factory
     attr_reader :change_set_persister, :image_config
@@ -81,7 +82,7 @@ class ThumbnailDerivativeService
       @resource = buffered_persister.save(change_set: change_set)
     end
     update_error_message(message: nil) if target_file.error_message.present?
-  rescue StandardError => error
+  rescue => error
     update_error_message(message: error.message)
     raise error
   end
@@ -100,13 +101,11 @@ class ThumbnailDerivativeService
 
   def vips_image
     @vips_image ||=
-      begin
-        Vips::Image.thumbnail(
-          filename.to_s,
-          width,
-          height: height
-        )
-      end
+      Vips::Image.thumbnail(
+        filename.to_s,
+        width,
+        height: height
+      )
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)

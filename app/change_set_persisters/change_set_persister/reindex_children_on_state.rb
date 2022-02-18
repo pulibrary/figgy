@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   class ReindexChildrenOnState
     class Factory
@@ -10,10 +11,10 @@ class ChangeSetPersister
 
       def new(change_set_persister:, change_set:, post_save_resource: nil)
         ReindexChildrenOnState.new(change_set_persister: change_set_persister,
-                                   change_set: change_set,
-                                   post_save_resource: post_save_resource,
-                                   model: model,
-                                   state: state)
+          change_set: change_set,
+          post_save_resource: post_save_resource,
+          model: model,
+          state: state)
       end
     end
     attr_reader :change_set_persister, :change_set, :model, :state, :post_save_resource

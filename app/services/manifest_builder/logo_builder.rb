@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilder
   class LogoBuilder
     attr_reader :resource

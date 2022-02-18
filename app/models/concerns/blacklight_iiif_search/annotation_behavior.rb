@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # customizable behavior for IiifSearchAnnotation
 module BlacklightIiifSearch
   module AnnotationBehavior

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :file_set do
     sequence(:title) { |x| "File Set #{x}" }
@@ -38,7 +39,7 @@ FactoryBot.define do
         mime_type: "image/tiff; gdal-format=GTiff",
         use: Valkyrie::Vocab::PCDMUse.CloudDerivative,
         original_filename: "display_raster.tif",
-        file_identifiers: ["cloud-geo-derivatives-shrine://#{Figgy.config['cloud_geo_bucket']}/example.tif"]
+        file_identifiers: ["cloud-geo-derivatives-shrine://#{Figgy.config["cloud_geo_bucket"]}/example.tif"]
       )
       service_targets "tiles"
     end

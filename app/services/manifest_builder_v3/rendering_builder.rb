@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   # See: https://iiif.io/api/presentation/3.0/#rendering
   class RenderingBuilder < ManifestBuilder::RenderingBuilder
@@ -15,7 +16,7 @@ class ManifestBuilderV3
           "id" => Ark.new(identifier).uri,
           "format" => "text/html",
           "type" => "Text",
-          "label" => { "en": ["View in catalog"] }
+          "label" => {en: ["View in catalog"]}
         }
       end
   end

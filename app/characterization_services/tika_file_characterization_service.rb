@@ -26,7 +26,7 @@ class TikaFileCharacterizationService
   end
 
   def json_output
-    "[#{RubyTikaApp.new(filename.to_s.gsub("'", %q('"'"')), tika_config).to_json.gsub('}{', '},{')}]"
+    "[#{RubyTikaApp.new(filename.to_s.gsub("'", %q('"'"')), tika_config).to_json.gsub("}{", "},{")}]"
   end
 
   def file_characterization_attributes

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe IngestEphemeraService, :admin_set do
@@ -19,7 +20,7 @@ RSpec.describe IngestEphemeraService, :admin_set do
   let(:argentina) { FactoryBot.create_for_repository(:ephemera_term, label: "Argentina", member_of_vocabulary_id: areas.id) }
   let(:change_set_persister) do
     ChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                           storage_adapter: storage_adapter)
+      storage_adapter: storage_adapter)
   end
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }

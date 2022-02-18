@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Bagit
   class MetadataAdapter
     attr_reader :base_path
@@ -35,9 +36,7 @@ module Bagit
     end
 
     def id
-      @id ||= begin
-        Valkyrie::ID.new(Digest::MD5.hexdigest("bagit://#{base_path}"))
-      end
+      @id ||= Valkyrie::ID.new(Digest::MD5.hexdigest("bagit://#{base_path}"))
     end
 
     class NestedMetadataAdapter < Bagit::MetadataAdapter

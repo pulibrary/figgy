@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rdf"
 class PULStore < RDF::StrictVocabulary("http://princeton.edu/pulstore/terms/")
   term :barcode, label: "Barcode", type: "rdf:Property"

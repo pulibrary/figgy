@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 module Numismatics
   class ArtistDecorator < Valkyrie::ResourceDecorator
     display :person,
-            :signature,
-            :role,
-            :side
+      :signature,
+      :role,
+      :side
 
     delegate :decorated_person, to: :wayfinder
 

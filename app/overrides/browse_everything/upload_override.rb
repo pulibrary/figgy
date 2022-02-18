@@ -3,7 +3,8 @@
 module BrowseEverything
   class Upload
     module Override
-      def perform_job; end
+      def perform_job
+      end
     end
   end
 end

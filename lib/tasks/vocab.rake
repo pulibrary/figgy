@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :figgy do
   namespace :vocab do
     task load: :environment do

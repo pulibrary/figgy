@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ArchivalMediaCollectionChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
   delegate :human_readable_type, to: :model

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class IngestLaeFolderJob < ApplicationJob
   def perform(folder_dir)
     logger.info "Ingesting LAE folder #{folder_dir}"

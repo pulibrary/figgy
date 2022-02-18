@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Slug
   attr_reader :slug
   def initialize(slug)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   # Mints a new AuthToken for Resources which support token-authorized access which have the mint_auth_token ChangeSet flag, or which have reached the final state in their workflow
   class ApplyAuthToken

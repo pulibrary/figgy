@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Types::ViewingDirectionEnum < Types::BaseEnum
   value "LEFTTORIGHT", value: "left-to-right"
   value "RIGHTTOLEFT", value: "right-to-left"

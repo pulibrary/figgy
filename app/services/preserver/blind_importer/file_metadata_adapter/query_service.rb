@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Preserver::BlindImporter::FileMetadataAdapter
   # This is a small version of a Valkyrie QueryService purely used to support
   # the read-only requirements of Preserver::BlindImporter.
@@ -21,16 +22,14 @@ class Preserver::BlindImporter::FileMetadataAdapter
     def find_members(resource:)
       member_ids = resource.try(:member_ids) || []
       member_ids.lazy.map do |id|
-        begin
-          file = storage_adapter.find_by(id: storage_id_from_resource_id(id, parent_resource: resource))
-          json = JSON.parse(file.read)
-          attributes = Valkyrie::Persistence::Shared::JSONValueMapper.new(json).result.symbolize_keys
-          member = Valkyrie::Types::Anything[attributes]
-          member.loaded[:parents] = [resource]
-          resource_processor.call(resource: member, adapter: adapter)
-        rescue Valkyrie::StorageAdapter::FileNotFound
-          nil
-        end
+        file = storage_adapter.find_by(id: storage_id_from_resource_id(id, parent_resource: resource))
+        json = JSON.parse(file.read)
+        attributes = Valkyrie::Persistence::Shared::JSONValueMapper.new(json).result.symbolize_keys
+        member = Valkyrie::Types::Anything[attributes]
+        member.loaded[:parents] = [resource]
+        resource_processor.call(resource: member, adapter: adapter)
+      rescue Valkyrie::StorageAdapter::FileNotFound
+        nil
       end.select(&:present?)
     end
 

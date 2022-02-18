@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A mixin adding supporting code for the DateRange nested resource
 # Once this mixin is included you need to add date_range_form to the list of
 #   primary_terms on the change set

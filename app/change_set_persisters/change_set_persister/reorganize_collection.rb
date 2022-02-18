@@ -35,11 +35,9 @@ class ChangeSetPersister
     end
 
     def barcode_lookup
-      @barcode_lookup ||= Hash[
-        barcode_members.map do |member|
-          [member.local_identifier.first, member.id]
-        end
-      ]
+      @barcode_lookup ||= barcode_members.map do |member|
+        [member.local_identifier.first, member.id]
+      end.to_h
     end
 
     def clean_old_relations

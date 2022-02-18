@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PlaylistsFromRecording
   def self.queries
     [:playlists_from_recording]

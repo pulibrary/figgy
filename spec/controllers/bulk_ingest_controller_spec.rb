@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe BulkIngestController do
@@ -35,20 +36,20 @@ RSpec.describe BulkIngestController do
       end
 
       it "assigns workflow states based on the resource type" do
-        get :show, params: { resource_type: "scanned_maps" }
+        get :show, params: {resource_type: "scanned_maps"}
         expect(assigns(:states)).to eq ["pending", "final_review", "complete", "takedown", "flagged"]
       end
 
       it "assigns collections" do
         collection = persister.save(resource: FactoryBot.build(:collection))
-        get :show, params: { resource_type: "scanned_maps" }
+        get :show, params: {resource_type: "scanned_maps"}
         expect(assigns(:collections)).to eq [[collection.title.first, collection.id.to_s]]
       end
     end
 
     context "when not logged in" do
       it "redirects to login" do
-        get :show, params: { resource_type: "scanned_maps" }
+        get :show, params: {resource_type: "scanned_maps"}
         expect(response).to redirect_to("/users/auth/cas")
       end
     end
@@ -98,16 +99,16 @@ RSpec.describe BulkIngestController do
         )
         attributes =
           {
-            workflow: { state: "pending" },
+            workflow: {state: "pending"},
             collections: ["4609321"],
             visibility: "open",
-            browse_everything: { "uploads" => [upload.uuid] }
+            browse_everything: {"uploads" => [upload.uuid]}
           }
         allow(IngestFolderJob).to receive(:perform_later)
         stub_bibdata(bib_id: "123456")
         stub_bibdata(bib_id: "4609321")
 
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
         expect(IngestFolderJob)
           .to have_received(:perform_later)
           .with(
@@ -145,16 +146,16 @@ RSpec.describe BulkIngestController do
         )
         attributes =
           {
-            workflow: { state: "pending" },
+            workflow: {state: "pending"},
             collections: ["4609321"],
             visibility: "open",
-            browse_everything: { "uploads" => [upload.uuid] }
+            browse_everything: {"uploads" => [upload.uuid]}
           }
         allow(IngestFolderJob).to receive(:perform_later)
         stub_pulfa(pulfa_id: "AC044_c0003")
         stub_bibdata(bib_id: "4609321")
 
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
         expect(IngestFolderJob)
           .to have_received(:perform_later)
           .with(
@@ -199,7 +200,7 @@ RSpec.describe BulkIngestController do
     end
     let(:attributes) do
       {
-        workflow: { state: "pending" },
+        workflow: {state: "pending"},
         collections: ["1234567"],
         visibility: "open",
         browse_everything: browse_everything
@@ -232,7 +233,7 @@ RSpec.describe BulkIngestController do
       end
 
       it "ingests the directory as a single resource" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
         expected_attributes = {
           directory: "/base/4609321",
           state: "pending",
@@ -250,7 +251,7 @@ RSpec.describe BulkIngestController do
       end
 
       it "ingests the directory as a single resource" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
         expected_attributes = {
           directory: "/base/4609321",
           state: "pending",
@@ -270,7 +271,7 @@ RSpec.describe BulkIngestController do
       end
 
       it "ingests the directory as a single resource" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
         expected_attributes = {
           directory: "/base/June 31",
           state: "pending",
@@ -286,7 +287,7 @@ RSpec.describe BulkIngestController do
         end
 
         before do
-          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+          post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
         end
 
         it "does not enqueue an ingest folder job and alerts the client" do
@@ -321,16 +322,16 @@ RSpec.describe BulkIngestController do
 
     let(:attributes) do
       {
-        workflow: { state: "pending" },
+        workflow: {state: "pending"},
         visibility: "open",
-        browse_everything: { "uploads" => [upload.id] }
+        browse_everything: {"uploads" => [upload.id]}
       }
     end
 
     it "ingests two resources" do
       FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
       stub_bibdata(bib_id: "4609321")
-      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+      post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 2
@@ -367,15 +368,15 @@ RSpec.describe BulkIngestController do
 
     let(:attributes) do
       {
-        workflow: { state: "pending" },
+        workflow: {state: "pending"},
         visibility: "open",
-        browse_everything: { "uploads" => [upload.id] }
+        browse_everything: {"uploads" => [upload.id]}
       }
     end
 
     it "Creates a multi-volume work" do
       stub_pulfa(pulfa_id: "AC044_c0003")
-      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+      post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       resource = resources.select { |res| res.member_ids.length == 2 }.first
@@ -419,15 +420,15 @@ RSpec.describe BulkIngestController do
       )
       attributes =
         {
-          workflow: { state: "pending" },
+          workflow: {state: "pending"},
           collections: [collection.id.to_s],
           visibility: "open",
           resource_type: "scanned_resource",
-          browse_everything: { "uploads" => [upload.uuid] }
+          browse_everything: {"uploads" => [upload.uuid]}
         }
       stub_bibdata(bib_id: "123456")
 
-      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+      post :browse_everything_files, params: {resource_type: "scanned_resource", **attributes}
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 3
@@ -441,16 +442,15 @@ RSpec.describe BulkIngestController do
   end
 
   def create_cloud_upload_for_container_ids(container_hash)
-    file_content = File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")).read
+    file_content = File.read(Rails.root.join("spec", "fixtures", "files", "example.tif"))
     provider = HashProvider.new(container_hash, file: file_content)
     allow(BrowseEverything::Provider::GoogleDrive).to receive(:new).and_return(provider)
     be_session = BrowseEverything::Session.build(
       provider_id: "google_drive"
     ).tap(&:save)
-    upload = BrowseEverything::Upload.build(
+    BrowseEverything::Upload.build(
       session_id: be_session.id,
       container_ids: container_hash.keys
     ).tap(&:save)
-    upload
   end
 end

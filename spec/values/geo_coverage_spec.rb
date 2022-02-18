@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe GeoCoverage do
@@ -29,7 +30,7 @@ describe GeoCoverage do
 
   describe "parse_coordinate" do
     it "parses a coordinate" do
-      expect(described_class.parse_coordinate(cov_string, /northlimit=([\.\d\-]+);/)).to eq 43.039
+      expect(described_class.parse_coordinate(cov_string, /northlimit=([.\d\-]+);/)).to eq 43.039
     end
   end
 

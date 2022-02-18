@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::CoinDecorator do
@@ -52,8 +53,8 @@ RSpec.describe Numismatics::CoinDecorator do
       before do
         allow(derivs).to receive(:find_by).with(id: file_id).and_return(file_id)
       end
-      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
-      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:derivs) { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id) { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
       let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
       let(:coin) { FactoryBot.create_for_repository(:coin, file_metadata: [pdf_file]) }
       it "finds the pdf file" do
@@ -65,8 +66,8 @@ RSpec.describe Numismatics::CoinDecorator do
       before do
         allow(derivs).to receive(:find_by).with(id: file_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
       end
-      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
-      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:derivs) { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id) { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
       let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
       let(:coin) { FactoryBot.create_for_repository(:coin, file_metadata: [pdf_file]) }
       it "does not return the bogus pdf file" do

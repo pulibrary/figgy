@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindDeepChildrenWithProperty
   def self.queries
     [:find_deep_children_with_property]
@@ -13,9 +14,9 @@ class FindDeepChildrenWithProperty
 
   def find_deep_children_with_property(resource:, model:, property:, value:, count: false)
     if count
-      query_service.connection[relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json].first[:count]
+      query_service.connection[relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: {property => Array.wrap(value)}.to_json].first[:count]
     else
-      run_query(relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json)
+      run_query(relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: {property => Array.wrap(value)}.to_json)
     end
   end
 
@@ -34,7 +35,7 @@ class FindDeepChildrenWithProperty
           JOIN orm_resources mem ON (g.member->>'id')::UUID = mem.id
           WHERE f.metadata @> '{"member_ids": [{}]}'
         )
-        select #{count ? 'COUNT(*) AS count' : '*'} from deep_members
+        select #{count ? "COUNT(*) AS count" : "*"} from deep_members
         WHERE internal_resource = :model
         AND metadata @> :property_query
     SQL

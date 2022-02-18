@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "figgy"
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
@@ -254,8 +255,8 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth(:cas,
-                  host: Figgy.config["devise"]["omniauth"]["cas"]["host"],
-                  url: Figgy.config["devise"]["omniauth"]["cas"]["url"])
+    host: Figgy.config["devise"]["omniauth"]["cas"]["host"],
+    url: Figgy.config["devise"]["omniauth"]["cas"]["url"])
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

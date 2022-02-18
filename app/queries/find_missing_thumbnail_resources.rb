@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindMissingThumbnailResources
   # Access the list of methods exposed for the query
   # @return [Array<Symbol>] query method signatures
@@ -35,7 +36,7 @@ class FindMissingThumbnailResources
     def each(model)
       docs = Valkyrie::Persistence::Solr::Queries::DefaultPaginator.new
       while docs.has_next?
-        docs = connection.paginate(docs.next_page, docs.per_page, "select", params: { q: query(model) })["response"]["docs"]
+        docs = connection.paginate(docs.next_page, docs.per_page, "select", params: {q: query(model)})["response"]["docs"]
         docs.each do |doc|
           yield resource_factory.to_resource(object: doc)
         end

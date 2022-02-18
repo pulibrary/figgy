@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "csv"
 class ReportsController < ApplicationController
   def ephemera_data
@@ -9,15 +10,15 @@ class ReportsController < ApplicationController
     end
     @ephemera_projects = query_service.find_all_of_model(model: EphemeraProject).map(&:decorate) unless @ephemera_project
     fields = %w[id local_identifier barcode ephemera_box_number folder_number title sort_title alternative_title
-                transliterated_title language ocr_language creator contributor publisher genre
-                width height page_count series keywords subject geo_subject geographic_origin
-                description date_created rendered_date_range
-                provenance source_url dspace_url rights_statement collection_titles]
+      transliterated_title language ocr_language creator contributor publisher genre
+      width height page_count series keywords subject geo_subject geographic_origin
+      description date_created rendered_date_range
+      provenance source_url dspace_url rights_statement collection_titles]
     respond_to do |format|
       format.html
       format.csv do
         send_data to_csv(@resources, fields: fields.map { |f| [f.to_sym, f] }.to_h),
-                  filename: "#{@ephemera_project.title.parameterize}-data-#{Time.zone.today}.csv"
+          filename: "#{@ephemera_project.title.parameterize}-data-#{Time.zone.today}.csv"
       end
     end
   end
@@ -28,8 +29,8 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data to_csv(@resources, fields: { source_metadata_identifier: "bibid", identifier: "ark", title: "title" }),
-                  filename: "identifiers-to-reconcile-#{Time.zone.today}.csv"
+        send_data to_csv(@resources, fields: {source_metadata_identifier: "bibid", identifier: "ark", title: "title"}),
+          filename: "identifiers-to-reconcile-#{Time.zone.today}.csv"
       end
     end
   end
@@ -44,7 +45,7 @@ class ReportsController < ApplicationController
       format.html
       format.csv do
         send_data hashes_to_csv(["id", "component_id", "ark", "url"], @resources.map { |r| resource_hash(r) }),
-                  filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
+          filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
       end
     end
   end

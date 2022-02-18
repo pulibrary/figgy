@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe LinkedData::LinkedEphemeraFolder do
@@ -25,7 +26,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_term.label.first,
-          "exact_match" => { "@id" => ephemera_term.uri.first }
+          "exact_match" => {"@id" => ephemera_term.uri.first}
         )
       end
     end
@@ -77,7 +78,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
             "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
             "@type" => "skos:Concept",
             "pref_label" => ephemera_term.label.first,
-            "exact_match" => { "@id" => ephemera_term.uri.first }
+            "exact_match" => {"@id" => ephemera_term.uri.first}
           }]
         )
       end
@@ -99,7 +100,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
             "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
             "@type" => "skos:Concept",
             "pref_label" => ephemera_term.label.first,
-            "exact_match" => { "@id" => ephemera_term.uri.first }
+            "exact_match" => {"@id" => ephemera_term.uri.first}
           }]
         )
       end
@@ -122,7 +123,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           "@id" => "http://www.example.com/catalog/#{ephemera_term.id}",
           "@type" => "skos:Concept",
           "pref_label" => ephemera_term.label.first,
-          "exact_match" => { "@id" => ephemera_term.uri.first }
+          "exact_match" => {"@id" => ephemera_term.uri.first}
         )
       end
     end
@@ -152,7 +153,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
             "@id" => "https://figgy.princeton.edu/ns/testVocabulary/testVocabulary",
             "@type" => "skos:ConceptScheme",
             "pref_label" => ephemera_vocabulary.label.first,
-            "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
+            "exact_match" => {"@id" => ephemera_vocabulary.uri.first}
           }
         )
       end
@@ -177,7 +178,7 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
           "@id" => "http://www.example.com/catalog/#{ephemera_vocabulary.id}",
           "@type" => "skos:ConceptScheme",
           "pref_label" => ephemera_vocabulary.label.first,
-          "exact_match" => { "@id" => ephemera_vocabulary.uri.first }
+          "exact_match" => {"@id" => ephemera_vocabulary.uri.first}
         )
       end
     end

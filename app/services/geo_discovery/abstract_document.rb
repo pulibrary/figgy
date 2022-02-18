@@ -1,26 +1,25 @@
 # frozen_string_literal: true
 # frozen_string_literal: true
+
 module GeoDiscovery
   class AbstractDocument
     attr_accessor :access_rights, :all_subject, :call_number, :creator,
-                  :dct_references, :description, :download, :fgdc, :format,
-                  :geom_type, :identifier, :iiif, :iiif_manifest, :iso19139,
-                  :issued, :language, :layer_modified, :layer_year, :mods,
-                  :held_by, :publisher, :resource_type, :slug, :solr_coverage,
-                  :source, :spatial, :subject, :suppressed, :temporal, :thumbnail,
-                  :title, :url, :wcs_path, :wfs_path, :wms_path, :wxs_identifier,
-                  :wmts_path, :xyz_path
+      :dct_references, :description, :download, :fgdc, :format,
+      :geom_type, :identifier, :iiif, :iiif_manifest, :iso19139,
+      :issued, :language, :layer_modified, :layer_year, :mods,
+      :held_by, :publisher, :resource_type, :slug, :solr_coverage,
+      :source, :spatial, :subject, :suppressed, :temporal, :thumbnail,
+      :title, :url, :wcs_path, :wfs_path, :wms_path, :wxs_identifier,
+      :wmts_path, :xyz_path
 
     # Cleans the document hash by removing unused fields.
     # @param [Hash] document hash
     # @return [Hash] cleaned document hash
     def clean_document(hash)
       hash.delete_if do |_k, v|
-        begin
-          v.nil? || v.empty?
-        rescue
-          false
-        end
+        v.nil? || v.empty?
+      rescue
+        false
       end
     end
 

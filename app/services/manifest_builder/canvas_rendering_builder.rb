@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilder
   class CanvasRenderingBuilder
     attr_reader :record
@@ -78,7 +79,7 @@ class ManifestBuilder
       def original_file_hash
         return unless original_file
         original_file_id = original_file.id.to_s
-        download_url_args = { resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host }
+        download_url_args = {resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host}
         download_url = url_helpers.download_url(download_url_args)
 
         {
@@ -90,10 +91,10 @@ class ManifestBuilder
 
       def mp3_file_hash
         return unless mp3_file
-        download_url_args = { resource_id: resource.id.to_s,
-                              id: mp3_file.id.to_s,
-                              protocol: protocol,
-                              host: host }
+        download_url_args = {resource_id: resource.id.to_s,
+                             id: mp3_file.id.to_s,
+                             protocol: protocol,
+                             host: host}
         download_url = url_helpers.download_url(download_url_args)
 
         {

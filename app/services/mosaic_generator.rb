@@ -24,10 +24,10 @@ class MosaicGenerator
     end
 
     def access_key
-      "AWS_ACCESS_KEY_ID=#{Figgy.config['aws_access_key_id']}"
+      "AWS_ACCESS_KEY_ID=#{Figgy.config["aws_access_key_id"]}"
     end
 
     def secret_access_key
-      "AWS_SECRET_ACCESS_KEY=#{Figgy.config['aws_secret_access_key']}"
+      "AWS_SECRET_ACCESS_KEY=#{Figgy.config["aws_secret_access_key"]}"
     end
 end

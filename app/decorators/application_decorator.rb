@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ApplicationDecorator < Draper::Decorator
   class_attribute :displayed_attributes, :iiif_manifest_attributes
   self.displayed_attributes = []
@@ -58,18 +59,16 @@ class ApplicationDecorator < Draper::Decorator
     end
 
     def to_h
-      Hash[
-        @keys.map do |attribute|
-          [attribute, Array.wrap(@subject.[](attribute))]
-        end
-      ]
+      @keys.map do |attribute|
+        [attribute, Array.wrap(@subject.[](attribute))]
+      end.to_h
     end
   end
 
   class ImportedAttributes < Attributes
     def to_h
       return {} if map.empty?
-      Hash[map]
+      map.to_h
     end
 
     private

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AutoIncrementValidator < ActiveModel::Validator
   def validate(record)
     return if record.send(property).to_i.positive?

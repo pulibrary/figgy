@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilder
   attr_reader :resource, :services
 
@@ -234,8 +235,8 @@ class ManifestBuilder
       [
         {
           "@id" => helper.pdf_url(resource),
-          label: "Download as PDF",
-          format: "application/pdf"
+          :label => "Download as PDF",
+          :format => "application/pdf"
         }
       ]
     end
@@ -245,10 +246,8 @@ class ManifestBuilder
     # @return [Resource]
     def members
       @members ||=
-        begin
-          decorate.members.to_a.select do |member|
-            !current_ability || current_ability.can?(:read, member)
-          end
+        decorate.members.to_a.select do |member|
+          !current_ability || current_ability.can?(:read, member)
         end
     end
 
@@ -326,7 +325,8 @@ class ManifestBuilder
 
     # Collections should not have viewing hints
     # @return [nil]
-    def viewing_hint; end
+    def viewing_hint
+    end
 
     def collection?
       true
@@ -436,16 +436,14 @@ class ManifestBuilder
     end
 
     def members
-      @members ||= begin
-        manifestable_members.map do |member|
-          decorator = member.decorate
-          if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
-            member.decorate.geo_members.first
-          else
-            member
-          end
-        end.compact
-      end
+      @members ||= manifestable_members.map do |member|
+        decorator = member.decorate
+        if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
+          member.decorate.geo_members.first
+        else
+          member
+        end
+      end.compact
     end
 
     def leaf_nodes
@@ -605,10 +603,10 @@ class ManifestBuilder
     def display_image
       return if file.mime_type.first.include?("audio")
       @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
-                                                        width: width.to_i,
-                                                        height: height.to_i,
-                                                        format: "image/jpeg",
-                                                        iiif_endpoint: endpoint)
+        width: width.to_i,
+        height: height.to_i,
+        format: "image/jpeg",
+        iiif_endpoint: endpoint)
     end
 
     def download_url
@@ -675,7 +673,7 @@ class ManifestBuilder
       def endpoint
         return unless resource.derivative_file
         IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(resource),
-                                       profile: "http://iiif.io/api/image/2/level2.json")
+          profile: "http://iiif.io/api/image/2/level2.json")
       end
 
       ##
@@ -796,16 +794,14 @@ class ManifestBuilder
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= begin
-        if audio_collection? || recording?
-          IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
+      @manifest ||= if audio_collection? || recording?
+        IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
         # If not multi-part and a collection, it's not a MVW
-        elsif @resource.viewing_hint.blank? && @resource.collection?
-          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
-        else
-          # note this assumes audio resources use flat modeling
-          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
-        end
+      elsif @resource.viewing_hint.blank? && @resource.collection?
+        IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
+      else
+        # note this assumes audio resources use flat modeling
+        IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
       end
     end
 

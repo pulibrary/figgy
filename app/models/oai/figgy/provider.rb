@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module OAI::Figgy
   class Provider < OAI::Provider::Base
     repository_name "Princeton University Library"

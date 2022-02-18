@@ -1,40 +1,41 @@
 # frozen_string_literal: true
+
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes,
-          :rendered_date_range,
-          :rendered_ocr_language,
-          :rendered_holding_location,
-          :member_of_collections,
-          :rendered_actors,
-          :archival_collection_code
+    :rendered_date_range,
+    :rendered_ocr_language,
+    :rendered_holding_location,
+    :member_of_collections,
+    :rendered_actors,
+    :archival_collection_code
 
   suppress :thumbnail_id,
-           :imported_author,
-           :source_jsonld,
-           :source_metadata,
-           :sort_title,
-           :ocr_language,
-           :rights_statement,
-           :actor,
-           :holding_location, # suppressed in superclass, but added back in with Schema::Common
-           :downloadable
+    :imported_author,
+    :source_jsonld,
+    :source_metadata,
+    :sort_title,
+    :ocr_language,
+    :rights_statement,
+    :actor,
+    :holding_location, # suppressed in superclass, but added back in with Schema::Common
+    :downloadable
 
   display_in_manifest displayed_attributes, :location
   suppress_from_manifest Schema::IIIF.attributes,
-                         :visibility,
-                         :internal_resource,
-                         :rights_statement,
-                         :rendered_rights_statement,
-                         :rendered_ocr_language,
-                         :ocr_language,
-                         :thumbnail_id,
-                         :rendered_date_range,
-                         :downloadable,
-                         :archival_collection_code,
-                         :pdf_type,
-                         :source_metadata_identifier,
-                         :created_at,
-                         :updated_at
+    :visibility,
+    :internal_resource,
+    :rights_statement,
+    :rendered_rights_statement,
+    :rendered_ocr_language,
+    :ocr_language,
+    :thumbnail_id,
+    :rendered_date_range,
+    :downloadable,
+    :archival_collection_code,
+    :pdf_type,
+    :source_metadata_identifier,
+    :created_at,
+    :updated_at
 
   delegate(*Schema::Common.attributes, to: :primary_imported_metadata, prefix: :imported)
   delegate :members, :file_sets, :collections, :playlists, :decorated_file_sets, to: :wayfinder
@@ -136,7 +137,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
       ControlledVocabulary.for(:language).find(language).label
     end
   end
-  alias display_imported_language imported_language
+  alias_method :display_imported_language, :imported_language
 
   def created
     output = super

@@ -1,5 +1,5 @@
-# coding: utf-8
 # frozen_string_literal: true
+
 require "rails_helper"
 require "valkyrie/specs/shared_specs"
 
@@ -385,7 +385,7 @@ RSpec.describe ChangeSetPersister do
       stub_bibdata(bib_id: "123456")
     end
     it "applies remote metadata from bibdata" do
-      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", imported_metadata: [{ applicant: "Test" }], source_metadata_identifier: nil)
+      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", imported_metadata: [{applicant: "Test"}], source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "1")
       output = change_set_persister.save(change_set: change_set)
@@ -651,7 +651,7 @@ RSpec.describe ChangeSetPersister do
         change_set = change_set_class.new(resource, characterize: true)
         change_set.files = [file]
 
-        attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile] }
+        attributes = {id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile]}
         file_metadata_node = FileMetadata.for(file: file).new(attributes)
         allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 
@@ -1044,16 +1044,16 @@ RSpec.describe ChangeSetPersister do
         child1 = FactoryBot.create_for_repository(:scanned_resource, title: ["child1"])
         child2 = FactoryBot.create_for_repository(:scanned_resource, title: ["child2"])
         structure = {
-          "label": "Top!",
-          "nodes": [
-            { "label": "Chapter 1",
-              "nodes": [
-                { "proxy": child1.id }
-              ] },
-            { "label": "Chapter 2",
-              "nodes": [
-                { "proxy": child2.id }
-              ] }
+          label: "Top!",
+          nodes: [
+            {label: "Chapter 1",
+             nodes: [
+               {proxy: child1.id}
+             ]},
+            {label: "Chapter 2",
+             nodes: [
+               {proxy: child2.id}
+             ]}
           ]
         }
         parent = FactoryBot.create_for_repository(:scanned_resource, logical_structure: [structure], member_ids: [child1.id, child2.id])
@@ -1270,7 +1270,7 @@ RSpec.describe ChangeSetPersister do
         change_set.validate(state: "all_in_production")
 
         change_set_persister.save(change_set: change_set)
-        doc = solr.get("select", params: { q: "id:#{folder.id}", fl: "read_access_group_ssim", rows: 1 })["response"]["docs"].first
+        doc = solr.get("select", params: {q: "id:#{folder.id}", fl: "read_access_group_ssim", rows: 1})["response"]["docs"].first
         expect(doc["read_access_group_ssim"]).to eq ["public"]
         expected_result = {
           "id" => folder.id.to_s,
@@ -1297,7 +1297,7 @@ RSpec.describe ChangeSetPersister do
       reloaded = query_service.find_by(id: parent.id)
       expect(reloaded.member_ids).to eq [output.id]
       expect(reloaded.thumbnail_id).to eq [output.id]
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
+      solr_record = Blacklight.default_index.connection.get("select", params: {qt: "document", q: "id:#{output.id}"})["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
       expect(output.cached_parent_id).to eq reloaded.id
     end
@@ -1313,7 +1313,7 @@ RSpec.describe ChangeSetPersister do
 
       expect(reloaded.member_ids).to eq [output.id]
       expect(reloaded.thumbnail_id).to eq [output.id]
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
+      solr_record = Blacklight.default_index.connection.get("select", params: {qt: "document", q: "id:#{output.id}"})["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
     end
 
@@ -1335,7 +1335,7 @@ RSpec.describe ChangeSetPersister do
       expect(old_reloaded.member_ids).to eq []
       expect(old_reloaded.thumbnail_id).to be_blank
 
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
+      solr_record = Blacklight.default_index.connection.get("select", params: {qt: "document", q: "id:#{output.id}"})["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{new_parent.id}"]
     end
 
@@ -1557,7 +1557,7 @@ RSpec.describe ChangeSetPersister do
 
       change_set_persister.save(change_set: change_set)
 
-      doc = solr.get("select", params: { q: "id:#{resource.id}", fl: "member_of_collection_titles_ssim", rows: 1 })["response"]["docs"].first
+      doc = solr.get("select", params: {q: "id:#{resource.id}", fl: "member_of_collection_titles_ssim", rows: 1})["response"]["docs"].first
       expect(doc["member_of_collection_titles_ssim"]).to eq ["New Title"]
     end
 
@@ -1571,10 +1571,10 @@ RSpec.describe ChangeSetPersister do
 
       change_set_persister.save(change_set: change_set)
 
-      folder_doc = solr.get("select", params: { q: "id:#{folder.id}", fl: "ephemera_project_ssim", rows: 1 })["response"]["docs"].first
+      folder_doc = solr.get("select", params: {q: "id:#{folder.id}", fl: "ephemera_project_ssim", rows: 1})["response"]["docs"].first
       expect(folder_doc["ephemera_project_ssim"]).to eq ["New Title"]
 
-      box_doc = solr.get("select", params: { q: "id:#{box.id}", fl: "ephemera_project_ssim", rows: 1 })["response"]["docs"].first
+      box_doc = solr.get("select", params: {q: "id:#{box.id}", fl: "ephemera_project_ssim", rows: 1})["response"]["docs"].first
       expect(box_doc["ephemera_project_ssim"]).to eq ["New Title"]
     end
   end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "tempfile"
 
 class PendingUpload < Valkyrie::Resource
@@ -40,20 +41,18 @@ class PendingUpload < Valkyrie::Resource
 
     def upload_file
       @upload_file ||= begin
-                         upload_files = BrowseEverything::UploadFile.find(upload_file_id)
-                         upload_files.first
-                       end
+        upload_files = BrowseEverything::UploadFile.find(upload_file_id)
+        upload_files.first
+      end
     end
     delegate :bytestream, to: :upload_file
 
     def downloaded_file
       @downloaded_file ||= begin
-                             target = Dir::Tmpname.create(original_filename) {}
-                             File.open(target, "wb") do |output|
-                               output.write(upload_file.download)
-                             end
-                             upload_file.purge_bytestream
-                             target
-                           end
+        target = Dir::Tmpname.create(original_filename) {}
+        File.binwrite(target, upload_file.download)
+        upload_file.purge_bytestream
+        target
+      end
     end
 end

@@ -1,13 +1,14 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe CicognaraCSV do
   describe "#headers" do
     let(:headers) do
       ["digital_cico_number", "label", "manifest", "contributing_library", "owner_call_number",
-       "owner_system_number", "other_number", "version_edition_statement", "version_publication_statement",
-       "version_publication_date", "additional_responsibility", "provenance", "physical_characteristics",
-       "rights", "based_on_original"]
+        "owner_system_number", "other_number", "version_edition_statement", "version_publication_statement",
+        "version_publication_date", "additional_responsibility", "provenance", "physical_characteristics",
+        "rights", "based_on_original"]
     end
 
     it "has a list of headers" do
@@ -33,8 +34,8 @@ RSpec.describe CicognaraCSV do
       end
       let(:obj) do
         FactoryBot.create_for_repository :complete_scanned_resource,
-                                         source_metadata_identifier: ["2068747"],
-                                         member_of_collection_ids: [col.id], import_metadata: true
+          source_metadata_identifier: ["2068747"],
+          member_of_collection_ids: [col.id], import_metadata: true
       end
       before do
         obj
@@ -47,9 +48,9 @@ RSpec.describe CicognaraCSV do
     context "with a Vatican/Cicognara rights statement" do
       let(:obj) do
         FactoryBot.create_for_repository :complete_scanned_resource,
-                                         source_metadata_identifier: ["2068747"],
-                                         rights_statement: ["http://cicognara.org/microfiche_copyright"],
-                                         member_of_collection_ids: [col.id], import_metadata: true
+          source_metadata_identifier: ["2068747"],
+          rights_statement: ["http://cicognara.org/microfiche_copyright"],
+          member_of_collection_ids: [col.id], import_metadata: true
       end
       let(:values) do
         [["cico:qgb", "Microfiche", manifest_url, "Bibliotheca Apostolica Vaticana", "Oversize NA2810 .H75f",

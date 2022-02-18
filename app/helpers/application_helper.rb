@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ApplicationHelper
   include ::BlacklightHelper
   include ::Blacklight::LayoutHelperBehavior
@@ -78,7 +79,7 @@ module ApplicationHelper
   # @param value [String] field value to query
   # @return [String]
   def facet_search_url(field:, value:)
-    query = { "f[#{field}][]" => value }.to_param
+    query = {"f[#{field}][]" => value}.to_param
     "#{root_path}?#{query}"
   end
 
@@ -162,7 +163,7 @@ module ApplicationHelper
   # @return [String]
   def manifest_path(resource)
     path_args = [[:manifest, resource]]
-    path_args << { auth_token: auth_token_param } if auth_token_param
+    path_args << {auth_token: auth_token_param} if auth_token_param
     polymorphic_path(*path_args)
   end
 
@@ -231,7 +232,7 @@ module ApplicationHelper
   #   link_back_to_catalog(label: 'Back to Search')
   #   link_back_to_catalog(label: 'Back to Search', route_set: my_engine)
   # @see Blacklight::UrlHelperBehavior#link_back_to_catalog
-  def link_back_to_catalog(opts = { label: nil })
+  def link_back_to_catalog(opts = {label: nil})
     scope = opts.delete(:route_set) || self
     # Filter for cases where the query params were cached by AJAX queries from
     # the client
@@ -253,15 +254,15 @@ module ApplicationHelper
     # query_params = search_state.reset(current_query_params).to_hash unless current_query_async?
 
     link_url = if query_params.blank?
-                 search_action_path(only_path: true)
-               else
-                 # This handles cases where the previous query has been cleared
-                 query_params[:q] = "" unless query_params.key?("q")
-                 scope.url_for(query_params)
-               end
+      search_action_path(only_path: true)
+    else
+      # This handles cases where the previous query has been cleared
+      query_params[:q] = "" unless query_params.key?("q")
+      scope.url_for(query_params)
+    end
 
     label = opts.delete(:label)
-    label ||= t("blacklight.back_to_bookmarks") if link_url =~ /bookmarks/
+    label ||= t("blacklight.back_to_bookmarks") if /bookmarks/.match?(link_url)
     label ||= t("blacklight.back_to_search")
 
     link_to label, link_url, opts

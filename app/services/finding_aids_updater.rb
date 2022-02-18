@@ -34,7 +34,7 @@ class FindingAidsUpdater
       def updated_collection_codes(date)
         svn_config = Rails.application.config_for :svn
         date = date.to_formatted_s(:iso8601)
-        stdout, status = Open3.capture2("svn diff --summarize -r {#{date}}:HEAD --username #{svn_config['user']} --password #{svn_config['pass']} #{File.join(svn_config['url'], 'pulfa/trunk/eads')}")
+        stdout, status = Open3.capture2("svn diff --summarize -r {#{date}}:HEAD --username #{svn_config["user"]} --password #{svn_config["pass"]} #{File.join(svn_config["url"], "pulfa/trunk/eads")}")
         raise StandardError unless status.success?
         parse_collection_ids(stdout)
       end

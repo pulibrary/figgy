@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # NOTE: This is a modified version of simple_form's default config file.
 #       The only changes were to move the inputs to after the hints and errors.
 
@@ -17,8 +18,8 @@ SimpleForm.setup do |config|
     b.optional :min_max
     b.optional :readonly
     b.use :label, class: "control-label"
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+    b.use :error, wrap_with: {tag: "span", class: "help-block"}
+    b.use :hint, wrap_with: {tag: "p", class: "help-block"}
     b.use :input, class: "form-control"
   end
 
@@ -28,8 +29,8 @@ SimpleForm.setup do |config|
     b.optional :maxlength
     b.optional :readonly
     b.use :label, class: "control-label"
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+    b.use :error, wrap_with: {tag: "span", class: "help-block"}
+    b.use :hint, wrap_with: {tag: "p", class: "help-block"}
     b.use :input
   end
 
@@ -41,16 +42,16 @@ SimpleForm.setup do |config|
       ba.use :label_input
     end
 
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+    b.use :error, wrap_with: {tag: "span", class: "help-block"}
+    b.use :hint, wrap_with: {tag: "p", class: "help-block"}
   end
 
   config.wrappers :vertical_radio_and_checkboxes, tag: "div", class: "form-group", error_class: "has-error" do |b|
     b.use :html5
     b.optional :readonly
     b.use :label, class: "control-label"
-    b.use :error, wrap_with: { tag: "span", class: "help-block" }
-    b.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+    b.use :error, wrap_with: {tag: "span", class: "help-block"}
+    b.use :hint, wrap_with: {tag: "p", class: "help-block"}
     b.use :input
   end
 
@@ -64,8 +65,8 @@ SimpleForm.setup do |config|
     b.use :label, class: "col-sm-3 control-label"
 
     b.wrapper tag: "div", class: "col-sm-9" do |ba|
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :error, wrap_with: {tag: "span", class: "help-block"}
+      ba.use :hint, wrap_with: {tag: "p", class: "help-block"}
       ba.use :input, class: "form-control"
     end
   end
@@ -78,8 +79,8 @@ SimpleForm.setup do |config|
     b.use :label, class: "col-sm-3 control-label"
 
     b.wrapper tag: "div", class: "col-sm-9" do |ba|
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :error, wrap_with: {tag: "span", class: "help-block"}
+      ba.use :hint, wrap_with: {tag: "p", class: "help-block"}
       ba.use :input
     end
   end
@@ -93,8 +94,8 @@ SimpleForm.setup do |config|
         ba.use :label_input
       end
 
-      wr.use :error, wrap_with: { tag: "span", class: "help-block" }
-      wr.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      wr.use :error, wrap_with: {tag: "span", class: "help-block"}
+      wr.use :hint, wrap_with: {tag: "p", class: "help-block"}
     end
   end
 
@@ -105,8 +106,8 @@ SimpleForm.setup do |config|
     b.use :label, class: "col-sm-3 control-label"
 
     b.wrapper tag: "div", class: "col-sm-9" do |ba|
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :error, wrap_with: {tag: "span", class: "help-block"}
+      ba.use :hint, wrap_with: {tag: "p", class: "help-block"}
       ba.use :input
     end
   end
@@ -120,9 +121,9 @@ SimpleForm.setup do |config|
     b.optional :readonly
     b.wrapper tag: "div", class: "label-error" do |_input|
       b.use :label
-      b.use :error, wrap_with: { tag: "span", class: "control-label" }
+      b.use :error, wrap_with: {tag: "span", class: "control-label"}
     end
-    b.use :hint,  wrap_with: { tag: "p", class: "help-inline" }
+    b.use :hint, wrap_with: {tag: "p", class: "help-inline"}
     b.use :input, class: "form-control"
   end
 
@@ -131,8 +132,8 @@ SimpleForm.setup do |config|
     b.optional :readonly
     b.use :label, class: "control-label"
     b.wrapper tag: "div", class: "form-inline" do |ba|
-      ba.use :error, wrap_with: { tag: "span", class: "help-block" }
-      ba.use :hint,  wrap_with: { tag: "p", class: "help-block" }
+      ba.use :error, wrap_with: {tag: "span", class: "help-block"}
+      ba.use :hint, wrap_with: {tag: "p", class: "help-block"}
       ba.use :input, class: "form-control"
     end
   end

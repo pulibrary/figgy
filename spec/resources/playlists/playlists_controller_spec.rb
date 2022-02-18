@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 include FixtureFileUpload
 
@@ -38,7 +39,7 @@ RSpec.describe PlaylistsController, type: :controller do
 
     context "it creates a playlist with the media reserve filesets" do
       let(:user) { FactoryBot.create(:admin) }
-      let(:params) { { recording_id: resource.id } }
+      let(:params) { {recording_id: resource.id} }
       let(:audio_file) { FactoryBot.create_for_repository(:file_set) }
       let(:resource) { FactoryBot.create_for_repository(:recording, member_ids: audio_file.id, part_of: "mustest") }
       let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
@@ -80,7 +81,7 @@ RSpec.describe PlaylistsController, type: :controller do
 
     context "html access control" do
       let(:factory) { :playlist }
-      let(:extra_params) { { playlist: { title: ["My Playlist"] } } }
+      let(:extra_params) { {playlist: {title: ["My Playlist"]}} }
       it_behaves_like "an access controlled update request"
 
       context "when a Playlist has been created" do
@@ -92,7 +93,7 @@ RSpec.describe PlaylistsController, type: :controller do
         end
 
         it "adds member IDs for proxies" do
-          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file_set.id] } }
+          patch :update, params: {id: resource.id.to_s, playlist: {member_ids: [proxy_file_set.id]}}
 
           expect(response).to be_redirect
           expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
@@ -117,7 +118,7 @@ RSpec.describe PlaylistsController, type: :controller do
         let(:resource) { FactoryBot.create_for_repository(:playlist, member_ids: [proxy_file_set.id]) }
 
         it "replaces member IDs for proxies" do
-          patch :update, params: { id: resource.id.to_s, playlist: { member_ids: [proxy_file_set2.id] } }
+          patch :update, params: {id: resource.id.to_s, playlist: {member_ids: [proxy_file_set2.id]}}
 
           expect(response).to be_redirect
           expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
@@ -135,7 +136,7 @@ RSpec.describe PlaylistsController, type: :controller do
         let(:file_set) { scanned_resource.decorate.members.first }
         it "filters the duplicate FileSet IDs" do
           expect(resource.member_ids).to be_empty
-          patch :update, params: { id: resource.id.to_s, playlist: { file_set_ids: [file_set.id, file_set.id] } }
+          patch :update, params: {id: resource.id.to_s, playlist: {file_set_ids: [file_set.id, file_set.id]}}
 
           reloaded = query_service.find_by(id: resource.id)
           expect(reloaded.member_ids.length).to eq(1)
@@ -175,7 +176,7 @@ RSpec.describe PlaylistsController, type: :controller do
 
       context "with a Playlist proxying to audio FileSets" do
         it "generates the IIIF Manifest" do
-          get :manifest, params: { id: resource.id, format: :json }
+          get :manifest, params: {id: resource.id, format: :json}
 
           expect(response.status).to eq(200)
           expect(response.body).not_to be_empty
@@ -209,7 +210,7 @@ RSpec.describe PlaylistsController, type: :controller do
 
       context "when an invalid resource ID is requested" do
         it "returns a not found status response" do
-          get :manifest, params: { id: "invalid", format: :json }
+          get :manifest, params: {id: "invalid", format: :json}
 
           expect(response.status).to eq(200)
           expect(response.body).not_to be_empty
@@ -227,7 +228,7 @@ RSpec.describe PlaylistsController, type: :controller do
         end
 
         it "generates the manifest for the resource" do
-          get :manifest, params: { id: resource.id.to_s }, format: :json
+          get :manifest, params: {id: resource.id.to_s}, format: :json
 
           expect(response.body).not_to be_empty
           manifest_values = JSON.parse(response.body)
@@ -261,7 +262,7 @@ RSpec.describe PlaylistsController, type: :controller do
 
         context "when transmitting a HEAD request" do
           it "responds with a link header specifying the title of the resource" do
-            head :manifest, params: { id: resource.id.to_s }, format: :json
+            head :manifest, params: {id: resource.id.to_s}, format: :json
 
             expect(response).to be_successful
             expect(response.headers).to include "Link"
@@ -278,7 +279,7 @@ RSpec.describe PlaylistsController, type: :controller do
         end
 
         it "generates a manifest with URLs containing the auth. token" do
-          get :manifest, params: { id: persisted.id.to_s, auth_token: persisted.auth_token }, format: :json
+          get :manifest, params: {id: persisted.id.to_s, auth_token: persisted.auth_token}, format: :json
 
           expect(response.body).not_to be_empty
           manifest_values = JSON.parse(response.body)
@@ -305,14 +306,14 @@ RSpec.describe PlaylistsController, type: :controller do
       it "redirects to login or root" do
         resource = FactoryBot.create_for_repository(:playlist)
 
-        get :structure, params: { id: resource.id.to_s }
+        get :structure, params: {id: resource.id.to_s}
         expect(response).to be_redirect
       end
     end
 
     context "when a playlist doesn't exist" do
       it "raises an error" do
-        get :structure, params: { id: "banana" }
+        get :structure, params: {id: "banana"}
         expect(response).to redirect_to_not_found
       end
     end
@@ -326,14 +327,14 @@ RSpec.describe PlaylistsController, type: :controller do
           :playlist,
           member_ids: proxy_file_set.id,
           logical_structure: [
-            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: proxy_file_set.id }] }] }
+            {label: "testing", nodes: [{label: "Chapter 1", nodes: [{proxy: proxy_file_set.id}]}]}
           ]
         )
 
         query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
         allow(query_service).to receive(:find_by).with(id: resource.id).and_call_original
         allow(query_service).to receive(:find_inverse_references_by)
-        get :structure, params: { id: resource.id.to_s }
+        get :structure, params: {id: resource.id.to_s}
 
         expect(response.body).to have_selector "li[data-proxy='#{proxy_file_set.id}']"
         expect(response.body).to have_field("label", with: "Chapter 1")

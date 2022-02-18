@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # This migration creates a couple functions to map nested Valkyrie::IDs that are
 # stored in the database to a flat array. These functions are then indexed when
 # they're used so we can do some queries faster, especially

@@ -11,7 +11,7 @@ RSpec.describe MediainfoCharacterizationService do
   let(:query_service) { adapter.query_service }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:resource) do
-    attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile] }
+    attributes = {id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile]}
     file_metadata_node = FileMetadata.for(file: file).new(attributes)
     allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 
@@ -59,7 +59,7 @@ RSpec.describe MediainfoCharacterizationService do
     it "sets technical metadata attributes empty" do
       new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
 
-      expect(Valkyrie.logger).to have_received(:warn).at_least(:once).with(/MediainfoCharacterizationService\: Failed to characterize/)
+      expect(Valkyrie.logger).to have_received(:warn).at_least(:once).with(/MediainfoCharacterizationService: Failed to characterize/)
       expect(new_file_set.original_file.mime_type).to eq ["audio/ogg"]
       expect(new_file_set.original_file.date_of_digitization).to be_empty
       expect(new_file_set.original_file.producer).to be_empty

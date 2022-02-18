@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FileSet < Resource
   enable_optimistic_locking
   include Valkyrie::Resource::AccessControls
@@ -18,20 +19,20 @@ class FileSet < Resource
   attribute :service_targets, Valkyrie::Types::Set
 
   delegate :width,
-           :height,
-           :x_resolution,
-           :y_resolution,
-           :bits_per_sample,
-           :size,
-           :camera_model,
-           :software,
-           :geometry,
-           :run_fixity,
-           :processing_note,
-           :error_message,
-           :mime_type,
-           to: :primary_file,
-           allow_nil: true
+    :height,
+    :x_resolution,
+    :y_resolution,
+    :bits_per_sample,
+    :size,
+    :camera_model,
+    :software,
+    :geometry,
+    :run_fixity,
+    :processing_note,
+    :error_message,
+    :mime_type,
+    to: :primary_file,
+    allow_nil: true
 
   delegate :date_of_digitization, :producer, :source_media_type, :duration, to: :preservation_file, allow_nil: true
 

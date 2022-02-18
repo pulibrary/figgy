@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventGenerator
   class ManifestEventGenerator
     attr_reader :rabbit_exchange
@@ -7,9 +8,11 @@ class EventGenerator
       @rabbit_exchange = rabbit_exchange
     end
 
-    def derivatives_created(record); end
+    def derivatives_created(record)
+    end
 
-    def derivatives_deleted(record); end
+    def derivatives_deleted(record)
+    end
 
     def record_created(record)
       return unless record

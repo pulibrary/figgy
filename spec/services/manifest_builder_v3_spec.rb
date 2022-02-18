@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ManifestBuilderV3 do
@@ -13,16 +14,16 @@ RSpec.describe ManifestBuilderV3 do
   def logical_structure(file_set_id)
     [
       {
-        "label": "Table of Contents",
-        "nodes": [
+        label: "Table of Contents",
+        nodes: [
           {
-            "label": "Chapter 1",
-            "nodes": [
+            label: "Chapter 1",
+            nodes: [
               {
-                "label": "Chapter 1a",
-                "nodes": [
+                label: "Chapter 1a",
+                nodes: [
                   {
-                    "proxy": file_set_id
+                    proxy: file_set_id
                   }
                 ]
               }
@@ -40,22 +41,22 @@ RSpec.describe ManifestBuilderV3 do
       let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
       let(:resource) do
         FactoryBot.create_for_repository(:scanned_map,
-                                         title: title,
-                                         coverage: coverage,
-                                         label: "test label",
-                                         actor: "test person",
-                                         sort_title: "test title2",
-                                         rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
-                                         call_number: "test value2",
-                                         edition: "test edition",
-                                         nav_date: "test date",
-                                         identifier: "ark:/88435/abc1234de",
-                                         source_metadata_identifier: "123456",
-                                         imported_metadata: [{
-                                           description: "Test Description",
-                                           location: ["RCPPA BL980.G7 B66 1982"]
-                                         }],
-                                         viewing_direction: ["right-to-left"])
+          title: title,
+          coverage: coverage,
+          label: "test label",
+          actor: "test person",
+          sort_title: "test title2",
+          rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"),
+          call_number: "test value2",
+          edition: "test edition",
+          nav_date: "test date",
+          identifier: "ark:/88435/abc1234de",
+          source_metadata_identifier: "123456",
+          imported_metadata: [{
+            description: "Test Description",
+            location: ["RCPPA BL980.G7 B66 1982"]
+          }],
+          viewing_direction: ["right-to-left"])
       end
 
       before do
@@ -103,11 +104,11 @@ RSpec.describe ManifestBuilderV3 do
       let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
       let(:resource) do
         FactoryBot.create_for_repository(:scanned_map,
-                                         downloadable: "none",
-                                         imported_metadata: [{
-                                           coverage: coverage,
-                                           description: "Test Description"
-                                         }])
+          downloadable: "none",
+          imported_metadata: [{
+            coverage: coverage,
+            description: "Test Description"
+          }])
       end
 
       it "displays coverage and disables download" do

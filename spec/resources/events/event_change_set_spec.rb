@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe EventChangeSet do
@@ -12,12 +13,12 @@ RSpec.describe EventChangeSet do
   let(:message) { "Test message" }
   let(:event) do
     FactoryBot.build(:event,
-                     type: type,
-                     status: status,
-                     resource_id: resource_id,
-                     child_property: child_property,
-                     child_id: child_id,
-                     message: message)
+      type: type,
+      status: status,
+      resource_id: resource_id,
+      child_property: child_property,
+      child_id: child_id,
+      message: message)
   end
 
   describe "#type" do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe TemplatesController, type: :controller do
@@ -18,7 +19,7 @@ RSpec.describe TemplatesController, type: :controller do
       field2 = FactoryBot.create_for_repository(:ephemera_field, field_name: "1", member_of_vocabulary_id: vocabulary.id)
       project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [field.id, field2.id])
 
-      get :new, params: { model_class: "EphemeraFolder", ephemera_project_id: project.id.to_s }
+      get :new, params: {model_class: "EphemeraFolder", ephemera_project_id: project.id.to_s}
 
       expect(response.body).to have_field "template[title]"
       expect(response.body).to have_select "Language", options: ["Test"]
@@ -33,7 +34,7 @@ RSpec.describe TemplatesController, type: :controller do
       project = FactoryBot.create_for_repository(:ephemera_project)
       template = FactoryBot.create_for_repository(:template)
 
-      delete :destroy, params: { ephemera_project_id: project.id.to_s, id: template.id.to_s }
+      delete :destroy, params: {ephemera_project_id: project.id.to_s, id: template.id.to_s}
 
       expect { query_service.find_by(id: template.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
       expect(response).to redirect_to solr_document_path(id: project.id)

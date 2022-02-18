@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class LoanChangeSet < ChangeSet
     delegate :human_readable_type, to: :model

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BulkIngestService
   attr_reader :change_set_persister, :logger, :change_set_param
   delegate :metadata_adapter, to: :change_set_persister
@@ -79,9 +80,9 @@ class BulkIngestService
     #   have a use case for them to be component IDs.
     def title_or_identifier(klass, path_basename)
       if klass.attribute_names.include?(:source_metadata_identifier) && RemoteRecord.bibdata?(path_basename.to_s)
-        { source_metadata_identifier: path_basename.to_s }
+        {source_metadata_identifier: path_basename.to_s}
       else
-        { title: path_basename }
+        {title: path_basename}
       end
     end
 
@@ -133,10 +134,10 @@ class BulkIngestService
 
     def find_by(property:, value:)
       results = if property.to_sym == :id
-                  [query_service.find_by(id: Valkyrie::ID.new(value.to_s))]
-                else
-                  property_query_service.find_by_property(property: property, value: value).to_a
-                end
+        [query_service.find_by(id: Valkyrie::ID.new(value.to_s))]
+      else
+        property_query_service.find_by_property(property: property, value: value).to_a
+      end
       raise "Failed to find the resource for #{property}:#{value}" if results.empty?
       results.first
     rescue => error
@@ -163,7 +164,7 @@ class BulkIngestService
     # @param parent_resource [Valkyrie::Resource] Parent that the files will be
     #   attached to.
     # @return [Array<Pathname>] the paths to any files
-    def files(path:, file_filters: [], parent_resource:)
+    def files(path:, parent_resource:, file_filters: [])
       file_paths = path.children.select(&:file?)
       if file_filters.present?
         file_paths = file_paths.select do |file|
@@ -200,12 +201,12 @@ class BulkIngestService
           mime_types = MIME::Types.type_for(basename)
           mime_type = mime_types.first
           title = if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
-                    basename
-                  elsif raster_resource_parent?
-                    basename
-                  else
-                    (idx + 1).to_s
-                  end
+            basename
+          elsif raster_resource_parent?
+            basename
+          else
+            (idx + 1).to_s
+          end
           service_targets = "tiles" if raster_resource_parent? && mosaic_service_target?(basename)
           nodes << IngestableFile.new(
             file_path: f,

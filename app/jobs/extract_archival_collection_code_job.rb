@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ExtractArchivalCollectionCodeJob < ApplicationJob
   def perform(logger: Logger.new(STDOUT))
     query_service.find_all_of_model(model: ScannedResource).each do |sr|

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CollectionValidator < ActiveModel::Validator
   def validate(record)
     validate_collection record

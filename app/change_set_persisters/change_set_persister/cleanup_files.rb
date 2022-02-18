@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   class CleanupFiles
     attr_reader :resource
-    def initialize(change_set_persister: nil, change_set:, post_save_resource: nil)
+    def initialize(change_set:, change_set_persister: nil, post_save_resource: nil)
       @resource = change_set.resource
     end
 

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 module Numismatics
   class NoteDecorator < Valkyrie::ResourceDecorator
     display :note,
-            :type
+      :type
 
     def manageable_files?
       false

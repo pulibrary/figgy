@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 include FixtureFileUpload
 
@@ -22,7 +23,7 @@ RSpec.describe VectorResourcesController, type: :controller do
         # TODO: look at what create_for_repository actually does
         parent = FactoryBot.create_for_repository(:vector_resource)
 
-        get :new, params: { parent_id: parent.id.to_s }
+        get :new, params: {parent_id: parent.id.to_s}
         expect(response.body).to have_field "Title"
         expect(response.body).to have_field "Rights Statement"
         expect(response.body).to have_field "Rights Note"
@@ -62,7 +63,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       it_behaves_like "an access controlled create request"
     end
     it "can create a vector resource" do
-      post :create, params: { vector_resource: valid_params }
+      post :create, params: {vector_resource: valid_params}
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
@@ -82,7 +83,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       end
       let(:collection) { FactoryBot.create_for_repository(:collection) }
       it "works" do
-        post :create, params: { vector_resource: valid_params }
+        post :create, params: {vector_resource: valid_params}
 
         expect(response).to be_redirect
         expect(response.location).to start_with "http://test.host/catalog/"
@@ -91,7 +92,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       end
     end
     it "renders the form if it doesn't create a vector resource" do
-      post :create, params: { vector_resource: invalid_params }
+      post :create, params: {vector_resource: invalid_params}
       expect(response).to render_template "base/new"
     end
   end
@@ -104,7 +105,7 @@ RSpec.describe VectorResourcesController, type: :controller do
     end
     it "can delete a vector resource" do
       vector_resource = FactoryBot.create_for_repository(:vector_resource)
-      delete :destroy, params: { id: vector_resource.id.to_s }
+      delete :destroy, params: {id: vector_resource.id.to_s}
 
       expect(response).to redirect_to root_path
       expect { query_service.find_by(id: vector_resource.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
@@ -119,7 +120,7 @@ RSpec.describe VectorResourcesController, type: :controller do
     end
     context "when a vector resource doesn't exist" do
       it "raises an error" do
-        get :edit, params: { id: "test" }
+        get :edit, params: {id: "test"}
         expect(response).to redirect_to_not_found
       end
     end
@@ -127,7 +128,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       render_views
       it "renders a form" do
         vector_resource = FactoryBot.create_for_repository(:vector_resource)
-        get :edit, params: { id: vector_resource.id.to_s }
+        get :edit, params: {id: vector_resource.id.to_s}
 
         expect(response.body).to have_field "Title", with: vector_resource.title.first
         expect(response.body).to have_button "Save"
@@ -141,7 +142,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       render_views
       it "renders a drop-down to select thumbnail" do
         vector_resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [file_set.id, child_vector_resource.id])
-        get :edit, params: { id: vector_resource.id.to_s }
+        get :edit, params: {id: vector_resource.id.to_s}
 
         expect(response.body).to have_select "Thumbnail", name: "vector_resource[thumbnail_id]", options: ["File", "Child Vector"]
       end
@@ -152,19 +153,19 @@ RSpec.describe VectorResourcesController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :vector_resource }
-      let(:extra_params) { { vector_resource: { title: ["Two"] } } }
+      let(:extra_params) { {vector_resource: {title: ["Two"]}} }
       it_behaves_like "an access controlled update request"
     end
     context "when a vector resource doesn't exist" do
       it "raises an error" do
-        patch :update, params: { id: "test" }
+        patch :update, params: {id: "test"}
         expect(response).to redirect_to_not_found
       end
     end
     context "when it does exist" do
       it "saves it and redirects" do
         vector_resource = FactoryBot.create_for_repository(:vector_resource)
-        patch :update, params: { id: vector_resource.id.to_s, vector_resource: { title: ["Two"] } }
+        patch :update, params: {id: vector_resource.id.to_s, vector_resource: {title: ["Two"]}}
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{vector_resource.id}"
@@ -175,7 +176,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       end
       it "renders the form if it fails validations" do
         vector_resource = FactoryBot.create_for_repository(:vector_resource)
-        patch :update, params: { id: vector_resource.id.to_s, vector_resource: { title: [""] } }
+        patch :update, params: {id: vector_resource.id.to_s, vector_resource: {title: [""]}}
 
         expect(response).to render_template "base/edit"
       end
@@ -197,7 +198,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       it "sets the record and children variables" do
         child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])
         parent = FactoryBot.create_for_repository(:vector_resource, member_ids: child.id)
-        get :file_manager, params: { id: parent.id }
+        get :file_manager, params: {id: parent.id}
 
         expect(assigns(:change_set).id).to eq parent.id
         expect(assigns(:children).map(&:id)).to eq [child.id]
@@ -220,7 +221,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       end
 
       it "renders the document" do
-        get :geoblacklight, params: { id: vector_resource.id, format: :json }
+        get :geoblacklight, params: {id: vector_resource.id, format: :json}
         expect(response).to be_successful
       end
     end
@@ -231,7 +232,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       end
 
       it "returns an error message" do
-        get :geoblacklight, params: { id: vector_resource.id, format: :json }
+        get :geoblacklight, params: {id: vector_resource.id, format: :json}
         expect(response.body).to include("problem")
       end
     end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ArchivalMediaCollectionDecorator < CollectionDecorator
   display Schema::Common.attributes
   suppress :source_jsonld, :source_metadata
@@ -35,7 +36,7 @@ class ArchivalMediaCollectionDecorator < CollectionDecorator
       ControlledVocabulary.for(:language).find(language).label
     end
   end
-  alias display_imported_language imported_language
+  alias_method :display_imported_language, :imported_language
 
   private
 

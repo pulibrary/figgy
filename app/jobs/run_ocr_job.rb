@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RunOCRJob < ApplicationJob
   queue_as :super_low
   delegate :query_service, to: :metadata_adapter

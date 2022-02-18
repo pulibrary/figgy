@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class OrangelightCoinBuilder
   include ThumbnailHelper
 
@@ -15,7 +16,7 @@ class OrangelightCoinBuilder
   private
 
     def coin_builder_error
-      { error: "#{decorator.title.first} with id: #{decorator.id} has no parent numismatic issue and cannot build an OL document." }
+      {error: "#{decorator.title.first} with id: #{decorator.id} has no parent numismatic issue and cannot build an OL document."}
     end
 
     def clean_document(hash)
@@ -26,8 +27,6 @@ class OrangelightCoinBuilder
       end
     end
 
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/MethodLength
     def document_hash
       document_coin_hash.merge(document_parent_hash) if document_parent_hash.present?
     end

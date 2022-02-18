@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "csv"
 
 class IngestEphemeraCSV
@@ -19,8 +20,8 @@ class IngestEphemeraCSV
       logger.info "Ingesting row #{row}"
       change_set = BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
       folder_data = FolderData.new(base_path: imgdir,
-                                   change_set_persister: change_set_persister,
-                                   persist_p: false,
+        change_set_persister: change_set_persister,
+        persist_p: false,
                                    **row.to_h)
       change_set.validate(folder_data.attributes)
       change_set.validate(files: folder_data.files)
@@ -34,8 +35,8 @@ class IngestEphemeraCSV
     @validation_errors = {}
     mdata_table.each_with_index do |row, index|
       folder_data = FolderData.new(base_path: imgdir,
-                                   change_set_persister: change_set_persister,
-                                   persist_p: false,
+        change_set_persister: change_set_persister,
+        persist_p: false,
                                    **row.to_h)
       change_set = BoxlessEphemeraFolderChangeSet.new(EphemeraFolder.new)
       change_set.validate(folder_data.attributes)
@@ -45,9 +46,6 @@ class IngestEphemeraCSV
     @validation_errors.empty?
   end
 end
-
-# rubocop:disable Metrics/ClassLength
-# rubocop:disable Metrics/AbcSize
 
 class FolderData
   attr_accessor :image_path, :fields, :change_set_persister, :vocab_service, :logger
@@ -60,10 +58,9 @@ class FolderData
     @change_set_persister = change_set_persister
     @logger = logger
     @vocab_service = VocabularyService::EphemeraVocabularyService.new(change_set_persister: change_set_persister,
-                                                                      persist_if_not_found: persist_p)
+      persist_if_not_found: persist_p)
   end
 
-  # rubocop:disable Metrics/MethodLength
   def attributes
     {
       member_ids: Array(fields[:member_ids]),
@@ -142,7 +139,7 @@ class FolderData
     if fields[:page_count]
       Array(fields[:page_count])
     else
-      Array(Array(files).count.to_s)
+      Array(Array(files).size.to_s)
     end
   end
 
@@ -179,15 +176,13 @@ class FolderData
 
   def subject
     return unless fields[:subject].present?
-    subjects = fields[:subject].split(/;|\//).map { |s| s.strip.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
+    subjects = fields[:subject].split(/;|\//).map { |s| s.strip.split("--") }.map { |c, s| {"category" => c, "topic" => s} }
     subjects.uniq.map do |sub|
-      begin
-        subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
-      rescue => e
-        logger.warn format("%s: no subject for %s", e.class, sub)
-      else
-        subject&.id
-      end
+      subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
+    rescue => e
+      logger.warn format("%s: no subject for %s", e.class, sub)
+    else
+      subject&.id
     end
   end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ReprocessMetsJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
   def perform(collection_id:)
@@ -24,8 +25,8 @@ class ReprocessMetsJob < ApplicationJob
 
   def change_set_persister
     @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                     storage_adapter: storage_adapter,
-                                                     queue: queue_name)
+      storage_adapter: storage_adapter,
+      queue: queue_name)
   end
 
   def metadata_adapter

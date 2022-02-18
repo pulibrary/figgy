@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class WithProxyForObject < SimpleDelegator
   attr_reader :members
   def initialize(logical_order, members)
@@ -13,7 +14,7 @@ class WithProxyForObject < SimpleDelegator
   def unstructured_objects
     @unstructured_objects ||=
       begin
-        unstructured_proxies = (members - all_nodes).map { |x| { proxy: x.id } }
+        unstructured_proxies = (members - all_nodes).map { |x| {proxy: x.id} }
         node_class.new(nodes: unstructured_proxies)
       end
   end
@@ -23,7 +24,7 @@ class WithProxyForObject < SimpleDelegator
   end
 
   def each_node(&block)
-    return enum_for(:each_node) unless block_given?
+    return enum_for(:each_node) unless block
     nodes.each do |node|
       yield node.proxy_for_object if node.proxy_for_object
       node.send(:each_node, &block)

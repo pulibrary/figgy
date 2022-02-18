@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe BoxlessEphemeraFolderChangeSet do
@@ -7,7 +8,7 @@ RSpec.describe BoxlessEphemeraFolderChangeSet do
   it_behaves_like "an ephemera folder change set", described_class
 
   describe "#valid" do
-    let(:valid_params) { { barcode: "", title: ["foo"], language: ["English"], page_count: [1], visibility: ["private"], rights_statement: RightsStatements.copyright_not_evaluated.to_s } }
+    let(:valid_params) { {barcode: "", title: ["foo"], language: ["English"], page_count: [1], visibility: ["private"], rights_statement: RightsStatements.copyright_not_evaluated.to_s} }
 
     it "requires title, language, genre, page_count, visibility, and rights_statement" do
       expect(change_set.validate(valid_params)).to eq true

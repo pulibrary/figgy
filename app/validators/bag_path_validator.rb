@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BagPathValidator < ActiveModel::Validator
   # @param [record] a ChangeSet object
   def validate(record)

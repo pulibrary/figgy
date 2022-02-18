@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 module Numismatics
   class PlaceDecorator < Valkyrie::ResourceDecorator
     display :city,
-            :geo_state,
-            :region
+      :geo_state,
+      :region
 
     def manageable_files?
       false

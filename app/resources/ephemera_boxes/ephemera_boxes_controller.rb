@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraBoxesController < ResourceController
   self.resource_class = EphemeraBox
   self.change_set_persister = ::ChangeSetPersister.new(
@@ -11,7 +12,7 @@ class EphemeraBoxesController < ResourceController
 
   def folders
     authorize! :read, resource
-    render json: { data: datatables_folders }
+    render json: {data: datatables_folders}
   end
 
   def datatables_folders

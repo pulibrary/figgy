@@ -41,7 +41,7 @@ class DaoUpdater
       "instance_type" => "digital_object",
       "jsonmodel_type" => "instance",
       "is_representative" => false,
-      "digital_object" => { "ref" => digital_object["uri"] }
+      "digital_object" => {"ref" => digital_object["uri"]}
     }
   end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Supported!!:
 #
 # Many Single Volumes
@@ -143,10 +144,8 @@ class BulkIngestController < ApplicationController
     end
 
     def upload_sets
-      @upload_sets ||= begin
-        browse_everything_uploads.map do |upload_id|
-          find_upload(upload_id)
-        end
+      @upload_sets ||= browse_everything_uploads.map do |upload_id|
+        find_upload(upload_id)
       end
     end
 

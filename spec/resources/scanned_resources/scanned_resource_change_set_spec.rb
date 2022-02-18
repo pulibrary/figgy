@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ScannedResourceChangeSet do
@@ -66,21 +67,21 @@ RSpec.describe ScannedResourceChangeSet do
   describe "#logical_structure" do
     let(:structure) do
       {
-        "label": "Top!",
-        "nodes": [
+        label: "Top!",
+        nodes: [
           {
-            "label": "Chapter 1",
-            "nodes": [
+            label: "Chapter 1",
+            nodes: [
               {
-                "proxy": resource1.id
+                proxy: resource1.id
               }
             ]
           },
           {
-            "label": "Chapter 2",
-            "nodes": [
+            label: "Chapter 2",
+            nodes: [
               {
-                "proxy": resource2.id
+                proxy: resource2.id
               }
             ]
           }

@@ -1,5 +1,6 @@
 # This migration comes from valkyrie_engine (originally 20161007101725)
 # frozen_string_literal: true
+
 class CreateOrmResources < ActiveRecord::Migration[5.0]
   def change
     create_table :orm_resources, id: :uuid do |t|

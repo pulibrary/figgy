@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :figgy do
   namespace :geniza do
     desc "Consolidate a Geniza item into a mvw"
@@ -30,7 +31,7 @@ namespace :figgy do
           csp.save(change_set: cs)
         end
         cs = ChangeSet.for(ScannedResource.new(title: title,
-                                               member_of_collection_ids: [geniza_colid]))
+          member_of_collection_ids: [geniza_colid]))
         cs.validate(member_ids: member_ids)
         csp.save(change_set: cs)
       end

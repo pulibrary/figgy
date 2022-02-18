@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module LinkedData
   class LinkedVocabularyBase < LinkedResource
     delegate(
@@ -18,7 +19,7 @@ module LinkedData
 
     def exact_match
       return {} unless external_uri_exists?
-      { "exact_match" => { "@id" => uri } }
+      {"exact_match" => {"@id" => uri}}
     end
 
     def linked_properties

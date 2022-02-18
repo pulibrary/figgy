@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A physical coin in our collections, modeling things that are unique to the physical item, such as its
 # weight, purchase/acquisition, where it was found, etc.
 module Numismatics

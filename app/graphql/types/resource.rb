@@ -1,18 +1,19 @@
 # frozen_string_literal: true
+
 module Types::Resource
   include Types::BaseInterface
   description "A resource in the system."
   orphan_types Types::Numismatics::CoinType,
-               Types::EphemeraFolderType,
-               Types::FileSetType,
-               Types::Numismatics::IssueType,
-               Types::Numismatics::MonogramType,
-               Types::PlaylistType,
-               Types::ProxyFileSetType,
-               Types::ScannedMapType,
-               Types::ScannedResourceType,
-               Types::RasterResourceType,
-               Types::VectorResourceType
+    Types::EphemeraFolderType,
+    Types::FileSetType,
+    Types::Numismatics::IssueType,
+    Types::Numismatics::MonogramType,
+    Types::PlaylistType,
+    Types::ProxyFileSetType,
+    Types::ScannedMapType,
+    Types::ScannedResourceType,
+    Types::RasterResourceType,
+    Types::VectorResourceType
 
   field :id, String, null: true
   field :label, String, null: true
@@ -93,11 +94,9 @@ module Types::Resource
 
   def thumbnail_resource
     @thumbnail_resource ||=
-      begin
-        members.find do |member|
-          member.id == object.try(:thumbnail_id).first
-        end || query_service.find_by(id: object.try(:thumbnail_id).first)
-      end
+      members.find do |member|
+        member.id == object.try(:thumbnail_id).first
+      end || query_service.find_by(id: object.try(:thumbnail_id).first)
   rescue Valkyrie::Persistence::ObjectNotFoundError
     nil
   end

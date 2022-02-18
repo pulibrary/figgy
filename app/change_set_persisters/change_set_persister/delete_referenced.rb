@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   class DeleteReferenced
     class Factory
@@ -9,8 +10,8 @@ class ChangeSetPersister
 
       def new(change_set_persister:, change_set:)
         DeleteReferenced.new(change_set_persister: change_set_persister,
-                             change_set: change_set,
-                             property: property)
+          change_set: change_set,
+          property: property)
       end
     end
     attr_reader :change_set_persister, :change_set, :property

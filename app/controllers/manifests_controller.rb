@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestsController < ApplicationController
   # Render the V3 IIIF presentation manifest for a given repository resource
   def v3
@@ -14,7 +15,6 @@ class ManifestsController < ApplicationController
     else
       head :not_implemented
     end
-
   rescue Valkyrie::Persistence::ObjectNotFoundError
     find_by_local_identifier
   end

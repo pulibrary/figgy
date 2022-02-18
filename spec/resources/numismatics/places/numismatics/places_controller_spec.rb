@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::PlacesController, type: :controller do
@@ -31,7 +32,7 @@ RSpec.describe Numismatics::PlacesController, type: :controller do
     end
     it "creates a place" do
       FactoryBot.create_for_repository(:numismatic_place)
-      post :create, params: { numismatics_place: valid_params }
+      post :create, params: {numismatics_place: valid_params}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/places"
       place = query_service.find_all_of_model(model: Numismatics::Place).select { |n| n["city"] == "Seattle" }.first
@@ -56,12 +57,12 @@ RSpec.describe Numismatics::PlacesController, type: :controller do
 
     context "html access control" do
       let(:factory) { :numismatic_place }
-      let(:extra_params) { { numismatic_place: { geo_state: "state" } } }
+      let(:extra_params) { {numismatic_place: {geo_state: "state"}} }
       it_behaves_like "an access controlled update request"
     end
     it "saves and redirects" do
       numismatic_place = FactoryBot.create_for_repository(:numismatic_place)
-      patch :update, params: { id: numismatic_place.id.to_s, numismatics_place: { region: "Essex" } }
+      patch :update, params: {id: numismatic_place.id.to_s, numismatics_place: {region: "Essex"}}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/places"
     end

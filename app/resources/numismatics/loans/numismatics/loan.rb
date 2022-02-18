@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class Loan < Resource
     include Valkyrie::Resource::AccessControls

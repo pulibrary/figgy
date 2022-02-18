@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraFolderIndexer
   delegate :query_service, to: :metadata_adapter
   attr_reader :resource
@@ -10,7 +11,7 @@ class EphemeraFolderIndexer
     return {} unless resource.is_a?(::EphemeraFolder)
     {
       Hydra.config[:permissions][:read].group => read_groups,
-      folder_label_tesim: folder_label
+      :folder_label_tesim => folder_label
     }
   end
 

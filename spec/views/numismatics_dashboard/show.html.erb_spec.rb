@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "numismatics_dashboard/show" do
@@ -10,7 +11,7 @@ RSpec.describe "numismatics_dashboard/show" do
   context "when the user is an admin" do
     let(:user) { FactoryBot.create(:admin) }
     let(:view_issues_path) do
-      search_catalog_path(params: { "f": { "human_readable_type_ssim": ["Issue"] }, "q": "" })
+      search_catalog_path(params: {f: {human_readable_type_ssim: ["Issue"]}, q: ""})
     end
 
     it "has panels" do

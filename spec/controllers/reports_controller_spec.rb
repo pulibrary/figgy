@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ReportsController, type: :controller do
@@ -9,12 +10,12 @@ RSpec.describe ReportsController, type: :controller do
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: [folder.id]) }
     let(:folder) do
       FactoryBot.create_for_repository(:ephemera_folder, contributor: ["contributor 1", "contributor 2"],
-                                                         language: language, genre: genre, subject: subject,
-                                                         keywords: ["keyword1", "keyword2"],
-                                                         geo_subject: geo_subject,
-                                                         geographic_origin: geo_origin,
-                                                         transliterated_title: "test transliterated title",
-                                                         member_of_collection_ids: [collection.id])
+        language: language, genre: genre, subject: subject,
+        keywords: ["keyword1", "keyword2"],
+        geo_subject: geo_subject,
+        geographic_origin: geo_origin,
+        transliterated_title: "test transliterated title",
+        member_of_collection_ids: [collection.id])
     end
     let(:boxless) { FactoryBot.create_for_repository(:ephemera_folder, title: "boxless folder") }
     let(:language) { EphemeraTerm.new label: "test language" }
@@ -30,12 +31,12 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "shows folders" do
-      get :ephemera_data, params: { project_id: project.id }, format: "html"
+      get :ephemera_data, params: {project_id: project.id}, format: "html"
       expect(response).to render_template :ephemera_data
       expect(assigns(:resources).first.id).to eq folder.id
     end
     it "allows downloading a CSV file" do
-      get :ephemera_data, params: { project_id: project.id }, format: "csv"
+      get :ephemera_data, params: {project_id: project.id}, format: "csv"
       csv = CSV.parse(response.body, headers: true, header_converters: :symbol)
       row1 = csv.first
       expect(row1[:local_identifier]).to eq "xyz1"
@@ -57,7 +58,7 @@ RSpec.describe ReportsController, type: :controller do
     context "when no project is specified" do
       render_views
       it "has links to each project" do
-        get :ephemera_data, params: { formats: :html }
+        get :ephemera_data, params: {formats: :html}
         expect(response).to render_template :ephemera_data
         expect(assigns(:ephemera_projects).first.id).to eq project.id
         expect(response.body).to have_link(project.title.first, href: ephemera_data_path(project.id))
@@ -152,13 +153,13 @@ RSpec.describe ReportsController, type: :controller do
       expect(response).to render_template :pulfa_ark_report
     end
     it "allows downloading a CSV file with only the open, complete, pulfa resource included" do
-      get :pulfa_ark_report, params: { since_date: "2018-01-01" }, format: "csv"
+      get :pulfa_ark_report, params: {since_date: "2018-01-01"}, format: "csv"
       expect(response.body).to eq(data)
     end
 
     context "with an empty since_date" do
       it "does not raise an error" do
-        get :pulfa_ark_report, params: { since_date: "" }
+        get :pulfa_ark_report, params: {since_date: ""}
         expect { response }.not_to raise_error
       end
     end

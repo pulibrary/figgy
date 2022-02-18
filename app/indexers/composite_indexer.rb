@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CompositeIndexer
   attr_reader :indexers
   def initialize(*indexers)

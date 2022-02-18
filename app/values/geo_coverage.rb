@@ -1,15 +1,17 @@
 # frozen_string_literal: true
+
 class GeoCoverage
   class ParseError < StandardError; end
+
   class InvalidGeometryError < StandardError; end
 
   attr_reader :n, :e, :s, :w
 
   def self.parse(str)
-    n = parse_coordinate(str, /northlimit=([\.\d\-]+);/)
-    e = parse_coordinate(str, /eastlimit=([\.\d\-]+);/)
-    s = parse_coordinate(str, /southlimit=([\.\d\-]+);/)
-    w = parse_coordinate(str, /westlimit=([\.\d\-]+);/)
+    n = parse_coordinate(str, /northlimit=([.\d\-]+);/)
+    e = parse_coordinate(str, /eastlimit=([.\d\-]+);/)
+    s = parse_coordinate(str, /southlimit=([.\d\-]+);/)
+    w = parse_coordinate(str, /westlimit=([.\d\-]+);/)
     raise ParseError, str if n.nil? || e.nil? || s.nil? || w.nil?
     new(n, e, s, w)
   rescue

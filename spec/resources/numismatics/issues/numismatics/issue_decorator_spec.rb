@@ -1,20 +1,21 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::IssueDecorator do
   subject(:decorator) { described_class.new(issue) }
   let(:issue) do
     FactoryBot.create_for_repository(:numismatic_issue,
-                                     member_ids: [coin.id],
-                                     state: "complete",
-                                     numismatic_citation: numismatic_citation,
-                                     numismatic_artist: numismatic_artist,
-                                     numismatic_note: numismatic_note,
-                                     numismatic_subject: numismatic_subject,
-                                     obverse_attribute: numismatic_attribute,
-                                     reverse_attribute: numismatic_attribute,
-                                     earliest_date: "-91",
-                                     latest_date: "-41")
+      member_ids: [coin.id],
+      state: "complete",
+      numismatic_citation: numismatic_citation,
+      numismatic_artist: numismatic_artist,
+      numismatic_note: numismatic_note,
+      numismatic_subject: numismatic_subject,
+      obverse_attribute: numismatic_attribute,
+      reverse_attribute: numismatic_attribute,
+      earliest_date: "-91",
+      latest_date: "-41")
   end
   let(:coin) { FactoryBot.create_for_repository(:coin) }
   let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number", numismatic_reference_id: [reference.id]) }

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe AddEphemeraToCollectionJob do
@@ -6,12 +7,12 @@ RSpec.describe AddEphemeraToCollectionJob do
     let(:service) { instance_double(AddEphemeraToCollection) }
     let(:project) do
       FactoryBot.create_for_repository(:ephemera_project,
-                                       member_ids: box.id)
+        member_ids: box.id)
     end
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:box) do
       FactoryBot.create_for_repository(:ephemera_box,
-                                       member_ids: folder.id)
+        member_ids: folder.id)
     end
     let(:folder) { FactoryBot.create_for_repository(:complete_ephemera_folder) }
 

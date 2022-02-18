@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UsersController < ApplicationController
   def index
     authorize! :manage, User.new
@@ -11,7 +12,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to users_url, notice: "User was successfully created." }
     end
-  rescue StandardError => e
+  rescue => e
     respond_to do |format|
       format.html { redirect_to users_url, notice: "Error creating user: #{e.message}" }
     end

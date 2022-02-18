@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class AccessionWayfinder < BaseWayfinder
     relationship_by_property :firms, property: :firm_id, singular: true

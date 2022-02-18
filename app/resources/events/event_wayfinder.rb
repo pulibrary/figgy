@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventWayfinder < BaseWayfinder
   relationship_by_property :affected_resources, property: :resource_id, singular: true
 

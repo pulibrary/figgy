@@ -1,5 +1,6 @@
 # This migration comes from blacklight (originally 20140202020202)
 # frozen_string_literal: true
+
 class CreateBookmarks < ActiveRecord::Migration[4.2]
   def self.up
     create_table :bookmarks do |t|

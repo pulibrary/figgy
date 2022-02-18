@@ -12,7 +12,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
       change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
-      render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }
+      render partial: "catalog/show_header_default", locals: {resource: resource, document: {}}
       expect(rendered).not_to have_button "Claim"
     end
   end
@@ -27,7 +27,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
       change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
-      render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }
+      render partial: "catalog/show_header_default", locals: {resource: resource, document: {}}
       expect(rendered).to have_button "Claim"
       expect(rendered).to have_selector "input[type='hidden'][name='scanned_resource[claimed_by]'][value='#{user.uid}']", visible: false
     end
@@ -36,7 +36,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
       change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
-      render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }
+      render partial: "catalog/show_header_default", locals: {resource: resource, document: {}}
       expect(rendered).to have_button "Claim from Michaelangelo"
       expect(rendered).to have_selector "input[type='hidden'][name='scanned_resource[claimed_by]'][value='#{user.uid}']", visible: false
     end
@@ -45,7 +45,7 @@ RSpec.describe "catalog/_show_header_default.html.erb" do
       change_set = ChangeSet.for(resource)
       assign :change_set, change_set
 
-      render partial: "catalog/show_header_default", locals: { resource: resource, document: {} }
+      render partial: "catalog/show_header_default", locals: {resource: resource, document: {}}
       expect(rendered).to have_button "Unclaim"
       expect(rendered).to have_selector "input[type='hidden'][name='scanned_resource[claimed_by]'][value='']", visible: false
     end

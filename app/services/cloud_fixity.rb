@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CloudFixity
   require "google/cloud/pubsub"
   class Worker
@@ -36,17 +37,13 @@ module CloudFixity
     end
 
     def pubsub
-      @pubsub ||= begin
-                    Google::Cloud::Pubsub.new
-                  end
+      @pubsub ||= Google::Cloud::Pubsub.new
     end
   end
 
   class FixityRequestor
     def self.pubsub
-      @pubsub ||= begin
-                    Google::Cloud::Pubsub.new
-                  end
+      @pubsub ||= Google::Cloud::Pubsub.new
     end
 
     def self.pubsub_topic

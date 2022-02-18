@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GeoMetadataExtractor
   class Fgdc
     attr_reader :doc

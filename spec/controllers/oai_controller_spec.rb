@@ -1,29 +1,30 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe OaiController do
   describe "Identify" do
     it "has the correct repository name" do
-      get :index, params: { "verb" => "Identify" }
+      get :index, params: {"verb" => "Identify"}
       result = Nokogiri::XML(response.body).remove_namespaces!
       expect(result.xpath("//repositoryName").text).to eq "Princeton University Library"
     end
 
     it "has an earliest timestamp" do
       resource = FactoryBot.create_for_repository(:scanned_resource)
-      get :index, params: { "verb" => "Identify" }
+      get :index, params: {"verb" => "Identify"}
       result = Nokogiri::XML(response.body).remove_namespaces!
       expect(result.xpath("//earliestDatestamp").text).to eq resource.updated_at.iso8601
     end
 
     it "has the correct email address" do
-      get :index, params: { "verb" => "Identify" }
+      get :index, params: {"verb" => "Identify"}
       result = Nokogiri::XML(response.body).remove_namespaces!
       expect(result.xpath("//adminEmail").text).to eq "digital-library@princeton.libanswers.com"
     end
 
     it "gives a sample id in the correct form" do
-      get :index, params: { "verb" => "Identify" }
+      get :index, params: {"verb" => "Identify"}
       result = Nokogiri::XML(response.body).remove_namespaces!
       expect(result.xpath("//sampleIdentifier").text).to eq "oai:figgy:fb4ecf51-58c8-4481-8a91-12f05d4729aa"
     end
@@ -38,7 +39,7 @@ RSpec.describe OaiController do
         stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
         FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
 
-        get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
+        get :index, params: {"verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21"}
 
         result = Nokogiri::XML(response.body).remove_namespaces!
         records = result.xpath("//ListRecords/record")
@@ -53,7 +54,7 @@ RSpec.describe OaiController do
         stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
         FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
 
-        get :index, params: { "verb" => "ListRecords", "set" => "nonexistent", "metadataPrefix" => "marc21" }
+        get :index, params: {"verb" => "ListRecords", "set" => "nonexistent", "metadataPrefix" => "marc21"}
 
         result = Nokogiri::XML(response.body).remove_namespaces!
         records = result.xpath("//ListRecords/record")
@@ -68,7 +69,7 @@ RSpec.describe OaiController do
         stub_pulfa(pulfa_id: "C0022_c0145")
         FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true)
 
-        get :index, params: { "verb" => "ListRecords", "set" => "C0022", "metadataPrefix" => "oai_dc" }
+        get :index, params: {"verb" => "ListRecords", "set" => "C0022", "metadataPrefix" => "oai_dc"}
 
         result = Nokogiri::XML(response.body).remove_namespaces!
         records = result.xpath("//ListRecords/record")
@@ -84,7 +85,7 @@ RSpec.describe OaiController do
       stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
       resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429")
 
-      get :index, params: { "verb" => "GetRecord", "metadataPrefix" => "marc21", identifier: "oai:figgy:#{resource.id}" }
+      get :index, params: {"verb" => "GetRecord", "metadataPrefix" => "marc21", :identifier => "oai:figgy:#{resource.id}"}
 
       result = Nokogiri::XML(response.body).remove_namespaces!
       records = result.xpath("//GetRecord/record")
@@ -112,7 +113,7 @@ RSpec.describe OaiController do
             import_metadata: true
           )
 
-          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+          get :index, params: {"verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc"}
 
           result = Nokogiri::XML(response.body).remove_namespaces!
           records = result.xpath("//GetRecord/record")
@@ -138,7 +139,7 @@ RSpec.describe OaiController do
             import_metadata: true
           )
 
-          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+          get :index, params: {"verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc"}
 
           result = Nokogiri::XML(response.body).remove_namespaces!
           records = result.xpath("//GetRecord/record")
@@ -166,7 +167,7 @@ RSpec.describe OaiController do
             import_metadata: true, files: [file1]
           )
 
-          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+          get :index, params: {"verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc"}
 
           result = Nokogiri::XML(response.body).remove_namespaces!
           records = result.xpath("//GetRecord/record")
@@ -190,7 +191,7 @@ RSpec.describe OaiController do
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
           resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id)
 
-          get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }
+          get :index, params: {"verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc"}
 
           result = Nokogiri::XML(response.body).remove_namespaces!
           records = result.xpath("//GetRecord/record")
@@ -206,7 +207,7 @@ RSpec.describe OaiController do
     it "returns all collections" do
       FactoryBot.create_for_repository(:collection, slug: "cico")
 
-      get :index, params: { "verb" => "ListSets" }
+      get :index, params: {"verb" => "ListSets"}
 
       result = Nokogiri::XML(response.body).remove_namespaces!
       records = result.xpath("//ListSets/set/setSpec").map(&:text)
@@ -220,7 +221,7 @@ RSpec.describe OaiController do
         stub_bibdata(bib_id: "8543429", content_type: "application/marcxml+xml")
         FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
 
-        get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
+        get :index, params: {"verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21"}
 
         result = Nokogiri::XML(response.body).remove_namespaces!
         records = result.xpath("//ListRecords/record")
@@ -238,11 +239,11 @@ RSpec.describe OaiController do
           FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: source_metadata_identifier, import_metadata: true)
         end
 
-        get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
+        get :index, params: {"verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21"}
         result = Nokogiri::XML(response.body).remove_namespaces!
         token = result.xpath("//resumptionToken").text
 
-        get :index, params: { "verb" => "ListRecords", "resumptionToken" => token }
+        get :index, params: {"verb" => "ListRecords", "resumptionToken" => token}
         result = Nokogiri::XML(response.body).remove_namespaces!
         token = result.xpath("//resumptionToken").text
         expect(token.split(":").last).to eq "2"

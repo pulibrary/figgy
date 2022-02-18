@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class MonogramWayfinder < BaseWayfinder
     relationship_by_property :members, property: :member_ids

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindByProperty
   def self.queries
     [:find_by_property]
@@ -21,7 +22,7 @@ class FindByProperty
     else
       # Wrap all the values in the hash in an array, since that's how they're
       # stored.
-      value = Hash[value.map { |k, v| [k, Array.wrap(v)] }]
+      value = value.map { |k, v| [k, Array.wrap(v)] }.to_h
       relation = orm_class.where(Sequel[:metadata].pg_jsonb.contains(value))
     end
     relation = relation.where(internal_resource: model.to_s) if model

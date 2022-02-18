@@ -1,5 +1,5 @@
-
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "ViewerConfiguration requests", type: :request do
@@ -7,7 +7,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
 
   describe "GET /viewer/config/:id" do
     it "generates a Universal Viewer manifest for the resource" do
-      get "/viewer/config/#{scanned_resource.id}", params: { format: :json }
+      get "/viewer/config/#{scanned_resource.id}", params: {format: :json}
 
       expect(response.status).to eq 200
       expect(response.body).not_to be_empty
@@ -37,7 +37,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
 
     context "when the resource does not exist" do
       it "responds with a 404 status code" do
-        get "/viewer/config/nonexistent", params: { format: :json }
+        get "/viewer/config/nonexistent", params: {format: :json}
 
         expect(response.status).to eq 404
       end
@@ -47,7 +47,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
       let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, downloadable: ["none"]) }
 
       it "responds with the configuration with downloads disabled" do
-        get "/viewer/config/#{scanned_resource.id}", params: { format: :json }
+        get "/viewer/config/#{scanned_resource.id}", params: {format: :json}
 
         expect(response.status).to eq 200
         expect(response.body).not_to be_empty
@@ -69,7 +69,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
         end
 
         it "responds with the configuration with downloads disabled" do
-          get "/viewer/config/#{scanned_resource.id}", params: { format: :json }
+          get "/viewer/config/#{scanned_resource.id}", params: {format: :json}
 
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty
@@ -92,7 +92,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
         end
 
         it "responds with the configuration with downloads disabled" do
-          get "/viewer/config/#{scanned_resource.id}", params: { format: :json }
+          get "/viewer/config/#{scanned_resource.id}", params: {format: :json}
 
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty

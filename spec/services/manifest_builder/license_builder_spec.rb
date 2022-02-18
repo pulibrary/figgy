@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ManifestBuilder::LicenseBuilder do
@@ -8,7 +9,7 @@ RSpec.describe ManifestBuilder::LicenseBuilder do
     let(:decorated) { ScannedResourceDecorator.new(scanned_resource) }
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource,
-                                       rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"))
+        rights_statement: RDF::URI("https://creativecommons.org/licenses/by-nc/4.0/"))
     end
 
     context "when viewing a new Scanned Resource" do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :numismatic_monogram, class: Numismatics::Monogram do
     title "Test Monogram"

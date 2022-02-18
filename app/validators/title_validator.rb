@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TitleValidator < ActiveModel::Validator
   def validate(record)
     return if Array.wrap(record.title).first.present?

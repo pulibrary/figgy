@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 class PlaylistDecorator < Valkyrie::ResourceDecorator
   display :title,
-          :visibility
+    :visibility
 
   display_in_manifest [:title]
 

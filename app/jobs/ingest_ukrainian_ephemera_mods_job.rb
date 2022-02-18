@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class IngestUkrainianEphemeraMODSJob < ApplicationJob
   def perform(project, mods, dir)
     logger.info "Ingesting ephemera folder #{dir}"

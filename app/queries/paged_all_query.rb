@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PagedAllQuery
   def self.queries
     [:paged_all]
@@ -102,7 +103,7 @@ class PagedAllQuery
     end
 
     def initial_requirements
-      { source_metadata_identifier: [], imported_metadata: [{}] }
+      {source_metadata_identifier: [], imported_metadata: [{}]}
     end
 
     def relation

@@ -1,15 +1,16 @@
 # frozen_string_literal: true
+
 module Numismatics
   class PersonDecorator < Valkyrie::ResourceDecorator
     display :name1,
-            :name2,
-            :epithet,
-            :family,
-            :born,
-            :died,
-            :class_of,
-            :years_active_start,
-            :years_active_end
+      :name2,
+      :epithet,
+      :family,
+      :born,
+      :died,
+      :class_of,
+      :years_active_start,
+      :years_active_end
 
     def manageable_files?
       false

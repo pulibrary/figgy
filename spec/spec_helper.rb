@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "simplecov"
 if ENV["CIRCLE_ARTIFACTS"]
   dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
@@ -32,5 +33,5 @@ RSpec.configure do |config|
 end
 
 WebMock.disable_net_connect!(allow_localhost: true,
-                             allow: "chromedriver.storage.googleapis.com")
+  allow: "chromedriver.storage.googleapis.com")
 ENV["NO_PROXY"] = nil

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "ruby-progressbar/outputs/null"
 
@@ -60,7 +61,7 @@ RSpec.describe Reindexer do
 
         described_class.reindex_all(logger: logger, wipe: true)
 
-        expect(solr_adapter.connection.get("select", params: { q: "*:*" })["response"]["numFound"]).to eq 0
+        expect(solr_adapter.connection.get("select", params: {q: "*:*"})["response"]["numFound"]).to eq 0
       end
       it "doesn't get rid of them if you tell it not to wipe" do
         resource = FactoryBot.build(:scanned_resource)
@@ -68,7 +69,7 @@ RSpec.describe Reindexer do
 
         described_class.reindex_all(logger: logger, wipe: false)
 
-        expect(solr_adapter.connection.get("select", params: { q: "*:*" })["response"]["numFound"]).to eq 1
+        expect(solr_adapter.connection.get("select", params: {q: "*:*"})["response"]["numFound"]).to eq 1
       end
     end
 
@@ -109,7 +110,7 @@ RSpec.describe Reindexer do
       end
 
       it "tolerates RSolr::Error::Http, logging bad id" do
-        error = RSolr::Error::Http.new({ uri: "http://example.com" }, nil)
+        error = RSolr::Error::Http.new({uri: "http://example.com"}, nil)
         allow(filtered_indexer).to receive(:multi_index_persist).and_raise error
         allow(filtered_indexer).to receive(:single_index_persist).with(resources[0]).and_raise error
 

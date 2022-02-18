@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Bagit
   class BagExporter
     attr_reader :metadata_adapter, :storage_adapter, :query_service

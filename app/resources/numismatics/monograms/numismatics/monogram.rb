@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A symbol made by overlapping or combining letters, typically used as an identifying mark of rulers on coins.
 module Numismatics
   class Monogram < Resource

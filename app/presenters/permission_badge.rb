@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PermissionBadge
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper

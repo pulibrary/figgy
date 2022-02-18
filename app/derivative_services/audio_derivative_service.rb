@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Generates MP3s from uploaded WAV files.
 # @note This will not generate files for any Resource that stores its primary
 # file as a PreservationMaster instead of an original file.
@@ -79,7 +80,7 @@ class AudioDerivativeService
       output = buffered_persister.save(change_set: change_set)
     end
     built_files = output.file_metadata.select(&:derivative_partial?).map do |file|
-      { file.label.first => file.id }
+      {file.label.first => file.id}
     end.inject(&:merge)
     [output, built_files]
   end

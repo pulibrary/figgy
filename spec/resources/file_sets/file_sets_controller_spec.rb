@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 include FixtureFileUpload
 
@@ -18,7 +19,7 @@ RSpec.describe FileSetsController, type: :controller do
   describe "PATCH /file_sets/id" do
     it "can update a file set" do
       file_set = FactoryBot.create_for_repository(:file_set)
-      patch :update, params: { id: file_set.id.to_s, file_set: { title: ["Second"] } }
+      patch :update, params: {id: file_set.id.to_s, file_set: {title: ["Second"]}}
 
       file_set = query_service.find_by(id: file_set.id)
       expect(file_set.title).to eq ["Second"]
@@ -26,7 +27,7 @@ RSpec.describe FileSetsController, type: :controller do
 
     context "with an invalid FileSet ID" do
       it "displays an error" do
-        patch :update, params: { id: "no-exist", file_set: { title: ["Second"] } }
+        patch :update, params: {id: "no-exist", file_set: {title: ["Second"]}}
         expect(response).to redirect_to_not_found
       end
     end
@@ -37,7 +38,7 @@ RSpec.describe FileSetsController, type: :controller do
     it "renders" do
       file_set = FactoryBot.create_for_repository(:file_set)
 
-      expect { get :edit, params: { id: file_set.id.to_s } }.not_to raise_error
+      expect { get :edit, params: {id: file_set.id.to_s} }.not_to raise_error
     end
   end
 
@@ -45,7 +46,7 @@ RSpec.describe FileSetsController, type: :controller do
     render_views
     it "renders the ocr_content property as text" do
       file_set = FactoryBot.create_for_repository(:file_set, ocr_content: "blabla test")
-      get :text, params: { id: file_set.id.to_s }
+      get :text, params: {id: file_set.id.to_s}
       expect(response.body).to eq "blabla test"
       expect(response.content_type).to eq "text/plain"
     end
@@ -63,14 +64,14 @@ RSpec.describe FileSetsController, type: :controller do
       end
 
       it "can regenerate derivatives" do
-        put :derivatives, params: { id: file_set.id.to_s }
+        put :derivatives, params: {id: file_set.id.to_s}
 
         expect(response).to redirect_to(file_set)
         expect(create_derivatives_class).to have_received(:perform_later)
       end
 
       it "can return json" do
-        put :derivatives, params: { id: file_set.id.to_s }, format: :json
+        put :derivatives, params: {id: file_set.id.to_s}, format: :json
 
         expect(response.status).to eq 200
         expect(response.body).to eq "{\"success\":true}"
@@ -84,13 +85,13 @@ RSpec.describe FileSetsController, type: :controller do
       file_set = FactoryBot.create_for_repository(:file_set)
       FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id])
 
-      expect { delete :destroy, params: { id: file_set.id.to_s } }.not_to raise_error
+      expect { delete :destroy, params: {id: file_set.id.to_s} }.not_to raise_error
     end
 
     it "redirects to the parent issue" do
       file_set = FactoryBot.create_for_repository(:file_set)
       parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id])
-      delete :destroy, params: { id: file_set.id.to_s }
+      delete :destroy, params: {id: file_set.id.to_s}
       expect(response).to redirect_to solr_document_path(parent)
     end
   end

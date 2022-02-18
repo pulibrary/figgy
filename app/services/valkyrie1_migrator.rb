@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Valkyrie1Migrator
   def self.call
     [EphemeraTerm, EphemeraVocabulary].each do |model|

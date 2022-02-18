@@ -10,7 +10,7 @@ module LinkedData
     end
 
     delegate :to_s, to: :value
-    alias as_json to_s
-    alias without_context as_json
+    alias_method :as_json, :to_s
+    alias_method :without_context, :as_json
   end
 end

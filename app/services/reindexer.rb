@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Reindexer
   def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, solr_adapter: :index_solr)
     new(
@@ -61,12 +62,10 @@ class Reindexer
       progress_bar
       index_individually = []
       all_resources.each_slice(batch_size) do |records|
-        begin
-          multi_index_persist(records)
-          progress_bar.progress += records.count
-        rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
-          index_individually += records
-        end
+        multi_index_persist(records)
+        progress_bar.progress += records.count
+      rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
+        index_individually += records
       end
       run_individual_retries(index_individually)
       solr_adapter.connection.commit
@@ -82,7 +81,7 @@ class Reindexer
       progress_bar.progress += 1
     rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http => e
       logger.error("Could not index #{record.id} due to #{e.class}")
-      Honeybadger.notify(e, context: { record_id: record.id })
+      Honeybadger.notify(e, context: {record_id: record.id})
     end
 
     def multi_index_persist(records)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Ability
   include Hydra::Ability
 
@@ -68,7 +69,7 @@ class Ability
 
   def curation_concerns
     [ScannedResource, EphemeraFolder, ScannedMap, VectorResource, RasterResource, Playlist, Numismatics::Coin,
-     Numismatics::Issue, Numismatics::Accession, Numismatics::Firm, Numismatics::Monogram, Numismatics::Person, Numismatics::Place, Numismatics::Reference]
+      Numismatics::Issue, Numismatics::Accession, Numismatics::Firm, Numismatics::Monogram, Numismatics::Person, Numismatics::Place, Numismatics::Reference]
   end
 
   def current_user
@@ -108,7 +109,7 @@ class Ability
 
   # Geo thumbnails are always downloadable
   def geo_thumbnail?(resource)
-    return true if /thumbnail/ =~ resource.original_name
+    return true if /thumbnail/.match?(resource.original_name)
     false
   end
 

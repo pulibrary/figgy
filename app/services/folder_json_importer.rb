@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FolderJSONImporter
   attr_reader :file, :attributes, :change_set_persister
   delegate :metadata_adapter, to: :change_set_persister

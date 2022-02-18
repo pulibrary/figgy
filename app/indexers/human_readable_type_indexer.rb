@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class HumanReadableTypeIndexer
   class_attribute :change_sets
   self.change_sets = [

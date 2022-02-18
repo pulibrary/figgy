@@ -28,8 +28,8 @@ class VocabularyService
 
     def find_term(label: nil, code: nil, vocab: nil)
       term = query_service.custom_queries.find_ephemera_term_by_label(label: label,
-                                                                      code: code,
-                                                                      parent_vocab_label: vocab)
+        code: code,
+        parent_vocab_label: vocab)
       return term.id unless term.nil?
       persister.save(resource: EphemeraTerm.new(label: label, member_of_vocabulary_id: imported_vocabulary.id)) if persist_if_not_found
     end

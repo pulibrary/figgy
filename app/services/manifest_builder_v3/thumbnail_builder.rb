@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   # Builder Class for thumbnail resources within IIIF Presentation Manifests
   # @see https://iiif.io/api/presentation/3.0/#thumbnail

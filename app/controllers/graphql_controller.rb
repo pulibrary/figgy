@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GraphqlController < ApplicationController
   class_attribute :change_set_persister
   self.change_set_persister = ::ChangeSetPersister.new(

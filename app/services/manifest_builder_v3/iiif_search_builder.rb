@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   class IIIFSearchBuilder < ManifestBuilder::IIIFSearchBuilder
     def apply(manifest)

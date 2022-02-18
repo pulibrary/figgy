@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RasterResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Geo

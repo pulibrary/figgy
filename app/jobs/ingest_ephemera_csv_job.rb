@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class IngestEphemeraCSVJob < ApplicationJob
   def perform(project_id, csvfile, basedir)
     logger.info "Ingesting csv file #{csvfile}"

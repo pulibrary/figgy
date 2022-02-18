@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindIdentifiersToReconcile
   def self.queries
     [:find_identifiers_to_reconcile]

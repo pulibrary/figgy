@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class SourceMetadataIdentifierOrTitleValidator < ActiveModel::Validator
   def validate(record)
     return if record.source_metadata_identifier.present? || Array.wrap(record.title).first.present?

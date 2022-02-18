@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
   class NotFoundError < RuntimeError; end
@@ -145,7 +146,7 @@ class ChangeSet < Valkyrie::ChangeSet
       item
     else
       # If the object shouldn't be deleted and doesn't exist, then add it to its parent collection
-      collection.append(property_klass.call_unsafe([{ id: SecureRandom.uuid }]).first)
+      collection.append(property_klass.call_unsafe([{id: SecureRandom.uuid}]).first)
     end
   end
 
@@ -177,7 +178,7 @@ class ChangeSet < Valkyrie::ChangeSet
   # This had to be overridden to handle that sometimes the keys that come in are
   # symbols.
   def rename_nested_param_for!(params, dfn)
-    name        = dfn[:name]
+    name = dfn[:name]
     nested_name = "#{name}_attributes"
     return unless params.key?(nested_name) || params.key?(nested_name.to_sym)
 

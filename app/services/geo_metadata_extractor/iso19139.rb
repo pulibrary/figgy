@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GeoMetadataExtractor
   class Iso19139
     attr_reader :doc

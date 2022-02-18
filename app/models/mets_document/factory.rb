@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class METSDocument
   class Factory
     attr_reader :mets

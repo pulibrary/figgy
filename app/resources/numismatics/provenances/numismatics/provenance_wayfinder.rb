@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class ProvenanceWayfinder < BaseWayfinder
     def decorated_firm

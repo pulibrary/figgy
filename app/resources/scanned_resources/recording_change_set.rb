@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RecordingChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
   enable_structure_manager

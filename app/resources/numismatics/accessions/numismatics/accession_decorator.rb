@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 module Numismatics
   class AccessionDecorator < Valkyrie::ResourceDecorator
     display :accession_number,
-            :date,
-            :items_number,
-            :type,
-            :cost,
-            :account,
-            :person,
-            :firm,
-            :note,
-            :private_note,
-            :citations
+      :date,
+      :items_number,
+      :type,
+      :cost,
+      :account,
+      :person,
+      :firm,
+      :note,
+      :private_note,
+      :citations
 
     delegate :decorated_firm, :decorated_person, to: :wayfinder
 

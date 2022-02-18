@@ -22,7 +22,7 @@ class OcrRequestsController < ApplicationController
     @ocr_request = OcrRequest.new(ocr_request_params)
     if @ocr_request.save
       PdfOcrJob.perform_later(resource: @ocr_request, out_path: ocr_out_file)
-      render status: :ok, json: { message: "uploaded" }
+      render status: :ok, json: {message: "uploaded"}
     else
       render status: :unprocessable_entity, json: @ocr_request.errors
     end

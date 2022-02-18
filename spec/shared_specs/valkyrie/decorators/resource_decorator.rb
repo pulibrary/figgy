@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.shared_examples "a Valkyrie::ResourceDecorator" do
@@ -22,8 +23,8 @@ RSpec.shared_examples "a Valkyrie::ResourceDecorator" do
   describe "#created" do
     let(:resource) do
       FactoryBot.build(factory_name,
-                       title: "test title",
-                       created: "01/01/1970")
+        title: "test title",
+        created: "01/01/1970")
     end
     it "exposes a formatted string for the created date" do
       expect(decorator.created).to eq ["January 1, 1970"]
@@ -47,10 +48,10 @@ RSpec.shared_examples "a Valkyrie::ResourceDecorator" do
     context "when viewing a new Scanned Resource" do
       let(:resource) do
         FactoryBot.create_for_repository(factory_name,
-                                         title: ["test title"],
-                                         pdf_type: ["Gray"],
-                                         identifier: ["http://arks.princeton.edu/ark:/88435/5m60qr98h"],
-                                         created: ["01/01/1970"])
+          title: ["test title"],
+          pdf_type: ["Gray"],
+          identifier: ["http://arks.princeton.edu/ark:/88435/5m60qr98h"],
+          created: ["01/01/1970"])
       end
       let(:metadata) { resource.decorate.iiif_metadata }
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class StateValidator < ActiveModel::Validator
   def validate(record)
     validate_state(record)

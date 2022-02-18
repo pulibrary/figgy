@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class AccessionChangeSet < ChangeSet
     delegate :human_readable_type, to: :model
@@ -19,7 +20,6 @@ module Numismatics
 
     validates_with AutoIncrementValidator, property: :accession_number
 
-    # rubocop:disable Metrics/MethodLength
     def primary_terms
       {
         "" => [

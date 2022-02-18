@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class IngestEphemeraService
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
@@ -299,7 +300,6 @@ class IngestEphemeraService
       @query_service = query_service
     end
 
-    # rubocop:disable Metrics/MethodLength
     def attributes
       {
         title: title,

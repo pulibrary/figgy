@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindManyByProperty
   def self.queries
     [:find_many_by_property]
@@ -21,7 +22,7 @@ class FindManyByProperty
 
     def build_conditions(property, values)
       conditions = values.map do |value|
-        internal_array = { property => Array.wrap(value) }
+        internal_array = {property => Array.wrap(value)}
         "metadata @> '#{internal_array.to_json}'"
       end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AuthToken < ApplicationRecord
   before_create :assign_token
   before_save :clean_group

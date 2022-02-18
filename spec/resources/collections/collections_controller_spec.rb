@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe CollectionsController, type: :controller do
@@ -13,7 +14,7 @@ RSpec.describe CollectionsController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     describe "POST /collections" do
       it "creates a collection" do
-        post :create, params: { collection: { title: "test", slug: "slug", visibility: "open", description: "" } }
+        post :create, params: {collection: {title: "test", slug: "slug", visibility: "open", description: ""}}
 
         expect(response).to be_redirect
 
@@ -27,7 +28,7 @@ RSpec.describe CollectionsController, type: :controller do
       it "creates a collection and imports metadata" do
         stub_pulfa(pulfa_id: "AC044_c0003")
 
-        post :create, params: { collection: { source_metadata_identifier: "AC044_c0003", slug: "slug" } }
+        post :create, params: {collection: {source_metadata_identifier: "AC044_c0003", slug: "slug"}}
 
         expect(response).to be_redirect
 
@@ -53,7 +54,7 @@ RSpec.describe CollectionsController, type: :controller do
       it "renders an existing record" do
         collection = persister.save(resource: FactoryBot.build(:collection))
 
-        get :edit, params: { id: collection.id.to_s }
+        get :edit, params: {id: collection.id.to_s}
 
         expect(response.body).to have_field "Title", with: collection.title.first
       end
@@ -63,7 +64,7 @@ RSpec.describe CollectionsController, type: :controller do
       it "updates an existing record" do
         collection = persister.save(resource: FactoryBot.build(:collection))
 
-        patch :update, params: { id: collection.id.to_s, collection: { title: "New" } }
+        patch :update, params: {id: collection.id.to_s, collection: {title: "New"}}
         reloaded = query_service.find_by(id: collection.id)
 
         expect(reloaded.title).to eq ["New"]
@@ -81,7 +82,7 @@ RSpec.describe CollectionsController, type: :controller do
           end
 
           it "creates a collection and imports metadata and calls the ingest job" do
-            post :create, params: { change_set: "archival_media_collection", collection: { source_metadata_identifier: "AC044_c0003", slug: "test-collection", refresh_remote_metadata: "0", bag_path: bag_path } }
+            post :create, params: {change_set: "archival_media_collection", collection: {source_metadata_identifier: "AC044_c0003", slug: "test-collection", refresh_remote_metadata: "0", bag_path: bag_path}}
 
             expect(response).to be_redirect
 
@@ -100,7 +101,7 @@ RSpec.describe CollectionsController, type: :controller do
           end
 
           it "creates a collection and imports metadata and calls the ingest job" do
-            post :create, params: { change_set: "archival_media_collection", collection: {} }
+            post :create, params: {change_set: "archival_media_collection", collection: {}}
 
             expect(response.status).to eq(200)
             expect(response).to render_template(:new)
@@ -126,7 +127,7 @@ RSpec.describe CollectionsController, type: :controller do
         collection = FactoryBot.create_for_repository(:collection)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
 
-        get :manifest, params: { id: collection.id.to_s, format: :json }
+        get :manifest, params: {id: collection.id.to_s, format: :json}
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
         expect(response.headers["Content-Type"]).to include "application/json"
@@ -142,7 +143,7 @@ RSpec.describe CollectionsController, type: :controller do
         metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
         allow(metadata_adapter.query_service).to receive(:find_by).and_call_original
 
-        get :manifest, params: { id: collection.id.to_s, format: :json }
+        get :manifest, params: {id: collection.id.to_s, format: :json}
 
         expect(metadata_adapter.query_service).to have_received(:find_by).exactly(1).times
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
@@ -158,7 +159,7 @@ RSpec.describe CollectionsController, type: :controller do
         FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
         scanned_resource2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id)
 
-        get :manifest, params: { id: collection.id.to_s, format: :json }
+        get :manifest, params: {id: collection.id.to_s, format: :json}
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
         expect(response.headers["Content-Type"]).to include "application/json"
@@ -173,7 +174,7 @@ RSpec.describe CollectionsController, type: :controller do
         collection
       end
       it "returns a IIIF manifest of all collections" do
-        get :index_manifest, params: { format: :json }
+        get :index_manifest, params: {format: :json}
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
         expect(manifest_response[:@id]).to eq "http://www.example.com/iiif/collections"
@@ -199,13 +200,13 @@ RSpec.describe CollectionsController, type: :controller do
       end
 
       it "displays html" do
-        get :ark_report, params: { id: collection.id }
+        get :ark_report, params: {id: collection.id}
 
         expect(response).to render_template :ark_report
       end
 
       it "allows downloading a CSV file" do
-        get :ark_report, params: { id: collection.id, format: "csv" }
+        get :ark_report, params: {id: collection.id, format: "csv"}
         data = "source_metadata_id,ark,manifest_url\nC0652_c0377,ark:/99999/fk47564298,http://test.host/concern/scanned_resources/#{resource.id}/manifest\n"
 
         expect(response.body).to eq(data)
@@ -218,7 +219,7 @@ RSpec.describe CollectionsController, type: :controller do
       let(:collection) { FactoryBot.create_for_repository(:collection, source_metadata_identifier: ["C0652"], slug: "test-collection", state: "draft") }
 
       it "does not display" do
-        get :ark_report, params: { id: collection.id }
+        get :ark_report, params: {id: collection.id}
 
         expect(response).to be_redirect
       end

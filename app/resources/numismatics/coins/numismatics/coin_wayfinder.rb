@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class CoinWayfinder < BaseWayfinder
     relationship_by_property :members, property: :member_ids

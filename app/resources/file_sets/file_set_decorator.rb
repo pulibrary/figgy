@@ -1,24 +1,25 @@
 # frozen_string_literal: true
+
 class FileSetDecorator < Valkyrie::ResourceDecorator
   display :height,
-          :width,
-          :x_resolution,
-          :y_resolution,
-          :bits_per_sample,
-          :mime_type,
-          :size,
-          :md5,
-          :sha1,
-          :sha256,
-          :camera_model,
-          :software,
-          :geometry,
-          :processing_note,
-          :barcode,
-          :part,
-          :transfer_notes,
-          :service_targets,
-          :error_message
+    :width,
+    :x_resolution,
+    :y_resolution,
+    :bits_per_sample,
+    :mime_type,
+    :size,
+    :md5,
+    :sha1,
+    :sha256,
+    :camera_model,
+    :software,
+    :geometry,
+    :processing_note,
+    :barcode,
+    :part,
+    :transfer_notes,
+    :service_targets,
+    :error_message
 
   delegate :collections, :preservation_objects, to: :wayfinder
 

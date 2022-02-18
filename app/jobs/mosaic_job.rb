@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MosaicJob < ApplicationJob
   discard_on TileMetadataService::Error
   queue_as :low

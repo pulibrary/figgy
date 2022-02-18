@@ -57,11 +57,13 @@ class MediainfoCharacterizationService
     class NullTracks
       # Implements the video track accessor
       # @return [nil]
-      def video; end
+      def video
+      end
 
       # Implements the audio track accessor
       # @return [nil]
-      def audio; end
+      def audio
+      end
 
       # Implements the accessor for track types
       # Returns only a track of the type "null"
@@ -81,23 +83,28 @@ class MediainfoCharacterizationService
       class Attributes
         # Implements the accessor for the encoded date element
         # @return [nil]
-        def encoded_date; end
+        def encoded_date
+        end
 
         # Implements the accessor for the producer element
         # @return [nil]
-        def producer; end
+        def producer
+        end
 
         # Implements the accessor for the original source form element
         # @return [nil]
-        def originalsourceform; end
+        def originalsourceform
+        end
 
         # Implements the accessor for the duration element
         # @return [nil]
-        def duration; end
+        def duration
+        end
 
         # Implements the accessor for the filesize element
         # @return [nil]
-        def filesize; end
+        def filesize
+        end
       end
     end
 
@@ -124,7 +131,7 @@ class MediainfoCharacterizationService
     # @return [MediaInfo::Tracks, NullTracks]
     def media_info_tracks
       @media_info ||= MediaInfo.from(filename)
-    rescue StandardError => error
+    rescue => error
       Valkyrie.logger.warn "#{self.class}: Failed to characterize #{filename} using MediaInfo: #{error.message}"
       NullTracks.new
     end

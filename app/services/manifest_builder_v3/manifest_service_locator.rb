@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   ##
   # Class for the IIIF Manifest Service Locator

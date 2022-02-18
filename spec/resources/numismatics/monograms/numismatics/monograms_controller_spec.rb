@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::MonogramsController, type: :controller do
@@ -30,7 +31,7 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
     end
     it "creates a monogram" do
       FactoryBot.create_for_repository(:numismatic_monogram)
-      post :create, params: { numismatics_monogram: valid_params }
+      post :create, params: {numismatics_monogram: valid_params}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/monograms"
       monogram = query_service.find_all_of_model(model: Numismatics::Monogram).select { |n| n["title"] == ["Monogram 1"] }.first
@@ -55,12 +56,12 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
 
     context "html access control" do
       let(:factory) { :numismatic_monogram }
-      let(:extra_params) { { numismatic_monogram: { title: ["Monogram 2"] } } }
+      let(:extra_params) { {numismatic_monogram: {title: ["Monogram 2"]}} }
       it_behaves_like "an access controlled update request"
     end
     it "saves and redirects" do
       numismatic_monogram = FactoryBot.create_for_repository(:numismatic_monogram)
-      patch :update, params: { id: numismatic_monogram.id.to_s, numismatics_monogram: { title: ["Monogram 45"] } }
+      patch :update, params: {id: numismatic_monogram.id.to_s, numismatics_monogram: {title: ["Monogram 45"]}}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/monograms"
     end
@@ -125,7 +126,7 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
     it "returns a IIIF manifest for a monogram with a file" do
       monogram = FactoryBot.create_for_repository(:numismatic_monogram, files: [file])
 
-      get :manifest, params: { id: monogram.id.to_s, format: :json }
+      get :manifest, params: {id: monogram.id.to_s, format: :json}
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
       expect(response.headers["Content-Type"]).to include "application/json"
@@ -134,7 +135,7 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
     end
 
     it "returns an error message if the object doesn't exist" do
-      get :manifest, params: { id: "asdf", format: :json }
+      get :manifest, params: {id: "asdf", format: :json}
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
       expect(response.headers["Content-Type"]).to include "application/json"

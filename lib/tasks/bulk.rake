@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :figgy do
   namespace :bulk do
     desc "Migrates directory of METS files"
@@ -6,7 +7,7 @@ namespace :figgy do
       md_root = ENV["METADATA"]
       import_mods = ENV["IMPORT_MODS"]&.casecmp("TRUE")&.zero?
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user = User.all.select(&:admin?).first unless user
+      user ||= User.all.select(&:admin?).first
 
       usage = "usage: rake bulk:ingest_mets METADATA=/path/to/mets_records IMPORT_MODS=TRUE USER=user"
       abort usage unless md_root && Dir.exist?(md_root)
@@ -41,7 +42,7 @@ namespace :figgy do
     desc "Ingest a directory of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
     task ingest: :environment do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user = User.all.select(&:admin?).first unless user
+      user ||= User.all.select(&:admin?).first
       dir = ENV["DIR"]
       bib = ENV["BIB"]
       coll = ENV["COLL"]
@@ -101,7 +102,6 @@ namespace :figgy do
             identifier: identifier,
             title: title,
             portion_note: note
-
           )
         end
       rescue => e
@@ -113,7 +113,7 @@ namespace :figgy do
     desc "Ingest a directory of scanned map TIFFs, each filename corresponds to a Bib ID"
     task ingest_scanned_maps: :environment do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user = User.all.select(&:admin?).first unless user
+      user ||= User.all.select(&:admin?).first
       dir = ENV["DIR"]
       bib = ENV["BIB"]
       background = ENV["BACKGROUND"]
@@ -151,23 +151,21 @@ namespace :figgy do
       @logger = Logger.new(STDOUT)
       query = Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries
       resources = if model.present?
-                    @logger.info "linking missing thumbnails for #{model.to_s.titleize}"
-                    query.find_missing_thumbnail_resources(model: model)
-                  else
-                    @logger.info "linking missing thumbnails for Scanned Resources"
-                    query.find_missing_thumbnail_resources
-                  end
+        @logger.info "linking missing thumbnails for #{model.to_s.titleize}"
+        query.find_missing_thumbnail_resources(model: model)
+      else
+        @logger.info "linking missing thumbnails for Scanned Resources"
+        query.find_missing_thumbnail_resources
+      end
       resources.each do |resource|
-        begin
-          if background
-            MissingThumbnailJob.set(queue: :low).perform_later(resource.id)
-          else
-            MissingThumbnailJob.perform_now(resource.id)
-          end
-        rescue => e
-          @logger.error "Error: #{e.message}"
-          @logger.error e.backtrace
+        if background
+          MissingThumbnailJob.set(queue: :low).perform_later(resource.id)
+        else
+          MissingThumbnailJob.perform_now(resource.id)
         end
+      rescue => e
+        @logger.error "Error: #{e.message}"
+        @logger.error e.backtrace
       end
     end
 
@@ -179,31 +177,29 @@ namespace :figgy do
       @logger = Logger.new(STDOUT)
       query = Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries
       resources = if model.present?
-                    @logger.info "linking thumbnails for #{model.to_s.titleize}"
-                    query.find_invalid_thumbnail_resources(model: model)
-                  else
-                    @logger.info "linking thumbnails for Scanned Resources"
-                    query.find_invalid_thumbnail_resources
-                  end
+        @logger.info "linking thumbnails for #{model.to_s.titleize}"
+        query.find_invalid_thumbnail_resources(model: model)
+      else
+        @logger.info "linking thumbnails for Scanned Resources"
+        query.find_invalid_thumbnail_resources
+      end
       # Handle these cases as if they were missing thumbnails
       resources.each do |resource|
-        begin
-          if background
-            MissingThumbnailJob.set(queue: :low).perform_later(resource.id)
-          else
-            MissingThumbnailJob.perform_now(resource.id)
-          end
-        rescue => e
-          @logger.error "Error: #{e.message}"
-          @logger.error e.backtrace
+        if background
+          MissingThumbnailJob.set(queue: :low).perform_later(resource.id)
+        else
+          MissingThumbnailJob.perform_now(resource.id)
         end
+      rescue => e
+        @logger.error "Error: #{e.message}"
+        @logger.error e.backtrace
       end
     end
 
     desc "Attach a set of directories of TIFFs to existing objects, using the directory names as identifiers to find the objects"
     task attach_each_dir: :environment do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user = User.all.select(&:admin?).first unless user
+      user ||= User.all.select(&:admin?).first
       dir = ENV["DIR"]
       field = ENV["FIELD"]
       filter = ENV["FILTER"]
@@ -323,7 +319,7 @@ namespace :figgy do
 
       abort "usage: rake bulk:append_coll COLL=[collection id] APPEND_COLL=[new collection id]" unless coll && append_coll
       logger = Logger.new(STDOUT)
-      attrs = { append_collection_ids: Valkyrie::ID.new(append_coll), skip_validation: true }
+      attrs = {append_collection_ids: Valkyrie::ID.new(append_coll), skip_validation: true}
       BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
     end
 

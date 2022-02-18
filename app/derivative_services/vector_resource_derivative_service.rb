@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class VectorResourceDerivativeService
   class Factory
     attr_reader :change_set_persister
@@ -71,7 +72,7 @@ class VectorResourceDerivativeService
     end
     unzip_display
     update_error_message(message: nil) if original_file.error_message.present?
-  rescue StandardError => error
+  rescue => error
     update_error_message(message: error.message)
     raise error
   end
@@ -135,7 +136,7 @@ class VectorResourceDerivativeService
   def unzip_display
     derivative_file = change_set.model.derivative_file
     derivative_path = Valkyrie::StorageAdapter.find_by(id: derivative_file.file_identifiers.first).io.path
-    shapefile_dir = "#{File.dirname(derivative_path)}/#{File.basename(derivative_path, '.zip')}"
+    shapefile_dir = "#{File.dirname(derivative_path)}/#{File.basename(derivative_path, ".zip")}"
     system "unzip -qq -o #{derivative_path} -d #{shapefile_dir}"
   end
 

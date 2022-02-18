@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   class CanvasRenderingBuilder < ManifestBuilder::CanvasRenderingBuilder
     # Modify the manifest for the Canvas
@@ -10,7 +11,7 @@ class ManifestBuilderV3
           "id" => helper.polymorphic_url([:text, record]),
           "type" => "Text",
           "format" => "text/plain",
-          "label" => { "en": ["download page text"] }
+          "label" => {en: ["download page text"]}
         }
       end
 
@@ -24,14 +25,14 @@ class ManifestBuilderV3
       def original_file_hash
         return unless original_file
         original_file_id = original_file.id.to_s
-        download_url_args = { resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host }
+        download_url_args = {resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host}
         download_url = url_helpers.download_url(download_url_args)
 
         {
           "id" => download_url,
           "format" => original_file.mime_type.first,
           "type" => "Dataset",
-          "label" => { "en": ["Download the original file"] }
+          "label" => {en: ["Download the original file"]}
         }
       end
   end

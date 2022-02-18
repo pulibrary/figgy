@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CollectionsMailer < ApplicationMailer
   def owner_report
     collection = params[:collection]

@@ -1,12 +1,13 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   def self.new(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, queue: :default)
     Basic.new(metadata_adapter: metadata_adapter,
-              storage_adapter: storage_adapter,
-              transaction: transaction,
-              characterize: characterize,
-              queue: queue,
-              handlers: registered_handlers)
+      storage_adapter: storage_adapter,
+      transaction: transaction,
+      characterize: characterize,
+      queue: queue,
+      handlers: registered_handlers)
   end
 
   def self.default
@@ -16,7 +17,6 @@ class ChangeSetPersister
     )
   end
 
-  # rubocop:disable Metrics/MethodLength
   def self.registered_handlers
     {
       before_save: [
@@ -173,7 +173,8 @@ class ChangeSetPersister
         yield
       end
 
-      def run; end
+      def run
+      end
     end
 
     # Provides an easy way to safely get a new instance of the change set

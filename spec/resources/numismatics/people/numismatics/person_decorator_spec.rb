@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::PersonDecorator do
@@ -23,10 +24,10 @@ RSpec.describe Numismatics::PersonDecorator do
     context "with only a died date" do
       let(:numismatic_person) do
         FactoryBot.create_for_repository(:numismatic_person,
-                                         born: nil,
-                                         died: "1963",
-                                         years_active_start: nil,
-                                         years_active_end: nil)
+          born: nil,
+          died: "1963",
+          years_active_start: nil,
+          years_active_end: nil)
       end
 
       it "generates a title" do
@@ -37,10 +38,10 @@ RSpec.describe Numismatics::PersonDecorator do
     context "with only a years_active_start date" do
       let(:numismatic_person) do
         FactoryBot.create_for_repository(:numismatic_person,
-                                         born: nil,
-                                         died: nil,
-                                         years_active_start: "1894",
-                                         years_active_end: nil)
+          born: nil,
+          died: nil,
+          years_active_start: "1894",
+          years_active_end: nil)
       end
 
       it "generates a title" do

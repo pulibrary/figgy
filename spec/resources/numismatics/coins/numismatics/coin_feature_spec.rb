@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.feature "Numismatics::Coins" do
@@ -213,7 +214,7 @@ RSpec.feature "Numismatics::Coins" do
   describe "form editing", js: true do
     let(:coin) do
       FactoryBot.create_for_repository(:coin,
-                                       numismatic_collection: "numismatic collection")
+        numismatic_collection: "numismatic collection")
     end
 
     it "displays select boxes for some properties" do

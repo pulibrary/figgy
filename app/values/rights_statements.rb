@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RightsStatements
   class << self
     def copyright_not_evaluated

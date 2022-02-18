@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ContextualPath
   include Rails.application.routes.url_helpers
   include ActionDispatch::Routing::PolymorphicRoutes

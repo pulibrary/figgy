@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "valkyrie/specs/shared_specs"
 
@@ -18,7 +19,7 @@ RSpec.describe Bagit::StorageAdapter do
     sha256_manifest = File.read(storage_adapter.bag_path.join("manifest-sha256.txt")).split("\n")
     sha1_manifest = File.read(storage_adapter.bag_path.join("manifest-sha1.txt")).split("\n")
     md5_manifest = File.read(storage_adapter.bag_path.join("manifest-md5.txt")).split("\n")
-    data_path = "data/#{Pathname.new(output_file.id.to_s.gsub('bag://', '')).basename}"
+    data_path = "data/#{Pathname.new(output_file.id.to_s.gsub("bag://", "")).basename}"
     expect(sha256_manifest[0]).to eq "547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c  #{data_path}"
     expect(sha1_manifest[0]).to eq "1b95e65efc3aefeac1f347218ab6f193328d70f5  #{data_path}"
     expect(md5_manifest[0]).to eq "2a28fb702286782b2cbf2ed9a5041ab1  #{data_path}"

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.shared_examples "LinkedData::Resource" do
@@ -17,11 +18,11 @@ RSpec.shared_examples "LinkedData::Resource" do
         [
           "https://bibdata.princeton.edu/context.json",
           {
-            "wgs84": "http://www.w3.org/2003/01/geo/wgs84_pos#",
-            "latitude": {
+            wgs84: "http://www.w3.org/2003/01/geo/wgs84_pos#",
+            latitude: {
               "@id": "wgs84:lat"
             },
-            "longitude": {
+            longitude: {
               "@id": "wgs84:lon"
             }
           }

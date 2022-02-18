@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GeoResourceReindexer
   # Reindexes GeoBlacklight by sending record updated messages
   # for all complete geo resources.
@@ -32,13 +33,11 @@ class GeoResourceReindexer
   def reindex_geoblacklight
     all_geo_resources.each do |resources|
       resources.each do |resource|
-        begin
-          decorator = resource.decorate
-          messenger.record_updated(decorator)
-          logger.info("Indexed into GeoBlacklight: #{resource.id}")
-        rescue StandardError => e
-          logger.warn("Error: #{e.message}")
-        end
+        decorator = resource.decorate
+        messenger.record_updated(decorator)
+        logger.info("Indexed into GeoBlacklight: #{resource.id}")
+      rescue => e
+        logger.warn("Error: #{e.message}")
       end
     end
   end
@@ -46,15 +45,13 @@ class GeoResourceReindexer
   def reindex_geoserver
     all_geo_resources.each do |resources|
       resources.each do |resource|
-        begin
-          decorator = resource.decorate
-          file_set = decorator.geo_members.try(:first)
-          next unless file_set
-          messenger.derivatives_created(file_set)
-          logger.info("Indexed into GeoServer: #{file_set.id}")
-        rescue StandardError => e
-          logger.warn("Error: #{e.message}")
-        end
+        decorator = resource.decorate
+        file_set = decorator.geo_members.try(:first)
+        next unless file_set
+        messenger.derivatives_created(file_set)
+        logger.info("Indexed into GeoServer: #{file_set.id}")
+      rescue => e
+        logger.warn("Error: #{e.message}")
       end
     end
   end
@@ -63,12 +60,10 @@ class GeoResourceReindexer
     @layers = {}
     all_geo_resources.each do |resources|
       resources.each do |resource|
-        begin
-          save_document(resource: resource)
-          logger.info("GeoBlacklight document created: #{resource.id}")
-        rescue StandardError => e
-          logger.warn("Error: #{e.message}")
-        end
+        save_document(resource: resource)
+        logger.info("GeoBlacklight document created: #{resource.id}")
+      rescue => e
+        logger.warn("Error: #{e.message}")
       end
     end
     save_layers_document(layers: @layers) unless @layers.empty?
@@ -127,7 +122,7 @@ class GeoResourceReindexer
 
     def save_layers_document(layers:)
       path = "#{ogm_repo_path}/layers.json"
-      output = JSON.pretty_generate(Hash[layers.sort])
+      output = JSON.pretty_generate(layers.sort.to_h)
       File.write(path, output)
     end
 end

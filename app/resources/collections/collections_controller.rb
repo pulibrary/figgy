@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "csv"
 
 class CollectionsController < ResourceController
@@ -35,7 +36,7 @@ class CollectionsController < ResourceController
       format.html
       format.csv do
         send_data ark_csv(@records),
-                  filename: "ark-report-#{@collection.title.parameterize}-#{Time.zone.today}.csv"
+          filename: "ark-report-#{@collection.title.parameterize}-#{Time.zone.today}.csv"
       end
     end
   end
@@ -45,8 +46,8 @@ class CollectionsController < ResourceController
     def ark_report_records(collection)
       collection.members.map do |resource|
         [resource.source_metadata_identifier&.first,
-         resource.identifier&.first,
-         helpers.manifest_url(resource)]
+          resource.identifier&.first,
+          helpers.manifest_url(resource)]
       end
     end
 

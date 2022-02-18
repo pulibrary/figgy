@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class VIPSDerivativeService
   # Pixel width or height at which point it cuts the size in half for
   # performance.
@@ -69,7 +70,7 @@ class VIPSDerivativeService
       @resource = buffered_persister.save(change_set: change_set)
     end
     update_error_message(message: nil) if target_file.error_message.present?
-  rescue StandardError => error
+  rescue => error
     update_error_message(message: error.message)
     raise error
   end

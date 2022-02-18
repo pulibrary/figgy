@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module LinkedData
   class LinkedSimpleResource < LinkedResource
     delegate(
@@ -56,7 +57,7 @@ module LinkedData
       def actor
         Array.wrap(resource.actor).map do |actor|
           if actor.is_a? Grouping
-            { "grouping" => actor.elements }
+            {"grouping" => actor.elements}
           else
             actor
           end

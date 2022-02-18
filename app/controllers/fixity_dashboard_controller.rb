@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FixityDashboardController < ApplicationController
   delegate :query_service, to: :metadata_adapter
 

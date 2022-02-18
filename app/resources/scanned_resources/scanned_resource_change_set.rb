@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ScannedResourceChangeSet < ChangeSet
   apply_workflow(BookWorkflow)
   enable_claiming

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Collection < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common
@@ -10,7 +11,8 @@ class Collection < Resource
   attribute :change_set, Valkyrie::Types::String
   attribute :restricted_viewers, Valkyrie::Types::Set
 
-  def thumbnail_id; end
+  def thumbnail_id
+  end
 
   def primary_imported_metadata
     Array.wrap(imported_metadata).first || ImportedMetadata.new

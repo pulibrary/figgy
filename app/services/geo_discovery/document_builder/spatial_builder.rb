@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GeoDiscovery
   class DocumentBuilder
     class SpatialBuilder
@@ -20,9 +21,9 @@ module GeoDiscovery
         # @return [GeoCoverage] coverage object
         def coverage
           @coverage ||= begin
-                          valid_coverages = resource_decorator.coverage.map { |c| GeoCoverage.parse(c) }.compact
-                          valid_coverages.first
-                        end
+            valid_coverages = resource_decorator.coverage.map { |c| GeoCoverage.parse(c) }.compact
+            valid_coverages.first
+          end
         end
 
         # Returns the coverage in solr format. For example:

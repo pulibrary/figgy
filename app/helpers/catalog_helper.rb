@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
 
@@ -18,7 +19,7 @@ module CatalogHelper
 
     # escape manually to allow <br /> to go through unescaped
     val = Array.wrap(presenter(document).heading).map { |v| h(v) }.join("<br />")
-    content_tag(tag, val, { itemprop: "name", dir: val.to_s.dir }, false)
+    content_tag(tag, val, {itemprop: "name", dir: val.to_s.dir}, false)
   end
 
   # Generates the text for faceted search parameters

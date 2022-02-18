@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Superclass for most LinkedData resources. Provides a generic implementation
 # for `#to_jsonld` and `#as_jsonld`. Subclasses are expected to override
 # `#properties`
@@ -21,8 +22,8 @@ module LinkedData
     def to_jsonld
       as_jsonld.to_json
     end
-    alias to_json to_jsonld
-    alias to_s to_json
+    alias_method :to_json, :to_jsonld
+    alias_method :to_s, :to_json
 
     def without_context
       as_jsonld.except("@context")
@@ -69,7 +70,7 @@ module LinkedData
       # @note It's expected that subclasses will override this to provide more
       # terms.
       def properties
-        { title: try(:title) }
+        {title: try(:title)}
       end
 
       # Default set of properties every JSON-LD serialization should have. Add
@@ -79,11 +80,11 @@ module LinkedData
           "@context": [
             "https://bibdata.princeton.edu/context.json",
             {
-              "wgs84": "http://www.w3.org/2003/01/geo/wgs84_pos#",
-              "latitude": {
+              wgs84: "http://www.w3.org/2003/01/geo/wgs84_pos#",
+              latitude: {
                 "@id": "wgs84:lat"
               },
-              "longitude": {
+              longitude: {
                 "@id": "wgs84:lon"
               }
             }

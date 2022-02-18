@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraTerm < Resource
   include Valkyrie::Resource::AccessControls
   attribute :label

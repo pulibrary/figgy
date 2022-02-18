@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module StructureHelper
   def structure_page_header
     h = content_tag(:h1, "Structure Manager")
@@ -17,8 +18,8 @@ module StructureHelper
     def bulk_edit_parent_work
       return "" unless @change_set.resource
       link = content_tag(:a, @change_set.resource.decorate.header,
-                         title: @change_set.id,
-                         href: bulk_edit_parent_path(@change_set, @parent))
+        title: @change_set.id,
+        href: bulk_edit_parent_path(@change_set, @parent))
       content_tag(:li, link)
     end
 

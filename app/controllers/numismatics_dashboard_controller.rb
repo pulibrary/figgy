@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class NumismaticsDashboardController < ApplicationController
   def show
     @issues = Wayfinder.for(Numismatics::Issue.new).issues_count

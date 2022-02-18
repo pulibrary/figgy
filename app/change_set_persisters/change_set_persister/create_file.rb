@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   class CreateFile
     class Factory
@@ -13,7 +14,7 @@ class ChangeSetPersister
     end
     attr_reader :change_set_persister, :change_set, :file_appender
     delegate :persister, :storage_adapter, to: :change_set_persister
-    def initialize(change_set_persister:, change_set:, post_save_resource: nil, file_appender:)
+    def initialize(change_set_persister:, change_set:, file_appender:, post_save_resource: nil)
       @change_set = change_set
       @change_set_persister = change_set_persister
       @file_appender = file_appender

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraBox < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ExportBagJob do
@@ -14,7 +15,7 @@ RSpec.describe ExportBagJob do
       bag_resource = bag_query.find_by(id: resource.id)
       bag_fileset = bag_query.find_by(id: bag_resource.member_ids.first)
       file_id = bag_fileset.original_file.file_identifiers.first
-      expect {  bag_storage.for(bag_id: bag_resource.id).find_by(id: file_id) }.not_to raise_error
+      expect { bag_storage.for(bag_id: bag_resource.id).find_by(id: file_id) }.not_to raise_error
     end
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UpdatedArchivalResources
   def self.queries
     [:updated_archival_resources]
@@ -13,7 +14,7 @@ class UpdatedArchivalResources
   end
 
   def updated_archival_resources(since_date:)
-    run_query(query, since_date.to_s, { visibility: ["open"] }.to_json)
+    run_query(query, since_date.to_s, {visibility: ["open"]}.to_json)
   end
 
   def query

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Preserver
   class NestedStoragePath
     attr_reader :base_path

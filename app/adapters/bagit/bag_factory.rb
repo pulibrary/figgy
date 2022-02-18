@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Bagit
   class BagFactory
     attr_reader :adapter
@@ -33,9 +34,7 @@ module Bagit
           lines = File.readlines(bag_path.join("tagmanifest-sha256.txt")).select do |line|
             !line.include?(metadata_digest_path.relative_path_from(bag_path).to_s)
           end
-          File.open(bag_path.join("tagmanifest-sha256.txt"), "w") do |f|
-            f.write(lines.join("\n"))
-          end
+          File.write(bag_path.join("tagmanifest-sha256.txt"), lines.join("\n"))
           FileUtils.rm_f(metadata_digest_path)
         else
           FileUtils.rm_rf(bag_path)
@@ -58,9 +57,7 @@ module Bagit
 
         def export_metadata
           FileUtils.mkdir_p(bag_path.join("metadata"))
-          File.open(metadata_digest_path, "w") do |f|
-            f.write(resource_metadata.to_json)
-          end
+          File.write(metadata_digest_path, resource_metadata.to_json)
           digest_metadata
         end
 
@@ -85,7 +82,7 @@ module Bagit
 
         def render_template_to_file(template:, file:)
           output = ERB.new(File.read(template_path.join(template)), nil, "-").result(binding)
-          File.open(file, "w") { |f| f.write(output) }
+          File.write(file, output)
         end
 
         def template_path

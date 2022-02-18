@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class VectorResourceChangeSet < ChangeSet
   apply_workflow(GeoWorkflow)
   enable_claiming
@@ -34,7 +35,6 @@ class VectorResourceChangeSet < ChangeSet
   validates_with RightsStatementValidator
   validates :visibility, presence: true
 
-  # rubocop:disable Metrics/MethodLength
   def primary_terms
     {
       "" => [

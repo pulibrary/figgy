@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "cancan/matchers"
 
@@ -62,11 +63,11 @@ describe Ability do
     stub_bibdata(bib_id: "123456")
     volume = FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2])
     mvw_resource = FactoryBot.create_for_repository(:complete_private_scanned_resource,
-                                                    title: "Private",
-                                                    source_metadata_identifier: "123456",
-                                                    user: creating_user,
-                                                    member_ids: [volume.id],
-                                                    run_callbacks: true)
+      title: "Private",
+      source_metadata_identifier: "123456",
+      user: creating_user,
+      member_ids: [volume.id],
+      run_callbacks: true)
     FactoryBot.create_for_repository(
       :resource_charge_list,
       resource_id: mvw_resource.id,
@@ -645,7 +646,7 @@ describe Ability do
 
     context "with an allowed reading room IP" do
       subject { described_class.new(current_user, ip_address: "1.2.3") }
-      let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
+      let(:config_hash) { {"access_control" => {"reading_room_ips" => ["1.2.3"]}} }
       before do
         allow(Figgy).to receive(:config).and_return(config_hash)
       end
@@ -746,7 +747,7 @@ describe Ability do
     end
 
     context "with an allowed IP" do
-      let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
+      let(:config_hash) { {"access_control" => {"reading_room_ips" => ["1.2.3"]}} }
       before do
         allow(Figgy).to receive(:config).and_return(config_hash)
       end

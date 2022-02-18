@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ArchivalMediaCollectionDecorator do
@@ -11,7 +12,7 @@ RSpec.describe ArchivalMediaCollectionDecorator do
   describe "#identifier" do
     let(:collection) do
       FactoryBot.build(:archival_media_collection,
-                       identifier: "ark:/99999/fk4")
+        identifier: "ark:/99999/fk4")
     end
     it "displays the identifier" do
       expect(decorator.display_attributes[:identifier]).to eq ["ark:/99999/fk4"]
@@ -20,13 +21,13 @@ RSpec.describe ArchivalMediaCollectionDecorator do
 
   describe "#imported_created" do
     context "with a single date" do
-      let(:imported_metadata) { [{ created: "2018-05-02T11:41:06.371-05:00" }] }
+      let(:imported_metadata) { [{created: "2018-05-02T11:41:06.371-05:00"}] }
       it "maps date to readable string" do
         expect(decorator.imported_created).to eq ["May 2, 2018"]
       end
     end
     context "with a date range" do
-      let(:imported_metadata) { [{ created: "1941-01-01T00:00:00Z/1985-12-31T23:59:59Z" }] }
+      let(:imported_metadata) { [{created: "1941-01-01T00:00:00Z/1985-12-31T23:59:59Z"}] }
       it "maps date to readable string" do
         expect(decorator.imported_created).to eq ["1941-1985"]
       end
@@ -34,7 +35,7 @@ RSpec.describe ArchivalMediaCollectionDecorator do
   end
 
   describe "#display_imported_language" do
-    let(:imported_metadata) { [{ language: "eng" }] }
+    let(:imported_metadata) { [{language: "eng"}] }
     it "maps keys to english strings" do
       expect(decorator.display_imported_language).to eq ["English"]
     end
@@ -42,8 +43,8 @@ RSpec.describe ArchivalMediaCollectionDecorator do
 
   describe "raw imported metadata" do
     let(:imported_metadata) do
-      [{ created: "2018-05-02T11:41:06.371-05:00",
-         language: "eng" }]
+      [{created: "2018-05-02T11:41:06.371-05:00",
+        language: "eng"}]
     end
     it "is not displayed" do
       expect(decorator.display_attributes.keys).not_to include :source_metadata

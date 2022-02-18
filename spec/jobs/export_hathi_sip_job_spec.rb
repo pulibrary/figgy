@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 include ActionDispatch::TestProcess
 
@@ -13,9 +14,9 @@ RSpec.describe ExportHathiSipJob do
     file1 = fixture_file_upload("files/example.tif", "image/tiff")
     file2 = fixture_file_upload("files/example.tif", "image/tiff")
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
-                                                        source_metadata_identifier: "123456",
-                                                        ocr_language: "eng",
-                                                        files: [file1, file2])
+      source_metadata_identifier: "123456",
+      ocr_language: "eng",
+      files: [file1, file2])
     scanned_resource
   end
 

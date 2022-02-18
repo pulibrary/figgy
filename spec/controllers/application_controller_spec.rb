@@ -10,7 +10,7 @@ RSpec.describe ApplicationController do
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
         allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
 
-        get :viewer_config, params: { id: resource.id.to_s, format: :json }
+        get :viewer_config, params: {id: resource.id.to_s, format: :json}
 
         output = JSON.parse(response.body)
         expect(output["modules"]["footerPanel"]["options"]["downloadEnabled"]).to eq false

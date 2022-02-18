@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::ReferencesController, type: :controller do
@@ -30,7 +31,7 @@ RSpec.describe Numismatics::ReferencesController, type: :controller do
     end
     it "creates a reference" do
       FactoryBot.create_for_repository(:numismatic_reference)
-      post :create, params: { numismatics_reference: valid_params }
+      post :create, params: {numismatics_reference: valid_params}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/references"
       reference = query_service.find_all_of_model(model: Numismatics::Reference).select { |n| n["title"] == ["Reference 1"] }.first
@@ -55,12 +56,12 @@ RSpec.describe Numismatics::ReferencesController, type: :controller do
 
     context "html access control" do
       let(:factory) { :numismatic_reference }
-      let(:extra_params) { { numismatic_reference: { title: ["Reference 2"] } } }
+      let(:extra_params) { {numismatic_reference: {title: ["Reference 2"]}} }
       it_behaves_like "an access controlled update request"
     end
     it "saves and redirects" do
       numismatic_reference = FactoryBot.create_for_repository(:numismatic_reference)
-      patch :update, params: { id: numismatic_reference.id.to_s, numismatics_reference: { title: ["Reference 3"] } }
+      patch :update, params: {id: numismatic_reference.id.to_s, numismatics_reference: {title: ["Reference 3"]}}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/reference"
     end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraVocabularyChangeSet < Valkyrie::ChangeSet
   validates :label, presence: true
   property :label, multiple: false, required: true

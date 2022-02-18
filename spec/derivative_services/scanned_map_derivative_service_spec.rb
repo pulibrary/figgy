@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
 
@@ -32,7 +33,6 @@ RSpec.describe ScannedMapDerivativeService do
 
     context "when given a jpeg mime_type" do
       it "is valid" do
-        # rubocop:disable RSpec/SubjectStub
         allow(valid_file).to receive(:mime_type).and_return(["image/jpeg"])
         # rubocop:enable RSpec/SubjectStub
         is_expected.to be_valid
@@ -41,7 +41,6 @@ RSpec.describe ScannedMapDerivativeService do
 
     context "when given a png mime_type" do
       it "is valid" do
-        # rubocop:disable RSpec/SubjectStub
         allow(valid_file).to receive(:mime_type).and_return(["image/png"])
         # rubocop:enable RSpec/SubjectStub
         is_expected.to be_valid
@@ -50,7 +49,6 @@ RSpec.describe ScannedMapDerivativeService do
 
     context "when given an invalid mime_type" do
       it "does not validate" do
-        # rubocop:disable RSpec/SubjectStub
         allow(valid_file).to receive(:mime_type).and_return(["image/gif"])
         # rubocop:enable RSpec/SubjectStub
         is_expected.not_to be_valid

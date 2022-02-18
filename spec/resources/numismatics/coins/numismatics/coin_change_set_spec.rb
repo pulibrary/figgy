@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::CoinChangeSet do
@@ -73,7 +74,7 @@ RSpec.describe Numismatics::CoinChangeSet do
 
   describe "#loan" do
     it "can be set with a note and a type" do
-      change_set.validate("loan_attributes" => { "0" => { note: "Test2", type: "Type" } })
+      change_set.validate("loan_attributes" => {"0" => {note: "Test2", type: "Type"}})
       expect(change_set.loan.first.note).to eq "Test2"
       expect(change_set.loan.first.type).to eq "Type"
     end

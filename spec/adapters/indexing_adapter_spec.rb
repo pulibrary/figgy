@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "valkyrie/specs/shared_specs"
 
 RSpec.describe IndexingAdapter do
   let(:adapter) do
     described_class.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:postgres),
-                        index_adapter: index_solr)
+      index_adapter: index_solr)
   end
   let(:query_service) { adapter.query_service }
   let(:persister) { adapter.persister }
@@ -46,7 +47,7 @@ RSpec.describe IndexingAdapter do
       end
     end.to raise_error("Bad")
     expect(query_service.find_all.to_a.length).to eq 0
-    expect(index_solr.connection.get("select", params: { q: "*:*" })["response"]["numFound"]).to eq 0
+    expect(index_solr.connection.get("select", params: {q: "*:*"})["response"]["numFound"]).to eq 0
   end
 
   it "doesn't try to persist if nothing happens" do

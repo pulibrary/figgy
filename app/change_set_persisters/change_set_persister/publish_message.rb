@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   class PublishMessage
     class Factory
@@ -14,7 +15,7 @@ class ChangeSetPersister
       private
 
         def klass_name
-          "ChangeSetPersister::Publish#{operation.to_s.camelize}#{'e' unless operation.to_s.last == 'e'}dMessage"
+          "ChangeSetPersister::Publish#{operation.to_s.camelize}#{"e" unless operation.to_s.last == "e"}dMessage"
         end
 
         def klass

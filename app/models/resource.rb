@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Resource < Valkyrie::Resource
   def self.human_readable_type
     @human_readable_type ||=

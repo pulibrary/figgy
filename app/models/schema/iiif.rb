@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ##
 # Defines the attributes from the IIIF
 module Schema

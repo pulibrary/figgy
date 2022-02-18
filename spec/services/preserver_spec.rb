@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe Preserver do
@@ -8,8 +9,8 @@ describe Preserver do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource,
-                                     source_metadata_identifier: "123456",
-                                     files: [file])
+      source_metadata_identifier: "123456",
+      files: [file])
   end
   let(:unpreserved_resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", files: [file])
@@ -106,8 +107,8 @@ describe Preserver do
     context "when retrieving Preservation from a ScannedMap" do
       let(:resource) do
         FactoryBot.create_for_repository(:complete_scanned_map,
-                                         source_metadata_identifier: "123456",
-                                         files: [file])
+          source_metadata_identifier: "123456",
+          files: [file])
       end
       let(:file_set) do
         resource.decorate.decorated_file_sets.first
@@ -127,7 +128,7 @@ describe Preserver do
     context "when preserving an EphemeraProject" do
       let(:resource) do
         FactoryBot.create_for_repository(:ephemera_project,
-                                         member_ids: folder.id)
+          member_ids: folder.id)
       end
       let(:change_set) { ChangeSet.for(resource) }
       let(:folder) do
@@ -150,7 +151,7 @@ describe Preserver do
     context "when preserving an EphemeraBox" do
       let(:resource) do
         FactoryBot.create_for_repository(:ephemera_box,
-                                         member_ids: folder.id)
+          member_ids: folder.id)
       end
       let(:change_set) { ChangeSet.for(resource) }
       let(:folder) do

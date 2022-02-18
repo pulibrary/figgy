@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe EditFieldHelper, type: :helper do
@@ -8,10 +9,10 @@ RSpec.describe EditFieldHelper, type: :helper do
     let(:spa) { FactoryBot.create_for_repository(:ephemera_term, label: "Spanish") }
     let(:languages) do
       [FactoryBot.create_for_repository(:ephemera_term, label: "Abkhazian").decorate,
-       FactoryBot.create_for_repository(:ephemera_term, label: "Afar").decorate,
-       eng.decorate,
-       por.decorate,
-       spa.decorate]
+        FactoryBot.create_for_repository(:ephemera_term, label: "Afar").decorate,
+        eng.decorate,
+        por.decorate,
+        spa.decorate]
     end
     let(:top_languages) { [eng, por, spa] }
     it "pops English, Spanish, Portuguese to the top of the list" do

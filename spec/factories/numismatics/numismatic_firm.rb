@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :numismatic_firm, class: Numismatics::Firm do
     city "firm city"

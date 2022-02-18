@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Bagit
   class QueryService
     attr_reader :adapter
@@ -28,11 +29,9 @@ module Bagit
 
     def find_many_by_ids(ids:)
       ids.uniq.map do |id|
-        begin
-          find_by(id: id)
-        rescue ::Valkyrie::Persistence::ObjectNotFoundError
-          nil
-        end
+        find_by(id: id)
+      rescue ::Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end.reject(&:nil?)
     end
 
@@ -73,7 +72,7 @@ module Bagit
       find_all_of_model(model: model).to_a.length
     end
 
-    def find_inverse_references_by(resource: nil, id: nil, model: nil, property:)
+    def find_inverse_references_by(property:, resource: nil, id: nil, model: nil)
       raise ArgumentError, "Provide resource or id" unless resource || id
       raise ArgumentError, "resource is not saved" unless !resource || resource.persisted?
       Valkyrie.logger.warn("Bagit Query Service has been asked to find inverse references. This will require iterating over the metadata of every bag - AVOID.")
@@ -92,7 +91,7 @@ module Bagit
 
       def filter_by_model(resources, model)
         return resources unless model
-        resources.select { |found_resource| found_resource.class == model }
+        resources.select { |found_resource| found_resource.instance_of?(model) }
       end
   end
 end

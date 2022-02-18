@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe VocabularyService::EphemeraVocabularyService do
   subject(:service) do
     described_class.new(change_set_persister: change_set_persister,
-                        persist_if_not_found: true)
+      persist_if_not_found: true)
   end
   let(:change_set_persister) do
     ChangeSetPersister.new(
@@ -17,49 +18,49 @@ RSpec.describe VocabularyService::EphemeraVocabularyService do
 
   before do
     politics_and_government = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                               label: "Politics and government")
+      label: "Politics and government")
 
     FactoryBot.create_for_repository(:ephemera_term,
-                                     label: "Government policy",
-                                     member_of_vocabulary_id: politics_and_government.id)
+      label: "Government policy",
+      member_of_vocabulary_id: politics_and_government.id)
 
     imported_terms = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                      label: "Imported Terms")
+      label: "Imported Terms")
 
     FactoryBot.create_for_repository(:ephemera_term,
-                                     label: "Some place",
-                                     member_of_vocabulary_id: imported_terms.id)
+      label: "Some place",
+      member_of_vocabulary_id: imported_terms.id)
 
     languages = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                                 label: "LAE Languages")
+      label: "LAE Languages")
     FactoryBot.create_for_repository(:ephemera_term,
-                                     label: ["Spanish"],
-                                     code: ["es"],
-                                     member_of_vocabulary_id: languages.id)
+      label: ["Spanish"],
+      code: ["es"],
+      member_of_vocabulary_id: languages.id)
 
     areas = FactoryBot.create_for_repository(:ephemera_vocabulary,
-                                             label: "LAE Areas")
+      label: "LAE Areas")
     FactoryBot.create_for_repository(:ephemera_term,
-                                     label: ["Chile"],
-                                     member_of_vocabulary_id: areas.id)
+      label: ["Chile"],
+      member_of_vocabulary_id: areas.id)
   end
 
   it "can find an existing subject" do
     subject = service.find_subject_by(category: "Politics and government",
-                                      topic: "Government policy")
+      topic: "Government policy")
     expect(subject.label.first).to eq("Government policy")
   end
 
   it "can find a new subject" do
     subject = service.find_subject_by(category: "Politics and government",
-                                      topic: "Bogus topic")
+      topic: "Bogus topic")
     expect(subject).not_to be_nil
     expect(subject.label.first).to eq("Bogus topic")
   end
 
   it "can recover from being given a bad category" do
     subject = service.find_subject_by(category: "Bogus category",
-                                      topic: "Bogus topic")
+      topic: "Bogus topic")
     expect(subject).not_to be_nil
     expect(subject.label.first).to eq("Bogus topic")
   end

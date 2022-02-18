@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class IngestMETSJob < ApplicationJob
   attr_reader :mets
 
@@ -18,8 +19,8 @@ class IngestMETSJob < ApplicationJob
 
   def change_set_persister
     @change_set_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                     storage_adapter: storage_adapter,
-                                                     queue: queue_name)
+      storage_adapter: storage_adapter,
+      queue: queue_name)
   end
 
   def metadata_adapter
@@ -82,7 +83,7 @@ class IngestMETSJob < ApplicationJob
     # @return [ScannedResource] the persisted resource with the logical structure assigned
     def assign_logical_structure(resource)
       new_change_set = ChangeSet.for(resource)
-      new_change_set.logical_structure = [{ label: "Main Structure", nodes: map_fileids(mets.structure)[:nodes] }]
+      new_change_set.logical_structure = [{label: "Main Structure", nodes: map_fileids(mets.structure)[:nodes]}]
       change_set_persister.save(change_set: new_change_set)
     end
 
@@ -120,9 +121,7 @@ class IngestMETSJob < ApplicationJob
     # @return [ChangeSet]
     def change_set
       @change_set ||=
-        begin
-          ChangeSet.for(ScannedResource.new, change_set_param: change_set_param)
-        end
+        ChangeSet.for(ScannedResource.new, change_set_param: change_set_param)
     end
 
     # METS comes in two forms: with a bib-id and without.

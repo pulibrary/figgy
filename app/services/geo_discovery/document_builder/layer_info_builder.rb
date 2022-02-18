@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GeoDiscovery
   class DocumentBuilder
     class LayerInfoBuilder
@@ -67,7 +68,7 @@ module GeoDiscovery
         def vector_geom_clean(value)
           return "Mixed" if value == "None"
           removable_strings = ["Multi ", "3D ", " String", "Measured "]
-          removable_strings.each  do |s|
+          removable_strings.each do |s|
             value = value.gsub(s, "")
           end
 

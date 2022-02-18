@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PreserveChildrenJob < ApplicationJob
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter

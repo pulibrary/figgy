@@ -104,7 +104,7 @@ class ResourceController < ApplicationController
       format.html do
         redirect_to contextual_path(obj, change_set).show
       end
-      format.json { render json: { status: "ok" } }
+      format.json { render json: {status: "ok"} }
     end
   end
 
@@ -234,17 +234,15 @@ class ResourceController < ApplicationController
     # Construct the pending download objects
     # @return [Array<PendingUpload>]
     def new_pending_uploads
-      @new_pending_uploads ||= begin
-        browse_everything_uploads.map do |upload_id|
-          upload_files(upload_id).map do |upload_file|
-            # create the pending upload
-            PendingUpload.new(
-              id: SecureRandom.uuid,
-              upload_file_id: upload_file.id
-            )
-          end
-        end.flatten
-      end
+      @new_pending_uploads ||= browse_everything_uploads.map do |upload_id|
+        upload_files(upload_id).map do |upload_file|
+          # create the pending upload
+          PendingUpload.new(
+            id: SecureRandom.uuid,
+            upload_file_id: upload_file.id
+          )
+        end
+      end.flatten
     end
 
     # Load upload files, filtering out hidden files

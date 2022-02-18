@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ThumbnailHelper
   include ::BlacklightHelper
 
@@ -14,7 +15,7 @@ module ThumbnailHelper
   end
 
   def default_icon_fallback
-    "this.src='#{image_path('default.png')}'"
+    "this.src='#{image_path("default.png")}'"
   end
 
   # Generate the thumbnail path for a given SolrDocument
@@ -23,8 +24,7 @@ module ThumbnailHelper
   # @return [String]
   def figgy_thumbnail_path(document, image_options = {})
     document = document.try(:resource) || document.try(:model) || document
-    value = send(figgy_thumbnail_method(document), document, image_options)
-    value
+    send(figgy_thumbnail_method(document), document, image_options)
   rescue TypeError # This error is raised by the QueryService
     Rails.logger.error("Unable to retrieve the resource with the ID #{document.id}")
     default_icon_fallback
@@ -64,8 +64,6 @@ module ThumbnailHelper
     image_tag url, image_options.merge(onerror: default_icon_fallback)
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   def iiif_thumbnail_path(document, image_options = {})
     if document.thumbnail_id.blank?
       return unless document.respond_to?(:member_ids)

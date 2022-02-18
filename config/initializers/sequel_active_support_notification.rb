@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "sequel/database/logging"
 require "active_support/notifications"
 

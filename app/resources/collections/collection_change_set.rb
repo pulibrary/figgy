@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CollectionChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
   include RemoteMetadataProperty

@@ -1,4 +1,5 @@
 # frozen_string_literal: false
+
 module MetadataFormHelper
   def form_title(params)
     controller_name = params["controller"]
@@ -9,9 +10,9 @@ module MetadataFormHelper
     model_params = params[model_name]
 
     if model_params && form_custom_title(model_params)
-      "#{action} #{model_params['change_set'].humanize.singularize.downcase} resource"
+      "#{action} #{model_params["change_set"].humanize.singularize.downcase} resource"
     elsif form_custom_title(params)
-      "#{action} #{params['change_set'].humanize.singularize.downcase} resource"
+      "#{action} #{params["change_set"].humanize.singularize.downcase} resource"
     else
       "#{action} #{model_name.humanize.downcase}"
     end

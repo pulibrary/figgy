@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateOcrRequestJob < ApplicationJob
   include ActiveStorage::Downloading
   queue_as :high

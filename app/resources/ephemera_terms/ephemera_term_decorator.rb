@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   display :label, :uri, :code, :tgm_label, :lcsh_label, :vocabulary
 
@@ -10,8 +11,8 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   def label
     Array.wrap(super).first
   end
-  alias title label
-  alias to_s label
+  alias_method :title, :label
+  alias_method :to_s, :label
 
   def external_uri_exists?
     value = Array.wrap(model.uri).first

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # This resource represents a single bibdata dump and tracks whether it has been
 #   processed to refresh metadata from voyager
 # We need to do this because bibdata provides an ongoing list of dump events,

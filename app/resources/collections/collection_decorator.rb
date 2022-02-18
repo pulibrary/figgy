@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CollectionDecorator < Valkyrie::ResourceDecorator
   delegate :members, :parents, :collections, :members_count, to: :wayfinder
   display Schema::Common.attributes, :owners, :restricted_viewers, :rendered_manifest_url, :rendered_dpul_url
@@ -34,7 +35,7 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
     # Generate the Hash for the IIIF Manifest metadata exposing the slug as an "Exhibit" property
     # @return [Hash] the exhibit metadata hash
     def iiif_manifest_exhibit
-      { exhibit: slug }
+      {exhibit: slug}
     end
 
     def rendered_dpul_url

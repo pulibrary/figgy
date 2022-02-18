@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe Event do
   subject(:event) do
     described_class.new(type: type,
-                        status: status,
-                        resource_id: resource_id,
-                        child_property: child_property,
-                        child_id: child_id,
-                        message: message)
+      status: status,
+      resource_id: resource_id,
+      child_property: child_property,
+      child_id: child_id,
+      message: message)
   end
   let(:type) { "Test type" }
   let(:status) { "Test status" }

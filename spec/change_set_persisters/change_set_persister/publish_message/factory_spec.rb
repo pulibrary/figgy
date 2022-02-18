@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ChangeSetPersister::PublishMessage::Factory do
@@ -26,7 +27,7 @@ RSpec.describe ChangeSetPersister::PublishMessage::Factory do
     it "raises an issue when attempting to initialize a publisher object for unsupported operations" do
       expect do
         described_class.new(operation: :unsupport)
-                       .new(change_set_persister: change_set_persister, change_set: change_set)
+          .new(change_set_persister: change_set_persister, change_set: change_set)
       end.to raise_error(NotImplementedError, "ChangeSetPersister::PublishUnsupportedMessage not supported as a change set persistence handler")
     end
   end

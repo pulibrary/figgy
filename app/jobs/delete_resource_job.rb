@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DeleteResourceJob < ApplicationJob
   def perform(id)
     resource = metadata_adapter.query_service.find_by(id: Valkyrie::ID.new(id))

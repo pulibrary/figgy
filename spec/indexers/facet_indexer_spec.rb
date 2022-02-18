@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe FacetIndexer do
@@ -7,7 +8,7 @@ RSpec.describe FacetIndexer do
       it "indexes relevant facets" do
         stub_bibdata(bib_id: "123456")
         scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
-        solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "*:*" })["response"]["docs"][0]
+        solr_record = Blacklight.default_index.connection.get("select", params: {qt: "document", q: "*:*"})["response"]["docs"][0]
 
         expect(solr_record["display_subject_ssim"]).to eq scanned_resource.imported_metadata.first.subject
         expect(solr_record["display_language_ssim"]).to eq ["English"]
@@ -91,7 +92,7 @@ RSpec.describe FacetIndexer do
       let(:language) { FactoryBot.create_for_repository(:ephemera_term, label: "English", member_of_vocabulary_id: [vocabulary.id]) }
       let(:subject_terms) do
         [FactoryBot.create_for_repository(:ephemera_term, label: "Birdo", member_of_vocabulary_id: [category.id]),
-         FactoryBot.create_for_repository(:ephemera_term, label: "Yoshi", member_of_vocabulary_id: [category.id])]
+          FactoryBot.create_for_repository(:ephemera_term, label: "Yoshi", member_of_vocabulary_id: [category.id])]
       end
       it "indexes subject, language" do
         folder = FactoryBot.create_for_repository(:ephemera_folder, subject: subject_terms, language: language)
@@ -111,7 +112,7 @@ RSpec.describe FacetIndexer do
         member_ids: file_set.id,
         thumbnail_id: file_set.id,
         logical_structure: [
-          { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
+          {label: "testing", nodes: [{label: "Chapter 1", nodes: [{proxy: file_set.id}]}]}
         ]
       )
 

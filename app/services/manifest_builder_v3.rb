@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   attr_reader :resource, :services
 
@@ -129,7 +130,7 @@ class ManifestBuilderV3
         {
           "@id" => helper.pdf_url(resource),
           "type" => "Text",
-          "label": { "en": ["Download as PDF"] },
+          :label => {en: ["Download as PDF"]},
           "format" => "application/pdf"
         }
       ]
@@ -151,16 +152,14 @@ class ManifestBuilderV3
     end
 
     def members
-      @members ||= begin
-        manifestable_members.map do |member|
-          decorator = member.decorate
-          if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
-            decorator.geo_members.first
-          else
-            member
-          end
-        end.compact
-      end
+      @members ||= manifestable_members.map do |member|
+        decorator = member.decorate
+        if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
+          decorator.geo_members.first
+        else
+          member
+        end
+      end.compact
     end
 
     def leaf_nodes
@@ -267,10 +266,10 @@ class ManifestBuilderV3
     # @return [IIIFManifest::DisplayImage]
     def display_image
       @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
-                                                        width: width.to_i,
-                                                        height: height.to_i,
-                                                        format: "image/jpeg",
-                                                        iiif_endpoint: endpoint)
+        width: width.to_i,
+        height: height.to_i,
+        format: "image/jpeg",
+        iiif_endpoint: endpoint)
     end
 
     def display_image_url
@@ -308,7 +307,7 @@ class ManifestBuilderV3
       def endpoint
         return unless resource.derivative_file
         IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(resource),
-                                       profile: "http://iiif.io/api/image/2/level2.json")
+          profile: "http://iiif.io/api/image/2/level2.json")
       end
 
       ##
@@ -386,8 +385,6 @@ class ManifestBuilderV3
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= begin
-        IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
-      end
+      @manifest ||= IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
     end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe BulkEditService do
@@ -19,7 +20,7 @@ RSpec.describe BulkEditService do
       it "updates the state of the member objects and mints an ark" do
         obj1 = FactoryBot.create_for_repository(:scanned_resource, state: ["pending"], member_of_collection_ids: [collection.id])
 
-        attrs = { state: "complete" }
+        attrs = {state: "complete"}
         described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
 
         after = query_service.find_by(id: obj1.id)
@@ -32,7 +33,7 @@ RSpec.describe BulkEditService do
       it "succeeds" do
         obj1 = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id], state: ["pending"], rights_statement: initial_rights)
 
-        attrs = { rights_statement: new_rights }
+        attrs = {rights_statement: new_rights}
         described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
 
         after = query_service.find_by(id: obj1.id)
@@ -51,7 +52,7 @@ RSpec.describe BulkEditService do
       it "logs an error and doesn't change the object" do
         obj = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id], rights_statement: initial_rights)
 
-        attrs = { rights_statement: bad_rights }
+        attrs = {rights_statement: bad_rights}
         described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
 
         expect(logger).to have_received(:warn).with("  Failed validation: {:rights_statement=>[\"http://rightsstatements.org/vocab/BAD/1.0/ is not a valid rights_statement\"]}")
@@ -69,7 +70,7 @@ RSpec.describe BulkEditService do
         obj1 = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id], state: ["pending"], rights_statement: initial_rights)
         obj2 = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id], state: ["pending"], rights_statement: initial_rights)
 
-        attrs = { rights_statement: new_rights, state: "complete" }
+        attrs = {rights_statement: new_rights, state: "complete"}
         described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
 
         after = query_service.find_by(id: obj1.id)
@@ -85,9 +86,9 @@ RSpec.describe BulkEditService do
     context "when updating collection_ids" do
       it "adds to the existing collection set" do
         obj = FactoryBot.create_for_repository(:scanned_resource,
-                                               member_of_collection_ids: [collection.id],
-                                               title: "original")
-        attrs = { append_collection_ids: collection2.id, title: "updated" }
+          member_of_collection_ids: [collection.id],
+          title: "original")
+        attrs = {append_collection_ids: collection2.id, title: "updated"}
         described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
 
         after = query_service.find_by(id: obj.id)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "ExhibitViewerConfiguration requests", type: :request do
@@ -8,7 +9,7 @@ RSpec.describe "ExhibitViewerConfiguration requests", type: :request do
     let(:manifest_url) { manifest_scanned_resource_url(scanned_resource) }
 
     it "generates a Universal Viewer configuration for the exhibit resource" do
-      get "/viewer/exhibit/config?manifest=#{CGI.escape(manifest_url)}", params: { format: :json }
+      get "/viewer/exhibit/config?manifest=#{CGI.escape(manifest_url)}", params: {format: :json}
 
       expect(response.status).to eq 200
       expect(response.body).not_to be_empty
@@ -27,7 +28,7 @@ RSpec.describe "ExhibitViewerConfiguration requests", type: :request do
 
     context "with a request for hypertext content" do
       it "generates a Universal Viewer configuration for the exhibit resource" do
-        get "/viewer/exhibit/config?manifest=#{CGI.escape(manifest_url)}", params: { format: :html }
+        get "/viewer/exhibit/config?manifest=#{CGI.escape(manifest_url)}", params: {format: :html}
 
         expect(response.status).to eq 200
         expect(response.body).not_to be_empty
@@ -47,7 +48,7 @@ RSpec.describe "ExhibitViewerConfiguration requests", type: :request do
 
     context "without a manifest parameter" do
       it "responds with a 400 status code" do
-        get "/viewer/exhibit/config", params: { format: :json }
+        get "/viewer/exhibit/config", params: {format: :json}
 
         expect(response.status).to eq 400
       end
@@ -57,7 +58,7 @@ RSpec.describe "ExhibitViewerConfiguration requests", type: :request do
       let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, downloadable: ["none"]) }
 
       it "responds with the configuration with downloads disabled" do
-        get "/viewer/exhibit/config?manifest=#{CGI.escape(manifest_url)}", params: { format: :json }
+        get "/viewer/exhibit/config?manifest=#{CGI.escape(manifest_url)}", params: {format: :json}
 
         expect(response.status).to eq 200
         expect(response.body).not_to be_empty

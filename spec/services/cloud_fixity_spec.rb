@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe CloudFixity do
@@ -126,24 +127,23 @@ RSpec.describe CloudFixity do
       id = SecureRandom.uuid
       id2 = SecureRandom.uuid
       resource = FactoryBot.create_for_repository(:scanned_resource)
-      preservation_object = begin
-                              FactoryBot.create_for_repository(
-                                :preservation_object,
-                                preserved_object_id: resource.id,
-                                metadata_node: FileMetadata.new(
-                                  id: id,
-                                  file_identifiers: Valkyrie::ID.new("shrine://yippie/ki/yay.tif"),
-                                  checksum: MultiChecksum.new(md5: "5")
-                                ),
-                                binary_nodes: [
-                                  FileMetadata.new(
-                                    id: id2,
-                                    file_identifiers: Valkyrie::ID.new("shrine://nakatomi/tower.tif"),
-                                    checksum: MultiChecksum.new(md5: "5")
-                                  )
-                                ]
-                              )
-                            end
+      preservation_object = FactoryBot.create_for_repository(
+        :preservation_object,
+        preserved_object_id: resource.id,
+        metadata_node: FileMetadata.new(
+          id: id,
+          file_identifiers: Valkyrie::ID.new("shrine://yippie/ki/yay.tif"),
+          checksum: MultiChecksum.new(md5: "5")
+        ),
+        binary_nodes: [
+          FileMetadata.new(
+            id: id2,
+            file_identifiers: Valkyrie::ID.new("shrine://nakatomi/tower.tif"),
+            checksum: MultiChecksum.new(md5: "5")
+          )
+        ]
+      )
+
       allow(Rails.logger).to receive(:info)
 
       CloudFixity::FixityRequestor.queue_resource_check!(id: resource.id.to_s)

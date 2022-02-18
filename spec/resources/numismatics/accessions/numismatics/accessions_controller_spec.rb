@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::AccessionsController, type: :controller do
@@ -31,7 +32,7 @@ RSpec.describe Numismatics::AccessionsController, type: :controller do
     end
     it "creates an accession" do
       FactoryBot.create_for_repository(:numismatic_accession)
-      post :create, params: { numismatics_accession: valid_params }
+      post :create, params: {numismatics_accession: valid_params}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/accessions"
       accession = query_service.find_all_of_model(model: Numismatics::Accession).select { |n| n["cost"] == ["$123.00"] }.first
@@ -56,12 +57,12 @@ RSpec.describe Numismatics::AccessionsController, type: :controller do
 
     context "html access control" do
       let(:factory) { :numismatic_accession }
-      let(:extra_params) { { numismatic_accession: { type: ["gift"] } } }
+      let(:extra_params) { {numismatic_accession: {type: ["gift"]}} }
       it_behaves_like "an access controlled update request"
     end
     it "saves and redirects" do
       numismatic_accession = FactoryBot.create_for_repository(:numismatic_accession)
-      patch :update, params: { id: numismatic_accession.id.to_s, numismatics_accession: { type: ["super gift"] } }
+      patch :update, params: {id: numismatic_accession.id.to_s, numismatics_accession: {type: ["super gift"]}}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/accessions"
     end

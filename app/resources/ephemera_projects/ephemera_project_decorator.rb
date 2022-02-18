@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   display :title
   delegate :members, :query_service, :decorated_folders_with_genres, to: :wayfinder
@@ -59,6 +60,6 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
     # Generate the Hash for the IIIF Manifest metadata exposing the slug as an "Exhibit" property
     # @return [Hash] the exhibit metadata hash
     def iiif_manifest_exhibit
-      { exhibit: slug }
+      {exhibit: slug}
     end
 end

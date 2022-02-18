@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraTermsController < ResourceController
   self.resource_class = EphemeraTerm
   self.change_set_persister = ::ChangeSetPersister.new(

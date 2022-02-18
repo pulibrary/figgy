@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.feature "Numismatics::Issues" do
@@ -378,18 +379,18 @@ RSpec.feature "Numismatics::Issues" do
     let(:adapter) { Valkyrie::MetadataAdapter.find(:index_solr) }
     let(:numismatic_issue) do
       FactoryBot.create_for_repository(:numismatic_issue,
-                                       color: "green",
-                                       denomination: "1/2 Penny",
-                                       edge: "serrated",
-                                       metal: "copper",
-                                       object_type: "coin",
-                                       obverse_figure: "obv figure",
-                                       obverse_orientation: "obv orientation",
-                                       obverse_part: "obv part",
-                                       reverse_figure: "rev figure",
-                                       reverse_orientation: "rev orientation",
-                                       reverse_part: "rev part",
-                                       shape: "round")
+        color: "green",
+        denomination: "1/2 Penny",
+        edge: "serrated",
+        metal: "copper",
+        object_type: "coin",
+        obverse_figure: "obv figure",
+        obverse_orientation: "obv orientation",
+        obverse_part: "obv part",
+        reverse_figure: "rev figure",
+        reverse_orientation: "rev orientation",
+        reverse_part: "rev part",
+        shape: "round")
     end
 
     it "displays select boxes for some properties" do

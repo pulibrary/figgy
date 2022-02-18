@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   class CleanupMembership
     class Factory
@@ -9,9 +10,9 @@ class ChangeSetPersister
 
       def new(change_set_persister:, change_set:, post_save_resource: nil)
         CleanupMembership.new(change_set_persister: change_set_persister,
-                              change_set: change_set,
-                              post_save_resource: post_save_resource,
-                              property: property)
+          change_set: change_set,
+          post_save_resource: post_save_resource,
+          property: property)
       end
     end
     attr_reader :change_set_persister, :change_set, :post_save_resource, :property

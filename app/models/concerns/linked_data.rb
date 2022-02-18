@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Enables RDF views of Solr Documents. Included via
 # `SolrDocument.use_extension`.
 module LinkedData

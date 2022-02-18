@@ -1,4 +1,5 @@
 # frozen_string_literal: false
+
 module EditFieldHelper
   def reorder_languages(languages, top_languages)
     pull_to_front(languages) { |term| top_languages.include? term }

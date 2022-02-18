@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Valkyrie::ResourceDecorator do
@@ -30,10 +31,10 @@ RSpec.describe Valkyrie::ResourceDecorator do
     context "when viewing a new Scanned Resource" do
       let(:resource) do
         FactoryBot.create_for_repository(:complete_scanned_resource,
-                                         title: ["test title"],
-                                         pdf_type: ["Gray"],
-                                         identifier: ["http://arks.princeton.edu/ark:/88435/5m60qr98h"],
-                                         created: ["01/01/1970"])
+          title: ["test title"],
+          pdf_type: ["Gray"],
+          identifier: ["http://arks.princeton.edu/ark:/88435/5m60qr98h"],
+          created: ["01/01/1970"])
       end
       let(:metadata) { resource.decorate.iiif_metadata }
 

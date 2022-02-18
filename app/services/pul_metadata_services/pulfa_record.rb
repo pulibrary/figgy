@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # require 'nokogiri'
 
 module PulMetadataServices
@@ -182,7 +183,7 @@ module PulMetadataServices
             parent_id = data.at_xpath("/c/did/container/@parent")
             return unless parent_id
             parent = data.at_xpath("//c[@id='#{parent_id}']/did/container")
-            "#{parent.attribute('type').value.capitalize} #{parent.content}"
+            "#{parent.attribute("type").value.capitalize} #{parent.content}"
           end
 
           # Generate a description of the parent container for the item (using an encoded container type)

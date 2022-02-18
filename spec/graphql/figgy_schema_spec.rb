@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe FiggySchema do
   # You can override `context` or `variables` in
   # more specific scopes
-  let(:context) { { ability: instance_double(Ability, can?: true), change_set_persister: GraphqlController.change_set_persister } }
+  let(:context) { {ability: instance_double(Ability, can?: true), change_set_persister: GraphqlController.change_set_persister} }
   let(:variables) { {} }
   # Call `result` to execute the query
   let(:result) do

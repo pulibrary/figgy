@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Generated with `rails generate valkyrie:model ProxyFileSet`
 require "rails_helper"
 require "valkyrie/specs/shared_specs"

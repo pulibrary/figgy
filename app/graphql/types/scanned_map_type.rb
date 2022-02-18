@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Types::ScannedMapType < Types::BaseObject
   implements Types::Resource
 

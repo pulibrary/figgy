@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ScannedResourceWayfinder < BaseWayfinder
   # All valid relationships for a ScannedResource
   relationship_by_property :members, property: :member_ids
@@ -34,8 +35,6 @@ class ScannedResourceWayfinder < BaseWayfinder
   def playlists
     return [] unless ChangeSet.for(resource).is_a?(RecordingChangeSet)
     @playlists ||=
-      begin
-        query_service.custom_queries.playlists_from_recording(recording: resource)
-      end
+      query_service.custom_queries.playlists_from_recording(recording: resource)
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe DownloadsController do
@@ -18,7 +19,7 @@ RSpec.describe DownloadsController do
       end
 
       it "serves files that exist" do
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s}
         expect(response.body).to eq(sample_file.read)
         expect(response.content_length).to eq(196_882)
         expect(response.content_type).to eq("image/tiff")
@@ -30,7 +31,7 @@ RSpec.describe DownloadsController do
         file_set.file_metadata.first.updated_at = nil
         change_set_persister.metadata_adapter.persister.save(resource: file_set)
 
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s}
 
         expect(response.body).to eq(sample_file.read)
         expect(response.content_length).to eq(196_882)
@@ -39,25 +40,25 @@ RSpec.describe DownloadsController do
       end
 
       it "returns an 404 when the file_set doesn't exist" do
-        get :show, params: { resource_id: file_set.id.to_s, id: "bogus" }
+        get :show, params: {resource_id: file_set.id.to_s, id: "bogus"}
         expect(response.status).to eq(404)
       end
 
       it "returns an 404 when the file is not found on disk" do
         allow(disk).to receive(:find_by).and_raise(Valkyrie::StorageAdapter::FileNotFound)
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s}
         expect(response.status).to eq(404)
       end
 
       it "returns an appropriate error when the resource doesn't exist" do
-        get :show, params: { resource_id: "bogus", id: "bogus" }
+        get :show, params: {resource_id: "bogus", id: "bogus"}
         expect(response.status).to eq(404)
       end
     end
 
     context "when not logged in and the parent is pending" do
       it "redirects to login" do
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s}
         expect(response).to redirect_to("/users/auth/cas")
       end
     end
@@ -70,7 +71,7 @@ RSpec.describe DownloadsController do
       end
 
       it "redirects to login" do
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s}
         expect(response).to redirect_to("/users/auth/cas")
       end
     end
@@ -83,7 +84,7 @@ RSpec.describe DownloadsController do
       end
 
       it "allows downloading the file" do
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s}
         expect(response.content_length).to eq(196_882)
         expect(response.content_type).to eq("image/tiff")
         expect(response.body).to eq(sample_file.read)
@@ -93,7 +94,7 @@ RSpec.describe DownloadsController do
     context "with an auth token" do
       it "allows downloading the file" do
         token = AuthToken.create!(group: ["admin"], label: "admin_token")
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: token.token }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: token.token}
         expect(response.content_length).to eq(196_882)
         expect(response.content_type).to eq("image/tiff")
         expect(response.body).to eq(sample_file.read)
@@ -114,7 +115,7 @@ RSpec.describe DownloadsController do
       it "allow clients to download the HLS partial file with an auth. token" do
         persisted_playlist = meta.query_service.find_by(id: playlist.id)
 
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token}
 
         expect(response.content_length).to eq(5452)
         expect(response.content_type).to eq("video/MP2T")
@@ -131,7 +132,7 @@ RSpec.describe DownloadsController do
         change_set.files = [file]
         output = change_set_persister.save(change_set: change_set)
 
-        get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s, auth_token: token.token }
+        get :show, params: {resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s, auth_token: token.token}
 
         expect(response).to be_successful
         expect(M3u8::Playlist.read(response.body).items[0].segment).to end_with "?auth_token=#{token.token}"
@@ -149,7 +150,7 @@ RSpec.describe DownloadsController do
         file_set = Wayfinder.for(parent).members.first
         partial = file_set.derivative_partial_files.first
 
-        get :show, params: { resource_id: file_set.id.to_s, id: partial.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: partial.id.to_s}
 
         expect(response).to be_successful
       end
@@ -161,7 +162,7 @@ RSpec.describe DownloadsController do
         file_set = Wayfinder.for(parent).members.first
         wav_file = file_set.original_files.first
 
-        get :show, params: { resource_id: file_set.id.to_s, id: wav_file.id.to_s }
+        get :show, params: {resource_id: file_set.id.to_s, id: wav_file.id.to_s}
 
         expect(response).not_to be_successful
       end
@@ -178,7 +179,7 @@ RSpec.describe DownloadsController do
         change_set.files = [file]
         output = change_set_persister.save(change_set: change_set)
 
-        get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s }
+        get :show, params: {resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s}
 
         expect(response).to be_successful
         expect(M3u8::Playlist.read(response.body).items[0].segment).not_to include "?auth_token"
@@ -207,7 +208,7 @@ RSpec.describe DownloadsController do
       it "allow clients to download the file with an auth. token" do
         persisted_playlist = meta.query_service.find_by(id: playlist2.id)
 
-        get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token }
+        get :show, params: {resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token}
 
         expect(response.content_length).to eq(147_550)
         expect(response.content_type).to eq("audio/x-wav")
@@ -235,7 +236,7 @@ RSpec.describe DownloadsController do
       let(:tika_output) { tika_xml_output }
 
       it "modifies inserts an onlink value into the file" do
-        get :show, params: { resource_id: fgdc_file_set.id.to_s, id: fgdc_file_set.file_metadata.first.id.to_s }
+        get :show, params: {resource_id: fgdc_file_set.id.to_s, id: fgdc_file_set.file_metadata.first.id.to_s}
 
         expect(response).to be_successful
         doc = Nokogiri::XML(response.body)

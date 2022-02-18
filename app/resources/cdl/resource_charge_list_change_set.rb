@@ -5,8 +5,8 @@ module CDL
     property :charged_items
     property :hold_queue
     property :optimistic_lock_token,
-             multiple: true,
-             required: true,
-             type: Valkyrie::Types::Set.of(Valkyrie::Types::OptimisticLockToken)
+      multiple: true,
+      required: true,
+      type: Valkyrie::Types::Set.of(Valkyrie::Types::OptimisticLockToken)
   end
 end

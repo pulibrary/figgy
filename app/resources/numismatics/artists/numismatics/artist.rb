@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class Artist < Resource
     include Valkyrie::Resource::AccessControls

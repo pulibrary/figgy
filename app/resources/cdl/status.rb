@@ -11,15 +11,15 @@ module CDL
     def as_json(*_args)
       return no_user if user.blank?
       {
-        "charged": charged_item.present?,
-        "available": available_status
+        charged: charged_item.present?,
+        available: available_status
       }.merge(expired_hash)
     end
 
     def no_user
       {
-        "charged": false,
-        "available": false
+        charged: false,
+        available: false
       }
     end
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 class Preserver::BlindImporter
-  def self.import(id: nil, source_resource: nil, change_set_persister:, source_metadata_adapter: default_source_metadata_adapter)
+  def self.import(change_set_persister:, id: nil, source_resource: nil, source_metadata_adapter: default_source_metadata_adapter)
     new(id: id, source_resource: source_resource, change_set_persister: change_set_persister, source_metadata_adapter: source_metadata_adapter).import!
   end
 
@@ -14,7 +15,7 @@ class Preserver::BlindImporter
 
   attr_reader :id, :source_metadata_adapter, :change_set_persister
   delegate :storage_adapter, to: :change_set_persister
-  def initialize(id: nil, source_metadata_adapter:, change_set_persister:, source_resource: nil)
+  def initialize(source_metadata_adapter:, change_set_persister:, id: nil, source_resource: nil)
     @id = id
     @source_metadata_adapter = source_metadata_adapter
     @change_set_persister = change_set_persister
@@ -33,8 +34,7 @@ class Preserver::BlindImporter
     end
     # Get rid of non-preserved members.
     source_change_set.try(:member_ids=, member_ids)
-    output = change_set_persister.save(change_set: source_change_set, external_resource: true)
-    output
+    change_set_persister.save(change_set: source_change_set, external_resource: true)
   end
 
   def import_binary_files

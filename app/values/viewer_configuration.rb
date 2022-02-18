@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class modeling configuration options for the Universal Viewer
 class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
   # Provides the default values for the viewer

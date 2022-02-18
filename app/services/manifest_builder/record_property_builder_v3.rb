@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilder
   # this class was added to support viewingDirection. Should be deleted once
   # we upgrade to a release with the resolution to
@@ -10,7 +11,7 @@ class ManifestBuilder
       manifest.behavior = ["auto-advance"]
       if record.resource.downloadable == ["none"]
         manifest["service"] = [
-          { "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] }
+          {"@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"]}
         ]
       end
 
@@ -47,10 +48,10 @@ class ManifestBuilder
         return nil if image_file_sets.empty? && member_image_file_sets.empty?
 
         image_file_set = if !image_file_sets.empty?
-                           image_file_sets.first
-                         else
-                           member_image_file_sets.first
-                         end
+          image_file_sets.first
+        else
+          member_image_file_sets.first
+        end
 
         ManifestBuilder::LeafNode.new(image_file_set, record)
       end

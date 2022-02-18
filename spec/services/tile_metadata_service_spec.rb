@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "shrine/storage/s3"
 
@@ -104,7 +105,7 @@ RSpec.describe TileMetadataService do
         fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         generator = described_class.new(resource: raster_set)
 
-        expect(generator.mosaic_file_id).to eq("disk://#{Rails.root.join('tmp', 'cloud_geo_derivatives', '33', '1d', '70', '331d70a54bd94a6580e4763c8f6b34fd', "mosaic-#{fingerprint}.json")}")
+        expect(generator.mosaic_file_id).to eq("disk://#{Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic-#{fingerprint}.json")}")
       end
     end
 

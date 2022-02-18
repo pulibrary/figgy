@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Bagit
   class StorageAdapter
     attr_reader :base_path
@@ -86,9 +87,7 @@ module Bagit
           lines = File.readlines(bag_path.join("manifest-#{algorithm}.txt")).select do |line|
             !line.include?(file_path.to_s)
           end
-          File.open(bag_path.join("manifest-#{algorithm}.txt"), "w") do |f|
-            f.write(lines.join("\n"))
-          end
+          File.write(bag_path.join("manifest-#{algorithm}.txt"), lines.join("\n"))
         end
       end
     end

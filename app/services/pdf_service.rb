@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PDFService
   attr_reader :change_set_persister
   delegate :storage_adapter, to: :change_set_persister

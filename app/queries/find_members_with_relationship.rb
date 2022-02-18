@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # This is a custom query which finds all members of an object as well as
 # populates `loaded` with a hash of objects eager loaded from a relationship.
@@ -28,7 +29,7 @@ class FindMembersWithRelationship
   def find_members_with_relationship(resource:, relationship:)
     members = query_service.find_members(resource: resource)
     relationship_objects =
-      run_query(relationship_query, id: resource.id.to_s, relation: relationship.to_s, relation_query: { relationship => [] }.to_json)
+      run_query(relationship_query, id: resource.id.to_s, relation: relationship.to_s, relation_query: {relationship => []}.to_json)
     populate_members(relationship, members, relationship_objects)
   end
 

@@ -36,14 +36,12 @@ class BibidUpdater
     # inside a transaction, which results in solr being different than postgres.
     def resources
       @resources ||=
-        begin
-          query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: [], lazy: true).select do |resource|
-            id = resource.source_metadata_identifier.first
-            next if id =~ /99.*3506421/
-            next if transform_id(id).length > 18
-            RemoteRecord.bibdata?(id)
-          end.to_a
-        end
+        query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: [], lazy: true).select do |resource|
+          id = resource.source_metadata_identifier.first
+          next if /99.*3506421/.match?(id)
+          next if transform_id(id).length > 18
+          RemoteRecord.bibdata?(id)
+        end.to_a
     end
 
     def total_count

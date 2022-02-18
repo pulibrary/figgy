@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraFieldChangeSet < Valkyrie::ChangeSet
   validates :field_name, :member_of_vocabulary_id, presence: true
   property :field_name, multiple: false, required: true

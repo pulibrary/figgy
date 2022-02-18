@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PosterIngesterJob < ApplicationJob
   def perform(file, project_label)
     file = File.open(file)
@@ -7,7 +8,7 @@ class PosterIngesterJob < ApplicationJob
     poster_genre = metadata_adapter.query_service.custom_queries.find_ephemera_term_by_label(label: "Posters", parent_vocab_label: "LAE Genres")
     raise "Both given project and the 'Poster' genre must exist before running." unless project.present? && poster_genre.present?
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      importer = FolderJSONImporter.new(file: file, attributes: { append_id: project.id, genre: poster_genre.id }, change_set_persister: buffered_changeset_persister)
+      importer = FolderJSONImporter.new(file: file, attributes: {append_id: project.id, genre: poster_genre.id}, change_set_persister: buffered_changeset_persister)
       importer.import!
     end
   end

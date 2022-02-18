@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ScannedResourcesController < ResourceController
   self.resource_class = ScannedResource
   self.change_set_persister = ChangeSetPersister.default
@@ -49,7 +50,7 @@ class ScannedResourcesController < ResourceController
     authorize! :pdf, change_set.resource
     pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
 
-    redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
+    redirect_path_args = {resource_id: change_set.id, id: pdf_file.id}
     redirect_path_args[:auth_token] = auth_token_param if auth_token_param
     redirect_to download_path(redirect_path_args)
   end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 adapter = Valkyrie::MetadataAdapter.find(:postgres)
 resource = adapter.persister.save(resource: ScannedResource.new(title: "Test Title"))
 resource_factory = adapter.query_service.resource_factory

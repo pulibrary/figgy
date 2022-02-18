@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
 
@@ -30,7 +31,6 @@ RSpec.describe AudioDerivativeService do
 
     context "when given an invalid mime_type" do
       it "does not validate" do
-        # rubocop:disable RSpec/SubjectStub
         allow(valid_file).to receive(:mime_type).and_return(["image/not-valid"])
         # rubocop:enable RSpec/SubjectStub
         is_expected.not_to be_valid

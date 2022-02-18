@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "ruby-progressbar"
 
 namespace :figgy do

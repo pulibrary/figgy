@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AddEphemeraToCollectionJob < ApplicationJob
   def perform(project_id, collection_id)
     logger.info "starting job"
@@ -8,9 +9,9 @@ class AddEphemeraToCollectionJob < ApplicationJob
     )
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       AddEphemeraToCollection.new(project_id: project_id,
-                                  collection_id: collection_id,
-                                  change_set_persister: buffered_changeset_persister,
-                                  logger: logger).add_ephemera
+        collection_id: collection_id,
+        change_set_persister: buffered_changeset_persister,
+        logger: logger).add_ephemera
     end
     logger.info "job finished"
   end

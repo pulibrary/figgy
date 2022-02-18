@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ScannedMapDecorator do
@@ -6,22 +7,22 @@ RSpec.describe ScannedMapDecorator do
   let(:imported_coverage) { "northlimit=07.033333; eastlimit=011.583333; southlimit=03.917778; westlimit=008.497222; units=degrees; projection=EPSG:4326" }
   let(:resource) do
     FactoryBot.build(:scanned_map,
-                     title: "test title",
-                     coverage: [],
-                     author: "test author",
-                     creator: "test creator",
-                     references: links.to_json,
-                     subject: "test subject",
-                     identifier: "ark:/99999/fk4",
-                     holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14",
-                     imported_metadata: [{
-                       coverage: imported_coverage
-                     }])
+      title: "test title",
+      coverage: [],
+      author: "test author",
+      creator: "test creator",
+      references: links.to_json,
+      subject: "test subject",
+      identifier: "ark:/99999/fk4",
+      holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14",
+      imported_metadata: [{
+        coverage: imported_coverage
+      }])
   end
   let(:links) do
     {
       "http://www.jstor.org/stable/1797655": ["www.jstor.org"],
-      "iiif_manifest_paths": "https://figgy.princeton.edu/concern/scanned_maps/pb8518582r/manifest"
+      iiif_manifest_paths: "https://figgy.princeton.edu/concern/scanned_maps/pb8518582r/manifest"
     }
   end
   describe "Voyager downtime" do
@@ -76,10 +77,10 @@ RSpec.describe ScannedMapDecorator do
     context "with imported metadata" do
       let(:resource) do
         FactoryBot.build(:scanned_map,
-                         title: "test title",
-                         imported_metadata: [{
-                           language: "eng"
-                         }])
+          title: "test title",
+          imported_metadata: [{
+            language: "eng"
+          }])
       end
 
       it "maps keys to english strings" do
@@ -91,8 +92,8 @@ RSpec.describe ScannedMapDecorator do
     context "with direct metadata" do
       let(:resource) do
         FactoryBot.build(:scanned_map,
-                         title: "test title",
-                         language: ["eng"])
+          title: "test title",
+          language: ["eng"])
       end
       it "exposes the language" do
         expect(decorator.language).to eq ["English"]

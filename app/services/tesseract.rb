@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Tesseract
   class << self
     def languages

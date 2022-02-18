@@ -1,4 +1,5 @@
 # frozen_string_literal: false
+
 class VectorResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Geo.attributes, :ark, :rendered_holding_location, :rendered_coverage, :member_of_collections
   suppress :coverage, :identifier, :source_jsonld, :thumbnail_id
@@ -10,14 +11,14 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   delegate :decorated_file_sets,
-           :decorated_raster_resource_parents,
-           :decorated_vector_resources,
-           :decorated_vector_resource_parents,
-           :geo_members,
-           :geo_metadata_members,
-           :members,
-           :parents,
-           to: :wayfinder
+    :decorated_raster_resource_parents,
+    :decorated_vector_resources,
+    :decorated_vector_resource_parents,
+    :geo_members,
+    :geo_metadata_members,
+    :members,
+    :parents,
+    to: :wayfinder
 
   def imported_attribute(attribute_key)
     return primary_imported_metadata.send(attribute_key) if primary_imported_metadata.try(attribute_key)
@@ -35,7 +36,7 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
       ControlledVocabulary.for(:language).find(language).label
     end
   end
-  alias display_imported_language imported_language
+  alias_method :display_imported_language, :imported_language
 
   def language
     (super || []).map do |language|

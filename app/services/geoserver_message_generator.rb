@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GeoserverMessageGenerator
   attr_reader :resource
 
@@ -96,7 +97,7 @@ class GeoserverMessageGenerator
     #   dataset)
     # @return [String]
     def shapefile_path
-      "file://#{File.dirname(geotiff_path)}/#{File.basename(geotiff_path, '.zip')}/#{id}.shp"
+      "file://#{File.dirname(geotiff_path)}/#{File.basename(geotiff_path, ".zip")}/#{id}.shp"
     end
 
     # Retrieve the title from the parent resource

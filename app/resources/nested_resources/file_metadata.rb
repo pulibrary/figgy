@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FileMetadata < Valkyrie::Resource
   include Valkyrie::Resource::AccessControls
   attribute :label, Valkyrie::Types::Set
@@ -40,12 +41,12 @@ class FileMetadata < Valkyrie::Resource
 
   def self.for(file:)
     new(label: file.original_filename,
-        original_filename: file.original_filename,
-        mime_type: file.content_type,
-        use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile],
-        created_at: Time.current,
-        updated_at: Time.current,
-        id: SecureRandom.uuid)
+      original_filename: file.original_filename,
+      mime_type: file.content_type,
+      use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile],
+      created_at: Time.current,
+      updated_at: Time.current,
+      id: SecureRandom.uuid)
   end
 
   def derivative?
@@ -97,7 +98,7 @@ class FileMetadata < Valkyrie::Resource
     return unless cloud_derivative?
     file_id = file_identifiers.first.to_s
     if file_id.include?("shrine")
-      file_id.gsub("cloud-geo-derivatives-shrine://", "s3://#{Figgy.config['cloud_geo_bucket']}/")
+      file_id.gsub("cloud-geo-derivatives-shrine://", "s3://#{Figgy.config["cloud_geo_bucket"]}/")
     else
       file_id.gsub("disk:/", "")
     end

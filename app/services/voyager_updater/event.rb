@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module VoyagerUpdater
   class Event
     PROCESSABLE_EVENT_TYPE = "CHANGED_RECORDS"

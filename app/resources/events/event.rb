@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Models events which modify resources
 
 class Event < Valkyrie::Resource

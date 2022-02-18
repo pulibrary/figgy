@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventGenerator
   class GeoserverEventGenerator
     attr_reader :rabbit_exchange
@@ -25,9 +26,11 @@ class EventGenerator
       )
     end
 
-    def record_created(record); end
+    def record_created(record)
+    end
 
-    def record_deleted(record); end
+    def record_deleted(record)
+    end
 
     def record_updated(record)
       # Iterate through all geo members of parent resource.
@@ -40,7 +43,8 @@ class EventGenerator
       end
     end
 
-    def record_member_updated(record); end
+    def record_member_updated(record)
+    end
 
     def valid?(record)
       return true if record.is_a?(VectorResource) || record.is_a?(RasterResource)

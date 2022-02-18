@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   class StructureBuilder < IIIFManifest::V3::ManifestBuilder::StructureBuilder
     def range_builder(top_range)

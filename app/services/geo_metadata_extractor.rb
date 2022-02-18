@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class GeoMetadataExtractor
   attr_reader :change_set, :file_node, :persister
   def initialize(change_set:, file_node:, persister:)

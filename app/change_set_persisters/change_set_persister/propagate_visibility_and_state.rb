@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   # Ensures that member resources inherit the visibility set on their parents
   # Also ensures that member resources have a state set which is appropriate to their Class

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PDFGenerator
   class CanvasDownloader
     attr_reader :canvas
@@ -51,7 +52,7 @@ class PDFGenerator
       end
 
       def max_dimensions
-        { height: (Canvas::LETTER_HEIGHT * scale_factor).round, width: (Canvas::LETTER_WIDTH * scale_factor).round }
+        {height: (Canvas::LETTER_HEIGHT * scale_factor).round, width: (Canvas::LETTER_WIDTH * scale_factor).round}
       end
 
       def max_width

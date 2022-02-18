@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventGenerator
   class CompositeGenerator
     attr_reader :generators

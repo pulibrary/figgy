@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe PulMetadataServices::PulfaRecord do
@@ -15,7 +16,7 @@ describe PulMetadataServices::PulfaRecord do
           created: ["1865-01-01T00:00:00Z/1865-12-31T23:59:59Z"],
           creator: ["Princeton University. Library. Dept. of Rare Books and Special Collections"],
           publisher: ["Princeton University. Library. Dept. of Rare Books and Special Collections"],
-          memberOf: [{ title: "Princeton University Library Records", identifier: "AC123" }],
+          memberOf: [{title: "Princeton University Library Records", identifier: "AC123"}],
           date_created: ["circa 1865"],
           container: ["Box 1, Folder 2"],
           extent: ["1 folder"],
@@ -34,7 +35,7 @@ describe PulMetadataServices::PulfaRecord do
           created: ["1885-01-01T00:00:00Z/1885-12-31T23:59:59Z"],
           creator: ["Savage, C. R. (Charles Roscoe), 1832-1909"],
           publisher: ["Princeton University Library. Special Collections."],
-          memberOf: [{ identifier: "WC064", title: "Princeton University Library Collection of Western Americana\n                Photographs" }],
+          memberOf: [{identifier: "WC064", title: "Princeton University Library Collection of Western Americana\n                Photographs"}],
           date_created: ["circa 1885"],
           container: ["Box M32, Folder M1089"],
           extent: ["1 item; 10 x 22 cm."],
@@ -78,7 +79,7 @@ describe PulMetadataServices::PulfaRecord do
           publisher: ["Lampakēs, Geōrgios, 1854-1914."],
           created: ["1902-01-01T00:00:00Z/1902-12-31T23:59:59Z"],
           date_created: ["1902"],
-          memberOf: [{ title: "Byzantine and post-Byzantine Inscriptions Collection", identifier: "C0967" }],
+          memberOf: [{title: "Byzantine and post-Byzantine Inscriptions Collection", identifier: "C0967"}],
           container: ["Box 1, Folder 1"],
           extent: ["1 folder"],
           heldBy: ["mss"],

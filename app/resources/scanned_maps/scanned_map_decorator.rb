@@ -1,29 +1,30 @@
 # frozen_string_literal: false
+
 class ScannedMapDecorator < Valkyrie::ResourceDecorator
   display Schema::Geo.attributes,
-          :ark,
-          :gbl_suppressed_override,
-          :rendered_holding_location,
-          :rendered_coverage,
-          :member_of_collections,
-          :relation,
-          :rendered_links
+    :ark,
+    :gbl_suppressed_override,
+    :rendered_holding_location,
+    :rendered_coverage,
+    :member_of_collections,
+    :relation,
+    :rendered_links
 
   suppress :thumbnail_id,
-           :coverage,
-           :cartographic_projection,
-           :extent,
-           :identifier,
-           :source_jsonld,
-           :sort_title
+    :coverage,
+    :cartographic_projection,
+    :extent,
+    :identifier,
+    :source_jsonld,
+    :sort_title
 
   display_in_manifest displayed_attributes
   suppress_from_manifest Schema::IIIF.attributes,
-                         :visibility,
-                         :internal_resource,
-                         :rights_statement,
-                         :rendered_rights_statement,
-                         :thumbnail_id
+    :visibility,
+    :internal_resource,
+    :rights_statement,
+    :rendered_rights_statement,
+    :thumbnail_id
 
   delegate(*Schema::Geo.attributes, to: :primary_imported_metadata, prefix: :imported)
 
@@ -42,17 +43,17 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   delegate :collections,
-           :decorated_file_sets,
-           :decorated_raster_resources,
-           :decorated_scanned_maps,
-           :decorated_scanned_map_parents,
-           :geo_members,
-           :geo_metadata_members,
-           :members,
-           :parents,
-           :mosaic_file_count,
-           :scanned_maps_count,
-           to: :wayfinder
+    :decorated_file_sets,
+    :decorated_raster_resources,
+    :decorated_scanned_maps,
+    :decorated_scanned_map_parents,
+    :geo_members,
+    :geo_metadata_members,
+    :members,
+    :parents,
+    :mosaic_file_count,
+    :scanned_maps_count,
+    to: :wayfinder
 
   def collection_slugs
     @collection_slugs ||= collections.flat_map(&:slug)
@@ -95,7 +96,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
       ControlledVocabulary.for(:language).find(language).label
     end
   end
-  alias display_imported_language imported_language
+  alias_method :display_imported_language, :imported_language
 
   def language
     (super || []).map do |language|

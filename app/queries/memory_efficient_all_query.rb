@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MemoryEfficientAllQuery
   def self.queries
     [:memory_efficient_all, :count_all_except_models]

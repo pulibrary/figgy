@@ -290,14 +290,14 @@ class DataSeeder
 
     def load_vocabs
       to_load = [
-        { file: "config/vocab/iso639-1.csv", name: "LAE Languages",
-          columns: { label: "label", category: nil } },
-        { file: "config/vocab/lae_areas.csv", name: "LAE Areas",
-          columns: { label: "label", category: nil } },
-        { file: File.join("spec", "fixtures", "lae_genres.csv"), name: "LAE Genres",
-          columns: { label: "pul_label", category: nil } },
-        { file: File.join("config", "vocab", "lae_subjects.csv"), name: "LAE Subjects",
-          columns: { label: "label", code: "code", uri: "uri", category: "category" } }
+        {file: "config/vocab/iso639-1.csv", name: "LAE Languages",
+         columns: {label: "label", category: nil}},
+        {file: "config/vocab/lae_areas.csv", name: "LAE Areas",
+         columns: {label: "label", category: nil}},
+        {file: File.join("spec", "fixtures", "lae_genres.csv"), name: "LAE Genres",
+         columns: {label: "pul_label", category: nil}},
+        {file: File.join("config", "vocab", "lae_subjects.csv"), name: "LAE Subjects",
+         columns: {label: "label", code: "code", uri: "uri", category: "category"}}
       ]
       to_load.each do |vocab|
         change_set_persister.buffer_into_index do |buffered_change_set_persister|

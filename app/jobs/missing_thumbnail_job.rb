@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MissingThumbnailJob < ApplicationJob
   # Sets the thumbnail ID for a repository resource missing a thumbnail
   # @param id [String] the ID for the repository resource

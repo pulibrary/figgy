@@ -2,3 +2,19 @@ require: standard
 
 inherit_gem:
   standard: config/base.yml
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'config/deploy.rb'
+    - 'vendor/**/*'
+    - 'valkyrie/**/*'
+    - 'db/schema.rb'
+    - 'spec/support/**/*'
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+
+Standard/BlockSingleLineBraces:
+  Enabled: false
+
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods

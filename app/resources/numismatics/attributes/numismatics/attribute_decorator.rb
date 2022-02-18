@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 module Numismatics
   class AttributeDecorator < Valkyrie::ResourceDecorator
     display :description,
-            :name
+      :name
 
     def manageable_files?
       false

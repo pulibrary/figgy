@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PlaylistsController < ResourceController
   self.resource_class = Playlist
   self.change_set_persister = ::ChangeSetPersister.new(
@@ -30,7 +31,7 @@ class PlaylistsController < ResourceController
       end
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError
-    render json: { message: "No manifest found for #{params[:id]}" }
+    render json: {message: "No manifest found for #{params[:id]}"}
   end
 
   # View the structural metadata for a given repository resource

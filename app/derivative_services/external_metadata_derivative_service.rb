@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ExternalMetadataDerivativeService
   class Factory
     attr_reader :change_set_persister
@@ -24,7 +25,8 @@ class ExternalMetadataDerivativeService
     @resource ||= query_service.find_by(id: id)
   end
 
-  def cleanup_derivatives; end
+  def cleanup_derivatives
+  end
 
   # Extract external geo metadata into parent vector or raster resource.
   def create_derivatives

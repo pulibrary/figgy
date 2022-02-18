@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 include FixtureFileUpload
 
@@ -47,7 +48,7 @@ RSpec.describe EphemeraTermsController, type: :controller do
       it_behaves_like "an access controlled create request"
     end
     it "can create an ephemera term" do
-      post :create, params: { ephemera_term: valid_params }
+      post :create, params: {ephemera_term: valid_params}
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
@@ -62,7 +63,7 @@ RSpec.describe EphemeraTermsController, type: :controller do
         allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_raise("Bad")
 
         expect do
-          post :create, params: { ephemera_term: valid_params }
+          post :create, params: {ephemera_term: valid_params}
         end.to raise_error "Bad"
         expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all_of_model(model: EphemeraTerm).to_a.length).to eq 0
       end
@@ -73,14 +74,14 @@ RSpec.describe EphemeraTermsController, type: :controller do
         )
         allow(Valkyrie::MetadataAdapter.find(:postgres).persister).to receive(:save).and_raise("Bad")
         expect do
-          post :create, params: { ephemera_term: valid_params }
+          post :create, params: {ephemera_term: valid_params}
         end.to raise_error "Bad"
         expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
         expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
       end
     end
     it "renders the form if it doesn't create a ephemera term" do
-      post :create, params: { ephemera_term: invalid_params }
+      post :create, params: {ephemera_term: invalid_params}
       expect(response).to render_template "base/new"
     end
   end
@@ -94,7 +95,7 @@ RSpec.describe EphemeraTermsController, type: :controller do
     it "can delete a term" do
       ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
       resource = FactoryBot.create_for_repository(:ephemera_folder, subject: ephemera_term.id, geographic_origin: ephemera_term.id)
-      delete :destroy, params: { id: ephemera_term.id.to_s }
+      delete :destroy, params: {id: ephemera_term.id.to_s}
 
       expect(response).to redirect_to root_path
       expect { query_service.find_by(id: ephemera_term.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
@@ -112,7 +113,7 @@ RSpec.describe EphemeraTermsController, type: :controller do
     end
     context "when a ephemera term doesn't exist" do
       it "raises an error" do
-        get :edit, params: { id: "test" }
+        get :edit, params: {id: "test"}
         expect(response).to redirect_to_not_found
       end
     end
@@ -120,7 +121,7 @@ RSpec.describe EphemeraTermsController, type: :controller do
       render_views
       it "renders a form" do
         ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
-        get :edit, params: { id: ephemera_term.id.to_s }
+        get :edit, params: {id: ephemera_term.id.to_s}
 
         expect(response.body).to have_field "Label", with: "test term"
         expect(response.body).to have_button "Save"
@@ -132,19 +133,19 @@ RSpec.describe EphemeraTermsController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_term }
-      let(:extra_params) { { ephemera_term: { label: ["test label"], member_of_vocabulary_id: [ephemera_vocabulary.id] } } }
+      let(:extra_params) { {ephemera_term: {label: ["test label"], member_of_vocabulary_id: [ephemera_vocabulary.id]}} }
       it_behaves_like "an access controlled update request"
     end
     context "when a ephemera term doesn't exist" do
       it "raises an error" do
-        patch :update, params: { id: "test" }
+        patch :update, params: {id: "test"}
         expect(response).to redirect_to_not_found
       end
     end
     context "when it does exist" do
       it "saves it and redirects" do
         ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
-        patch :update, params: { id: ephemera_term.id.to_s, ephemera_term: { label: ["test label"], member_of_vocabulary_id: [ephemera_vocabulary.id] } }
+        patch :update, params: {id: ephemera_term.id.to_s, ephemera_term: {label: ["test label"], member_of_vocabulary_id: [ephemera_vocabulary.id]}}
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_term.id}"
@@ -155,7 +156,7 @@ RSpec.describe EphemeraTermsController, type: :controller do
       end
       it "renders the form if it fails validations" do
         ephemera_term = FactoryBot.create_for_repository(:ephemera_term)
-        patch :update, params: { id: ephemera_term.id.to_s, ephemera_term: { label: nil, member_of_vocabulary_id: nil } }
+        patch :update, params: {id: ephemera_term.id.to_s, ephemera_term: {label: nil, member_of_vocabulary_id: nil}}
 
         expect(response).to render_template "base/edit"
       end

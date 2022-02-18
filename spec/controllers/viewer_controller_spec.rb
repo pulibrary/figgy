@@ -23,14 +23,14 @@ RSpec.describe ViewerController do
       it "displays a sign in button" do
         resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
 
-        get :auth, params: { id: resource.id.to_s }
+        get :auth, params: {id: resource.id.to_s}
 
         expect(response.body).to have_link "Princeton Users: Log in to View"
       end
       it "doesn't have an x-frame-options header" do
         resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
 
-        get :auth, params: { id: resource.id.to_s }
+        get :auth, params: {id: resource.id.to_s}
 
         expect(response.headers["X-Frame-Options"]).to be_nil
       end
@@ -38,7 +38,7 @@ RSpec.describe ViewerController do
         it "redirects the user back to the viewer" do
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource)
 
-          get :auth, params: { id: resource.id.to_s }
+          get :auth, params: {id: resource.id.to_s}
 
           expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
         end
@@ -48,7 +48,7 @@ RSpec.describe ViewerController do
           collection = FactoryBot.create_for_repository(:collection, restricted_viewers: ["tpend"])
           resource = FactoryBot.create_for_repository(:complete_reading_room_scanned_resource, member_of_collection_ids: collection.id)
 
-          get :auth, params: { id: resource.id.to_s }
+          get :auth, params: {id: resource.id.to_s}
 
           expect(response).to be_successful
           expect(response.body).to have_content "Please contact Special Collections staff through the Ask Us! form for access to this collection. Use your Princeton credentials to login."
@@ -61,7 +61,7 @@ RSpec.describe ViewerController do
           stub_bibdata(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
 
-          get :auth, params: { id: resource.id.to_s }
+          get :auth, params: {id: resource.id.to_s}
 
           expect(response).to be_successful
           expect(response.body).to have_link "Princeton Users: Log in to check out a digital copy"
@@ -78,7 +78,7 @@ RSpec.describe ViewerController do
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           sign_in user
 
-          get :auth, params: { id: resource.id.to_s }
+          get :auth, params: {id: resource.id.to_s}
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
@@ -97,7 +97,7 @@ RSpec.describe ViewerController do
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
           sign_in user
 
-          get :auth, params: { id: resource.id.to_s }
+          get :auth, params: {id: resource.id.to_s}
 
           expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
         end
@@ -119,7 +119,7 @@ RSpec.describe ViewerController do
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: held_items)
           sign_in user
 
-          get :auth, params: { id: resource.id.to_s }
+          get :auth, params: {id: resource.id.to_s}
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
@@ -141,7 +141,7 @@ RSpec.describe ViewerController do
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
           sign_in user
 
-          get :auth, params: { id: resource.id.to_s }
+          get :auth, params: {id: resource.id.to_s}
 
           expect(response).to be_successful
           expect(response.body).to have_content "This Item may be protected by third-party copyright and/or related intellectual property rights."
@@ -160,7 +160,7 @@ RSpec.describe ViewerController do
         sign_in FactoryBot.create(:user)
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource)
 
-        get :auth, params: { id: resource.id.to_s }
+        get :auth, params: {id: resource.id.to_s}
 
         expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
       end
@@ -170,7 +170,7 @@ RSpec.describe ViewerController do
         sign_in FactoryBot.create(:user)
         resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
 
-        get :auth, params: { id: resource.id.to_s }
+        get :auth, params: {id: resource.id.to_s}
 
         expect(response).to redirect_to viewer_index_path(anchor: "?manifest=http://www.example.com/concern/scanned_resources/#{resource.id}/manifest")
       end

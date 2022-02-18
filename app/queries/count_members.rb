@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CountMembers
   def self.queries
     [:count_members]

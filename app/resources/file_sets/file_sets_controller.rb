@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FileSetsController < ResourceController
   self.resource_class = FileSet
   self.change_set_persister = ::ChangeSetPersister.new(

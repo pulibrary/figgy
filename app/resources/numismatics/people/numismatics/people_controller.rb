@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class PeopleController < ResourceController
     self.resource_class = Numismatics::Person

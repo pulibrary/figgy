@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DeleteMemberJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
   def perform(id)

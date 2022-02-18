@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PlaylistChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
   delegate :human_readable_type, to: :resource

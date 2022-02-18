@@ -1,14 +1,15 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe GeoResourceReindexer do
   let(:geo_work) do
     FactoryBot.build(:vector_resource,
-                     title: "Geo Work",
-                     coverage: coverage.to_s,
-                     visibility: "open",
-                     state: "complete",
-                     identifier: "ark:/99999/fk4")
+      title: "Geo Work",
+      coverage: coverage.to_s,
+      visibility: "open",
+      state: "complete",
+      identifier: "ark:/99999/fk4")
   end
   let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
   let(:change_set) { VectorResourceChangeSet.new(geo_work) }

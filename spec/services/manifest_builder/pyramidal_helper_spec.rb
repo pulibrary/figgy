@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ManifestBuilder::PyramidalHelper do
@@ -14,7 +15,7 @@ RSpec.describe ManifestBuilder::PyramidalHelper do
       it "generates a base URL for a pyramidal if it's present" do
         path = Valkyrie::StorageAdapter.find_by(id: file_set.pyramidal_derivative.file_identifiers[0]).io.path
         path = path.gsub(Figgy.config["pyramidal_derivative_path"], "").gsub(/^\//, "").gsub(".tif", "")
-        expect(pyramidal_helper.base_url(file_set)).to eq "http://localhost:8182/pyramidals/iiif/2/#{path.gsub('/', '%2F')}"
+        expect(pyramidal_helper.base_url(file_set)).to eq "http://localhost:8182/pyramidals/iiif/2/#{path.gsub("/", "%2F")}"
       end
     end
     context "when something goes wrong finding the path" do

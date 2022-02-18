@@ -1,12 +1,13 @@
 # frozen_string_literal: true
+
 class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   display :barcode,
-          :box_number,
-          :shipped_date,
-          :tracking_number,
-          :drive_barcode,
-          :visibility,
-          :member_of_collections
+    :box_number,
+    :shipped_date,
+    :tracking_number,
+    :drive_barcode,
+    :visibility,
+    :member_of_collections
 
   def title
     "Box #{box_number.first}"
@@ -44,7 +45,8 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   end
 
   class NullProject
-    def title; end
+    def title
+    end
 
     def header
       nil

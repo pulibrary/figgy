@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CatalogController < ApplicationController
   include BlacklightRangeLimit::ControllerOverride
   # @note If you're looking for the JSON-LD generation code, please see the
@@ -27,15 +28,15 @@ class CatalogController < ApplicationController
   def self.search_config
     {
       "qf" => %w[identifier_tesim
-                 figgy_title_ssim
-                 figgy_title_tesim
-                 transliterated_title_ssim
-                 transliterated_title_tesim
-                 source_metadata_identifier_ssim
-                 local_identifier_ssim
-                 barcode_ssim
-                 call_number_tsim
-                 no_case],
+        figgy_title_ssim
+        figgy_title_tesim
+        transliterated_title_ssim
+        transliterated_title_tesim
+        source_metadata_identifier_ssim
+        local_identifier_ssim
+        barcode_ssim
+        call_number_tsim
+        no_case],
       "qt" => "search",
       "rows" => 10
     }
@@ -63,9 +64,9 @@ class CatalogController < ApplicationController
     return unless current_user && (current_user.staff? || current_user.admin?)
     return if blacklight_config.facet_fields.key?("claimed_by_ssim")
     blacklight_config.add_facet_field "claimed_by_ssim", query: {
-      unclaimed: { label: "Unclaimed", fq: "-claimed_by_ssim:[* TO *]" },
-      claimed: { label: "Claimed", fq: "claimed_by_ssim:[* TO *]" },
-      claimed_by_me: { label: "Claimed by Me", fq: "claimed_by_ssim:#{current_user.uid}" }
+      unclaimed: {label: "Unclaimed", fq: "-claimed_by_ssim:[* TO *]"},
+      claimed: {label: "Claimed", fq: "claimed_by_ssim:[* TO *]"},
+      claimed_by_me: {label: "Claimed by Me", fq: "claimed_by_ssim:#{current_user.uid}"}
     }, label: "Claimed"
   end
 
@@ -188,7 +189,7 @@ class CatalogController < ApplicationController
       _, @parent_document = fetch(params[:parent_id])
     # we know in our data a fileset never has more than one parent; grab it for breadcrumb convenience
     elsif @document[:internal_resource_ssim].include? "FileSet"
-      query = "member_ids_ssim:id-#{params['id']}"
+      query = "member_ids_ssim:id-#{params["id"]}"
       _, result = search_results(q: query, rows: 1)
       @parent_document = result.first if result.first
     elsif params[:parent_id].nil? && @document.decorated_resource.try(:decorated_parent)
@@ -210,9 +211,9 @@ class CatalogController < ApplicationController
       object_id = result.first["id"]
       model_name = result.first["internal_resource_ssim"].first.underscore.to_sym
       url = polymorphic_url([:manifest, model_name], id: object_id)
-      params[:no_redirect] ? render(json: { url: url }) : redirect_to(url)
+      params[:no_redirect] ? render(json: {url: url}) : redirect_to(url)
     else
-      render json: { message: "No manifest found for #{ark}" }, status: 404
+      render json: {message: "No manifest found for #{ark}"}, status: 404
     end
   end
 

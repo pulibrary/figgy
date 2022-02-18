@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class FirmsController < ResourceController
     self.resource_class = Numismatics::Firm

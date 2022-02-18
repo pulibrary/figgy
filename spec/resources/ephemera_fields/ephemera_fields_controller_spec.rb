@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 include FixtureFileUpload
 
@@ -51,7 +52,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
       it_behaves_like "an access controlled create request"
     end
     it "can create an ephemera field" do
-      post :create, params: { ephemera_field: valid_params }
+      post :create, params: {ephemera_field: valid_params}
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
@@ -66,7 +67,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
         allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_raise("Bad")
 
         expect do
-          post :create, params: { ephemera_field: valid_params }
+          post :create, params: {ephemera_field: valid_params}
         end.to raise_error "Bad"
         expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all_of_model(model: EphemeraField).to_a.length).to eq 0
       end
@@ -77,14 +78,14 @@ RSpec.describe EphemeraFieldsController, type: :controller do
         )
         allow(Valkyrie::MetadataAdapter.find(:postgres).persister).to receive(:save).and_raise("Bad")
         expect do
-          post :create, params: { ephemera_field: valid_params }
+          post :create, params: {ephemera_field: valid_params}
         end.to raise_error "Bad"
         expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
         expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
       end
     end
     it "renders the form if it doesn't create a ephemera field" do
-      post :create, params: { ephemera_field: invalid_params }
+      post :create, params: {ephemera_field: invalid_params}
       expect(response).to render_template "base/new"
     end
   end
@@ -96,7 +97,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
       it_behaves_like "an access controlled destroy request"
     end
     it "can delete a book" do
-      delete :destroy, params: { id: ephemera_field.id.to_s }
+      delete :destroy, params: {id: ephemera_field.id.to_s}
 
       expect(response).to redirect_to root_path
       expect { query_service.find_by(id: ephemera_field.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
@@ -111,7 +112,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
     end
     context "when a ephemera field doesn't exist" do
       it "raises an error" do
-        get :edit, params: { id: "test" }
+        get :edit, params: {id: "test"}
         expect(response).to redirect_to_not_found
       end
     end
@@ -119,7 +120,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
       render_views
       it "renders a form" do
         ephemera_term
-        get :edit, params: { id: ephemera_field.id.to_s }
+        get :edit, params: {id: ephemera_field.id.to_s}
 
         expect(response.body).to have_field "Name", with: "1"
         expect(response.body).to have_field "Favorite Terms"
@@ -135,7 +136,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
       render_views
       it "renders a form with the subject" do
         ephemera_term
-        get :edit, params: { id: ephemera_field.id.to_s }
+        get :edit, params: {id: ephemera_field.id.to_s}
 
         expect(response.body).to have_field "Name", with: "1"
         expect(response.body).to have_field "Favorite Terms"
@@ -149,18 +150,18 @@ RSpec.describe EphemeraFieldsController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     context "access control" do
       let(:factory) { :ephemera_field }
-      let(:extra_params) { { ephemera_field: { title: ["Two"] } } }
+      let(:extra_params) { {ephemera_field: {title: ["Two"]}} }
       it_behaves_like "an access controlled update request"
     end
     context "when a ephemera field doesn't exist" do
       it "raises an error" do
-        patch :update, params: { id: "test" }
+        patch :update, params: {id: "test"}
         expect(response).to redirect_to_not_found
       end
     end
     context "when it does exist" do
       it "saves it and redirects" do
-        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: ["test field2"], member_of_vocabulary_id: [ephemera_vocabulary.id] } }
+        patch :update, params: {id: ephemera_field.id.to_s, ephemera_field: {field_name: ["test field2"], member_of_vocabulary_id: [ephemera_vocabulary.id]}}
 
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{ephemera_field.id}"
@@ -170,7 +171,7 @@ RSpec.describe EphemeraFieldsController, type: :controller do
         expect(reloaded.field_name).to eq ["test field2"]
       end
       it "renders the form if it fails validations" do
-        patch :update, params: { id: ephemera_field.id.to_s, ephemera_field: { field_name: nil, member_of_vocabulary_id: nil } }
+        patch :update, params: {id: ephemera_field.id.to_s, ephemera_field: {field_name: nil, member_of_vocabulary_id: nil}}
 
         expect(response).to render_template "base/edit"
       end

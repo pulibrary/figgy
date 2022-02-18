@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe IngestVocabService do
@@ -20,7 +21,7 @@ RSpec.describe IngestVocabService do
 
   describe "#ingest" do
     context "with categories" do
-      let(:ingest_vocab_service) { described_class.new(change_set_persister, subject_csv, "Subjects", { label: "subject", category: "category", uri: "uri" }, logger) }
+      let(:ingest_vocab_service) { described_class.new(change_set_persister, subject_csv, "Subjects", {label: "subject", category: "category", uri: "uri"}, logger) }
       before do
         ingest_vocab_service.ingest
       end
@@ -33,7 +34,7 @@ RSpec.describe IngestVocabService do
     end
 
     context "with categories & a parent vocab name" do
-      let(:ingest_vocab_service) { described_class.new(change_set_persister, subject_csv, "LAE Subjects", { label: "subject", category: "category", uri: "uri" }, logger) }
+      let(:ingest_vocab_service) { described_class.new(change_set_persister, subject_csv, "LAE Subjects", {label: "subject", category: "category", uri: "uri"}, logger) }
       before do
         ingest_vocab_service.ingest
       end
@@ -46,7 +47,7 @@ RSpec.describe IngestVocabService do
     end
 
     context "without categories" do
-      let(:ingest_vocab_service) { described_class.new(change_set_persister, genre_csv, "Genres", { label: "pul_label", tgm_label: "tgm_label", lcsh_label: "lcsh_label", uri: "uri" }, logger) }
+      let(:ingest_vocab_service) { described_class.new(change_set_persister, genre_csv, "Genres", {label: "pul_label", tgm_label: "tgm_label", lcsh_label: "lcsh_label", uri: "uri"}, logger) }
       before do
         ingest_vocab_service.ingest
       end

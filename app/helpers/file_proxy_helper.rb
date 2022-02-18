@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module FileProxyHelper
   # @param [Playlist]
   # @return [Array[Hash]] Array of hash representations of file_proxies

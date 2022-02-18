@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :raster_resource do
     title "Title"
@@ -86,7 +87,7 @@ FactoryBot.define do
           file_path: Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"),
           mime_type: "image/tif",
           original_filename: "geotiff.tif",
-          container_attributes: { service_targets: "tiles" }
+          container_attributes: {service_targets: "tiles"}
         )
         file2 = file.new({}) # Duplicates file.
         resource.member_ids ||= []

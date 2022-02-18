@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TileMetadataController < ApplicationController
   # If the tile metadata service finds no raster file sets, it will raise
   # a TileMetadataService::Error exception. This ensures we don't run an expensive
@@ -12,7 +13,7 @@ class TileMetadataController < ApplicationController
     if mosaic_path
       respond_to do |f|
         f.json do
-          render json: { uri: mosaic_path }
+          render json: {uri: mosaic_path}
         end
       end
     else

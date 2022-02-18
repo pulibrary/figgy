@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::PeopleController, type: :controller do
@@ -31,7 +32,7 @@ RSpec.describe Numismatics::PeopleController, type: :controller do
     end
     it "creates a person" do
       FactoryBot.create_for_repository(:numismatic_person)
-      post :create, params: { numismatics_person: valid_params }
+      post :create, params: {numismatics_person: valid_params}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/people"
       person = query_service.find_all_of_model(model: Numismatics::Person).select { |n| n["name1"] == ["Marcus"] }.first
@@ -56,12 +57,12 @@ RSpec.describe Numismatics::PeopleController, type: :controller do
 
     context "html access control" do
       let(:factory) { :numismatic_person }
-      let(:extra_params) { { numismatic_person: { name1: ["Ceasar"] } } }
+      let(:extra_params) { {numismatic_person: {name1: ["Ceasar"]}} }
       it_behaves_like "an access controlled update request"
     end
     it "saves and redirects" do
       numismatic_person = FactoryBot.create_for_repository(:numismatic_person)
-      patch :update, params: { id: numismatic_person.id.to_s, numismatics_person: { name1: ["Ceasar"] } }
+      patch :update, params: {id: numismatic_person.id.to_s, numismatics_person: {name1: ["Ceasar"]}}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/people"
     end

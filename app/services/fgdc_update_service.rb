@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FgdcUpdateService
   def self.insert_onlink(file_set)
     new(file_set: file_set).insert_onlink

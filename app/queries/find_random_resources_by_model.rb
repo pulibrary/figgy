@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindRandomResourcesByModel
   def self.queries
     [:find_random_resources_by_model]

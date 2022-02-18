@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PDFGenerator
   class Error < StandardError; end
 
@@ -56,7 +57,7 @@ class PDFGenerator
   end
 
   def prawn_options
-    default_options = { margin: 0 }
+    default_options = {margin: 0}
     default_options[:page_layout] = :portrait if canvas_downloaders.first
     default_options
   end

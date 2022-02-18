@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # IiifSearch
 module BlacklightIiifSearch
   class IiifSearch
@@ -30,8 +31,8 @@ module BlacklightIiifSearch
     # or else all records matching object_relation_solr_params are returned
     # @return [Hash]
     def solr_params
-      return { q: "nil:nil" } unless q
-      { q: q, fq: ["{!join from=member_ids_ssim to=join_id_ssi}id:#{id}"], rows: rows, page: page }
+      return {q: "nil:nil"} unless q
+      {q: q, fq: ["{!join from=member_ids_ssim to=join_id_ssi}id:#{id}"], rows: rows, page: page}
     end
   end
 end

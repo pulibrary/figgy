@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraFolderWayfinder < BaseWayfinder
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
   inverse_relationship_by_property :ephemera_boxes, property: :member_ids, singular: true, model: EphemeraBox
@@ -9,7 +10,7 @@ class EphemeraFolderWayfinder < BaseWayfinder
 
   # Boxless folders shouldn't go through a box for their project.
   # TODO: Move boxless folders to a new model?
-  alias original_ephemera_projects ephemera_projects
+  alias_method :original_ephemera_projects, :ephemera_projects
   def ephemera_projects
     @delegated_ephemera_projects ||= ephemera_box.present? ? Wayfinder.for(ephemera_box).ephemera_projects : original_ephemera_projects
   end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BulkUpdateJob < ApplicationJob
   def perform(ids:, args:)
     change_set_persister.buffer_into_index do |buffered_change_set_persister|

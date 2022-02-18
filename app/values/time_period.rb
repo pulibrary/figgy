@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TimePeriod
   attr_accessor :doc, :initial_value
   def initialize(initial_value, doc)

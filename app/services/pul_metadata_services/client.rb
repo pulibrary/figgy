@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module PulMetadataServices
   class Client
     class << self
@@ -22,14 +23,14 @@ module PulMetadataServices
 
       def retrieve_from_aspace_pulfa(id)
         conn = Faraday.new(url: Figgy.config[:findingaids_aspace_url])
-        response = conn.get("#{id.tr('.', '-')}.json")
+        response = conn.get("#{id.tr(".", "-")}.json")
         return nil if response.status != 200
         response.body.dup.force_encoding("UTF-8")
       end
 
       def retrieve_aspace_pulfa_ead(id)
         conn = Faraday.new(url: Figgy.config[:findingaids_aspace_url])
-        response = conn.get("#{id.tr('.', '-')}.xml")
+        response = conn.get("#{id.tr(".", "-")}.xml")
         return nil if response.status != 200
         response.body.dup.force_encoding("UTF-8")
       end
@@ -62,7 +63,7 @@ module PulMetadataServices
         # @return [String] string-serialized XML for record information Document
         def retrieve_from_pulfa(id)
           conn = Faraday.new(url: Figgy.config[:legacy_findingaids_url])
-          response = conn.get("#{id.tr('_', '/')}.xml", scope: "record")
+          response = conn.get("#{id.tr("_", "/")}.xml", scope: "record")
           response.body.dup.force_encoding("UTF-8")
         end
 
@@ -71,7 +72,7 @@ module PulMetadataServices
         # @return [String] string-serialized XML for the EAD Document
         def full_source_from_pulfa(id)
           conn = Faraday.new(url: Figgy.config[:legacy_findingaids_url])
-          response = conn.get("#{id.tr('_', '/')}.xml")
+          response = conn.get("#{id.tr("_", "/")}.xml")
           response.body.dup.force_encoding("UTF-8")
         end
     end

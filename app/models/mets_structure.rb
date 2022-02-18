@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MetsStructure
   def structure
     structure_type("Logical") || default_structure
@@ -7,7 +8,7 @@ module MetsStructure
   def structure_for_volume(volume_id)
     return {} if structureless?
     volume = logical_node_for_volume(volume_id) || volume_nodes.find { |vol| vol.attribute("ID").value == volume_id }
-    { nodes: structure_for_nodeset(volume.element_children) }
+    {nodes: structure_for_nodeset(volume.element_children)}
   end
 
   def file_label(file_id)
@@ -21,7 +22,7 @@ module MetsStructure
     def logical_node_for_volume(volume_id)
       logical_node = @mets.xpath("/mets:mets/mets:structLink/mets:smLink[@xlink:from='#{volume_id}']")[0]
       return if logical_node.blank?
-      @mets.xpath("//mets:div[@ID='#{logical_node['xlink:to']}']")[0]
+      @mets.xpath("//mets:div[@ID='#{logical_node["xlink:to"]}']")[0]
     end
 
     def structure_map(type)
@@ -36,11 +37,11 @@ module MetsStructure
       return nil unless structure_map(type)
       top = structure_map(type).xpath("mets:div/mets:div")
       return nil if top.empty?
-      { nodes: structure_for_nodeset(top) }
+      {nodes: structure_for_nodeset(top)}
     end
 
     def default_structure
-      { nodes: structure_for_nodeset(structure_map("RelatedObjects").xpath("mets:div/mets:div[@TYPE = 'OrderedList']/mets:div")) }
+      {nodes: structure_for_nodeset(structure_map("RelatedObjects").xpath("mets:div/mets:div[@TYPE = 'OrderedList']/mets:div"))}
     end
 
     def structure_for_nodeset(nodeset)
@@ -63,7 +64,7 @@ module MetsStructure
           child_nodes << structure_recurse(child)
         end
       end
-      { label: node["LABEL"], nodes: child_nodes }
+      {label: node["LABEL"], nodes: child_nodes}
     end
 
     def section(node)
@@ -77,7 +78,7 @@ module MetsStructure
     def single_file_object(node)
       id = node["FILEID"]
       label = label_from_hierarchy(node.parent) || label_from_related_objects(id)
-      { label: label, proxy: id }
+      {label: label, proxy: id}
     end
 
     def label_from_hierarchy(node)
@@ -85,7 +86,7 @@ module MetsStructure
       current = node
       label = current["LABEL"]
       while current.parent["LABEL"] && in_scope(current.parent)
-        label = "#{current.parent['LABEL']}. #{label}"
+        label = "#{current.parent["LABEL"]}. #{label}"
         current = current.parent
       end
       label

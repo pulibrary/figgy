@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe CollectionsMailer, type: :mailer do
@@ -71,7 +72,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
         <a href="http://www.example.com/catalog/#{id}">Pretty Resource</a>
       </li>
     </ul>
-FIXTURE
+    FIXTURE
   end
 
   def expected_pending(resource:)
@@ -79,7 +80,7 @@ FIXTURE
       <li>
         <a href="http://www.example.com/catalog/#{resource.id}">#{resource.title.first}</a>
       </li>
-FIXTURE
+    FIXTURE
   end
 
   def expected_collection(collection:)

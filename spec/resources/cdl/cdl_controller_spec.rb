@@ -15,7 +15,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
       it "returns a 403 forbidden" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
 
-        post :hold, params: { id: resource.id.to_s }
+        post :hold, params: {id: resource.id.to_s}
 
         expect(response).to be_forbidden
       end
@@ -36,7 +36,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, hold_queue: hold_queue)
         sign_in user
 
-        post :hold, params: { id: resource.id.to_s }
+        post :hold, params: {id: resource.id.to_s}
 
         expect(response).to redirect_to "/viewer/#{resource.id}/auth"
         expect(flash[:alert]).to eq "You have already reserved this item."
@@ -55,7 +55,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
         sign_in user
 
-        post :hold, params: { id: resource.id.to_s }
+        post :hold, params: {id: resource.id.to_s}
 
         expect(response).to redirect_to "/viewer/#{resource.id}/auth"
         charge_list = Wayfinder.for(resource).resource_charge_list
@@ -76,7 +76,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
           allow(CDL::ChargeManager).to receive(:new).and_return(charge_manager)
           sign_in user
 
-          post :hold, params: { id: resource.id.to_s }
+          post :hold, params: {id: resource.id.to_s}
 
           expect(response).to redirect_to "/viewer/#{resource.id}/auth"
         end
@@ -93,7 +93,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
       it "returns a 403 forbidden" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
 
-        post :charge, params: { id: resource.id.to_s }
+        post :charge, params: {id: resource.id.to_s}
 
         expect(response).to be_forbidden
       end
@@ -110,7 +110,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
           sign_in user
 
-          post :charge, params: { id: resource.id.to_s }
+          post :charge, params: {id: resource.id.to_s}
 
           expect(response).to redirect_to "/viewer/#{resource.id}/auth"
           expect(flash[:alert]).to eq "This item is not currently available for check out."
@@ -126,7 +126,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)
           sign_in user
 
-          post :charge, params: { id: resource.id.to_s }
+          post :charge, params: {id: resource.id.to_s}
 
           resource_charge_list = Wayfinder.for(resource).resource_charge_list
           expect(resource_charge_list.charged_items[0].netid).to eq user.uid
@@ -148,7 +148,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
             allow(CDL::ChargeManager).to receive(:new).and_return(charge_manager)
             sign_in user
 
-            post :charge, params: { id: resource.id.to_s }
+            post :charge, params: {id: resource.id.to_s}
 
             expect(response).to redirect_to "/viewer/#{resource.id}/auth"
           end
@@ -162,7 +162,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
       it "returns false for everything and no expires_at key" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
 
-        get :status, params: { id: resource.id.to_s }
+        get :status, params: {id: resource.id.to_s}
         json = JSON.parse(response.body)
 
         expect(json["charged"]).to eq false
@@ -178,7 +178,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
         allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
         sign_in user
 
-        get :status, params: { id: resource.id.to_s }
+        get :status, params: {id: resource.id.to_s}
         json = JSON.parse(response.body)
 
         expect(json["charged"]).to eq false
@@ -199,7 +199,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
           sign_in user
 
-          get :status, params: { id: resource.id.to_s }
+          get :status, params: {id: resource.id.to_s}
           json = JSON.parse(response.body)
 
           expect(json["charged"]).to eq true
@@ -222,7 +222,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
           sign_in user
 
-          get :status, params: { id: resource.id.to_s }
+          get :status, params: {id: resource.id.to_s}
           json = JSON.parse(response.body)
 
           expect(json["charged"]).to eq false
@@ -237,7 +237,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
       it "returns a 403 forbidden" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
 
-        post :return, params: { id: resource.id.to_s }
+        post :return, params: {id: resource.id.to_s}
 
         expect(response).to be_forbidden
       end
@@ -255,7 +255,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
         sign_in user
 
-        post :return, params: { id: resource.id.to_s }
+        post :return, params: {id: resource.id.to_s}
 
         expect(response).to redirect_to "/viewer/#{resource.id}/auth"
         expect(flash[:notice]).to eq "Thank you for returning this item."
@@ -278,7 +278,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
           allow(CDL::ChargeManager).to receive(:new).and_return(charge_manager)
           sign_in user
 
-          post :return, params: { id: resource.id.to_s }
+          post :return, params: {id: resource.id.to_s}
 
           expect(response).to redirect_to "/viewer/#{resource.id}/auth"
         end
@@ -294,7 +294,7 @@ RSpec.describe Cdl::CdlController, type: :controller do
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)
         sign_in user
 
-        post :return, params: { id: resource.id.to_s }
+        post :return, params: {id: resource.id.to_s}
 
         expect(response).to redirect_to "/viewer/#{resource.id}/auth"
         expect(flash[:notice]).to eq nil

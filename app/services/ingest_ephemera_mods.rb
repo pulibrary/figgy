@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class IngestEphemeraMODS
   attr_accessor :project_id, :mods, :dir, :change_set_persister, :logger
   delegate :query_service, to: :change_set_persister
@@ -198,8 +199,8 @@ class IngestEphemeraMODS
     end
 
     def title_attributes
-      return { title: native_title, transliterated_title: transliterated_title } if native_title
-      { title: first_title }
+      return {title: native_title, transliterated_title: transliterated_title} if native_title
+      {title: first_title}
     end
 
     def native_title

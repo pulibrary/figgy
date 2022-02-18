@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Decorates the Pathname with some convenience parsing methods
 # Provides methods needed by FileMetadata.for
 class IngestableAudioFile
@@ -19,7 +20,7 @@ class IngestableAudioFile
       "audio/mpeg"
     end
   end
-  alias content_type mime_type
+  alias_method :content_type, :mime_type
 
   def use
     if master?

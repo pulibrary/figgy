@@ -1,12 +1,13 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe FileMetadata do
   subject(:file_metadata) do
     described_class.new(label: label,
-                        original_filename: original_filename,
-                        mime_type: mime_type,
-                        use: use)
+      original_filename: original_filename,
+      mime_type: mime_type,
+      use: use)
   end
   let(:label) { "Test label" }
   let(:original_filename) { "test_file.txt" }

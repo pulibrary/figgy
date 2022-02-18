@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe ProxyFileSetsController, type: :controller do
@@ -20,7 +21,7 @@ describe ProxyFileSetsController, type: :controller do
     end
     it "can delete a resource" do
       resource = FactoryBot.create_for_repository(factory)
-      delete :destroy, params: { id: resource.id.to_s }
+      delete :destroy, params: {id: resource.id.to_s}
 
       expect(response).to redirect_to root_path
       expect { query_service.find_by(id: resource.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError

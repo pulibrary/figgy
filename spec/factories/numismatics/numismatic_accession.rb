@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :numismatic_accession, class: Numismatics::Accession do
     accession_number 1

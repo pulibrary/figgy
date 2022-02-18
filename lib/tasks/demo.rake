@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Demo-related tasks should only be run in development or staging
 if Rails.env.development? || Rails.env.staging?
   namespace :figgy do

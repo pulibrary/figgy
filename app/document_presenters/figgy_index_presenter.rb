@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FiggyIndexPresenter < ::Blacklight::IndexPresenter
   ##
   # Overrides https://github.com/projectblacklight/blacklight/blob/v6.11.2/app/presenters/blacklight/index_presenter.rb#L24
@@ -19,7 +20,7 @@ class FiggyIndexPresenter < ::Blacklight::IndexPresenter
               field_or_string_or_proc.call(document, opts)
             when String
               field_or_string_or_proc
-            end
+    end
 
     value ||= document.id
     field_values(config, value: value)

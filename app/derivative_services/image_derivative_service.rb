@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ImageDerivativeService
   class Factory
     attr_reader :change_set_persister, :image_config
@@ -21,6 +22,7 @@ class ImageDerivativeService
       attribute :output_name, Valkyrie::Types::String
     end
   end
+
   class IoDecorator < SimpleDelegator
     attr_reader :original_filename, :content_type, :use
     def initialize(io, original_filename, content_type, use)
@@ -72,7 +74,7 @@ class ImageDerivativeService
     change_set.files = [build_file]
     @resource = change_set_persister.save(change_set: change_set)
     update_error_message(message: nil) if target_file.error_message.present?
-  rescue StandardError => error
+  rescue => error
     update_error_message(message: error.message)
     raise error
   end

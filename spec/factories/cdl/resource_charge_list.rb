@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :resource_charge_list, class: CDL::ResourceChargeList do
     to_create do |instance|

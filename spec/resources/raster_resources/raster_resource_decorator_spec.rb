@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe RasterResourceDecorator do
@@ -7,16 +8,16 @@ RSpec.describe RasterResourceDecorator do
   let(:imported_coverage) { "northlimit=-00.500000; eastlimit=040.841667; southlimit=-12.000000; westlimit=028.666667; units=degrees; projection=EPSG:4326" }
   let(:resource) do
     FactoryBot.build(:raster_resource,
-                     title: "test title",
-                     author: "test author",
-                     creator: "test creator",
-                     coverage: coverage,
-                     subject: "test subject",
-                     identifier: "ark:/99999/fk4",
-                     holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14",
-                     imported_metadata: [{
-                       coverage: imported_coverage
-                     }])
+      title: "test title",
+      author: "test author",
+      creator: "test creator",
+      coverage: coverage,
+      subject: "test subject",
+      identifier: "ark:/99999/fk4",
+      holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/14",
+      imported_metadata: [{
+        coverage: imported_coverage
+      }])
   end
   it "exposes markup for rights statement" do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
@@ -61,10 +62,10 @@ RSpec.describe RasterResourceDecorator do
     context "with imported metadata" do
       let(:resource) do
         FactoryBot.build(:raster_resource,
-                         title: "test title",
-                         imported_metadata: [{
-                           language: "eng"
-                         }])
+          title: "test title",
+          imported_metadata: [{
+            language: "eng"
+          }])
       end
 
       it "maps keys to english strings" do
@@ -76,8 +77,8 @@ RSpec.describe RasterResourceDecorator do
     context "with direct metadata" do
       let(:resource) do
         FactoryBot.build(:raster_resource,
-                         title: "test title",
-                         language: ["eng"])
+          title: "test title",
+          language: ["eng"])
       end
       it "exposes the language" do
         expect(decorator.language).to eq ["English"]
@@ -88,10 +89,10 @@ RSpec.describe RasterResourceDecorator do
     context "with imported metadata" do
       let(:resource) do
         FactoryBot.build(:scanned_map,
-                         title: "test title",
-                         imported_metadata: [{
-                           subject: "test subject"
-                         }])
+          title: "test title",
+          imported_metadata: [{
+            subject: "test subject"
+          }])
       end
 
       it "maps keys to english strings" do

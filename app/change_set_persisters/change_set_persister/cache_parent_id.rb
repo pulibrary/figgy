@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   class CacheParentId
     attr_reader :change_set_persister, :change_set, :post_save_resource

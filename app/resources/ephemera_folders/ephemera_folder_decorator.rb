@@ -1,52 +1,53 @@
 # frozen_string_literal: true
+
 class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   display :barcode,
-          :folder_number,
-          :title,
-          :sort_title,
-          :alternative_title,
-          :transliterated_title,
-          :language,
-          :genre,
-          :width,
-          :height,
-          :page_count,
-          :keywords,
-          :rights_statement,
-          :series,
-          :creator,
-          :contributor,
-          :publisher,
-          :geographic_origin,
-          :rendered_subject,
-          :geo_subject,
-          :description,
-          :date_created,
-          :rendered_date_range,
-          :local_identifier,
-          :provenance,
-          :dspace_url,
-          :source_url,
-          :visibility,
-          :rendered_rights_statement,
-          :rendered_ocr_language,
-          :rendered_holding_location,
-          :member_of_collections
+    :folder_number,
+    :title,
+    :sort_title,
+    :alternative_title,
+    :transliterated_title,
+    :language,
+    :genre,
+    :width,
+    :height,
+    :page_count,
+    :keywords,
+    :rights_statement,
+    :series,
+    :creator,
+    :contributor,
+    :publisher,
+    :geographic_origin,
+    :rendered_subject,
+    :geo_subject,
+    :description,
+    :date_created,
+    :rendered_date_range,
+    :local_identifier,
+    :provenance,
+    :dspace_url,
+    :source_url,
+    :visibility,
+    :rendered_rights_statement,
+    :rendered_ocr_language,
+    :rendered_holding_location,
+    :member_of_collections
 
   display_in_manifest displayed_attributes, :subject, :categories
   suppress_from_manifest Schema::IIIF.attributes,
-                         :visibility,
-                         :internal_resource,
-                         :rights_statement,
-                         :rendered_rights_statement,
-                         :rendered_ocr_language,
-                         :thumbnail_id,
-                         :rendered_date_range,
-                         :rendered_subject,
-                         :created_at,
-                         :updated_at,
-                         :sort_title,
-                         :holding_location
+    :visibility,
+    :internal_resource,
+    :rights_statement,
+    :rendered_rights_statement,
+    :rendered_ocr_language,
+    :thumbnail_id,
+    :rendered_date_range,
+    :rendered_subject,
+    :created_at,
+    :updated_at,
+    :sort_title,
+    :holding_location
 
   delegate :members, :parent, :query_service, to: :wayfinder
 
@@ -178,7 +179,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
         if value.label == value.vocabulary.label
           linked_category
         else
-          "#{linked_category} -- #{link_to_facet_search(field: 'display_subject_ssim', value: value.label)}".html_safe
+          "#{linked_category} -- #{link_to_facet_search(field: "display_subject_ssim", value: value.label)}".html_safe
         end
       else
         value
@@ -252,7 +253,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
     def link_to_facet_search(field:, value:)
       # I'm not sure why we can't use catalog_path. but root_path is essentially the same
-      query = { "f[#{field}][]" => value }.to_param
+      query = {"f[#{field}][]" => value}.to_param
       h.link_to value, "#{h.root_path}?#{query}"
     end
 end

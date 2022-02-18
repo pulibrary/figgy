@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   # this class was added to support viewingDirection. Should be deleted once
   # we upgrade to a release with the resolution to

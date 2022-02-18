@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class modeling configuration options for the Universal Viewer used in digital
 # exhibits
 class ExhibitViewerConfiguration < ViewerConfiguration

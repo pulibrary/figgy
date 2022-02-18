@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 # See https://github.com/geoblacklight/geoblacklight/wiki/Schema
@@ -10,14 +11,14 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
   let(:geo_work) do
     FactoryBot.create_for_repository(:vector_resource,
-                                     coverage: coverage.to_s,
-                                     issued: issued,
-                                     spatial: "Micronesia",
-                                     temporal: "2011",
-                                     subject: ["Human settlements", "Society"],
-                                     language: "Esperanto",
-                                     visibility: visibility,
-                                     identifier: "ark:/99999/fk4")
+      coverage: coverage.to_s,
+      issued: issued,
+      spatial: "Micronesia",
+      temporal: "2011",
+      subject: ["Human settlements", "Society"],
+      language: "Esperanto",
+      visibility: visibility,
+      identifier: "ark:/99999/fk4")
   end
   let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032) }
   let(:issued) { "2013" }
@@ -326,10 +327,10 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     context "with a parent resource that is missing its thumbnail file set" do
       let(:geo_work) do
         FactoryBot.create_for_repository(:scanned_map,
-                                         member_ids: child.id,
-                                         thumbnail_id: missing_id,
-                                         coverage: coverage.to_s,
-                                         visibility: visibility)
+          member_ids: child.id,
+          thumbnail_id: missing_id,
+          coverage: coverage.to_s,
+          visibility: visibility)
       end
       let(:missing_id) { Valkyrie::ID.new("missing") }
       let(:child_change_set) { ScannedMapChangeSet.new(child, files: [file]) }
@@ -379,9 +380,9 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   describe "raster resource" do
     let(:geo_work) do
       FactoryBot.create_for_repository(:raster_resource,
-                                       coverage: coverage.to_s,
-                                       subject: ["Human settlements", "Society"],
-                                       visibility: visibility)
+        coverage: coverage.to_s,
+        subject: ["Human settlements", "Society"],
+        visibility: visibility)
     end
     let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
 
@@ -417,10 +418,10 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     context "with a non-Princeton value in the held_by property" do
       let(:geo_work) do
         FactoryBot.create_for_repository(:raster_resource,
-                                         coverage: coverage.to_s,
-                                         visibility: visibility,
-                                         identifier: "ark:/99999/fk4",
-                                         held_by: "Other Institution")
+          coverage: coverage.to_s,
+          visibility: visibility,
+          identifier: "ark:/99999/fk4",
+          held_by: "Other Institution")
       end
 
       it "references the value in identifier fields" do

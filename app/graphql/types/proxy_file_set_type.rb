@@ -1,7 +1,9 @@
 # frozen_string_literal: true
+
 class Types::ProxyFileSetType < Types::BaseObject
   implements Types::Resource
-  def viewing_hint; end
+  def viewing_hint
+  end
 
   def label
     object.label.try(:first)
@@ -18,7 +20,8 @@ class Types::ProxyFileSetType < Types::BaseObject
     }
   end
 
-  def source_metadata_identifier; end
+  def source_metadata_identifier
+  end
 
   def members
     []

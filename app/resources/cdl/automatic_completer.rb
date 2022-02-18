@@ -38,7 +38,7 @@ module CDL
     def draft_cdl_resources
       query_service.custom_queries.find_by_property(
         property: :metadata,
-        value: { state: "draft", change_set: "CDL::Resource" },
+        value: {state: "draft", change_set: "CDL::Resource"},
         model: ScannedResource,
         lazy: true
       )

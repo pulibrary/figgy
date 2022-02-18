@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Mutations::UpdateResource < Mutations::BaseMutation
   null true
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Numismatics::CoinsController, type: :controller do
@@ -12,7 +13,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     render_views
     it "is created in an issue" do
       issue = FactoryBot.create_for_repository(:numismatic_issue)
-      get :new, params: { parent_id: issue.id.to_s }
+      get :new, params: {parent_id: issue.id.to_s}
 
       expect(assigns(:selected_issue)).to be_truthy
     end
@@ -43,7 +44,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
       end
 
       it "adds the coin as a member of the issue" do
-        post :create, params: { numismatics_coin: { append_id: issue.id.to_s, weight: 5 } }
+        post :create, params: {numismatics_coin: {append_id: issue.id.to_s, weight: 5}}
 
         updated_issue = Valkyrie.config.metadata_adapter.query_service.find_by(id: issue.id)
         expect(updated_issue.member_ids).not_to be_empty
@@ -62,7 +63,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     it "redirects to the parent issue" do
       coin = FactoryBot.create_for_repository(:coin)
       issue = FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id])
-      delete :destroy, params: { id: coin.id }
+      delete :destroy, params: {id: coin.id}
       expect(response).to redirect_to solr_document_path(issue)
     end
   end
@@ -78,11 +79,11 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
       metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
       coin = FactoryBot.create_for_repository(:coin,
-                                              numismatic_collection: "numismatic collection")
+        numismatic_collection: "numismatic collection")
       change_set = ChangeSet.for(coin)
       change_set_persister.save(change_set: change_set)
 
-      get :edit, params: { id: resource.id.to_s }
+      get :edit, params: {id: resource.id.to_s}
       numismatic_collections = assigns(:numismatic_collections)
 
       expect(numismatic_collections.first.value).to eq "numismatic collection"
@@ -93,7 +94,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
 
     context "html access control" do
       let(:factory) { :coin }
-      let(:extra_params) { { coin: { size: [6] } } }
+      let(:extra_params) { {coin: {size: [6]}} }
       it_behaves_like "an access controlled update request"
     end
   end
@@ -105,7 +106,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     it "returns a IIIF manifest for a resource with a file" do
       coin = FactoryBot.create_for_repository(:complete_open_coin, files: [file])
 
-      get :manifest, params: { id: coin.id.to_s, format: :json }
+      get :manifest, params: {id: coin.id.to_s, format: :json}
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
       expect(response.headers["Content-Type"]).to include "application/json"
@@ -123,10 +124,10 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     context "when a folder exists" do
       let(:coin_number) { 1234 }
       let(:ingest_dir) { Pathname.new(Figgy.config["ingest_folder_path"]).join("numismatics", "1234") }
-      let(:args) { { directory: ingest_dir.to_s, property: "id", id: coin.id.to_s } }
+      let(:args) { {directory: ingest_dir.to_s, property: "id", id: coin.id.to_s} }
 
       it "returns JSON for whether a directory exists" do
-        get :discover_files, params: { format: :json, id: coin.id }
+        get :discover_files, params: {format: :json, id: coin.id}
 
         output = JSON.parse(response.body, symbolize_keys: true)
 
@@ -135,14 +136,14 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
         expect(output["file_count"]).to eq 2
       end
       it "spawns a background job to ingest the files" do
-        post :auto_ingest, params: { id: coin.id }
+        post :auto_ingest, params: {id: coin.id}
         expect(IngestFolderJob).to have_received(:perform_later).with(args)
       end
     end
     context "when a folder doesn't exist" do
       let(:coin_number) { 6789 }
       it "returns JSON appropriately" do
-        get :discover_files, params: { format: :json, id: coin.id }
+        get :discover_files, params: {format: :json, id: coin.id}
 
         output = JSON.parse(response.body, symbolize_keys: true)
 
@@ -158,7 +159,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     it "renders an orangelight document" do
       coin = FactoryBot.create_for_repository(:coin)
       FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id])
-      get :orangelight, params: { id: coin.id, format: :json }
+      get :orangelight, params: {id: coin.id, format: :json}
       doc = JSON.parse(response.body)
       expect(doc["id"]).to eq "coin-#{coin.coin_number}"
     end
@@ -166,7 +167,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     context "when a coin has no parent" do
       it "returns an error message with status code 500" do
         coin = FactoryBot.create_for_repository(:coin)
-        get :orangelight, params: { id: coin.id, format: :json }
+        get :orangelight, params: {id: coin.id, format: :json}
         doc = JSON.parse(response.body)
         expect(response.status).to eq 500
         expect(doc["error"]).to include "has no parent numismatic issue"
@@ -198,7 +199,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     end
 
     it "generates a pdf, attaches it to the folder, and redirects the user to download it" do
-      get :pdf, params: { id: resource.id.to_s }
+      get :pdf, params: {id: resource.id.to_s}
       reloaded = adapter.query_service.find_by(id: resource.id)
       expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
 

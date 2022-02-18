@@ -26,9 +26,9 @@ module Migrations
     # inline here.
     def relation
       orm_class.use_cursor
-               .exclude(internal_resource: [FileSet, PreservationObject, Tombstone, Event, EphemeraTerm].map(&:to_s))
-               .exclude(Sequel[:metadata].pg_jsonb.contains(cached_parent_id: [{}]))
-               .lazy
+        .exclude(internal_resource: [FileSet, PreservationObject, Tombstone, Event, EphemeraTerm].map(&:to_s))
+        .exclude(Sequel[:metadata].pg_jsonb.contains(cached_parent_id: [{}]))
+        .lazy
     end
 
     def change_set_persister

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraFieldWayfinder < BaseWayfinder
   relationship_by_property :ephemera_vocabularies, property: :member_of_vocabulary_id, singular: true
   relationship_by_property :favorite_terms, property: :favorite_term_ids

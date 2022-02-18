@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindIdUsageByModel
   def self.queries
     [:find_id_usage_by_model]
@@ -18,14 +19,12 @@ class FindIdUsageByModel
     return [] if output_hash.keys.empty?
     objects = query_service.find_many_by_ids(ids: output_hash.keys)
     objects.map do |object|
-      { object => output_hash[object.id.to_s] }
+      {object => output_hash[object.id.to_s]}
     end.reduce(&:merge)
   end
 
   def massage_output(output)
-    Hash[
-      output.group_by { |hsh| hsh[:id] }.map { |k, v| [k, v.flat_map { |x| x[:key].to_sym }] }
-    ]
+    output.group_by { |hsh| hsh[:id] }.map { |k, v| [k, v.flat_map { |x| x[:key].to_sym }] }.to_h
   end
 
   def query

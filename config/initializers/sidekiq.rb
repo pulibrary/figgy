@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "redis_config"
 Sidekiq::Client.reliable_push! unless Rails.env.test?
 Sidekiq.configure_server do |config|

@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 class CicognaraCSV
   def self.headers
     ["digital_cico_number", "label", "manifest", "contributing_library",
-     "owner_call_number", "owner_system_number", "other_number",
-     "version_edition_statement", "version_publication_statement", "version_publication_date",
-     "additional_responsibility", "provenance", "physical_characteristics", "rights", "based_on_original"]
+      "owner_call_number", "owner_system_number", "other_number",
+      "version_edition_statement", "version_publication_statement", "version_publication_date",
+      "additional_responsibility", "provenance", "physical_characteristics", "rights", "based_on_original"]
   end
 
   def self.values(col_id)
@@ -22,8 +23,8 @@ class CicognaraCSV
     contrib = orig ? "Bibliotheca Apostolica Vaticana" : "Princeton University Library"
 
     [dclnum, label, Rails.application.routes.url_helpers.manifest_scanned_resource_url(r),
-     contrib, first(r.imported_call_number), sysid, first(r.identifier), nil, first(r.imported_publisher),
-     date(r), nil, nil, first(r.imported_extent), first(r.rights_statement).to_s, orig]
+      contrib, first(r.imported_call_number), sysid, first(r.identifier), nil, first(r.imported_publisher),
+      date(r), nil, nil, first(r.imported_extent), first(r.rights_statement).to_s, orig]
   end
 
   def self.first(value)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RemoteRecord
   # Factory method for PulMetadataServices objects
   # @param source_metadata_identifier [String]
@@ -18,12 +19,12 @@ class RemoteRecord
 
   def self.pulfa?(source_metadata_identifier)
     return false if source_metadata_identifier.match?(/\//)
-    source_metadata_identifier.match?(/^(aspace_)?([A-Z][a-zA-Z0-9\.-]+)(_[a-z0-9]+)?/)
+    source_metadata_identifier.match?(/^(aspace_)?([A-Z][a-zA-Z0-9.-]+)(_[a-z0-9]+)?/)
   end
 
   def self.pulfa_collection(source_metadata_identifier)
     return if source_metadata_identifier.match?(/\//)
-    m = source_metadata_identifier.match(/^(aspace_)?(?<code>[A-Z][a-zA-Z0-9.-]+)([_][a-z0-9]+)?/)
+    m = source_metadata_identifier.match(/^(aspace_)?(?<code>[A-Z][a-zA-Z0-9.-]+)(_[a-z0-9]+)?/)
     m[:code] if m
   end
 
@@ -40,13 +41,13 @@ class RemoteRecord
 
   def self.source_metadata_url(id)
     return "#{Figgy.config[:bibdata_url]}#{id}" if bibdata?(id)
-    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
+    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr("_", "/")}.xml?scope=record" if pulfa?(id)
   end
 
   def self.record_url(id)
     return unless id
     return "https://catalog.princeton.edu/catalog/#{id}" if bibdata?(id)
-    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr('_', '/')}" if pulfa?(id)
+    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr("_", "/")}" if pulfa?(id)
   end
 
   class PulfaRecord
@@ -137,9 +138,9 @@ class RemoteRecord
       end
 
       def result
-        Hash[value.map do |key, value|
+        value.map do |key, value|
           [key, calling_mapper.for(value).result]
-        end]
+        end.to_h
       end
     end
 

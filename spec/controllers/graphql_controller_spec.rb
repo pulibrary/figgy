@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe GraphqlController do
@@ -13,12 +14,12 @@ RSpec.describe GraphqlController do
     context "when logged in as a staff user" do
       let(:user) { FactoryBot.create(:staff) }
       it "can run a graphql query" do
-        post :execute, params: { query: query_string, format: :json }
+        post :execute, params: {query: query_string, format: :json}
 
         expect(response).to be_successful
         json_response = JSON.parse(response.body)
         expect(json_response["data"]).to eq(
-          "resource" => { "viewingHint" => "individuals" }
+          "resource" => {"viewingHint" => "individuals"}
         )
       end
       it "doesn't query for parents of FileSets" do
@@ -30,7 +31,7 @@ RSpec.describe GraphqlController do
         allow(adapter.query_service).to receive(:find_by).with(id: parent.id.to_s).and_call_original
         child_query_string = %|{ resource(id: "#{parent.id}") { members { id }, thumbnail { id, thumbnailUrl, iiifServiceUrl } } }|
 
-        post :execute, params: { query: child_query_string, format: :json }
+        post :execute, params: {query: child_query_string, format: :json}
 
         expect(response).to be_successful
         expect(JSON.parse(response.body)["errors"]).to be_blank
@@ -38,26 +39,26 @@ RSpec.describe GraphqlController do
         expect(adapter.query_service).to have_received(:find_by).exactly(1).times
       end
       it "can support variables set as a JSON string" do
-        post :execute, params: { query: query_string, variables: { episode: "bla" }.to_json }
+        post :execute, params: {query: query_string, variables: {episode: "bla"}.to_json}
         expect(response).to be_successful
       end
       it "can support an empty string for variables" do
-        post :execute, params: { query: query_string, variables: "" }
+        post :execute, params: {query: query_string, variables: ""}
         expect(response).to be_successful
       end
       it "will error if given something strange for a variable" do
-        expect { post :execute, params: { query: query_string, variables: [1] } }.to raise_error ArgumentError
+        expect { post :execute, params: {query: query_string, variables: [1]} }.to raise_error ArgumentError
       end
     end
     context "when not logged in" do
       let(:scanned_resource) { FactoryBot.create_for_repository(:complete_open_scanned_resource, viewing_hint: "individuals") }
       it "can run a graphql query for a public scanned resource" do
-        post :execute, params: { query: query_string, format: :json }
+        post :execute, params: {query: query_string, format: :json}
 
         expect(response).to be_successful
         json_response = JSON.parse(response.body)
         expect(json_response["data"]).to eq(
-          "resource" => { "viewingHint" => "individuals" }
+          "resource" => {"viewingHint" => "individuals"}
         )
       end
     end

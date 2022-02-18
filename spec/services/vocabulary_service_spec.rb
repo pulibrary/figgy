@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe VocabularyService do
   subject(:service) do
     described_class.new(change_set_persister: change_set_persister,
-                        persist_if_not_found: false)
+      persist_if_not_found: false)
   end
   let(:change_set_persister) do
     ChangeSetPersister.new(

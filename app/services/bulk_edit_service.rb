@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 class BulkEditService
   # Update all members of a Collection to have the given attributes
   def self.perform(collection_id:, attributes:, metadata_adapter: Valkyrie.config.metadata_adapter, logger: Valkyrie.logger)
     change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                  storage_adapter: Valkyrie.config.storage_adapter)
+      storage_adapter: Valkyrie.config.storage_adapter)
     c = metadata_adapter.query_service.find_by(id: collection_id)
     c.decorate.members.each do |member|
       logger.info "Updating attributes for #{member}"
@@ -24,7 +25,7 @@ class BulkEditService
                                        existing_attributes[:member_of_collection_ids] << proposed_attributes[key]
                                      else
                                        proposed_attributes[key]
-                                     end
+      end
     end
     incorporated_attributes
   end

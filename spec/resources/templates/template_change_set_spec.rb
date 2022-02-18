@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe TemplateChangeSet do
@@ -17,7 +18,7 @@ RSpec.describe TemplateChangeSet do
       expect(change_set.child_change_set.required?(:title)).to eq false
     end
     it "can set nested properties" do
-      change_set.validate(nested_properties: [{ title: "Test" }])
+      change_set.validate(nested_properties: [{title: "Test"}])
     end
   end
 

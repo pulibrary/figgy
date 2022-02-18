@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "bagit"
 
 # Job for ingesting Collection (ArchivalMediaCollections) objects as Bags
@@ -29,8 +30,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
     def find_or_create_amc(component_id)
       existing_amc = metadata_adapter.query_service.custom_queries
-                                     .find_by_property(property: :source_metadata_identifier, value: component_id)
-                                     .select { |r| r.is_a? Collection }.first
+        .find_by_property(property: :source_metadata_identifier, value: component_id)
+        .select { |r| r.is_a? Collection }.first
       return existing_amc unless existing_amc.nil?
       change_set = change_set_class.new(Collection.new)
       change_set.validate(source_metadata_identifier: component_id)
@@ -39,8 +40,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
     def changeset_persister
       @changeset_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
-                                                      storage_adapter: storage_adapter,
-                                                      queue: queue_name)
+        storage_adapter: storage_adapter,
+        queue: queue_name)
     end
 
     def metadata_adapter
@@ -116,7 +117,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
           file_path: builder.path,
           mime_type: builder.mime_type,
           original_filename: builder.original_filename,
-          container_attributes: { read_groups: file_set_read_groups }
+          container_attributes: {read_groups: file_set_read_groups}
         )
         recording_change_set.files << file
       end
@@ -171,8 +172,8 @@ class IngestArchivalMediaBagJob < ApplicationJob
           RecordingChangeSet.new(
             recording,
             property => value,
-            visibility: collection.visibility.first,
-            downloadable: "public",
+            :visibility => collection.visibility.first,
+            :downloadable => "public",
             **recording_attributes
           )
         end
@@ -196,7 +197,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
         # @param file [IngestableAudioFile] the audio file being uploaded
         # @return [FileMetadata]
         def create_node(ingestable_audio_file)
-          attributes = { id: SecureRandom.uuid }
+          attributes = {id: SecureRandom.uuid}
           file_metadata_node = FileMetadata.for(file: ingestable_audio_file).new(attributes)
           file = storage_adapter.upload(file: ingestable_audio_file, resource: file_metadata_node, original_filename: ingestable_audio_file.original_filename)
           file_metadata_node.file_identifiers = file_metadata_node.file_identifiers + [file.id]
@@ -212,11 +213,11 @@ class IngestArchivalMediaBagJob < ApplicationJob
           RecordingChangeSet.new(
             recording,
             property => value,
-            files: [],
-            visibility: collection.visibility.first,
-            upload_set_id: upload_set_id,
-            downloadable: "public",
-            rights_statement: RightsStatements.copyright_not_evaluated
+            :files => [],
+            :visibility => collection.visibility.first,
+            :upload_set_id => upload_set_id,
+            :downloadable => "public",
+            :rights_statement => RightsStatements.copyright_not_evaluated
           )
         end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ScannedResourceDecorator do
@@ -15,24 +16,24 @@ RSpec.describe ScannedResourceDecorator do
   describe "#imported_created" do
     let(:resource) do
       FactoryBot.build(:scanned_resource,
-                       title: "test title",
-                       created: "01/01/1970",
-                       imported_metadata: imported_metadata)
+        title: "test title",
+        created: "01/01/1970",
+        imported_metadata: imported_metadata)
     end
     context "with a single date" do
-      let(:imported_metadata) { [{ created: Date.parse("01/01/1970") }] }
+      let(:imported_metadata) { [{created: Date.parse("01/01/1970")}] }
       it "exposes a formatted string for the created date" do
         expect(decorator.imported_created).to eq ["January 1, 1970"]
       end
     end
     context "with a date range" do
-      let(:imported_metadata) { [{ created: "1941-01-01T00:00:00Z/1985-12-31T23:59:59Z" }] }
+      let(:imported_metadata) { [{created: "1941-01-01T00:00:00Z/1985-12-31T23:59:59Z"}] }
       it "maps date to readable string" do
         expect(decorator.imported_created).to eq ["1941-1985"]
       end
     end
     context "with just a year" do
-      let(:imported_metadata) { [{ created: "1970" }] }
+      let(:imported_metadata) { [{created: "1970"}] }
       it "exposes the year" do
         expect(decorator.imported_created).to eq ["1970"]
       end
@@ -58,7 +59,7 @@ RSpec.describe ScannedResourceDecorator do
   context "with a holding location" do
     let(:resource) do
       FactoryBot.build(:scanned_resource,
-                       holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15")
+        holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15")
     end
     describe "Voyager downtime" do
       it "handles error caused by Voyager downtime" do
@@ -76,14 +77,14 @@ RSpec.describe ScannedResourceDecorator do
   context "with imported metadata" do
     let(:resource) do
       FactoryBot.build(:scanned_resource,
-                       title: "test title",
-                       author: "test author",
-                       imported_metadata: [{
-                         creator: "test creator",
-                         subject: "test subject",
-                         language: "eng",
-                         location: ["RCPPA BL980.G7 B66 1982"]
-                       }])
+        title: "test title",
+        author: "test author",
+        imported_metadata: [{
+          creator: "test creator",
+          subject: "test subject",
+          language: "eng",
+          location: ["RCPPA BL980.G7 B66 1982"]
+        }])
     end
 
     describe "#iiif_manifest_attributes" do
@@ -171,8 +172,8 @@ RSpec.describe ScannedResourceDecorator do
       before do
         allow(derivs).to receive(:find_by).with(id: file_id).and_return(file_id)
       end
-      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
-      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:derivs) { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id) { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
       let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, file_metadata: [pdf_file]) }
       it "finds the pdf file" do
@@ -184,8 +185,8 @@ RSpec.describe ScannedResourceDecorator do
       before do
         allow(derivs).to receive(:find_by).with(id: file_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
       end
-      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
-      let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
+      let(:derivs) { Valkyrie::StorageAdapter.find(:derivatives) }
+      let(:file_id) { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
       let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, file_metadata: [pdf_file]) }
       it "does not return the bogus pdf file" do

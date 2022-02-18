@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindDeepFailedCloudFixityCount
   def self.queries
     [:find_deep_failed_cloud_fixity_count]

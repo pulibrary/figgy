@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PreservationObject < Resource
   # the object we track preservation of
   attribute :preserved_object_id, Valkyrie::Types::ID

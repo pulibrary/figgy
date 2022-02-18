@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RasterResourceDerivativeService
   class Factory
     attr_reader :change_set_persister
@@ -66,7 +67,7 @@ class RasterResourceDerivativeService
     create_cloud_derivatives
     generate_mosaic
     update_error_message(message: nil) if original_file.error_message.present?
-  rescue StandardError => error
+  rescue => error
     update_error_message(message: error.message)
     raise error
   end

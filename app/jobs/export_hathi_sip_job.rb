@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ExportHathiSipJob < ApplicationJob
   def perform(resource_id, destination = Rails.root.join("tmp"), logger = Logger.new(STDOUT))
     logger.info "Exporting #{resource_id} to Hathi SIP in '#{destination}'"

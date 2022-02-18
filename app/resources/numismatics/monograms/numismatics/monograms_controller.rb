@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class MonogramsController < ResourceController
     self.resource_class = Numismatics::Monogram
@@ -29,7 +30,7 @@ module Numismatics
         end
       end
     rescue Valkyrie::Persistence::ObjectNotFoundError
-      render json: { message: "No manifest found for #{params[:id]}" }
+      render json: {message: "No manifest found for #{params[:id]}"}
     end
 
     private

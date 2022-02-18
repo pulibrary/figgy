@@ -11,10 +11,10 @@ class Preserver
     def self.from_preservation_object(resource:, change_set_persister:, storage_adapter: nil)
       file_metadata = resource.metadata_node
       metadata_file_identifier = if file_metadata.nil?
-                                   nil
-                                 else
-                                   file_metadata.file_identifiers.first
-                                 end
+        nil
+      else
+        file_metadata.file_identifiers.first
+      end
       binary_nodes = resource.binary_nodes
       binary_file_identifiers = binary_nodes.map(&:file_identifiers)
       binary_file_identifiers.flatten!
@@ -79,7 +79,7 @@ class Preserver
         metadata_file_contents = metadata_file.read
         metadata_json = JSON.parse(metadata_file_contents)
         metadata_json.delete("file_metadata")
-        resource_object = { metadata: metadata_json }
+        resource_object = {metadata: metadata_json}
         file_set = Valkyrie.config.metadata_adapter.resource_factory.to_resource(object: resource_object)
         optimistic_lock_token = metadata_json["optimistic_lock_token"].map do |lock_json|
           build_optimistic_lock_token(lock_json)

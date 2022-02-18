@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class HocrDerivativeService
   class Factory
     attr_reader :change_set_persister, :processor_factory
@@ -46,7 +47,8 @@ class HocrDerivativeService
   end
 
   # No cleanup necessary - all this does is set a property on FileSet.
-  def cleanup_derivatives; end
+  def cleanup_derivatives
+  end
 
   def parent
     @parent ||= Wayfinder.for(resource).parent

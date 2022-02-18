@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe AddEphemeraToCollection do
@@ -6,18 +7,18 @@ describe AddEphemeraToCollection do
   context "when project has EphemeraBoxes" do
     subject(:service) do
       described_class.new(project_id: project.id,
-                          collection_id: collection.id,
-                          change_set_persister: change_set_persister,
-                          logger: logger)
+        collection_id: collection.id,
+        change_set_persister: change_set_persister,
+        logger: logger)
     end
     let(:project) do
       FactoryBot.create_for_repository(:ephemera_project,
-                                       member_ids: box.id)
+        member_ids: box.id)
     end
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:box) do
       FactoryBot.create_for_repository(:ephemera_box,
-                                       member_ids: folder.id)
+        member_ids: folder.id)
     end
     let(:folder) { FactoryBot.create_for_repository(:complete_ephemera_folder) }
 
@@ -38,13 +39,13 @@ describe AddEphemeraToCollection do
   context "when project has only EphemeraFolders" do
     subject(:service) do
       described_class.new(project_id: project.id,
-                          collection_id: collection.id,
-                          change_set_persister: change_set_persister,
-                          logger: logger)
+        collection_id: collection.id,
+        change_set_persister: change_set_persister,
+        logger: logger)
     end
     let(:project) do
       FactoryBot.create_for_repository(:ephemera_project,
-                                       member_ids: folder.id)
+        member_ids: folder.id)
     end
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:folder) { FactoryBot.create_for_repository(:complete_ephemera_folder) }

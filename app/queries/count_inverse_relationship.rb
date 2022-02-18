@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CountInverseRelationship
   def self.queries
     [:count_inverse_relationship]
@@ -14,7 +15,7 @@ class CountInverseRelationship
   # @param resource [Valkyrie::Resource] resources whose relationship will be counted
   # @param property [Symbol] property to check the inverse relationship of
   def count_inverse_relationship(resource:, property:)
-    relationship = { property => [{ id: resource.id.to_s }] }
+    relationship = {property => [{id: resource.id.to_s}]}
     connection[find_inverse_relationship_query, relationship.to_json].first[:count]
   end
 

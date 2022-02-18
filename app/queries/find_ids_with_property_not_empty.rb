@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindIdsWithPropertyNotEmpty
   def self.queries
     [:find_ids_with_property_not_empty]
@@ -11,7 +12,7 @@ class FindIdsWithPropertyNotEmpty
   end
 
   def find_ids_with_property_not_empty(property:)
-    relation = { property => [] }
+    relation = {property => []}
     metadata = Sequel.pg_jsonb_op(:metadata)
     resources.select(:id).where(
       metadata.has_key?(property.to_s)

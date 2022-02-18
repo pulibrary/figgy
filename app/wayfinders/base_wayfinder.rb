@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Wayfinders are classes which manage navigating relationships between IDs
 # stored on a Valkyrie::Resource to their associated Valkyrie::Resources.
 #

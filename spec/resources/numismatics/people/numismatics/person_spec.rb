@@ -1,18 +1,19 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe Numismatics::Person do
   subject(:numismatic_place) do
     described_class.new(name1: "name1",
-                        name2: "name2",
-                        epithet: "epithet",
-                        family: "family",
-                        born: "born",
-                        died: "died",
-                        class_of: "class of",
-                        years_active_start: "years active start",
-                        years_active_end: "years active end",
-                        replaces: "ruler-123")
+      name2: "name2",
+      epithet: "epithet",
+      family: "family",
+      born: "born",
+      died: "died",
+      class_of: "class of",
+      years_active_start: "years active start",
+      years_active_end: "years active end",
+      replaces: "ruler-123")
   end
 
   it "has properties" do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Preserver
   # Provided as a mechanism for switching preservation strategies depending on
   # the profile. For now, there's only one, so fall down to new.
@@ -8,12 +9,13 @@ class Preserver
   end
 
   class NullPreserver
-    def self.preserve!; end
+    def self.preserve!
+    end
   end
 
   attr_reader :change_set, :storage_adapter, :change_set_persister
   delegate :resource, to: :change_set
-  def initialize(change_set:, storage_adapter: nil, change_set_persister:)
+  def initialize(change_set:, change_set_persister:, storage_adapter: nil)
     @change_set = change_set
     @storage_adapter = storage_adapter || default_storage_adapter
     @change_set_persister = change_set_persister
@@ -73,9 +75,7 @@ class Preserver
 
     def preservation_object
       @preservation_object ||=
-        begin
-          Wayfinder.for(resource).try(:preservation_object) || PreservationObject.new(preserved_object_id: resource.id)
-        end
+        Wayfinder.for(resource).try(:preservation_object) || PreservationObject.new(preserved_object_id: resource.id)
     end
 
     def preserve_children
@@ -118,15 +118,13 @@ class Preserver
 
     def metadata_node
       @metadata_node ||=
-        begin
-          FileMetadata.new(
-            label: "#{resource.id}.json",
-            mime_type: "application/json",
-            checksum: MultiChecksum.for(temp_metadata_file),
-            use: Valkyrie::Vocab::PCDMUse.PreservedMetadata,
-            id: SecureRandom.uuid
-          )
-        end
+        FileMetadata.new(
+          label: "#{resource.id}.json",
+          mime_type: "application/json",
+          checksum: MultiChecksum.for(temp_metadata_file),
+          use: Valkyrie::Vocab::PCDMUse.PreservedMetadata,
+          id: SecureRandom.uuid
+        )
     end
 
     def temp_metadata_file

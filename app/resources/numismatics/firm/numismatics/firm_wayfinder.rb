@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class FirmWayfinder < BaseWayfinder
     def firms_count

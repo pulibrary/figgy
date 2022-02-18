@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilderV3
   class NavPlaceBuilder
     attr_reader :resource

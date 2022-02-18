@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module FileManagerHelper
   def geo_metadata_file?(change_set)
     original_file = change_set.model.try(:original_file)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class IngestFoldersJob < ApplicationJob
   def perform(directory:, property: nil, class_name: "ScannedResource", change_set_param: nil, file_filters: [], **attributes)
     Rails.logger.info "Ingesting folder #{directory}"

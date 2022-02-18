@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe CollectionDecorator do
@@ -16,7 +17,7 @@ RSpec.describe CollectionDecorator do
   describe "#owners" do
     let(:collection) do
       FactoryBot.build(:collection,
-                       owners: ["owner"], description: ["test description"])
+        owners: ["owner"], description: ["test description"])
     end
     it "displays the owners" do
       expect(decorator.display_attributes[:owners]).to eq ["owner"]

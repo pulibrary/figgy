@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Generated with `rails generate valkyrie:model ScannedResource`
 
 # A scanned resource is the parent object for most digital objects that

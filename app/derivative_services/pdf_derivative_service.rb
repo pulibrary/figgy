@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PDFDerivativeService
   class Factory
     attr_reader :change_set_persister
@@ -27,7 +28,7 @@ class PDFDerivativeService
     update_pdf_use
     tiffs = convert_pages
     add_file_sets(tiffs)
-  rescue StandardError => e
+  rescue => e
     update_error_message(message: e.message)
     raise e
   ensure
@@ -77,7 +78,7 @@ class PDFDerivativeService
   def convert_pages
     image = Vips::Image.pdfload(filename, access: :sequential, memory: true)
     pages = image.get_value("pdf-n_pages")
-    files = Array.new(pages).lazy.each_with_index.map do |_, page|
+    Array.new(pages).lazy.each_with_index.map do |_, page|
       # Ruby's set to mark and sweep for GC, and we can't explicitly close VIPS
       # references. The file handles aren't freed up until the garbage collector
       # runs, but it's 4 handles per VIPS access. So force a GC to keep the
@@ -89,7 +90,6 @@ class PDFDerivativeService
       page_image.tiffsave(location)
       build_file(page + 1, location)
     end
-    files
   end
 
   def build_file(page, file_path)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
@@ -23,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def guest_uid_authentication_key(key)
-    key &&= nil unless key.to_s =~ /^guest/
+    key &&= nil unless /^guest/.match?(key.to_s)
     return key if key
     "guest_" + guest_user_unique_suffix
   end
@@ -112,10 +113,10 @@ class ApplicationController < ActionController::Base
     resource = find_resource_from_manifest(manifest_url_param)
 
     config = if resource.decorate.downloadable?
-               default_exhibit_uv_config
-             else
-               downloads_disabled_exhibit_uv_config
-             end
+      default_exhibit_uv_config
+    else
+      downloads_disabled_exhibit_uv_config
+    end
 
     respond_to do |format|
       format.json { render json: config }

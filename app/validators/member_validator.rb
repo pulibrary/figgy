@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class MemberValidator < ActiveModel::Validator
   def validate(record)
     validate_member record

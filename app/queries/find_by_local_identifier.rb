@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindByLocalIdentifier
   def self.queries
     [:find_by_local_identifier]

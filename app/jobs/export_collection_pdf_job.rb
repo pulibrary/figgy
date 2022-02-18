@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ExportCollectionPDFJob < ApplicationJob
   def perform(resource_id, logger: Logger.new(STDOUT))
     collection = query_service.find_by(id: resource_id)

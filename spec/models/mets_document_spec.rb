@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe METSDocument do
@@ -19,27 +20,27 @@ RSpec.describe METSDocument do
           proxy: "goszd"
         }]
       },
-              {
-                label: "Preamble", nodes: [
-                  {
-                    label: "image 4",
-                    proxy: "v6huf"
-                  },
-                  {
-                    label: "image 5",
-                    proxy: "x3mmf"
-                  }
-                ]
-              }]
+        {
+          label: "Preamble", nodes: [
+            {
+              label: "image 4",
+              proxy: "v6huf"
+            },
+            {
+              label: "image 5",
+              proxy: "x3mmf"
+            }
+          ]
+        }]
     }
   end
   let(:flat_structure) do
     {
       nodes: [
-        { proxy: "s45u4", label: "vol 1 front cover" },
-        { proxy: "x04jf", label: "vol 1 pastedown" },
-        { proxy: "iocby", label: "vol 1 front flyleaf 1" },
-        { proxy: "jiots", label: "vol 1 front flyleaf 1v" }
+        {proxy: "s45u4", label: "vol 1 front cover"},
+        {proxy: "x04jf", label: "vol 1 pastedown"},
+        {proxy: "iocby", label: "vol 1 front flyleaf 1"},
+        {proxy: "jiots", label: "vol 1 front flyleaf 1v"}
       ]
     }
   end
@@ -211,54 +212,54 @@ RSpec.describe METSDocument do
       subject(:mets_document) { described_class.new mets_file_multi4 }
       let(:expected_structure) do
         {
-          "nodes":
+          nodes:
           [
             {
-              "label": "front cover", "proxy": "nrwkc"
+              label: "front cover", proxy: "nrwkc"
             },
             {
-              "label": "front paste down", "proxy": "fh2bx"
+              label: "front paste down", proxy: "fh2bx"
             },
             {
-              "label": "[Frontispice]", "nodes":
+              label: "[Frontispice]", nodes:
               [
                 {
-                  "label": "frontispice", "proxy": "jtatf"
+                  label: "frontispice", proxy: "jtatf"
                 },
                 {
-                  "label": "frontispice 1v", "proxy": "dj7kh"
+                  label: "frontispice 1v", proxy: "dj7kh"
                 }
               ]
             },
             {
-              "label": "[Title Page]", "nodes":
+              label: "[Title Page]", nodes:
               [
                 {
-                  "label": "p. 1", "proxy": "v7j0i"
+                  label: "p. 1", proxy: "v7j0i"
                 },
                 {
-                  "label": "p. 2", "proxy": "nqks4"
+                  label: "p. 2", proxy: "nqks4"
                 }
               ]
             },
             {
-              "label": "Premier Cahier", "nodes":
+              label: "Premier Cahier", nodes:
               [
                 {
-                  "label": "p. 5", "proxy": "hsf26"
+                  label: "p. 5", proxy: "hsf26"
                 },
                 {
-                  "label": "p. 6", "proxy": "mkqpy"
+                  label: "p. 6", proxy: "mkqpy"
                 },
                 {
-                  "label": "Pavillon d'agrément, gothique anglais, Londres, par Jean Grunden. Pl. 1 et 2",
-                  "nodes":
+                  label: "Pavillon d'agrément, gothique anglais, Londres, par Jean Grunden. Pl. 1 et 2",
+                  nodes:
                   [
                     {
-                      "label": "plate 1", "proxy": "ejgtg"
+                      label: "plate 1", proxy: "ejgtg"
                     },
                     {
-                      "label": "plate 1v", "proxy": "z3g5g"
+                      label: "plate 1v", proxy: "z3g5g"
                     }
                   ]
                 }

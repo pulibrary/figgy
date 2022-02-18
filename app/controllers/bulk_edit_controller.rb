@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class BulkEditController < ApplicationController
   include Blacklight::SearchHelper
   before_action :load_collections, only: [:resources_edit]
@@ -46,7 +47,7 @@ class BulkEditController < ApplicationController
     end
 
     def initial_builder
-      builder_params = { q: params["search_params"]["q"], f: params["search_params"]["f"] }
+      builder_params = {q: params["search_params"]["q"], f: params["search_params"]["f"]}
       builder = search_builder.with(builder_params)
       builder.rows = params["batch_size"] || 50
       builder

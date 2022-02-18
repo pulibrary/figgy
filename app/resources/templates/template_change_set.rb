@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class TemplateChangeSet < ChangeSet
   self.fields = [:title]
   property :title, required: true, multiple: false

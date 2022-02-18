@@ -107,10 +107,8 @@ class MarcRecordEnhancer
 
     def cico_024s
       @cico_024s ||=
-        begin
-          marc.fields("024").select do |f|
-            f.subfields.find { |s| s.code == "2" }&.value == "cico"
-          end
+        marc.fields("024").select do |f|
+          f.subfields.find { |s| s.code == "2" }&.value == "cico"
         end
     end
 
@@ -122,8 +120,8 @@ class MarcRecordEnhancer
 
     def references
       marc.fields("510")
-          .select { |field| field.subfields.select { |subfield| subfield.code == "a" }.first.value =~ /Cicognara/ }
-          .flat_map { |field| field.subfields.select { |subfield| subfield.code == "c" } }
-          .map(&:value)
+        .select { |field| field.subfields.select { |subfield| subfield.code == "a" }.first.value =~ /Cicognara/ }
+        .flat_map { |field| field.subfields.select { |subfield| subfield.code == "c" } }
+        .map(&:value)
     end
 end

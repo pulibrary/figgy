@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DateRangeChangeSet < ChangeSet
   validates :start, :end, year: true
   validate :start_before_end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RightsStatementValidator < ActiveModel::Validator
   # ensure the property exists and is in the controlled vocabulary
   def validate(record)

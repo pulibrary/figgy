@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "figgy"
 Datadog.configure do |c|
   c.tracer(enabled: false) unless Rails.env.production?

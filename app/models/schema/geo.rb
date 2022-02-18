@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ##
 # Defines attributes for geo resources
 module Schema

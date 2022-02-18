@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventChangeSet < ChangeSet
   property :type, multiple: false, required: true
   property :status, multiple: false, required: true

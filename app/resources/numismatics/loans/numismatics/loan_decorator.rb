@@ -1,13 +1,14 @@
 # frozen_string_literal: true
+
 module Numismatics
   class LoanDecorator < Valkyrie::ResourceDecorator
     display :firm,
-            :person,
-            :date_in,
-            :date_out,
-            :exhibit_name,
-            :note,
-            :type
+      :person,
+      :date_in,
+      :date_out,
+      :exhibit_name,
+      :note,
+      :type
 
     delegate :decorated_firm, :decorated_person, to: :wayfinder
 

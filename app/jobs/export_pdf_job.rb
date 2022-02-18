@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ExportPDFJob < ApplicationJob
   def perform(resource_id)
     logger.info "Exporting #{resource_id} to disk as a PDF"

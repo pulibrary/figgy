@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EphemeraProjectWayfinder < BaseWayfinder
   relationship_by_property :members, property: :member_ids
   relationship_by_property :ephemera_boxes, property: :member_ids, model: EphemeraBox

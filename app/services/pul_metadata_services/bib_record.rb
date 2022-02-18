@@ -3,7 +3,7 @@
 module PulMetadataServices
   class BibRecord
     attr_reader :source
-    alias full_source source
+    alias_method :full_source, :source
 
     # Constructor
     # @param source [String] the string-serialized MARC-XML for the record
@@ -89,10 +89,10 @@ module PulMetadataServices
 
     def description
       formatted_fields_as_array(["500", "501", "502", "504", "507", "508",
-                                 "511", "510", "513", "514", "515", "516", "518", "522", "525", "526", "530",
-                                 "533", "534", "535", "536", "538", "542", "544", "545", "546", "547", "550",
-                                 "552", "555", "556", "562", "563", "565", "567", "580", "581", "583", "584",
-                                 "585", "586", "588", "590"])
+        "511", "510", "513", "514", "515", "516", "518", "522", "525", "526", "530",
+        "533", "534", "535", "536", "538", "542", "544", "545", "546", "547", "550",
+        "552", "555", "556", "562", "563", "565", "567", "580", "581", "583", "584",
+        "585", "586", "588", "590"])
     end
 
     def extent
@@ -193,7 +193,7 @@ module PulMetadataServices
     def subjects
       # Broken: name puctuation won't come out correctly
       formatted_fields_as_array(["600", "610", "611", "630", "648", "650", "651",
-                                 "653", "654", "655", "656", "657", "658", "662", "690"], separator: "--")
+        "653", "654", "655", "656", "657", "658", "662", "690"], separator: "--")
     end
 
     # We squash together 505s with ' ; '
@@ -277,7 +277,7 @@ module PulMetadataServices
         d = data["008"].value[7, 4]
         d = d.tr "u", "0" unless d == "uuuu"
         d = d.tr " ", "0" unless d == "    "
-        d if d =~ /^[0-9]{4}$/
+        d if /^[0-9]{4}$/.match?(d)
       end
 
       def determine_primary_title_field

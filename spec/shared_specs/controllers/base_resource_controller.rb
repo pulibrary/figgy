@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.shared_examples "a ResourceController" do |*flags|
@@ -29,7 +30,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         collection = FactoryBot.create_for_repository(:collection)
         parent = FactoryBot.create_for_repository(factory)
 
-        get :new, params: { parent_id: parent.id.to_s }
+        get :new, params: {parent_id: parent.id.to_s}
         expect(response.body).to have_field "Title"
         expect(response.body).to have_field "Rights Statement"
         expect(response.body).to have_field "Rights Note"
@@ -69,7 +70,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
       it_behaves_like "an access controlled create request"
     end
     it "can create a new resource" do
-      post :create, params: { param_key => valid_params }
+      post :create, params: {param_key => valid_params}
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/"
@@ -91,7 +92,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
       end
       let(:collection) { FactoryBot.create_for_repository(:collection) }
       it "works" do
-        post :create, params: { param_key => valid_params }
+        post :create, params: {param_key => valid_params}
 
         expect(response).to be_redirect
         expect(response.location).to start_with "http://test.host/catalog/"
@@ -102,14 +103,14 @@ RSpec.shared_examples "a ResourceController" do |*flags|
 
     it "can create a nested resource" do
       parent = FactoryBot.create_for_repository(factory)
-      post :create, params: { param_key => valid_params.merge(append_id: parent.id.to_s) }
+      post :create, params: {param_key => valid_params.merge(append_id: parent.id.to_s)}
 
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/catalog/parent/#{parent.id}/"
       id = response.location.gsub("http://test.host/catalog/parent/#{parent.id}/", "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
       expect(find_resource(parent.id).member_ids).to eq [Valkyrie::ID.new(id)]
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{id}" })["response"]["docs"][0]
+      solr_record = Blacklight.default_index.connection.get("select", params: {qt: "document", q: "id:#{id}"})["response"]["docs"][0]
       expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
     end
     context "when something bad goes wrong" do
@@ -120,7 +121,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         allow(Valkyrie::MetadataAdapter.find(:index_solr).persister).to receive(:save_all).and_raise("Bad")
 
         expect do
-          post :create, params: { param_key => valid_params }
+          post :create, params: {param_key => valid_params}
         end.to raise_error "Bad"
         expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
       end
@@ -131,7 +132,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         )
         allow(Valkyrie::MetadataAdapter.find(:postgres).persister).to receive(:save).and_raise("Bad")
         expect do
-          post :create, params: { param_key => valid_params }
+          post :create, params: {param_key => valid_params}
         end.to raise_error "Bad"
         expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.find_all.to_a.length).to eq 0
         expect(Valkyrie::MetadataAdapter.find(:index_solr).query_service.find_all.to_a.length).to eq 0
@@ -139,7 +140,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
     end
 
     it "renders the form if it doesn't create a new resource" do
-      post :create, params: { param_key => invalid_params }
+      post :create, params: {param_key => invalid_params}
       expect(response).to render_template "base/new"
     end
 
@@ -154,7 +155,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
       end
 
       it "renders the form for a new resource, and both logs and flashes an error message" do
-        post :create, params: { param_key => valid_params.merge(invalid_metadata_params) }
+        post :create, params: {param_key => valid_params.merge(invalid_metadata_params)}
 
         expect(response).to render_template "base/new"
         expect(Rails.logger).to have_received(:error).with("Invalid source metadata ID: CD- 34517q")
@@ -170,13 +171,13 @@ RSpec.shared_examples "a ResourceController" do |*flags|
     end
     it "can delete a resource" do
       resource = FactoryBot.create_for_repository(factory)
-      delete :destroy, params: { id: resource.id.to_s }
+      delete :destroy, params: {id: resource.id.to_s}
 
       expect(response).to redirect_to root_path
       expect { query_service.find_by(id: resource.id) }.to raise_error ::Valkyrie::Persistence::ObjectNotFoundError
     end
     it "returns a 404 when given a bad resource ID" do
-      delete :destroy, params: { id: SecureRandom.uuid }
+      delete :destroy, params: {id: SecureRandom.uuid}
 
       expect(response).to redirect_to_not_found
     end
@@ -192,7 +193,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
     end
     context "when a resource doesn't exist" do
       it "redirects" do
-        get :edit, params: { id: "test" }
+        get :edit, params: {id: "test"}
         expect(response).to redirect_to_not_found
       end
     end
@@ -200,7 +201,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
       render_views
       it "renders a form" do
         resource = FactoryBot.create_for_repository(factory)
-        get :edit, params: { id: resource.id.to_s }
+        get :edit, params: {id: resource.id.to_s}
 
         expect(response.body).to have_field "Title", with: resource.title.first
         expect(response.body).to have_button "Save"
@@ -213,19 +214,19 @@ RSpec.shared_examples "a ResourceController" do |*flags|
 
     context "html" do
       context "access control" do
-        let(:extra_params) { { param_key => { title: ["Two"] } } }
+        let(:extra_params) { {param_key => {title: ["Two"]}} }
         it_behaves_like "an access controlled update request"
       end
       context "when a resource doesn't exist" do
         it "raises an error" do
-          patch :update, params: { id: "test" }
+          patch :update, params: {id: "test"}
           expect(response).to redirect_to_not_found
         end
       end
       context "when it does exist" do
         it "saves it and redirects" do
           resource = FactoryBot.create_for_repository(factory)
-          patch :update, params: { id: resource.id.to_s, param_key => { title: ["Two"] } }
+          patch :update, params: {:id => resource.id.to_s, param_key => {title: ["Two"]}}
 
           expect(response).to be_redirect
           expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
@@ -236,7 +237,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         end
         it "renders the form if it fails validations" do
           resource = FactoryBot.create_for_repository(factory)
-          patch :update, params: { id: resource.id.to_s, param_key => { title: [""] } }
+          patch :update, params: {:id => resource.id.to_s, param_key => {title: [""]}}
 
           expect(response).to render_template "base/edit"
         end
@@ -245,7 +246,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
     context "when it does exist" do
       it "saves it and redirects" do
         resource = FactoryBot.create_for_repository(factory)
-        patch :update, params: { id: resource.id.to_s, param_key => { title: ["Two"] } }
+        patch :update, params: {:id => resource.id.to_s, param_key => {title: ["Two"]}}
         expect(response).to be_redirect
         expect(response.location).to eq "http://test.host/catalog/#{resource.id}"
         id = response.location.gsub("http://test.host/catalog/", "")
@@ -258,7 +259,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         let(:user) { FactoryBot.create(:user) }
         it "returns 403" do
           resource = FactoryBot.create_for_repository(factory)
-          params = { id: resource.id.to_s, param_key => { member_ids: ["not_an_id"] }, format: :json }
+          params = {:id => resource.id.to_s, param_key => {member_ids: ["not_an_id"]}, :format => :json}
           patch :update, params: params
           expect(response.status).to eq(403)
         end
@@ -266,13 +267,13 @@ RSpec.shared_examples "a ResourceController" do |*flags|
 
       context "when a resource doesn't exist" do
         it "returns 404" do
-          patch :update, params: { id: "not_an_id", format: :json }
+          patch :update, params: {id: "not_an_id", format: :json}
           expect(response.status).to eq(404)
         end
       end
       it "renders the form if it fails validations" do
         resource = FactoryBot.create_for_repository(factory)
-        patch :update, params: { id: resource.id.to_s, param_key => { title: [""] } }
+        patch :update, params: {:id => resource.id.to_s, param_key => {title: [""]}}
         expect(response).to render_template "base/edit"
       end
 
@@ -280,7 +281,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         context "invalid data submitted" do
           it "returns 400" do
             resource = FactoryBot.create_for_repository(factory)
-            params = { id: resource.id.to_s, param_key => { title: [""] }, format: :json }
+            params = {:id => resource.id.to_s, param_key => {title: [""]}, :format => :json}
             patch :update, params: params
             expect(response.status).to eq(400)
           end
@@ -291,7 +292,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
             file_set2 = FactoryBot.create_for_repository(:file_set)
             resource = FactoryBot.create_for_repository(factory, member_ids: [file_set1.id, file_set2.id])
 
-            params = { id: resource.id.to_s, param_key => { member_ids: [file_set2.id, file_set1.id] }, format: :json }
+            params = {:id => resource.id.to_s, param_key => {member_ids: [file_set2.id, file_set1.id]}, :format => :json}
             patch :update, params: params
             expect(response.status).to eq(200)
             reloaded = find_resource(resource.id)
@@ -308,7 +309,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         let(:user) { FactoryBot.create(:user) }
         it "returns 404" do
           resource = FactoryBot.create_for_repository(factory)
-          params = { id: resource.id.to_s, param_key => { member_ids: ["not_an_id"] }, format: :json }
+          params = {:id => resource.id.to_s, param_key => {member_ids: ["not_an_id"]}, :format => :json}
           patch :update, params: params
           expect(response.status).to eq(403)
         end
@@ -316,7 +317,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
 
       context "when a resource doesn't exist" do
         it "returns 404" do
-          patch :update, params: { id: "not_an_id", format: :json }
+          patch :update, params: {id: "not_an_id", format: :json}
           expect(response.status).to eq(404)
         end
       end
@@ -324,7 +325,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
       context "when the resource does exist" do
         it "returns 400 for invalid data" do
           resource = FactoryBot.create_for_repository(factory)
-          params = { id: resource.id.to_s, param_key => { title: [""] }, format: :json }
+          params = {:id => resource.id.to_s, param_key => {title: [""]}, :format => :json}
           patch :update, params: params
           expect(response.status).to eq(400)
         end
@@ -333,7 +334,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
           file_set2 = FactoryBot.create_for_repository(:file_set)
           resource = FactoryBot.create_for_repository(factory, member_ids: [file_set1.id, file_set2.id])
 
-          params = { id: resource.id.to_s, param_key => { member_ids: [file_set2.id, file_set1.id] }, format: :json }
+          params = {:id => resource.id.to_s, param_key => {member_ids: [file_set2.id, file_set1.id]}, :format => :json}
           patch :update, params: params
           expect(response.status).to eq(200)
           reloaded = find_resource(resource.id)
@@ -350,7 +351,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         child = FactoryBot.create_for_repository(:file_set)
         parent = FactoryBot.create_for_repository(factory, member_ids: child.id)
 
-        get :file_manager, params: { id: parent.id }
+        get :file_manager, params: {id: parent.id}
 
         expect(assigns(:change_set).id).to eq parent.id
         expect(assigns(:children).map(&:id)).to eq [child.id]
@@ -366,7 +367,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
     it "returns a IIIF manifest for a resource with a file" do
       resource = FactoryBot.create_for_repository(manifestable_factory, files: [file])
 
-      get :manifest, params: { id: resource.id.to_s, format: :json }
+      get :manifest, params: {id: resource.id.to_s, format: :json}
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
       expect(response.headers["Content-Type"]).to include "application/json"
@@ -377,7 +378,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
       it "returns it still" do
         resource = FactoryBot.create_for_repository(factory, local_identifier: "pk643fd004", files: [file])
 
-        get :manifest, params: { id: resource.local_identifier.first, format: :json }
+        get :manifest, params: {id: resource.local_identifier.first, format: :json}
 
         expect(response).to redirect_to polymorphic_path [:manifest, resource]
       end
@@ -393,7 +394,7 @@ RSpec.shared_examples "a ResourceController" do |*flags|
         .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
     end
     it "generates a PDF, attaches it to the simple resource, and redirects to download for it" do
-      get :pdf, params: { id: resource.id.to_s }
+      get :pdf, params: {id: resource.id.to_s}
       reloaded = adapter.query_service.find_by(id: resource.id)
 
       expect(reloaded.file_metadata).not_to be_blank

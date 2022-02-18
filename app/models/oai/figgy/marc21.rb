@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module OAI::Figgy
   class MARC21 < OAI::Provider::Metadata::Format
     def initialize

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ManifestBuilder
   class SequenceBuilder < IIIFManifest::ManifestBuilder::SequenceBuilder
     attr_reader :start_canvas_builder

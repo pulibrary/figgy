@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for EphemeraFields as independent resources
 # Please note that these are global in namespace and distinct from ControlledVocabulary::EphemeraField
 # Also note that :field_name was used (as opposed to :name) for the purposes of disambiguation

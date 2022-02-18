@@ -1,7 +1,7 @@
 # frozen_string_literal: true
+
 # A custom input class for the slug field; adapted directly from the simple form
 # docs
-# rubocop:disable Rails/OutputSafety
 class DpulUrlInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
     merged_input_options = merge_wrapper_options(input_html_options, wrapper_options)

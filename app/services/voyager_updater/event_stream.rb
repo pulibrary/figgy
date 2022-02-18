@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module VoyagerUpdater
   class EventStream
     attr_reader :url

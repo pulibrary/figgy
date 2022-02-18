@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GeoDiscovery
   class DocumentBuilder
     class BasicMetadataBuilder
@@ -67,7 +68,7 @@ module GeoDiscovery
         # @return [Array<Symbol>] attributes
         def simple_attributes
           [:creator, :spatial, :temporal,
-           :held_by, :language, :publisher]
+            :held_by, :language, :publisher]
         end
 
         # Returns an array of subject strings. For Vector and Raster Resources,

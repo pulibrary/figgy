@@ -1,19 +1,20 @@
 # frozen_string_literal: true
+
 class Valkyrie::ResourceDecorator < ApplicationDecorator
   display :internal_resource, :created_at, :updated_at
   suppress :depositor,
-           :description,
-           :holding_location,
-           :keyword,
-           :nav_date,
-           :ocr_language,
-           :pdf_type,
-           :rights_statement,
-           :sort_title,
-           :source_jsonld,
-           :source_metadata,
-           :source_metadata_identifier,
-           :title
+    :description,
+    :holding_location,
+    :keyword,
+    :nav_date,
+    :ocr_language,
+    :pdf_type,
+    :rights_statement,
+    :sort_title,
+    :source_jsonld,
+    :source_metadata,
+    :source_metadata_identifier,
+    :title
   delegate :members, :parents, to: :wayfinder
 
   def wayfinder
@@ -273,17 +274,17 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
 
     # Aliases all methods which may contain date strings
-    alias created_value date_value
-    alias imported_created_value created_value
-    alias updated_value date_value
-    alias imported_updated_value updated_value
+    alias_method :created_value, :date_value
+    alias_method :imported_created_value, :created_value
+    alias_method :updated_value, :date_value
+    alias_method :imported_updated_value, :updated_value
     private :date_value
 
     # For identifiers containing URL's into markup, generates HTML link markup
     # @return [Array<String>] HTML markup for links, or the original identifiers
     def identifier_value
       @value.map do |id|
-        if id =~ /^https?\:\/\//
+        if /^https?:\/\//.match?(id)
           "<a href='#{id}' alt='#{label}'>#{id}</a>"
         else
           id
@@ -292,7 +293,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
 
     # Aliases the method for imported identifiers
-    alias imported_identifier_value identifier_value
+    alias_method :imported_identifier_value, :identifier_value
 
     # Generates a resource transformed into linked data (only if it is an EphemeraTerm)
     # Otherwise, the original Object is returned
@@ -306,11 +307,11 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end
 
     # Aliases all methods which may contain linked data terms
-    alias geo_subject_value linkable_value
-    alias genre_value linkable_value
-    alias geographic_origin_value linkable_value
-    alias language_value linkable_value
-    alias subject_value linkable_value
+    alias_method :geo_subject_value, :linkable_value
+    alias_method :genre_value, :linkable_value
+    alias_method :geographic_origin_value, :linkable_value
+    alias_method :language_value, :linkable_value
+    alias_method :subject_value, :linkable_value
     private :linkable_value
 
     # Ensures that only the titles of collections are specified within the Manifest metadata
@@ -322,7 +323,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     # Provides a Hash representation of the metadata attribute name/value mapping
     # @return [Hash]
     def to_h
-      { "label" => label, "value" => value }
+      {"label" => label, "value" => value}
     end
 
     private

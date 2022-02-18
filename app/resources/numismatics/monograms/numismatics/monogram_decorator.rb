@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Numismatics
   class MonogramDecorator < Valkyrie::ResourceDecorator
     display :title

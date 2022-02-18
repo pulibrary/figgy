@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class PDFGenerator
   class CoverPageGenerator
     attr_reader :pdf_generator
@@ -35,10 +36,10 @@ class PDFGenerator
       dejavu = Rails.root.join("app", "assets", "fonts", "Dejavu", "DejaVuSerif-webfont.ttf")
 
       prawn_document.font_families.update(
-        "amiri" => { normal: amiri_r, italic: amiri_r, bold: amiri_b, bold_italic: amiri_b },
-        "noto_cjk" => { normal: noto_cjk_r, italic: noto_cjk_r, bold: noto_cjk_b, bold_italic: noto_cjk_b },
-        "noto_ara" => { normal: noto_ara_r, italic: noto_ara_r, bold: noto_ara_b, bold_italic: noto_ara_b },
-        "dejavu" => { normal: dejavu, italic: dejavu, bold: dejavu, bold_italic: dejavu }
+        "amiri" => {normal: amiri_r, italic: amiri_r, bold: amiri_b, bold_italic: amiri_b},
+        "noto_cjk" => {normal: noto_cjk_r, italic: noto_cjk_r, bold: noto_cjk_b, bold_italic: noto_cjk_b},
+        "noto_ara" => {normal: noto_ara_r, italic: noto_ara_r, bold: noto_ara_b, bold_italic: noto_ara_b},
+        "dejavu" => {normal: dejavu, italic: dejavu, bold: dejavu, bold_italic: dejavu}
       )
       prawn_document.fallback_fonts(["noto_cjk", "noto_ara", "amiri", "dejavu"])
       prawn_document.font("dejavu")
@@ -50,7 +51,7 @@ class PDFGenerator
         header(prawn_document, resource.title, size: 24)
         resource.rights_statement.each do |statement|
           text(prawn_document, rights_statement_label(statement))
-          rights_statement_text(statement).split(/\n/).flat_map { |x| x.split("<br/>") }.each do |line|
+          rights_statement_text(statement).split("\n").flat_map { |x| x.split("<br/>") }.each do |line|
             text(prawn_document, line)
           end
         end
@@ -89,13 +90,13 @@ class PDFGenerator
         prawn_document.move_down 20
 
         header(prawn_document, "Download Information")
-        prawn_document.text "Date Rendered: #{Time.current.strftime('%Y-%m-%d %I:%M:%S %p %Z')}"
+        prawn_document.text "Date Rendered: #{Time.current.strftime("%Y-%m-%d %I:%M:%S %p %Z")}"
         resource_link = if resource.decorate.public_readable_state? && resource.identifier
-                          identifier = Ark.new(resource.identifier.first)
-                          identifier.uri
-                        else
-                          IdentifierService.url_for(resource)
-                        end
+          identifier = Ark.new(resource.identifier.first)
+          identifier.uri
+        else
+          IdentifierService.url_for(resource)
+        end
 
         prawn_document.text "Available Online at: <u><a href='#{resource_link}'>#{resource_link}</a></u>", inline_format: true
       end

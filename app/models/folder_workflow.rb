@@ -20,7 +20,7 @@ class FolderWorkflow < BaseWorkflow
   # @param workflow [BaseWorkflow]
   # @return [Symbol]
   def translate_state_from(workflow)
-    return super if workflow.class == self.class
+    return super if workflow.instance_of?(self.class)
     final_state if workflow.final_state?
   end
 

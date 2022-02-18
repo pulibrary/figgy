@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "boot"
 require_relative "read_only_mode"
 require "rails"

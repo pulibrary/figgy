@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindFacetValues
   # Access the list of methods exposed for the query
   # @return [Array<Symbol>] query method signatures
@@ -40,7 +41,7 @@ class FindFacetValues
       {
         q: "*",
         rows: 0,
-        "facet": "on",
+        facet: "on",
         "facet.limit": -1,
         "facet.sort": "index",
         "facet.field": facet_fields

@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe IdentifierService do
   let(:ark) { "ark:/88435/x1234567" }
   let(:minter) { class_double("Ezid::Identifier") }
   let(:identifier) { instance_double("Ezid::Identifier") }
-  let(:base_metadata) { { dc_publisher: "Princeton University Library", dc_title: "Title", dc_type: "Text" } }
+  let(:base_metadata) { {dc_publisher: "Princeton University Library", dc_title: "Title", dc_type: "Text"} }
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
   before do
     stub_ezid(shoulder: "88435", blade: "x1234567")
@@ -61,7 +62,7 @@ RSpec.describe IdentifierService do
         storage_adapter: Valkyrie.config.storage_adapter
       )
     end
-    let(:base_metadata) { { dc_publisher: "Princeton University Library", dc_title: "Cameroons under United Kingdom Trusteeship 1949", dc_type: "Text" } }
+    let(:base_metadata) { {dc_publisher: "Princeton University Library", dc_title: "Cameroons under United Kingdom Trusteeship 1949", dc_type: "Text"} }
     let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/10001789#view") }
     let(:ark) { "ark:/88435/jq085p05h" }
 
@@ -105,7 +106,7 @@ RSpec.describe IdentifierService do
 
     context "with a pulfa source_metadata_identifier" do
       let(:cid) { "MC016_c9616" }
-      let(:metadata) { base_metadata.merge(target: "http://findingaids.princeton.edu/collections/#{cid.tr('_', '/')}") }
+      let(:metadata) { base_metadata.merge(target: "http://findingaids.princeton.edu/collections/#{cid.tr("_", "/")}") }
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: cid }
 
       before do

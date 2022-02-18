@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeSetPersister
   # Updates any AuthTokens by storing the ID for the related Resource
   class UpdateAuthToken

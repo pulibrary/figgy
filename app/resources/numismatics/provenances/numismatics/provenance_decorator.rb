@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 module Numismatics
   class ProvenanceDecorator < Valkyrie::ResourceDecorator
     display :note,
-            :date,
-            :firm,
-            :person
+      :date,
+      :firm,
+      :person
 
     delegate :decorated_firm, :decorated_person, to: :wayfinder
 

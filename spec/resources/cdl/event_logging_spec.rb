@@ -9,7 +9,7 @@ RSpec.describe CDL::EventLogging do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
           .to_return(status: 200,
-                     body: file_fixture("bibdata/#{netid}.json").read, headers: { "Content-Type" => "application/json" })
+            body: file_fixture("bibdata/#{netid}.json").read, headers: {"Content-Type" => "application/json"})
       end
       it "returns the patron group" do
         expect(described_class.get_patron_group(netid: netid)).to eq "staff"
@@ -21,7 +21,7 @@ RSpec.describe CDL::EventLogging do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
           .to_return(status: 404,
-                     body: nil, headers: { "Content-Type" => "application/json" })
+            body: nil, headers: {"Content-Type" => "application/json"})
       end
       it "returns nil" do
         expect(described_class.get_patron_group(netid: netid)).to be_nil
@@ -41,7 +41,7 @@ RSpec.describe CDL::EventLogging do
     before do
       stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
         .to_return(status: 200,
-                   body: file_fixture("bibdata/#{netid}.json").read, headers: { "Content-Type" => "application/json" })
+          body: file_fixture("bibdata/#{netid}.json").read, headers: {"Content-Type" => "application/json"})
       stub_request(:post, "https://www.google-analytics.com/collect")
       allow(SecureRandom).to receive(:uuid).and_return("1")
     end
@@ -58,7 +58,7 @@ RSpec.describe CDL::EventLogging do
     before do
       stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
         .to_return(status: 200,
-                   body: file_fixture("bibdata/#{netid}.json").read, headers: { "Content-Type" => "application/json" })
+          body: file_fixture("bibdata/#{netid}.json").read, headers: {"Content-Type" => "application/json"})
       stub_request(:post, "https://www.google-analytics.com/collect")
       allow(SecureRandom).to receive(:uuid).and_return("1")
     end
@@ -75,7 +75,7 @@ RSpec.describe CDL::EventLogging do
     before do
       stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
         .to_return(status: 200,
-                   body: file_fixture("bibdata/#{netid}.json").read, headers: { "Content-Type" => "application/json" })
+          body: file_fixture("bibdata/#{netid}.json").read, headers: {"Content-Type" => "application/json"})
       stub_request(:post, "https://www.google-analytics.com/collect")
       allow(SecureRandom).to receive(:uuid).and_return("1")
     end
@@ -92,7 +92,7 @@ RSpec.describe CDL::EventLogging do
     before do
       stub_request(:get, "https://bibdata.princeton.edu/patron/#{netid}")
         .to_return(status: 200,
-                   body: file_fixture("bibdata/#{netid}.json").read, headers: { "Content-Type" => "application/json" })
+          body: file_fixture("bibdata/#{netid}.json").read, headers: {"Content-Type" => "application/json"})
       stub_request(:post, "https://www.google-analytics.com/collect")
       allow(SecureRandom).to receive(:uuid).and_return("1")
     end

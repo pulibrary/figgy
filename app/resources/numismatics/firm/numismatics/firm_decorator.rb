@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 module Numismatics
   class FirmDecorator < Valkyrie::ResourceDecorator
     display :name,
-            :city
+      :city
 
     def manageable_files?
       false

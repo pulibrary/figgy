@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FindResourcesWithoutMembers
   def self.queries
     [:find_resources_without_members]

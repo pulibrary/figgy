@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 include FixtureFileUpload
 
@@ -30,8 +31,8 @@ RSpec.describe ScannedResourcesController, type: :controller do
       stub_ezid(shoulder: "99999/fk4", blade: "")
       resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, files: [file])
 
-      get :manifest, params: { id: resource.id, format: :json }
-      get :manifest, params: { id: resource.id, format: :json }
+      get :manifest, params: {id: resource.id, format: :json}
+      get :manifest, params: {id: resource.id, format: :json}
 
       expect(ManifestBuilder).to have_received(:new).exactly(1).times
     end
@@ -39,10 +40,10 @@ RSpec.describe ScannedResourcesController, type: :controller do
       stub_ezid(shoulder: "99999/fk4", blade: "")
       resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, files: [file])
 
-      get :manifest, params: { id: resource.id, format: :json }
-      get :manifest, params: { id: resource.id, format: :json, auth_token: "1" }
-      get :manifest, params: { id: resource.id, format: :json, auth_token: "1" }
-      get :manifest, params: { id: resource.id, format: :json, auth_token: "2" }
+      get :manifest, params: {id: resource.id, format: :json}
+      get :manifest, params: {id: resource.id, format: :json, auth_token: "1"}
+      get :manifest, params: {id: resource.id, format: :json, auth_token: "1"}
+      get :manifest, params: {id: resource.id, format: :json, auth_token: "2"}
 
       expect(ManifestBuilder).to have_received(:new).exactly(3).times
     end
@@ -53,7 +54,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       it "renders the full manifest" do
         resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
         authorization_token = AuthToken.create!(group: ["admin"], label: "Admin Token")
-        get :manifest, params: { id: resource.id, format: :json, auth_token: authorization_token.token }
+        get :manifest, params: {id: resource.id, format: :json, auth_token: authorization_token.token}
 
         expect(response).to be_successful
         expect(response.body).not_to eq "{}"
@@ -62,26 +63,25 @@ RSpec.describe ScannedResourcesController, type: :controller do
     context "when not logged in" do
       it "returns a 403" do
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource)
-        get :manifest, params: { id: resource.id, format: :json }
+        get :manifest, params: {id: resource.id, format: :json}
         expect(response).to be_forbidden
       end
       it "returns a 401 for a complete netid-required resource" do
         resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
-        get :manifest, params: { id: resource.id, format: :json }
+        get :manifest, params: {id: resource.id, format: :json}
         expect(response).to be_unauthorized
       end
     end
     context "when not logged, but in a reading room" do
-      let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
+      let(:config_hash) { {"access_control" => {"reading_room_ips" => ["1.2.3"]}} }
       before do
-        # rubocop:disable RSpec/InstanceVariable
         @request.remote_addr = "1.2.3"
         # rubocop:enable RSpec/InstanceVariable
         allow(Figgy).to receive(:config).and_return(config_hash)
       end
       it "returns a 401" do
         resource = FactoryBot.create_for_repository(:reading_room_scanned_resource)
-        get :manifest, params: { id: resource.id, format: :json }
+        get :manifest, params: {id: resource.id, format: :json}
         expect(response).to be_unauthorized
       end
     end
@@ -93,11 +93,11 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
     context "when the params specify a change_set" do
       it "is simple, creates a new SimpleChangeSet" do
-        get :new, params: { change_set: "simple" }
+        get :new, params: {change_set: "simple"}
         expect(assigns(:change_set)).to be_a SimpleChangeSet
       end
       it "is recording, creates a new RecordingChangeSet" do
-        get :new, params: { change_set: "recording" }
+        get :new, params: {change_set: "recording"}
         expect(assigns(:change_set)).to be_a RecordingChangeSet
         expect(response.body).to have_field "Source Metadata ID"
         expect(response.body).to have_field "Title"
@@ -110,7 +110,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         allow(Valkyrie.logger).to receive(:error)
       end
       it "creates a new ScannedResource and flashes a warning" do
-        get :new, params: { change_set: "invalid" }
+        get :new, params: {change_set: "invalid"}
         expect(Valkyrie.logger).to have_received(:error).with("Failed to find the ChangeSet class for invalid.").at_least(:once)
       end
     end
@@ -235,7 +235,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     render_views
 
     it "does not render a collections form field" do
-      get :edit, params: { id: scanned_resource.id.to_s }
+      get :edit, params: {id: scanned_resource.id.to_s}
 
       expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]"
     end
@@ -249,7 +249,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
 
       it "does not render a collections form field" do
-        get :edit, params: { id: member_resource.id.to_s }
+        get :edit, params: {id: member_resource.id.to_s}
 
         expect(response.body).not_to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]"
       end
@@ -274,7 +274,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
         it "notifies the user with an error and redirects them to the edit view" do
           resource = FactoryBot.create_for_repository(:scanned_resource)
-          patch :update, params: { id: resource.id.to_s, scanned_resource: { title: ["Two"] } }
+          patch :update, params: {id: resource.id.to_s, scanned_resource: {title: ["Two"]}}
 
           expect(response).to render_template "base/edit"
           expect(flash[:alert]).to eq "Sorry, another user or process updated this resource simultaneously.  Please resubmit your changes."
@@ -291,7 +291,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
       it "strips them" do
         stub_pulfa(pulfa_id: "AC044_c0003")
-        patch :update, params: { id: resource.id.to_s, scanned_resource: params }
+        patch :update, params: {id: resource.id.to_s, scanned_resource: params}
 
         reloaded = find_resource(resource.id)
         expect(reloaded.source_metadata_identifier.first).to eq "AC044_c0003"
@@ -317,14 +317,14 @@ RSpec.describe ScannedResourcesController, type: :controller do
         before do
           allow(minted_id).to receive(:id).and_return(new_ark)
           allow(minter).to receive(:mint).and_return(minted_id)
-          stub_request(:head, "http://n2t.institution.edu/path").to_return(status: 302, headers: { "location" => "http://findingaids.princeton.edu/path" })
-          stub_request(:head, "http://arks.princeton.edu/ark:/99999/fk4234567").to_return(status: 301, headers: { "location" => "http://n2t.institution.edu/path" })
+          stub_request(:head, "http://n2t.institution.edu/path").to_return(status: 302, headers: {"location" => "http://findingaids.princeton.edu/path"})
+          stub_request(:head, "http://arks.princeton.edu/ark:/99999/fk4234567").to_return(status: 301, headers: {"location" => "http://n2t.institution.edu/path"})
 
           allow(IdentifierService).to receive(:minter).and_return(minter)
           allow(IdentifierService).to receive(:minter_user).and_return("spec")
         end
         it "does not update the ARK and persists the other updates" do
-          patch :update, params: { id: resource.id.to_s, scanned_resource: params }
+          patch :update, params: {id: resource.id.to_s, scanned_resource: params}
 
           expect(response).to redirect_to(solr_document_path(resource.id))
 
@@ -349,7 +349,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
       context "when the resource has a PULFA ARK" do
         it "alerts the client to an ARK update error but persists the other updates" do
-          patch :update, params: { id: resource.id.to_s, scanned_resource: params }
+          patch :update, params: {id: resource.id.to_s, scanned_resource: params}
 
           expect(response).to redirect_to(solr_document_path(resource.id))
 
@@ -365,7 +365,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
           sign_in user
           resource = FactoryBot.create_for_repository(:scanned_resource)
 
-          patch :update, params: { id: resource.id.to_s, scanned_resource: { files: { "0" => file } } }
+          patch :update, params: {id: resource.id.to_s, scanned_resource: {files: {"0" => file}}}
 
           expect(Wayfinder.for(resource).members.first.title).to eq ["example.tif"]
         end
@@ -377,12 +377,12 @@ RSpec.describe ScannedResourcesController, type: :controller do
           resource = FactoryBot.create_for_repository(:scanned_resource)
           structure = {
             "logical_structure" =>
-            [{ "nodes" =>
-               [{ "label" => "Test", "nodes" => [{ "proxy" => "641b8b7a-52c7-4909-8ee8-36735fb5c52f" }] },
-                { "proxy" => "9aa2123a-553b-4d06-a06a-f39c936c47ba" }],
-               "label" => "Logical" }]
+            [{"nodes" =>
+               [{"label" => "Test", "nodes" => [{"proxy" => "641b8b7a-52c7-4909-8ee8-36735fb5c52f"}]},
+                 {"proxy" => "9aa2123a-553b-4d06-a06a-f39c936c47ba"}],
+              "label" => "Logical"}]
           }
-          patch :update, params: { id: resource.id.to_s, scanned_resource: structure }
+          patch :update, params: {id: resource.id.to_s, scanned_resource: structure}
 
           expect(response).to redirect_to(solr_document_path(resource.id))
 
@@ -400,13 +400,13 @@ RSpec.describe ScannedResourcesController, type: :controller do
       it "redirects to login or root" do
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
 
-        get :structure, params: { id: scanned_resource.id.to_s }
+        get :structure, params: {id: scanned_resource.id.to_s}
         expect(response).to be_redirect
       end
     end
     context "when a scanned resource doesn't exist" do
       it "raises an error" do
-        get :structure, params: { id: "banana" }
+        get :structure, params: {id: "banana"}
         expect(response).to redirect_to_not_found
       end
     end
@@ -419,14 +419,14 @@ RSpec.describe ScannedResourcesController, type: :controller do
           member_ids: file_set.id,
           thumbnail_id: file_set.id,
           logical_structure: [
-            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
+            {label: "testing", nodes: [{label: "Chapter 1", nodes: [{proxy: file_set.id}]}]}
           ]
         )
 
         query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
         allow(query_service).to receive(:find_by).with(id: scanned_resource.id).and_call_original
         allow(query_service).to receive(:find_inverse_references_by)
-        get :structure, params: { id: scanned_resource.id.to_s }
+        get :structure, params: {id: scanned_resource.id.to_s}
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
         expect(response.body).to have_field("label", with: "Chapter 1")
@@ -455,8 +455,8 @@ RSpec.describe ScannedResourcesController, type: :controller do
           session_id: session.id
         ).tap(&:save)
         {
-          "id": resource.id,
-          "browse_everything" => { "uploads" => [upload.id] }
+          :id => resource.id,
+          "browse_everything" => {"uploads" => [upload.id]}
         }
       end
 
@@ -503,7 +503,6 @@ RSpec.describe ScannedResourcesController, type: :controller do
         it "does not persist any files" do
           file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
           resource = FactoryBot.create_for_repository(:scanned_resource)
-          # rubocop:disable RSpec/AnyInstance
           allow_any_instance_of(BrowseEverything::UploadFile).to receive(:download).and_raise
           # rubocop:enable RSpec/AnyInstance
           post :browse_everything_files, params: params_for_paths([file_path], resource)
@@ -519,7 +518,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
   describe "GET /concern/scanned_resources/save_and_ingest/:id" do
     let(:user) { FactoryBot.create(:admin) }
     it "returns JSON for whether a directory exists" do
-      get :save_and_ingest, params: { format: :json, id: "123456" }
+      get :save_and_ingest, params: {format: :json, id: "123456"}
 
       output = JSON.parse(response.body, symbolize_keys: true)
 
@@ -528,7 +527,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       expect(output["file_count"]).to eq 2
     end
     it "returns JSON for when it's a MVW" do
-      get :save_and_ingest, params: { format: :json, id: "4609321" }
+      get :save_and_ingest, params: {format: :json, id: "4609321"}
 
       output = JSON.parse(response.body, symbolize_keys: true)
 
@@ -539,7 +538,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
     context "when ingesting a music reserve" do
       it "uses the music directory" do
-        get :save_and_ingest, params: { change_set: "recording", format: :json, id: "1182238" }
+        get :save_and_ingest, params: {change_set: "recording", format: :json, id: "1182238"}
 
         output = JSON.parse(response.body, symbolize_keys: true)
 
@@ -550,7 +549,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
     context "when a folder doesn't exist" do
       it "returns JSON appropriately" do
-        get :save_and_ingest, params: { format: :json, id: "1234" }
+        get :save_and_ingest, params: {format: :json, id: "1234"}
 
         output = JSON.parse(response.body, symbolize_keys: true)
 

@@ -1,12 +1,13 @@
 # frozen_string_literal: true
+
 module Numismatics
   class ReferenceDecorator < Valkyrie::ResourceDecorator
     display :authors,
-            :part_of_parent,
-            :pub_info,
-            :short_title,
-            :title,
-            :year
+      :part_of_parent,
+      :pub_info,
+      :short_title,
+      :title,
+      :year
 
     delegate :decorated_parent, :decorated_authors, :members, to: :wayfinder
 

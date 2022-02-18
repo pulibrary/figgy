@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module OrangelightDocumentController
   extend ActiveSupport::Concern
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :ephemera_folder do
     barcode "12345678901234"
