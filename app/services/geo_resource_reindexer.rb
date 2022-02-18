@@ -4,14 +4,14 @@ class GeoResourceReindexer
   # Reindexes GeoBlacklight by sending record updated messages
   # for all complete geo resources.
   # @param optional logger [Logger] instance of logger class
-  def self.reindex_geoblacklight(logger: Logger.new(STDOUT))
+  def self.reindex_geoblacklight(logger: Logger.new($stdout))
     new(logger: logger, ogm_repo_path: nil).reindex_geoblacklight
   end
 
   # Reindexes GeoServer by sending derivative created messages
   # for all complete geo resources.
   # @param optional logger [Logger] instance of logger class
-  def self.reindex_geoserver(logger: Logger.new(STDOUT))
+  def self.reindex_geoserver(logger: Logger.new($stdout))
     new(logger: logger, ogm_repo_path: nil).reindex_geoserver
   end
 
@@ -20,7 +20,7 @@ class GeoResourceReindexer
   # that matches document identifiers with their location in the directory structure.
   # @param optional logger [Logger] instance of logger class
   # @param optional ogm_repo_path [String] path of ogm repository
-  def self.reindex_ogm(logger: Logger.new(STDOUT), ogm_repo_path: "./tmp/edu.princeton.arks")
+  def self.reindex_ogm(logger: Logger.new($stdout), ogm_repo_path: "./tmp/edu.princeton.arks")
     new(logger: logger, ogm_repo_path: ogm_repo_path).reindex_ogm
   end
 

@@ -48,11 +48,7 @@ class RecordingChangeSet < ChangeSet
   # Do not preserve Audio Reserves recordings
   def preserve?
     return false unless persisted?
-    if in_archival_media_collection?
-      true
-    else
-      false
-    end
+    in_archival_media_collection?
   end
 
   private

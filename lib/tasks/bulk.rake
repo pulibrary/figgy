@@ -7,7 +7,7 @@ namespace :figgy do
       md_root = ENV["METADATA"]
       import_mods = ENV["IMPORT_MODS"]&.casecmp("TRUE")&.zero?
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user ||= User.all.select(&:admin?).first
+      user ||= User.all.find(&:admin?)
 
       usage = "usage: rake bulk:ingest_mets METADATA=/path/to/mets_records IMPORT_MODS=TRUE USER=user"
       abort usage unless md_root && Dir.exist?(md_root)
@@ -34,7 +34,7 @@ namespace :figgy do
     task refresh_remote_metadata: :environment do
       batch_size = ENV["BATCH_SIZE"] || 50
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       @logger.info "Generating background jobs to refresh remote metadata for everything:"
       BulkUpdateRemoteMetadataService.call(batch_size: batch_size)
     end
@@ -42,7 +42,7 @@ namespace :figgy do
     desc "Ingest a directory of TIFFs as a ScannedResource, or a directory of directories as a MultiVolumeWork"
     task ingest: :environment do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user ||= User.all.select(&:admin?).first
+      user ||= User.all.find(&:admin?)
       dir = ENV["DIR"]
       bib = ENV["BIB"]
       coll = ENV["COLL"]
@@ -57,7 +57,7 @@ namespace :figgy do
 
       abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       @logger.warn "No BIB id specified" unless bib
       @logger.info "ingesting files from: #{dir}"
       @logger.info "filtering to files ending with #{filter}" if filter
@@ -113,14 +113,14 @@ namespace :figgy do
     desc "Ingest a directory of scanned map TIFFs, each filename corresponds to a Bib ID"
     task ingest_scanned_maps: :environment do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user ||= User.all.select(&:admin?).first
+      user ||= User.all.find(&:admin?)
       dir = ENV["DIR"]
       bib = ENV["BIB"]
       background = ENV["BACKGROUND"]
 
       abort "usage: rake bulk:ingest_scanned_maps BIB=1234567 DIR=/path/to/files" unless dir && Dir.exist?(dir)
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       @logger.warn "No BIB id specified" unless bib
       @logger.info "ingesting files from: #{dir}"
       @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
@@ -148,7 +148,7 @@ namespace :figgy do
       background = ENV["BACKGROUND"]
       model = ENV["MODEL"]
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       query = Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries
       resources = if model.present?
         @logger.info "linking missing thumbnails for #{model.to_s.titleize}"
@@ -174,7 +174,7 @@ namespace :figgy do
       background = ENV["BACKGROUND"]
       model = ENV["MODEL"]
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       query = Valkyrie::MetadataAdapter.find(:index_solr).query_service.custom_queries
       resources = if model.present?
         @logger.info "linking thumbnails for #{model.to_s.titleize}"
@@ -199,7 +199,7 @@ namespace :figgy do
     desc "Attach a set of directories of TIFFs to existing objects, using the directory names as identifiers to find the objects"
     task attach_each_dir: :environment do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user ||= User.all.select(&:admin?).first
+      user ||= User.all.find(&:admin?)
       dir = ENV["DIR"]
       field = ENV["FIELD"]
       filter = ENV["FILTER"]
@@ -209,7 +209,7 @@ namespace :figgy do
 
       abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter MODEL=ResourceClass CHANGE_SET_NAME=simple" unless field && dir && Dir.exist?(dir)
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       @logger.info "attaching files from: #{dir}"
       @logger.info "attaching as: #{user.user_key} (override with USER=foo)"
       @logger.info "filtering to files ending with #{filter}" if filter
@@ -257,7 +257,7 @@ namespace :figgy do
       preservation_policy = ENV["PRESERVATION_POLICY"]
 
       abort "usage: rake bulk:update_attrs COLL=[collection id] STATE=[state] RIGHTS=[rights] PRESERVATION_POLICY=[cloud]" unless coll
-      logger = Logger.new(STDOUT)
+      logger = Logger.new($stdout)
       attrs = {}
       attrs[:state] = state if state
       attrs[:rights_statement] = rights if rights
@@ -268,7 +268,7 @@ namespace :figgy do
     # Intermediate files were created to add watermarks
     desc "Ingest a directory of TIFFs as intermediate files for existing ScannedResources"
     task ingest_intermediate_files: :environment do
-      logger = Logger.new(STDOUT)
+      logger = Logger.new($stdout)
 
       begin
         dir = ENV["DIR"]
@@ -298,7 +298,7 @@ namespace :figgy do
       archival_collection_code = ENV["CODE"]
       background = ENV["BACKGROUND"]
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       @logger.info "Removing archival collection #{archival_collection_code}"
 
       begin
@@ -318,7 +318,7 @@ namespace :figgy do
       append_coll = ENV["APPEND_COLL"]
 
       abort "usage: rake bulk:append_coll COLL=[collection id] APPEND_COLL=[new collection id]" unless coll && append_coll
-      logger = Logger.new(STDOUT)
+      logger = Logger.new($stdout)
       attrs = {append_collection_ids: Valkyrie::ID.new(append_coll), skip_validation: true}
       BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
     end

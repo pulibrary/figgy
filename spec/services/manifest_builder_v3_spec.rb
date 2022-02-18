@@ -74,7 +74,7 @@ RSpec.describe ManifestBuilderV3 do
         output = manifest_builder.build
         expect(output).to be_kind_of Hash
         expect(output["summary"]["eng"]).to eq ["Test Description"]
-        expect(output["items"].select { |i| i["type"] == "Canvas" }.count).to eq 1
+        expect(output["items"].count { |i| i["type"] == "Canvas" }).to eq 1
 
         # RDF Literal title displays with correct language value
         title = output["metadata"].find { |m| m["label"]["eng"] == ["Title"] }
@@ -133,7 +133,7 @@ RSpec.describe ManifestBuilderV3 do
         expect(output["summary"]["eng"]).to eq ["Test Description"]
         expect(output["type"]).to eq "Manifest"
         expect(output["manifests"]).to be_nil
-        expect(output["items"].select { |i| i["type"] == "Canvas" }.count).to eq 1
+        expect(output["items"].count { |i| i["type"] == "Canvas" }).to eq 1
 
         # structure is empty when the resource has no stucture defined
         expect(output["structures"]).to be_nil

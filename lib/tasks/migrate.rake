@@ -159,7 +159,7 @@ namespace :figgy do
       # Construct or retrieve the memoized logger for STDOUT
       # @return [Logger]
       def logger
-        @logger ||= Logger.new(STDOUT)
+        @logger ||= Logger.new($stdout)
       end
 
       # Construct a ChangeSetPersister for persisting the EphemeraBoxes and member EphemeraFolders

@@ -977,7 +977,7 @@ RSpec.describe ChangeSetPersister do
       change_set_persister.delete(change_set: updated_change_set)
 
       query_service.find_members(resource: output).first
-      derivative = file_set.file_metadata.select(&:derivative?).first
+      derivative = file_set.file_metadata.find(&:derivative?)
       derivative_path = derivative.file_identifiers.first.to_s.gsub("disk://", "")
       expect(File.exist?(derivative_path)).to be false
       original = file_set.original_file

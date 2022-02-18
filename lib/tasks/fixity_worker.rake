@@ -18,7 +18,7 @@ namespace :figgy do
     task request_cloud_fixity: :environment do
       id = ENV["ID"]
       abort "usage: rake fixity:request_cloud_fixity ID=resourceid" unless id
-      Rails.logger = Logger.new(STDOUT)
+      Rails.logger = Logger.new($stdout)
       CloudFixity::FixityRequestor.queue_resource_check!(id: id)
     end
   end

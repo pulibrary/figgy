@@ -19,7 +19,7 @@ namespace :figgy do
         unless sql_serv_user && sql_serv_pass && pg_user && pg_pass && file_root && recording_id
           abort "usage: rake music:import:recording SQL_SERV_USER=username SQL_SERV_PASS=password PG_USER=username PG_PASS=password [PG_DB_NAME=orangelight_staging] FILE_ROOT=fileroot RECORDING_ID=recording_id"
         end
-        logger = Logger.new(STDOUT)
+        logger = Logger.new($stdout)
         collector = MusicImportService::RecordingCollector.new(
           sql_server_adapter: MusicImportService::TinyTdsAdapter.new(dbhost: sql_serv_host, dbport: sql_serv_port, dbuser: sql_serv_user, dbpass: sql_serv_pass),
           postgres_adapter: MusicImportService::PgAdapter.new(dbhost: pg_host, dbport: pg_port, dbname: pg_dbname, dbuser: pg_user, dbpass: pg_pass),
@@ -52,7 +52,7 @@ namespace :figgy do
         unless sql_serv_user && sql_serv_pass && pg_user && pg_pass && file_root && course
           abort "usage: rake music:import:recording SQL_SERV_USER=username SQL_SERV_PASS=password PG_USER=username PG_PASS=password [PG_DB_NAME=orangelight_staging] FILE_ROOT=fileroot COURSE=course"
         end
-        logger = Logger.new(STDOUT)
+        logger = Logger.new($stdout)
         collector = MusicImportService::RecordingCollector.new(
           sql_server_adapter: MusicImportService::TinyTdsAdapter.new(dbhost: sql_serv_host, dbport: sql_serv_port, dbuser: sql_serv_user, dbpass: sql_serv_pass),
           postgres_adapter: MusicImportService::PgAdapter.new(dbhost: pg_host, dbport: pg_port, dbname: pg_dbname, dbuser: pg_user, dbpass: pg_pass),
@@ -84,7 +84,7 @@ namespace :figgy do
           abort "usage: rake music:report:bibids SQL_SERV_USER=username SQL_SERV_PASS=password PG_USER=username PG_PASS=password [PG_DB_NAME=orangelight_staging]"
         end
 
-        logger = Logger.new(STDOUT)
+        logger = Logger.new($stdout)
         collector = MusicImportService::RecordingCollector.new(
           sql_server_adapter: MusicImportService::TinyTdsAdapter.new(dbhost: sql_serv_host, dbport: sql_serv_port, dbuser: sql_serv_user, dbpass: sql_serv_pass),
           postgres_adapter: MusicImportService::PgAdapter.new(dbhost: pg_host, dbport: pg_port, dbname: pg_dbname, dbuser: pg_user, dbpass: pg_pass),

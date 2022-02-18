@@ -41,18 +41,18 @@ class IngestFolderLocator
   # @return [Integer]
   def file_count
     return unless exists?
-    Dir.glob(folder_pathname.join("**")).select do |file|
+    Dir.glob(folder_pathname.join("**")).count do |file|
       File.file?(file)
-    end.count
+    end
   end
 
   # Counts the number of child directories in the directory
   # @return [Integer]
   def volume_count
     return unless exists?
-    Dir.glob(folder_pathname.join("**")).select do |file|
+    Dir.glob(folder_pathname.join("**")).count do |file|
       File.directory?(file)
-    end.count
+    end
   end
 
   # Construct or retrieve the memoized path name for the directory

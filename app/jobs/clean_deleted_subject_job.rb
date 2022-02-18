@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CleanDeletedSubjectJob < ApplicationJob
-  def perform(subject_id, logger: Logger.new(STDOUT))
+  def perform(subject_id, logger: Logger.new($stdout))
     adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
     qs = adapter.query_service
     folders = qs.find_inverse_references_by(property: :subject, id: subject_id)

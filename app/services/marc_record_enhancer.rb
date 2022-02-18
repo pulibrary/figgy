@@ -44,7 +44,7 @@ class MarcRecordEnhancer
         marc.append(manifest856)
       end
 
-      manifest856_q = manifest856.subfields.select { |s| s.code == "q" }.first
+      manifest856_q = manifest856.subfields.find { |s| s.code == "q" }
       manifest856.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)")) unless manifest856_q
     end
 
@@ -55,7 +55,7 @@ class MarcRecordEnhancer
         dcl024 = existing_024s(dcl).first
         if dcl024
           dcl024.indicator1 = "8"
-          subfield2 = dcl024.subfields.select { |s| s.code == "2" }.first
+          subfield2 = dcl024.subfields.find { |s| s.code == "2" }
           dcl024.subfields.delete(subfield2) if subfield2
         else
           dcl024 = MARC::DataField.new("024", "8", " ", MARC::Subfield.new("a", dcl))
@@ -100,9 +100,9 @@ class MarcRecordEnhancer
     end
 
     def existing_856(uri)
-      existing_856s.select do |f|
-        f.subfields.select { |s| s.code == "u" }.first.value == uri
-      end.first
+      existing_856s.find do |f|
+        f.subfields.find { |s| s.code == "u" }.value == uri
+      end
     end
 
     def cico_024s
@@ -114,13 +114,13 @@ class MarcRecordEnhancer
 
     def existing_024s(id)
       marc.fields("024").select do |f|
-        f.subfields.select { |s| s.code == "a" }.first.value == id
+        f.subfields.find { |s| s.code == "a" }.value == id
       end
     end
 
     def references
       marc.fields("510")
-        .select { |field| field.subfields.select { |subfield| subfield.code == "a" }.first.value =~ /Cicognara/ }
+        .select { |field| field.subfields.find { |subfield| subfield.code == "a" }.value =~ /Cicognara/ }
         .flat_map { |field| field.subfields.select { |subfield| subfield.code == "c" } }
         .map(&:value)
     end

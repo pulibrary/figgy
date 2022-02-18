@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ExportCollectionPDFJob < ApplicationJob
-  def perform(resource_id, logger: Logger.new(STDOUT))
+  def perform(resource_id, logger: Logger.new($stdout))
     collection = query_service.find_by(id: resource_id)
     logger.info "Exporting #{collection.title.first} to disk as PDFs"
 

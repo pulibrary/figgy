@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ExtractArchivalCollectionCodeJob < ApplicationJob
-  def perform(logger: Logger.new(STDOUT))
+  def perform(logger: Logger.new($stdout))
     query_service.find_all_of_model(model: ScannedResource).each do |sr|
       next unless sr.source_metadata_identifier.present?
       next unless RemoteRecord.pulfa?(sr.source_metadata_identifier.first)

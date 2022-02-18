@@ -4,7 +4,7 @@ class IngestEphemeraService
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
   attr_reader :folder_dir, :state, :project, :logger, :change_set_persister
-  def initialize(folder_dir, state, project, change_set_persister, logger = Logger.new(STDOUT))
+  def initialize(folder_dir, state, project, change_set_persister, logger = Logger.new($stdout))
     @folder_dir = folder_dir
     @state = state
     @project = project

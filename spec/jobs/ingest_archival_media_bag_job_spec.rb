@@ -30,7 +30,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "adds all 3 file types to the file set" do
-      file_set = query_service.find_all_of_model(model: FileSet).select { |fs| fs.title.include? "32101047382401_1" }.sort_by(&:created_at).last
+      file_set = query_service.find_all_of_model(model: FileSet).select { |fs| fs.title.include? "32101047382401_1" }.max_by(&:created_at)
       expect(file_set.file_metadata.count).to eq 5
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
         "http://pcdm.org/use#PreservationMasterFile", # Master
@@ -160,7 +160,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       expect(file_sets.map(&:title)).to include ["32101047382492_1_p1"], ["32101047382492_1_p2"]
       expect(file_sets.map(&:mime_type).to_a).to include ["audio/x-wav"]
 
-      file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p1" }.sort_by(&:created_at).last
+      file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p1" }.max_by(&:created_at)
       expect(file_set.file_metadata.count).to eq 5
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
         "http://pcdm.org/use#PreservationMasterFile", # Master
@@ -170,7 +170,7 @@ RSpec.describe IngestArchivalMediaBagJob do
         "http://pcdm.org/use#ServiceFilePartial" # HLS Partial
       )
 
-      file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p2" }.sort_by(&:created_at).last
+      file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p2" }.max_by(&:created_at)
       expect(file_set.file_metadata.count).to eq 5
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
         "http://pcdm.org/use#PreservationMasterFile", # Master

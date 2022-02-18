@@ -6,7 +6,7 @@ class IngestVocabService
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
   attr_reader :file, :name, :columns, :change_set_persister, :logger
-  def initialize(change_set_persister, file, name, columns, logger = Logger.new(STDOUT))
+  def initialize(change_set_persister, file, name, columns, logger = Logger.new($stdout))
     raise ArgumentError, "Vocabulary name is required" unless name
     @file = file
     @name = name

@@ -156,7 +156,7 @@ RSpec.describe IngestMETSJob do
       allow(FileUtils).to receive(:mv).and_call_original
 
       books = adapter.query_service.find_all_of_model(model: ScannedResource).to_a
-      parent_book = books.sort_by(&:created_at).last
+      parent_book = books.max_by(&:created_at)
       child_books = adapter.query_service.find_members(resource: parent_book).to_a
 
       expect(parent_book.member_ids.length).to eq 3

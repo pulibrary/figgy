@@ -50,7 +50,7 @@ module Figgy
     config.active_record.sqlite3.represent_boolean_as_integer = true
     # load overrides
     config.to_prepare do
-      Dir.glob(Rails.root.join("app", "**", "*_override*.rb")) do |c|
+      Dir.glob(Rails.root.join("app", "**", "*_override*.rb")).sort.each do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
       end
     end

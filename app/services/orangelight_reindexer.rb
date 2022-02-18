@@ -4,7 +4,7 @@ class OrangelightReindexer
   # Reindexes resources indexed into Orangelight by sending record updated messages
   # for all complete resources.
   # @param optional logger [Logger] instance of logger class
-  def self.reindex_orangelight(logger: Logger.new(STDOUT))
+  def self.reindex_orangelight(logger: Logger.new($stdout))
     new(logger: logger).reindex_orangelight
   end
 

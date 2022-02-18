@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UpdateCicoIdsJob < ApplicationJob
-  def perform(collection_id:, logger: Logger.new(STDOUT))
+  def perform(collection_id:, logger: Logger.new($stdout))
     collection = query_service.find_by(id: collection_id)
     Wayfinder.for(collection).members.each do |resource|
       next unless resource.local_identifier.present?

@@ -89,7 +89,7 @@ RSpec.describe MarcRecordEnhancer do
         urls = enhancer.enhance_cicognara.fields("856").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == "1" &&
-            field.subfields.select { |subfield| subfield.code == "u" }.count == 1
+            field.subfields.count { |subfield| subfield.code == "u" } == 1
         end
         expect(urls.count).to eq 2
         subfields_u = urls.flat_map(&:subfields).select { |s| s.code == "u" }
@@ -117,7 +117,7 @@ RSpec.describe MarcRecordEnhancer do
         urls = enhancer.enhance_cicognara.fields("856").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == "1" &&
-            field.subfields.select { |subfield| subfield.code == "u" }.count == 1
+            field.subfields.count { |subfield| subfield.code == "u" } == 1
         end
         expect(urls.count).to eq 3
         subfields_u = urls.flat_map(&:subfields).select { |s| s.code == "u" }
@@ -135,7 +135,7 @@ RSpec.describe MarcRecordEnhancer do
         urls = enhancer.enhance_cicognara.fields("856").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == "1" &&
-            field.subfields.select { |subfield| subfield.code == "u" }.count == 1
+            field.subfields.count { |subfield| subfield.code == "u" } == 1
         end
         expect(urls.count).to eq 2
         subfields_u = urls.flat_map(&:subfields).select { |s| s.code == "u" }
@@ -162,10 +162,10 @@ RSpec.describe MarcRecordEnhancer do
         std_ids = enhancer.enhance_cicognara.fields("024").select do |field|
           field.indicator1 == "8" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.count == 1
+            field.subfields.count { |subfield| subfield.code == "a" } == 1
         end
         expect(std_ids.count).to eq 1
-        subfield_a = std_ids.first.subfields.select { |s| s.code == "a" }.first
+        subfield_a = std_ids.first.subfields.find { |s| s.code == "a" }
         expect(subfield_a.value).to eq "dcl:xjt"
       end
     end
@@ -187,7 +187,7 @@ RSpec.describe MarcRecordEnhancer do
         std_ids = enhancer.marc.fields("024").select do |field|
           field.indicator1 == "8" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.count == 1
+            field.subfields.count { |subfield| subfield.code == "a" } == 1
         end
         expect(std_ids.count).to eq 2
         id_values = std_ids.flat_map(&:subfields).select { |s| s.code == "a" }
@@ -201,10 +201,10 @@ RSpec.describe MarcRecordEnhancer do
         std_ids = enhancer.enhance_cicognara.fields("024").select do |field|
           field.indicator1 == "8" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.count == 1
+            field.subfields.count { |subfield| subfield.code == "a" } == 1
         end
         expect(std_ids.count).to eq 1
-        subfield_a = std_ids.first.subfields.select { |s| s.code == "a" }.first
+        subfield_a = std_ids.first.subfields.find { |s| s.code == "a" }
         expect(subfield_a.value).to eq "dcl:xjt"
       end
     end
@@ -234,11 +234,11 @@ RSpec.describe MarcRecordEnhancer do
         references = enhancer.enhance_cicognara.fields("510").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.first.value.starts_with?("Cicognara") &&
-            field.subfields.select { |subfield| subfield.code == "c" }.count == 1
+            field.subfields.find { |subfield| subfield.code == "a" }.value.starts_with?("Cicognara") &&
+            field.subfields.count { |subfield| subfield.code == "c" } == 1
         end
         expect(references.count).to eq 1
-        subfield_c = references.first.subfields.select { |s| s.code == "c" }.first
+        subfield_c = references.first.subfields.find { |s| s.code == "c" }
         expect(subfield_c.value).to eq "3723"
       end
     end
@@ -263,11 +263,11 @@ RSpec.describe MarcRecordEnhancer do
         references = enhancer.enhance_cicognara.fields("510").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.first.value.starts_with?("Cicognara") &&
-            field.subfields.select { |subfield| subfield.code == "c" }.count == 1
+            field.subfields.find { |subfield| subfield.code == "a" }.value.starts_with?("Cicognara") &&
+            field.subfields.count { |subfield| subfield.code == "c" } == 1
         end
         expect(references.count).to eq 1
-        subfield_c = references.first.subfields.select { |s| s.code == "c" }.first
+        subfield_c = references.first.subfields.find { |s| s.code == "c" }
         expect(subfield_c.value).to eq "3723"
       end
     end
@@ -290,10 +290,10 @@ RSpec.describe MarcRecordEnhancer do
         references = enhancer.marc.fields("510").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.first.value.starts_with?("Cicognara")
+            field.subfields.find { |subfield| subfield.code == "a" }.value.starts_with?("Cicognara")
         end
         expect(references.count).to eq 1
-        subfield_c = references.first.subfields.select { |s| s.code == "c" }.first
+        subfield_c = references.first.subfields.find { |s| s.code == "c" }
         expect(subfield_c.value).to eq "3723"
       end
     end
@@ -305,9 +305,9 @@ RSpec.describe MarcRecordEnhancer do
         references = enhancer.marc.fields("510").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.first.value.starts_with?("Cicognara")
+            field.subfields.find { |subfield| subfield.code == "a" }.value.starts_with?("Cicognara")
         end
-        subfield_c = references.first.subfields.select { |s| s.code == "c" }.first
+        subfield_c = references.first.subfields.find { |s| s.code == "c" }
         expect(subfield_c.value).to eq "3723"
       end
     end
@@ -335,11 +335,11 @@ RSpec.describe MarcRecordEnhancer do
         references = enhancer.enhance_cicognara.fields("510").select do |field|
           field.indicator1 == "4" &&
             field.indicator2 == " " &&
-            field.subfields.select { |subfield| subfield.code == "a" }.first.value.starts_with?("Cicognara,") &&
-            field.subfields.select { |subfield| subfield.code == "c" }.count == 1
+            field.subfields.find { |subfield| subfield.code == "a" }.value.starts_with?("Cicognara,") &&
+            field.subfields.count { |subfield| subfield.code == "c" } == 1
         end
         expect(references.count).to eq 1
-        subfield_c = references.first.subfields.select { |s| s.code == "c" }.first
+        subfield_c = references.first.subfields.find { |s| s.code == "c" }
         expect(subfield_c.value).to eq "2196"
       end
     end

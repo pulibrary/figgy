@@ -17,7 +17,7 @@ namespace :figgy do
       abort "usage: BASEDIR=directory CSV=csvfile PROJECT=project_id rake csv:ingest_ephemera" unless basedir && project_id && csvfile
       abort "no such file #{csvfile}" unless File.file?(csvfile)
       abort "no such directory #{basedir}" unless File.directory?(basedir)
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
 
       @logger.info "beginning to ingest ephemera from #{csvfile} with basedir #{basedir}"
       IngestEphemeraCSVJob.perform_now(project_id, csvfile, basedir)
@@ -36,7 +36,7 @@ namespace :figgy do
       abort "usage: COLL=collection_id BASEDIR=directory CSV=csvfile rake bulk:from_csv" unless coll && basedir
       abort "no such file #{csvfile}" unless File.file?(csvfile)
       class_name = "ScannedResource"
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
 
       begin
         csv = CSV.read(csvfile, headers: true)

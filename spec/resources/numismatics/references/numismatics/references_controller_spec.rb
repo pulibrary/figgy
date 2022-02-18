@@ -34,7 +34,7 @@ RSpec.describe Numismatics::ReferencesController, type: :controller do
       post :create, params: {numismatics_reference: valid_params}
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/references"
-      reference = query_service.find_all_of_model(model: Numismatics::Reference).select { |n| n["title"] == ["Reference 1"] }.first
+      reference = query_service.find_all_of_model(model: Numismatics::Reference).find { |n| n["title"] == ["Reference 1"] }
       expect(reference.depositor).to eq [user.uid]
     end
   end

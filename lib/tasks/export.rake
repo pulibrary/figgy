@@ -23,7 +23,7 @@ namespace :figgy do
       ids = ENV["ID"]
       abort "usage: rake export:files ID=[object ids, comma separated]" unless ids
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       ids.split(",").each do |id|
         logger.info "Exporting #{id} to disk"
         ExportFilesJob.perform_now(id)
@@ -35,7 +35,7 @@ namespace :figgy do
       ids = ENV["ID"]
       abort "usage: rake export:pdf ID=[object ids, comma separated]" unless ids
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       ids.split(",").each do |id|
         logger.info "Exporting #{id} to disk as PDF"
         ExportPDFJob.perform_now(id)

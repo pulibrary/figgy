@@ -14,12 +14,12 @@ namespace :figgy do
     task mets: :environment do
       file = ENV["FILE"]
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user ||= User.all.select(&:admin?).first
+      user ||= User.all.find(&:admin?)
       import_mods = ENV["IMPORT_MODS"]&.casecmp("TRUE")&.zero?
 
       abort "usage: rake import:mets FILE=/path/to/file.mets [USER=aperson] [IMPORT_MODS=TRUE]" unless file && File.file?(file)
 
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new($stdout)
       @logger.info "ingesting as: #{user.user_key} (override with USER=foo)"
       @logger.info "queuing job to ingest file: #{file}"
 

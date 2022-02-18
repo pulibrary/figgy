@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
         end
       end
       format.html do
-        raise exception if :manifest == exception.action
+        raise exception if exception.action == :manifest
         if current_user
           redirect_to root_url, alert: exception.message
         else

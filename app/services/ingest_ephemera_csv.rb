@@ -52,7 +52,7 @@ class FolderData
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, :persister, to: :metadata_adapter
 
-  def initialize(base_path:, change_set_persister:, persist_p: false, logger: Logger.new(STDOUT), **arg_fields)
+  def initialize(base_path:, change_set_persister:, persist_p: false, logger: Logger.new($stdout), **arg_fields)
     @image_path = File.join(base_path, arg_fields[:path])
     @fields = arg_fields.except(:path)
     @change_set_persister = change_set_persister

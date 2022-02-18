@@ -291,7 +291,7 @@ RSpec.describe PlaylistsController, type: :controller do
           first_canvas = manifest_values["items"].first
           first_annotation_page = first_canvas["items"].first
           first_annotation = first_annotation_page["items"].first
-          file_node1 = file_set1.file_metadata.select(&:derivative?).first
+          file_node1 = file_set1.file_metadata.find(&:derivative?)
           expect(first_annotation["body"]).to include("id" => "http://www.example.com/downloads/#{file_set1.id}/file/#{file_node1.id}?auth_token=#{persisted.auth_token}")
         end
       end

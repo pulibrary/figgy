@@ -19,7 +19,7 @@ namespace :figgy do
   desc "updates the remote metadata from Voyager"
   task update_bib_ids: :environment do
     if defined?(Rails) && (Rails.env == "development")
-      Rails.logger = Logger.new(STDOUT)
+      Rails.logger = Logger.new($stdout)
     end
     VoyagerUpdater::EventStream.new("https://bibdata.princeton.edu/events.json").process!
   end
@@ -28,12 +28,12 @@ namespace :figgy do
     namespace :finding_aids do
       desc "updates remote metadata from finding aids changed yesterday"
       task yesterday: :environment do
-        FindingAidsUpdater.new(logger: Logger.new(STDOUT)).yesterday
+        FindingAidsUpdater.new(logger: Logger.new($stdout)).yesterday
       end
 
       desc "updates remote metadata from all finding aids"
       task all: :environment do
-        FindingAidsUpdater.new(logger: Logger.new(STDOUT)).all
+        FindingAidsUpdater.new(logger: Logger.new($stdout)).all
       end
     end
   end

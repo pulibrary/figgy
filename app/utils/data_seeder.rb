@@ -7,7 +7,7 @@ class DataSeeder
   attr_accessor :logger
   delegate :query_service, :persister, to: :metadata_adapter
 
-  def initialize(logger = Logger.new(STDOUT))
+  def initialize(logger = Logger.new($stdout))
     raise("DataSeeder is not for use in production!") if Rails.env == "production"
     @logger = logger
   end

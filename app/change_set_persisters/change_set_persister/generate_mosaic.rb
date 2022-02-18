@@ -28,10 +28,8 @@ class ChangeSetPersister
         return false unless file_count&.positive?
         if resource.is_a?(ScannedMap) && resource.decorate.scanned_maps_count > 1
           true
-        elsif resource.is_a?(RasterResource) && resource.decorate.raster_resources_count > 1
-          true
         else
-          false
+          resource.is_a?(RasterResource) && resource.decorate.raster_resources_count > 1
         end
       end
   end
