@@ -13,8 +13,5 @@ AllCops:
     - 'node_modules/**/*'
     - 'tmp/**/*'
 
-Standard/BlockSingleLineBraces:
-  Enabled: false
-
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
