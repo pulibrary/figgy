@@ -109,7 +109,7 @@ jobs:
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_vips_install.sh
       - run: sudo pip3 install pip -U
-      - run: sudo pip3 install morecantile==3.0.5
+      - run: sudo pip3 install setuptools -U
       - run: sudo pip3 install cogeo-mosaic
       - run:
           name: Install node@lts/erbium (need right version for `yarn`)
