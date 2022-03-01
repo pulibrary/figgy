@@ -19,7 +19,7 @@ jobs:
       - checkout
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libopenjp2-tools libopenjp2-7 lsof python3-pip
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libopenjp2-tools libopenjp2-7 lsof python3-pip python-is-python3
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_vips_install.sh
