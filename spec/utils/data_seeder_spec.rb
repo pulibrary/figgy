@@ -15,7 +15,7 @@ RSpec.describe DataSeeder do
 
   describe "if run in production" do
     it "raises RuntimeError" do
-      allow(Rails).to receive(:env).and_return("production")
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
       expect { described_class.new(logger) }.to raise_error(RuntimeError, /production/)
     end
   end

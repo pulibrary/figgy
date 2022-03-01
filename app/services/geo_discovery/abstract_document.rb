@@ -16,7 +16,7 @@ module GeoDiscovery
     # @return [Hash] cleaned document hash
     def clean_document(hash)
       hash.delete_if do |_k, v|
-        v.blank?
+        v.blank? && v != false
       rescue
         false
       end
