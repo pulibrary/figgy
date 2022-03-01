@@ -197,8 +197,7 @@ class BulkIngestService
         nodes = []
         file_paths.each_with_index do |f, idx|
           basename = File.basename(f)
-          mime_types = MIME::Types.type_for(basename)
-          mime_type = mime_types.first
+          mime_type = mime_type(f)
           title = if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
                     basename
                   elsif raster_resource_parent?
@@ -219,6 +218,17 @@ class BulkIngestService
           )
         end
         nodes
+      end
+
+      def mime_type(file_path)
+        basename = File.basename(file_path)
+        mime_types = MIME::Types.type_for(basename)
+        # New mime-types gem prefers audio/wav, but all our code is set up for
+        # audio/x-wav, so do this so it picks x-wav.
+        preferred_mime_type = mime_types.find do |mime_type|
+          preserved_file_name_mime_types.include?(mime_type.to_s)
+        end
+        preferred_mime_type || mime_types.first
       end
 
       def raster_resource_parent?
