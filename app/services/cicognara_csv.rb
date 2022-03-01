@@ -41,7 +41,7 @@ class CicognaraCSV
   end
 
   def self.extract_dclnum(r)
-    local_identifier(r).select { |val| val.starts_with?("cico:") }.first
+    local_identifier(r).find { |val| val.starts_with?("cico:") }
   end
 
   def self.local_identifier(r)

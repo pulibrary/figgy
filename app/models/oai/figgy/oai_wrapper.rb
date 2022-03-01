@@ -41,7 +41,7 @@ module OAI::Figgy
 
     def language
       english_names = decorated_resource.language || decorated_resource.imported_language
-      return unless english_names.present?
+      return if english_names.blank?
       ISO_639.find_by_english_name(english_names.first).alpha3
     end
 

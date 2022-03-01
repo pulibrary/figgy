@@ -235,7 +235,7 @@ class METSDocument
     end
 
     def map_to_holding_location(locations)
-      return unless locations.present?
+      return if locations.blank?
       ControlledVocabulary.for(:holding_location).all.find { |term| term.label.include? locations.first }&.value
     end
 
@@ -253,6 +253,6 @@ class METSDocument
     def logical_volumes
       xp = "/mets:mets/mets:structMap[@TYPE='Logical']/mets:div/mets:div[starts-with(@TYPE, 'Bound')]"
       log = @mets.xpath(xp)
-      log if log && !log.empty?
+      log.presence
     end
 end

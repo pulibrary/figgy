@@ -10,7 +10,7 @@ class ChangeSetPersister
     end
 
     def run
-      return unless append_id.present?
+      return if append_id.blank?
       return if post_save_resource.id == append_id
       remove_from_old_parent
       add_to_new_parent

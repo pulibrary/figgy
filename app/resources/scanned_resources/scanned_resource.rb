@@ -46,7 +46,7 @@ class ScannedResource < Resource
   end
 
   def title
-    imported_metadata&.first&.title.present? ? imported_metadata&.first&.title : __attributes__[:title]
+    imported_metadata&.first&.title.presence || __attributes__[:title]
   end
 
   # Determines if this is an image resource

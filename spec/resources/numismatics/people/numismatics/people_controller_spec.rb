@@ -34,7 +34,7 @@ RSpec.describe Numismatics::PeopleController, type: :controller do
       post :create, params: { numismatics_person: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/people"
-      person = query_service.find_all_of_model(model: Numismatics::Person).select { |n| n["name1"] == ["Marcus"] }.first
+      person = query_service.find_all_of_model(model: Numismatics::Person).find { |n| n["name1"] == ["Marcus"] }
       expect(person.depositor).to eq [user.uid]
     end
   end

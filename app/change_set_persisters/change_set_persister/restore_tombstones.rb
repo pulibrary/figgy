@@ -9,9 +9,9 @@ class ChangeSetPersister
     end
 
     def run
-      return unless change_set.try(:tombstone_restore_ids).present?
+      return if change_set.try(:tombstone_restore_ids).blank?
       tombstones.each do |tombstone|
-        next unless tombstone.preservation_object.present?
+        next if tombstone.preservation_object.blank?
         file_set = Preserver::Importer.from_preservation_object(
           resource: tombstone.preservation_object,
           change_set_persister: change_set_persister

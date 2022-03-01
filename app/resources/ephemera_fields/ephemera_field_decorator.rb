@@ -59,8 +59,8 @@ class EphemeraFieldDecorator < Valkyrie::ResourceDecorator
       term = ControlledVocabulary.for(:ephemera_field).find(name)
       next unless term
       h.link_to(term.label, term.value) +
-        h.content_tag("br") +
-        h.content_tag("p") do
+        h.tag.br +
+        h.tag.p do
           term.definition.html_safe
         end
     end

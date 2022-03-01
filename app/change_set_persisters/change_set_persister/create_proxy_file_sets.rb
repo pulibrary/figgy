@@ -11,7 +11,7 @@ class ChangeSetPersister
     end
 
     def run
-      return unless file_set_ids.present?
+      return if file_set_ids.blank?
       change_set.member_ids += proxy_file_set_ids
       change_set.sync
     end
@@ -34,7 +34,7 @@ class ChangeSetPersister
     end
 
     def current_member_ids
-      return [] unless change_set.try(:file_set_ids).present?
+      return [] if change_set.try(:file_set_ids).blank?
       @current_members ||= Wayfinder.for(change_set.resource).members.map(&:proxied_file_id)
     end
 

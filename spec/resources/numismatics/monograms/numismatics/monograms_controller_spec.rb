@@ -33,7 +33,7 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
       post :create, params: { numismatics_monogram: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/monograms"
-      monogram = query_service.find_all_of_model(model: Numismatics::Monogram).select { |n| n["title"] == ["Monogram 1"] }.first
+      monogram = query_service.find_all_of_model(model: Numismatics::Monogram).find { |n| n["title"] == ["Monogram 1"] }
       expect(monogram.depositor).to eq [user.uid]
     end
   end

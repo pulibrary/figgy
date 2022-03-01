@@ -3,7 +3,7 @@ class UpdateCicoIdsJob < ApplicationJob
   def perform(collection_id:, logger: Logger.new(STDOUT))
     collection = query_service.find_by(id: collection_id)
     Wayfinder.for(collection).members.each do |resource|
-      next unless resource.local_identifier.present?
+      next if resource.local_identifier.blank?
       id_switcher = IdSwitcher.new(resource.local_identifier)
       next unless id_switcher.updates?
       logger.info "Updating #{resource.id}'s local_identifier from #{resource.local_identifier} to #{id_switcher.new_array}"

@@ -35,7 +35,7 @@ class ChangeSetPersister
 
     def run
       return unless change_set.respond_to?(:created_file_sets)
-      created_file_sets.each { |created_file_set| messenger.record_created(created_file_set) } unless created_file_sets.blank?
+      created_file_sets.each { |created_file_set| messenger.record_created(created_file_set) } if created_file_sets.present?
     end
 
     delegate :messenger, to: :change_set_persister

@@ -130,7 +130,7 @@ class PDFDerivativeService
   end
 
   def update_pdf_use
-    pdf_file_metadata = resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.select(&:pdf?).first
+    pdf_file_metadata = resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.find(&:pdf?)
     return unless pdf_file_metadata
 
     pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]

@@ -16,12 +16,10 @@ class OrangelightReindexer
     # Tell OL it's going to get a lot of these; it won't commit each one
     ENV["BULK"] = "true"
     all_orangelight_resources.each do |resource|
-      begin
-        messenger.record_updated(resource)
-        logger.info("Indexed into Orangelight: #{resource.id}")
-      rescue StandardError => e
-        logger.warn("Error: #{e.message}")
-      end
+      messenger.record_updated(resource)
+      logger.info("Indexed into Orangelight: #{resource.id}")
+    rescue StandardError => e
+      logger.warn("Error: #{e.message}")
     end
   end
 

@@ -152,7 +152,7 @@ class ManifestBuilder
     end
 
     def wrap_proxies(node)
-      if !node.proxy.present?
+      if node.proxy.blank?
         StructureNode.new(
           id: node.id,
           label: node.label,
@@ -308,7 +308,7 @@ class ManifestBuilder
       @work_presenters ||=
         begin
           output = super
-          output.blank? ? FalseEmpty.new : output
+          output.presence || FalseEmpty.new
         end
     end
 

@@ -27,7 +27,7 @@ class CollectionValidator < ActiveModel::Validator
     end
 
     def validate_collection(record)
-      return true unless Array.wrap(record.member_of_collection_ids).first.present?
+      return true if Array.wrap(record.member_of_collection_ids).first.blank?
       record.member_of_collection_ids.map { |collection_id| resource_exists?(uuid: collection_id, record: record) }.reduce(:|)
     end
 end

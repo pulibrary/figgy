@@ -79,7 +79,7 @@ class GeoMetadataExtractor
         extract_text(node)
       end.uniq
 
-      placenames.present? ? placenames : nil
+      placenames.presence
     end
 
     def topic
@@ -87,10 +87,10 @@ class GeoMetadataExtractor
       topics = nodes.map do |node|
         value = extract_text(node)
 
-        TOPIC_CATEGORIES[value.to_sym].present? ? TOPIC_CATEGORIES[value.to_sym] : value
+        TOPIC_CATEGORIES[value.to_sym].presence || value
       end.uniq
 
-      topics.present? ? topics : nil
+      topics.presence
     end
 
     def theme
@@ -100,12 +100,12 @@ class GeoMetadataExtractor
         extract_text(node)
       end.uniq
 
-      themes.present? ? themes : nil
+      themes.presence
     end
 
     def subject
       values = topic.concat(theme).uniq
-      values.present? ? values : nil
+      values.presence
     end
 
     def temporal
@@ -115,7 +115,7 @@ class GeoMetadataExtractor
         extract_text(node)
       end.uniq
 
-      timeperiods.present? ? timeperiods : nil
+      timeperiods.presence
     end
 
     # ISO 19115 Topic Category
@@ -153,7 +153,7 @@ class GeoMetadataExtractor
           end
         end.uniq
 
-        values.present? ? values : nil
+        values.presence
       end
 
       def extract_text(node, path = nil)

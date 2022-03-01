@@ -82,14 +82,14 @@ class PagedAllQuery
     end
 
     def with_requirements(requirements)
-      return self unless requirements.present?
+      return self if requirements.blank?
       tap do
         self.relation = relation.where(Sequel[:orm_resources][:metadata].pg_jsonb.contains(initial_requirements.merge(requirements)))
       end
     end
 
     def only_models(models)
-      return self unless models.present?
+      return self if models.blank?
       tap do
         self.relation = relation.where(Sequel[:orm_resources][:internal_resource] => Array(models).map(&:to_s))
       end

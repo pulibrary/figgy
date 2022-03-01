@@ -19,7 +19,7 @@ class MemberValidator < ActiveModel::Validator
     end
 
     def validate_member(record)
-      return true unless Array.wrap(record.member_ids).first.present?
+      return true if Array.wrap(record.member_ids).first.blank?
       valid_ids = record.member_ids.select { |id| valid_uuid?(id.to_s) }
       (record.member_ids - valid_ids).each do |member_id|
         record.errors.add(:member_ids, "#{member_id} is not a valid UUID")

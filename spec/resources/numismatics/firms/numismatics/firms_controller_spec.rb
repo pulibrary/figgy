@@ -34,7 +34,7 @@ RSpec.describe Numismatics::FirmsController, type: :controller do
       post :create, params: { numismatics_firm: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/firms"
-      firm = query_service.find_all_of_model(model: Numismatics::Firm).select { |n| n["city"] == "city" }.first
+      firm = query_service.find_all_of_model(model: Numismatics::Firm).find { |n| n["city"] == "city" }
       expect(firm.depositor).to eq [user.uid]
     end
   end

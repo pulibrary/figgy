@@ -28,7 +28,7 @@ class VocabularyValidator < ActiveModel::Validator
 
     def validate_vocabulary(record)
       vocabulary_ids = Array.wrap(record.member_of_vocabulary_id)
-      return true unless vocabulary_ids.first.present?
+      return true if vocabulary_ids.first.blank?
       vocabulary_ids.map { |vocabulary_id| resource_exists?(uuid: vocabulary_id, record: record) }.reduce(:|)
     end
 end

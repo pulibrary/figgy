@@ -12,7 +12,7 @@ class BulkEditController < ApplicationController
     args = {}.tap do |hash|
       hash[:mark_complete] = (params["mark_complete"] == "1")
       BulkUpdateJob.supported_attributes.each do |key|
-        hash[key] = params[key.to_s] unless params[key.to_s].blank?
+        hash[key] = params[key.to_s] if params[key.to_s].present?
       end
     end
     batches.each do |ids|

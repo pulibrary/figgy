@@ -4,7 +4,7 @@ class RiiifResolver < Riiif::AbstractFileSystemResolver
   delegate :query_service, to: :metadata_adapter
 
   def pattern(id)
-    raise ArgumentError, "Invalid characters in id `#{id}`" unless id =~ /^[\w\-:]+$/
+    raise ArgumentError, "Invalid characters in id `#{id}`" unless /^[\w\-:]+$/.match?(id)
     file_set = query_service.find_by(id: Valkyrie::ID.new(id))
     file_metadata = file_set.derivative_files.find { |x| x.mime_type == ["image/tiff"] } || file_set.derivative_file
     raise Valkyrie::Persistence::ObjectNotFoundError, id if file_metadata.nil?

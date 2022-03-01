@@ -15,7 +15,7 @@ class ChangeSetPersister
     # Key triggering ingest off of the bag_path property existing so we can do
     # it outside of HTML forms.
     def run
-      return unless change_set.try(:bag_path).present?
+      return if change_set.try(:bag_path).blank?
       IngestArchivalMediaBagJob.perform_later(
         collection_component: post_save_resource.source_metadata_identifier.first,
         bag_path: change_set.bag_path.to_s,

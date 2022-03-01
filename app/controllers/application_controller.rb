@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def guest_uid_authentication_key(key)
-    key &&= nil unless key.to_s =~ /^guest/
+    key &&= nil unless /^guest/.match?(key.to_s)
     return key if key
     "guest_" + guest_user_unique_suffix
   end

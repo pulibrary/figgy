@@ -4,7 +4,7 @@ if Rails.env.development? || Rails.env.test?
 
   namespace :servers do
     desc "Start solr and postgres servers using lando."
-    task :start do
+    task start: :environment do
       system("lando start")
       system("rake db:create")
       system("rake db:migrate")
@@ -12,7 +12,7 @@ if Rails.env.development? || Rails.env.test?
     end
 
     desc "Stop lando solr and postgres servers."
-    task :stop do
+    task stop: :environment do
       system("lando stop")
     end
   end
@@ -29,7 +29,7 @@ if Rails.env.development? || Rails.env.test?
     namespace :clean do
       namespace :test do
         desc "Cleanup test servers"
-        task :solr do
+        task solr: :environment do
           SolrWrapper.instance(managed: true, verbose: true, port: 8984, instance_dir: "tmp/figgy-core-test", persist: false).remove_instance_dir!
           puts "Cleaned up test solr server."
         end

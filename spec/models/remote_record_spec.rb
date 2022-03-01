@@ -5,7 +5,7 @@ RSpec.describe RemoteRecord, type: :model do
   describe ".retrieve" do
     context "with a Voyager record ID" do
       it "constructs a RemoteRecord instance" do
-        expect(described_class.retrieve("4609321")).to be_a RemoteRecord
+        expect(described_class.retrieve("4609321")).to be_a described_class
       end
     end
 

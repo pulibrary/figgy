@@ -24,7 +24,7 @@ module CDL
     end
 
     def expired_hash
-      return {} unless charged_item.present?
+      return {} if charged_item.blank?
       {
         expires_at: charged_item.expiration_time.to_i
       }

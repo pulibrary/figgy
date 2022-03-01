@@ -61,12 +61,10 @@ class Reindexer
       progress_bar
       index_individually = []
       all_resources.each_slice(batch_size) do |records|
-        begin
-          multi_index_persist(records)
-          progress_bar.progress += records.count
-        rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
-          index_individually += records
-        end
+        multi_index_persist(records)
+        progress_bar.progress += records.count
+      rescue RSolr::Error::ConnectionRefused, RSolr::Error::Http
+        index_individually += records
       end
       run_individual_retries(index_individually)
       solr_adapter.connection.commit

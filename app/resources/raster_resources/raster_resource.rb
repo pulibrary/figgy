@@ -26,8 +26,8 @@ class RasterResource < Resource
   end
 
   def title
-    imported_title = primary_imported_metadata.title.present? ? primary_imported_metadata.title : []
-    attributes[:title].present? ? attributes[:title] : imported_title
+    imported_title = primary_imported_metadata.title.presence || []
+    attributes[:title].presence || imported_title
   end
 
   def linked_resource

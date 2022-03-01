@@ -21,16 +21,14 @@ class Preserver::BlindImporter::FileMetadataAdapter
     def find_members(resource:)
       member_ids = resource.try(:member_ids) || []
       member_ids.lazy.map do |id|
-        begin
-          file = storage_adapter.find_by(id: storage_id_from_resource_id(id, parent_resource: resource))
-          json = JSON.parse(file.read)
-          attributes = Valkyrie::Persistence::Shared::JSONValueMapper.new(json).result.symbolize_keys
-          member = Valkyrie::Types::Anything[attributes]
-          member.loaded[:parents] = [resource]
-          resource_processor.call(resource: member, adapter: adapter)
-        rescue Valkyrie::StorageAdapter::FileNotFound
-          nil
-        end
+        file = storage_adapter.find_by(id: storage_id_from_resource_id(id, parent_resource: resource))
+        json = JSON.parse(file.read)
+        attributes = Valkyrie::Persistence::Shared::JSONValueMapper.new(json).result.symbolize_keys
+        member = Valkyrie::Types::Anything[attributes]
+        member.loaded[:parents] = [resource]
+        resource_processor.call(resource: member, adapter: adapter)
+      rescue Valkyrie::StorageAdapter::FileNotFound
+        nil
       end.select(&:present?)
     end
 
@@ -71,7 +69,7 @@ class Preserver::BlindImporter::FileMetadataAdapter
       end
 
       def convert!
-        return resource unless resource.try(:file_metadata).present?
+        return resource if resource.try(:file_metadata).blank?
         resource.file_metadata.map! do |file_metadata|
           file_metadata.file_identifiers.map! do |identifier|
             get_file_id(identifier, file_metadata)

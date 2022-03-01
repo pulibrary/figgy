@@ -22,17 +22,15 @@ module Bagit
         next unless resource.respond_to?(:alternate_ids)
         resource.alternate_ids.include?(alternate_identifier)
       end
-      raise Valkyrie::Persistence::ObjectNotFoundError unless output.present?
+      raise Valkyrie::Persistence::ObjectNotFoundError if output.blank?
       output
     end
 
     def find_many_by_ids(ids:)
       ids.uniq.map do |id|
-        begin
-          find_by(id: id)
-        rescue ::Valkyrie::Persistence::ObjectNotFoundError
-          nil
-        end
+        find_by(id: id)
+      rescue ::Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end.reject(&:nil?)
     end
 

@@ -13,7 +13,7 @@ class PermissionBadge
   # Draws div tags with bootstrap labels representing the items visibility
   # @return [String] the span markup
   def render
-    content_tag(:div, children, class: "label #{label_class}") + computed_visibility_notice
+    tag.div(children, class: "label #{label_class}") + computed_visibility_notice
   end
 
   # Retrieve the text for the badge
@@ -33,7 +33,7 @@ class PermissionBadge
     # Draw a notice representing the computed visibility status
     def computed_visibility_notice
       return if @public_readable_state.nil?
-      content_tag(:div, computed_visibility_note, class: "alert alert-inline #{computed_visibility_class}")
+      tag.div(computed_visibility_note, class: "alert alert-inline #{computed_visibility_class}")
     end
 
     # Generate a note of the final visibility, including both the visibility property and workflow state
@@ -61,13 +61,13 @@ class PermissionBadge
     end
 
     def text_span
-      content_tag(:span, text, class: "text")
+      tag.span(text, class: "text")
     end
 
     # Generate the markup for the visibility icon
     # @return [String] the markup
     def icon
-      content_tag(:span, "", class: "icon")
+      tag.span("", class: "icon")
     end
 
     # Generate the markup within the <span>

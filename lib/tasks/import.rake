@@ -13,7 +13,7 @@ namespace :figgy do
     task mets: :environment do
       file = ENV["FILE"]
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user = User.all.select(&:admin?).first unless user
+      user = User.all.find(&:admin?) unless user
       import_mods = ENV["IMPORT_MODS"]&.casecmp("TRUE")&.zero?
 
       abort "usage: rake import:mets FILE=/path/to/file.mets [USER=aperson] [IMPORT_MODS=TRUE]" unless file && File.file?(file)

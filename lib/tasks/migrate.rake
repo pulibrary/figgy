@@ -49,7 +49,7 @@ namespace :figgy do
       output = nil
 
       Find.find(md_root) do |md_path|
-        next unless File.basename(md_path) =~ /mods$/
+        next unless /mods$/.match?(File.basename(md_path))
         subdir_name = File.dirname(md_path).match(/^.*pudl0066\/(.*)$/)[1]
         image_path = File.join(image_root, subdir_name, File.basename(md_path, ".*"))
         change_set_persister.buffer_into_index do |buffered_changeset_persister|
@@ -75,7 +75,7 @@ namespace :figgy do
       output = nil
 
       Find.find(md_root) do |md_path|
-        next unless File.basename(md_path) =~ /mods$/
+        next unless /mods$/.match?(File.basename(md_path))
         subdir_name = File.dirname(md_path).match(/^.*pudl0125\/(.*)$/)[1]
         image_path = File.join(image_root, subdir_name, File.basename(md_path, ".*"))
         change_set_persister.buffer_into_index do |buffered_changeset_persister|

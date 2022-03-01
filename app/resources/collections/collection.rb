@@ -17,6 +17,6 @@ class Collection < Resource
   end
 
   def title
-    primary_imported_metadata.title.present? ? primary_imported_metadata.title : attributes[:title]
+    primary_imported_metadata.title.presence || attributes[:title]
   end
 end

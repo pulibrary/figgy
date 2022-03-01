@@ -20,7 +20,7 @@ class FindingAidsUpdater
 
   def all
     query_service.find_all_of_model(model: ScannedResource).each do |resource|
-      next unless resource.source_metadata_identifier.present?
+      next if resource.source_metadata_identifier.blank?
       next if PulMetadataServices::Client.bibdata?(resource.source_metadata_identifier.first)
       logger.info "Refreshing pulfa metadata for #{resource.id}, #{resource.source_metadata_identifier}"
       FindingAidsUpdateJob.perform_later(id: resource.id.to_s)

@@ -261,7 +261,7 @@ module ApplicationHelper
                end
 
     label = opts.delete(:label)
-    label ||= t("blacklight.back_to_bookmarks") if link_url =~ /bookmarks/
+    label ||= t("blacklight.back_to_bookmarks") if /bookmarks/.match?(link_url)
     label ||= t("blacklight.back_to_search")
 
     link_to label, link_url, opts

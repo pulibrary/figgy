@@ -87,7 +87,7 @@ class ManifestBuilder
       # @param record_id [Valkyrie::ID, String] the ID for the FileSet
       # @return [FileSet]
       def find_thumbnail_file_set(record_id)
-        return unless record_id.present?
+        return if record_id.blank?
         record = query_service.find_by(id: Valkyrie::ID.new(record_id.to_s))
         if record.is_a?(FileSet)
           record

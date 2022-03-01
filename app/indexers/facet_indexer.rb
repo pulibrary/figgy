@@ -51,7 +51,7 @@ class FacetIndexer
 
   def pub_date_start
     date = resource.imported_metadata&.first&.created
-    return unless date.present?
+    return if date.blank?
     date = parse_date(date.first)
     return unless date
     date.year

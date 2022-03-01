@@ -34,7 +34,7 @@ module GeoDiscovery
         def build_simple_attributes(document)
           simple_attributes.each do |a|
             value = resource_decorator.send(a.to_s)
-            next if value.nil? || value.empty?
+            next if value.blank?
             document.send("#{a}=", value)
           end
         end
@@ -59,7 +59,7 @@ module GeoDiscovery
         # @return [String] identifier
         def identifier
           identifiers = resource_decorator.identifier
-          return identifiers.first unless identifiers.nil? || identifiers.empty?
+          return identifiers.first if identifiers.present?
           resource_decorator.id.to_s
         end
 

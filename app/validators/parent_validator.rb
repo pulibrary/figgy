@@ -28,7 +28,7 @@ class ParentValidator < ActiveModel::Validator
 
     def validate_parent(record)
       parent_ids = Array.wrap(record.parent_id)
-      return true unless parent_ids.first.present?
+      return true if parent_ids.first.blank?
       parent_ids.map { |parent_id| resource_exists?(uuid: parent_id, record: record) }.reduce(:|)
     end
 end

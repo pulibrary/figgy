@@ -3,7 +3,7 @@ inherit_gem:
   bixby: bixby_default.yml
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.7
   Exclude:
     - 'bin/*'
     - 'config/deploy.rb'
@@ -129,7 +129,7 @@ Metrics/CyclomaticComplexity:
     - 'app/services/manifest_builder.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/models/ability.rb'
-Metrics/LineLength:
+Layout/LineLength:
   Exclude:
     - 'spec/views/scanned_resources/order_manager.html.erb_spec.rb'
     - 'lib/tasks/music_reserves.rake'
@@ -307,10 +307,6 @@ Naming/FileName:
     - 'Gemfile'
     - '**/*.rake'
     - 'Capfile'
-Lint/Void:
-  Enabled: true
-  Exclude:
-    - 'app/derivative_services/jp2_derivative_service.rb'
 Style/LineEndConcatenation:
   Exclude:
     - 'spec/controllers/reports_controller_spec.rb'
@@ -347,6 +343,12 @@ Lint/Void:
 # We don't like postfix conditionals.
 Style/IfUnlessModifier:
   Enabled: false
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - 'lib/tasks/performance.rake'
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+Rails/UnknownEnv:
+  Enabled: false
+Rails/CreateTableWithTimestamps:
+  Enabled: false

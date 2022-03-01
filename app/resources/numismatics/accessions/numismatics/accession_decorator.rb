@@ -68,7 +68,7 @@ module Numismatics
     end
 
     def formatted_date
-      return unless date.present?
+      return if date.blank?
       parsed_date&.strftime("%F")
     rescue
       date

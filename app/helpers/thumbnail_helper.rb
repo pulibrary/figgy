@@ -59,7 +59,7 @@ module ThumbnailHelper
     return default_path unless thumbnail_id
 
     url = download_path document.id, thumbnail_id
-    return default_path unless url.present?
+    return default_path if url.blank?
 
     image_tag url, image_options.merge(onerror: default_icon_fallback)
   end

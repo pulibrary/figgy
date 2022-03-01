@@ -34,7 +34,7 @@ RSpec.describe Numismatics::AccessionsController, type: :controller do
       post :create, params: { numismatics_accession: valid_params }
       expect(response).to be_redirect
       expect(response.location).to start_with "http://test.host/concern/numismatics/accessions"
-      accession = query_service.find_all_of_model(model: Numismatics::Accession).select { |n| n["cost"] == ["$123.00"] }.first
+      accession = query_service.find_all_of_model(model: Numismatics::Accession).find { |n| n["cost"] == ["$123.00"] }
       expect(accession.depositor).to eq [user.uid]
     end
   end

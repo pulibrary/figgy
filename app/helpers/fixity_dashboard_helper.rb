@@ -38,10 +38,10 @@ module FixityDashboardHelper
   end
 
   def format_fixity_status(val, count)
-    content_tag :div, "#{format_fixity_success(val)} #{format_fixity_count(val, count)}".html_safe
+    tag.div "#{format_fixity_success(val)} #{format_fixity_count(val, count)}".html_safe
   end
 
   def format_fixity_count(val, count)
-    content_tag :span, count, title: format_fixity_success(val), class: ["fixity-count", "label", "label-#{fixity_success_level(val)}"]
+    tag.span count, title: format_fixity_success(val), class: ["fixity-count", "label", "label-#{fixity_success_level(val)}"]
   end
 end
