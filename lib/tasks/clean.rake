@@ -14,7 +14,7 @@ namespace :figgy do
     end
 
     desc "Clean dead Sidekiq Queues."
-    task :dead_queues do
+    task dead_queues: :environment do
       CleanDeadQueuesJob.set(queue: :low).perform_later
     end
   end

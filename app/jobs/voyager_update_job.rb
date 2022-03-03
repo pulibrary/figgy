@@ -8,20 +8,18 @@ class VoyagerUpdateJob < ApplicationJob
 
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|
-        begin
-          resource = query_service.find_by(id: id)
-          next if resource.blank?
+        resource = query_service.find_by(id: id)
+        next if resource.blank?
 
-          change_set = ChangeSet.for(resource)
-          next unless change_set.respond_to?(:apply_remote_metadata?) && change_set.respond_to?(:source_metadata_identifier)
+        change_set = ChangeSet.for(resource)
+        next unless change_set.respond_to?(:apply_remote_metadata?) && change_set.respond_to?(:source_metadata_identifier)
 
-          change_set.validate(refresh_remote_metadata: "1")
+        change_set.validate(refresh_remote_metadata: "1")
 
-          logger.info "Processing updates for Voyager record #{id} imported into resource #{resource.id}..."
-          buffered_change_set_persister.save(change_set: change_set)
-        rescue StandardError => error
-          warn "#{self.class}: Unable to process the changed Voyager record #{id}: #{error}"
-        end
+        logger.info "Processing updates for Voyager record #{id} imported into resource #{resource.id}..."
+        buffered_change_set_persister.save(change_set: change_set)
+      rescue StandardError => error
+        warn "#{self.class}: Unable to process the changed Voyager record #{id}: #{error}"
       end
     end
   end

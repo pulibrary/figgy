@@ -30,7 +30,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
     def find_or_create_amc(component_id)
       existing_amc = metadata_adapter.query_service.custom_queries
                                      .find_by_property(property: :source_metadata_identifier, value: component_id)
-                                     .select { |r| r.is_a? Collection }.first
+                                     .find { |r| r.is_a? Collection }
       return existing_amc unless existing_amc.nil?
       change_set = change_set_class.new(Collection.new)
       change_set.validate(source_metadata_identifier: component_id)

@@ -38,7 +38,7 @@ class Preserver::BlindImporter
   end
 
   def import_binary_files
-    return unless source_resource.try(:file_metadata).present?
+    return if source_resource.try(:file_metadata).blank?
     source_resource.file_metadata.each do |file_metadata|
       file_metadata.file_identifiers.map! do |file_identifier|
         file = source_storage_adapter.find_by(id: file_identifier)

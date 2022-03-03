@@ -108,12 +108,12 @@ class FolderData
   end
 
   def creator
-    return [] unless fields[:creator].present?
+    return [] if fields[:creator].blank?
     fields[:creator].split(";").collect(&:strip)
   end
 
   def title
-    return [] unless fields[:title].present?
+    return [] if fields[:title].blank?
     @title ||= Array(fields[:title])
   end
 
@@ -142,7 +142,7 @@ class FolderData
     if fields[:page_count]
       Array(fields[:page_count])
     else
-      Array(Array(files).count.to_s)
+      Array(Array(files).size.to_s)
     end
   end
 
@@ -158,41 +158,39 @@ class FolderData
   end
 
   def language
-    return unless fields[:language].present?
+    return if fields[:language].blank?
     @language ||= fields[:language].split(";").collect { |lang| find_language(lang.strip) }
   end
 
   def ocr_language
-    return unless fields[:ocr_language].present?
+    return if fields[:ocr_language].blank?
     @ocr_language ||= fields[:ocr_language].split(";").collect(&:strip)
   end
 
   def geographic_origin
-    return unless fields[:geographic_origin].present?
+    return if fields[:geographic_origin].blank?
     @geographic_origin ||= vocab_service.find_term(label: Array(fields[:geographic_origin]).first, vocab: "LAE Geographic Areas")
   end
 
   def keywords
-    return unless fields[:keywords].present?
+    return if fields[:keywords].blank?
     fields[:keywords].split(";").collect(&:strip)
   end
 
   def subject
-    return unless fields[:subject].present?
+    return if fields[:subject].blank?
     subjects = fields[:subject].split(/;|\//).map { |s| s.strip.split("--") }.map { |c, s| { "category" => c, "topic" => s } }
     subjects.uniq.map do |sub|
-      begin
-        subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
-      rescue => e
-        logger.warn format("%s: no subject for %s", e.class, sub)
-      else
-        subject&.id
-      end
+      subject = vocab_service.find_subject_by(category: sub["category"], topic: sub["topic"])
+    rescue => e
+      logger.warn format("%s: no subject for %s", e.class, sub)
+    else
+      subject&.id
     end
   end
 
   def geo_subject
-    return unless fields[:geo_subject].present?
+    return if fields[:geo_subject].blank?
     Array(vocab_service.find_term(label: Array(fields[:geo_subject]).first, vocab: "LAE Geographic Areas"))
   end
 
@@ -217,7 +215,7 @@ class FolderData
   end
 
   def genre
-    return unless fields[:genre].present?
+    return if fields[:genre].blank?
     term = vocab_service.find_term(label: fields[:genre])
     return term.id unless term.nil?
   end

@@ -10,7 +10,7 @@ class ChangeSetPersister
     end
 
     def run
-      return unless created_file_sets.present?
+      return if created_file_sets.blank?
       created_file_sets.each do |file_set|
         next unless file_set.instance_of?(FileSet) && characterize?
         ::CharacterizationJob.set(queue: change_set_persister.queue).perform_later(file_set.id.to_s)

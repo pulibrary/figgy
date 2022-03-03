@@ -11,7 +11,7 @@ class IdentifierService
   end
 
   def self.get_ark_result(ark:)
-    return "" unless ark.present?
+    return "" if ark.blank?
     initial_result = Faraday.head("http://arks.princeton.edu/#{ark}")
     return "" unless initial_result.status == 301
     final_result = Faraday.head(initial_result.headers["location"])
@@ -56,7 +56,7 @@ class IdentifierService
   end
 
   private_class_method def self.mint_or_update_geo_resource(resource)
-    assign_new_identifier(resource) unless resource.identifier.present?
+    assign_new_identifier(resource) if resource.identifier.blank?
     update_geo_metadata resource
   end
 

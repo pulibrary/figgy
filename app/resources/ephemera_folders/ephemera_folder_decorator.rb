@@ -73,7 +73,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   end
 
   def rendered_date_range
-    return unless first_range.present?
+    return if first_range.blank?
     first_range.range_string
   end
 
@@ -90,7 +90,7 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def rendered_holding_location
     value = holding_location
-    return unless value.present?
+    return if value.blank?
     vocabulary = ControlledVocabulary.for(:holding_location)
     values = value.map do |holding_location|
       term = vocabulary.find(holding_location)
@@ -106,18 +106,18 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
       term = ControlledVocabulary.for(:rights_statement).find(rights_statement)
       next unless term
       h.link_to(term.label, term.value) +
-        h.content_tag("br") +
-        h.content_tag("p") do
+        h.tag.br +
+        h.tag.p do
           term.definition.html_safe
         end +
-        h.content_tag("p") do
+        h.tag.p do
           I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
   end
 
   def rendered_ocr_language
-    return unless ocr_language.present?
+    return if ocr_language.blank?
     vocabulary = ControlledVocabulary.for(:ocr_language)
     ocr_language.map { |language| vocabulary.find(language).try(:label) }.compact
   end

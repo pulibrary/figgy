@@ -15,7 +15,7 @@ RSpec.describe DataSeeder do
 
   describe "if run in production" do
     it "raises RuntimeError" do
-      allow(Rails).to receive(:env).and_return("production")
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
       expect { described_class.new(logger) }.to raise_error(RuntimeError, /production/)
     end
   end
@@ -72,10 +72,10 @@ RSpec.describe DataSeeder do
       expect(query_service.find_all_of_model(model: EphemeraTerm).count).to be > vocabs
       expect(query_service.find_all_of_model(model: EphemeraProject).count).to eq 1
       d = query_service.find_all_of_model(model: EphemeraProject).first.decorate
-      expect(d.members.select { |m| m.is_a? EphemeraField }.size).to eq 5
-      expect(d.members.select { |m| m.is_a? EphemeraBox }.size).to eq 1
+      expect(d.members.count { |m| m.is_a? EphemeraField }).to eq 5
+      expect(d.members.count { |m| m.is_a? EphemeraBox }).to eq 1
       d = query_service.find_all_of_model(model: EphemeraBox).first.decorate
-      expect(d.members.select { |m| m.is_a? EphemeraFolder }.size).to eq 3
+      expect(d.members.count { |m| m.is_a? EphemeraFolder }).to eq 3
     end
   end
 

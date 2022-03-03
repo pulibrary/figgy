@@ -8,7 +8,7 @@ class ChangeSetPersister
     end
 
     def run
-      return unless change_set.try(:append_collection_ids).present?
+      return if change_set.try(:append_collection_ids).blank?
       change_set.member_of_collection_ids = (change_set.member_of_collection_ids || []) + change_set.append_collection_ids
     end
   end

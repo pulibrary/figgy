@@ -203,11 +203,11 @@ class IngestEphemeraMODS
     end
 
     def native_title
-      mods_doc.title.select { |t| t.respond_to?(:language) && !t.language.to_s.downcase.end_with?("latn") }.first
+      mods_doc.title.find { |t| t.respond_to?(:language) && !t.language.to_s.downcase.end_with?("latn") }
     end
 
     def transliterated_title
-      mods_doc.title.select { |t| t.respond_to?(:language) && t.language.to_s.downcase.end_with?("latn") }.first
+      mods_doc.title.find { |t| t.respond_to?(:language) && t.language.to_s.downcase.end_with?("latn") }
     end
 
     def first_title

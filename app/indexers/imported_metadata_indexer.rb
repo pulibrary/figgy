@@ -6,7 +6,7 @@ class ImportedMetadataIndexer
   end
 
   def to_solr
-    return {} unless resource.try(:imported_metadata)&.first.present?
+    return {} if resource.try(:imported_metadata)&.first.blank?
     identifier_properties.merge(primary_imported_properties)
   end
 

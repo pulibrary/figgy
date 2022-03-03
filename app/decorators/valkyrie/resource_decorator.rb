@@ -283,7 +283,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     # @return [Array<String>] HTML markup for links, or the original identifiers
     def identifier_value
       @value.map do |id|
-        if id =~ /^https?\:\/\//
+        if /^https?\:\/\//.match?(id)
           "<a href='#{id}' alt='#{label}'>#{id}</a>"
         else
           id

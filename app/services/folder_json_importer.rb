@@ -84,12 +84,12 @@ class FolderJSONImporter
       end
 
       def language
-        return unless resource["language"].present?
+        return if resource["language"].blank?
         @language ||= find_or_create_term_by(label: ISO_639.find_by_code(resource["language"]).english_name.split(";").first).id
       end
 
       def geo_origin
-        return unless resource["geo_origin"].present?
+        return if resource["geo_origin"].blank?
         @geo_origin ||= find_or_create_term_by(label: resource["geo_origin"]).id
       end
 

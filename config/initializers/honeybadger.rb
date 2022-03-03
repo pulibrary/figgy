@@ -5,7 +5,7 @@
 Honeybadger.configure do |config|
   config.before_notify do |notice|
     # Ignore Shapefile encoding errors.
-    if notice.error_message =~ /ogr2ogr -q -nln/
+    if /ogr2ogr -q -nln/.match?(notice.error_message)
       notice.halt!
     end
   end

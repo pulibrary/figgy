@@ -10,7 +10,7 @@ module OrangelightDocumentController
         end
       end
     rescue OrangelightCoinBuilder::NoParentException => e
-      render json: e.message, status: 500
+      render json: e.message, status: :internal_server_error
     end
   end
 

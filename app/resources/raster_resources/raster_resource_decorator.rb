@@ -60,7 +60,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
 
   def rendered_holding_location
     value = holding_location
-    return unless value.present?
+    return if value.blank?
     vocabulary = ControlledVocabulary.for(:holding_location)
     value.map do |holding_location|
       vocabulary.find(holding_location).label
@@ -72,11 +72,11 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
       term = ControlledVocabulary.for(:rights_statement).find(rights_statement)
       next unless term
       h.link_to(term.label, term.value) +
-        h.content_tag("br") +
-        h.content_tag("p") do
+        h.tag.br +
+        h.tag.p do
           term.definition.html_safe
         end +
-        h.content_tag("p") do
+        h.tag.p do
           I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
         end
     end
@@ -88,7 +88,7 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def title
-    return ["#{super.first} (#{portion_note.first})"] unless portion_note.blank?
+    return ["#{super.first} (#{portion_note.first})"] if portion_note.present?
     super
   end
 

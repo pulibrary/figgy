@@ -16,7 +16,7 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data to_csv(@resources, fields: fields.map { |f| [f.to_sym, f] }.to_h),
+        send_data to_csv(@resources, fields: fields.index_by(&:to_sym)),
                   filename: "#{@ephemera_project.title.parameterize}-data-#{Time.zone.today}.csv"
       end
     end
@@ -36,7 +36,7 @@ class ReportsController < ApplicationController
 
   def pulfa_ark_report
     authorize! :show, Report
-    unless params[:since_date].blank?
+    if params[:since_date].present?
       @resources = query_service.custom_queries.updated_archival_resources(since_date: params[:since_date])
     end
 

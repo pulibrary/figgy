@@ -133,11 +133,11 @@ module Numismatics
         term = ControlledVocabulary.for(:rights_statement).find(rights_statement)
         next unless term
         h.link_to(term.label, term.value) +
-          h.content_tag("br") +
-          h.content_tag("p") do
+          h.tag.br +
+          h.tag.p do
             term.definition.html_safe
           end +
-          h.content_tag("p") do
+          h.tag.p do
             I18n.t("works.show.attributes.rights_statement.boilerplate").html_safe
           end
       end

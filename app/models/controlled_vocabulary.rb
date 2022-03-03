@@ -104,7 +104,7 @@ class ControlledVocabulary
     # @param state [String] the state for which the badge should be generated
     # @return [String] the HTML for the Bootstrap badge
     def badge(state)
-      h.content_tag(:span, I18n.t("state.#{state}.label"), class: "label #{dom_label_class(state)}")
+      h.tag.span(I18n.t("state.#{state}.label"), class: "label #{dom_label_class(state)}")
     end
 
     # Retrieves the label for a state using the app. locale

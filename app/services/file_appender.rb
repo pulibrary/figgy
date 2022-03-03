@@ -70,9 +70,9 @@ class FileAppender
     # @param filename [String]
     # @return [String] title
     def coin_image_title(filename)
-      if filename =~ /R/
+      if /R/.match?(filename)
         "Reverse"
-      elsif filename =~ /O/
+      elsif /O/.match?(filename)
         "Obverse"
       else
         filename
@@ -156,7 +156,7 @@ class FileAppender
 
     # Returns a thumbnail id for the parent and a array of file_sets.
     def find_thumbnail_id(file_sets)
-      return unless parent.thumbnail_id.blank?
+      return if parent.thumbnail_id.present?
       file_sets.each do |file_set|
         extension = File.extname(file_set.primary_file.original_filename.first)
         return file_set.id unless no_thumbnail_extensions.include?(extension)

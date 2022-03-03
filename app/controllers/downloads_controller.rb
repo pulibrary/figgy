@@ -41,7 +41,7 @@ class DownloadsController < ApplicationController
     response.headers["Content-Type"] = file_desc.mime_type.first.to_s
     response.headers["Content-Length"] ||= transformed_fgdc.size.to_s
     # Prevent Rack::ETag from calculating a digest over body
-    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT") unless file_desc.updated_at.blank?
+    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT") if file_desc.updated_at.present?
     send_data(transformed_fgdc, filename: load_file.original_name, type: "application/xml", disposition: :inline)
   end
 
@@ -99,7 +99,7 @@ class DownloadsController < ApplicationController
     response.headers["Content-Type"] = file_desc.mime_type.first.to_s
     response.headers["Content-Length"] ||= binary_file.size.to_s
     # Prevent Rack::ETag from calculating a digest over body
-    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT") unless file_desc.updated_at.blank?
+    response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT") if file_desc.updated_at.present?
   end
 
   def query_service

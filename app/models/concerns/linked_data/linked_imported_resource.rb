@@ -10,7 +10,7 @@ module LinkedData
       def imported_jsonld
         return {} unless resource.respond_to?(:primary_imported_metadata)
         return finding_aid_metadata if resource.source_metadata_identifier.present? && RemoteRecord.pulfa?(resource.source_metadata_identifier.first)
-        return {} unless resource.primary_imported_metadata.source_jsonld.present?
+        return {} if resource.primary_imported_metadata.source_jsonld.blank?
         @imported_jsonld ||= JSON.parse(resource.primary_imported_metadata.source_jsonld.first)
       end
 

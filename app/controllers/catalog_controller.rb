@@ -167,7 +167,7 @@ class CatalogController < ApplicationController
   end
 
   def has_search_parameters?
-    !params[:q].nil? || !params[:f].blank? || !params[:search_field].blank?
+    !params[:q].nil? || params[:f].present? || params[:search_field].present?
   end
 
   def resource
@@ -212,7 +212,7 @@ class CatalogController < ApplicationController
       url = polymorphic_url([:manifest, model_name], id: object_id)
       params[:no_redirect] ? render(json: { url: url }) : redirect_to(url)
     else
-      render json: { message: "No manifest found for #{ark}" }, status: 404
+      render json: { message: "No manifest found for #{ark}" }, status: :not_found
     end
   end
 

@@ -30,7 +30,7 @@ class EphemeraBoxChangeSet < ChangeSet
   end
 
   def drive_barcode_valid?
-    return if drive_barcode.nil? || drive_barcode.empty? || Barcode.new(Array.wrap(drive_barcode).first).valid?
+    return if drive_barcode.blank? || Barcode.new(Array.wrap(drive_barcode).first).valid?
     errors.add(:drive_barcode, "has an invalid checkdigit")
   end
 

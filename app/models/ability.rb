@@ -108,7 +108,7 @@ class Ability
 
   # Geo thumbnails are always downloadable
   def geo_thumbnail?(resource)
-    return true if /thumbnail/ =~ resource.original_name
+    return true if /thumbnail/.match?(resource.original_name)
     false
   end
 

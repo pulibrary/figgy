@@ -51,7 +51,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
 
   def cloud_fixity_events_for(file_id)
     preservation_id = preservation_id_of(file_id)
-    return [] unless preservation_id.present?
+    return [] if preservation_id.blank?
     custom_queries.find_by_property(property: :child_id, value: preservation_id)
   end
 

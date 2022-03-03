@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.6.5-node-browsers
+      - image: circleci/ruby:2.7.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -19,7 +19,7 @@ jobs:
       - checkout
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libopenjp2-tools libopenjp2-7 lsof
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo libopenjp2-tools libopenjp2-7 lsof python3-pip python-is-python3
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_vips_install.sh
@@ -41,7 +41,7 @@ jobs:
         name: Restore bundle cache
         key: figgy-{{ checksum "Gemfile.lock" }}
       # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      - run: rm vendor/bundle/ruby/2.7.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
       - run: gem install bundler -v '2.2.14'
       # Bundle install dependencies
@@ -74,7 +74,7 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.6.5-node-browsers
+      - image: circleci/ruby:2.7.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -104,7 +104,7 @@ jobs:
             sudo apt-get -y install google-chrome-stable
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client libopenjp2-tools libopenjp2-7 ocrmypdf lsof python3-pip
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client libopenjp2-tools libopenjp2-7 ocrmypdf lsof python3-pip python-is-python3
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_vips_install.sh
@@ -127,7 +127,7 @@ jobs:
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      - run: rm vendor/bundle/ruby/2.7.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
       - run: gem install bundler -v '2.2.14'
       # Bundle install dependencies
@@ -163,7 +163,7 @@ jobs:
   coverage_report:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.6.5-node-browsers
+      - image: circleci/ruby:2.7.5-node-browsers
     steps:
       - attach_workspace:
           at: '~/figgy'
@@ -179,7 +179,7 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.6.5-node-browsers
+      - image: circleci/ruby:2.7.5-node-browsers
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -190,7 +190,7 @@ jobs:
           at: '~/figgy'
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo lsof
+      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo lsof python-is-python3
       - run: sudo sh bin/ci_simple_tiles_install.sh
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_vips_install.sh
@@ -208,7 +208,7 @@ jobs:
           name: Check current version of node
           command: node -v
       # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.6.0/specifications/simpler-tiles-0.3.1.gemspec || true
+      - run: rm vendor/bundle/ruby/2.7.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
       - run: gem install bundler -v '2.2.14'
       # Bundle install dependencies

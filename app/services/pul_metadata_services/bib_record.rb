@@ -277,7 +277,7 @@ module PulMetadataServices
         d = data["008"].value[7, 4]
         d = d.tr "u", "0" unless d == "uuuu"
         d = d.tr " ", "0" unless d == "    "
-        d if d =~ /^[0-9]{4}$/
+        d if /^[0-9]{4}$/.match?(d)
       end
 
       def determine_primary_title_field

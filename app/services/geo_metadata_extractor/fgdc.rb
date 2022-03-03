@@ -72,9 +72,9 @@ class GeoMetadataExtractor
 
     def keywords
       keywords = extract_multivalued("//idinfo/keywords/theme/themekey")
-      keywords.map! { |k| TOPIC_CATEGORIES[k.to_sym].present? ? TOPIC_CATEGORIES[k.to_sym] : k }
+      keywords.map! { |k| TOPIC_CATEGORIES[k.to_sym].presence || k }
       keywords.uniq!
-      keywords.present? ? keywords : nil
+      keywords.presence
     end
 
     # ISO 19115 Topic Category
@@ -107,7 +107,7 @@ class GeoMetadataExtractor
           values << node.text.strip
         end
         values.uniq!
-        values.present? ? values : nil
+        values.presence
       end
   end
 end

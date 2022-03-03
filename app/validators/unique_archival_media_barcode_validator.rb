@@ -28,7 +28,7 @@ class UniqueArchivalMediaBarcodeValidator < ActiveModel::Validator
 
       def files_to_import
         # might be nil (in tests) or "" (coming from form)
-        return [] unless record.bag_path.present?
+        return [] if record.bag_path.blank?
         bag.barcodes
       end
 

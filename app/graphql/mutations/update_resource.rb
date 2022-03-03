@@ -48,7 +48,7 @@ class Mutations::UpdateResource < Mutations::BaseMutation
   end
 
   def valid_member_ids?(change_set, attributes)
-    return true unless attributes[:member_ids].present?
+    return true if attributes[:member_ids].blank?
     change_set_ids = change_set.resource.member_ids.map(&:to_s)
     member_ids = attributes[:member_ids].map(&:to_s)
     return true if change_set_ids.sort == member_ids.sort

@@ -378,7 +378,7 @@ RSpec.describe BulkIngestController do
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
-      resource = resources.select { |res| res.member_ids.length == 2 }.first
+      resource = resources.find { |res| res.member_ids.length == 2 }
       expect(resource.source_metadata_identifier).to eq ["AC044_c0003"]
       expect(resource.member_ids.length).to eq(2)
       expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
@@ -431,7 +431,7 @@ RSpec.describe BulkIngestController do
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 3
-      resource = resources.select { |res| res.member_ids.length == 2 }.first
+      resource = resources.find { |res| res.member_ids.length == 2 }
       expect(resource.source_metadata_identifier).to eq ["123456"]
       expect(resource.member_ids.length).to eq(2)
       expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
