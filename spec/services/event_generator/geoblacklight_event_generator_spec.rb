@@ -2,12 +2,13 @@
 require "rails_helper"
 
 RSpec.describe EventGenerator::GeoblacklightEventGenerator do
-  subject(:event_generator) { described_class.new(rabbit_connection) }
-  let(:rabbit_connection) { instance_double(GeoblacklightMessagingClient, publish: true) }
+  subject(:event_generator) { described_class.new }
   let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
   let(:record) { FactoryBot.create_for_repository(:complete_scanned_map, coverage: coverage) }
 
-  it_behaves_like "an EventGenerator"
+  before do
+    allow(PulmapPublishingJob).to receive(:perform_later)
+  end
 
   describe "#record_deleted" do
     it "publishes a persistent JSON delete message with the geoblacklight slug as the id" do
@@ -20,14 +21,14 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
       event_generator.record_deleted(record)
 
-      expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+      expect(PulmapPublishingJob).to have_received(:perform_later).with(expected_result)
     end
   end
 
   describe "#record_updated" do
     context "with a record in a completed state" do
       it "publishes a persistent JSON updated message with geoblacklight document" do
-        gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
+        gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new).to_json
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
@@ -37,7 +38,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
         event_generator.record_updated(record)
 
-        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+        expect(PulmapPublishingJob).to have_received(:perform_later).with(expected_result)
       end
     end
     context "with a record updated as part of a bulk  operation" do
@@ -46,7 +47,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
       end
 
       it "publishes a persistent JSON updated message with a bulk flag set to true" do
-        gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
+        gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new).to_json
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
@@ -56,7 +57,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
         event_generator.record_updated(record)
 
-        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+        expect(PulmapPublishingJob).to have_received(:perform_later).with(expected_result)
       end
     end
     context "with a record in a takedown state" do
@@ -72,7 +73,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
         event_generator.record_updated(record)
 
-        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+        expect(PulmapPublishingJob).to have_received(:perform_later).with(expected_result)
       end
     end
 
@@ -82,7 +83,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
       it "does not publish a JSON message" do
         event_generator.record_updated(record)
 
-        expect(rabbit_connection).not_to have_received(:publish)
+        expect(PulmapPublishingJob).not_to have_received(:perform_later)
       end
     end
   end
@@ -90,7 +91,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
   describe "#record_member_updated" do
     context "with a record in a completed state" do
       it "publishes a persistent JSON updated message with geoblacklight document" do
-        gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new)
+        gbl_doc = GeoDiscovery::DocumentBuilder.new(record, GeoDiscovery::GeoblacklightDocument.new).to_json
         expected_result = {
           "id" => record.id.to_s,
           "event" => "UPDATED",
@@ -100,7 +101,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
         event_generator.record_member_updated(record)
 
-        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+        expect(PulmapPublishingJob).to have_received(:perform_later).with(expected_result)
       end
     end
 
@@ -117,7 +118,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
 
         event_generator.record_member_updated(record)
 
-        expect(rabbit_connection).to have_received(:publish).with(expected_result.to_json)
+        expect(PulmapPublishingJob).to have_received(:perform_later).with(expected_result)
       end
     end
 
@@ -127,7 +128,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
       it "does not publish a JSON message" do
         event_generator.record_member_updated(record)
 
-        expect(rabbit_connection).not_to have_received(:publish)
+        expect(PulmapPublishingJob).not_to have_received(:perform_later)
       end
     end
   end

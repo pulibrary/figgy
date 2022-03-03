@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 class EventGenerator
   class GeoblacklightEventGenerator
-    attr_reader :rabbit_exchange
-
-    def initialize(rabbit_exchange)
-      @rabbit_exchange = rabbit_exchange
-    end
-
     def derivatives_created(record); end
 
     def derivatives_deleted(record); end
@@ -45,11 +39,11 @@ class EventGenerator
     private
 
       def publish_message(message)
-        rabbit_exchange.publish(message.to_json)
+        PulmapPublishingJob.perform_later(message)
       end
 
       def message(type, record)
-        base_message(type, record).merge("doc" => document_generator(record))
+        base_message(type, record).merge("doc" => document_generator(record).to_json)
       end
 
       def delete_message(type, record)

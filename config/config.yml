@@ -103,7 +103,6 @@ defaults: &defaults
     server: 'amqp://localhost:5672'
     exchange:
       figgy: "figgy_events"
-      geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
       orangelight: "orangelight_events"
   vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://figgy.princeton.edu/ns/') %>
@@ -218,6 +217,8 @@ defaults: &defaults
       workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
   tileserver:
     url: <%= ENV['TILESERVER_URL'] %>
+  pulmap_solr:
+    url: <%= ENV['PULMAP_SOLR_URL'] %>
   characterization:
     imagemagick:
       supported_mime_types:
@@ -293,7 +294,6 @@ production:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
       figgy: "figgy_events"
-      geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
       orangelight: "orangelight_events"
 
@@ -312,7 +312,6 @@ staging:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
       figgy: "figgy_events"
-      geoblacklight: "gbl_events"
       geoserver: "geoserver_events"
       orangelight: "orangelight_events"
   geoserver:

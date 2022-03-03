@@ -8,10 +8,6 @@ module Figgy
     @messaging_client ||= MessagingClient.new(Figgy.config["events"]["server"])
   end
 
-  def geoblacklight_messaging_client
-    @geoblacklight_messaging_client ||= GeoblacklightMessagingClient.new(Figgy.config["events"]["server"])
-  end
-
   def geoserver_messaging_client
     @geoserver_messaging_client ||= GeoserverMessagingClient.new(Figgy.config["events"]["server"])
   end
@@ -55,6 +51,6 @@ module Figgy
       all_environment_config[Rails.env]
     end
 
-    module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :geoserver_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
+    module_function :config, :config_yaml, :messaging_client, :geoserver_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
     module_function :global_protect_ips, :all_environment_config, :index_read_only?
 end
