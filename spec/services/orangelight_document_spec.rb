@@ -168,7 +168,7 @@ describe OrangelightDocument do
         expect(output[:issue_obverse_legend_s]).to eq ["GEORGIUS•DEI•GRATIA•REX•"]
         expect(output[:issue_obverse_attributes_s]).to eq ["attribute name, attribute description"]
         expect(output[:issue_reverse_symbol_s]).to eq ["goat head"]
-        expect(output[:issue_reverse_description_s]).to eq "Emperor and Virgin, seated, right, Harp at left side, 5 strings."
+        expect(output[:issue_reverse_description_s]).to eq "Emperor and Virgin, seated, left, Harp at right side, 11 strings. Right arm holding up a palm-branch"
         expect(output[:issue_reverse_part_s]).to eq ["seated"]
         expect(output[:issue_reverse_orientation_s]).to eq ["left"]
         expect(output[:issue_reverse_figure_description_s]).to eq ["Harp at right side, 11 strings. Right arm holding up a palm-branch"]

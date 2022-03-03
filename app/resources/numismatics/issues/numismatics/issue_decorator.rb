@@ -164,7 +164,7 @@ module Numismatics
     end
 
     def reverse_description
-      [initial_capital(reverse_figure), reverse_part, obverse_orientation, obverse_figure_description].select(&:present?).join(", ")
+      [initial_capital(reverse_figure), reverse_part, reverse_orientation, reverse_figure_description].select(&:present?).join(", ")
     end
   end
 end
