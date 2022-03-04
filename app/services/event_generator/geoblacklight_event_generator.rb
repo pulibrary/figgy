@@ -29,10 +29,10 @@ class EventGenerator
     end
 
     def valid?(record)
-      # return false if record.is_a?(FileSet)
-      # return false unless record.try(:geo_resource?)
-      # return false if errors?(record)
-      #
+      return false if record.is_a?(FileSet)
+      return false unless record.try(:geo_resource?)
+      return false if errors?(record)
+
       true
     end
 
@@ -43,7 +43,7 @@ class EventGenerator
       end
 
       def message(type, record)
-        base_message(type, record).merge("doc" => document_generator(record).to_json)
+        base_message(type, record).merge("doc" => document_generator(record).to_hash)
       end
 
       def delete_message(type, record)
