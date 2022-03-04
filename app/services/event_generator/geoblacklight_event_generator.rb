@@ -29,10 +29,10 @@ class EventGenerator
     end
 
     def valid?(record)
-      return false if record.is_a?(FileSet)
-      return false unless record.try(:geo_resource?)
-      return false if errors?(record)
-
+      # return false if record.is_a?(FileSet)
+      # return false unless record.try(:geo_resource?)
+      # return false if errors?(record)
+      #
       true
     end
 
