@@ -234,6 +234,17 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
     render_views
 
+    it "renders a collection field when there are collections with RDF::Literal titles" do
+      # Create 3 collections to force sort by title.
+      FactoryBot.create(:collection, title: RDF::Literal("Test", language: "fr"))
+      FactoryBot.create(:collection, title: RDF::Literal("Test2", language: "fr"))
+      FactoryBot.create(:collection, title: "Test3")
+
+      get :edit, params: { id: scanned_resource.id.to_s }
+
+      expect(response.body).to have_select "Collections", name: "scanned_resource[member_of_collection_ids][]"
+    end
+
     it "does not render a collections form field" do
       get :edit, params: { id: scanned_resource.id.to_s }
 
