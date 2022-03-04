@@ -8,8 +8,6 @@ class GeoblacklightEventProcessor
                    headers: { 'Content-Type' => 'application/json' }
       index.commit unless bulk?
       true
-    rescue RSolr::Error::Http
-      false
     end
   end
 end

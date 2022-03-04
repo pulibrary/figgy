@@ -26,7 +26,7 @@ class GeoblacklightEventProcessor
       end
 
       def index
-        @index ||= RSolr.connect(url: Figgy.config["pulmap_solr"][:url])
+        @index ||= RSolr.connect(url: "http://lib-solr8-staging.princeton.edu:8983/solr/pulmap-staging")
       end
   end
 end
