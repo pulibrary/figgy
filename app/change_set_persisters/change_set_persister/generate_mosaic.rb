@@ -11,7 +11,7 @@ class ChangeSetPersister
     def run
       return unless mosaic?(post_save_resource)
       return unless published?(change_set)
-      MosaicJob.perform_later(post_save_resource)
+      MosaicJob.perform_later(post_save_resource.id.to_s)
       change_set
     end
 

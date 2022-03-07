@@ -45,7 +45,7 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
         change_set.validate(state: "complete")
         change_set_persister.save(change_set: change_set)
 
-        expect(MosaicJob).to have_received(:perform_later)
+        expect(MosaicJob).to have_received(:perform_later).with(raster_set.id.to_s)
       end
     end
 
