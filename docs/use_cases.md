@@ -42,6 +42,10 @@ indicate values to be filled in, square brackets represent optional values)
       - 💿 Princeton_\<MMSID\>\_f\<sheet
       number\>\<r/v\>\[x/y/z\]\_###\<N/R/G\>\_\<shot_number\>\_\<R/F\>.tif
       (### is wavelength, N/R/G represent filter - none, red, or green)
+      - 💿 Princeton_\<MMSID\>\_f\<sheet number\>\<r/v\>\[x/y/z\].json (JSON
+        file describing all the images' technical metadata.)
+        (This file will be stored but not parsed - all the technical metadata is
+        duplicated either in the filename or the EXIF metadata of the image.)
 
 For more on the meaning of the filename see the contractor's
 [README](https://docs.google.com/document/d/1rjVgnUizdSrR1EsxaTV5RyHIOEWyUze8kjyS9ICPkyM/edit?usp=sharing)
@@ -50,6 +54,8 @@ These resources are ingested via bulk ingest or "Save and Ingest" and results in
 a multi-volume work resource with one volume per "page" and 25 images per side
 of page. If the resource is already digitized then the catalog will have two
 viewers - one for the multispectral images and one for the resource as a whole.
+The filename at ingest must be preserved in perpetuity, even if the label
+changes in the future, as it acts as technical metadata.
 
 When viewers support "non-paged" IIIF hints such that we can interleave normal
 page scans with multispectral scans we hope to combine these resources for a
