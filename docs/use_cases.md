@@ -57,6 +57,8 @@ viewers - one for the multispectral images and one for the resource as a whole.
 The filename at ingest must be preserved in perpetuity, even if the label
 changes in the future, as it acts as technical metadata.
 
-When viewers support "non-paged" IIIF hints such that we can interleave normal
+When viewers support
+["non-paged"](https://preview.iiif.io/cookbook/3333-choice/recipe/0035-foldouts/) IIIF hints or
+["choice"](https://preview.iiif.io/cookbook/3333-choice/recipe/0033-choice/) such that we can interleave normal
 page scans with multispectral scans we hope to combine these resources for a
 better experience.
