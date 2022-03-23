@@ -22,18 +22,4 @@ namespace :figgy do
     end
     VoyagerUpdater::EventStream.new("https://bibdata.princeton.edu/events.json").process!
   end
-
-  namespace :refresh do
-    namespace :finding_aids do
-      desc "updates remote metadata from finding aids changed yesterday"
-      task yesterday: :environment do
-        FindingAidsUpdater.new(logger: Logger.new(STDOUT)).yesterday
-      end
-
-      desc "updates remote metadata from all finding aids"
-      task all: :environment do
-        FindingAidsUpdater.new(logger: Logger.new(STDOUT)).all
-      end
-    end
-  end
 end
