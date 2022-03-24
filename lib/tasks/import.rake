@@ -31,7 +31,7 @@ namespace :figgy do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
       user = User.all.find(&:admin?) unless user
 
-      abort "usage: rake import:json FILE=/path/to/file.json [USER=person]" unless file && File.file?(file)
+      abort "usage: rake import:json FILE=/path/to/file.json [USER=person]" unless file_path && File.file?(file_path)
 
       @logger = Logger.new(STDOUT)
       @logger.info "ingesting #{file_path} as: #{user.user_key} (override with USER=foo)"
@@ -39,7 +39,7 @@ namespace :figgy do
       class_name = "ScannedResource"
       filters = [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
 
-      data = JSON.parse(File.read(file))
+      data = JSON.parse(File.read(file_path))
       logger.info "ingesting #{data['records'].length} records"
       data["records"].each do |record|
         attrs = record.map { |k, v| [k.to_sym, v] }.to_h
