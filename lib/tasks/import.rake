@@ -28,33 +28,14 @@ namespace :figgy do
     desc "Ingest a JSON file."
     task json: :environment do
       file_path = ENV["FILE"]
-      user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
-      user = User.all.find(&:admin?) unless user
 
-      abort "usage: rake import:json FILE=/path/to/file.json [USER=person]" unless file_path && File.file?(file_path)
+      abort "usage: rake import:json FILE=/path/to/file.json" unless file_path && File.file?(file_path)
 
       @logger = Logger.new(STDOUT)
-      @logger.info "ingesting #{file_path} as: #{user.user_key} (override with USER=foo)"
+      @logger.info "ingesting #{file_path}"
 
-      class_name = "ScannedResource"
-      filters = [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
-
-      data = JSON.parse(File.read(file_path))
-      logger.info "ingesting #{data['records'].length} records"
-      data["records"].each do |record|
-        attrs = record.map { |k, v| [k.to_sym, v] }.to_h
-        dir = attrs.delete(:path)
-        colls = Array(attrs.delete(:member_of_collection_ids))
-        logger.info "ingesting #{attrs[:title]}"
-        IngestFolderJob.perform_now(
-          directory: dir,
-          class_name: class_name,
-          member_of_collection_ids: colls,
-          file_filters: filters,
-          **attrs
-        )
-        logger.info "done ingesting #{attrs[:title]}"
-      end
+      ingester = JsonIngester.new(json_path: file_path, logger: @logger)
+      ingester.ingest!
     end
   end
 end
