@@ -1,0 +1,28 @@
+{
+  "records": [
+    {
+      "title": "Princeton Plasma Physics Laboratory Highlights for Fiscal Year 2007",
+      "local_identifier": "07Highlights",
+      "path": "/mnt/hydra_sources/ingest_scratch/pppl_technical_reports/staged/07Highlights",
+      "creator": [
+        ""
+      ],
+      "member_of_collection_ids": [
+        "e6080f72-4ba5-4e35-a87d-9a4eb826d0e3"
+      ]
+    },
+    {
+      "title": "Annual Site Environmental Report - 2018",
+      "local_identifier": "PPPL-2019_191",
+      "path": "/mnt/hydra_sources/ingest_scratch/pppl_technical_reports/staged/PPPL-2019_191",
+      "creator": [
+        "M. Hughes",
+        "R. Sheneman",
+        "J. Levine"
+      ],
+      "member_of_collection_ids": [
+        "e6080f72-4ba5-4e35-a87d-9a4eb826d0e3"
+      ]
+    }
+  ]
+}
