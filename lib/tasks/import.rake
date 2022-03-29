@@ -24,5 +24,18 @@ namespace :figgy do
 
       IngestMETSJob.set(queue: :low).perform_later(file, user, import_mods)
     end
+
+    desc "Ingest a JSON file."
+    task json: :environment do
+      file_path = ENV["FILE"]
+
+      abort "usage: rake import:json FILE=/path/to/file.json" unless file_path && File.file?(file_path)
+
+      @logger = Logger.new(STDOUT)
+      @logger.info "ingesting #{file_path}"
+
+      ingester = JsonIngester.new(json_path: file_path, logger: @logger)
+      ingester.ingest!
+    end
   end
 end
