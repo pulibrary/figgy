@@ -200,8 +200,11 @@ class BulkIngestService
           mime_type = mime_type(basename)
           title = if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
                     basename
-                  elsif raster_resource_parent?
-                    basename
+                  # Add cropped title if there's cropped/uncropped
+                  elsif cropped_title?(basename, file_paths)
+                    "#{parent_resource.title.first} (Cropped)"
+                  elsif raster_resource_parent? || scanned_map_parent?
+                    parent_resource.title.map(&:to_s)
                   else
                     (idx + 1).to_s
                   end
@@ -220,6 +223,10 @@ class BulkIngestService
         nodes
       end
 
+      def cropped_title?(basename, file_paths)
+        raster_resource_parent? && mosaic_service_target?(basename) && file_paths.size > 1
+      end
+
       def mime_type(basename)
         mime_types = MIME::Types.type_for(basename)
         # New mime-types gem prefers audio/wav, but all our code is set up for
@@ -228,6 +235,10 @@ class BulkIngestService
           preserved_file_name_mime_types.include?(mime_type.to_s)
         end
         preferred_mime_type || mime_types.first
+      end
+
+      def scanned_map_parent?
+        parent_resource.is_a?(ScannedMap)
       end
 
       def raster_resource_parent?

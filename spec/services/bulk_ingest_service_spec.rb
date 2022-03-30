@@ -223,6 +223,8 @@ RSpec.describe BulkIngestService do
 
         expect(sheet1_children.map(&:class)).to eq [FileSet]
         expect(sheet2_children.map(&:class)).to eq [FileSet]
+        expect(sheet1_children.first.title).to eq ["sheet1"]
+        expect(sheet2_children.first.title).to eq ["sheet2"]
 
         expect(sheet1_children.first.service_targets).to eq ["tiles"]
         expect(sheet2_children.first.service_targets).to eq ["tiles"]
@@ -250,18 +252,21 @@ RSpec.describe BulkIngestService do
 
         expect(sheet1_children.map(&:class)).to eq [RasterResource, FileSet]
         expect(sheet2_children.map(&:class)).to eq [RasterResource, FileSet]
+        # Name sheets after folders so they appear named right in the viewer.
+        expect(sheet1_children.last.title.first).to start_with "Earth rites"
+        expect(sheet2_children.last.title).to eq ["Sheet2"]
 
         sheet1_raster_children = Wayfinder.for(sheet1_children.first).members
         sheet2_raster_children = Wayfinder.for(sheet2_children.first).members
 
         expect(sheet1_raster_children.map(&:class)).to eq [FileSet, FileSet]
-        expect(sheet1_raster_children.first.title).to eq ["sheet1.tif"]
-        expect(sheet1_raster_children.last.title).to eq ["sheet1_cropped.tif"]
+        expect(sheet1_raster_children.first.title).to eq ["Raster"]
+        expect(sheet1_raster_children.last.title).to eq ["Raster (Cropped)"]
         expect(sheet1_raster_children.last.service_targets).to eq ["tiles"]
         expect(sheet1_raster_children.first.service_targets).to eq []
         expect(sheet2_raster_children.map(&:class)).to eq [FileSet, FileSet]
-        expect(sheet2_raster_children.first.title).to eq ["sheet2.tif"]
-        expect(sheet2_raster_children.last.title).to eq ["sheet2_cropped.tif"]
+        expect(sheet2_raster_children.first.title).to eq ["Raster"]
+        expect(sheet2_raster_children.last.title).to eq ["Raster (Cropped)"]
         expect(sheet2_raster_children.last.service_targets).to eq ["tiles"]
         expect(sheet1_raster_children.first.service_targets).to eq []
       end
