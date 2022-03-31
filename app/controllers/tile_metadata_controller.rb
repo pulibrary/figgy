@@ -7,6 +7,15 @@ class TileMetadataController < ApplicationController
   # you pass the id for a MapSet that has no RasterResource grandchildren.
   rescue_from TileMetadataService::Error, with: :not_found
 
+  def tilejson
+    tilejson_path = TilePath.new(find_resource(params[:id])).tilejson
+    if tilejson_path
+      redirect_to tilejson_path
+    else
+      not_found
+    end
+  end
+
   def metadata
     mosaic_path = cached_mosaic_path
     if mosaic_path
