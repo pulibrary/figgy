@@ -26,6 +26,7 @@ class FileSet < Resource
            :camera_model,
            :software,
            :geometry,
+           :bounds,
            :run_fixity,
            :processing_note,
            :error_message,

@@ -13,6 +13,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :camera_model,
           :software,
           :geometry,
+          :bounds,
           :processing_note,
           :barcode,
           :part,
@@ -61,5 +62,11 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
 
   def preservation_binaries
     preservation_objects.first&.binary_nodes || []
+  end
+
+  def bounds
+    coords= super&.first
+    return unless coords
+    "North: #{coords[:north]}, East: #{coords[:east]}, South: #{coords[:south]}, West: #{coords[:west]}"
   end
 end

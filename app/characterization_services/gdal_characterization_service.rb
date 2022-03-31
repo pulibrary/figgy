@@ -96,6 +96,7 @@ class GdalCharacterizationService
     # @return [Hash]
     def file_characterization_attributes
       {
+        bounds: info_service.bounds,
         mime_type: mime_type
       }
     end

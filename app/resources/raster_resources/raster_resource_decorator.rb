@@ -49,9 +49,27 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     false
   end
 
+  def coverage
+    Array.wrap(super).first ||
+      coverage_from_file_set ||
+      imported_metadata.try(:first).try(:coverage) ||
+      coverage_from_parent
+  end
+
+  def coverage_from_parent
+    parent = parents.first
+    return unless parent
+    parent.decorate.coverage
+  end
+
+  def coverage_from_file_set
+    bounds = geo_members&.first&.bounds&.first
+    return unless bounds
+    GeoCoverage.new(bounds[:north], bounds[:east], bounds[:south], bounds[:west]).to_s
+  end
+
   def rendered_coverage
-    display_coverage = Array.wrap(coverage).first || imported_metadata.try(:first).try(:coverage)
-    h.bbox_display(display_coverage)
+    h.bbox_display(coverage)
   end
 
   def rendered_holding_location
