@@ -48,8 +48,8 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def coverage
-    Array.wrap(super).first ||
-      imported_metadata.try(:first).try(:coverage) ||
+    super&.first ||
+      imported_metadata&.first&.coverage&.first ||
       coverage_from_parent
   end
 

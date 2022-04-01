@@ -69,7 +69,7 @@ FactoryBot.define do
     end
 
     factory :raster_set do
-      state "pending"
+      state "complete"
       after(:build) do |resource, _evaluator|
         resource.member_ids ||= []
         resource.member_ids += [
