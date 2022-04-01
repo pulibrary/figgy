@@ -6,7 +6,6 @@ class MosaicJob < ApplicationJob
 
   def perform(resource_id)
     resource = query_service.find_by(id: Valkyrie::ID.new(resource_id))
-    return unless resource.decorate.raster_set?
     TileMetadataService.new(resource: resource).path
   end
 
