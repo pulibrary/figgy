@@ -50,9 +50,9 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
   end
 
   def coverage
-    Array.wrap(super).first ||
+    super&.first ||
       coverage_from_file_set ||
-      imported_metadata.try(:first).try(:coverage) ||
+      imported_metadata&.first&.coverage&.first ||
       coverage_from_parent
   end
 
