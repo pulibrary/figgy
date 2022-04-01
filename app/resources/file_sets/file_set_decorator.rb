@@ -65,7 +65,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   end
 
   def bounds
-    coords= super&.first
+    coords = super&.first
     return unless coords
     "North: #{coords[:north]}, East: #{coords[:east]}, South: #{coords[:south]}, West: #{coords[:west]}"
   end

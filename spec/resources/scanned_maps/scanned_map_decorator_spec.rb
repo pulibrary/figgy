@@ -161,4 +161,57 @@ RSpec.describe ScannedMapDecorator do
       expect(decorator.gbl_suppressed_override).to eq "False"
     end
   end
+
+  describe "#coverage" do
+    let(:coverage) { "northlimit=10.0; eastlimit=15.0; southlimit=1.0; westlimit=5.0; units=degrees; projection=EPSG:4326" }
+
+    context "with non-imported and imported coverage" do
+      let(:resource) do
+        FactoryBot.build(:scanned_map,
+                        title: "test title",
+                        coverage: coverage,
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      it "returns the non-imported coverage" do
+        expect(decorator.coverage).to eq(coverage)
+      end
+    end
+
+    context "with imported coverage" do
+      let(:resource) do
+        FactoryBot.build(:scanned_map,
+                        title: "test title",
+                        coverage: [],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      it "returns the imported coverage" do
+        expect(decorator.coverage).to eq(imported_coverage)
+      end
+    end
+
+    context "with no non-imported or imported coverage" do
+      let(:parent) do
+        FactoryBot.create_for_repository(
+          :map_set,
+          title: "test title",
+          coverage: [],
+          imported_metadata: [{
+            coverage: imported_coverage
+          }]
+        )
+      end
+
+      let(:resource) { parent.decorate.members.first }
+
+      it "returns the coverage from the parent" do
+        expect(decorator.coverage).to eq(imported_coverage)
+      end
+    end
+  end
 end
