@@ -105,10 +105,8 @@ en:
         rendered_manifest_url:
           label: "IIIF Manifest URL"
         rights_statement:
-          pdf_boilerplate: |
-            Princeton University Library claims no copyright governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately.
           boilerplate: |
-            Princeton University Library claims no copyright governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately. We request that users reproducing this resource cite it according to the guidelines described at <a href="https://library.princeton.edu/special-collections/policies/forms-citation" >https://library.princeton.edu/special-collections/policies/forms-citation</a>.
+            Princeton University Library claims no copyright or license governing this digital resource. It is provided for free, on a non-commercial, open-access basis, for fair-use academic and research purposes only. Anyone who claims copyright over any part of these resources and feels that they should not be presented in this manner is invited to contact Princeton University Library, who will in turn consider such concerns and make every effort to respond appropriately. We request that users reproducing this resource cite it according to the guidelines described at <a href="https://library.princeton.edu/special-collections/policies/forms-citation">https://library.princeton.edu/special-collections/policies/forms-citation</a>.
         weight:
           label: "Weight (g)"
         size:
