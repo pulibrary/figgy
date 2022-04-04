@@ -86,6 +86,9 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
       expect(refs["http://schema.org/url"]).to be nil
+
+      # Rights
+      expect(document["rights_statement_s"]).to eq geo_work.decorate.rendered_rights_statement.first
     end
   end
 

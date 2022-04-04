@@ -62,7 +62,8 @@ module GeoDiscovery
           dct_issued_dt: issued,
           suppressed_b: suppressed,
           dc_source_sm: source,
-          call_number_s: call_number
+          call_number_s: call_number,
+          rights_statement_s: rendered_rights_statement
         }
       end
       # rubocop:enable Metrics/LineLength, Metrics/AbcSize
