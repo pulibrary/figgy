@@ -1,7 +1,35 @@
 import UVManager from 'viewer/uv_manager'
 import jQ from 'jquery'
+import LeafletViewer from 'viewer/leaflet_viewer'
 jest.mock('viewer/cdl_timer')
+jest.mock('viewer/leaflet_viewer')
 describe('UVManager', () => {
+  const initialHTML =
+    '<h1 id="title" class="lux-heading h1" style="display: none;"></h1>' +
+    '<div class="container--tabs">' +
+        '<section class="row">' +
+        '<ul class="nav nav-tabs" id="tab-container">' +
+        '<li class="active"><a href="#tab-1">Default</a></li>' +
+        '<li id="map-tab" class=""><a href="#map-tab-content">Map</a></li>' +
+        '</ul>' +
+        '<div class="tab-content">' +
+        '<div id="tab-1" class="tab-pane active">' +
+        '<div id="view" class="document-viewers widget-list">' +
+        '<div class="intrinsic-container intrinsic-container-16x9" id="viewer-container">' +
+        '<div id="uv" class="uv"></div>' +
+        '</div>' +
+        '</div>' +
+        '</div> ' +
+        '<div id="map-tab-content" class="tab-pane" data-tilemetadata="https://localhost:3000/tilemetadata">' +
+        '<div class="document-viewers widget-list">' +
+        '<div class="intrinsic-container intrinsic-container-16x9" id="viewer-container">' +
+        '<div id="leaflet" class="leaflet"></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</section>' +
+    '</div>'
   afterEach(() => {
     if (global.$ !== undefined) {
       global.$.mockClear()
@@ -16,7 +44,7 @@ describe('UVManager', () => {
   })
   function buildMocks (status) {
     // Mock jQuery
-    const clickable = { click: () => clickable, on: () => clickable, is: () => clickable, outerHeight: () => clickable, width: () => clickable, height: () => clickable, hide: () => clickable, show: () => clickable }
+    const clickable = { click: () => clickable, on: () => clickable, is: () => clickable, outerHeight: () => clickable, width: () => clickable, height: () => clickable, hide: () => clickable, show: () => clickable, children: () => clickable }
     global.$ = jest.fn().mockImplementation(() => clickable)
 
     // Mock $.ajax
@@ -40,12 +68,14 @@ describe('UVManager', () => {
 
   describe('initialize', () => {
     it('redirects to viewer auth if the manifest 401s', async () => {
+      document.body.innerHTML = initialHTML
       buildMocks(401)
 
       // Initialize
       const uvManager = new UVManager()
       await uvManager.initialize()
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
+      expect(LeafletViewer).not.toHaveBeenCalled()
     })
   })
 })

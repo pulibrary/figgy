@@ -12,6 +12,24 @@ RSpec.describe TileMetadataController, type: :controller do
     FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
   end
 
+  describe "#tilejson" do
+    with_queue_adapter :inline
+    it "redirects to the tilejson URL" do
+      raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+
+      get :tilejson, params: { id: raster_set.id, format: :json }
+
+      expect(response).to redirect_to "https://map-tiles-test.example.com/mosaicjson/tilejson.json?id=#{raster_set.id.to_s.tr('-', '')}"
+    end
+    it "returns not_found if not given a mosaic" do
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+
+      get :tilejson, params: { id: scanned_resource.id, format: :json }
+
+      expect(response.status).to eq 404
+    end
+  end
+
   describe "#metadata" do
     let(:query_service) { ChangeSetPersister.default.query_service }
 

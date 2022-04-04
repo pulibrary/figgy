@@ -235,6 +235,9 @@ development:
   ocr_out_path: <%= Rails.root.join("tmp", "ocr_out") %>
   repository_path: <%= Rails.root.join("tmp", "more_files") %>
   pyramidals_bucket: <%= ENV["FIGGY_PYRAMIDALS_BUCKET"] %>
+  cloud_geo_bucket: "figgy-geo-staging"
+  tileserver:
+    url: "https://map-tiles-staging.princeton.edu"
 
 test:
   <<: *defaults

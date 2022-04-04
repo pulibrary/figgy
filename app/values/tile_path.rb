@@ -8,7 +8,13 @@ class TilePath
 
   def tilejson
     return unless valid?
-    "#{tileserver}/#{endpoint}/tilejson.json?id=#{id}"
+    # Our tile service doesn't know how to resolve IDs for development, so just
+    # put the direct URL to S3 here.
+    if Rails.env.development?
+      "#{tileserver}/#{endpoint}/tilejson.json?url=#{TileMetadataService.new(resource: resource).path}"
+    else
+      "#{tileserver}/#{endpoint}/tilejson.json?id=#{id}"
+    end
   end
 
   def wmts

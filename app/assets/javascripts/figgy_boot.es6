@@ -14,7 +14,6 @@ import MemberResourcesTables from "relationships/member_resources_table"
 import ParentResourcesTables from "relationships/parent_resources_table"
 import BulkLabeler from "bulk_labeler/bulk_label"
 import BoundingBoxSelector from "bounding_box_selector"
-import LeafletTileViewer from "leaflet_tile_viewer"
 
 export default class Initializer {
   constructor() {
@@ -23,7 +22,6 @@ export default class Initializer {
     this.initialize_form()
     this.initialize_timepicker()
     this.initialize_bbox()
-    this.initialize_leaflet_tile_viewer()
     this.structure_manager = new StructureManager
     this.modal_viewer = new ModalViewer
     this.derivative_form = new DerivativeForm
@@ -109,13 +107,6 @@ export default class Initializer {
     $("#bbox").each((_i, element) => {
       const $element = $(element)
       new BoundingBoxSelector($element)
-    })
-  }
-
-  initialize_leaflet_tile_viewer () {
-    $("#leaflet-tile-viewer").each((_i, element) => {
-      const $element = $(element)
-      new LeafletTileViewer($element)
     })
   }
 

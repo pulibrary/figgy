@@ -2,17 +2,32 @@
 import CDLTimer from 'viewer/cdl_timer'
 import IIIFLogo from 'images/iiif-logo.svg'
 import TakedownLogo from 'images/takedown.png'
+import LeafletViewer from 'viewer/leaflet_viewer'
+import TabManager from 'viewer/tab_manager'
 
 export default class UVManager {
   async initialize () {
     this.bindLogin()
     this.bindResize()
+    this.tabManager = new TabManager()
+    this.tabManager.initialize()
     this.uvElement.hide()
     await this.loadUV()
+    this.resize()
   }
 
   async loadUV () {
-    return this.checkManifest().then(this.createUV.bind(this)).catch(this.requestAuth.bind(this)).promise()
+    return this.checkManifest()
+      .then(this.createUV.bind(this))
+      // If creating the UV fails, don't build leaflet.
+      .then(() => { return this.buildLeafletViewer() })
+      .catch(this.requestAuth.bind(this))
+      .promise()
+  }
+
+  buildLeafletViewer () {
+    this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
+    return this.leafletViewer.loadLeaflet()
   }
 
   checkManifest () {
@@ -20,9 +35,10 @@ export default class UVManager {
   }
 
   createUV (data, status, jqXHR) {
+    this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(jqXHR)
     this.uvElement.show()
-    createUV('#uv', {
+    this.uv = createUV('#uv', {
       root: 'uv',
       iiifResourceUri: this.manifest,
       configUri: this.configURI,
@@ -41,9 +57,8 @@ export default class UVManager {
 
   addViewerIcons () {
     const existingButton = document.querySelector('a.iiif-drag')
-    const takedownButton = document.querySelector('a.takedown')
     const shareButton = document.querySelector('.footerPanel button.share')
-    if (existingButton !== null || shareButton === null || shareButton.style.display === "none") {
+    if (existingButton !== null || shareButton === null || shareButton.style.display === 'none') {
       return
     }
     const mobileShareButton = document.querySelector('.mobileFooterPanel button.share')
@@ -119,8 +134,14 @@ export default class UVManager {
     const windowWidth = window.innerWidth
     const windowHeight = window.innerHeight
     const titleHeight = $('#title').outerHeight($('#title').is(':visible'))
+    let tabHeight = 0
+    if ($('#tab-container').is(':visible')) {
+      tabHeight = $('#tab-container').outerHeight(true)
+    }
     this.uvElement.width(windowWidth)
-    this.uvElement.height(windowHeight - titleHeight)
+    this.uvElement.height(windowHeight - titleHeight - tabHeight)
+    this.uvElement.children('div').height(windowHeight - titleHeight - tabHeight)
+    if (this.uv) { this.uv.resize() }
     this.waitForElementToDisplay('button.share', 500, this.addViewerIcons.bind(this))
   }
 
