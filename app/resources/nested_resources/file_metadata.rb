@@ -16,6 +16,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :use, Valkyrie::Types::Set
   attribute :size, Valkyrie::Types::Set
   attribute :geometry, Valkyrie::Types::Set
+  attribute :bounds, Valkyrie::Types::Set
   attribute :processing_note, Valkyrie::Types::Set
   attribute :error_message, Valkyrie::Types::Set
 

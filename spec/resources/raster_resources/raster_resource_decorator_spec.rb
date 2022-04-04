@@ -2,6 +2,8 @@
 require "rails_helper"
 
 RSpec.describe RasterResourceDecorator do
+  with_queue_adapter :inline
+
   subject(:decorator) { described_class.new(resource) }
   let(:coverage) { "northlimit=07.033333; eastlimit=011.583333; southlimit=03.917778; westlimit=008.497222; units=degrees; projection=EPSG:4326" }
   let(:imported_coverage) { "northlimit=-00.500000; eastlimit=040.841667; southlimit=-12.000000; westlimit=028.666667; units=degrees; projection=EPSG:4326" }
@@ -135,6 +137,76 @@ RSpec.describe RasterResourceDecorator do
   describe "#decorated_file_sets" do
     it "retrieves all file sets" do
       expect(decorator.decorated_file_sets).to be_empty
+    end
+  end
+
+  describe "#coverage" do
+    context "with non-imported and imported coverage" do
+      let(:resource) do
+        FactoryBot.build(:raster_resource,
+                        title: "test title",
+                        coverage: coverage,
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      it "returns the non-imported coverage" do
+        expect(decorator.coverage).to eq(coverage)
+      end
+    end
+
+    context "with imported coverage" do
+      let(:resource) do
+        FactoryBot.build(:raster_resource,
+                        title: "test title",
+                        coverage: [],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      it "returns the imported coverage" do
+        expect(decorator.coverage).to eq(imported_coverage)
+      end
+    end
+
+    context "with no non-imported or imported coverage" do
+      let(:parent) do
+        FactoryBot.create_for_repository(
+          :raster_set,
+          title: "test title",
+          coverage: [],
+          imported_metadata: [{
+            coverage: imported_coverage
+          }]
+        )
+      end
+
+      let(:resource) { parent.decorate.members.first }
+
+      it "returns the coverage from the parent" do
+        expect(decorator.coverage).to eq(imported_coverage)
+      end
+    end
+  end
+
+  context "with no non-imported or imported coverage and a raster file" do
+    let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
+    let(:tika_output) { tika_geotiff_output }
+    let(:resource) do
+      FactoryBot.create_for_repository(
+        :raster_resource,
+        files: [file],
+        title: "test title",
+        identifier: "ark:/99999/fk4",
+        coverage: []
+      )
+    end
+    let(:coverage) { "northlimit=9.01; eastlimit=11.21; southlimit=0.000002; westlimit=0.000002; units=degrees; projection=EPSG:4326" }
+
+    it "returns coverage from the raster file" do
+      expect(decorator.coverage).to eq(coverage)
     end
   end
 end

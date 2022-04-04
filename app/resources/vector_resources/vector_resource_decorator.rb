@@ -47,9 +47,20 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     false
   end
 
+  def coverage
+    super&.first ||
+      imported_metadata&.first&.coverage&.first ||
+      coverage_from_parent
+  end
+
+  def coverage_from_parent
+    parent = parents.first
+    return unless parent
+    parent.decorate.coverage
+  end
+
   def rendered_coverage
-    display_coverage = Array.wrap(coverage).first || imported_metadata.try(:first).try(:coverage)
-    h.bbox_display(display_coverage)
+    h.bbox_display(coverage)
   end
 
   def rendered_holding_location

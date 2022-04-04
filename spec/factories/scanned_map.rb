@@ -68,6 +68,17 @@ FactoryBot.define do
       state "complete"
     end
 
+    factory :map_set do
+      state "complete"
+      after(:build) do |resource, _evaluator|
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:scanned_map).id,
+          FactoryBot.create_for_repository(:scanned_map).id
+        ]
+      end
+    end
+
     factory :scanned_map_with_raster_children do
       state "complete"
       after(:build) do |resource, _evaluator|

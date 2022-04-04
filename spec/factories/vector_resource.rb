@@ -67,5 +67,16 @@ FactoryBot.define do
     factory :complete_vector_resource do
       state "complete"
     end
+
+    factory :vector_set do
+      state "complete"
+      after(:build) do |resource, _evaluator|
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:vector_resource).id,
+          FactoryBot.create_for_repository(:vector_resource).id
+        ]
+      end
+    end
   end
 end

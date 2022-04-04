@@ -376,7 +376,7 @@ GEM
       activesupport
       capybara
       i18n
-    geo_works-derivatives (0.5.0)
+    geo_works-derivatives (0.6.0)
       hydra-derivatives
       mime-types
       simpler-tiles
@@ -1013,7 +1013,7 @@ DEPENDENCIES
   font-awesome-rails
   foreman
   formulaic
-  geo_works-derivatives (~> 0.5.0)
+  geo_works-derivatives (~> 0.6.0)
   google-cloud-pubsub
   graphiql-rails
   graphql
