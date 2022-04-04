@@ -80,4 +80,16 @@ RSpec.describe FileSetDecorator do
       end
     end
   end
+
+  describe "#bounds" do
+    let(:bounds) { [{ north: 71.0, east: 80.0, south: 70.0, west: 81.0 }] }
+
+    before do
+      allow(file_set).to receive(:bounds).and_return(bounds)
+    end
+
+    it "returns a rendered bounds string" do
+      expect(decorator.bounds).to include "North: 71.0"
+    end
+  end
 end
