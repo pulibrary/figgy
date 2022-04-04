@@ -20,7 +20,8 @@ module GeoDiscovery
       LayerInfoBuilder,
       SlugBuilder,
       IIIFBuilder,
-      RelationshipBuilder
+      RelationshipBuilder,
+      RightsBuilder
     ]
 
     # Class used to generate urls for links in the document.
