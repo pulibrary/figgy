@@ -1,28 +1,16 @@
 # frozen_string_literal: true
 class EventGenerator
   class GeoserverEventGenerator
-    attr_reader :rabbit_exchange
-
-    def initialize(rabbit_exchange)
-      @rabbit_exchange = rabbit_exchange
-    end
+    def initialize(_); end;
 
     def derivatives_created(record)
-      publish_message(
-        message("CREATED", record)
-      )
+      params = message_generator.new(resource: record).generate
+      GeoserverPublishJob.perform_later("CREATE", params)
     end
 
     def derivatives_deleted(record)
-      # Attempt to delete from both public and restricted
-      # workspaces to make sure all traces of the file
-      # are cleaned up on GeoServer.
-      publish_message(
-        message("DELETED", record, public_workspace)
-      )
-      publish_message(
-        message("DELETED", record, authenticated_workspace)
-      )
+      params = message_generator.new(resource: record).generate
+      GeoserverPublishJob.perform_later("DELETE", params)
     end
 
     def record_created(record); end
@@ -34,9 +22,8 @@ class EventGenerator
       geo_members = record.decorate.try(:geo_members) || []
       geo_members.each do |member|
         next unless member.derivative_file
-        publish_message(
-          message("UPDATED", member)
-        )
+        params = message_generator.new(resource: member).generate
+        GeoserverPublishJob.perform_later("UPDATE", params)
       end
     end
 
@@ -50,42 +37,14 @@ class EventGenerator
 
     private
 
-      def authenticated_workspace
-        Figgy.config["geoserver"]["authenticated"]["workspace"]
-      end
-
-      def base_message(record)
-        message_generator.new(resource: record).generate
-      end
-
       def geo_file_set?(record)
         return false unless record.is_a?(FileSet)
         return false unless vector_file_set?(record) || raster_file_set?(record)
         return true if record.derivative_file
       end
 
-      def merged_values(type, workspace)
-        {
-          "event" => type,
-          "workspace" => workspace
-        }
-      end
-
-      def message(type, record, workspace = nil)
-        values = merged_values(type, workspace).delete_if { |_k, v| v.nil? }
-        base_message(record).merge(values)
-      end
-
       def message_generator
         GeoserverMessageGenerator
-      end
-
-      def public_workspace
-        Figgy.config["geoserver"]["open"]["workspace"]
-      end
-
-      def publish_message(message)
-        rabbit_exchange.publish(message.to_json)
       end
 
       def raster_file_set?(record)

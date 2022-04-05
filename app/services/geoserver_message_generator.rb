@@ -20,13 +20,47 @@ class GeoserverMessageGenerator
     }
   end
 
-  private
+  # Resource id prefixed with letter to avoid restrictions on
+  # numbers in QNames from GeoServer generated WFS GML.
+  # @return [String]
+  def id
+    "p-#{resource.id}"
+  end
 
-    # GeoServer workspace for restricted content that requires authentication
-    # @return [String]
-    def authenticated_workspace
-      Figgy.config["geoserver"]["authenticated"]["workspace"]
-    end
+  # Provide the type of geospatial layer type (Shapefile or GeoTIFF)
+  # @return [Symbol]
+  def layer_type
+    return "shapefile" if vector_file?
+    "geotiff"
+  end
+
+  # Generate the file system path for the vector shapefile binary or raster
+  #   GeoTiff
+  # @return [String]
+  def path
+    return shapefile_path if vector_file?
+    geotiff_path
+  end
+
+  # Retrieve the title from the parent resource
+  # @return [String]
+  def title
+    return "" unless parent
+    Array(parent.title).first.to_s
+  end
+
+  # Generate a GeoServer workspace for the file set
+  # @see http://docs.geoserver.org/stable/en/user/rest/workspaces.html
+  # @return [String]
+  def workspace
+    # Return a default workspace value if there is no parent resource
+    return authenticated_workspace unless parent
+    # Generate a workspace value from the visibility of the parent resource
+    visibility = parent.model.visibility.try(:first)
+    visibility == public_visibility ? public_workspace : authenticated_workspace
+  end
+
+  private
 
     # Generate the file path for the first derivative appended to the resource
     # @return [String]
@@ -52,32 +86,10 @@ class GeoserverMessageGenerator
       Figgy.config["geoserver"]["derivatives_path"]
     end
 
-    # Resource id prefixed with letter to avoid restrictions on
-    # numbers in QNames from GeoServer generated WFS GML.
-    # @return [String]
-    def id
-      "p-#{resource.id}"
-    end
-
-    # Provide the type of geospatial layer type (Shapefile or GeoTIFF)
-    # @return [Symbol]
-    def layer_type
-      return :shapefile if vector_file?
-      :geotiff
-    end
-
     # Retrieve the parent resource
     # @return [Valkyrie::Resource]
     def parent
       @parent ||= resource.decorate.parent
-    end
-
-    # Generate the file system path for the vector shapefile binary or raster
-    #   GeoTiff
-    # @return [String]
-    def path
-      return shapefile_path if vector_file?
-      geotiff_path
     end
 
     # GeoServer workspace for open public content
@@ -99,27 +111,9 @@ class GeoserverMessageGenerator
       "file://#{File.dirname(geotiff_path)}/#{File.basename(geotiff_path, '.zip')}/#{id}.shp"
     end
 
-    # Retrieve the title from the parent resource
-    # @return [String]
-    def title
-      return "" unless parent
-      Array(parent.title).first.to_s
-    end
-
     # Determines whether or the resource is a vector file
     # @return [Boolean]
     def vector_file?
       ControlledVocabulary::GeoVectorFormat.new.include?(resource.mime_type.first)
-    end
-
-    # Generate a GeoServer workspace for the file set
-    # @see http://docs.geoserver.org/stable/en/user/rest/workspaces.html
-    # @return [String]
-    def workspace
-      # Return a default workspace value if there is no parent resource
-      return authenticated_workspace unless parent
-      # Generate a workspace value from the visibility of the parent resource
-      visibility = parent.model.visibility.try(:first)
-      visibility == public_visibility ? public_workspace : authenticated_workspace
     end
 end
