@@ -1,35 +1,32 @@
 # frozen_string_literal: true
 class GeoserverPublishJob < ApplicationJob
-  # queue_as :high
   attr_reader :layer_type, :params
 
-  def perform(event, params)
-    @params = params
-    @layer_type = params["layer_type"]
+  def perform(event, base_params)
+    @params = base_params
+    @layer_type = base_params["layer_type"]
 
     case event
     when "CREATE"
-      create
+      create_layer
     when "DELETE"
       # Attempt to delete from both public and restricte
       # workspaces to make sure all traces of the file
       # are cleaned up on GeoServer.
       params["workspace"] = public_workspace
-      delete
+      delete_layers
       params["workspace"] = authenticated_workspace
-      delete
+      delete_layers
     when "UPDATE"
-      delete
-      create
+      delete_layer
+      create_layer
     end
   end
 
   private
 
-    def create
+    def create_layer
       Geoserver::Publish.send(create_method, create_params)
-    rescue => e
-      logger.info("Geoserver publish error: #{e.message}")
     end
 
     def create_params
@@ -46,7 +43,8 @@ class GeoserverPublishJob < ApplicationJob
       return :shapefile if layer_type == "shapefile"
     end
 
-    def delete
+    def delete_layer
+      logger.info("Geoserver delete layer params: #{params}")
       Geoserver::Publish.send(delete_method, delete_params)
     rescue => e
       logger.info("Geoserver publish error: #{e.message}")
