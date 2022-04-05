@@ -1,23 +1,24 @@
 # frozen_string_literal: true
 class GeoserverPublishJob < ApplicationJob
-  queue_as :high
+  # queue_as :high
   attr_reader :layer_type, :params
 
   def perform(event, params)
     @params = params
     @layer_type = params["layer_type"]
 
-    if event == "CREATE"
-      Geoserver::Publish.send(create_method, params)
-    elsif event == "DELETE"
+    case event
+    when "CREATE"
+      Geoserver::Publish.send(create_method, create_params)
+    when "DELETE"
       # Attempt to delete from both public and restricted
       # workspaces to make sure all traces of the file
       # are cleaned up on GeoServer.
       params["workspace"] = public_workspace
-      Geoserver::Publish.send(delete_method, params)
+      Geoserver::Publish.send(delete_method, delete_params)
       params["workspace"] = authenticated_workspace
-      Geoserver::Publish.send(delete_method, params)
-    elsif event == "UPDATE"
+      Geoserver::Publish.send(delete_method, delete_params)
+    when "UPDATE"
       Geoserver::Publish.send(delete_method, delete_params)
       Geoserver::Publish.send(create_method, create_params)
     end
@@ -27,10 +28,10 @@ class GeoserverPublishJob < ApplicationJob
 
     def create_params
       {
-        workspace_name: params.workspace,
-        file_path: params.path,
-        id: params.id,
-        title: params.title
+        workspace_name: params["workspace"],
+        file_path: params["path"],
+        id: params["id"],
+        title: params["title"]
       }
     end
 
@@ -46,8 +47,8 @@ class GeoserverPublishJob < ApplicationJob
 
     def delete_params
       {
-        workspace_name: params.workspace,
-        id: params.id
+        workspace_name: params["workspace"],
+        id: params["id"]
       }
     end
 

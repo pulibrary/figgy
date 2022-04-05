@@ -62,6 +62,12 @@ class GeoserverMessageGenerator
 
   private
 
+    # GeoServer workspace for restricted content that requires authentication
+    # @return [String]
+    def authenticated_workspace
+      Figgy.config["geoserver"]["authenticated"]["workspace"]
+    end
+
     # Generate the file path for the first derivative appended to the resource
     # @return [String]
     def derivative_file_path

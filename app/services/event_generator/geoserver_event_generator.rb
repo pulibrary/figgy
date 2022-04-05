@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class EventGenerator
   class GeoserverEventGenerator
-    def initialize(_); end;
+    def initialize(_); end
 
     def derivatives_created(record)
       params = message_generator.new(resource: record).generate
