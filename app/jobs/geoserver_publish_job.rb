@@ -10,15 +10,9 @@ class GeoserverPublishJob < ApplicationJob
     when "CREATE"
       create_layer
     when "DELETE"
-      # Attempt to delete from both public and restricte
-      # workspaces to make sure all traces of the file
-      # are cleaned up on GeoServer.
-      params["workspace"] = public_workspace
-      delete_layers
-      params["workspace"] = authenticated_workspace
       delete_layers
     when "UPDATE"
-      delete_layer
+      delete_layers
       create_layer
     end
   end
@@ -43,8 +37,17 @@ class GeoserverPublishJob < ApplicationJob
       return :shapefile if layer_type == "shapefile"
     end
 
+    def delete_layers
+      # Attempt to delete from both public and restricte
+      # workspaces to make sure all traces of the file
+      # are cleaned up on GeoServer.
+      params["workspace"] = public_workspace
+      delete_layer
+      params["workspace"] = authenticated_workspace
+      delete_layer
+    end
+
     def delete_layer
-      logger.info("Geoserver delete layer params: #{params}")
       Geoserver::Publish.send(delete_method, delete_params)
     rescue => e
       logger.info("Geoserver publish error: #{e.message}")
