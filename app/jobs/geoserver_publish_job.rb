@@ -41,14 +41,14 @@ class GeoserverPublishJob < ApplicationJob
       # Attempt to delete from both public and restricte
       # workspaces to make sure all traces of the file
       # are cleaned up on GeoServer.
-      params["workspace"] = public_workspace
-      delete_layer
-      params["workspace"] = authenticated_workspace
-      delete_layer
+      delete_layer(public_workspace)
+      delete_layer(authenticated_workspace)
     end
 
-    def delete_layer
-      Geoserver::Publish.send(delete_method, delete_params)
+    def delete_layer(workspace = nil)
+      updated_params = delete_params
+      updated_params["workspace"] = workspace if workspace
+      Geoserver::Publish.send(delete_method, updated_params)
     rescue => e
       logger.info("Geoserver publish error: #{e.message}")
     end
