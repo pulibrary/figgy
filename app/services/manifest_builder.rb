@@ -715,7 +715,7 @@ class ManifestBuilder
     end
 
     def pdf_url(resource)
-      url = manifest_url(resource).gsub("manifest", "pdf")
+      url = Rails.application.routes.url_helpers.pdf_url(resource)
       return url + "?auth_token=#{resource.auth_token}" if token_authorizable?(resource)
       url
     end
