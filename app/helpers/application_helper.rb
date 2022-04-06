@@ -180,8 +180,11 @@ module ApplicationHelper
     "/viewer#?manifest=#{manifest_url(resource)}"
   end
 
-  def fileset_download_path(fileset)
-    download_path(fileset.id, fileset.file_metadata.first.id)
+  # Convenience method for a fileset download path
+  # @param [FileSet] the fileset to provide a download link to
+  # @param [Hash] querystring options, for example an auth token to pass through
+  def fileset_download_path(fileset, opts = {})
+    download_path(fileset.id, fileset.file_metadata.first.id, opts)
   end
 
   def figgy_pdf_path(resource)

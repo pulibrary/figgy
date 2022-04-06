@@ -80,8 +80,10 @@ RSpec.describe "ScannedResource requests", type: :request do
     it "redirects the client to be authenticated" do
       get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
 
+      # it has to be reloaded to get the pdf_file because hitting this route
+      # generates the file
       reloaded = adapter.query_service.find_by(id: scanned_resource.id)
-      expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
+      expect(response).to redirect_to "/downloads/#{scanned_resource.id}/file/#{reloaded.pdf_file.id}"
 
       follow_redirect!
       expect(response).to redirect_to user_cas_omniauth_authorize_path
@@ -107,7 +109,7 @@ RSpec.describe "ScannedResource requests", type: :request do
         sequences = manifest_values["sequences"]
         renderings = sequences.first["rendering"]
 
-        expect(renderings.first).to include("@id" => "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/pdf")
+        expect(renderings.first).to include("@id" => "http://www.example.com/catalog/#{scanned_resource.id}/pdf")
 
         canvases = sequences.first["canvases"]
         canvas_renderings = canvases.first["rendering"]
