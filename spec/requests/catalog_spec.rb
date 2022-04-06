@@ -27,31 +27,26 @@ RSpec.describe "Catalog requests", type: :request do
         let(:scanned_resource) { FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [sample_file]) }
 
         it "redirects the client to be authenticated" do
-          wayfinder = Wayfinder.for(scanned_resource)
+          file_set = Wayfinder.for(scanned_resource).source_pdf
 
-          # TODO
-          # it's generating the pdf page images -- we don't want it to do this.
-          wayfinder.file_sets.each do |fs|
-            stub_request(:any, "http://www.example.com/image-service/#{fs.id}/full/200,/0/gray.jpg")
-              .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
-          end
           get "/catalog/#{scanned_resource.id}/pdf"
 
-          # TODO: it's sending client to omniauth via concerns route
-          # expect(response).to redirect_to "/downloads/#{file_set.id}/file/1234"
+          expect(response).to redirect_to "/downloads/#{file_set.id}/file/#{file_set.file_metadata.first.id}"
 
-          # first it goes to the concerns route
           follow_redirect!
-
-          # then it goes to the downloads route
-          follow_redirect!
-
-          # then it wants to auth
           expect(response).to redirect_to user_cas_omniauth_authorize_path
         end
 
-        # TODO: write this spec and make it pass
         it "can download the original with a token" do
+          auth_token = AuthToken.create!(group: ["admin"], label: "Admin Token").token
+          file_set = Wayfinder.for(scanned_resource).source_pdf
+
+          get "/catalog/#{scanned_resource.id}/pdf?auth_token=#{auth_token}"
+
+          expect(response).to redirect_to "/downloads/#{file_set.id}/file/#{file_set.file_metadata.first.id}?auth_token=#{auth_token}"
+
+          follow_redirect!
+          expect(response.status).to be 200
         end
       end
     end
