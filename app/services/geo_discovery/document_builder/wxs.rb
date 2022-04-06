@@ -59,12 +59,7 @@ module GeoDiscovery
         # Gets the representative file set.
         # @return [FileSet] representative file set
         def file_set
-          @file_set ||= begin
-            member_id = resource_decorator.thumbnail_id.try(:first)
-            return nil unless member_id
-            members = resource_decorator.geo_members.select { |m| m.id == member_id }
-            members.first.decorate unless members.empty?
-          end
+          @file_set ||= resource_decorator.thumbnail_members.try(:first)
         end
 
         # Mime type of the file set.
