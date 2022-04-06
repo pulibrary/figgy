@@ -39,6 +39,7 @@ class ScannedResource < Resource
     Array.wrap(imported_metadata).first || ImportedMetadata.new
   end
 
+  # This retrieves a generated pdf file (not an original pdf file)
   def pdf_file
     file_metadata.find do |file|
       file.mime_type == ["application/pdf"]

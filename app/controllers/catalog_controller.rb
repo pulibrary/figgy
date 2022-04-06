@@ -222,9 +222,16 @@ class CatalogController < ApplicationController
     if source_pdf && can?(:download, source_pdf)
       redirect_to "#{request.base_url}#{helpers.fileset_download_path(source_pdf)}"
     elsif helpers.pdf_allowed?(resource) && can?(:pdf, resource)
-      redirect_to "#{request.base_url}#{polymorphic_path([:pdf, resource])}"
+      redirect_to "#{request.base_url}#{polymorphic_path([:pdf, resource], auth_token_param)}"
     else
       redirect_to solr_document_url(resource), notice: "No PDF available for this item"
     end
   end
+
+  private
+
+    def auth_token_param
+      return {} unless params[:auth_token]
+      { auth_token: params[:auth_token] }
+    end
 end
