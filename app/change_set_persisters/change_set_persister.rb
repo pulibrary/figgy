@@ -42,6 +42,7 @@ class ChangeSetPersister
       ],
       after_save_commit: [
         PublishMessage::Factory.new(operation: :update),
+        GeoserverPublish::Factory.new(operation: :update),
         ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production"),
         IngestBag,
         PreserveResource,
@@ -53,6 +54,8 @@ class ChangeSetPersister
         UpdateOCR
       ],
       before_delete: [
+        GeoserverPublish::Factory.new(operation: :delete),
+        GeoserverPublish::Factory.new(operation: :derivatives_delete),
         CreateTombstone,
         CleanupFiles,
         CleanupStructure,
