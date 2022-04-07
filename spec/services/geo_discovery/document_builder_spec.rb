@@ -75,6 +75,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
       # layer info fields
       expect(document["layer_geom_type_s"]).to eq("Polygon")
+      expect(document["layer_geom_type_sm"]).to eq(["Polygon"])
       expect(document["dc_format_s"]).to eq("Shapefile")
 
       # references
@@ -185,6 +186,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
       it "has layer info fields" do
         expect(document["layer_geom_type_s"]).to eq("Image")
+        expect(document["layer_geom_type_sm"]).to eq(["Image"])
         expect(document["dc_format_s"]).to eq("TIFF")
       end
     end
@@ -373,9 +375,10 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         metadata_adapter.persister.save(resource: file_set)
       end
 
-      it "returns document wmts reference" do
+      it "returns document wmts reference and both formats" do
         refs = JSON.parse(document["dct_references_s"])
         expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to match(/WMTSCapabilities/)
+        expect(document["layer_geom_type_sm"]).to contain_exactly("Image", "Raster")
       end
     end
   end
@@ -403,6 +406,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     it "has metadata" do
       # Layer info fields
       expect(document["layer_geom_type_s"]).to eq("Raster")
+      expect(document["layer_geom_type_sm"]).to eq(["Raster"])
       expect(document["dc_format_s"]).to eq("GeoTIFF")
       expect(document["all_subject_sm"]).to eq(["Human settlements", "Society"])
 

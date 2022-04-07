@@ -57,7 +57,8 @@ module GeoDiscovery
           layer_modified_dt: layer_modified,
           layer_id_s: layer_id,
           dct_references_s: clean_document(references).to_json.to_s,
-          layer_geom_type_s: geom_type,
+          layer_geom_type_s: geom_types.first,
+          layer_geom_type_sm: geom_types,
           dc_format_s: format,
           dct_issued_dt: issued,
           suppressed_b: suppressed,
@@ -177,7 +178,7 @@ module GeoDiscovery
       end
 
       def build_private_document?
-        return true if geom_type == "Image" && access_rights == restricted_visibility
+        return true if geom_types.include?("Image") && access_rights == restricted_visibility
         return true if access_rights == private_visibility
         false
       end
