@@ -5,7 +5,7 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
   with_queue_adapter :inline
   subject(:wxs_builder) { described_class.new(decorator) }
 
-  let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility) }
+  let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility, wms_url: "", wfs_url: "", layer_name: "") }
   let(:decorator) { query_service.find_by(id: geo_work.id).decorate }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
   let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file]) }
