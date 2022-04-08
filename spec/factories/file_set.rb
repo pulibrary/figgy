@@ -33,13 +33,16 @@ FactoryBot.define do
     end
 
     factory :geo_raster_cloud_file do
-      file_metadata FileMetadata.new(
-        id: Valkyrie::ID.new(SecureRandom.uuid),
-        mime_type: "image/tiff; gdal-format=GTiff",
-        use: Valkyrie::Vocab::PCDMUse.CloudDerivative,
-        original_filename: "display_raster.tif",
-        file_identifiers: ["cloud-geo-derivatives-shrine://#{Figgy.config['cloud_geo_bucket']}/example.tif"]
-      )
+      file_metadata [
+        FileMetadata.new(
+          id: Valkyrie::ID.new(SecureRandom.uuid),
+          mime_type: "image/tiff; gdal-format=GTiff",
+          use: Valkyrie::Vocab::PCDMUse.CloudDerivative,
+          original_filename: "display_raster.tif",
+          file_identifiers: ["cloud-geo-derivatives-shrine://#{Figgy.config['cloud_geo_bucket']}/example.tif"]
+        ),
+        FileMetadata.new(id: Valkyrie::ID.new(SecureRandom.uuid), mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.OriginalFile)
+      ]
       service_targets "tiles"
     end
 

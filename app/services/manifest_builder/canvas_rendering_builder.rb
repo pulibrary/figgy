@@ -23,6 +23,11 @@ class ManifestBuilder
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
+      return unless geotiff_child
+      # When given a MapSet with both ScannedMap tiffs and attached Raster
+      # Resources we attach a link to the Raster's original file so users can
+      # download the GeoTiff from the viewer embedded in the catalog.
+      manifest["rendering"] << geotiff_download
     end
 
     # Construct a helper Object
@@ -86,6 +91,27 @@ class ManifestBuilder
           "label" => "Download the original file",
           "format" => original_file.mime_type.first
         }
+      end
+
+      def geotiff_download
+        download_url_args = { resource_id: geotiff_child.id.to_s,
+                              id: geotiff_file.id.to_s,
+                              protocol: protocol,
+                              host: host }
+        download_url = url_helpers.download_url(download_url_args)
+        {
+          "@id" => download_url,
+          "label" => "Download GeoTiff",
+          "format" => geotiff_file.mime_type.first
+        }
+      end
+
+      def geotiff_file
+        geotiff_child&.original_file
+      end
+
+      def geotiff_child
+        record.try(:geotiff_child)
       end
 
       def mp3_file_hash
