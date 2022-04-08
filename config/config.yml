@@ -104,7 +104,6 @@ defaults: &defaults
     exchange:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
-      geoserver: "geoserver_events"
       orangelight: "orangelight_events"
   vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://figgy.princeton.edu/ns/') %>
   devise:
@@ -297,7 +296,6 @@ production:
     exchange:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
-      geoserver: "geoserver_events"
       orangelight: "orangelight_events"
 
 staging:
@@ -316,7 +314,6 @@ staging:
     exchange:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
-      geoserver: "geoserver_events"
       orangelight: "orangelight_events"
   geoserver:
     url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
