@@ -75,10 +75,12 @@ class ChangeSetPersister
       GeoserverPublishJob.perform_now(operation: "delete", resource_id: resource.id.to_s)
     end
 
-    def valid?
-      return false unless resource.is_a?(VectorResource)
-      resource.decorate.geo_members.present?
-    end
+    private
+
+      def valid?
+        return false unless resource.is_a?(VectorResource)
+        resource.decorate.geo_members.present?
+      end
   end
 
   class GeoserverPublishDerivativesDelete
