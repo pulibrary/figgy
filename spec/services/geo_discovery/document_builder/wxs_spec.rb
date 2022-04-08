@@ -16,6 +16,7 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
   let(:tika_output) { tika_shapefile_output }
 
   before do
+    allow(GeoserverPublishJob).to receive(:perform_later)
     output = change_set_persister.save(change_set: change_set)
     file_set_id = output.member_ids[0]
     file_set = query_service.find_by(id: file_set_id)

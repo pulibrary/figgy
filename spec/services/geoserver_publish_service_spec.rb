@@ -14,6 +14,10 @@ RSpec.describe GeoserverPublishService do
   let(:file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
   let(:tika_output) { tika_shapefile_output }
 
+  before do
+    allow(GeoserverPublishJob).to receive(:perform_later)
+  end
+
   describe "#delete" do
     let(:resource) do
       FactoryBot.create_for_repository(
