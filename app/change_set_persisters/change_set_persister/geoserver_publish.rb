@@ -26,10 +26,9 @@ class ChangeSetPersister
   end
 
   class GeoserverPublishUpdate
-    attr_reader :change_set_persister, :change_set, :post_save_resource
+    attr_reader :change_set, :post_save_resource
     def initialize(change_set_persister:, change_set:, post_save_resource: nil)
       @change_set = change_set
-      @change_set_persister = change_set_persister
       @post_save_resource = post_save_resource
     end
 
@@ -63,10 +62,8 @@ class ChangeSetPersister
   end
 
   class GeoserverPublishDelete
-    attr_reader :change_set_persister, :change_set, :resource
+    attr_reader :resource
     def initialize(change_set_persister:, change_set:)
-      @change_set = change_set
-      @change_set_persister = change_set_persister
       @resource = change_set.resource
     end
 
@@ -84,10 +81,8 @@ class ChangeSetPersister
   end
 
   class GeoserverPublishDerivativesDelete
-    attr_reader :change_set_persister, :change_set, :resource
+    attr_reader :resource
     def initialize(change_set_persister:, change_set:)
-      @change_set = change_set
-      @change_set_persister = change_set_persister
       @resource = change_set.resource
     end
 
