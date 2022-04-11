@@ -1,26 +1,67 @@
 # frozen_string_literal: true
-class GeoserverMessageGenerator
-  attr_reader :resource
+class GeoserverPublishService
+  attr_reader :resource, :logger
 
-  # @param resource [Valkyrie::Resource]
-  def initialize(resource:)
+  # @param resource [FileSet]
+  def initialize(resource:, logger: Logger.new(STDOUT))
     @resource = resource
+    @logger = logger
   end
 
-  # Generate the (RabbitMQ) message propagated in response to a new geospatial
-  #   asset being ingested or updated
-  # @return [Hash]
-  def generate
-    {
-      "id" => id,
-      "layer_type" => layer_type,
-      "workspace" => workspace,
-      "path" => path,
-      "title" => title
-    }
+  def create
+    Geoserver::Publish.send(create_method, create_params)
+  end
+
+  def delete
+    delete_layer
+  end
+
+  def update
+    delete_from_all
+    create
   end
 
   private
+
+    def create_method
+      layer_type.to_sym
+    end
+
+    def create_params
+      {
+        workspace_name: workspace,
+        file_path: path,
+        id: id,
+        title: title
+      }
+    end
+
+    def delete_method
+      "delete_#{layer_type}".to_sym
+    end
+
+    def delete_params
+      {
+        workspace_name: workspace,
+        id: id
+      }
+    end
+
+    def delete_layer(workspace = nil)
+      updated_params = delete_params
+      updated_params[:workspace_name] = workspace if workspace
+      Geoserver::Publish.send(delete_method, updated_params)
+    rescue StandardError => e
+      logger.info(e.message)
+    end
+
+    def delete_from_all
+      # Attempt to delete from both public and restricte
+      # workspaces to make sure all traces of the file
+      # are cleaned up on GeoServer.
+      delete_layer(public_workspace)
+      delete_layer(authenticated_workspace)
+    end
 
     # GeoServer workspace for restricted content that requires authentication
     # @return [String]
@@ -36,14 +77,6 @@ class GeoserverMessageGenerator
       end
       derivative_id = local_derivative.file_identifiers.first
       Valkyrie::StorageAdapter.find_by(id: derivative_id).io.path
-    rescue Valkyrie::StorageAdapter::FileNotFound
-      ""
-    end
-
-    # Access the path used for GeoServer derivatives
-    # @return [String]
-    def geotiff_path
-      derivative_file_path.gsub(Figgy.config["geo_derivative_path"], geoserver_base_path)
     end
 
     # Access the currently configured path for GeoServer derivative files
@@ -59,11 +92,10 @@ class GeoserverMessageGenerator
       "p-#{resource.id}"
     end
 
-    # Provide the type of geospatial layer type (Shapefile or GeoTIFF)
-    # @return [Symbol]
+    # Provide the type of geospatial layer type
+    # @return [String]
     def layer_type
-      return :shapefile if vector_file?
-      :geotiff
+      "shapefile"
     end
 
     # Retrieve the parent resource
@@ -72,12 +104,10 @@ class GeoserverMessageGenerator
       @parent ||= resource.decorate.parent
     end
 
-    # Generate the file system path for the vector shapefile binary or raster
-    #   GeoTiff
+    # Generate the file system path for the vector shapefile binary
     # @return [String]
     def path
-      return shapefile_path if vector_file?
-      geotiff_path
+      shapefile_path
     end
 
     # GeoServer workspace for open public content
@@ -92,11 +122,11 @@ class GeoserverMessageGenerator
       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
-    # Generate the file system path for the Shapefile (comprising a vector
-    #   dataset)
+    # Generate the file system path for the Shapefile (comprising a vector dataset)
     # @return [String]
     def shapefile_path
-      "file://#{File.dirname(geotiff_path)}/#{File.basename(geotiff_path, '.zip')}/#{id}.shp"
+      base_path = derivative_file_path.gsub(Figgy.config["geo_derivative_path"], geoserver_base_path)
+      "file://#{File.dirname(base_path)}/#{File.basename(base_path, '.zip')}/#{id}.shp"
     end
 
     # Retrieve the title from the parent resource
@@ -104,12 +134,6 @@ class GeoserverMessageGenerator
     def title
       return "" unless parent
       Array(parent.title).first.to_s
-    end
-
-    # Determines whether or the resource is a vector file
-    # @return [Boolean]
-    def vector_file?
-      ControlledVocabulary::GeoVectorFormat.new.include?(resource.mime_type.first)
     end
 
     # Generate a GeoServer workspace for the file set

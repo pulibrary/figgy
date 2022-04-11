@@ -104,7 +104,6 @@ defaults: &defaults
     exchange:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
-      geoserver: "geoserver_events"
       orangelight: "orangelight_events"
   vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://figgy.princeton.edu/ns/') %>
   devise:
@@ -210,7 +209,7 @@ defaults: &defaults
       - new-zealand-princeto.gpogn2y5gg2j.gw.gpcloudservice.com 
       - australia-east-princeto.gpogn2y5gg2j.gw.gpcloudservice.com 
   geoserver:
-    url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
+    url: <%= ENV['GEOSERVER_BASE_URL'] || "http://localhost:8080/geoserver" %>
     derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "geo_derivatives") %>
     open:
       workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
@@ -267,7 +266,7 @@ test:
         host: <%= ENV.fetch('CAS_HOST', 'localhost.localdomain') %>
         url: <%= ENV.fetch('CAS_URL', 'https://localhost.localdomain/cas') %>
   geoserver:
-    url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
+    url: <%= ENV['GEOSERVER_BASE_URL'] || "http://localhost:8080/geoserver" %>
     derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "test_geo_derivatives") %>
     open:
       workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
@@ -297,7 +296,6 @@ production:
     exchange:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
-      geoserver: "geoserver_events"
       orangelight: "orangelight_events"
 
 staging:
@@ -316,10 +314,9 @@ staging:
     exchange:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
-      geoserver: "geoserver_events"
       orangelight: "orangelight_events"
   geoserver:
-    url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver" %>
+    url: <%= ENV['GEOSERVER_BASE_URL'] || "http://localhost:8080/geoserver" %>
     derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "geo_derivatives") %>
     open:
       workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy-staging" %>

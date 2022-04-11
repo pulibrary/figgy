@@ -1811,6 +1811,11 @@ RSpec.describe ChangeSetPersister do
 
     context "when adding FGDC metadata to a preserved object", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
+
+      before do
+        allow(GeoserverPublishJob).to receive(:perform_later)
+      end
+
       it "updates the binary content in the preservation store" do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         xml = fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml; schema=fgdc")
@@ -1962,6 +1967,153 @@ RSpec.describe ChangeSetPersister do
 
       parent = Wayfinder.for(barcode_resource).parents.first
       expect(parent.source_metadata_identifier).to eq ["C0652_c0377"]
+    end
+  end
+
+  describe "updating a VectorResource", run_real_characterization: true, run_real_derivatives: true do
+    with_queue_adapter :inline
+
+    before do
+      allow(GeoserverPublishJob).to receive(:perform_later)
+    end
+
+    context "when setting the resource to takedown status" do
+      it "triggers a geoserver publish job with a delete operation" do
+        file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+        resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
+        vector_change_set = ChangeSet.for(resource)
+        vector_change_set.validate(state: "takedown")
+        change_set_persister.save(change_set: vector_change_set)
+
+        expect(GeoserverPublishJob).to have_received(:perform_later).with(hash_including(operation: "delete"))
+      end
+    end
+
+    context "when the title is changed" do
+      it "triggers a geoserver publish job with an update operation" do
+        file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+        resource = FactoryBot.create_for_repository(:complete_open_vector_resource, title: "Vector", files: [file])
+        vector_change_set = ChangeSet.for(resource)
+        vector_change_set.validate(title: "New Vector Title")
+        change_set_persister.save(change_set: vector_change_set)
+
+        expect(GeoserverPublishJob).to have_received(:perform_later).with(hash_including(operation: "update"))
+      end
+    end
+
+    context "when the visibility is changed" do
+      it "triggers a geoserver publish job with an update operation" do
+        file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+        resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
+        vector_change_set = ChangeSet.for(resource)
+        vector_change_set.validate(visibility: "restricted")
+        change_set_persister.save(change_set: vector_change_set)
+
+        expect(GeoserverPublishJob).to have_received(:perform_later).with(hash_including(operation: "update"))
+      end
+    end
+
+    context "when setting the resource status to complete" do
+      before do
+        allow(GeoserverPublishJob).to receive(:perform_later)
+      end
+
+      it "triggers a geoserver publish job with a delete operation" do
+        file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+        resource = FactoryBot.create_for_repository(:takedown_vector_resource, files: [file])
+        vector_change_set = ChangeSet.for(resource)
+        vector_change_set.validate(state: "complete")
+        change_set_persister.save(change_set: vector_change_set)
+
+        expect(GeoserverPublishJob).to have_received(:perform_later).with(hash_including(operation: "update"))
+      end
+    end
+
+    context "when the publisher is changed" do
+      it "does not trigger a geoserver publish job" do
+        file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+        resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
+        vector_change_set = ChangeSet.for(resource)
+        vector_change_set.validate(publisher: ["ESRI"])
+        change_set_persister.save(change_set: vector_change_set)
+
+        expect(GeoserverPublishJob).not_to have_received(:perform_later).with(hash_including(operation: "update"))
+      end
+    end
+
+    context "when the resource doesn't have an attached geo file" do
+      it "does not trigger a geoserver publish job" do
+        resource = FactoryBot.create_for_repository(:complete_open_vector_resource)
+        vector_change_set = ChangeSet.for(resource)
+        vector_change_set.validate(visibility: "restricted")
+        change_set_persister.save(change_set: vector_change_set)
+
+        expect(GeoserverPublishJob).not_to have_received(:perform_later)
+      end
+    end
+  end
+
+  context "when deleting a vector geo FileSet", run_real_characterization: true, run_real_derivatives: true do
+    before do
+      allow(GeoserverPublishJob).to receive(:perform_later)
+      allow(GeoserverPublishJob).to receive(:perform_now)
+    end
+
+    it "runs a geoserver publish job synchronously with a derivatives_delete operation" do
+      file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+      resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
+      file_set = Wayfinder.for(resource).members.last
+      file_set_change_set = ChangeSet.for(file_set)
+      change_set_persister.delete(change_set: file_set_change_set)
+
+      expect(GeoserverPublishJob).to have_received(:perform_now).with(hash_including(operation: "derivatives_delete"))
+    end
+  end
+
+  context "when deleting a VectorResource", run_real_characterization: true, run_real_derivatives: true do
+    before do
+      allow(GeoserverPublishJob).to receive(:perform_later)
+      allow(GeoserverPublishJob).to receive(:perform_now)
+    end
+
+    it "runs a geoserver publish job synchronously with a derivatives_delete operation" do
+      file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+      resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
+      vector_change_set = ChangeSet.for(resource)
+      change_set_persister.delete(change_set: vector_change_set)
+
+      expect(GeoserverPublishJob).to have_received(:perform_now).with(hash_including(operation: "delete"))
+    end
+  end
+
+  context "when updating a RasterResource" do
+    before do
+      allow(GeoserverPublishJob).to receive(:perform_later)
+    end
+
+    it "does not trigger a geoserver publish job" do
+      resource = FactoryBot.create_for_repository(:complete_open_raster_resource)
+      raster_change_set = ChangeSet.for(resource)
+      raster_change_set.validate(visibility: "restricted")
+      change_set_persister.save(change_set: raster_change_set)
+
+      expect(GeoserverPublishJob).not_to have_received(:perform_later)
+    end
+  end
+
+  context "when deleting a raster geo FileSet", run_real_characterization: true, run_real_derivatives: true do
+    before do
+      allow(GeoserverPublishJob).to receive(:perform_now)
+    end
+
+    it "does not trigger a geoserver publish job" do
+      file = fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff")
+      resource = FactoryBot.create_for_repository(:complete_open_raster_resource, files: [file])
+      file_set = Wayfinder.for(resource).members.last
+      file_set_change_set = ChangeSet.for(file_set)
+      change_set_persister.delete(change_set: file_set_change_set)
+
+      expect(GeoserverPublishJob).not_to have_received(:perform_now)
     end
   end
 end

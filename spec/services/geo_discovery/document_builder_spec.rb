@@ -31,6 +31,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
   describe "vector resource", run_real_characterization: true do
     before do
+      allow(GeoserverPublishJob).to receive(:perform_later)
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids[0]
       file_set = query_service.find_by(id: file_set_id)
