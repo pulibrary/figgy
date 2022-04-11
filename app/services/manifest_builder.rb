@@ -599,6 +599,18 @@ class ManifestBuilder
       Valkyrie::ResourceDecorator.new(resource).header
     end
 
+    # Returns a geotiff child for MapSets which have attached Raster resources.
+    def geotiff_child
+      @geotiff_child ||=
+        begin
+          return false unless parent_node.is_a?(ScannedMapNode)
+          parent = resource.decorate.parent
+          if parent.mosaic_file_count == 1
+            parent.wayfinder.uncropped_geotiff_filesets.first
+          end
+        end
+    end
+
     ##
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
