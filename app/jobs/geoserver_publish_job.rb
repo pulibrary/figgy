@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class GeoserverPublishJob < ApplicationJob
+  queue_as :high
+
   def perform(operation:, resource_id:)
     @resource = query_service.find_by(id: resource_id)
 
