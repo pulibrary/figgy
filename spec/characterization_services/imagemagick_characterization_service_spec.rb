@@ -77,15 +77,33 @@ RSpec.describe ImagemagickCharacterizationService do
   end
 
   describe "#valid?" do
-    it "returns true" do
-      expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+    context "when provided with a scanned resource fileset" do
+      it "returns true" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+      end
+    end
+
+    context "when provided with an ephemera folder fileset" do
+      let(:folder) do
+        change_set_persister.save(
+          change_set: ChangeSet.for(
+            FactoryBot.create_for_repository(:ephemera_folder),
+            files: [file]
+          )
+        )
+      end
+      let(:folder_members) { Wayfinder.for(folder).members }
+      let(:valid_file_set) { folder_members.first }
+      it "returns true" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+      end
     end
   end
 
-  context "when provided with a file which is not a valid image file" do
-    let(:file) { fixture_file_upload("files/invalid.tif", "image/tiff") }
-    let(:invalid_file_set) { book_members.first }
-    describe "#image_valid?" do
+  describe "#image_valid?" do
+    context "when provided with a file which is not a valid image file" do
+      let(:file) { fixture_file_upload("files/invalid.tif", "image/tiff") }
+      let(:invalid_file_set) { book_members.first }
       it "returns false" do
         expect(described_class.new(file_set: invalid_file_set, persister: persister).image_valid?).to be false
       end
