@@ -153,6 +153,11 @@ namespace :figgy do
       Migrations::AddCachedParentIdsMigrator.call
     end
 
+    desc "Add service target of tiles to all raster resources and enqueues derivatives"
+    task service_target: :environment do
+      Migrations::AddServiceTargetMigrator.call
+    end
+
     private
 
       # Construct or retrieve the memoized logger for STDOUT
