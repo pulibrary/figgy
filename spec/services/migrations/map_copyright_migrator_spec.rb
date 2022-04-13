@@ -10,6 +10,7 @@ RSpec.describe Migrations::MapCopyrightMigrator do
         scanned_map = FactoryBot.create_for_repository(:complete_campus_only_scanned_map)
         raster_map = FactoryBot.create_for_repository(:complete_campus_only_raster_resource)
         vector_map = FactoryBot.create_for_repository(:complete_campus_only_vector_resource)
+        open_scanned_map = FactoryBot.create_for_repository(:complete_open_scanned_resource)
 
         described_class.call
 
@@ -17,6 +18,7 @@ RSpec.describe Migrations::MapCopyrightMigrator do
         expect(query_service.find_by(id: scanned_map.id).rights_statement).to eq [RightsStatements.in_copyright]
         expect(query_service.find_by(id: raster_map.id).rights_statement).to eq [RightsStatements.in_copyright]
         expect(query_service.find_by(id: vector_map.id).rights_statement).to eq [RightsStatements.in_copyright]
+        expect(query_service.find_by(id: open_scanned_map.id).rights_statement).to eq [RightsStatements.no_known_copyright]
       end
     end
   end
