@@ -39,6 +39,7 @@ class Resource < Valkyrie::Resource
   end
 
   # Determines if this is an image resource
+  # Used to determine the right characterization service
   # @return [TrueClass, FalseClass]
   def image_resource?
     false
