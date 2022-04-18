@@ -76,7 +76,7 @@ Metrics/ClassLength:
     - 'app/services/ingest_ephemera_service.rb'
     - 'app/services/ingest_ephemera_mods.rb'
     - 'app/utils/data_seeder.rb'
-    - 'app/models/numismatics/orangelight_coin_builder.rb'
+    - 'app/models/orangelight_coin_builder.rb'
     - 'app/decorators/scanned_resource_decorator.rb'
     - 'app/decorators/scanned_map_decorator.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
