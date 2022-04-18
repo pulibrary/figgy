@@ -179,7 +179,7 @@ Rails.application.config.to_prepare do
     :geo_derivatives
   )
 
-  if Figgy.config["cloud_geo_bucket"].present? && !Rails.env.test?
+  if Figgy.config["aws_access_key_id"].present? && Figgy.config["cloud_geo_bucket"].present? && !Rails.env.test?
     require "shrine/storage/s3"
     Shrine.storages = (Shrine.storages || {}).merge(
       cloud_geo_storage: Shrine::Storage::S3.new(
