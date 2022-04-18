@@ -16,7 +16,7 @@ class BulkEditController < ApplicationController
       end
     end
     batches.each do |ids|
-      BulkUpdateJob.perform_later(ids: ids, args: args)
+      BulkUpdateJob.perform_later(ids: ids, email: current_user.email, args: args, time: Time.current.to_s, search_params: search_params)
     end
     resources_count = batches.map(&:count).reduce(:+)
     flash[:notice] = "#{resources_count} resources were queued for bulk update."
@@ -24,6 +24,10 @@ class BulkEditController < ApplicationController
   end
 
   private
+
+    def search_params
+      params.permit(search_params: {})["search_params"]
+    end
 
     def load_collections
       @collections = Valkyrie.config.metadata_adapter.query_service.find_all_of_model(model: Collection).map(&:decorate) || []

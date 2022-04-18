@@ -33,7 +33,11 @@ RSpec.describe BulkEditController, type: :controller do
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
     end
     it "updates the resources" do
-      expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).with(ids: [resource2.id.to_s, resource1.id.to_s], args: { mark_complete: true })
+      Timecop.freeze(Time.current) do
+        expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).with(
+          ids: [resource2.id.to_s, resource1.id.to_s], email: user.email, args: { mark_complete: true }, time: Time.current.to_s, search_params: params[:search_params]
+        )
+      end
       expect(response.body).to redirect_to root_path
       expect(flash[:notice]).to eq "2 resources were queued for bulk update."
     end
@@ -41,9 +45,11 @@ RSpec.describe BulkEditController, type: :controller do
     context "when there are multiple pages of results" do
       let(:params) { { batch_size: 1, mark_complete: "1", search_params: { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "" } } }
       it "enqueues one update job per page of results" do
-        post :resources_update, params: params
-        expect(BulkUpdateJob).to have_been_enqueued.with(ids: [resource1.id.to_s], args: { mark_complete: true })
-        expect(BulkUpdateJob).to have_been_enqueued.with(ids: [resource2.id.to_s], args: { mark_complete: true })
+        Timecop.freeze(Time.current) do
+          post :resources_update, params: params
+          expect(BulkUpdateJob).to have_been_enqueued.with(ids: [resource1.id.to_s], email: user.email, args: { mark_complete: true }, time: Time.current.to_s, search_params: params[:search_params])
+          expect(BulkUpdateJob).to have_been_enqueued.with(ids: [resource2.id.to_s], email: user.email, args: { mark_complete: true }, time: Time.current.to_s, search_params: params[:search_params])
+        end
       end
     end
   end

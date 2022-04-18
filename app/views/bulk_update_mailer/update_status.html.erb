@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h2>Bulk update status report for batch initiated on <%= @time %></h2>
+    <% if @resource_id.present? %> 
+      <p>
+        Bulk update failed due to invalid change set on Resource with id <%= @resource_id %>
+      </p>
+      <% else %> 
+        <p>Bulk update successful for <%= @ids.length %> Resource(s) in batch.</p>
+    <% end %>
+    <p>
+      You received this email because you initiated a bulk update with the following search parameters:
+    </p>
+    <ul>
+      <li>Query: <%= @search_params[:q] %></li>
+      <li>Facets: <%= raw @search_params[:f] %></li>
+    </ul>
+    <p>And for these Resources(s):</p>
+    <ul>
+      <% @ids.each do |id| %>
+        <li><%= id %></li>
+      <% end %>
+    </ul>
+  </body>
+</html>
