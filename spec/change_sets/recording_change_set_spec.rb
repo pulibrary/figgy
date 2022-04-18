@@ -107,7 +107,7 @@ RSpec.describe RecordingChangeSet do
 
   describe "#preserve?" do
     context "when not a member of an archival media collection" do
-      let(:resource) { FactoryBot.create_for_repository(:complete_recording) }
+      let(:formresource) { FactoryBot.create_for_repository(:complete_recording) }
 
       it "is not preserved" do
         expect(change_set.preserve?).to be false
@@ -116,7 +116,7 @@ RSpec.describe RecordingChangeSet do
 
     context "when a member of an archival media collection" do
       let(:collection) { FactoryBot.create_for_repository(:archival_media_collection) }
-      let(:resource) { FactoryBot.create_for_repository(:complete_recording, member_of_collection_ids: [collection.id]) }
+      let(:form_resource) { FactoryBot.create_for_repository(:complete_recording, member_of_collection_ids: [collection.id]) }
 
       it "is preserved" do
         expect(change_set.preserve?).to be true
@@ -125,7 +125,7 @@ RSpec.describe RecordingChangeSet do
   end
 
   describe "#logical_structure" do
-    let(:resource) { FactoryBot.create_for_repository(:complete_recording) }
+    let(:form_resource) { FactoryBot.create_for_repository(:complete_recording) }
     it "responds to it" do
       expect(change_set).to respond_to :logical_structure
     end
