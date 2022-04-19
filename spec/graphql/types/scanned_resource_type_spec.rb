@@ -2,12 +2,6 @@
 require "rails_helper"
 
 RSpec.describe Types::ScannedResourceType do
-  describe "fields" do
-    it "has startPage" do
-      expect(described_class).to have_field(:startPage)
-    end
-  end
-
   subject(:type) { described_class.new(scanned_resource, ability: ability) }
   let(:bibid) { "123456" }
   let(:scanned_resource) do
@@ -37,6 +31,7 @@ RSpec.describe Types::ScannedResourceType do
     it { is_expected.to have_field(:members) }
     it { is_expected.to have_field(:ocrContent) }
     it { is_expected.to have_field(:sourceMetadataIdentifier).of_type(String) }
+    it { is_expected.to have_field(:startPage).of_type(String) }
   end
 
   describe "#viewing_hint" do
