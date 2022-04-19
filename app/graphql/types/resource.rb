@@ -23,6 +23,7 @@ module Types::Resource
   field :source_metadata_identifier, String, null: true
   field :thumbnail, Types::Thumbnail, null: true
   field :ocr_content, [String], null: true
+  field :embed, Types::EmbedType, null: true
 
   definition_methods do
     def resolve_type(object, _context)

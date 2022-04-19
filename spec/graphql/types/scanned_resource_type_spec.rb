@@ -32,6 +32,7 @@ RSpec.describe Types::ScannedResourceType do
     it { is_expected.to have_field(:ocrContent) }
     it { is_expected.to have_field(:sourceMetadataIdentifier).of_type(String) }
     it { is_expected.to have_field(:startPage).of_type(String) }
+    it { is_expected.to have_field(:embed).of_type(Types::EmbedType) }
   end
 
   describe "#viewing_hint" do
@@ -183,6 +184,54 @@ RSpec.describe Types::ScannedResourceType do
       type = described_class.new(scanned_resource, {})
 
       expect(type.ocr_content).to eq ["test"]
+    end
+  end
+
+  describe "#embed" do
+    context "when resource is public" do
+      it "sets the right embed" do
+        {
+          embed: {
+            html: "<iframe>",
+            status: "unauthenticated"
+          }
+        }
+      end
+    end
+
+    # download permission
+    context "when resource is a reading room zip file" do
+      context "when user is not logged in" do
+      {
+        embed: {
+          html: nil,
+          status: "unauthenticated"
+        }
+      }
+      end
+
+      context "when OARSC-permitted user is logged in" do
+      end
+
+      context "when nonpermitted user is logged in" do
+      end
+    end
+
+    # read permission
+    context "when resource is a reading room viewer-viewable resource" do
+      context "when OARSC-permitted user is logged in" do
+      {
+        embed: {
+          html: "<iframe>",
+          status: "authenticated"
+        }
+      }
+      end
+
+    context "when resource is CDL" do
+    end
+
+    context "when resource is private" do
     end
   end
 end
