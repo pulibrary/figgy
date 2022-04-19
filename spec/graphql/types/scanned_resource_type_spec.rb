@@ -189,49 +189,82 @@ RSpec.describe Types::ScannedResourceType do
 
   describe "#embed" do
     context "when resource is public" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(
+          :complete_open_scanned_resource
+        )
+      end
       it "sets the right embed" do
-        {
-          embed: {
+        expect(type.embed).to eq(
+          {
             html: "<iframe>",
-            status: "unauthenticated"
+            status: "authorized"
           }
-        }
+        )
       end
     end
 
     # download permission
     context "when resource is a reading room zip file" do
       context "when user is not logged in" do
-      {
-        embed: {
-          html: nil,
-          status: "unauthenticated"
-        }
-      }
+        it "returns unauthenticated" do
+          {
+            embed: {
+              html: nil,
+              status: "unauthenticated"
+            }
+          }
+        end
       end
 
       context "when OARSC-permitted user is logged in" do
+        it "returns a download link and authorized" do
+          {
+            embed: {
+              html: "<a href='yadayada'></a>",
+              status: "authorized"
+            }
+          }
+        end
       end
 
       context "when nonpermitted user is logged in" do
+        it "returns unauthorized" do
+          {
+            embed: {
+              html: nil,
+              status: "unauthorized"
+            }
+          }
+        end
       end
     end
 
     # read permission
     context "when resource is a reading room viewer-viewable resource" do
       context "when OARSC-permitted user is logged in" do
-      {
-        embed: {
-          html: "<iframe>",
-          status: "authenticated"
-        }
-      }
+        it "returns an iframe and authorized" do
+          {
+            embed: {
+              html: "<iframe>",
+              status: "authorized"
+            }
+          }
+        end
       end
-
-    context "when resource is CDL" do
     end
 
     context "when resource is private" do
+      context "and a permitted user is logged in" do
+        it "returns an iframe and authorized" do
+          {
+            embed: {
+              html: "<iframe>",
+              status: "authorized"
+            }
+          }
+        end
+      end
     end
   end
 end

@@ -26,4 +26,10 @@ class Types::ScannedResourceType < Types::BaseObject
   def source_metadata_identifier
     Array.wrap(object.source_metadata_identifier).first
   end
+
+  def embed
+    {
+      "bla": "test"
+    }
+  end
 end
