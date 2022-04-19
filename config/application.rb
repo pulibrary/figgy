@@ -29,8 +29,8 @@ module Figgy
     config.active_job.queue_adapter = :sidekiq
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins "*"
-        resource "/graphql", headers: :any, methods: [:post]
+        origins "http://localhost:3000", /.*\.princeton\.edu$/
+        resource "/graphql", headers: :any, methods: [:post], credentials: true
 
         # The browse everything front-end is a react app which can be run separately
         #   from the rails server in development on a different port.
