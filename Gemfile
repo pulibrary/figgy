@@ -73,7 +73,7 @@ end
 
 group :test do
   gem "capybara-screenshot"
-  gem "database_cleaner"
+  gem "database_cleaner", "~> 1.0"
   gem "formulaic"
   gem "rspec-graphql_matchers"
   gem "rspec_junit_formatter"
