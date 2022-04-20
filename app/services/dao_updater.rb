@@ -15,8 +15,8 @@ class DaoUpdater
     link_digital_object
   rescue Aspace::Client::ArchivalObjectNotFound
     Honeybadger.notify(
-      "DaoUpdater failed to update resource #{change_set.id} with source metadata identifier #{change_set.source_metadata_identifier}." \
-      "If the source metadata identifier looks like a component id (e.g. MC001), talk to the product owner." \
+      "DaoUpdater failed to update resource #{change_set.id} with source metadata identifier #{change_set.source_metadata_identifier} because the Archival Object could not be found. " \
+      "If the source metadata identifier looks like a component id (e.g. MC001), talk to the product owner. " \
       "Otherwise, ask on #figgy whether anyone recognizes what's going on"
     )
   end
