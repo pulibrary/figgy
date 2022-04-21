@@ -28,10 +28,17 @@ class Types::ScannedResourceType < Types::BaseObject
   end
 
   def embed
-    {
-      html: build_iframe,
-      status: "authorized"
-    }
+    if ability.can?(:download, object)
+      {
+        html: build_iframe,
+        status: "authorized"
+      }
+    else
+      {
+        html: nil,
+        status: "unauthenticated"
+      }
+    end
   end
 
   private

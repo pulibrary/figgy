@@ -13,10 +13,9 @@ RSpec.describe Types::ScannedResourceType do
       source_metadata_identifier: [bibid]
     )
   end
-  let(:ability) { instance_double(Ability) }
+  let(:ability) { instance_double(Ability, can?: true) }
 
   before do
-    allow(ability).to receive(:can?).and_return(true)
     stub_bibdata(bib_id: bibid)
   end
 
@@ -207,14 +206,18 @@ RSpec.describe Types::ScannedResourceType do
 
     # download permission
     context "when resource is a reading room zip file" do
+      let(:collection) { FactoryBot.create_for_repository(:collection, restricted_viewers: [FactoryBot.create(:user).uid, user&.uid]) }
+      let(:zip_file_set) { FactoryBot.create_for_repository(:zip_file_set) }
       let(:scanned_resource) do
-        zip_file_set = FactoryBot.create_for_repository(:zip_file_set)
-        FactoryBot.create_for_repository(:complete_reading_room_scanned_resource, member_ids: zip_file_set.id)
+        FactoryBot.create_for_repository(:complete_reading_room_scanned_resource, member_ids: zip_file_set.id, member_of_collection_ids: collection.id)
       end
+      let(:user) { nil }
+      let(:ability) do
+        Ability.new(user)
+      end
+
       context "when user is not logged in" do
         before do
-          allow(ability).to receive(:current_user).and_return(nil)
-          allow(ability).to receive(:can?).with(:download, anything).and_return(false)
         end
         it "returns unauthenticated" do
           expect(type.embed).to eq(
