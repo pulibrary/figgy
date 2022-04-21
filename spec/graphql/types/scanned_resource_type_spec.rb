@@ -207,14 +207,22 @@ RSpec.describe Types::ScannedResourceType do
 
     # download permission
     context "when resource is a reading room zip file" do
+      let(:scanned_resource) do
+        zip_file_set = FactoryBot.create_for_repository(:zip_file_set)
+        FactoryBot.create_for_repository(:complete_reading_room_scanned_resource, member_ids: zip_file_set.id)
+      end
       context "when user is not logged in" do
+        before do
+          allow(ability).to receive(:current_user).and_return(nil)
+          allow(ability).to receive(:can?).with(:download, anything).and_return(false)
+        end
         it "returns unauthenticated" do
-          {
-            embed: {
+          expect(type.embed).to eq(
+            {
               html: nil,
               status: "unauthenticated"
             }
-          }
+          )
         end
       end
 
