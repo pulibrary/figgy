@@ -195,9 +195,10 @@ RSpec.describe Types::ScannedResourceType do
         )
       end
       it "sets the right embed" do
+        manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
         expect(type.embed).to eq(
           {
-            html: "<iframe>",
+            html: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
             status: "authorized"
           }
         )

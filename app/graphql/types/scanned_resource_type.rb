@@ -29,7 +29,17 @@ class Types::ScannedResourceType < Types::BaseObject
 
   def embed
     {
-      "bla": "test"
+      html: build_iframe,
+      status: "authorized"
     }
   end
+
+  private
+
+    def build_iframe
+      helper = ManifestBuilder::ManifestHelper.new
+      viewer_url = helper.viewer_index_url
+      manifest_url = ManifestBuilder::ManifestHelper.new.manifest_url(object)
+      %(<iframe allowfullscreen="true" id="uv_iframe" src="#{viewer_url}#?manifest=#{manifest_url}"></iframe>)
+    end
 end
