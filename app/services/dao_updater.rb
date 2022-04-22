@@ -68,6 +68,7 @@ class DaoUpdater
   end
 
   def new_dao
+    # Embed.new(object).to_dao
     if zip_file?
       zip_file_dao
     else

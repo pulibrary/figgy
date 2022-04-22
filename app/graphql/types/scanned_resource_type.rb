@@ -28,34 +28,41 @@ class Types::ScannedResourceType < Types::BaseObject
   end
 
   def embed
-    # If I can read and get a viewer for it, build iframe
-    # If I can download and get a link, render link
-    # If my first file set is a zip file, render link
-    # Otherwise, build iframe
-    if zip_file? && ability.can?(:download, file_set)
-      {
-        html: build_link,
-        status: "authorized"
-      }
-    elsif ability.can?(:read, object)
-      {
-        html: build_iframe,
-        status: "authorized"
-      }
-    elsif ability.current_user.anonymous?
-      {
-        html: nil,
-        status: "unauthenticated"
-      }
+    # Embed.for(object, ability).to_graphql
+    {
+      html: build_html,
+      status: build_status
+    }
+  end
+
+  def build_html
+    return unless embed_authorized?
+    if zip_file?
+      build_link
     else
-      {
-        html: nil,
-        status: "unauthorized"
-      }
+      build_iframe
+    end
+  end
+
+  # I'm allowed to embed if:
+  #   I can download the first file set (use case: a zip file)
+  #   I can read the resource (use case: a viewer)
+  def embed_authorized?
+    ability.can?(:download, file_set) || ability.can?(:manifest, object)
+  end
+
+  def build_status
+    if embed_authorized?
+      "authorized"
+    elsif ability.current_user.anonymous?
+      "unauthenticated"
+    else
+      "unauthorized"
     end
   end
 
   def zip_file?
+    # !resource.viewer_enabled?
     (file_set&.mime_type || []).include?("application/zip")
   end
 
