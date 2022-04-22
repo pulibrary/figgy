@@ -114,6 +114,7 @@ Metrics/ClassLength:
     - 'app/resources/cdl/charge_manager.rb'
     - 'app/services/pulfa_exporter.rb'
     - 'app/services/geo_metadata_extractor/iso19139.rb'
+    - 'app/services/dao_updater.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/helpers/application_helper.rb'
