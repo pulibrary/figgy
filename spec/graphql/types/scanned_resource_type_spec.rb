@@ -6,14 +6,14 @@ RSpec.describe Types::ScannedResourceType do
   let(:bibid) { "123456" }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(
-      :scanned_resource,
+      :complete_open_scanned_resource,
       viewing_hint: "individuals",
       title: ["I'm a little teapot", "short and stout"],
       viewing_direction: "left-to-right",
       source_metadata_identifier: [bibid]
     )
   end
-  let(:ability) { instance_double(Ability, can?: true) }
+  let(:ability) { Ability.new(FactoryBot.create(:admin)) }
 
   before do
     stub_bibdata(bib_id: bibid)
