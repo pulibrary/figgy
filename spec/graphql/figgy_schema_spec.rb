@@ -34,7 +34,7 @@ RSpec.describe FiggySchema do
       let(:query_string) { %|{ resource(id: "#{id}") { embed { html, status } } }| }
       it "returns it" do
         expect(result["errors"]).to be_blank
-        expect(result["data"]["resource"]["embed"]).to eq({ "html" => nil, "status" => nil })
+        expect(result["data"]["resource"]["embed"].keys).to eq(["html", "status"])
       end
     end
     context "when given a file set" do
