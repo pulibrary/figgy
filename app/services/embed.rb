@@ -1,11 +1,14 @@
 # frozen_string_literal: true
+
+# Use this class to provide the correct embed hashes for a given resource with
+# the appropriate permissions enforced.
 class Embed
   def self.for(resource:, ability:)
     new(resource: resource, ability: ability)
   end
 
   attr_reader :resource, :ability
-  def initialize(resource:, ability:)
+  def initialize(resource:, ability: nil)
     @resource = resource
     @ability = ability
   end
@@ -15,6 +18,19 @@ class Embed
       html: build_html,
       status: build_status
     }
+  end
+
+  def to_dao
+    if viewer_enabled?
+      {
+        "file_uri" => helper.manifest_url(resource),
+        "use_statement" => "https://iiif.io/api/presentation/2.1/"
+      }
+    else
+      {
+        "file_uri" => helper.download_url(file_set, file_set.primary_file)
+      }
+    end
   end
 
   private
