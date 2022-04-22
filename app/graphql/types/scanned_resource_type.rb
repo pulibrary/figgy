@@ -28,57 +28,6 @@ class Types::ScannedResourceType < Types::BaseObject
   end
 
   def embed
-    # Embed.for(object, ability).to_graphql
-    {
-      html: build_html,
-      status: build_status
-    }
+    Embed.for(resource: object, ability: ability).to_graphql
   end
-
-  def build_html
-    return unless embed_authorized?
-    if zip_file?
-      build_link
-    else
-      build_iframe
-    end
-  end
-
-  # I'm allowed to embed if:
-  #   I can download the first file set (use case: a zip file)
-  #   I can read the resource (use case: a viewer)
-  def embed_authorized?
-    ability.can?(:download, file_set) || ability.can?(:manifest, object)
-  end
-
-  def build_status
-    if embed_authorized?
-      "authorized"
-    elsif ability.current_user.anonymous?
-      "unauthenticated"
-    else
-      "unauthorized"
-    end
-  end
-
-  def zip_file?
-    # !resource.viewer_enabled?
-    (file_set&.mime_type || []).include?("application/zip")
-  end
-
-  def file_set
-    @file_set ||= Wayfinder.for(object).file_sets.first
-  end
-
-  private
-
-    def build_link
-      "<a href='#{helper.download_url(file_set, file_set.primary_file)}'>Download Content</a>"
-    end
-
-    def build_iframe
-      viewer_url = helper.viewer_index_url
-      manifest_url = ManifestBuilder::ManifestHelper.new.manifest_url(object)
-      %(<iframe allowfullscreen="true" id="uv_iframe" src="#{viewer_url}#?manifest=#{manifest_url}"></iframe>)
-    end
 end
