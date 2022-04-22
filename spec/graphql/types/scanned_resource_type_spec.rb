@@ -2,27 +2,20 @@
 require "rails_helper"
 
 RSpec.describe Types::ScannedResourceType do
-  describe "fields" do
-    it "has startPage" do
-      expect(described_class).to have_field(:startPage)
-    end
-  end
-
   subject(:type) { described_class.new(scanned_resource, ability: ability) }
   let(:bibid) { "123456" }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(
-      :scanned_resource,
+      :complete_open_scanned_resource,
       viewing_hint: "individuals",
       title: ["I'm a little teapot", "short and stout"],
       viewing_direction: "left-to-right",
       source_metadata_identifier: [bibid]
     )
   end
-  let(:ability) { instance_double(Ability) }
+  let(:ability) { Ability.new(FactoryBot.create(:admin)) }
 
   before do
-    allow(ability).to receive(:can?).and_return(true)
     stub_bibdata(bib_id: bibid)
   end
 
@@ -37,6 +30,8 @@ RSpec.describe Types::ScannedResourceType do
     it { is_expected.to have_field(:members) }
     it { is_expected.to have_field(:ocrContent) }
     it { is_expected.to have_field(:sourceMetadataIdentifier).of_type(String) }
+    it { is_expected.to have_field(:startPage).of_type(String) }
+    it { is_expected.to have_field(:embed).of_type(Types::EmbedType) }
   end
 
   describe "#viewing_hint" do
@@ -188,6 +183,112 @@ RSpec.describe Types::ScannedResourceType do
       type = described_class.new(scanned_resource, {})
 
       expect(type.ocr_content).to eq ["test"]
+    end
+  end
+
+  describe "#embed" do
+    let(:user) { nil }
+    let(:ability) do
+      Ability.new(user)
+    end
+
+    context "when resource is public" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(
+          :complete_open_scanned_resource
+        )
+      end
+      it "sets the right embed" do
+        manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
+        expect(type.embed).to eq(
+          {
+            html: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+            status: "authorized"
+          }
+        )
+      end
+    end
+
+    # download permission
+    context "when resource is a reading room zip file" do
+      let(:collection) { FactoryBot.create_for_repository(:collection, restricted_viewers: [FactoryBot.create(:user).uid, user&.uid]) }
+      let(:zip_file_set) { FactoryBot.create_for_repository(:zip_file_set) }
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(:complete_reading_room_scanned_resource, member_ids: zip_file_set.id, member_of_collection_ids: collection.id)
+      end
+
+      context "when user is not logged in" do
+        it "returns unauthenticated" do
+          expect(type.embed).to eq(
+            {
+              html: nil,
+              status: "unauthenticated"
+            }
+          )
+        end
+      end
+
+      context "when OARSC-permitted user is logged in" do
+        let(:user) { FactoryBot.create(:user) }
+        it "returns a download link and authorized" do
+          expect(type.embed).to eq(
+            {
+              html: "<a href='http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.primary_file.id}'>Download Content</a>",
+              status: "authorized"
+            }
+          )
+        end
+      end
+
+      context "when nonpermitted user is logged in" do
+        let(:ability) { Ability.new(FactoryBot.create(:user)) } # Non-collection user
+        it "returns unauthorized" do
+          expect(type.embed).to eq(
+            {
+              html: nil,
+              status: "unauthorized"
+            }
+          )
+        end
+      end
+    end
+
+    # read permission
+    context "when resource is a reading room viewer-viewable resource" do
+      let(:collection) { FactoryBot.create_for_repository(:collection, restricted_viewers: [FactoryBot.create(:user).uid, user&.uid]) }
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(:complete_reading_room_scanned_resource, member_of_collection_ids: collection.id)
+      end
+      context "when OARSC-permitted user is logged in" do
+        let(:user) { FactoryBot.create(:user) }
+        it "returns an iframe and authorized" do
+          manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
+          expect(type.embed).to eq(
+            {
+              html: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              status: "authorized"
+            }
+          )
+        end
+      end
+    end
+
+    context "when resource is private" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(:complete_private_scanned_resource)
+      end
+      context "and a permitted user is logged in" do
+        let(:user) { FactoryBot.create(:admin) }
+        it "returns an iframe and authorized" do
+          manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
+          expect(type.embed).to eq(
+            {
+              html: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              status: "authorized"
+            }
+          )
+        end
+      end
     end
   end
 end

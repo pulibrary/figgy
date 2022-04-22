@@ -68,50 +68,18 @@ class DaoUpdater
   end
 
   def new_dao
-    if zip_file?
-      zip_file_dao
-    else
-      manifest_dao
-    end
-  end
-
-  def zip_file?
-    (file_set&.mime_type || []).include?("application/zip")
-  end
-
-  def manifest_dao
     {
       "jsonmodel_type" => "digital_object_component",
       "digital_object_id" => change_set.id.to_s,
       "title" => "View digital content",
       "publish" => true,
       "file_versions" => [
-        {
-          "file_uri" => ManifestBuilder::ManifestHelper.new.manifest_url(change_set.resource),
-          "publish" => true,
-          "jsonmodel_type" => "file_version",
-          "use_statement" => "https://iiif.io/api/presentation/2.1/"
-        }
-      ]
-    }
-  end
-
-  def file_set
-    @file_set ||= Wayfinder.for(change_set.resource).file_sets.first
-  end
-
-  def zip_file_dao
-    {
-      "jsonmodel_type" => "digital_object_component",
-      "digital_object_id" => change_set.id.to_s,
-      "title" => "View digital content",
-      "publish" => true,
-      "file_versions" => [
-        {
-          "file_uri" => ManifestBuilder::ManifestHelper.new.download_url(file_set.id, file_set.primary_file.id),
-          "publish" => true,
-          "jsonmodel_type" => "file_version"
-        }
+        Embed.new(resource: change_set.resource).to_dao.merge(
+          {
+            "publish" => true,
+            "jsonmodel_type" => "file_version"
+          }
+        )
       ]
     }
   end
