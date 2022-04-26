@@ -73,7 +73,7 @@ class DaoUpdater
     {
       "jsonmodel_type" => "digital_object_component",
       "digital_object_id" => change_set.id.to_s,
-      "title" => "View digital content",
+      "title" => title,
       "publish" => true,
       "file_versions" => [
         Embed.new(resource: change_set.resource).to_dao.merge(
@@ -88,5 +88,21 @@ class DaoUpdater
 
   def aspace_client
     @aspace_client ||= Aspace::Client.new
+  end
+
+  def file_set
+    Wayfinder.for(change_set.resource).file_sets.first
+  end
+
+  def zip_file?
+    (file_set&.mime_type || []).include?("application/zip")
+  end
+
+  def title
+    if zip_file?
+      "Download content"
+    else
+      "View digital content"
+    end
   end
 end
