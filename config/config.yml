@@ -226,6 +226,7 @@ defaults: &defaults
       supported_mime_types:
         - 'audio/x-wav'
         - 'audio/mpeg'
+  pulfalight_unpublished_token: <%= ENV["PULFALIGHT_UNPUBLISHED_TOKEN"] %>
 
 development:
   <<: *defaults

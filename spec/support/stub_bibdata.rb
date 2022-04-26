@@ -74,7 +74,9 @@ module BibdataStubbing
         }
       )
     # If we're stubbing pulfa, it's not in aspace, so return 404 from there.
-    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr('/', '_')}.json")
+    json_url = "#{aspace_domain}/catalog/#{pulfa_id.tr('/', '_')}.json"
+    json_url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token
+    stub_request(:get, json_url)
       .to_return(
         status: 404,
         headers: {
@@ -85,7 +87,9 @@ module BibdataStubbing
   end
 
   def stub_aspace(pulfa_id:, body: nil)
-    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr('.', '-')}.json")
+    json_url = "#{aspace_domain}/catalog/#{pulfa_id.tr('.', '-')}.json"
+    json_url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token
+    stub_request(:get, json_url)
       .to_return(
         status: 200,
         headers: {

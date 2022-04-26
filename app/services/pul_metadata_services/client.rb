@@ -22,7 +22,9 @@ module PulMetadataServices
 
       def retrieve_from_aspace_pulfa(id)
         conn = Faraday.new(url: Figgy.config[:findingaids_aspace_url])
-        response = conn.get("#{id.tr('.', '-')}.json")
+        url = "#{id.tr('.', '-')}.json"
+        url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token.present?
+        response = conn.get(url)
         return nil if response.status != 200
         response.body.dup.force_encoding("UTF-8")
       end
