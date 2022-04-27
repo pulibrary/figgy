@@ -158,6 +158,11 @@ namespace :figgy do
       Migrations::AddServiceTargetMigrator.call
     end
 
+    desc "Update all DAOs"
+    task update_daos: :environment do
+      Migrations::DaoMigrator.call
+    end
+
     private
 
       # Construct or retrieve the memoized logger for STDOUT
