@@ -45,6 +45,14 @@ class Embed
     end
   end
 
+  def link_label
+    if viewer_enabled?
+      "View digital content"
+    else
+      "Download content"
+    end
+  end
+
   private
 
     def build_type

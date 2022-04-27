@@ -73,10 +73,10 @@ class DaoUpdater
     {
       "jsonmodel_type" => "digital_object_component",
       "digital_object_id" => change_set.id.to_s,
-      "title" => "View digital content",
+      "title" => embed.link_label,
       "publish" => true,
       "file_versions" => [
-        Embed.new(resource: change_set.resource).to_dao.merge(
+        embed.to_dao.merge(
           {
             "publish" => true,
             "jsonmodel_type" => "file_version"
@@ -88,5 +88,9 @@ class DaoUpdater
 
   def aspace_client
     @aspace_client ||= Aspace::Client.new
+  end
+
+  def embed
+    @embed ||= Embed.new(resource: change_set.resource)
   end
 end
