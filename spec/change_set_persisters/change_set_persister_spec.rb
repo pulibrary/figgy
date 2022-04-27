@@ -292,6 +292,22 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "when a source_metadata_identifier is from PULFA and it's configured to request unpublished content" do
+    let(:blade) { "MC016_c9616" }
+
+    it "applies remote metadata from PULFA" do
+      allow(Figgy).to receive(:pulfalight_unpublished_token).and_return("1234")
+      stub_pulfa(pulfa_id: "MC016_c9616")
+      resource = FactoryBot.build(:scanned_resource, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: "MC016_c9616")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.title).to eq ['Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
+      expect(WebMock).to have_requested(:get, "https://findingaids-beta.princeton.edu/catalog/#{blade}.json?auth_token=1234").at_least_once
+    end
+  end
+
   context "when requesting from Alma" do
     it "converts the old ID syntax and tries that too" do
       stub_bibdata(bib_id: "123456", status: 404)
