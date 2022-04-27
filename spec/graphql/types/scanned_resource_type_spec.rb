@@ -202,7 +202,8 @@ RSpec.describe Types::ScannedResourceType do
         manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
         expect(type.embed).to eq(
           {
-            html: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+            type: "html",
+            content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
             status: "authorized"
           }
         )
@@ -221,7 +222,8 @@ RSpec.describe Types::ScannedResourceType do
         it "returns unauthenticated" do
           expect(type.embed).to eq(
             {
-              html: nil,
+              type: nil,
+              content: nil,
               status: "unauthenticated"
             }
           )
@@ -233,7 +235,8 @@ RSpec.describe Types::ScannedResourceType do
         it "returns a download link and authorized" do
           expect(type.embed).to eq(
             {
-              html: "<a href='http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.primary_file.id}'>Download Content</a>",
+              type: "link",
+              content: "http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.primary_file.id}",
               status: "authorized"
             }
           )
@@ -245,7 +248,8 @@ RSpec.describe Types::ScannedResourceType do
         it "returns unauthorized" do
           expect(type.embed).to eq(
             {
-              html: nil,
+              type: nil,
+              content: nil,
               status: "unauthorized"
             }
           )
@@ -265,7 +269,8 @@ RSpec.describe Types::ScannedResourceType do
           manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
           expect(type.embed).to eq(
             {
-              html: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              type: "html",
+              content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
               status: "authorized"
             }
           )
@@ -283,7 +288,8 @@ RSpec.describe Types::ScannedResourceType do
           manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
           expect(type.embed).to eq(
             {
-              html: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              type: "html",
+              content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
               status: "authorized"
             }
           )
