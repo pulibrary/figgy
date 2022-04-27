@@ -13,11 +13,23 @@ class Embed
     @ability = ability
   end
 
+  # Status conflates both authorization and authentication, preferencing
+  # authorization first.
+  # There will only be html content if the status is authorized.
   def to_graphql
-    {
-      html: build_html,
-      status: build_status
-    }
+    if embed_authorized?
+      {
+        type: build_type,
+        content: build_content,
+        status: "authorized"
+      }
+    else
+      {
+        type: nil,
+        content: nil,
+        status: unauthorized_status
+      }
+    end
   end
 
   def to_dao
@@ -35,21 +47,25 @@ class Embed
 
   private
 
-    def build_html
-      return unless embed_authorized?
+    def build_type
+      if viewer_enabled?
+        "html"
+      else
+        "link"
+      end
+    end
+
+    def build_content
       if viewer_enabled?
         build_iframe
       else
-        build_link
+        # download the first file set
+        helper.download_url(file_set, file_set.primary_file)
       end
     end
 
     def helper
       @helper ||= ManifestBuilder::ManifestHelper.new
-    end
-
-    def build_link
-      "<a href='#{helper.download_url(file_set, file_set.primary_file)}'>Download Content</a>"
     end
 
     def build_iframe
@@ -65,10 +81,8 @@ class Embed
       ability.can?(:download, file_set) || ability.can?(:manifest, resource)
     end
 
-    def build_status
-      if embed_authorized?
-        "authorized"
-      elsif ability.current_user.anonymous?
+    def unauthorized_status
+      if ability.current_user.anonymous?
         "unauthenticated"
       else
         "unauthorized"
