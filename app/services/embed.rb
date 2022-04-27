@@ -33,6 +33,14 @@ class Embed
     end
   end
 
+  def link_label
+    if viewer_enabled?
+      "View digital content"
+    else
+      "Download content"
+    end
+  end
+
   private
 
     def build_html
@@ -49,7 +57,7 @@ class Embed
     end
 
     def build_link
-      "<a href='#{helper.download_url(file_set, file_set.primary_file)}'>Download Content</a>"
+      "<a href='#{helper.download_url(file_set, file_set.primary_file)}'>#{link_label}</a>"
     end
 
     def build_iframe

@@ -233,7 +233,7 @@ RSpec.describe Types::ScannedResourceType do
         it "returns a download link and authorized" do
           expect(type.embed).to eq(
             {
-              html: "<a href='http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.primary_file.id}'>Download Content</a>",
+              html: "<a href='http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.primary_file.id}'>Download content</a>",
               status: "authorized"
             }
           )
