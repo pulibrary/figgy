@@ -30,13 +30,21 @@ RSpec.describe FiggySchema do
         expect(result["data"]["resource"]["viewingHint"]).to eq("individuals")
       end
     end
+
     context "when requesting an embed" do
-      let(:query_string) { %|{ resource(id: "#{id}") { embed { html, status } } }| }
+      let(:query_string) { %|{ resource(id: "#{id}") { embed { type, content, status } } }| }
       it "returns it" do
         expect(result["errors"]).to be_blank
-        expect(result["data"]["resource"]["embed"].keys).to eq(["html", "status"])
+        expect(result["data"]["resource"]["embed"]).to eq(
+          {
+            "type" => "html",
+            "content" => "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=http://www.example.com/concern/scanned_resources/#{id}/manifest\"></iframe>",
+            "status" => "authorized"
+          }
+        )
       end
     end
+
     context "when given a file set" do
       let(:resource) { FactoryBot.create_for_repository(:file_set, viewing_hint: "individuals") }
       it "works" do
