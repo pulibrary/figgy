@@ -9,6 +9,17 @@ class ResourcesController < ApplicationController
   delegate :metadata_adapter, to: :change_set_persister
   delegate :persister, :query_service, to: :metadata_adapter
 
+  def refresh_remote_metadata
+    body = JSON.parse(request.body.read)
+    codes = body["archival_collection_codes"]
+    return if codes.blank?
+    codes.each do |code|
+      RefreshArchivalCollectionJob.perform_later(collection_code: code)
+    end
+
+    head :accepted
+  end
+
   def new
     @change_set = ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param).prepopulate!
     authorize_create!(change_set: @change_set)
