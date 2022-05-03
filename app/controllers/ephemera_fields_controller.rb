@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class EphemeraFieldsController < ResourceController
+class EphemeraFieldsController < ResourcesController
   self.resource_class = EphemeraField
   self.change_set_persister = ::ChangeSetPersister.new(
     metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

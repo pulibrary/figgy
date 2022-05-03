@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Numismatics
-  class FirmsController < ResourceController
+  class FirmsController < ResourcesController
     self.resource_class = Numismatics::Firm
     self.change_set_persister = ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

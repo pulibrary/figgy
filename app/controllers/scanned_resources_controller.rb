@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ScannedResourcesController < ResourceController
+class ScannedResourcesController < ResourcesController
   self.resource_class = ScannedResource
   self.change_set_persister = ChangeSetPersister.default
 

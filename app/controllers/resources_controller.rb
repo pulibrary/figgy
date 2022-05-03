@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # A base controller for resources, intended for inheritance
-class ResourceController < ApplicationController
+class ResourcesController < ApplicationController
   class_attribute :resource_class, :change_set_persister
   include TokenAuth
   include Blacklight::SearchContext

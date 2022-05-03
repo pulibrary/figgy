@@ -15,7 +15,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     sign_in user if user
   end
 
-  it_behaves_like "a ResourceController"
+  it_behaves_like "a ResourcesController"
 
   describe "manifest caching" do
     let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
