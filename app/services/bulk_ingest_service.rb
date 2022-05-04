@@ -14,7 +14,7 @@ class BulkIngestService
   # @param base_directory [String] the path to the parent directory
   # @param property [String, nil] the resource property (when attaching files to existing resources)
   # @param file_filters [Array] the filter used for matching against the filename extension
-  def attach_each_dir(base_directory:, property: nil, file_filters: [], **attributes)
+  def attach_each_dir(base_directory:, property: nil, file_filters: [], preserve_file_names: false, **attributes)
     raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
 
     entries = Dir["#{base_directory}/*"]
@@ -22,7 +22,7 @@ class BulkIngestService
     entries.sort.each do |subdir|
       next unless File.directory?(subdir)
       logger.info "Attaching #{subdir}"
-      attach_dir(base_directory: subdir, property: property, file_filters: file_filters, **attributes)
+      attach_dir(base_directory: subdir, property: property, file_filters: file_filters, preserve_file_names: preserve_file_names, **attributes)
     end
   end
 
@@ -32,7 +32,7 @@ class BulkIngestService
   # @param base_directory [String] the path to the base directory
   # @param property [String, nil] the resource property (when attaching files to existing resources)
   # @param file_filters [Array] the filter used for matching against the filename extension
-  def attach_dir(base_directory:, property: nil, file_filters: [], **attributes)
+  def attach_dir(base_directory:, property: nil, file_filters: [], preserve_file_names: false, **attributes)
     raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
 
     file_entries = Dir["#{base_directory}/*"]
@@ -48,7 +48,7 @@ class BulkIngestService
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
     resource = find_or_create_by(property: property, value: file_name, **attributes)
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
-    attach_children(path: directory_path, resource: resource, file_filters: file_filters, **child_attributes)
+    attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
   end
 
   private
@@ -91,17 +91,18 @@ class BulkIngestService
     # @param path [Pathname] the path to the directory containing the child directories
     # @param resource [Resource] the resource being used to construct child resources
     # @param file_filters [Array] the filter used for matching against the filename extension
-    def attach_children(path:, resource:, file_filters: [], **attributes)
+    def attach_children(path:, resource:, file_filters: [], preserve_file_names: false, **attributes)
       child_attributes = attributes.except(:collection)
       child_resources = dirs(path: path).map do |subdir_path|
         child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
         attach_children(
           path: subdir_path,
           resource: new_resource(klass: child_klass, **child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))),
-          file_filters: file_filters
+          file_filters: file_filters,
+          preserve_file_names: preserve_file_names
         )
       end
-      child_files = files(path: path, file_filters: file_filters, parent_resource: resource)
+      child_files = files(path: path, file_filters: file_filters, parent_resource: resource, preserve_file_names: preserve_file_names)
 
       change_set = ChangeSet.for(resource, change_set_param: change_set_param)
       change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
@@ -163,7 +164,7 @@ class BulkIngestService
     # @param parent_resource [Valkyrie::Resource] Parent that the files will be
     #   attached to.
     # @return [Array<Pathname>] the paths to any files
-    def files(path:, file_filters: [], parent_resource:)
+    def files(path:, file_filters: [], preserve_file_names: false, parent_resource:)
       file_paths = path.children.select(&:file?)
       if file_filters.present?
         file_paths = file_paths.select do |file|
@@ -174,15 +175,16 @@ class BulkIngestService
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
 
-      BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource).to_a
+      BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource, preserve_file_names: preserve_file_names).to_a
     end
 
     # Converts file paths to IngestableFiles to attach to a parent.
     class BulkFilePathConverter
-      attr_reader :file_paths, :parent_resource
-      def initialize(file_paths:, parent_resource:)
+      attr_reader :file_paths, :parent_resource, :preserve_file_names
+      def initialize(file_paths:, parent_resource:, preserve_file_names: false)
         @file_paths = file_paths.sort
         @parent_resource = parent_resource
+        @preserve_file_names = preserve_file_names
       end
 
       # Mosaic target if creating a raster and there's either one file or the
@@ -198,16 +200,6 @@ class BulkIngestService
         file_paths.each_with_index do |f, idx|
           basename = File.basename(f)
           mime_type = mime_type(basename)
-          title = if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
-                    basename
-                  # Add cropped title if there's cropped/uncropped
-                  elsif cropped_title?(basename, file_paths)
-                    "#{parent_resource.title.first} (Cropped)"
-                  elsif raster_resource_parent? || scanned_map_parent?
-                    parent_resource.title.map(&:to_s)
-                  else
-                    (idx + 1).to_s
-                  end
           service_targets = "tiles" if raster_resource_parent? && mosaic_service_target?(basename)
           nodes << IngestableFile.new(
             file_path: f,
@@ -215,12 +207,27 @@ class BulkIngestService
             original_filename: basename,
             copyable: true,
             container_attributes: {
-              title: title,
+              title: file_title(basename, mime_type, idx),
               service_targets: service_targets
             }
           )
         end
         nodes
+      end
+
+      def file_title(basename, mime_type, membership_index)
+        if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
+          basename
+        elsif preserve_file_names
+          basename.gsub(File.extname(basename), "")
+          # Add cropped title if there's cropped/uncropped
+        elsif cropped_title?(basename, file_paths)
+          "#{parent_resource.title.first} (Cropped)"
+        elsif raster_resource_parent? || scanned_map_parent?
+          parent_resource.title.map(&:to_s)
+        else
+          (membership_index + 1).to_s
+        end
       end
 
       def cropped_title?(basename, file_paths)
