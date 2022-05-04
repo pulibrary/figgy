@@ -109,7 +109,8 @@ class BulkIngestController < ApplicationController
       {
         member_of_collection_ids: collection_ids,
         state: params[:workflow][:state],
-        visibility: params[:visibility]
+        visibility: params[:visibility],
+        preserve_file_names: params[:preserve_file_names] == "1"
       }
     end
 

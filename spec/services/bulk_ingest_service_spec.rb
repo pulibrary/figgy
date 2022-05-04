@@ -111,6 +111,22 @@ RSpec.describe BulkIngestService do
         expect(resource.source_metadata_identifier).to include(bib)
         expect(resource.local_identifier).to include(local_id)
       end
+      it "maintains file names if preserve_file_names is true" do
+        ingester.attach_dir(
+          base_directory: single_dir,
+          file_filters: [".tif"],
+          source_metadata_identifier: bib,
+          local_identifier: local_id,
+          collection: coll,
+          preserve_file_names: true
+        )
+
+        updated_collection = query_service.find_by(id: coll.id)
+
+        resource = Wayfinder.for(updated_collection).members.first
+        members = Wayfinder.for(resource).members
+        expect(members.first.title).to eq ["color"]
+      end
     end
 
     context "when using the SimpleChangeSet" do

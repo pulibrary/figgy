@@ -242,6 +242,30 @@ RSpec.describe BulkIngestController do
         }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
       end
+
+      context "and preserve_file_names is checked" do
+        let(:attributes) do
+          {
+            workflow: { state: "pending" },
+            collections: ["1234567"],
+            visibility: "open",
+            browse_everything: browse_everything,
+            preserve_file_names: "1"
+          }
+        end
+        it "keeps file names" do
+          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+          expected_attributes = {
+            directory: "/base/4609321",
+            state: "pending",
+            visibility: "open",
+            member_of_collection_ids: ["1234567"],
+            source_metadata_identifier: "4609321",
+            preserve_file_names: true
+          }
+          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+        end
+      end
     end
 
     context "when the directory looks like a bibid, but isn't valid" do
