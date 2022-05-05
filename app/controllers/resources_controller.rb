@@ -1,13 +1,24 @@
 # frozen_string_literal: true
 
 # A base controller for resources, intended for inheritance
-class ResourceController < ApplicationController
+class ResourcesController < ApplicationController
   class_attribute :resource_class, :change_set_persister
   include TokenAuth
   include Blacklight::SearchContext
   before_action :load_collections, only: [:new, :edit, :update, :create]
   delegate :metadata_adapter, to: :change_set_persister
   delegate :persister, :query_service, to: :metadata_adapter
+
+  def refresh_remote_metadata
+    body = JSON.parse(request.body.read)
+    codes = body["archival_collection_codes"]
+    return if codes.blank?
+    codes.each do |code|
+      RefreshArchivalCollectionJob.perform_later(collection_code: code)
+    end
+
+    head :accepted
+  end
 
   def new
     @change_set = ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param).prepopulate!

@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   end
 
   post "/graphql", to: "graphql#execute", defaults: { format: :json }
+  post "/resources/refresh_remote_metadata", to: "resources#refresh_remote_metadata", defaults: { format: :json }
+
   get "dashboard/fixity", to: "fixity_dashboard#show", as: "fixity_dashboard"
   get "dashboard/numismatics", to: "numismatics_dashboard#show", as: "numismatics_dashboard"
 

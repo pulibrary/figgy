@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Numismatics
-  class AccessionsController < ResourceController
+  class AccessionsController < ResourcesController
     self.resource_class = Numismatics::Accession
     self.change_set_persister = ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),

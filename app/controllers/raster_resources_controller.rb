@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RasterResourcesController < ResourceController
+class RasterResourcesController < ResourcesController
   include GeoResourceController
   include GeoblacklightDocumentController
   before_action :load_thumbnail_members, only: [:edit]
