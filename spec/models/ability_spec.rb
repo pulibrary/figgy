@@ -295,6 +295,7 @@ describe Ability do
       is_expected.to be_able_to(:read, :graphql)
       is_expected.to be_able_to(:download, no_public_download_open_file)
       is_expected.to be_able_to(:download, token_downloadable_audio_file)
+      is_expected.to be_able_to(:refresh_remote_metadata, private_scanned_resource)
     }
 
     context "when index read-only mode is on" do
@@ -432,6 +433,7 @@ describe Ability do
       is_expected.to be_able_to(:download, token_downloadable_audio_file)
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
+      is_expected.not_to be_able_to(:refresh_remote_metadata, :json_document)
     }
 
     context "when read-only mode is on" do
@@ -528,6 +530,7 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, admin_file)
       is_expected.not_to be_able_to(:download, no_public_download_open_file)
       is_expected.not_to be_able_to(:download, token_downloadable_audio_file)
+      is_expected.not_to be_able_to(:refresh_remote_metadata, :json_document)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, pending_scanned_resource)
@@ -851,6 +854,7 @@ describe Ability do
       is_expected.not_to be_able_to(:destroy, ocr_request)
       is_expected.not_to be_able_to(:download, no_public_download_open_file)
       is_expected.not_to be_able_to(:download, token_downloadable_audio_file)
+      is_expected.not_to be_able_to(:refresh_remote_metadata, :json_document)
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, private_scanned_resource)
@@ -1020,6 +1024,14 @@ describe Ability do
 
       it "preserves the access controls to a resource" do
         is_expected.not_to be_able_to(:read, vector_resource)
+      end
+    end
+
+    context "with a manifest_refresh auth token" do
+      let(:token) { AuthToken.create(label: "Test", group: ["metadata_refresh"]).token }
+
+      it "provides access refresh remote metadata for a resource" do
+        is_expected.to be_able_to(:refresh_remote_metadata, :json_document)
       end
     end
 
