@@ -8,6 +8,7 @@ class ResourcesController < ApplicationController
   before_action :load_collections, only: [:new, :edit, :update, :create]
   delegate :metadata_adapter, to: :change_set_persister
   delegate :persister, :query_service, to: :metadata_adapter
+  skip_before_action :verify_authenticity_token, only: [:refresh_remote_metadata]
 
   def refresh_remote_metadata
     body = JSON.parse(request.body.read)
