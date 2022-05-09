@@ -38,7 +38,7 @@ RSpec.describe BulkUpdateMailer, type: :mailer do
         expect(email.from).to contain_exactly "no-reply@www.example.com"
         expect(email.to).to contain_exactly user.email
         expect(email.subject).to eq "Bulk update status for batch initiated on #{time}"
-        expect(email.body.to_s).to include "Bulk update failed due to invalid change set on Resource with id #{resource1.id}"
+        expect(email.body.to_s).to include "Bulk update failed due to invalid parameters on Resource with ID <a href=\"http://www.example.com/catalog/#{resource1.id}\">#{resource1.id}</a>"
         expect(email.body.to_s).to include expected_search_params(search_params: search_params)
         expect(email.body.to_s).to include expected_ids(ids: ids)
 
@@ -64,8 +64,8 @@ RSpec.describe BulkUpdateMailer, type: :mailer do
     <<-FIXTURE
     <p>And for these Resources(s):</p>
     <ul>
-        <li>#{ids[0]}</li>
-        <li>#{ids[1]}</li>
+        <li><a href=\"http://www.example.com/catalog/#{ids[0]}\">#{ids[0]}</a></li>
+        <li><a href=\"http://www.example.com/catalog/#{ids[1]}\">#{ids[1]}</a></li>
     </ul>
     FIXTURE
   end
