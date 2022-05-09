@@ -2,6 +2,8 @@
 require "rails_helper"
 
 RSpec.describe ResourcesController do
+  with_queue_adapter :test
+
   describe "#refresh_remote_metadata" do
     context "with a list of archival_collection_codes" do
       it "starts a job of some kind, returns 202" do
