@@ -33,7 +33,7 @@ RSpec.describe BulkUpdateMailer, type: :mailer do
 
       it "when bulk update fails" do
         time = Time.current.to_s
-        email = described_class.with(email: user.email, ids: ids, resource_id: resource1.id, time: Time.current.to_s, search_params: search_params).update_status
+        email = described_class.with(email: user.email, ids: ids, resource_id: resource1.id, time: time, search_params: search_params).update_status
 
         expect(email.from).to contain_exactly "no-reply@www.example.com"
         expect(email.to).to contain_exactly user.email
