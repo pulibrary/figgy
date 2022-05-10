@@ -11,6 +11,7 @@ class ResourcesController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:refresh_remote_metadata]
 
   def refresh_remote_metadata
+    authorize! :refresh_remote_metadata, :json_document
     body = JSON.parse(request.body.read)
     codes = body["archival_collection_codes"]
     return if codes.blank?

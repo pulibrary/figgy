@@ -55,6 +55,9 @@ class Ability
     end
     can [:read], Numismatics::Monogram
     can [:read], :graphql
+    can :refresh_remote_metadata, :json_document do
+      current_user.groups.include?("metadata_refresh")
+    end
   end
 
   # Abilities that should be granted to institutional patron
@@ -80,7 +83,7 @@ class Ability
   end
 
   def stored_token
-    @auth_token ||= AuthToken.find_by(token: token_param)
+    @stored_token ||= AuthToken.find_by(token: token_param)
   end
 
   # Construct the AuthToken object from the parameter value in the HTTP request
