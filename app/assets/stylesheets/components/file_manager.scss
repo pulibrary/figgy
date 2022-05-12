@@ -91,7 +91,8 @@
     }
     li.pending {
       .panel > form {
-        @extend .panel-info;
+        // TODO: Fix
+        // @extend .panel-info;
       }
     }
     li .attributes .file_set_viewing_hint {
@@ -102,7 +103,8 @@
     }
     li.failure {
       .panel > form {
-        @extend .panel-danger;
+        // TODO: Fix
+        // @extend .panel-danger;
       }
     }
     &.grid li {
@@ -124,7 +126,8 @@
     background-color: #FECA40;
   }
   .panel > form {
-    @extend .panel-default;
+    // TODO: Fix
+    // @extend .panel-default;
   }
   .resource-type-heading {
     padding: 0 15px;

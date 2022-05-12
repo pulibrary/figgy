@@ -58,7 +58,7 @@
     }
 
     &.list ul {
-      @include content-columns(3);
+      columns: 3;
     }
   }
 
