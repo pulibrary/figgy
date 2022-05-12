@@ -20,15 +20,17 @@
   }
 }
 
-.panel-classify-work {
-  @include panel-variant(none, $gray-light, $light-gray, $panel-default-border);
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  & > .panel-heading {
-    border-style: solid;
-    border-width: 1px;
-  }
-}
+// TODO: Replace styles
+
+// .panel-classify-work {
+//   @include panel-variant(none, $gray-light, $light-gray, $panel-default-border);
+//   -webkit-box-shadow: none;
+//   box-shadow: none;
+//   & > .panel-heading {
+//     border-style: solid;
+//     border-width: 1px;
+//   }
+// }
 
 // Copied from CC
 
