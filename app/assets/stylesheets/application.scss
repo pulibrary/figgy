@@ -10,15 +10,14 @@
  *= require leaflet-boundingbox
 */
 @charset "utf-8";
+@import "../../../node_modules/lux-design-system/dist/system/system.utils.scss";
 @import 'variables/typography';
 @import 'variables/breaks';
 @import 'variables/colors';
 @import 'variables/typography';
 @import 'variables/visibility_widget';
-@import "../../../node_modules/lux-design-system/dist/system/system.utils.scss";
 @import "../../../node_modules/vue-select/src/scss/vue-select.scss";
 
-@import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
 

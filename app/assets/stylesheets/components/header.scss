@@ -202,18 +202,18 @@ header {
   }
 }
 
-@media (max-width: $grid-float-breakpoint-max) {
+@include media-breakpoint-down(md) {
   .navbar-inverse {
     .item-with-options {
-      color: $navbar-inverse-link-color;
+      color: $link-color;
     }
     .item-options {
       > li > a {
-        color: $navbar-inverse-link-color;
+        color: $link-color;
         &:hover,
         &:focus {
-          color: $navbar-inverse-link-hover-color;
-          background-color: $navbar-inverse-link-hover-bg;
+          color: $link-hover-color;
+          background-color: $dropdown-link-hover-bg;
         }
       }
     }

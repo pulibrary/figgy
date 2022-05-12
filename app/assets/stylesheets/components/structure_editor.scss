@@ -10,12 +10,12 @@
   }
   .expanded {
     > div > .panel > .panel-heading > div > .title > .expand-collapse {
-      @extend .glyphicon-arrow-down;
+      // @extend .glyphicon-arrow-down;
     }
   }
   .collapsed {
     > div > .panel > .panel-heading > div > .title > .expand-collapse {
-      @extend .glyphicon-arrow-up;
+      // @extend .glyphicon-arrow-up;
     }
   }
   .expand-collapse {
@@ -41,13 +41,13 @@
     }
   }
   .title {
-    @extend .col-xs-8;
+    @extend .col-8;
     input[type=text] {
       width: 80%;
     }
   }
   .toolbar {
-    @extend .col-xs-4;
+    @extend .col-4;
     text-align: right;
     .glyphicon-remove {
       @extend .text-danger;
