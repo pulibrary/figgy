@@ -38,7 +38,7 @@
   </head>
   <body>
     <%= content_for?(:body) ? yield(:body) : yield %>
-    <%= render 'shared/ajax_modal' %>
+    <%= render 'shared/modal' %>
     <%# There were errors when we tried to include this webpack %>
     <%# see comments culminating with https://github.com/pulibrary/figgy/pull/3754#issuecomment-598510375 %>
     <script src="//cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.js"></script>
