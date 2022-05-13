@@ -35,7 +35,7 @@ RSpec.describe BulkEditController, type: :controller do
     it "updates the resources" do
       Timecop.freeze(Time.current) do
         expect { post :resources_update, params: params }.to have_enqueued_job(BulkUpdateJob).with(
-          ids: [resource2.id.to_s, resource1.id.to_s], email: user.email, args: { mark_complete: true }, time: Time.current.to_s, search_params: params[:search_params]
+          ids: array_including(resource2.id.to_s, resource1.id.to_s), email: user.email, args: { mark_complete: true }, time: Time.current.to_s, search_params: params[:search_params]
         )
       end
       expect(response.body).to redirect_to root_path
