@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class BulkEditController < ApplicationController
-  include Blacklight::SearchHelper
+  include Blacklight::Searchable
+  include ::Hydra::Catalog
   before_action :load_collections, only: [:resources_edit]
+  delegate :search_builder, :repository, to: :search_service
 
   def resources_edit
     (solr_response, _document_list) = search_results(q: params["q"], f: params["f"])
