@@ -114,6 +114,10 @@ class CatalogController < ApplicationController
     }
     config.add_facet_fields_to_solr_request!
 
+    config.add_results_collection_tool(:sort_widget)
+    config.add_results_collection_tool(:per_page_widget)
+    config.add_results_collection_tool(:view_type_group)
+
     config.add_search_field "all_fields", label: "All Fields"
 
     # If there are more than this many search results, no spelling ("did you
@@ -185,7 +189,7 @@ class CatalogController < ApplicationController
 
   def set_parent_document
     if params[:parent_id]
-      _, @parent_document = fetch(params[:parent_id])
+      _, @parent_document = search_service.fetch(params[:parent_id])
     # we know in our data a fileset never has more than one parent; grab it for breadcrumb convenience
     elsif @document[:internal_resource_ssim].include? "FileSet"
       query = "member_ids_ssim:id-#{params['id']}"

@@ -10,7 +10,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
     it "can find documents via JSON" do
       get :index, params: { q: "", format: :json }
@@ -78,7 +78,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "123456" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
     context "with imported metadata" do
       render_views
@@ -89,8 +89,8 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "Earth rites" }
 
-        expect(response.body).to have_selector "td", text: "Bord, Janet, 1945-"
-        expect(assigns(:document_list).length).to eq 1
+        expect(response.body).to have_selector "dd", text: "Bord, Janet, 1945-"
+        expect(assigns(:response).documents.length).to eq 1
         facets = assigns(:response)["facet_counts"]["facet_fields"]
         expect(facets["state_ssim"]).to eq ["complete", 1]
         expect(facets["display_subject_ssim"]).to eq [output.imported_metadata[0].subject.first, 1]
@@ -101,7 +101,7 @@ RSpec.describe CatalogController do
       persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, local_identifier: "p3b593k91p"))
 
       get :index, params: { q: "p3b593k91p" }
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
     context "with metadata imported from voyager" do
       it "can search by imported local identifiers" do
@@ -109,24 +109,24 @@ RSpec.describe CatalogController do
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429", import_metadata: true))
         get :index, params: { q: "cico:xjt" }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
       it "can search by call number" do
         stub_bibdata(bib_id: "10001789")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         persister.save(resource: FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true))
         get :index, params: { q: "g8731" }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
       it "can search by various imported fields" do
         stub_bibdata(bib_id: "10001789")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         persister.save(resource: FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true))
         get :index, params: { q: "Stationery" }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
 
         get :index, params: { q: "lighthouses" }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
     context "with metadata imported from pulfa" do
@@ -135,7 +135,7 @@ RSpec.describe CatalogController do
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, title: [], source_metadata_identifier: "AC044_c0003", import_metadata: true))
         get :index, params: { q: "Box 1 Folder 2" }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
     context "recordings with imported metadata" do
@@ -150,12 +150,12 @@ RSpec.describe CatalogController do
 
       it "can find by imported metadata" do
         get :index, params: { q: "Sheena is a punk rocker" }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
 
       it "can find by track name" do
         get :index, params: { q: "Title not in imported metadata?" }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
     it "can search by ARK" do
@@ -165,17 +165,17 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "ark:/99999/fk4123456" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
 
       get :index, params: { q: "fk4123456" }
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
     it "can search by non-imported title" do
       persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "Tësting This"))
 
       get :index, params: { q: "Testing" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
 
     context "with indexed completed ephemera folders" do
@@ -186,25 +186,32 @@ RSpec.describe CatalogController do
       it "can search by barcode" do
         get :index, params: { q: "123456789abcde" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
 
       it "can search by folder label" do
         get :index, params: { q: "folder 24" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
 
     it "can sort by title" do
-      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "Resource A"))
-      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "Resource B"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "A"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "B"))
 
-      get :index, params: { q: "resource", sort: "title_ssort asc" }
-      expect(assigns(:document_list).map { |r| r.resource.title.first }).to eq(["Resource A", "Resource B"])
+      get :index, params: { q: "", sort: "title_ssort asc" }
 
-      get :index, params: { q: "resource", sort: "title_ssort desc" }
-      expect(assigns(:document_list).map { |r| r.resource.title.first }).to eq(["Resource B", "Resource A"])
+      expect(assigns(:response).documents.map { |r| r.resource.title.first }).to eq(["A", "B"])
+    end
+
+    it "can sort by title desc" do
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "A"))
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, title: "B"))
+
+      get :index, params: { q: "", sort: "title_ssort desc" }
+
+      expect(assigns(:response).documents.map { |r| r.resource.title.first }).to eq(["B", "A"])
     end
 
     it "allows multiple anonymous users to search" do
@@ -224,7 +231,7 @@ RSpec.describe CatalogController do
     it "doesn't display claimed_by if not logged in" do
       persister.save(resource: FactoryBot.build(:complete_scanned_resource, claimed_by: "Donatello"))
       get :index, params: { q: "" }
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
       queries = assigns(:response)["facet_counts"]["facet_queries"]
       expect(queries.keys.select { |x| x.include?("claimed") }).to be_empty
     end
@@ -256,7 +263,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 0
+      expect(assigns(:response).documents.length).to eq 0
     end
   end
 
@@ -266,14 +273,14 @@ RSpec.describe CatalogController do
         sign_in FactoryBot.create(:staff)
         persister.save(resource: FactoryBot.build(:numismatic_place))
         get :index, params: { q: "", all_models: "true", f: { human_readable_type_ssim: ["Place"] } }
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
     context "anonymous user" do
       it "cannot access solr metadata for numismatics place" do
         persister.save(resource: FactoryBot.build(:numismatic_place))
         get :index, params: { q: "", all_models: "true", f: { human_readable_type_ssim: ["Place"] } }
-        expect(assigns(:document_list).length).to eq 0
+        expect(assigns(:response).documents.length).to eq 0
       end
     end
   end
@@ -285,7 +292,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
 
       it "does not display incomplete EphemeraFolders" do
@@ -293,7 +300,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 0
+        expect(assigns(:response).documents.length).to eq 0
       end
 
       it "does not display EphemeraBoxes" do
@@ -301,7 +308,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 0
+        expect(assigns(:response).documents.length).to eq 0
       end
     end
 
@@ -316,7 +323,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 2
+        expect(assigns(:response).documents.length).to eq 2
       end
 
       it "displays all_in_production  EphemeraBoxes" do
@@ -324,7 +331,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
 
       context "with a non-Latin title which has been transliterated" do
@@ -337,12 +344,12 @@ RSpec.describe CatalogController do
 
         it "can search by the non-Latin title" do
           get :index, params: { q: "Что" }
-          expect(assigns(:document_list).length).to eq 1
+          expect(assigns(:response).documents.length).to eq 1
         end
 
         it "can search by the transliterated title" do
           get :index, params: { q: "Chto" }
-          expect(assigns(:document_list).length).to eq 1
+          expect(assigns(:response).documents.length).to eq 1
         end
       end
     end
@@ -358,14 +365,14 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
 
       it "indexes by barcode" do
         persister.save(resource: FactoryBot.build(:ephemera_box, barcode: "abcde012345678"))
         get :index, params: { q: "abcde012345678" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
 
@@ -382,7 +389,7 @@ RSpec.describe CatalogController do
       it "does display complete EphemeraFolders" do
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
 
@@ -399,13 +406,13 @@ RSpec.describe CatalogController do
       it "does display complete EphemeraFolders" do
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
 
       it "retrieves folders by box/folder label" do
         get :index, params: { q: "box 42 folder 99" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
 
@@ -422,7 +429,7 @@ RSpec.describe CatalogController do
       it "does display incomplete folders" do
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
   end
@@ -436,7 +443,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
   end
 
@@ -449,7 +456,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 0
+      expect(assigns(:response).documents.length).to eq 0
     end
   end
 
@@ -459,14 +466,14 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 0
+      expect(assigns(:response).documents.length).to eq 0
     end
     it "does display a Simple Resource in published state" do
       persister.save(resource: FactoryBot.build(:simple_resource, state: "complete"))
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
   end
 
@@ -480,7 +487,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 0
+        expect(assigns(:response).documents.length).to eq 0
       end
     end
     context "as an admin" do
@@ -492,7 +499,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
+        expect(assigns(:response).documents.length).to eq 1
       end
     end
   end
@@ -512,8 +519,8 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 1
-        expect(assigns(:document_list).first.resource.id).to eq parent.id
+        expect(assigns(:response).documents.length).to eq 1
+        expect(assigns(:response).documents.first.resource.id).to eq parent.id
       end
     end
 
@@ -527,8 +534,8 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list).length).to eq 2
-        expect(assigns(:document_list).map(&:id)).to contain_exactly(parent.id.to_s, child.id.to_s)
+        expect(assigns(:response).documents.length).to eq 2
+        expect(assigns(:response).documents.map(&:id)).to contain_exactly(parent.id.to_s, child.id.to_s)
       end
     end
   end
@@ -543,7 +550,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
     context "when a resource has a collection" do
       render_views
@@ -554,7 +561,7 @@ RSpec.describe CatalogController do
         get :index, params: { q: "" }
 
         expect(response.body).to have_selector ".facet-field-heading", text: "Collections"
-        expect(response.body).to have_selector ".facet_select", text: collection.title.first
+        expect(response.body).to have_selector ".facet-select", text: collection.title.first
       end
     end
   end
@@ -569,7 +576,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
   end
 
@@ -583,7 +590,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 1
+      expect(assigns(:response).documents.length).to eq 1
     end
   end
 
@@ -597,7 +604,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 0
+      expect(assigns(:response).documents.length).to eq 0
     end
   end
 
@@ -610,7 +617,7 @@ RSpec.describe CatalogController do
 
       get :index, params: { q: "" }
 
-      expect(assigns(:document_list).length).to eq 0
+      expect(assigns(:response).documents.length).to eq 0
     end
   end
 
@@ -818,7 +825,7 @@ RSpec.describe CatalogController do
 
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list)).to be_empty
+        expect(assigns(:response).documents).to be_empty
       end
     end
 
@@ -830,7 +837,7 @@ RSpec.describe CatalogController do
         sign_in user
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list)).not_to be_empty
+        expect(assigns(:response).documents).not_to be_empty
       end
       it "displays private resources even in index read-only mode" do
         user = FactoryBot.create(:admin)
@@ -840,7 +847,7 @@ RSpec.describe CatalogController do
         sign_in user
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list)).not_to be_empty
+        expect(assigns(:response).documents).not_to be_empty
       end
     end
     context "when logged in" do
@@ -851,7 +858,7 @@ RSpec.describe CatalogController do
         sign_in user
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list)).not_to be_empty
+        expect(assigns(:response).documents).not_to be_empty
       end
       it "displays resources which are explicitly given permission to that user" do
         user = FactoryBot.create(:user)
@@ -860,7 +867,7 @@ RSpec.describe CatalogController do
         sign_in user
         get :index, params: { q: "" }
 
-        expect(assigns(:document_list)).not_to be_empty
+        expect(assigns(:response).documents).not_to be_empty
       end
     end
   end
@@ -958,16 +965,16 @@ RSpec.describe CatalogController do
     it "finds coins by issue metadata fields" do
       issue_metadata.values.each do |val|
         get :index, params: { q: val }
-        expect(assigns(:document_list)).not_to be_empty
-        expect(assigns(:document_list).map(&:id)).to include(coin.id.to_s)
+        expect(assigns(:response).documents).not_to be_empty
+        expect(assigns(:response).documents.map(&:id)).to include(coin.id.to_s)
       end
     end
 
     it "finds coins by coin metadata fields" do
       coin_metadata.values.each do |val|
         get :index, params: { q: val }
-        expect(assigns(:document_list)).not_to be_empty
-        expect(assigns(:document_list).map(&:id)).to include(coin.id.to_s)
+        expect(assigns(:response).documents).not_to be_empty
+        expect(assigns(:response).documents.map(&:id)).to include(coin.id.to_s)
       end
     end
   end
