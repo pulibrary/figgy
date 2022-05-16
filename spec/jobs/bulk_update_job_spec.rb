@@ -98,10 +98,9 @@ describe BulkUpdateJob do
         allow(ChangeSet).to receive(:for).and_return(change_set)
         allow(change_set).to receive(:valid?).and_return(false)
       end
-      it "raises an error" do
-        expect { described_class.perform_now(ids: ids, email: user.email, args: args, time: Time.current, search_params: {}) }.to raise_error(
-          "Bulk update failed for batch #{ids} with args #{args} due to invalid change set on resource #{resource1.id}"
-        )
+      it "Sends an email notice" do
+        expect { described_class.perform_now(ids: ids, email: user.email, args: args, time: Time.current, search_params: {}) }
+          .to change { ActionMailer::Base.deliveries.count }.by(1)
       end
     end
   end
