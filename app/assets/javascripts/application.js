@@ -18,6 +18,8 @@
 //= require leaflet-boundingbox
 //
 // Required by Blacklight
+//= require popper
+//= require bootstrap
 //= require blacklight/blacklight
 //= require cable
 //= require form/mutex
@@ -34,7 +36,7 @@
 //= require openseadragon/jquery
 //= require bootstrap-select
 //= require bootstrap_select_dropdown
-// require bootstrap/affix
+//= //require bootstrap/affix
 //= require babel/polyfill
 //= require hydra-editor/hydra-editor
 //= require cocoon
