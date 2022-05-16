@@ -70,7 +70,7 @@ class CatalogController < ApplicationController
   end
 
   def iiif_search
-    _, @document = fetch(params[:solr_document_id])
+    _, @document = search_service.fetch(params[:solr_document_id])
     authorize! :iiif_search, resource
     super
   end
@@ -95,6 +95,7 @@ class CatalogController < ApplicationController
 
     config.index.title_field = "figgy_title_ssim"
     config.index.display_type_field = "human_readable_type_ssim"
+    config.show.display_type_field = "human_readable_type_ssim"
     config.add_facet_field "member_of_collection_titles_ssim", label: "Collections", limit: 5
     config.add_facet_field "human_readable_type_ssim", label: "Type of Work", limit: 5
     config.add_facet_field "ephemera_project_ssim", label: "Ephemera Project", limit: 5
@@ -188,7 +189,9 @@ class CatalogController < ApplicationController
     # we know in our data a fileset never has more than one parent; grab it for breadcrumb convenience
     elsif @document[:internal_resource_ssim].include? "FileSet"
       query = "member_ids_ssim:id-#{params['id']}"
-      _, result = search_results(q: query, rows: 1)
+      _, result = search_service.search_results do |search_builder|
+        search_builder.with(q: query, rows: 1)
+      end
       @parent_document = result.first if result.first
     elsif params[:parent_id].nil? && @document.decorated_resource.try(:decorated_parent)
       set_coin_parent
@@ -203,7 +206,9 @@ class CatalogController < ApplicationController
   def lookup_manifest
     ark = "#{params[:prefix]}/#{params[:naan]}/#{params[:arkid]}"
     query = "identifier_ssim:#{RSolr.solr_escape(ark)}"
-    _, result = search_results(q: query, fl: "id, internal_resource_ssim", rows: 1)
+    _, result = search_service.search_results do |search_builder|
+      search_builder.with(q: query, fl: "id, internal_resource_ssim", rows: 1)
+    end
 
     if result.first
       object_id = result.first["id"]
@@ -218,7 +223,7 @@ class CatalogController < ApplicationController
   # This endpoint redirects to download an original pdf if present,
   # or redirects to the resource pdf endpoint if one needs to be generated
   def pdf
-    _, @document = fetch(params[:solr_document_id])
+    _, @document = search_service.fetch(params[:solr_document_id])
 
     source_pdf = Wayfinder.for(resource).source_pdf
     if source_pdf
