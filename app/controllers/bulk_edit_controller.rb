@@ -6,7 +6,9 @@ class BulkEditController < ApplicationController
   delegate :search_builder, :repository, to: :search_service
 
   def resources_edit
-    (solr_response, _document_list) = search_results(q: params["q"], f: params["f"])
+    (solr_response, _document_list) = search_service.search_results do |search_builder|
+      search_builder.with(q: params["q"], f: params["f"])
+    end
     @resources_count = solr_response["response"]["numFound"]
   end
 
