@@ -40,12 +40,8 @@
 //= require babel/polyfill
 //= require hydra-editor/hydra-editor
 //= require cocoon
-//= require range_limit
+//= require blacklight_range_limit
 //= require_tree .
-$(document).ready(function() {
-  Initializer = require('figgy_boot')
-  window.figgy = new Initializer()
-})
 $(document).ready(function() {
   $('.multi_value.form-group').manage_fields();
 });
