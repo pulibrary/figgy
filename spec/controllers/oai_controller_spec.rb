@@ -65,7 +65,7 @@ RSpec.describe OaiController do
       it "returns all the resources in oai_dc" do
         collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
-        stub_pulfa(pulfa_id: "C0022_c0145")
+        stub_aspace(pulfa_id: "C0022_c0145")
         FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "C0022", "metadataPrefix" => "oai_dc" }
@@ -158,7 +158,7 @@ RSpec.describe OaiController do
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
-          stub_pulfa(pulfa_id: "C0022_c0145")
+          stub_aspace(pulfa_id: "C0022_c0145")
           resource = FactoryBot.create_for_repository(
             :complete_scanned_resource,
             member_of_collection_ids: collection.id,
@@ -173,10 +173,10 @@ RSpec.describe OaiController do
           expect(records.length).to eq 1
           expect(result.xpath("//title").text).to eq "156. Camp à Providence sur le chemin de Boston, le 13 Novembre, 4 miles de l'ancien Camp"
           expect(result.xpath("//creator").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
-          expect(result.xpath("//publisher").text).to eq "Berthier, Louis-Alexandre, 1753-1815."
+          expect(result.xpath("//publisher").text).to eq "Berthier, Louis-Alexandre, 1753-1815"
           expect(result.xpath("//date").text).to eq "1-1"
           expect(result.xpath("//rights").text).to eq "No Known Copyright"
-          expect(result.xpath("//format").map(&:text)).to eq ["image/tiff", "1 item; 33 x 29 cm"]
+          expect(result.xpath("//format").map(&:text)).to eq ["image/tiff"]
           # defaults to "text" when no values are defined
           expect(result.xpath("//type").map(&:text)).to eq ["text"]
           expect(result.xpath("//source").text).to eq "Princeton University Library, C0022_c0145"

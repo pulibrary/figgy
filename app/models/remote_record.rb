@@ -8,7 +8,7 @@ class RemoteRecord
     if bibdata?(source_metadata_identifier)
       new(source_metadata_identifier)
     elsif pulfa?(source_metadata_identifier)
-      PulfaRecord.new(source_metadata_identifier, resource)
+      PulfaRecord.new(source_metadata_identifier)
     end
   end
 
@@ -55,9 +55,8 @@ class RemoteRecord
     # Constructor
     # @param source_metadata_identifier [String]
     # @param resource [Resource]
-    def initialize(source_metadata_identifier, resource = nil)
+    def initialize(source_metadata_identifier)
       @source_metadata_identifier = source_metadata_identifier
-      @resource = resource
     end
 
     def attributes
@@ -65,11 +64,11 @@ class RemoteRecord
     end
 
     def success?
-      client_result.source.strip.present?
+      client_result && client_result.source.strip.present?
     end
 
     def client_result
-      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier, @resource)
+      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier)
     end
   end
 

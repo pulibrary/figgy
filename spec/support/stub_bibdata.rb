@@ -109,6 +109,19 @@ module BibdataStubbing
       )
   end
 
+  def stub_aspace_error(pulfa_id:, status_code:)
+    json_url = "#{aspace_domain}/catalog/#{pulfa_id.tr('/', '_')}.json"
+    json_url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token
+    stub_request(:get, json_url)
+      .to_return(
+        status: status_code,
+        headers: {
+          "Content-Type" => "application/json"
+        },
+        body: { status: status_code, error: "Error" }.to_json
+      )
+  end
+
   def aspace_domain
     "https://findingaids-beta.princeton.edu"
   end
