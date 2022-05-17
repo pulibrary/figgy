@@ -1,7 +1,8 @@
 <% content_for(:above_container) do %>
   <div class="lux">
-    <%= render 'shared/header' %>
+    <%= render "shared/header" %>
   </div>
+  <%= render "shared/flash_message" %>
 <% end %>
 <% content_for(:content) do %>
   <% if content_for? :sidebar %>
