@@ -1,6 +1,6 @@
-import Flash from "flash"
-import LabelerActionsManager from "bulk_labeler/labeler_actions_manager"
-import shift_enabled_selecting from "shift_selecting"
+import Flash from "figgy/flash"
+import LabelerActionsManager from "figgy/bulk_labeler/labeler_actions_manager"
+import shift_enabled_selecting from "figgy/shift_selecting"
 export default class BulkLabeler {
   constructor() {
     this.element = $("*[data-action=file-manager]")
