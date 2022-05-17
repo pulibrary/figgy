@@ -1,7 +1,8 @@
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory'
-const csrfToken = document.getElementsByName('csrf-token')[0].content
+const csrfToken = document.getElementsByName('csrf-token')[0]
+  ? document.getElementsByName('csrf-token')[0].content : undefined
 const httpLink = createHttpLink({
   uri: '/graphql',
   credentials: 'include',
