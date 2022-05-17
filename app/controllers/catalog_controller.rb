@@ -117,6 +117,8 @@ class CatalogController < ApplicationController
     config.add_results_collection_tool(:sort_widget)
     config.add_results_collection_tool(:per_page_widget)
     config.add_results_collection_tool(:view_type_group)
+    config.add_results_document_tool(:bookmark, partial: "bookmark_control", if: :render_bookmarks_control?)
+    config.add_nav_action(:bookmark, partial: "blacklight/nav/bookmark", if: :render_bookmarks_control?)
 
     config.add_search_field "all_fields", label: "All Fields"
 
@@ -204,7 +206,7 @@ class CatalogController < ApplicationController
 
   def set_coin_parent
     params[:parent_id] = @document.decorated_resource.decorated_parent["id"].to_s
-    _, @parent_document = fetch(params[:parent_id])
+    _, @parent_document = search_service.fetch(params[:parent_id])
   end
 
   def lookup_manifest
