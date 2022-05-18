@@ -12,6 +12,7 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
     assign(:change_set, parent)
     assign(:children, members)
     stub_blacklight_views
+    allow(view).to receive(:controller_name).and_return("catalog")
     render
   end
 
