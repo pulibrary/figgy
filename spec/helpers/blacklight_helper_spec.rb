@@ -39,9 +39,12 @@ RSpec.describe ::BlacklightHelper do
     let(:facet) { "human_readable_type_ssim" }
     let(:values) { ["Scanned Resource", "Vector Resource"] }
 
+    let(:search_state) { Blacklight::SearchState.new({}, CatalogController.blacklight_config, controller) }
+
     before do
       allow(helper).to receive(:blacklight_config).and_return(CatalogController.blacklight_config)
       allow(helper).to receive(:action_name).and_return("show")
+      allow(helper).to receive(:search_state).and_return(search_state)
     end
 
     it "generates the text for the faceted search" do
