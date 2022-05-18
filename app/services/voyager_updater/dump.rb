@@ -37,7 +37,7 @@ module VoyagerUpdater
       # Retrieve the JSON from Voyager and parse the values into a Hash
       # @return [Hash]
       def parsed_json
-        @parsed_json ||= JSON.parse(open(url).read)
+        @parsed_json ||= JSON.parse(URI.open(url).read)
       end
 
       # Retrieves a resource using a Voyager bib. ID
