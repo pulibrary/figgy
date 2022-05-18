@@ -3,9 +3,9 @@ require "rails_helper"
 
 describe VoyagerUpdater::EventStream do
   subject(:event_stream) { described_class.new(url) }
-  let(:url) { "http://localhost.localdomain" }
+  let(:url) { "http://example.com" }
   let(:id) { "1234567" }
-  let(:dump_url) { "http://localhost.localdomain" }
+  let(:dump_url) { "http://example.com" }
   let(:dump_type) { "CHANGED_RECORDS" }
   let(:data) do
     [
@@ -18,7 +18,7 @@ describe VoyagerUpdater::EventStream do
   end
 
   before do
-    stub_request(:get, "http://localhost.localdomain/").to_return(body: data.to_json)
+    stub_request(:get, "http://example.com/").to_return(body: data.to_json)
   end
 
   describe ".new" do
