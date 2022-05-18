@@ -19,8 +19,8 @@ RSpec.feature "Browsing archival media collections" do
   end
 
   before do
-    stub_pulfa(pulfa_id: "C0652")
-    stub_pulfa(pulfa_id: "C0652_c0377")
+    stub_findingaid(pulfa_id: "C0652")
+    stub_findingaid(pulfa_id: "C0652_c0377")
     stub_ezid(shoulder: "99999/fk4", blade: "123456")
     member
     sign_in user

@@ -65,7 +65,7 @@ RSpec.describe OaiController do
       it "returns all the resources in oai_dc" do
         collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
-        stub_aspace(pulfa_id: "C0022_c0145")
+        stub_findingaid(pulfa_id: "C0022_c0145")
         FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "C0022", "metadataPrefix" => "oai_dc" }
@@ -158,7 +158,7 @@ RSpec.describe OaiController do
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
-          stub_aspace(pulfa_id: "C0022_c0145")
+          stub_findingaid(pulfa_id: "C0022_c0145")
           resource = FactoryBot.create_for_repository(
             :complete_scanned_resource,
             member_of_collection_ids: collection.id,

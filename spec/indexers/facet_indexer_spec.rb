@@ -77,7 +77,7 @@ RSpec.describe FacetIndexer do
       it "parses the first year from a date range" do
         # 1941-01-01T00:00:00Z/1985-12-31T23:59:59Z
         pulfa_id = "C0652_c0377"
-        stub_pulfa(pulfa_id: pulfa_id)
+        stub_findingaid(pulfa_id: pulfa_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: pulfa_id, import_metadata: true)
 
         output = described_class.new(resource: scanned_resource).to_solr

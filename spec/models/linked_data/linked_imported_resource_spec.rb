@@ -37,19 +37,19 @@ RSpec.describe LinkedData::LinkedImportedResource do
       )
     end
     it "returns a link to the finding aids site" do
-      stub_pulfa(pulfa_id: source_id)
+      stub_findingaid(pulfa_id: source_id)
       expect(linked_resource.as_jsonld["link_to_finding_aid"]).to eq "https://findingaids.princeton.edu/collections/C0652/c0389"
     end
     it "has all the imported metadata" do
-      stub_pulfa(pulfa_id: source_id)
+      stub_findingaid(pulfa_id: source_id)
       jsonld = linked_resource.as_jsonld
       expect(jsonld["created"]).to eq ["1-1"]
       expect(jsonld["date_created"]).to eq ["undated"]
-      expect(jsonld["extent"]).to eq ["1 folder"]
+      expect(jsonld["extent"]).to eq ["1 item"]
       expect(jsonld["creator"]).to eq ["Rodriguez Monegal, Emir, 1921-1985."]
       expect(jsonld["language"]).to eq ["Spanish; Castilian"]
-      expect(jsonld["publisher"]).to eq ["Rodriguez Monegal, Emir, 1921-1985."]
-      expect(jsonld["container"]).to eq ["Box 23"]
+      expect(jsonld["publisher"]).to eq ["Rodríguez Monegal, Emír"]
+      expect(jsonld["container"]).to eq ["Box 23, Item 4"]
       expect(jsonld["archival_collection_code"]).to be_nil
       expect(jsonld["pdf_type"]).to be_nil
       expect(jsonld["source_metadata_identifier"]).to be_nil

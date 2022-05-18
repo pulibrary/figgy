@@ -109,7 +109,7 @@ RSpec.describe IdentifierService do
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: cid }
 
       before do
-        stub_aspace(pulfa_id: "MC016_c9616")
+        stub_findingaid(pulfa_id: "MC016_c9616")
       end
 
       it "links to OrangeLight" do

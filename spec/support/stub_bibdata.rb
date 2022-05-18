@@ -57,36 +57,7 @@ module BibdataStubbing
     end
   end
 
-  def stub_pulfa(pulfa_id:, body: nil)
-    pulfa_id = pulfa_id.tr("_", "/")
-    stub_request(:get, "https://findingaids.princeton.edu/collections/#{pulfa_id}.xml?scope=record")
-      .to_return(
-        body: body || file_fixture("pulfa/#{pulfa_id}.xml").read,
-        headers: {
-          "Content-Type" => "application/json+ld"
-        }
-      )
-    stub_request(:get, "https://findingaids.princeton.edu/collections/#{pulfa_id}.xml")
-      .to_return(
-        body: body || file_fixture("pulfa/#{pulfa_id}_full.xml").read,
-        headers: {
-          "Content-Type" => "application/json+ld"
-        }
-      )
-    # If we're stubbing pulfa, it's not in aspace, so return 404 from there.
-    json_url = "#{aspace_domain}/catalog/#{pulfa_id.tr('/', '_')}.json"
-    json_url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token
-    stub_request(:get, json_url)
-      .to_return(
-        status: 404,
-        headers: {
-          "Content-Type" => "application/json"
-        },
-        body: { status: 404, error: "Not Found" }.to_json
-      )
-  end
-
-  def stub_aspace(pulfa_id:, body: nil)
+  def stub_findingaid(pulfa_id:, body: nil)
     json_url = "#{aspace_domain}/catalog/#{pulfa_id.tr('.', '-')}.json"
     json_url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token
     stub_request(:get, json_url)

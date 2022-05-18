@@ -10,7 +10,7 @@ RSpec.describe ExtractArchivalCollectionCodeJob do
 
   before do
     allow(logger).to receive(:info)
-    stub_pulfa(pulfa_id: "C0652_c0389")
+    stub_findingaid(pulfa_id: "C0652_c0389")
     resource
   end
 

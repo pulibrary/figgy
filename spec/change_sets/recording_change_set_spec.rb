@@ -90,7 +90,7 @@ RSpec.describe RecordingChangeSet do
     end
 
     before do
-      stub_pulfa(pulfa_id: "C0652_c0377")
+      stub_findingaid(pulfa_id: "C0652_c0377")
     end
 
     describe "#valid?" do

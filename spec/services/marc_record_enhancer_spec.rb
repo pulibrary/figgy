@@ -39,7 +39,7 @@ RSpec.describe MarcRecordEnhancer do
 
     context "when the resource has a pulfa id" do
       it "returns nil" do
-        stub_aspace(pulfa_id: "RBD1_c13076")
+        stub_findingaid(pulfa_id: "RBD1_c13076")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "RBD1_c13076")
         expect(described_class.for(resource)).to be_nil
       end

@@ -6,8 +6,8 @@ describe PulMetadataServices::Client do
 
   before do
     stub_bibdata(bib_id: "4609321", content_type: content_type_marc_xml)
-    stub_aspace(pulfa_id: "RBD1_c13076")
-    stub_aspace(pulfa_id: "MC001.01_c000001")
+    stub_findingaid(pulfa_id: "RBD1_c13076")
+    stub_findingaid(pulfa_id: "MC001.01_c000001")
   end
 
   describe ".retrieve" do

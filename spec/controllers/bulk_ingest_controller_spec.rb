@@ -151,7 +151,7 @@ RSpec.describe BulkIngestController do
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
-        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_findingaid(pulfa_id: "AC044_c0003")
         stub_bibdata(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
@@ -398,7 +398,7 @@ RSpec.describe BulkIngestController do
     end
 
     it "Creates a multi-volume work" do
-      stub_pulfa(pulfa_id: "AC044_c0003")
+      stub_findingaid(pulfa_id: "AC044_c0003")
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)

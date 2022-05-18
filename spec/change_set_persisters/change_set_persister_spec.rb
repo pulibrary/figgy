@@ -277,7 +277,7 @@ RSpec.describe ChangeSetPersister do
   context "when a source_metadata_identifier is set and it's from PULFA" do
     let(:blade) { "MC016_c9616" }
     before do
-      stub_pulfa(pulfa_id: "MC016_c9616")
+      stub_findingaid(pulfa_id: "MC016_c9616")
     end
     it "applies remote metadata from PULFA" do
       resource = FactoryBot.build(:scanned_resource, title: [])
@@ -297,7 +297,7 @@ RSpec.describe ChangeSetPersister do
 
     it "applies remote metadata from PULFA" do
       allow(Figgy).to receive(:pulfalight_unpublished_token).and_return("1234")
-      stub_pulfa(pulfa_id: "MC016_c9616")
+      stub_findingaid(pulfa_id: "MC016_c9616")
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "MC016_c9616")
@@ -323,7 +323,7 @@ RSpec.describe ChangeSetPersister do
   end
   context "when a source_metadata_identifier is set and it's from aspace pulfalight" do
     it "applies remote metadata from aspace Pulfalight" do
-      stub_aspace(pulfa_id: "MC001.01_c000001")
+      stub_findingaid(pulfa_id: "MC001.01_c000001")
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "MC001.01_c000001")
@@ -340,7 +340,7 @@ RSpec.describe ChangeSetPersister do
     let(:blade) { "C0652" }
     let(:change_set_class) { ArchivalMediaCollectionChangeSet }
     before do
-      stub_pulfa(pulfa_id: "C0652")
+      stub_findingaid(pulfa_id: "C0652")
     end
     it "applies remote metadata from PULFA" do
       resource = FactoryBot.build(:archival_media_collection, title: [])
@@ -386,7 +386,7 @@ RSpec.describe ChangeSetPersister do
   end
   context "when a source_metadata_identifier is set for the first time, and it doesn't exist from PULFA" do
     before do
-      stub_pulfa(pulfa_id: "MC016_c9616", body: "")
+      stub_findingaid(pulfa_id: "MC016_c9616", body: "")
     end
     it "is marked as invalid" do
       resource = FactoryBot.build(:scanned_resource, title: [])
@@ -1431,7 +1431,7 @@ RSpec.describe ChangeSetPersister do
     let(:change_set) { change_set_class.new(resource, bag_path: bag_path) }
 
     before do
-      stub_aspace(pulfa_id: "C0652")
+      stub_findingaid(pulfa_id: "C0652")
       change_set.source_metadata_identifier = "C0652"
     end
 
@@ -1463,8 +1463,8 @@ RSpec.describe ChangeSetPersister do
       let(:change_set) { ArchivalMediaCollectionChangeSet.new(collection, source_metadata_identifier: "C0652", bag_path: bag_path) }
 
       before do
-        stub_aspace(pulfa_id: "C0652")
-        stub_aspace(pulfa_id: "C0652_c0377")
+        stub_findingaid(pulfa_id: "C0652")
+        stub_findingaid(pulfa_id: "C0652_c0377")
       end
 
       it "persists imported metadata for new Recording" do
@@ -1965,8 +1965,8 @@ RSpec.describe ChangeSetPersister do
 
   context "when telling an archival_media_collection to reorganize" do
     it "reorganizes" do
-      stub_aspace(pulfa_id: "C0652")
-      stub_aspace(pulfa_id: "C0652_c0377")
+      stub_findingaid(pulfa_id: "C0652")
+      stub_findingaid(pulfa_id: "C0652_c0377")
       coll = FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "C0652")
       barcode_resource = FactoryBot.create_for_repository(:recording, local_identifier: "32101047382401")
       FactoryBot.create_for_repository(

@@ -6,8 +6,8 @@ describe RemoteRecord::PulfaRecord, type: :model do
   let(:source_metadata_identifier) { "C0652" }
 
   before do
-    stub_aspace(pulfa_id: "C0652")
-    stub_aspace(pulfa_id: "C0652_c0377")
+    stub_findingaid(pulfa_id: "C0652")
+    stub_findingaid(pulfa_id: "C0652_c0377")
   end
 
   describe ".new" do

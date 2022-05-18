@@ -7,7 +7,7 @@ RSpec.describe ArchivalMediaBagParser do
   let(:barcode) { "32101047382401" }
 
   before do
-    stub_aspace(pulfa_id: "C0652")
+    stub_findingaid(pulfa_id: "C0652")
   end
 
   describe "#component_groups" do

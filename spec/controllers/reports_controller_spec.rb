@@ -78,7 +78,7 @@ RSpec.describe ReportsController, type: :controller do
       change_set.validate(source_metadata_identifier: "123456", state: ["complete"])
       change_set_persister.save(change_set: change_set)
 
-      stub_pulfa(pulfa_id: "MC016_c9616")
+      stub_findingaid(pulfa_id: "MC016_c9616")
       change_set = ScannedResourceChangeSet.new(resource2)
       change_set.validate(source_metadata_identifier: "MC016_c9616")
       change_set_persister.save(change_set: change_set)
@@ -132,9 +132,9 @@ RSpec.describe ReportsController, type: :controller do
     before do
       sign_in user
       stub_bibdata(bib_id: "123456")
-      stub_pulfa(pulfa_id: "MC016_c9616")
-      stub_pulfa(pulfa_id: "C0652_c0377")
-      stub_pulfa(pulfa_id: "RBD1_c13076")
+      stub_findingaid(pulfa_id: "MC016_c9616")
+      stub_findingaid(pulfa_id: "C0652_c0377")
+      stub_findingaid(pulfa_id: "RBD1_c13076")
       stub_ezid(shoulder: "99999/fk4", blade: "8675309")
       bibdata_resource
       pulfa_resource
