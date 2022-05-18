@@ -5,7 +5,7 @@ require "rails_helper"
 describe VoyagerUpdater::Event do
   subject(:event) { described_class.new(values) }
   let(:id) { 123_456 }
-  let(:dump_url) { "http://localhost.localdomain" }
+  let(:dump_url) { "http://example.com" }
   let(:dump_type) { "CHANGED_RECORDS" }
   let(:values) do
     {
