@@ -3,7 +3,7 @@ require "rails_helper"
 
 describe VoyagerUpdater::Dump do
   subject(:dump) { described_class.new(url) }
-  let(:url) { "http://localhost.localdomain" }
+  let(:url) { "http://example.com" }
   let(:data) do
     {
       "ids" => {
