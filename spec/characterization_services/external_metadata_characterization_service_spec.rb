@@ -42,7 +42,7 @@ RSpec.describe ExternalMetadataCharacterizationService do
   end
 
   context "with an non-geo metadata file" do
-    let(:file) { fixture_file_upload("files/pulfa/MC016/c9616.xml", "application/xml") }
+    let(:file) { fixture_file_upload("files/geo_metadata/non-geo-metadata.xml", "application/xml") }
 
     it "sets the file node mime_type without a mime type extension" do
       file_set = valid_file_set
