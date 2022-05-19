@@ -63,12 +63,29 @@ export default class UVManager {
     }
     const mobileShareButton = document.querySelector('.mobileFooterPanel button.share')
     // Pull link from the UV share popup.
+    const policies = this.createPoliciesElement()
 
-    shareButton.parentNode.insertBefore(this.createTakedownElement(), shareButton.nextSibling)
-    mobileShareButton.parentNode.insertBefore(this.createTakedownElement(), mobileShareButton.nextSibling)
+    shareButton.parentNode.insertBefore(policies.icon, shareButton.nextSibling)
+    mobileShareButton.parentNode.insertBefore(policies.icon, mobileShareButton.nextSibling)
 
     shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
     mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
+
+    const overlays = document.querySelector('.overlays')
+    overlays.appendChild(policies.overlay)
+    console.log(overlays)
+
+    policies.icon.addEventListener('click', (e) => {
+      e.preventDefault()
+
+      if (window.getComputedStyle(policies.overlay).display === 'block') {
+        console.log('change to display none')
+        policies.overlay.style.display = 'none';
+      } else {
+        console.log('change to display block')
+        policies.overlay.style.display = 'block';
+      }
+    })
   }
 
   createIIIFDragElement () {
@@ -88,6 +105,31 @@ export default class UVManager {
     iconElement.target = '_blank'
     iconElement.innerHTML = `<img src="${TakedownLogo}" style="width:30px; height=30px;"/> <span id="takedown-rights">Rights and Permissions</span>`
     return iconElement
+  }
+
+  createPoliciesElement () {
+    const harmfulLanguageLink = document.createElement('a')
+    harmfulLanguageLink.href = 'https://library.princeton.edu/statement-harmful-content'
+    harmfulLanguageLink.target = '_blank'
+    harmfulLanguageLink.innerHTML = 'Statement on Harmful Content'
+    const harmfulLanguageListItem = document.createElement('li')
+    harmfulLanguageListItem.appendChild(harmfulLanguageLink)
+
+    const policiesMenu = document.createElement('ul')
+    policiesMenu.style="top: -191.844px; left: 1px;"
+    policiesMenu.appendChild(harmfulLanguageListItem)
+    const policiesOverlayDiv = document.createElement('div')
+    policiesOverlayDiv.className = 'overlay policies'
+    policiesOverlayDiv.appendChild(policiesMenu)
+
+    const iconElement = document.createElement('a')
+    iconElement.className = 'btn imageBtn policies'
+
+    iconElement.href = 'https://library.princeton.edu/statement-harmful-content'
+    iconElement.target = '_blank'
+    iconElement.innerHTML = `<img src="${TakedownLogo}" style="width:30px; height=30px;"/> <span id="takedown-rights">Policies</span>`
+
+    return { icon: iconElement, overlay: policiesOverlayDiv }
   }
 
   waitForElementToDisplay (selector, time, callback) {
