@@ -38,7 +38,7 @@ RSpec.describe LinkedData::LinkedImportedResource do
     end
     it "returns a link to the finding aids site" do
       stub_findingaid(pulfa_id: source_id)
-      expect(linked_resource.as_jsonld["link_to_finding_aid"]).to eq "https://findingaids.princeton.edu/collections/C0652/c0389"
+      expect(linked_resource.as_jsonld["link_to_finding_aid"]).to eq "https://findingaids.princeton.edu/catalog/C0652_c0389"
     end
     it "has all the imported metadata" do
       stub_findingaid(pulfa_id: source_id)

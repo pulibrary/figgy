@@ -94,7 +94,7 @@ module BibdataStubbing
   end
 
   def aspace_domain
-    "https://findingaids-beta.princeton.edu"
+    "https://findingaids.princeton.edu"
   end
 
   def stub_bibdata_context

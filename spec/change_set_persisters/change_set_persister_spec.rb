@@ -304,7 +304,7 @@ RSpec.describe ChangeSetPersister do
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ['Speech: "... Results of the Eleventh Meeting of the Council of NATO"']
-      expect(WebMock).to have_requested(:get, "https://findingaids-beta.princeton.edu/catalog/#{blade}.json?auth_token=1234").at_least_once
+      expect(WebMock).to have_requested(:get, "https://findingaids.princeton.edu/catalog/#{blade}.json?auth_token=1234").at_least_once
     end
   end
 

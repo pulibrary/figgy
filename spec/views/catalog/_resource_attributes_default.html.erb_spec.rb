@@ -192,7 +192,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
     end
     it "provides a link to the finding aid" do
       expect(rendered).to have_selector "th", text: "Source Metadata Identifier"
-      expect(rendered).to have_link "AC044_c0003", href: "https://findingaids.princeton.edu/collections/AC044/c0003"
+      expect(rendered).to have_link "AC044_c0003", href: "https://findingaids.princeton.edu/catalog/AC044_c0003"
     end
   end
 

@@ -33,8 +33,7 @@ defaults: &defaults
   pulfa_notify: uaaglist@princeton.edu,mssdiv@princeton.edu,escowles@princeton.edu
   default_search_directory: studio_new/DPUL
   enable_pyramidal_access: true
-  findingaids_aspace_url: https://findingaids-beta.princeton.edu/catalog/
-  legacy_findingaids_url: https://findingaids.princeton.edu/collections/
+  findingaids_url: https://findingaids.princeton.edu/catalog/
   bibdata_url: https://bibdata.princeton.edu/bibliographic/
   jp2_recipes:
     default_color: >
