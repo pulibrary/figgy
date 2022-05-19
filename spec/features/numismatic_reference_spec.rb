@@ -18,8 +18,8 @@ RSpec.describe "Numismatics::Reference", js: true do
       visit numismatics_references_path
       expect(page).to have_css(".pagination .active > a")
       page.find(:css, "#site-actions > div.btn-group.add-content").click
-      expect(page).to have_css("#site-actions > div.btn-group.add-content.open")
-      add_content = page.find(:css, "#site-actions > div.btn-group.add-content.open")
+      expect(page).to have_css("#site-actions > div.btn-group.add-content.show")
+      add_content = page.find(:css, "#site-actions > div.btn-group.add-content.show")
       pagination_number = page.find(:css, ".pagination .active > a")
       pagination_z_value = pagination_number.native.style("z-index")
       expect(pagination_z_value).to eq "0"
