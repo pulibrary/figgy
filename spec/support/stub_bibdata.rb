@@ -58,7 +58,7 @@ module BibdataStubbing
   end
 
   def stub_findingaid(pulfa_id:, body: nil)
-    json_url = "#{aspace_domain}/catalog/#{pulfa_id.tr('.', '-')}.json"
+    json_url = "#{pulfalight_domain}/catalog/#{pulfa_id.tr('.', '-')}.json"
     json_url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token
     stub_request(:get, json_url)
       .to_return(
@@ -70,7 +70,7 @@ module BibdataStubbing
       )
     ead = Pathname.new(file_fixture_path).join("pulfa/aspace/#{pulfa_id}.ead.xml")
     return unless File.exist?(ead)
-    stub_request(:get, "#{aspace_domain}/catalog/#{pulfa_id.tr('.', '-')}.xml")
+    stub_request(:get, "#{pulfalight_domain}/catalog/#{pulfa_id.tr('.', '-')}.xml")
       .to_return(
         status: 200,
         headers: {
@@ -80,8 +80,8 @@ module BibdataStubbing
       )
   end
 
-  def stub_aspace_error(pulfa_id:, status_code:)
-    json_url = "#{aspace_domain}/catalog/#{pulfa_id.tr('/', '_')}.json"
+  def stub_findingaid_error(pulfa_id:, status_code:)
+    json_url = "#{pulfalight_domain}/catalog/#{pulfa_id.tr('/', '_')}.json"
     json_url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token
     stub_request(:get, json_url)
       .to_return(
@@ -93,7 +93,7 @@ module BibdataStubbing
       )
   end
 
-  def aspace_domain
+  def pulfalight_domain
     "https://findingaids.princeton.edu"
   end
 
