@@ -74,7 +74,7 @@ RSpec.feature "Ephemera Vocabularies" do
         visit edit_ephemera_folder_path(folder.id)
         expect(page).to have_selector(".ephemera_folder_language button.dropdown-toggle")
         page.find(:css, '[data-id="ephemera_folder_language"]').click
-        expect(page.all(:css, ".dropdown-menu.open").first.all(:css, "a:last-child").last).to have_content "test term"
+        expect(page.all(:css, "div.dropdown-menu.show").first.all(:css, "a:last-child").last).to have_content "test term"
       end
     end
 
