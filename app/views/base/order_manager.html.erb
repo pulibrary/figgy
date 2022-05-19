@@ -1,3 +1,4 @@
+<div class="lux">
 <div class="container">
 <ul class="breadcrumb">
   <% if decorated_change_set_resource.try(:decorated_parent).present? %>
@@ -8,3 +9,4 @@
 </ul>
 </div>
 <order-manager resource-id="<%= @change_set.id %>" default-thumbnail="<%= image_url('default_thumbnail.png') %>"></order-manager>
+</div>
