@@ -33,7 +33,7 @@ RSpec.describe DaoUpdater do
       it "notifies honeybadger" do
         stub_aspace_login
 
-        stub_aspace(pulfa_id: "MC230_c117")
+        stub_findingaid(pulfa_id: "MC230_c117")
         stub_find_archival_object_not_found(component_id: "MC230_c117")
         allow(Honeybadger).to receive(:notify)
 

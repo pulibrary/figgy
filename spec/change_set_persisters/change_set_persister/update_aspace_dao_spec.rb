@@ -9,7 +9,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
   it "updates ASpace with a new DAO when an item is marked complete" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")
-    stub_aspace(pulfa_id: "MC001.01_c000001")
+    stub_findingaid(pulfa_id: "MC001.01_c000001")
     stub_ezid(shoulder: shoulder, blade: blade)
     mocked_digital_object_create = stub_create_digital_object
     mocked_archival_object_update = stub_archival_object_update(archival_object_id: "260330")
@@ -32,7 +32,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
   it "updates ASpace even if a digital object already exists" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")
-    stub_aspace(pulfa_id: "MC001.01_c000001")
+    stub_findingaid(pulfa_id: "MC001.01_c000001")
     stub_ezid(shoulder: shoulder, blade: blade)
     stub_find_digital_object_by_figgy_id(already_exists: true)
     mocked_digital_object_update = stub_digital_object_update
@@ -53,7 +53,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
   it "adds a download link as the DAO if it's a zip file" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")
-    stub_aspace(pulfa_id: "MC001.01_c000001")
+    stub_findingaid(pulfa_id: "MC001.01_c000001")
     stub_ezid(shoulder: shoulder, blade: blade)
     mocked_digital_object_create = stub_create_digital_object
     mocked_archival_object_update = stub_archival_object_update(archival_object_id: "260330")
@@ -81,7 +81,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC230_c117")
     stub_find_digital_object(ref: "/repositories/3/digital_objects/12331")
-    stub_aspace(pulfa_id: "MC230_c117")
+    stub_findingaid(pulfa_id: "MC230_c117")
     stub_ezid(shoulder: shoulder, blade: blade)
     mocked_digital_object_create = stub_create_digital_object
     mocked_archival_object_update = stub_archival_object_update(archival_object_id: "298998")

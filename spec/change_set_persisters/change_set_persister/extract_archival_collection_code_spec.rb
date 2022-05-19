@@ -7,7 +7,7 @@ RSpec.describe ChangeSetPersister::ExtractArchivalCollectionCode do
 
   context "with pulfa collection and component ids" do
     let(:source_metadata_id) { "C0652_c0377" }
-    before { stub_pulfa(pulfa_id: source_metadata_id) }
+    before { stub_findingaid(pulfa_id: source_metadata_id) }
 
     it "extracts the collection code" do
       updated = described_class.new(change_set_persister: nil, change_set: change_set).run
@@ -17,7 +17,7 @@ RSpec.describe ChangeSetPersister::ExtractArchivalCollectionCode do
 
   context "with a pulfa collection id" do
     let(:source_metadata_id) { "C0652" }
-    before { stub_pulfa(pulfa_id: source_metadata_id) }
+    before { stub_findingaid(pulfa_id: source_metadata_id) }
 
     it "extracts the collection code" do
       updated = described_class.new(change_set_persister: nil, change_set: change_set).run

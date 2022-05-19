@@ -25,7 +25,7 @@ RSpec.describe CollectionsController, type: :controller do
       end
 
       it "creates a collection and imports metadata" do
-        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_findingaid(pulfa_id: "AC044_c0003")
 
         post :create, params: { collection: { source_metadata_identifier: "AC044_c0003", slug: "slug" } }
 
@@ -42,7 +42,7 @@ RSpec.describe CollectionsController, type: :controller do
         let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
 
         before do
-          stub_aspace(pulfa_id: "AC044_c0003")
+          stub_findingaid(pulfa_id: "AC044_c0003")
           allow(Dir).to receive(:exist?).and_return(true)
           allow(IngestArchivalMediaBagJob).to receive(:perform_later)
         end
@@ -58,6 +58,21 @@ RSpec.describe CollectionsController, type: :controller do
           expect(collection.primary_imported_metadata).to be_a ImportedMetadata
           expect(collection.title).to contain_exactly "Alumni Council: Proposals for Electing Young Alumni Trustees"
           expect(IngestArchivalMediaBagJob).to have_received(:perform_later)
+        end
+      end
+
+      context "when source metadata identifier is not found in pulfalight" do
+        it "" do
+          stub_findingaid_error(pulfa_id: "AC000_c0000", status_code: 500)
+          post :create, params: { collection: { source_metadata_identifier: "AC000_c0000", slug: "slug" } }
+
+          # Does not redirect
+          expect(response).not_to be_redirect
+          expect(response).to render_template("base/new")
+
+          # Does not create the collection
+          collections = query_service.find_all_of_model(model: Collection)
+          expect(collections).to be_empty
         end
       end
 
@@ -189,7 +204,7 @@ RSpec.describe CollectionsController, type: :controller do
 
       before do
         stub_ezid(shoulder: "99999/fk4", blade: "7564298")
-        stub_pulfa(pulfa_id: "C0652_c0377")
+        stub_findingaid(pulfa_id: "C0652_c0377")
 
         change_set = RecordingChangeSet.new(resource)
         change_set.validate(source_metadata_identifier: "C0652_c0377", member_of_collection_ids: [collection.id])

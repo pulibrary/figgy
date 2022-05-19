@@ -4,33 +4,27 @@ module PulMetadataServices
     class << self
       # Factory method for constructing BibRecord or PulfaRecord objects
       # @param id [String] the identifier
-      # @param model [Resource] the model being described by the remote record
-      # @return [PulMetadataServices::BibRecord, PulMetadataServices::PulfaRecord]
-      def retrieve(id, model = nil)
+      # @return [PulMetadataServices::BibRecord, PulMetadataServices::AspacePulfaRecord]
+      def retrieve(id)
         if bibdata?(id)
           src = retrieve_from_bibdata(id)
-          record = PulMetadataServices::BibRecord.new(src)
+          PulMetadataServices::BibRecord.new(src)
         elsif (src = retrieve_from_aspace_pulfa(id))
-          record = PulMetadataServices::AspacePulfaRecord.new(src)
-        else
-          src = retrieve_from_pulfa(id)
-          full_src = full_source_from_pulfa(id)
-          record = PulMetadataServices::PulfaRecord.new(src, model, full_src)
+          PulMetadataServices::AspacePulfaRecord.new(src)
         end
-        record
       end
 
       def retrieve_from_aspace_pulfa(id)
-        conn = Faraday.new(url: Figgy.config[:findingaids_aspace_url])
+        conn = Faraday.new(url: Figgy.config[:findingaids_url])
         url = "#{id.tr('.', '-')}.json"
         url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token.present?
         response = conn.get(url)
-        return nil if response.status != 200
+        return unless response.success?
         response.body.dup.force_encoding("UTF-8")
       end
 
       def retrieve_aspace_pulfa_ead(id)
-        conn = Faraday.new(url: Figgy.config[:findingaids_aspace_url])
+        conn = Faraday.new(url: Figgy.config[:findingaids_url])
         response = conn.get("#{id.tr('.', '-')}.xml")
         return nil if response.status != 200
         response.body.dup.force_encoding("UTF-8")
@@ -56,26 +50,6 @@ module PulMetadataServices
         response = conn.get(id)
         response.body
       end
-
-      private
-
-        # Retrieves information about archival records in the Princeton University Library Finding Aids (PULFA) service using an ID
-        # @param id [String]
-        # @return [String] string-serialized XML for record information Document
-        def retrieve_from_pulfa(id)
-          conn = Faraday.new(url: Figgy.config[:legacy_findingaids_url])
-          response = conn.get("#{id.tr('_', '/')}.xml", scope: "record")
-          response.body.dup.force_encoding("UTF-8")
-        end
-
-        # Retrieves an EAD Document (XML) from the Princeton University Library Finding Aids (PULFA) service using an ID
-        # @param id [String]
-        # @return [String] string-serialized XML for the EAD Document
-        def full_source_from_pulfa(id)
-          conn = Faraday.new(url: Figgy.config[:legacy_findingaids_url])
-          response = conn.get("#{id.tr('_', '/')}.xml")
-          response.body.dup.force_encoding("UTF-8")
-        end
     end
   end
 end

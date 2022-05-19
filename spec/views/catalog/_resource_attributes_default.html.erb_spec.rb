@@ -183,7 +183,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
     let(:solr_document) { SolrDocument.new(document) }
 
     before do
-      stub_pulfa(pulfa_id: "AC044_c0003")
+      stub_findingaid(pulfa_id: "AC044_c0003")
       assign :document, solr_document
       allow(view).to receive(:document).and_return(solr_document)
       allow(view).to receive(:has_search_parameters?).and_return(false)
@@ -192,7 +192,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
     end
     it "provides a link to the finding aid" do
       expect(rendered).to have_selector "th", text: "Source Metadata Identifier"
-      expect(rendered).to have_link "AC044_c0003", href: "https://findingaids.princeton.edu/collections/AC044/c0003"
+      expect(rendered).to have_link "AC044_c0003", href: "https://findingaids.princeton.edu/catalog/AC044_c0003"
     end
   end
 

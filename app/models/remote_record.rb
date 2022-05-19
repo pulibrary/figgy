@@ -8,7 +8,7 @@ class RemoteRecord
     if bibdata?(source_metadata_identifier)
       new(source_metadata_identifier)
     elsif pulfa?(source_metadata_identifier)
-      PulfaRecord.new(source_metadata_identifier, resource)
+      PulfaRecord.new(source_metadata_identifier)
     end
   end
 
@@ -40,13 +40,13 @@ class RemoteRecord
 
   def self.source_metadata_url(id)
     return "#{Figgy.config[:bibdata_url]}#{id}" if bibdata?(id)
-    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr('_', '/')}.xml?scope=record" if pulfa?(id)
+    "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}.xml" if pulfa?(id)
   end
 
   def self.record_url(id)
     return unless id
     return "https://catalog.princeton.edu/catalog/#{id}" if bibdata?(id)
-    "#{Figgy.config[:legacy_findingaids_url]}#{id.tr('_', '/')}" if pulfa?(id)
+    "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}" if pulfa?(id)
   end
 
   class PulfaRecord
@@ -55,9 +55,8 @@ class RemoteRecord
     # Constructor
     # @param source_metadata_identifier [String]
     # @param resource [Resource]
-    def initialize(source_metadata_identifier, resource = nil)
+    def initialize(source_metadata_identifier)
       @source_metadata_identifier = source_metadata_identifier
-      @resource = resource
     end
 
     def attributes
@@ -65,11 +64,11 @@ class RemoteRecord
     end
 
     def success?
-      client_result.source.strip.present?
+      client_result && client_result.source.strip.present?
     end
 
     def client_result
-      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier, @resource)
+      @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier)
     end
   end
 

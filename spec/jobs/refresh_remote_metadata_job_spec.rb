@@ -10,7 +10,7 @@ RSpec.describe RefreshRemoteMetadataJob do
 
     context "when the metadata has changed" do
       it "updates the metadata" do
-        stub_aspace(pulfa_id: component_id)
+        stub_findingaid(pulfa_id: component_id)
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: component_id, archival_collection_code: collection_code)
         change_set = ChangeSet.for(resource)
         change_set.validate(imported_metadata: nil)
@@ -27,7 +27,7 @@ RSpec.describe RefreshRemoteMetadataJob do
 
     context "when the metadata has not changed" do
       it "doesn't persist the resource" do
-        stub_aspace(pulfa_id: component_id)
+        stub_findingaid(pulfa_id: component_id)
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: component_id, archival_collection_code: collection_code)
         change_set = ChangeSet.for(resource)
         change_set.validate(refresh_remote_metadata: "1")

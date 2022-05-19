@@ -102,7 +102,7 @@ RSpec.describe RemoteRecord, type: :model do
 
     context "with a PULFA record ID" do
       it "provides a link to the finding aid" do
-        expect(described_class.source_metadata_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record"
+        expect(described_class.source_metadata_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/catalog/AC044_c0003.xml"
       end
     end
   end
@@ -116,7 +116,7 @@ RSpec.describe RemoteRecord, type: :model do
 
     context "with a PULFA record ID" do
       it "validates that this is a bib. ID" do
-        expect(described_class.record_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/collections/AC044/c0003"
+        expect(described_class.record_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/catalog/AC044_c0003"
       end
     end
 

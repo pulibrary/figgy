@@ -62,7 +62,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
 
       it "returns only items that can be converted to MARC21" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
-        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_findingaid(pulfa_id: "AC044_c0003")
         # Return MARC items
         create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
         # Don't return items without a metadata identifier

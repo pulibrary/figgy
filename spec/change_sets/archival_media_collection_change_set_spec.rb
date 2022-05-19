@@ -52,7 +52,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
 
       it "is invalid" do
         FactoryBot.create_for_repository(:collection, source_metadata_identifier: "AC044_c0003")
-        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_findingaid(pulfa_id: "AC044_c0003")
 
         expect(change_set).not_to be_valid
       end
@@ -62,7 +62,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "AC044_c0003") }
 
       it "is invalid" do
-        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_findingaid(pulfa_id: "AC044_c0003")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "AC044_c0003")
 
         expect(change_set).to be_valid
@@ -72,7 +72,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
     context "when source_metadata_identifier is set" do
       let(:collection) { FactoryBot.build(:collection, source_metadata_identifier: "AC044_c0003") }
       it "is valid" do
-        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_findingaid(pulfa_id: "AC044_c0003")
         expect(change_set).to be_valid
       end
     end
@@ -123,8 +123,8 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
       let(:query_service) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
       with_queue_adapter :inline
       before do
-        stub_aspace(pulfa_id: "C0652")
-        stub_aspace(pulfa_id: "C0652_c0377")
+        stub_findingaid(pulfa_id: "C0652")
+        stub_findingaid(pulfa_id: "C0652_c0377")
       end
 
       it "is invalid" do

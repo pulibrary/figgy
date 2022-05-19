@@ -301,7 +301,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         }
       end
       it "strips them" do
-        stub_pulfa(pulfa_id: "AC044_c0003")
+        stub_findingaid(pulfa_id: "AC044_c0003")
         patch :update, params: { id: resource.id.to_s, scanned_resource: params }
 
         reloaded = find_resource(resource.id)

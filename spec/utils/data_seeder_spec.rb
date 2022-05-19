@@ -96,7 +96,7 @@ RSpec.describe DataSeeder do
 
   describe "#generate_archival_recording" do
     before do
-      stub_aspace(pulfa_id: "C0652")
+      stub_findingaid(pulfa_id: "C0652")
     end
     it "adds a recording with a file set containing 3 files" do
       seeder.generate_archival_recording

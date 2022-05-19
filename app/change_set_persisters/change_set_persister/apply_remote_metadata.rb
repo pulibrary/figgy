@@ -13,6 +13,7 @@ class ChangeSetPersister
       return unless change_set.respond_to?(:apply_remote_metadata?)
       return unless change_set.respond_to?(:source_metadata_identifier)
       return unless change_set.apply_remote_metadata?
+      return unless remote_record.success?
       attributes = remote_record.attributes
       apply(attributes)
       change_set
@@ -21,7 +22,7 @@ class ChangeSetPersister
     private
 
       def remote_record
-        RemoteRecord.retrieve(change_set.source_metadata_identifier, resource: change_set.resource)
+        @remote_record ||= RemoteRecord.retrieve(change_set.source_metadata_identifier, resource: change_set.resource)
       end
 
       # Determines whether or not the resource in the ChangeSet is a geospatial resource

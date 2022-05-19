@@ -15,8 +15,8 @@ RSpec.describe ExportCollectionPDFJob do
     before do
       allow(ExportService).to receive(:export_resource_or_volumes_pdf).and_call_original
       allow(ExportService).to receive(:export_pdf)
-      stub_pulfa(pulfa_id: pulfa_id)
-      stub_pulfa(pulfa_id: pulfa_id2)
+      stub_findingaid(pulfa_id: pulfa_id)
+      stub_findingaid(pulfa_id: pulfa_id2)
       resource1
       resource2
       resource3
