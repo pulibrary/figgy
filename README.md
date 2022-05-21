@@ -209,7 +209,8 @@ To enable:
 
 ## More
 Valkyrie Documentation:
-- For links to helpful valkyrie documentation and troubleshooting tips, visit the [wiki pages](https://github.com/pulibrary/figgy/wiki).
+- For links to helpful valkyrie documentation and troubleshooting tips, visit the [Valkyrie wiki](https://github.com/samvera-labs/valkyrie/wiki).
+- Figgy documentation is in [/docs](https://github.com/pulibrary/figgy/tree/main/docs)
 
 User documentation is maintained in Google Drive:
 - [Figgy_work > Demos and Documentation](https://drive.google.com/drive/u/2/folders/1--EaoC-9fCpJx2tW4ej0-SyNNbEBX4MX)
