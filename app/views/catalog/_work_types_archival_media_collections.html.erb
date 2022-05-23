@@ -1,6 +1,12 @@
-<li class="work-type work-type-<%= type %>">
-  <h4 class="title">Archival Media Collection</h4>
-  <%= content_tag(:div, nil, class: ['work-icon', "icon-#{"Archival Media Collection".downcase.gsub(' ','-')}"]) %>
-  <%= link_to 'Add New', new_polymorphic_path([:archival_media_collection, :collections]),
+<% if can? :create, type %>
+  <div class="col-sm-3">
+    <div class="card work-type work-type-<%= type %>">
+      <div class="card-body">
+        <div class="card-title">Archival Media Collection</div>
+        <%= content_tag(:div, nil, class: ['work-icon', "icon-#{"Archival Media Collection".downcase.gsub(' ','-')}"]) %>
+        <%= link_to 'Add New', new_polymorphic_path([:archival_media_collection, :collections]),
     class: "add-button btn btn-primary #{dom_class(type, 'add_new')}" %>
-</li>
+      </div>
+    </div>
+  </div>
+<% end %>
