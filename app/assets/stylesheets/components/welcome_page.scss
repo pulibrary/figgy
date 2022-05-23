@@ -27,6 +27,10 @@
   }
   .card.work-type {
     @extend .text-center;
+    .card-title {
+      font-size: 1.2rem;
+      color: #337ab7;
+    }
     .work-icon {
       font-size: 50px;
       color: $blue;
