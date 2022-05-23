@@ -1,0 +1,20 @@
+<% if can? :create, klass %>
+  <div class="col-sm-3">
+    <div class="card work-type work-type-<%= klass %>">
+      <div class="card-body">
+        <div class="card-title"><%= klass.human_readable_type %></div>
+        <%= content_tag(:div, nil, class: ['work-icon', "icon-#{klass.human_readable_type.downcase.gsub(' ','-')}"]) %>
+        <%= link_to 'Add New',
+          main_app.new_polymorphic_path([klass]),
+          class: "add-button btn btn-primary #{dom_class(klass, 'add_new')}"
+        %>
+      <% if bulk.include?(klass) %>
+        <%= link_to 'Bulk Ingest',
+          bulk_ingest_show_path(klass.to_s.underscore),
+          class: "add-button btn btn-primary #{dom_class(klass, 'add_new')}"
+        %>
+    <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
