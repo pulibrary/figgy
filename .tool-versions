@@ -2,3 +2,4 @@ ruby 2.7.5
 nodejs 12.16.1
 java zulu-8.56.0.21
 python 3.9.0
+yarn 1.22.10
