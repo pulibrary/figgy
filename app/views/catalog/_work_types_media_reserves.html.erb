@@ -1,21 +1,25 @@
-<% if types.any? {|klass| can? :create, klass} %>
+<% if types.any? { |klass| can? :create, klass } %>
 <div class="row">
   <div class="col-md-12">
     <div class="card card-classify-work">
       <div class="card-header"><%= label %></div>
       <div class="card-body">
-        <ul class="classify-work">
+        <div class="row">
           <% types.each do |klass| %>
             <% if can? :create, klass %>
-              <li class="work-type work-type-<%= klass %>">
-                <h4 class="title">Recording</h4>
-                <%= content_tag(:div, nil, class: ['work-icon', "icon-#{klass.human_readable_type.downcase.gsub(' ','-')}"]) %>
-                <%= link_to 'Add New', new_polymorphic_path([:recording, :scanned_resources]),
-                    class: "add-button btn btn-primary #{dom_class(klass, 'add_new')}" %>
-              </li>
+              <div class="col-sm-3">
+                <div class="card work-type work-type-<%= klass %>">
+                  <div class="card-body">
+                    <div class="card-title">Recording</div>
+                    <%= content_tag(:div, nil, class: ['work-icon', "icon-#{klass.human_readable_type.downcase.gsub(' ','-')}"]) %>
+                    <%= link_to 'Add New', new_polymorphic_path([:recording, :scanned_resources]),
+                class: "add-button btn btn-primary #{dom_class(klass, 'add_new')}" %>
+                  </div>
+                </div>
+              </div>
             <% end %>
           <% end %>
-        </ul>
+        </div>
       </div>
     </div>
   </div>
