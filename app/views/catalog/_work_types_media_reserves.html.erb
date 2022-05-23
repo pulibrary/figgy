@@ -1,9 +1,9 @@
 <% if types.any? {|klass| can? :create, klass} %>
 <div class="row">
   <div class="col-md-12">
-    <div class="panel panel-classify-work">
-      <div class="panel-heading"><%= label %></div>
-      <div class="panel-body">
+    <div class="card card-classify-work">
+      <div class="card-header"><%= label %></div>
+      <div class="card-body">
         <ul class="classify-work">
           <% types.each do |klass| %>
             <% if can? :create, klass %>
