@@ -2,9 +2,9 @@
 <% if projects.length > 0 %>
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-classify-work">
-        <div class="panel-heading">Ephemera</div>
-        <div class="panel-body">
+      <div class="card card-classify-work">
+        <div class="card-header">Ephemera</div>
+        <div class="card-body">
           <ul class="classify-work">
             <% projects.to_a.sort_by(&:title).each do |project| %>
               <li class="work-type work-type-<%= project.title %>">
