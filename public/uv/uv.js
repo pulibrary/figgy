@@ -5749,7 +5749,7 @@ var Manifesto;
                             _a.sent();
                             if (!(resource.status === HTTPStatusCode.OK)) return [3 /*break*/, 3];
                             return [2 /*return*/, resource];
-                        case 3: 
+                        case 3:
                         // the stored token is no good for this resource
                         return [4 /*yield*/, Utils.doAuthChain(resource, openContentProviderInteraction, openTokenService, userInteractedWithContentProvider, getContentProviderInteraction, handleMovedTemporarily, showOutOfOptionsMessages)];
                         case 4:
@@ -5841,7 +5841,7 @@ var Manifesto;
                             // The difference is in the expected behaviour of
                             //
                             //    await userInteractedWithContentProvider(contentProviderInteraction);
-                            // 
+                            //
                             // For clickthrough the opened window should close immediately having established
                             // a session, whereas for login the user might spend some time entering credentials etc.
                             // Looking for clickthrough pattern
@@ -13385,7 +13385,7 @@ var IncomingMessage = exports.IncomingMessage = function (xhr, response, mode, f
 		self.url = response.url
 		self.statusCode = response.status
 		self.statusMessage = response.statusText
-		
+
 		response.headers.forEach(function (header, key){
 			self.headers[key.toLowerCase()] = header
 			self.rawHeaders.push(key, header)
@@ -13515,7 +13515,7 @@ IncomingMessage.prototype._onXHRProgress = function () {
 				self.push(new Buffer(response))
 				break
 			}
-			// Falls through in IE8	
+			// Falls through in IE8
 		case 'text':
 			try { // This will fail when readyState = 3 in IE9. Switch mode and wait for readyState = 4
 				response = xhr.responseText
@@ -15617,7 +15617,7 @@ var Manifold;
         Helper.prototype.isVerticallyAligned = function () {
             return this.isTopToBottom() || this.isBottomToTop();
         };
-        // dates //     
+        // dates //
         Helper.prototype.createDateNodes = function (rootNode, nodes) {
             for (var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
@@ -17142,7 +17142,7 @@ define('modules/uv-shared-module/CenterPanel',["require", "exports", "./BaseView
                     this.$subtitleText.width('auto');
                     this.$subtitleWrapper.width('auto');
                     this.$subtitleExpand.hide();
-                    // if the subtitle span is wider than the container, set it to display:block 
+                    // if the subtitle span is wider than the container, set it to display:block
                     // and set its width to that of the container
                     // this will make it appear elided.
                     // show the expand button
@@ -21190,7 +21190,7 @@ define('modules/uv-dialogues-module/DownloadDialogue',["require", "exports", "..
         DownloadDialogue.prototype.addEntireFileDownloadOptions = function () {
             if (this.isDownloadOptionAvailable(DownloadOption_1.DownloadOption.ENTIRE_FILE_AS_ORIGINAL)) {
                 this.$downloadOptions.empty();
-                // 
+                //
                 // add each file src
                 var canvas = this.extension.helper.getCurrentCanvas();
                 var renderingFound = false;
@@ -21569,7 +21569,7 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseEven
         FooterPanel.prototype.updateMinimisedButtons = function () {
             // if configured to always minimise buttons
             if (Utils.Bools.getBool(this.options.minimiseButtons, false)) {
-                this.$options.addClass('minimiseButtons');
+                // this.$options.addClass('minimiseButtons');
                 return;
             }
             // otherwise, check metric
@@ -22865,11 +22865,11 @@ define('modules/uv-resourcesleftpanel-module/ResourcesLeftPanel',["require", "ex
              TODO: make tabs work
             this.$tabs = $('<div class="tabs"></div>');
             this.$main.append(this.$tabs);
-    
+
             this.$thumbsButton = $('<a class="thumbs tab">' + this.content.thumbnails + '</a>');
             this.$thumbsButton.prop('title', this.content.thumbnails);
             this.$tabs.append(this.$thumbsButton);
-    
+
             this.$resourcesButton = $('<a class="resources tab">' + this.content.resources+ '</a>');
             this.$resourcesButton.prop('title', this.content.resources);
             this.$tabs.append(this.$resourcesButton);
