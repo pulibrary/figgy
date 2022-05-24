@@ -20,6 +20,7 @@ class RefreshRemoteMetadataJob < ApplicationJob
     end
 
     def apply_remote_metadata
+      return unless change_set.respond_to?(:refresh_remote_metadata)
       change_set.refresh_remote_metadata = "1"
       ChangeSetPersister::ApplyRemoteMetadata.new(change_set_persister: change_set_persister, change_set: change_set).run
     end

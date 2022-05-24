@@ -45,5 +45,14 @@ RSpec.describe RefreshRemoteMetadataJob do
         expect(csp_mock).not_to have_received(:save)
       end
     end
+
+    context "with a SimpleResource" do
+      it "exits without erroring" do
+        stub_findingaid(pulfa_id: component_id)
+        resource = FactoryBot.create_for_repository(:simple_resource, source_metadata_identifier: component_id, archival_collection_code: collection_code)
+
+        expect { described_class.perform_now(id: resource.id) }.not_to raise_error
+      end
+    end
   end
 end
