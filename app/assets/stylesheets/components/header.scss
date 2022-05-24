@@ -116,14 +116,6 @@ header {
   height: 34px;
 }
 
-.search-form .search-submit {
-  outline: none;
-  height: 34px;
-  width: 34px;
-  right: 0;
-  top: 0;
-}
-
 .input-group {
   width: 100%;
 }
@@ -143,19 +135,14 @@ header {
   }
 }
 
-#site-search {
-  .search-query {
-    padding-left: .6em;
-    padding-right: 12%;
+.search-form {
+  #search-input {
     width: 100%;
   }
 
-  .input-group-btn {
-    width: 1%;
-  }
-
-  .search-submit {
-    padding: 2px;
+  #keyword-search-submit {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
