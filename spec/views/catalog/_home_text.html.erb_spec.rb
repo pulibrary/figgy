@@ -18,11 +18,11 @@ RSpec.describe "catalog/_home_text.html.erb" do
       expect(rendered).to have_link "Bulk Ingest"
     end
 
-    it "has panels" do
-      expect(rendered).to have_css("div.panel-heading", text: "Numismatics")
+    it "has cards" do
+      expect(rendered).to have_css("div.card-header", text: "Numismatics")
       expect(rendered).to have_link "Manage Numismatics", href: numismatics_dashboard_path
-      expect(rendered).to have_css("h4.title", text: "Recording")
-      expect(rendered).to have_css("div.panel-heading", text: "Media Reserves")
+      expect(rendered).to have_css("div.card-title", text: "Recording")
+      expect(rendered).to have_css("div.card-header", text: "Media Reserves")
       expect(rendered).to have_link "Add New", href: new_recording_scanned_resources_path
     end
   end
