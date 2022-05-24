@@ -1,5 +1,12 @@
 <div>
   <library-header app-name="Figgy" app-url="/">
-
+    <menu-bar type="main-menu" :menu-items="[
+      <% if current_user %>
+        {name: 'Logout', component: 'Logout', href: '<%= main_app.destroy_user_session_path %>'}
+      <% else %>
+        {name: 'Log In', component: 'Login', href: '<%= main_app.new_user_session_path %>'}
+      <%end %>
+      ]"
+    ></menu-bar>
   </library-header>
 </div>
