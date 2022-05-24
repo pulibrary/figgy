@@ -1,14 +1,20 @@
 <%= form_tag main_app.search_catalog_path, :method => :get, :class => "search-form form-inline clearfix navbar-form" do %>
-  <div class="input-group">
+  <div class="input-group" id="search-input">
     <legend class="accessible-hidden">Search <%=t('product_name')%></legend>
     <%= label_tag :catalog_search, t('search.form.q.label'), :class => "accessible-hidden" %>
     <%= render_hash_as_hidden_fields(search_state.params_for_search().except(:q, :search_field, :qt, :page, :utf8)) %>
     <%= text_field_tag(:q, params[:q], :class => "q search-query form-control", :id => "catalog_search", :placeholder => t('search.form.q.placeholder'), :size => "30", :tabindex => "1", :type => "search") %>
-    <span class="input-group-btn">
+    <div class="input-group-append">
       <button type="submit" class="search-submit btn btn-primary" id="keyword-search-submit" tabindex="2">
         <span class="submit-search-text sr-only">Search</span>
-        <span class="glyphicon glyphicon-search"></span>
+        <span class="blacklight-icons blacklight-icon-search" aria-hidden="true"><!--?xml version="1.0"?-->
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-label="Search" role="img">
+            <title>Search</title>
+            <path fill="none" d="M0 0h24v24H0V0z"></path>
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+          </svg>
+        </span>
       </button>
-    </span>
+    </div>
   </div>
 <% end %>
