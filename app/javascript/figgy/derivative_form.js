@@ -15,16 +15,14 @@ export default class DerivativeForm {
       $('.flash-message span.text')
         .text("Derivatives are being regenerated")
         .parent()
-        .removeClass('alert-danger')
-        .addClass('alert-success')
-        .removeClass('hidden')
+        .removeAttr('hidden')
     }).fail(function(response, textStatus, errorThrown) {
       $('.flash-message span.text')
         .text("Derivatives cannot be regenerated")
         .parent()
         .removeClass('alert-success')
         .addClass('alert-danger')
-        .removeClass('hidden')
+        .removeAttr('hidden')
     })
   }
 }
