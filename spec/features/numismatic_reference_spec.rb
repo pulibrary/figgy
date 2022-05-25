@@ -17,9 +17,9 @@ RSpec.describe "Numismatics::Reference", js: true do
     it "is not displayed on top of the add content menu" do
       visit numismatics_references_path
       expect(page).to have_css(".pagination .active > a")
-      page.find(:css, "#site-actions > div.btn-group.add-content").click
-      expect(page).to have_css("#site-actions > div.btn-group.add-content.show")
-      add_content = page.find(:css, "#site-actions > div.btn-group.add-content.show")
+      page.find(:css, "#site-actions > div.add-content").click
+      expect(page).to have_css("#site-actions > div.add-content.show")
+      add_content = page.find(:css, "#site-actions > div.add-content.show")
       pagination_number = page.find(:css, ".pagination .active > a")
       pagination_z_value = pagination_number.native.style("z-index")
       expect(pagination_z_value).to eq "0"

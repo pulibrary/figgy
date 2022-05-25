@@ -1,16 +1,10 @@
-dl.document-metadata {
-  ul {
-    list-style: none;
-    padding-left: 0;
-  }
-}
+// dl.document-metadata {
+//   ul {
+//     list-style: none;
+//     padding-left: 0;
+//   }
+// }
 #documents .document {
-  > .btn-group {
-    float: right;
-  }
-  > .document-metadata {
-    width: 60%;
-  }
   > .document-thumbnail {
     margin-top: 20px;
     padding-left: 0;
@@ -24,19 +18,6 @@ dl.document-metadata {
   margin-bottom: 10px;
 }
 
-.attribute-table {
-  ul {
-    list-style: none;
-  }
-}
-
 #sortAndPerPage {
   margin-top: 1em;
-}
-
-div.pagination {
-  a.disabled {
-    color: gray;
-    pointer-events: none;
-  }
 }
