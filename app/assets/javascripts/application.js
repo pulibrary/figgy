@@ -16,7 +16,8 @@
 //= require leaflet
 //= require Control.Geocoder
 //= require leaflet-boundingbox
-//
+//= require datatables
+
 // Required by Blacklight
 //= require popper
 //= require bootstrap
@@ -28,8 +29,6 @@
 //= require jquery-ui/slider
 //= require jquery-ui/datepicker
 //= require jquery-ui/selectable
-//= require dataTables/jquery.dataTables
-//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require jqueryui-timepicker-addon
 //= require nestedSortable/jquery.mjs.nestedSortable
 //= require openseadragon/openseadragon
