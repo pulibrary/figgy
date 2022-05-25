@@ -12,6 +12,8 @@
 
   .card.work-type {
     @extend .text-center;
+    margin-bottom: 1.25em;
+
     .card-title {
       font-size: 1.2rem;
       color: #337ab7;
@@ -20,6 +22,9 @@
       font-size: 50px;
       color: $blue;
       padding: 15px 0 15px 0;
+    }
+    .card-body .btn {
+      margin: .5em .25em;
     }
   }
 }
