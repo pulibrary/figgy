@@ -1,9 +1,11 @@
 .thumbnail-inner {
-  width: 200px;
+  width: 150px;
 }
 .document-thumbnail {
+  margin-top: 20px;
+  padding-left: 0;
   text-align: center;
-  img {
-    max-width: 100%;
+  > a img {
+    max-width: 150px;
   }
 }
