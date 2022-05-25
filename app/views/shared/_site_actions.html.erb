@@ -1,3 +1,44 @@
 <% if current_user %>
-  <%= render 'shared/add_content' %>
+  <% include_works_link = can_ever_create_works? %>
+  <% if include_works_link %>
+    <div class="dropdown add-content">
+      <a class="btn btn-primary dropdown-toggle" id="add-content" data-toggle="dropdown" href="#" aria-haspopup="true">Actions</a>
+      <ul class="dropdown-menu dropdown-menu-right">
+        <% if include_works_link %>
+          <li>
+            <%= render 'shared/add_works' %>
+          </li>
+        <% end %>
+        <% if can?(:create, ::Collection) %>
+          <div class="dropdown-divider"></div>
+          <li><%= link_to 'Add a Collection', main_app.new_collection_path, class: 'dropdown-item new-collection', role: 'menuitem' %></li>
+          <li><%= link_to 'Add an Archival Media Collection', main_app.new_archival_media_collection_collections_path, class: 'dropdown-item new-collection', role: 'menuitem' %></li>
+        <% end %>
+        <% if can?(:create, ::Role) %>
+          <div class="dropdown-divider"></div>
+          <li><%= link_to 'Manage Roles', role_management.roles_path, class: 'dropdown-item manage-roles', role: 'menuitem' %></li>
+          <li><%= link_to 'Manage Users', main_app.users_path, class: 'dropdown-item manage-users', role: 'menuitem' %></li>
+        <% end %>
+        <% if can?(:create, ::EphemeraProject) %>
+          <div class="dropdown-divider"></div>
+          <li><%= link_to 'Manage Ephemera Projects', main_app.ephemera_projects_path, class: 'dropdown-item manage-ephemera-projects', role: 'menuitem' %></li>
+          <% if can?(:create, ::EphemeraVocabulary) %>
+            <li><%= link_to 'Manage Ephemera Vocabularies', main_app.ephemera_vocabularies_path, class: 'dropdown-item manage-ephemera-vocabularies', role: 'menuitem' %></li>
+          <% end %>
+        <% end %>
+        <% if can?(:create, ::Numismatics::Reference) %>
+          <div class="dropdown-divider"></div>
+          <li><%= link_to 'Manage Numismatics', main_app.numismatics_dashboard_path, class: 'dropdown-item manage-numismatic-accessions', role: 'menuitem' %></li>
+        <% end %>
+        <% if can?(:create, AuthToken) %>
+          <div class="dropdown-divider"></div>
+          <li><%= link_to 'Manage Auth Tokens', main_app.auth_tokens_path, class: 'dropdown-item manage-auth-tokens', role: 'menuitem' %></li>
+        <% end %>
+        <% if can?(:create, OcrRequest) %>
+          <div class="dropdown-divider"></div>
+          <li><%= link_to 'Manage OCR Requests', main_app.ocr_requests_path, class: 'dropdown-item manage-ocr-requests', role: 'menuitem' %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 <% end %>
