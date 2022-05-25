@@ -60,13 +60,13 @@ export default class Initializer {
   // most datatables can be initialized here
   // note that member resources datatables are initialized in that class
   initialize_datatables() {
-    $(".datatable").DataTable()
+    $(".datatable").dataTable()
     // Set an initial sort order of data table for coins
-    $(".coin-datatable").DataTable({
+    $(".coin-datatable").dataTable({
       "order": [[ 2, "asc" ]]
     })
     // Set an initial sort order of data table for ocr requests
-    $("#requests-table").DataTable({
+    $("#requests-table").dataTable({
       order: [[1, "desc"]],
     })
   }
