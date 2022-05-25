@@ -4,7 +4,6 @@
  *= require jquery-ui/datepicker
  *= require jquery-ui/slider
  *= require jqueryui-timepicker-addon
- *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  *= require leaflet
  *= require Control.Geocoder
  *= require leaflet-boundingbox
@@ -20,6 +19,11 @@
 
 @import "bootstrap";
 @import "font-awesome";
+// @import 'datatables';
+
+@import 'datatables/dataTables.bootstrap4';
+@import 'datatables/extensions/Responsive/responsive.bootstrap4';
+@import 'datatables/extensions/Buttons/buttons.bootstrap4';
 
 // PUL specific styles
 @import 'abstractions/mixins';
