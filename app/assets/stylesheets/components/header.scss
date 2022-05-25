@@ -1,74 +1,11 @@
-@import "variables/breaks";
-@import "variables/colors";
-@import "variables/typography";
-@import "abstractions/mixins";
-
-header {
-  /*
-    these styles are needed to keep dropdown menus from falling underneath
-    sticky elements on page. Note it's not actually sticky because there's
-    no `top` or `bottom` assigned.
-   */
-  position: sticky;
-  z-index: 1001;
+#site-search {
+  margin: 1.5em 0;
 }
 
-.l-branding__pul {
-  background: $dark-gray;
-  border-top: 3px solid $orange;
-  min-height: 40px;
-  position: relative;
-
-  .logo__pul {
-    height: 40px;
-    position: relative;
-    z-index: 10;
-    text-align: center;
-  }
-
-  .logo__pul img {
-    margin: 0;
-
-    @include vertical-align;
-  }
-}
-
-@media (min-width: $bp-medium) {
-  .l-branding__pul .logo__pul {
-    text-align: left;
-  }
-}
-
-.l-branding__pul .logo__pul {
-  margin: 0;
-  padding: 0;
-}
-
-@media (max-width: $bp-medium) {
-  .header__secondary .container .navbar-right {
+.search-form {
+  #search-input {
     width: 100%;
-    margin-top: 1em;
   }
-
-  .header__secondary .container .navbar-right .navbar-nav {
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-
-    li {
-      display: inline-block;
-      float: none;
-    }
-  }
-}
-
-.svg .logo-svg {
-  display: inline-block;
-  max-width: 100%;
-}
-
-.svg .logo-no-svg {
-  display: none;
 }
 
 #site-actions {
@@ -79,41 +16,10 @@ header {
   .btn-group {
     margin: 0 1em;
   }
-}
-
-@media (min-width: $bp-medium) {
-  .header__secondary > .container,
-  #site-actions,
-  #site-search {
-    height: 76px;
-  }
-
-  #site-actions {
+  @include media-breakpoint-up(md) {
     text-align: right;
-
-    > a,
-    .my-actions,
-    .add-content {
-      @include vertical-align;
-
-      z-index: 1;
-    }
+    margin-top: 1.5em;
   }
-}
-
-#site-search form {
-  margin: 0;
-}
-
-.search-form {
-  margin: 0;
-
-  @include vertical-align;
-}
-
-.search-form .search-query {
-  outline: none;
-  height: 34px;
 }
 
 .input-group {
@@ -127,23 +33,6 @@ header {
 .accessible-hidden,
 .visuallyhidden {
   @include visually-hidden;
-}
-
-#site-actions {
-  .btn-group + .btn-group {
-    margin-left: 0;
-  }
-}
-
-.search-form {
-  #search-input {
-    width: 100%;
-  }
-
-  #keyword-search-submit {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
 }
 
 // Copied over from Curation Concerns.
