@@ -188,26 +188,3 @@ header {
     font-style:italic;
   }
 }
-
-@include media-breakpoint-down(md) {
-  .navbar-inverse {
-    .item-with-options {
-      color: $link-color;
-    }
-    .item-options {
-      > li > a {
-        color: $link-color;
-        &:hover,
-        &:focus {
-          color: $link-hover-color;
-          background-color: $dropdown-link-hover-bg;
-        }
-      }
-    }
-  }
-}
-.menu--level-1,
-.logo__pul {
-  height: 40px;
-  position: relative;
-}
