@@ -1,3 +1,13 @@
 .facet-limit h3 {
   margin: 0;
 }
+
+.facet-limit-active.border-success {
+    border-color: $green-light !important;
+  }
+
+.facet-limit-active {
+  .card-header {
+    background: $light-gray !important;
+  }
+}
