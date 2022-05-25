@@ -11,7 +11,7 @@ RSpec.feature "Home Page" do
     end
 
     scenario "displays creation links for administrators" do
-      click_link "Add"
+      click_link "Actions"
       expect(page).to have_link "New Scanned Resource"
       expect(page).to have_link "New Recording", href: new_recording_scanned_resources_path
       expect(page).to have_link "Add a Collection", href: "/collections/new"
