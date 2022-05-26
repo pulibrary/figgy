@@ -1,14 +1,14 @@
   <div class="admin-controls">
     <% if can?(:update, resource) %>
-      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+      <%= link_to "Edit #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-light' %>
     <% end %>
     <% if can?(:edit, resource) %>
       <div class="btn-group">
         <% if can?(:create, Template) %>
-          <%= link_to "Create New Folder Template", new_ephemera_project_template_path([decorated_resource.ephemera_project], model_class: "EphemeraFolder"), class: 'btn btn-default' %>
+          <%= link_to "Create New Folder Template", new_ephemera_project_template_path([decorated_resource.ephemera_project], model_class: "EphemeraFolder"), class: 'btn btn-light' %>
         <% end %>
           <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Attach Ephemera Folder<span class="caret"></span>
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Attach Ephemera Folder<span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
               <li>

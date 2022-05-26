@@ -1,3 +1,8 @@
+// Show content above sidebar on show page
+body.blacklight-catalog-show #content {
+  @extend .order-first;
+}
+
 .relationships, .attributes {
   tbody th {
     width: 20%;
