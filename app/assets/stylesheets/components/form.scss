@@ -50,10 +50,9 @@
   .radio {
     display: inline-block;
   }
-  .label {
+  .badge {
     font-size: 14px;
     font-variant: small-caps;
-    padding-top: 0px;
     span {
       display: inline-block;
     }
@@ -72,8 +71,6 @@
       background-color: $white;
       color: $university-black;
       border: 2px solid $gainsboro;
-      padding-bottom: 2px;
-      padding-right: 6px;
       .icon {
         background-image: image-url("open_visibility.png");
       }
@@ -82,24 +79,20 @@
       background-color: $princeton-orange;
       color: $university-black;
       border: 2px solid $university-black;
-      padding-bottom: 2px;
-      padding-right: 6px;
       .icon {
         background-image: image-url("authenticated_visibility.png");
       }
     }
     &-warning {
       background-color: $university-black;
+      color: $white;
       border: 2px solid $university-black;
-      padding-bottom: 2px;
-      padding-right: 6px;
       .icon {
         background-image: image-url("authenticated_visibility_white.png");
       }
     }
     &-danger {
       background-color: $university-black;
-      padding-left: 10px;
       .icon {
         background-image: image-url("restricted_visibility.png");
       }
