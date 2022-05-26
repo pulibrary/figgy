@@ -1,5 +1,5 @@
 <% if can?(:order_manager, resource) %>
   <% if decorated_resource.orderable_files? && decorated_resource.manageable_order? %>
-    <%= link_to "Order Manager", main_app.polymorphic_path([:order_manager, resource]), class: 'btn btn-default' %>
+    <%= link_to "Order Manager", main_app.polymorphic_path([:order_manager, resource]), class: 'btn btn-light' %>
   <% end %>
 <% end %>
