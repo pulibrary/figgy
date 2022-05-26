@@ -140,7 +140,15 @@ module ApplicationHelper
   # Classes added to a document's sidebar div. Overrides blacklight helper.
   # See: https://github.com/projectblacklight/blacklight/blob/master/app/helpers/blacklight/layout_helper_behavior.rb
   def show_sidebar_classes
-    "col-xs-12"
+    "show-sidebar col-lg-12"
+  end
+
+  def sidebar_classes
+    if action_name == "show"
+      show_sidebar_classes
+    else
+      super
+    end
   end
 
   # Renders a span tag based on resource visibility value and workflow state

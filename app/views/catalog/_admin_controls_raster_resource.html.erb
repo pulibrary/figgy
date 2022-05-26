@@ -1,23 +1,21 @@
   <div class="admin-controls">
-    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+    <%= link_to "Edit #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-light' %>
     <% if decorated_resource.manageable_files? %>
-      <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-default' %>
+      <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-light' %>
     <% end %>
     <% if decorated_resource.manageable_structure? %>
-      <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
+      <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-light' %>
     <% end %>
     <% if decorated_resource.attachable_objects.length > 0 %>
         <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" class="btn btn-light dropdown-toggle" id="attachButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Attach Child <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu">
+          <div class="dropdown-menu" aria-labelledby="attachButton">
             <% decorated_resource.attachable_objects.each do |concern| %>
-              <li>
-                <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id) %>
-              </li>
+              <%= link_to "Attach #{concern.human_readable_type}",  polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern)], parent_id: resource.id), class: "dropdown-item" %>
             <% end %>
-          </ul>
+          </div>
         </div>
     <% end %>
 
