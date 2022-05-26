@@ -1,10 +1,3 @@
-// dl.document-metadata {
-//   ul {
-//     list-style: none;
-//     padding-left: 0;
-//   }
-// }
-
 .back-to-search {
   margin-bottom: 10px;
 }
@@ -12,3 +5,20 @@
 #sortAndPerPage {
   margin-top: 1em;
 }
+
+#main-container {
+  padding-top: 1em;
+}
+
+#document {
+  @extend .border-top, .mt-3, .pt-3;
+
+  caption {
+    caption-side: top;
+  }
+
+  td {
+    padding: 8px;
+  }
+}
+
