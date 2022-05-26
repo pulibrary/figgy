@@ -39,9 +39,20 @@
     }
   }
 }
-.form-group .radio input.radio_buttons {
-  margin-left: 0;
+
+// Format radio buttons for Bootstrap 4.
+// https://getbootstrap.com/docs/4.0/components/forms/#default-stacked
+// Another (better?) possibility is to create a custom SimpleForm input
+.radio {
+  @extend .form-check;
+  input {
+    @extend .form-check-input;
+  }
+  label {
+    @extend .form-check-label;
+  }
 }
+
 .panel-delete-controls {
   border-top-width: 0px;
   padding-top: 1em;
@@ -340,3 +351,4 @@ form.button-to {
     }
   }
 }
+
