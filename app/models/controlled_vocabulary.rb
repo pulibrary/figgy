@@ -104,7 +104,7 @@ class ControlledVocabulary
     # @param state [String] the state for which the badge should be generated
     # @return [String] the HTML for the Bootstrap badge
     def badge(state)
-      h.tag.span(I18n.t("state.#{state}.label"), class: "label #{dom_label_class(state)}")
+      h.tag.span(I18n.t("state.#{state}.label"), class: "badge #{dom_label_class(state)}")
     end
 
     # Retrieves the label for a state using the app. locale
@@ -125,20 +125,20 @@ class ControlledVocabulary
     # @return [Hash] the state to HTML class mapping
     def state_classes
       @state_classes ||= {
-        new: "label-default",
-        pending: "label-default",
-        needs_qa: "label-info",
-        metadata_review: "label-info",
-        final_review: "label-primary",
-        complete: "label-success",
-        flagged: "label-warning",
-        takedown: "label-danger",
-        ready_to_ship: "label-info",
-        shipped: "label-info",
-        received: "label-default",
-        all_in_production: "label-success",
-        draft: "label-default",
-        published: "label-success"
+        new: "badge-default",
+        pending: "badge-default",
+        needs_qa: "badge-info",
+        metadata_review: "badge-info",
+        final_review: "badge-primary",
+        complete: "badge-success",
+        flagged: "badge-warning",
+        takedown: "badge-danger",
+        ready_to_ship: "badge-info",
+        shipped: "badge-info",
+        received: "badge-default",
+        all_in_production: "badge-success",
+        draft: "badge-default",
+        published: "badge-success"
       }
     end
   end
