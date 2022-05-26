@@ -2,19 +2,19 @@
   - :value: <%= Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC %>
     :label: open
     :definition: Open to the world. Anyone can view.
-    :label_class: label-success
+    :label_class: badge-success
   - :value: <%= Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED %>
     :label: princeton
     :definition: Restricted access. Only users logged in with a Princeton University NetID can view.
-    :label_class: label-info
+    :label_class: badge-info
   - :value: <%= ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS %>
     :label: on campus
     :definition: Restricted access. Users can only view on campus or VPN.
-    :label_class: label-info
+    :label_class: badge-info
   - :value: <%= ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_READING_ROOM %>
     :label: reading room
     :definition: Restricted access. Only users who have been granted reading room permission in this application and are physically in an RBSC reading room can view.
-    :label_class: label-warning
+    :label_class: badge-warning
   - :value: <%= Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
     :label: private
     :definition: Only privileged users of this application can view.
