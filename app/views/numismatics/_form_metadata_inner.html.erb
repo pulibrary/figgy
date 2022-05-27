@@ -1,4 +1,4 @@
-<div class="panel-body">
+<div class="card-body">
   <% fields.each do |field| %>
     <% unless field.is_a?(Array) %>
       <%= render_edit_field_partial(field, f: f) %>
