@@ -18,4 +18,4 @@
   - :value: <%= Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE %>
     :label: private
     :definition: Only privileged users of this application can view.
-    :label_class: label-danger
+    :label_class: badge-danger

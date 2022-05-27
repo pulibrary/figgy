@@ -1,6 +1,8 @@
-<aside id="form-progress" class="form-progress panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title"><%= t("works.progress.header") %></h3>
+<aside id="form-progress" class="form-progress card">
+  <div class="card-header">
+    <div class="card-title">
+      <h3><%= t("works.progress.header") %></h3>
+    </div>
   </div>
   <div class="list-group">
     <div class="list-group-item">
@@ -16,14 +18,14 @@
       <%= render 'form_visibility_component', f: f %>
     </div>
   </div>
-  <div class="panel-footer text-center panel-save-controls">
+  <div class="card-footer text-center card-save-controls">
     <%= f.submit class: 'btn btn-primary save' %>
     <% if support_save_and_duplicate?(resource: f.object.resource)  %>
       <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
     <% end %>
   </div>
   <% if f.object.resource.is_a?(ScannedResource) %>
-    <div class="panel-footer text-center">
+    <div class="card-footer text-center">
       <%= hidden_field_tag "save_and_ingest_path" %>
       <%= f.submit "Save and Ingest", class: 'btn btn-primary', data: { save_and_ingest: true } %>
       <div id="save-and-ingest-info">
@@ -31,17 +33,17 @@
     </div>
   <% end %>
   <% if f.object.respond_to?(:skip_validation) %>
-    <div class="panel-footer text-center">
+    <div class="card-footer text-center">
       <%= f.submit "Save Draft", class: 'btn btn-primary', formnovalidate: true %>
     </div>
   <% end %>
 
   <% if params[:action] == "edit" %>
-    <div class="panel-footer text-center panel-delete-controls">
+    <div class="card-footer text-center card-delete-controls">
       <%# send user back to object from edit, back to home from new %>
       <%= link_to t(:'helpers.action.cancel'),
                   f.object.id ? solr_document_path(id: f.object.id) : main_app.root_path,
-                  class: 'btn btn-default' %>
+                  class: 'btn btn-secondary' %>
       <%= link_to "Delete This #{f.object.resource.human_readable_type}", main_app.polymorphic_path([f.object.resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{f.object.resource.human_readable_type}?" }, method: :delete %>
     </div>
   <% end %>

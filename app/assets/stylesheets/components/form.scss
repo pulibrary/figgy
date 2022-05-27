@@ -1,6 +1,6 @@
 #metadata {
-  .checkbox input[type='checkbox'] {
-    margin-left: 0;
+  .form-check {
+    margin-left: 1.25rem;
   }
   .nested-fields {
     border: 1px solid #ddd;
@@ -53,10 +53,11 @@
   }
 }
 
-.panel-delete-controls {
+.card-delete-controls {
   border-top-width: 0px;
   padding-top: 1em;
 }
+
 .set-access-controls, #attributes, #members {
   .radio {
     display: inline-block;
@@ -263,21 +264,21 @@ form.button-to {
   width: auto;
 }
 
-.panel-heading a.monograms:after {
+.card-header a.monograms:after {
     font-family:'Glyphicons Halflings';
     content:"\2212";
     float: left;
     padding-right:5px;
     color: $green;
 }
-.panel-heading a.monograms.collapsed:after {
+.card-header a.monograms.collapsed:after {
     content:"\2b";
     float: left;
     padding-right:5px;
     color: $green;
 }
 
-.form-numismatics .panel-body {
+.form-numismatics .card-body {
   padding: 8px;
   div.form-group {
     margin-bottom: 0.5em;
