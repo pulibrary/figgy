@@ -1,12 +1,12 @@
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h2 class="panel-title">Parent Raster Resources</h2>
+  <div class="card mb-4">
+    <div class="card-header">
+      Parent Raster Resources
     </div>
-    <div class="panel-body parent-resources">
+    <div class="card-body parent-resources">
       <%= simple_form_for @change_set do |f| %>
         <div class="row">
           <div class="col-md-12">
-            <div class="loading-status hidden">Loading...</div>
+            <div class="loading-status d-none">Loading...</div>
             <table id="parent-raster-resources"
                   class="table table-striped parent-resources parent-raster-resources"
                   data-update-url="<%= polymorphic_url([resource]) %>"
