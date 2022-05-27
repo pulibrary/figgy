@@ -107,9 +107,22 @@ table.dataTable thead > tr > th {
   z-index: 1000;
 }
 
-.workflow-actions {
-  // Align workflow actions and comments columns
-  h3 {
-    margin-top: 0;
+#document {
+  .card-header {
+    font-size: 18px;
+    color: $blue;
+  }
+
+  .table-heading {
+    & {
+      font-size: 18px;
+      color: $blue;
+    }
+  }
+  .workflow-actions {
+    // Align workflow actions and comments columns
+    h3 {
+      margin-top: 0;
+    }
   }
 }
