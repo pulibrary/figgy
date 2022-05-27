@@ -8,17 +8,17 @@
       placeholder_text [String] placeholder value for the id input element
     %>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
+  <div class="card mb-4">
+    <div class="card-header">
       <% panel_title ||= "Child #{member_type.titleize.pluralize}" %>
-      <h2 class="panel-title"><%= panel_title %></h2>
+      <%= panel_title %>
     </div>
-    <div class="panel-body member-resources"
+    <div class="card-body member-resources"
       id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
       <%= simple_form_for @change_set do |f| %>
         <div class="row">
           <div class="col-md-12">
-            <div class="loading-status hidden">Loading...</div>
+            <div class="loading-status d-none">Loading...</div>
 
             <table
               id="<%= "members-#{member_type.pluralize.dasherize}" %>"
