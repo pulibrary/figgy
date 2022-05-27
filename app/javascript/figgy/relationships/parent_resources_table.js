@@ -114,10 +114,10 @@ export default class ParentResourcesTable {
 
   update() {
     if(this.loading) {
-      this.$loading.removeClass('hidden')
+      this.$loading.removeClass('d-none')
       this.table.addClass('loading')
     } else {
-      this.$loading.addClass('hidden')
+      this.$loading.addClass('d-none')
       this.table.removeClass('loading')
     }
   }
@@ -131,7 +131,7 @@ export default class ParentResourcesTable {
     const $this = this;
     const $warning = $this.element.find('#warning-message');
     $warning.text(message);
-    $warning.parent().removeClass('hidden');
+    $warning.parent().removeClass('d-none');
   }
 
   /**
@@ -140,7 +140,7 @@ export default class ParentResourcesTable {
    */
   hideWarningMessage(row) {
     const $this = this;
-    $this.element.find('.message.has-warning').addClass('hidden');
+    $this.element.find('.message.has-warning').addClass('d-none');
   }
 
   /**
