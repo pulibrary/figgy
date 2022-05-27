@@ -9,6 +9,11 @@ body.blacklight-catalog-show #content {
   }
   ul.tabular {
     padding-left: 0px;
+    margin-bottom: 0px;
+    li.attribute {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
   }
 }
 
