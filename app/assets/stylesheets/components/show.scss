@@ -106,3 +106,10 @@ table.dataTable thead > tr > th {
   /* leaflet controls are 1000; this needs to scroll over them on map show pages */
   z-index: 1000;
 }
+
+.workflow-actions {
+  // Align workflow actions and comments columns
+  h3 {
+    margin-top: 0;
+  }
+}
