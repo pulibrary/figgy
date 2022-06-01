@@ -1,6 +1,6 @@
 <div class="admin-controls">
   <% if can?(:update, resource) %>
-    <%= link_to "Edit #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-light' %>
+    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-light' %>
   <% end %>
   <% if can?(:order_manager, resource) %>
     <% if decorated_resource.manageable_order? %>
