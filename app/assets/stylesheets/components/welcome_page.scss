@@ -3,6 +3,7 @@
   .card-header {
     border: $card-border-width solid $card-border-color;
   }
+}
 
   .work-type-card-col {
     @extend .col-lg-3;
@@ -10,21 +11,20 @@
     @extend .col-sm-6;
   }
 
-  .card.work-type {
-    @extend .text-center;
-    margin-bottom: 1.25em;
+.card.work-type {
+  @extend .text-center;
+  margin-bottom: 1.25em;
 
-    .card-title {
-      font-size: 1.2rem;
-      color: #337ab7;
-    }
-    .work-icon {
-      font-size: 50px;
-      color: $blue;
-      padding: 15px 0 15px 0;
-    }
-    .card-body .btn {
-      margin: .5em .25em;
-    }
+  .card-title {
+    font-size: 1.2rem;
+    color: #337ab7;
+  }
+  .work-icon {
+    font-size: 50px;
+    color: $blue;
+    padding: 15px 0 15px 0;
+  }
+  .card-body .btn {
+    margin: .5em .25em;
   }
 }

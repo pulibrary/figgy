@@ -1,17 +1,9 @@
-<div class="col-md-12">
-  <div class="card card-classify-work">
+<div class="work-type-card-col">
+  <div class="card work-type classify-issues">
     <div class="card-body">
-      <div class="row">
-        <div class="work-type-card-col">
-          <div class="card work-type">
-            <div class="card-body">
-              <div class="card-title"><%= label %></div>
-              <%= link_to "View", search_catalog_path(params: {"f":{"human_readable_type_ssim":["Issue"]},"q":""}), class: "add-button btn btn-primary" %><br>
-              <%= link_to "New Issue", new_numismatics_issue_path, class: "add-button btn btn-primary" %>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="card-title">Issues</div>
+      <%= link_to "View", search_catalog_path(params: {"f":{"human_readable_type_ssim":["Issue"]},"q":""}), class: "add-button btn btn-primary" %><br>
+      <%= link_to "New Issue", new_numismatics_issue_path, class: "add-button btn btn-primary" %>
     </div>
   </div>
 </div>
