@@ -17,13 +17,13 @@ RSpec.describe "Numismatics::Reference", js: true do
     it "is not displayed on top of the add content menu" do
       visit numismatics_references_path
       expect(page).to have_css(".pagination .active > a")
-      page.find(:css, "#site-actions > div.add-content").click
+      page.click_link("add-content")
       expect(page).to have_css("#site-actions > div.add-content.show")
-      add_content = page.find(:css, "#site-actions > div.add-content.show")
       pagination_number = page.find(:css, ".pagination .active > a")
-      pagination_z_value = pagination_number.native.style("z-index")
-      expect(pagination_z_value).to eq "0"
-      expect(add_content.native.style("z-index")).not_to be < pagination_z_value
+      pagination_z_value = pagination_number.native.style("z-index").to_i
+      dropdown_menu = page.find("#site-actions .dropdown-menu")
+      dropdown_menu_z_value = dropdown_menu.native.style("z-index").to_i
+      expect(pagination_z_value).to be < dropdown_menu_z_value
     end
   end
 end
