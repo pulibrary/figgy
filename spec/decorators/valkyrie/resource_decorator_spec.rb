@@ -303,7 +303,7 @@ RSpec.describe Valkyrie::ResourceDecorator do
     let(:resource) { FactoryBot.build(:complete_scanned_resource) }
 
     it "has a badge" do
-      expect(decorator.visibility_badge.first).to have_selector("div.label-success", text: "open")
+      expect(decorator.visibility_badge.first).to have_selector("div.badge-success", text: "open")
     end
 
     it "does not have a verbose note" do

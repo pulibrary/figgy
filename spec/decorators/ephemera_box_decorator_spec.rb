@@ -25,7 +25,7 @@ RSpec.describe EphemeraBoxDecorator do
     expect(resource.decorate.attachable_objects).to include EphemeraFolder
   end
   it "displays a state badge" do
-    expect(decorator.rendered_state).to eq("<span class=\"label label-default\">New</span>")
+    expect(decorator.rendered_state).to eq("<span class=\"badge badge-default\">New</span>")
   end
   it "exposes a single barcode" do
     expect(decorator.barcode).to eq("00000000000000")
