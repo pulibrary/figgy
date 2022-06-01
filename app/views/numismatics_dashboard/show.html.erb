@@ -1,10 +1,11 @@
 <h3 class="title">Numismatics</h3>
 <div class="row">
-  <%= render partial: "numismatics_dashboard/managed_row", locals: { label: ["Accessions", "Firms", "Monograms"] } %>
+  <%= render partial: "numismatics_dashboard/managed_row", locals: { labels: ["Accessions", "Firms", "Monograms"] } %>
 </div>
 <div class="row">
-  <%= render partial: "numismatics_dashboard/managed_row", locals: { label: ["People", "Places", "References"] } %>
+  <%= render partial: "numismatics_dashboard/managed_row", locals: { labels: ["People", "Places", "References"] } %>
+
 </div>
 <div class="row">
-  <%= render partial: "numismatics_dashboard/issues_row", locals: { label: "Issues"} %>
+  <%= render partial: "numismatics_dashboard/issues_row" %>
 </div>
