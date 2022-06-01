@@ -1,19 +1,13 @@
-<div class="col-md-12">
-  <div class="card card-classify-work">
-    <div class="card-body">
-      <div class="row">
-        <% label.each do |name| %>
-          <div class="work-type-card-col">
-            <div class="card work-type">
-              <div class="card-body">
-                <%= instance_variable_get"@#{name.downcase}" %>
-                <div class="card-title"><%= name %></div>
-                <%= link_to "Manage", send("numismatics_#{name.downcase}_path"), class: "btn btn-primary manage-#{name.downcase}" %>
-              </div>
-            </div>
-          </div>
-        <% end %>
+<% labels.each do |name| %>
+  <div class="work-type-card-col">
+    <div class="card work-type classify-<%= name.downcase %>">
+      <div class="card-body">
+        <div class="card-text">
+          <%= instance_variable_get"@#{name.downcase}" %>
+        </div>
+        <div class="card-title"><%= name %></div>
+        <%= link_to "Manage", send("numismatics_#{name.downcase}_path"), class: "btn btn-primary manage-#{name.downcase}" %>
       </div>
     </div>
   </div>
-</div>
+<% end %>
