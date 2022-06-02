@@ -48,7 +48,7 @@ RSpec.describe EphemeraBoxesController, type: :controller do
         json = JSON.parse(response.body)
         expect(json["data"].length).to eq 1
         expect(json["data"][0]["folder_number"]).to eq folder.folder_number.first
-        expect(json["data"][0]["workflow_state"]).to eq "<span class=\"label label-info\">Needs QA</span>"
+        expect(json["data"][0]["workflow_state"]).to eq "<span class=\"badge badge-info\">Needs QA</span>"
         expect(json["data"][0]["title"]).to eq folder.title
         expect(json["data"][0]["barcode"]).to eq folder.barcode.first
         expect(json["data"][0]["genre"]).to eq folder.genre.first
