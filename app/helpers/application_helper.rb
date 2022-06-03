@@ -21,6 +21,22 @@ module ApplicationHelper
     !creatable_works.empty?
   end
 
+  # Constructs a title using application name
+  # @return [String]
+  def construct_page_title(*elements)
+    (elements.flatten.compact + [application_name]).join(" // ")
+  end
+
+  # Determines the bootstrap container type based on layout
+  # @return [String] container-fluid, container
+  def container_type
+    if ordermanager_layout?
+      "container-fluid"
+    else
+      "container"
+    end
+  end
+
   # Returns a polymorphic path for linking to file sets in File Manager
   # @param child [Resource] child resource
   # @param parent [ChangeSet] parent change set
@@ -49,6 +65,14 @@ module ApplicationHelper
     @document.decorated_resource
   end
 
+  # Generates a page title
+  # @return [String]
+  def default_page_title
+    text = controller_name.singularize.titleize
+    text = "#{action_name.titleize} " + text if action_name
+    construct_page_title(text)
+  end
+
   # URL for directly querying Figgy for a specific field and value
   # @param field [String] Solr field name
   # @param value [String] field value to query
@@ -66,6 +90,22 @@ module ApplicationHelper
     else
       super
     end
+  end
+
+  # Gets current layout for use in rendering partials
+  # @return [String] ordermanager, default
+  def layout_type
+    if params[:action] == "order_manager"
+      "ordermanager"
+    else
+      "default"
+    end
+  end
+
+  # Determines if odermanager is the current layout type
+  # @return [Boolean]
+  def ordermanager_layout?
+    layout_type == "ordermanager"
   end
 
   # Returns the resource associated with the document presenter

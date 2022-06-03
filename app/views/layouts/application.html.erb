@@ -10,7 +10,7 @@
       <%= content_for(:sidebar) %>
     </section>
 
-    <section id="content" class="<%= main_content_classes %>" aria-label="<%= t('blacklight.search.documents.aria.search_results') %>">
+    <section id="content" class="<%= main_content_classes %> <%= container_type %>" aria-label="<%= t('blacklight.search.documents.aria.search_results') %>">
       <%= yield %>
     </section>
 
