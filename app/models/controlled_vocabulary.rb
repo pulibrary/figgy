@@ -125,8 +125,8 @@ class ControlledVocabulary
     # @return [Hash] the state to HTML class mapping
     def state_classes
       @state_classes ||= {
-        new: "badge-default",
-        pending: "badge-default",
+        new: "badge-dark",
+        pending: "badge-dark",
         needs_qa: "badge-info",
         metadata_review: "badge-info",
         final_review: "badge-primary",
@@ -135,9 +135,9 @@ class ControlledVocabulary
         takedown: "badge-danger",
         ready_to_ship: "badge-info",
         shipped: "badge-info",
-        received: "badge-default",
+        received: "badge-dark",
         all_in_production: "badge-success",
-        draft: "badge-default",
+        draft: "badge-dark",
         published: "badge-success"
       }
     end
