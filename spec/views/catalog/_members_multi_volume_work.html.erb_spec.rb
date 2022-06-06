@@ -18,7 +18,7 @@ RSpec.describe "catalog/_members_multi_volume_work" do
     end
 
     it "shows them" do
-      expect(rendered).to have_selector "h2", text: "Members"
+      expect(rendered).to have_selector "div", text: "Members"
       expect(rendered).to have_selector "td", text: "vol1"
       expect(rendered).to have_selector "div.badge-success .text", text: "open"
       expect(rendered).to have_selector "span.label-primary.fixity-count", text: "1"
