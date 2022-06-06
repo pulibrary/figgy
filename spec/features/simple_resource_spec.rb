@@ -23,6 +23,12 @@ RSpec.feature "SimpleChangeSets" do
     sign_in user
   end
 
+  scenario "visiting a resource show page" do
+    visit solr_document_path(simple_resource)
+
+    expect(page).to have_css("title", text: "#{simple_resource.title.first} - Figgy", visible: false)
+  end
+
   scenario "creating a new resource" do
     visit new_simple_scanned_resources_path
 

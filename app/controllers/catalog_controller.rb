@@ -147,6 +147,9 @@ class CatalogController < ApplicationController
     config.show.document_presenter_class = ValkyrieShowPresenter
     config.index.document_presenter_class = FiggyIndexPresenter
 
+    # Configuration to correctly render show page title element
+    config.show.html_title_field = "figgy_title_ssim"
+
     # "sort results by" options
     config.add_sort_field "score desc, updated_at_dtsi desc", label: "relevance \u25BC"
     config.add_sort_field "title_ssort asc", label: "title (A-Z)"
