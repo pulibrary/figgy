@@ -59,7 +59,7 @@ RSpec.feature "Scanned Resources" do
     scenario "the volumes are displayed as members" do
       visit solr_document_path(multi_volume_work)
 
-      expect(page).to have_selector "h2", text: "Members"
+      expect(page).to have_selector "div", text: "Members"
       expect(page).to have_selector "td", text: "vol1"
     end
   end
