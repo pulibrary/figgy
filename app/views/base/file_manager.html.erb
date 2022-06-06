@@ -1,11 +1,13 @@
 <h1>File Manager</h1>
-<ul class="breadcrumb">
-  <% if decorated_change_set_resource.try(:decorated_parent).present? %>
-    <li><%= link_to decorated_change_set_resource.decorated_parent.first_title, solr_document_path(id: decorated_change_set_resource.decorated_parent.id.to_s) %></li>
-  <% end %>
-  <li><%= link_to decorated_change_set_resource.first_title, solr_document_path(id: "#{@change_set.id}") %></li>
-  <li class="active">File Manager</li>
-</ul>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <% if decorated_change_set_resource.try(:decorated_parent).present? %>
+      <li class="breadcrumb-item"><%= link_to decorated_change_set_resource.decorated_parent.first_title, solr_document_path(id: decorated_change_set_resource.decorated_parent.id.to_s) %></li>
+    <% end %>
+    <li class="breadcrumb-item"><%= link_to decorated_change_set_resource.first_title, solr_document_path(id: "#{@change_set.id}") %></li>
+    <li class="breadcrumb-item active">File Manager</li>
+  </ol>
+</nav>
 <div id="file-manager-extra-tools">
   <%= render "file_manager_extra_tools" %>
 </div>
