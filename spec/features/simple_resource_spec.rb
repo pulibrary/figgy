@@ -179,7 +179,7 @@ RSpec.feature "SimpleChangeSets" do
     scenario "saved SimpleResources are displayed as members" do
       visit solr_document_path(parent)
 
-      expect(page).to have_selector "h2", text: "Members"
+      expect(page).to have_selector "div", text: "Members"
       expect(page).to have_selector "td", text: "member resource"
     end
   end
