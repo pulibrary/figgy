@@ -1,15 +1,13 @@
-<div class="row">
-  <div id="numismatic_citation">
-    <%= f.simple_fields_for :numismatic_citation, wrapper: :inline_form do |g| %>
-      <%= render 'records/edit_fields/numismatic_citation_fields', f: g %>
-    <% end %>
-  </div>
-  <div class="links">
-    <%= link_to_add_association f, :numismatic_citation, partial: 'records/edit_fields/numismatic_citation_fields', force_non_association_create: true do %>
-      <button type="button" class="btn btn-link add">
-        <span class="glyphicon glyphicon-plus"></span>
-        <span class="controls-add-text">Add another Citation</span>
-      </button>
-    <% end %>
-  </div>
+<div id="numismatic_citation">
+  <%= f.simple_fields_for :numismatic_citation, wrapper: :inline_form do |g| %>
+    <%= render 'records/edit_fields/numismatic_citation_fields', f: g %>
+  <% end %>
+</div>
+<div class="links">
+  <%= link_to_add_association f, :numismatic_citation, partial: 'records/edit_fields/numismatic_citation_fields', force_non_association_create: true do %>
+    <button type="button" class="btn btn-link add">
+      <span class="glyphicon glyphicon-plus"></span>
+      <span class="controls-add-text">Add another Citation</span>
+    </button>
+  <% end %>
 </div>

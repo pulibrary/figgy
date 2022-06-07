@@ -103,6 +103,7 @@ table.dataTable thead > tr > th {
   border: 1px solid transparent;
   border-radius: 4px;
   border-color: #ddd;
+  width: 100%;
   /* leaflet controls are 1000; this needs to scroll over them on map show pages */
   z-index: 1000;
 }
