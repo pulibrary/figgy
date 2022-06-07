@@ -21,12 +21,6 @@ module ApplicationHelper
     !creatable_works.empty?
   end
 
-  # Constructs a title using application name
-  # @return [String]
-  def construct_page_title(*elements)
-    (elements.flatten.compact + [application_name]).join(" // ")
-  end
-
   # Determines the bootstrap container type based on layout
   # @return [String] container-fluid, container
   def container_type
@@ -63,14 +57,6 @@ module ApplicationHelper
   # @return [Valkyrie::ResourceDecorator]
   def decorated_resource
     @document.decorated_resource
-  end
-
-  # Generates a page title
-  # @return [String]
-  def default_page_title
-    text = controller_name.singularize.titleize
-    text = "#{action_name.titleize} " + text if action_name
-    construct_page_title(text)
   end
 
   # URL for directly querying Figgy for a specific field and value
