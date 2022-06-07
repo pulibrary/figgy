@@ -21,6 +21,16 @@ module ApplicationHelper
     !creatable_works.empty?
   end
 
+  # Determines the bootstrap container type based on layout
+  # @return [String] container-fluid, container
+  def container_type
+    if ordermanager_layout?
+      "container-fluid"
+    else
+      "container"
+    end
+  end
+
   # Returns a polymorphic path for linking to file sets in File Manager
   # @param child [Resource] child resource
   # @param parent [ChangeSet] parent change set
@@ -66,6 +76,22 @@ module ApplicationHelper
     else
       super
     end
+  end
+
+  # Gets current layout for use in rendering partials
+  # @return [String] ordermanager, default
+  def layout_type
+    if params[:action] == "order_manager"
+      "ordermanager"
+    else
+      "default"
+    end
+  end
+
+  # Determines if odermanager is the current layout type
+  # @return [Boolean]
+  def ordermanager_layout?
+    layout_type == "ordermanager"
   end
 
   # Returns the resource associated with the document presenter
