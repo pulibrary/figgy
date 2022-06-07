@@ -1,24 +1,22 @@
-<div class="panel panel-default">
+<div class="card">
   <% if label.present? %>
     <% if label.eql?("Monograms")%>
-      <%# when the page loads the monograms panel is collapsed %>
-      <%# Monograms panel starts %>
-      <div class="panel-heading">
+      <%# when the page loads the monograms card is collapsed %>
+      <%# Monograms card starts %>
+      <div class="card-header">
         <a data-toggle = "collapse" href="#collapseMonograms" class="collapsed monograms"><%= label %></a>
         <%= link_to 'New Monogram', new_numismatics_monogram_path, class: 'btn btn-sm btn-primary new-link', target: '_blank'%>
       </div>
-      <div id="collapseMonograms" class="panel-collapse collapse">
-         <div class = "panel-body">
-           <%= render partial: 'numismatics/form_metadata_inner', locals: { fields: fields, f: f } %>
-         </div>
+      <div id="collapseMonograms" class="card-collapse collapse">
+        <%= render partial: 'numismatics/form_metadata_inner', locals: { fields: fields, f: f } %>
       </div>
-      <%# Monograms panel ends %>
+      <%# Monograms card ends %>
     <% else %>
-      <div class="panel-heading"><%= label %></div>
+      <div class="card-header"><%= label %></div>
       <%= render partial: 'numismatics/form_metadata_inner', locals: { fields: fields, f: f } %>
     <% end %>
   <% else %>
-    <div class="panel-heading">Metadata</div>
+    <div class="card-header">Metadata</div>
     <%= render partial: 'numismatics/form_metadata_inner', locals: { fields: fields, f: f } %>
   <% end %>
 </div>

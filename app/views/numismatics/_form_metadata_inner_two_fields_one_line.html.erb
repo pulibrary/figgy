@@ -1,15 +1,21 @@
 <%# This partial is using a 6 column with the assumption of a 2 elements array. %>
 <div class="card">
   <div class="card-body">
-    <% field.each do |field| %>
-      <div class="col-sm-6" >
-        <div class="form-group">
-            <%= f.label field, field, class: "control-label col-sm-6" %>
-          <div class="col-sm-6">
-            <%= f.input field, label: false, required: f.object.required?(field), class: "form-control" %>
+    <div class="row">
+      <% field.each do |field| %>
+        <div class="col-sm-6" >
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-6">
+                <%= f.label field, field, class: "col-form-label" %>
+              </div>
+              <div class="col-sm-6">
+                <%= f.input field, label: false, required: f.object.required?(field), class: "form-control" %>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 </div>
