@@ -1,7 +1,7 @@
 <template>
   <div>
     <heading level="h2">
-      Edit <small>the selected item</small>
+      Edit <small class="text-muted">the selected item</small>
     </heading>
     <form
       id="app"

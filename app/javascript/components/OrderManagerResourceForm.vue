@@ -1,7 +1,7 @@
 <template>
   <div>
     <heading level="h2">
-      Set Properties <small>
+      Set Properties <small class="text-muted">
         for this <span v-if="isMultiVolume">
           multi-volume
         </span> resource
