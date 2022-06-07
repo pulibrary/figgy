@@ -1,18 +1,16 @@
 <h2><%= form_title(params) %></h2>
 <%= simple_form_for @change_set do |f| %>
   <div class="row">
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12" role="main">
-        <div class="form-panel-content form-numismatics" id="metadata">
-          <%= yield "metadata_tab".to_sym if content_for? "metadata_tab".to_sym %>
-          <%= render "numismatics/form_metadata", f: f %>
-        </div>
+    <div class="col-xs-12 col-sm-12 col-md-12" role="main">
+      <div class="form-panel-content form-numismatics" id="metadata">
+        <%= yield "metadata_tab".to_sym if content_for? "metadata_tab".to_sym %>
+        <%= render "numismatics/form_metadata", f: f %>
       </div>
     </div>
-    <div id="sidebar" class="show-sidebar">
-      <div class="col-xs-12 col-sm-12 col-md-12">
-        <%= render 'numismatics/form_buttons', f: f %>
-      </div>
+  </div>
+  <div id="sidebar" class="show-sidebar">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+      <%= render 'numismatics/form_buttons', f: f %>
     </div>
   </div>
 <% end %>
