@@ -5,11 +5,11 @@
   </div>
 <% elsif @change_set.primary_terms.is_a?(Hash) %>
   <% @change_set.primary_terms.each_pair do |label, fields| %>
-    <div class="panel">
+    <div class="card">
       <% unless label.empty? %>
-        <div class="panel-header"><%= label %></div>
+        <div class="card-header"><%= label %></div>
       <% else %>
-        <div class="panel-header">Metadata</div>
+        <div class="card-header">Metadata</div>
       <% end %>
       <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
     </div>
