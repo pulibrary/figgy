@@ -21567,12 +21567,6 @@ define('modules/uv-shared-module/FooterPanel',["require", "exports", "./BaseEven
             this.updateMinimisedButtons();
         };
         FooterPanel.prototype.updateMinimisedButtons = function () {
-            // if configured to always minimise buttons
-            if (Utils.Bools.getBool(this.options.minimiseButtons, false)) {
-                // this.$options.addClass('minimiseButtons');
-                return;
-            }
-            // otherwise, check metric
             if (!this.extension.isDesktopMetric()) {
                 this.$options.addClass('minimiseButtons');
             }
