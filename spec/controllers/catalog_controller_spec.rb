@@ -13,9 +13,13 @@ RSpec.describe CatalogController do
       expect(assigns(:response).documents.length).to eq 1
     end
     it "can find documents via JSON" do
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource))
+
       get :index, params: { q: "", format: :json }
 
       expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["data"].first["attributes"].keys).to include("figgy_title_ssi")
     end
   end
 

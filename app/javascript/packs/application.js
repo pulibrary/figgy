@@ -37,8 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       data: {
         options: [],
       },
-      // Functions to run after Vue is mounted
-      mounted: function () {
+      beforeCreate: function () {
         setupAjaxSelect()
       }
     })
