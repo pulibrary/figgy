@@ -1,5 +1,5 @@
 <div>
-  <library-header app-name="Figgy" app-url="/" max-width=1200>
+  <library-header app-name="Figgy" app-url="/">
     <menu-bar type="main-menu" :menu-items="[
       <% if current_user %>
         {name: 'Logout', component: 'Logout', href: '<%= main_app.destroy_user_session_path %>'}
