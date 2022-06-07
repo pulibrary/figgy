@@ -1,7 +1,8 @@
 /* global UV, $, createUV */
 import CDLTimer from 'viewer/cdl_timer'
 import IIIFLogo from 'images/iiif-logo.svg'
-import TakedownLogo from 'images/takedown.png'
+import StatementOnHarmfulContentIcon from 'images/statement.png'
+import TakedownLogo from 'images/copyright.svg'
 import LeafletViewer from 'viewer/leaflet_viewer'
 import TabManager from 'viewer/tab_manager'
 
@@ -67,6 +68,9 @@ export default class UVManager {
     shareButton.parentNode.insertBefore(this.createTakedownElement(), shareButton.nextSibling)
     mobileShareButton.parentNode.insertBefore(this.createTakedownElement(), mobileShareButton.nextSibling)
 
+    shareButton.parentNode.insertBefore(this.createStatementElement(), shareButton.nextSibling)
+    mobileShareButton.parentNode.insertBefore(this.createStatementElement(), mobileShareButton.nextSibling)
+
     shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
     mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
   }
@@ -77,7 +81,7 @@ export default class UVManager {
     iconElement.className = 'btn imageBtn iiif-drag'
     iconElement.href = link
     iconElement.target = '_blank'
-    iconElement.innerHTML = `<img src="${IIIFLogo}" style="width:30px; height=30px;"/>`
+    iconElement.innerHTML = `<img src="${IIIFLogo}" style="width:25px; height=25px;"/>`
     return iconElement
   }
 
@@ -86,7 +90,16 @@ export default class UVManager {
     iconElement.className = 'btn imageBtn takedown'
     iconElement.href = 'https://library.princeton.edu/takedown-request'
     iconElement.target = '_blank'
-    iconElement.innerHTML = `<img src="${TakedownLogo}" style="width:30px; height=30px;"/> <span id="takedown-rights">Rights and Permissions</span>`
+    iconElement.innerHTML = `<img src="${TakedownLogo}" style="width:25px; height=25px;"/> <span id="takedown-rights">Rights and Permissions</span>`
+    return iconElement
+  }
+
+  createStatementElement () {
+    const iconElement = document.createElement('a')
+    iconElement.className = 'btn imageBtn statement'
+    iconElement.href = 'https://library.princeton.edu/statement-harmful-content'
+    iconElement.target = '_blank'
+    iconElement.innerHTML = `<img src="${StatementOnHarmfulContentIcon}" style="width:25px; height=25px;"/> <span id="statement-on-harmful-content">Statement on Harmful Content</span>`
     return iconElement
   }
 

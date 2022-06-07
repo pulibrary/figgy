@@ -33,3 +33,4 @@ yarn-debug.log*
 gdrive.yml
 /storage
 /profiles
+yarn-error.log
