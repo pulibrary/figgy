@@ -63,8 +63,13 @@ GIT
       ttfunk
 
 GEM
-  remote: https://rubygems.org/
   remote: https://gems.contribsys.com/
+  specs:
+    sidekiq-pro (3.7.1)
+      sidekiq (>= 4.1.5)
+
+GEM
+  remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.3)
     aasm (4.12.2)
@@ -834,8 +839,6 @@ GEM
       rack (~> 2.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 4.2)
-    sidekiq-pro (3.7.1)
-      sidekiq (>= 4.1.5)
     signet (0.12.0)
       addressable (~> 2.3)
       faraday (~> 0.9)

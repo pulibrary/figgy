@@ -287,10 +287,14 @@ form.button-to {
     color: $green;
 }
 .card-header a.monograms.collapsed:after {
-    content:"\2b";
-    float: left;
-    padding-right:5px;
-    color: $green;
+  content:"\2b";
+  float: left;
+  padding-right:5px;
+  color: $green;
+}
+
+.card {
+  margin-bottom: 25px;
 }
 
 .form-numismatics .card-body {
