@@ -1,7 +1,9 @@
-<ol class="breadcrumb">
-  <li><%= link_to 'Vocabularies', ephemera_vocabularies_path %></li>
-  <% if decorated_resource.vocabulary %>
-    <li><%= link_to decorated_resource.vocabulary.first_title, solr_document_path(id: "#{decorated_resource.vocabulary.id}") %></li>
-  <% end %>
-  <li><%= decorated_resource.first_title %></li>
-</ol>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to 'Vocabularies', ephemera_vocabularies_path %></li>
+    <% if decorated_resource.vocabulary %>
+      <li class="breadcrumb-item"><%= link_to decorated_resource.vocabulary.first_title, solr_document_path(id: "#{decorated_resource.vocabulary.id}") %></li>
+    <% end %>
+    <li class="breadcrumb-item active" aria-current="page"><%= decorated_resource.first_title %></li>
+  </ol>
+</nav>

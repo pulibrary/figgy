@@ -1,9 +1,11 @@
 <h2>Ephemera Data</h2>
 <% if @resources %>
-  <ol class="breadcrumb">
-    <li><%= link_to "Ephemera Data", ephemera_data_path %></li>
-    <li><%= @ephemera_project.title %></li>
-  </ol>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Ephemera Data", ephemera_data_path %></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= @ephemera_project.title %></li>
+    </ol>
+  </nav>
   <p>
     <%= link_to "Download CSV", ephemera_data_path(format: :csv) %>
   </p>
@@ -28,13 +30,14 @@
     </tbody>
   </table>
 <% else %>
-  <ol class="breadcrumb">
-    <li>Select an ephemera project</li>
-  </ol>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Select an ephemera project</li>
+    </ol>
+  </nav>
   <ul>
     <% @ephemera_projects.each do |project| %>
       <li><%= link_to project.title, ephemera_data_path(project.id) %></li>
     <% end %>
   </ul>
 <% end %>
-

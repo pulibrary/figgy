@@ -1,6 +1,8 @@
 <% if @parent_document %>
-  <ol class="breadcrumb">
-    <li><%= link_to @parent_document.decorated_resource.first_title, @parent_document %></li>
-    <li><%= @document.decorated_resource.first_title %></li>
-  </ol>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to @parent_document.decorated_resource.first_title, @parent_document %></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= @document.decorated_resource.first_title %></li>
+    </ol>
+  </nav>
 <% end %>

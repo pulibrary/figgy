@@ -1,9 +1,11 @@
 <h2>Pulfa Ark Report</h2>
 <% if @resources %>
+<nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li><%= link_to "Pulfa Ark Report", pulfa_ark_report_path %></li>
-    <li><%= params[:since_date] %></li>
+    <li class="breadcrumb-item"><%= link_to "Pulfa Ark Report", pulfa_ark_report_path %></li>
+    <li class="breadcrumb-item active" aria-current="page"><%= params[:since_date] %></li>
   </ol>
+</nav>
   <p>
     <%= link_to "Download CSV", pulfa_ark_report_path(params[:since_date], format: :csv) %>
   </p>
@@ -28,9 +30,11 @@
     </tbody>
   </table>
 <% else %>
+<nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li>View Pulfa Ark Report for objects updated since</li>
+    <li class="breadcrumb-item active" aria-current="page">View Pulfa Ark Report for objects updated since</li>
   </ol>
+</nav>
   <%= form_with(url: pulfa_ark_report_path, method: :get, local: true) do |f| %>
     <%= f.text_field :since_date, class: 'timepicker', required: true, autocomplete: "off" %>
     <%= f.submit("View") %>
