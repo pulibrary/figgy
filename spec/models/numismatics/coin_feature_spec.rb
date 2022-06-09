@@ -36,7 +36,7 @@ RSpec.feature "Numismatics::Coins" do
     it "shows parent when there is no parent param in the url" do
       visit solr_document_path(coin)
       expect(page).to have_css ".breadcrumb", text: "#{numismatic_issue.title.join} #{coin.title.join}"
-      expect(page).to have_selector("#doc_#{coin.id} > ol > li:nth-child(1) > a")
+      expect(page).to have_selector("#doc_#{coin.id} > nav > ol > li:nth-child(1) > a")
       expect(page).to have_link "Issue: 1", href: solr_document_path(numismatic_issue)
     end
   end
