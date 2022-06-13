@@ -4,8 +4,7 @@ require "rails_helper"
 RSpec.describe "Numismatic Ingest", js: true do
   describe "auto-ingest" do
     context "when there are matching files" do
-      # TODO: Fix coin auto-ingest
-      xit "displays an auto-ingest button" do
+      it "displays an auto-ingest button" do
         user = FactoryBot.create(:admin)
         coin = FactoryBot.create_for_repository(:coin, coin_number: 1234)
 

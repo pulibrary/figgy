@@ -82,8 +82,7 @@ RSpec.feature "File Manager" do
       allow(extractor).to receive(:extract).and_return(true)
     end
 
-    # TODO: Fix file manager extract metadata alert on geo resources
-    xscenario "users extract metadata from an fgdc metadata file", js: true do
+    scenario "users extract metadata from an fgdc metadata file", js: true do
       visit polymorphic_path [:file_manager, resource]
       expect(page).to have_selector("form.extract_metadata button")
       click_button "Extract Metadata"
