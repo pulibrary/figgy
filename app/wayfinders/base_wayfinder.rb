@@ -171,6 +171,8 @@ class BaseWayfinder
     first_member if first_member.try(:mime_type) == ["application/pdf"]
   end
 
+  inverse_relationship_by_property :parents, property: :member_ids, singular: true
+
   private
 
     def deep_fixity_count(fixity_success:)

@@ -36,6 +36,7 @@ class DuplicateResourceDetector {
     $.ajax({ url: `${this.queryUrl}&format=json`, context: this })
       .done(function(data) {
         if ( data.data.length > 0 ) {
+          this.removeWarning()
           this.appendWarning()
         } else {
           this.removeWarning()

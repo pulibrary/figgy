@@ -1,6 +1,1 @@
-<% if @parent_document %>
-  <ol class="breadcrumb">
-    <li><%= link_to @parent_document.decorated_resource.first_title, @parent_document %></li>
-    <li><%= @document.decorated_resource.first_title %></li>
-  </ol>
-<% end %>
+<%= render(BreadcrumbComponent.new(decorated_resource: decorated_resource)) %>
