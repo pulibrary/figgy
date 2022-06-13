@@ -1,8 +1,5 @@
-<ol class="breadcrumb">
-  <li><%= link_to 'Vocabularies', ephemera_vocabularies_path %></li>
-  <% if decorated_resource.vocabulary %>
-    <li><%= link_to decorated_resource.vocabulary.first_title, solr_document_path(id: "#{decorated_resource.vocabulary.id}") %></li>
+<%= render(BreadcrumbComponent.new(decorated_resource: decorated_resource)) do |c| %>
+  <% c.with_root_breadcrumb do %>
+    <%= link_to 'Vocabularies', ephemera_vocabularies_path %>
   <% end %>
-  <li><%= decorated_resource.first_title %></li>
-</ol>
-<%= render(BreadcrumbComponent.new(decorated_resource: decorated_resource)) %>
+<% end %>

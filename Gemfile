@@ -44,7 +44,7 @@ gem "title"
 gem "uglifier"
 gem "valkyrie", "~> 3.0.0-beta.1"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
-gem "view_component", "~> 2.57.0", require: "view_component/engine"
+gem "view_component", require: "view_component/engine"
 gem "webpacker", "~> 4.0"
 
 group :development do
