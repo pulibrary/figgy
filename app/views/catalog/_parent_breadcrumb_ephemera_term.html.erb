@@ -5,3 +5,4 @@
   <% end %>
   <li><%= decorated_resource.first_title %></li>
 </ol>
+<%= render(BreadcrumbComponent.new(decorated_resource: decorated_resource)) %>

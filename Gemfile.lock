@@ -1097,6 +1097,7 @@ DEPENDENCIES
   valkyrie-derivatives!
   valkyrie-sequel (~> 3.0.0.pre.beta.1)
   valkyrie-shrine (~> 0.4.0)
+  view_component
   web-console
   webdrivers
   webmock

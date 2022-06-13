@@ -61,6 +61,10 @@ class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
     false
   end
 
+  def breadcrumb_hierarchy
+    [wayfinder.decorated_parent_vocabulary].compact
+  end
+
   private
 
     def camelized_label
