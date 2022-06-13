@@ -39,6 +39,7 @@ RSpec.feature "Ephemera Boxes" do
 
   context "when a user creates a new ephemera box" do
     context "with ephemera boxes already created" do
+      # TODO: Fix duplicate barcode warning
       scenario "users see a warning if they try to use duplicate barcodes", js: true do
         visit ephemera_project_add_box_path(parent_id: ephemera_project.id)
         page.fill_in "ephemera_box_barcode", with: "00000000000000"
@@ -76,6 +77,7 @@ RSpec.feature "Ephemera Boxes" do
         page.fill_in "ephemera_box_box_number", with: "1"
         expect(page).to have_content "This barcode is already in use"
 
+        page.fill_in "ephemera_box_barcode", with: ""
         page.fill_in "ephemera_box_barcode", with: "22222222222222"
         page.fill_in "ephemera_box_box_number", with: "2"
         expect(page).not_to have_content "This barcode is already in use"

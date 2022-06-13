@@ -167,6 +167,7 @@ class CatalogController < ApplicationController
     config.add_index_field "call_number_tsim", label: "Call Number"
     config.add_index_field "part_of_ssim", label: "Part Of"
     config.add_index_field "imported_date_created_tesim", label: "Date"
+    config.add_index_field "figgy_title_ssi"
   end
 
   # Determine whether or not a user can edit the resource in the current context

@@ -410,8 +410,8 @@ RSpec.feature "Numismatics::Issues" do
 
     it "displays a collapsed Monograms panel" do
       visit new_numismatics_issue_path
-      page.find(".panel-heading a.collapsed.monograms").click
-      expect(page).not_to have_css(".panel-heading a.collapsed.monograms")
+      page.find(".card-header a.collapsed.monograms").click
+      expect(page).not_to have_css(".card-header a.collapsed.monograms")
     end
 
     context "when Issues have been saved" do

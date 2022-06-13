@@ -22,3 +22,13 @@
   }
 }
 
+.documents-list {
+  dt, dd {
+    // Field `figgy_title_ssi` needed in JSON catalog rendering for numismatics
+    // attribute search, but redundant in search results display.
+    &.blacklight-figgy_title_ssi {
+      visibility: hidden;
+      display: none;
+    }
+  }
+}

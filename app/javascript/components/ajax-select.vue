@@ -5,12 +5,12 @@
     </template>
     <template slot="option" slot-scope="option">
       <div class="d-center">
-        {{ option["figgy_title_ssi"] }}
+        {{ option["title"] }}
         </div>
     </template>
     <template slot="selected-option" slot-scope="option">
       <div class="selected d-center">
-        {{ option["figgy_title_ssi"] }}
+        {{ option["title"] }}
       </div>
     </template>
   </v-select>
@@ -66,9 +66,9 @@ export default {
     ).then(res => {
       return res.json()
     }).then(json => {
-      const docs = json.response.docs
+      const docs = json.data
       if (docs.length > 0) {
-        this.options = json.response.docs
+        this.options = json.data.map(this.mapDocument)
         this.selected = this.options[0]
       }
     })
@@ -84,12 +84,15 @@ export default {
       loading(true)
       this.search(loading, search, this)
     },
+    mapDocument (doc) {
+      return { id: doc.id, title: _.get(doc, ['attributes', 'figgy_title_ssi', 'attributes', 'value']) }
+    },
     search: _.debounce((loading, query, vm) => {
       vm.query = `*${query}*`
       fetch(
         vm.searchURL
       ).then(res => {
-        res.json().then(json => (vm.options = json.response.docs))
+        res.json().then(json => (vm.options = json.data.map(vm.mapDocument)))
         loading(false)
       })
     }, 350)

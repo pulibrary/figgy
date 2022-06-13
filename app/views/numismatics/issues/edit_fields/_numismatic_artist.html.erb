@@ -1,15 +1,13 @@
-<div class="row">
-  <div id="numismatic_artist">
-    <%= f.simple_fields_for :numismatic_artist, wrapper: :inline_form do |g| %>
-      <%= render 'numismatic_artist_fields', f: g %>
-    <% end %>
-  </div>
-  <div class="links">
-    <%= link_to_add_association f, :numismatic_artist, partial: 'numismatic_artist_fields', force_non_association_create: true do %>
-      <button type="button" class="btn btn-link add">
-        <span class="glyphicon glyphicon-plus"></span>
-        <span class="controls-add-text">Add another Artist</span>
-      </button>
-    <% end %>
-  </div>
+<div id="numismatic_artist">
+  <%= f.simple_fields_for :numismatic_artist, wrapper: :inline_form do |g| %>
+    <%= render 'numismatic_artist_fields', f: g %>
+  <% end %>
+</div>
+<div class="links">
+  <%= link_to_add_association f, :numismatic_artist, partial: 'numismatic_artist_fields', force_non_association_create: true do %>
+    <button type="button" class="btn btn-link add">
+      <span class="glyphicon glyphicon-plus"></span>
+      <span class="controls-add-text">Add another Artist</span>
+    </button>
+  <% end %>
 </div>
