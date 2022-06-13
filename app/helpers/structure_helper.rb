@@ -9,8 +9,10 @@ module StructureHelper
   private
 
     def bulk_edit_breadcrumb
-      tag.ul(class: "breadcrumb") do
-        (bulk_edit_parent_work + header)
+      tag.nav do
+        tag.ol(class: "breadcrumb") do
+          (bulk_edit_parent_work + header)
+        end
       end
     end
 
@@ -19,11 +21,13 @@ module StructureHelper
       link = tag.a(@change_set.resource.decorate.header,
                          title: @change_set.id,
                          href: bulk_edit_parent_path(@change_set, @parent))
-      tag.li(link)
+      tag.li(class: "breadcrumb-item") do
+        link
+      end
     end
 
     def header
-      tag.li("Structure Manager", class: :active)
+      tag.li("Structure Manager", class: "breadcrumb-item active")
     end
 
     def bulk_edit_parent_path(change_set, parent)
