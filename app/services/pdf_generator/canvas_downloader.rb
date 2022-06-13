@@ -11,7 +11,7 @@ class PDFGenerator
     # Download the PDF by opening the stream with OpenURI using the read-only and binary modes
     # @return [File]
     def download
-      open(download_url, "rb")
+      URI.open(download_url, "rb")
     end
 
     # The server isn't authorized to download from itself through HTTP. Instead,
