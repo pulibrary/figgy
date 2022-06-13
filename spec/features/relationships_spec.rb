@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-# TODO: Fix related resources spec (possibly javascript?)
-RSpec.xfeature "Related Resources", js: true do
+RSpec.feature "Related Resources", js: true do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }

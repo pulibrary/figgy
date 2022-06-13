@@ -103,8 +103,7 @@ RSpec.feature "Ephemera Folders" do
       expect(page).to have_content "EphemeraFolder"
     end
 
-    # TODO: Fix ephemera folder edit form warning message
-    xscenario "users see a warning if they try to use duplicate barcodes", js: true do
+    scenario "users see a warning if they try to use duplicate barcodes", js: true do
       visit parent_new_ephemera_box_path(parent_id: ephemera_box.id)
       page.fill_in "ephemera_folder_barcode", with: "00000000000000"
       page.fill_in "ephemera_folder_folder_number", with: "1"
