@@ -342,8 +342,7 @@ RSpec.feature "Numismatics::Issues" do
       end
     end
 
-    # TODO: Fix Monogram vue logic and monogram creation form
-    xscenario "when users are editing the Numismatics::Issue resource", js: true do
+    scenario "when users are editing the Numismatics::Issue resource", js: true do
       visit edit_numismatics_issue_path(parent)
 
       doc = Nokogiri::HTML(page.body)
