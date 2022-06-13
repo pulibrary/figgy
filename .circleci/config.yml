@@ -6,6 +6,7 @@ orbs:
 jobs:
   build:
     working_directory: ~/figgy
+    resource_class: large
     docker:
       - image: cimg/ruby:2.7.5-browsers
         environment:
@@ -62,6 +63,7 @@ jobs:
           paths: '*'
   test:
     working_directory: ~/figgy
+    resource_class: large
     docker:
       - image: cimg/ruby:2.7.5-browsers
         environment:
