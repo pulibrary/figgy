@@ -3,7 +3,7 @@
   <%= simple_form_for @change_set do |f| %>
     <%= f.input :claimed_by, as: :hidden, input_html: { value: current_user.uid == @change_set.claimed_by ? "" : current_user.uid } %>
     <% if @change_set.claimed_by == current_user.uid %>
-      <input class="btn btn-default" type="submit" value="Unclaim">
+      <input class="btn btn-secondary" type="submit" value="Unclaim">
     <% else %>
       <input class="btn btn-primary" type="submit" value="Claim<%= " from #{@change_set.claimed_by}" if @change_set.claimed_by.present? %>">
     <% end %>
