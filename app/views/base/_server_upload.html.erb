@@ -1,6 +1,6 @@
  <div class="row" id="ba-row">
   <div class="col-md-3">
-    <div class="well well-sm">
+    <div class="card card-body bg-light">
       <%= form_tag polymorphic_path([main_app, :browse_everything_files, @change_set]), id: "browse-everything-form" do %>
         <% if params[:parent_id] %>
           <%= hidden_field_tag 'parent_id', params[:parent_id] %>
@@ -15,7 +15,7 @@
   </div>
   <% if @change_set.pending_uploads.present? %>
     <div class="col-md-9">
-      <div class="well well-sm">
+      <div class="card card-body bg-light">
         <%= render "pending_uploads", uploads: @change_set.pending_uploads %>
       </div>
     </div>
