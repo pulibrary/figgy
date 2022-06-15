@@ -1,13 +1,13 @@
-<div class="panel panel-default img-panel">
+<div class="card img-panel">
   <%= simple_form_for node, remote: true, html: {'data-type': 'json'} do |f| %>
     <% if f.object.model.error_message.present? %>
-      <div class="panel-heading order-error-message">
+      <div class="card-header order-error-message">
         <div>
           <span>Error generating derivatives</span>
         </div>
       </div>
     <% end %>
-    <div class="panel-heading">
+    <div class="card-header">
       <div class="order-title">
         <span class="title">
           <%= f.object.title.first %>
@@ -19,7 +19,7 @@
         <% end %>
       </div>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
       <div class="text-center thumbnail">
         <%= render "file_manager_thumbnail", node: node %>
       </div>

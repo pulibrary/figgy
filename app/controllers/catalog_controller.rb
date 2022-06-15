@@ -76,6 +76,10 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+    # Turn off search session tracking
+    # Interferes with thumbnail display in FileSet manager
+    config.track_search_session = false
+
     # configuration for Blacklight IIIF Content Search
     config.iiif_search = {
       full_text_field: "ocr_content_tsim",
