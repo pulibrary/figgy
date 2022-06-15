@@ -33,8 +33,8 @@
                     <td><%= scanned_map.created_at %></td>
                     <td><%= scanned_map.visibility_badge.first.html_safe %></td>
                     <td>
-                      <%= link_to 'View', scanned_map_url, class: 'btn btn-default' %>
-                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-default' %>
+                      <%= link_to 'View', scanned_map_url, class: 'btn btn-secondary' %>
+                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-secondary' %>
                       <span class="input-group-btn">
                         <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
                       </span>

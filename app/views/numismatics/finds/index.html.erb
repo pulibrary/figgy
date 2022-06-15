@@ -22,8 +22,8 @@
           <td><%= numismatic_find.locus %></td>
           <td><%= numismatic_find.description %></td>
           <td>
-            <%= link_to 'View', solr_document_path(numismatic_find), class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_find]), class: 'btn btn-default' %>
+            <%= link_to 'View', solr_document_path(numismatic_find), class: 'btn btn-secondary' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_find]), class: 'btn btn-secondary' %>
           </td>
         </tr>
       <% end %>

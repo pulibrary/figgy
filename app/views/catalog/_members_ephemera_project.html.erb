@@ -18,8 +18,8 @@
         <td class="barcode"><%= box.barcode %></td>
         <td class="drive_barcode"><%= box.drive_barcode %></td>
         <td>
-          <%= link_to 'View', box_url, class: 'btn btn-default' %>
-          <%= link_to 'Edit', main_app.polymorphic_path([:edit, box]), class: 'btn btn-default' %>
+          <%= link_to 'View', box_url, class: 'btn btn-secondary' %>
+          <%= link_to 'Edit', main_app.polymorphic_path([:edit, box]), class: 'btn btn-secondary' %>
         </td>
       </tr>
     <% end %>

@@ -24,8 +24,8 @@
           <td><%= numismatic_accession.cost %></td>
           <td><%= numismatic_accession.account %></td>
           <td>
-            <%= link_to 'View', solr_document_path(numismatic_accession), class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_accession]), class: 'btn btn-default' %>
+            <%= link_to 'View', solr_document_path(numismatic_accession), class: 'btn btn-secondary' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_accession]), class: 'btn btn-secondary' %>
           </td>
         </tr>
       <% end %>
