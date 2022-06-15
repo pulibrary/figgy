@@ -142,6 +142,7 @@ Layout/LineLength:
     - 'spec/controllers/collections_controller_spec.rb'
     - 'spec/models/oai/figgy/valkyrie_provider_model_spec.rb'
     - 'spec/decorators/numismatics/accession_decorator_spec.rb'
+    - 'config/initializers/simple_form_bootstrap.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'
