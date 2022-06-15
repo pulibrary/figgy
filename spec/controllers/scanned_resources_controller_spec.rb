@@ -101,7 +101,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(assigns(:change_set)).to be_a RecordingChangeSet
         expect(response.body).to have_field "Source Metadata ID"
         expect(response.body).to have_field "Title"
-        expect(response.body).to have_selector "p.help-block", text: "Required if Source Metadata ID is blank"
+        expect(response.body).to have_text "Required if Source Metadata ID is blank"
       end
     end
 
