@@ -213,7 +213,9 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    bootstrap_form (2.6.0)
+    bootstrap_form (4.5.0)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     builder (3.2.4)
     bundler-audit (0.9.0.1)
       bundler (>= 1.2.0, < 3)
@@ -488,10 +490,12 @@ GEM
       hydra-access-controls (= 12.0.1)
       hydra-core (= 12.0.1)
       rails (>= 5.2, < 7)
-    hydra-role-management (0.2.2)
+    hydra-role-management (1.0.3)
       blacklight
       bootstrap_form
+      bundler (>= 1.5)
       cancancan
+      json (>= 1.8)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -593,7 +597,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.15.0)
+    minitest (5.16.0)
     modernizr-rails (2.7.1)
     msgpack (1.4.5)
     multi_json (1.15.0)
@@ -653,7 +657,7 @@ GEM
     puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
-    rack (2.2.3)
+    rack (2.2.3.1)
     rack-cors (1.0.6)
       rack (>= 1.6.0)
     rack-mini-profiler (1.0.2)
@@ -684,7 +688,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     railties (5.2.5)
       actionpack (= 5.2.5)
@@ -991,6 +995,7 @@ DEPENDENCIES
   blacklight_range_limit
   bootsnap
   bootstrap (~> 4.0)
+  bootstrap_form (~> 4.5.0)
   browse-everything!
   bundler (~> 2.0)
   bundler-audit
