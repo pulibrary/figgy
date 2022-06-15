@@ -14,8 +14,8 @@
           <td><%= numismatic_firm.name %></td>
           <td><%= numismatic_firm.city %></td>
           <td>
-            <%= link_to 'View', solr_document_path(numismatic_firm), class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_firm]), class: 'btn btn-default' %>
+            <%= link_to 'View', solr_document_path(numismatic_firm), class: 'btn btn-secondary' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_firm]), class: 'btn btn-secondary' %>
           </td>
         </tr>
       <% end %>

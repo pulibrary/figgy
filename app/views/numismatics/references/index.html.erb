@@ -15,8 +15,8 @@
           <td><%= numismatic_reference.title %></td></td>
           <td><%= numismatic_reference.short_title %></td></td>
           <td>
-            <%= link_to 'View', numismatic_reference_url, class: 'btn btn-default' %>
-            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_reference]), class: 'btn btn-default' %>
+            <%= link_to 'View', numismatic_reference_url, class: 'btn btn-secondary' %>
+            <%= link_to 'Edit', main_app.polymorphic_path([:edit, numismatic_reference]), class: 'btn btn-secondary' %>
           </td>
         </tr>
       <% end %>

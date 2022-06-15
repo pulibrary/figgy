@@ -19,8 +19,8 @@
           <td><%= coin.created_at %></td>
           <td><%= coin.visibility_badge.first.html_safe %></td>
           <td>
-              <%= link_to 'View', coin_url, class: 'btn btn-default' %>
-              <%= link_to 'Edit', main_app.polymorphic_path([:edit, coin]), class: 'btn btn-default' %>
+              <%= link_to 'View', coin_url, class: 'btn btn-secondary' %>
+              <%= link_to 'Edit', main_app.polymorphic_path([:edit, coin]), class: 'btn btn-secondary' %>
           </td>
         </tr>
       <% end %>  
