@@ -23,7 +23,7 @@
         <td><%= ocr_request.created_at %></td></td>
         <td><%= ocr_request.state %></td></td>
         <td>
-          <%= link_to 'View', ocr_request, class: 'btn btn-default' %>
+          <%= link_to 'View', ocr_request, class: 'btn btn-secondary' %>
           <%= link_to 'Delete', main_app.polymorphic_path([ocr_request]), class: 'btn btn-danger', data: { confirm: 'Are you sure?' }, method: :delete %>
         </td>
       </tr>
