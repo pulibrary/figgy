@@ -33,8 +33,8 @@
                     <td><%= raster_resource.created_at %></td>
                     <td><%= raster_resource.visibility_badge.first.html_safe %></td>
                     <td>
-                      <%= link_to 'View', raster_resource_url, class: 'btn btn-default' %>
-                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-default' %>
+                      <%= link_to 'View', raster_resource_url, class: 'btn btn-secondary' %>
+                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, raster_resource]), class: 'btn btn-secondary' %>
                       <span class="input-group-btn">
                         <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
                       </span>
