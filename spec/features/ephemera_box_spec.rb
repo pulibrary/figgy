@@ -33,7 +33,7 @@ RSpec.feature "Ephemera Boxes" do
 
     scenario "users see validation errors" do
       visit polymorphic_path [:edit, ephemera_box]
-      expect(page.find(:css, ".has-error")).to have_content "has an invalid checkdigit"
+      expect(page).to have_content "has an invalid checkdigit"
     end
   end
 
