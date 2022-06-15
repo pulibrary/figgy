@@ -1,12 +1,12 @@
 <h2><%= link_to "Roles", role_management.roles_path %>: <%= @role.name %></h2>
 <%= bootstrap_form_for @role, :url=>role_management.role_path(@role) do |f| %>
   <%= f.text_field :name, :label=> 'Role name' %>
-  <%= f.submit "Update" %>
+  <%= f.submit "Update", class: "btn btn-primary" %>
+  <% if can? :destroy, Role %>
+    <%= button_to "Delete", role_management.role_path(@role), :method=>:delete, :class=>'btn btn-danger' %>
+  <% end %>
 <% end %>
 
-<% if can? :destroy, Role %>
-  <%= button_to "Delete", role_management.role_path(@role), :method=>:delete, :class=>'btn btn-danger' %>
-<% end %>
 <h3>Accounts:</h3>
 <ul>
   <% @role.users.sort_by(&:uid).each do |user| %>
@@ -20,6 +20,6 @@
 <h3>Add a new account:</h3>
 <%= bootstrap_form_tag :url=> role_management.role_users_path(@role) do |f| %>
   <%= f.select 'user_key', User.all.order(:uid), :label=>'User' %>
-  <%= f.submit "Add" %>
+  <%= f.submit "Add", class: "btn btn-primary" %>
   <%= link_to "Cancel", role_management.roles_path, :class => 'btn btn-secondary' %>
 <% end %>
