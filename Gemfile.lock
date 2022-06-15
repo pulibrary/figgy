@@ -213,7 +213,9 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    bootstrap_form (2.6.0)
+    bootstrap_form (4.5.0)
+      actionpack (>= 5.2)
+      activemodel (>= 5.2)
     builder (3.2.4)
     bundler-audit (0.9.0.1)
       bundler (>= 1.2.0, < 3)
@@ -991,6 +993,7 @@ DEPENDENCIES
   blacklight_range_limit
   bootsnap
   bootstrap (~> 4.0)
+  bootstrap_form (~> 4.5.0)
   browse-everything!
   bundler (~> 2.0)
   bundler-audit
