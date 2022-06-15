@@ -486,10 +486,12 @@ GEM
       hydra-access-controls (= 12.0.1)
       hydra-core (= 12.0.1)
       rails (>= 5.2, < 7)
-    hydra-role-management (0.2.2)
+    hydra-role-management (1.0.3)
       blacklight
       bootstrap_form
+      bundler (>= 1.5)
       cancancan
+      json (>= 1.8)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
