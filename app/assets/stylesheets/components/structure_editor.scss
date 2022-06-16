@@ -2,20 +2,20 @@
   .placeholder {
     outline: 1px dashed #4183C4;
   }
-  .ui-selected > div > .panel > .panel-heading {
+  .ui-selected > div > .card > .card-header {
     background: #F39814;
   }
-  .ui-selecting > div > .panel > .panel-heading {
+  .ui-selecting > div > .card > .card-header {
     background: #FECA40;
   }
   .expanded {
-    > div > .panel > .panel-heading > div > .title > .expand-collapse {
-      // @extend .glyphicon-arrow-down;
+    > div > .card > .card-header > div > .title > .expand-collapse {
+      @extend .glyphicon-arrow-down;
     }
   }
   .collapsed {
-    > div > .panel > .panel-heading > div > .title > .expand-collapse {
-      // @extend .glyphicon-arrow-up;
+    > div > .card > .card-header > div > .title > .expand-collapse {
+      @extend .glyphicon-arrow-up;
     }
   }
   .expand-collapse {
@@ -53,6 +53,9 @@
       @extend .text-danger;
       top: 5px;
     }
+  }
+  #structure_label {
+    margin: .5em;
   }
 }
 #list-toolbar {
