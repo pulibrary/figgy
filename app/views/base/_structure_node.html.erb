@@ -1,7 +1,7 @@
 <%= content_tag "li", data: { proxy: node.proxy.first.to_s }.compact, class: (node.proxy ? 'mjs-nestedSortable-no-nesting' : '') do %>
   <div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
+    <div class="card">
+      <div class="card-header">
         <div class="row">
           <div class="title">
             <span class="move glyphicon glyphicon-move"></span>
@@ -20,7 +20,7 @@
         </div>
       </div>
       <% if node.proxy.present? %>
-        <div class="panel-body">
+        <div class="card-body">
           <%= osd_modal_for(node.proxy_for_object) do %>
             <%= render_thumbnail_tag(node.proxy_for_object, onerror: default_icon_fallback)%>
           <% end %>
