@@ -91,6 +91,9 @@ h1 {
 
 #leaflet {
   width: 100%;
+  // Need vendor prefixes for correct height on Firefox
+  height: -moz-calc(100% - 49px);
+  height: -webkit-calc(100% - 49px);
   height: calc(100% - 49px);
 }
 
