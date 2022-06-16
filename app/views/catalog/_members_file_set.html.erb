@@ -12,41 +12,41 @@
   <tbody>
   <% resource.original_files.each do |file| %>
     <tr>
-      <td><span class="label label-success">Original File</span>&nbsp;<%= file.label.first %></td>
+      <td><span class="badge badge-success">Original File</span>&nbsp;<%= file.label.first %></td>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.derivative_files.each do |file| %>
     <tr>
       <% if resource.derivative_partial_files.length > 0 && file.mime_type.include?("application/x-mpegURL") %>
-        <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %> (<%= resource.derivative_partial_files.length %> Partials)</td>
+        <td><span class="badge badge-info">Derivative File</span>&nbsp;<%= file.label.first %> (<%= resource.derivative_partial_files.length %> Partials)</td>
       <% else %>
-        <td><span class="label label-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
+        <td><span class="badge badge-info">Derivative File</span>&nbsp;<%= file.label.first %></td>
       <% end %>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.cloud_derivative_files.each do |file| %>
     <tr>
-      <td><span class="label label-info">Cloud Derivative File</span>&nbsp;<%= file.label.first %></td>
+      <td><span class="badge badge-info">Cloud Derivative File</span>&nbsp;<%= file.label.first %></td>
       <td><%= file.updated_at %></td><td></td><td></td><td></td>
     </tr>
   <% end %>
   <% resource.intermediate_files.each do |file| %>
     <tr>
-      <td><span class="label label-info">Intermediate File</span>&nbsp;<%= file.label.first %></td>
+      <td><span class="badge badge-info">Intermediate File</span>&nbsp;<%= file.label.first %></td>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.preservation_files.each do |file| %>
     <tr>
-      <td><span class="label label-info">Preservation Master</span>&nbsp;<%= file.label.first %></td>
+      <td><span class="badge badge-info">Preservation Master</span>&nbsp;<%= file.label.first %></td>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
   <% resource.thumbnail_files.each do |file| %>
     <tr>
-      <td><span class="label label-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
+      <td><span class="badge badge-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
