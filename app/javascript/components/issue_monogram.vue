@@ -19,7 +19,7 @@
       <template v-if="isAttached">
         <button
           name="button"
-          class="btn btn-secondary btn btn-danger btn-remove-row"
+          class="btn btn-danger btn-remove-row"
           @click.prevent="detach"
         >
           Detach
@@ -28,7 +28,7 @@
       <template v-else>
         <button
           name="button"
-          class="btn btn-secondary btn btn-primary btn-add-row"
+          class="btn btn-primary btn-add-row"
           @click.prevent="attach"
         >
           Attach

@@ -23,7 +23,7 @@
         </template>
       </tr>
 
-      <tr class="hidden">
+      <tr class="d-none">
         <template v-for="monogram in attachedMembers">
           <td :key="monogram.id">
             <input

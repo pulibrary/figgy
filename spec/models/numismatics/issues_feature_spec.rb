@@ -349,6 +349,7 @@ RSpec.feature "Numismatics::Issues" do
 
       issue_monogram_elements = doc.xpath("//*[@class='monogram-content']").map(&:to_s)
       issue_monogram_element = issue_monogram_elements.first
+
       expect(issue_monogram_element).to include("Test Monogram")
       expect(issue_monogram_element).to include(file_set.id.to_s)
 
