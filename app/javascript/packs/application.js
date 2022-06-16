@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'file-uploader': FileUploader
       },
       data: {
-        options: [],
+        options: []
       },
-      beforeCreate: function () {
+      mounted: function () {
         setupAjaxSelect()
       }
     })
