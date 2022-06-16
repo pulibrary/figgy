@@ -102,8 +102,8 @@ export default class StructureManager {
   new_node() {
     return $("<li>", { class: "expanded" }).append(
       $("<div>").append(
-        $("<div>", { class: "panel panel-default" }).append(
-          $("<div>", { class: "panel-heading" }).append(
+        $("<div>", { class: "card" }).append(
+          $("<div>", { class: "card-header" }).append(
             $("<div>", { class: "row" }).append(
               $("<div>", { class: "title" }).append(
                 $("<span>", { class: "move glyphicon glyphicon-move" })).append(
