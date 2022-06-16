@@ -346,28 +346,17 @@ RSpec.feature "Numismatics::Issues" do
       visit edit_numismatics_issue_path(parent)
 
       doc = Nokogiri::HTML(page.body)
-      expect(doc.xpath("//issue-monograms")).not_to be_empty
 
-      issue_monogram_elements = doc.xpath("//issue-monograms")
-      expect(issue_monogram_elements).not_to be_empty
-
+      issue_monogram_elements = doc.xpath("//*[@class='monogram-content']").map(&:to_s)
       issue_monogram_element = issue_monogram_elements.first
-      attributes = JSON.parse(issue_monogram_element[":members"])
-      expect(attributes).to be_a Array
-      expect(attributes.length).to eq(2)
 
-      first_attribute = attributes.first
-      expect(first_attribute.keys).to include("id", "url", "thumbnail", "title", "attached")
-      expect(first_attribute["id"]).to eq(monogram2.id.to_s)
-      expect(first_attribute["title"]).to eq("Test Monogram")
-      expect(first_attribute["attached"]).to be true
-      expect(first_attribute["thumbnail"]).to include(file_set.id.to_s)
+      expect(issue_monogram_element).to include("Test Monogram")
+      expect(issue_monogram_element).to include(file_set.id.to_s)
 
-      last_attribute = attributes.last
-      expect(last_attribute.keys).to include("id", "url", "thumbnail", "title", "attached")
-      expect(last_attribute["id"]).to eq(monogram1.id.to_s)
-      expect(last_attribute["title"]).to eq("Test Monogram")
-      expect(last_attribute["attached"]).to be false
+      issue_monogram_options = doc.xpath("//*[@class='monogram-options']").map(&:to_s)
+      expect(issue_monogram_options[0]).to include("Detach")
+      expect(issue_monogram_options[1]).to include("Attach")
+
       expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Place"
       expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Person"
       expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Monogram"
