@@ -127,7 +127,7 @@ class RasterResourceDerivativeService
   end
 
   def run_derivatives
-    GeoWorks::Derivatives::Runners::RasterDerivatives.create(
+    GeoDerivatives::Runners::RasterDerivatives.create(
       filename, outputs: [instructions_for_display, instructions_for_thumbnail]
     )
   end

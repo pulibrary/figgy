@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Base class for GDAL/OGR characterization services from GeoWorks Derivatives
+# Base class for GDAL/OGR characterization services from GeoDerivatives
 class GdalCharacterizationService
   attr_reader :file_set, :persister
   def initialize(file_set:, persister:)
@@ -102,9 +102,9 @@ class GdalCharacterizationService
     end
 
     # Service that provides information about a raster dataset
-    # @return [GeoWorks::Derivatives::Processors::Raster::Info]
+    # @return [GeoDerivatives::Processors::Raster::Info]
     def info_service
-      @info_service ||= GeoWorks::Derivatives::Processors::Raster::Info.new(dataset_path)
+      @info_service ||= GeoDerivatives::Processors::Raster::Info.new(dataset_path)
     end
 
     def valid?
@@ -129,9 +129,9 @@ class GdalCharacterizationService
     end
 
     # Service that provides information about a vector dataset
-    # @return [GeoWorks::Derivatives::Processors::Vector::Info]
+    # @return [GeoDerivatives::Processors::Vector::Info]
     def info_service
-      @info_service ||= GeoWorks::Derivatives::Processors::Vector::Info.new(dataset_path)
+      @info_service ||= GeoDerivatives::Processors::Vector::Info.new(dataset_path)
     end
 
     def valid?

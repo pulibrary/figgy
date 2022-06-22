@@ -1,0 +1,24 @@
+Driver: GTiff/GeoTIFF
+Files: /example.tif
+Size is 200, 287
+Metadata:
+  TIFFTAG_DATETIME=2014:12:03 12:40:50
+  TIFFTAG_DOCUMENTNAME=color_200.tif
+  TIFFTAG_RESOLUTIONUNIT=2 (pixels/inch)
+  TIFFTAG_SOFTWARE=Adobe Photoshop CS5.1 Macintosh
+  TIFFTAG_XRESOLUTION=1120
+  TIFFTAG_YRESOLUTION=1120
+Image Structure Metadata:
+  INTERLEAVE=PIXEL
+Corner Coordinates:
+Upper Left  (    0.0,    0.0)
+Lower Left  (    0.0,  287.0)
+Upper Right (  200.0,    0.0)
+Lower Right (  200.0,  287.0)
+Center      (  100.0,  143.5)
+Band 1 Block=200x13 Type=Byte, ColorInterp=Red
+    Computed Min/Max=14.000,220.000
+Band 2 Block=200x13 Type=Byte, ColorInterp=Green
+    Computed Min/Max=14.000,209.000
+Band 3 Block=200x13 Type=Byte, ColorInterp=Blue
+    Computed Min/Max=14.000,183.000

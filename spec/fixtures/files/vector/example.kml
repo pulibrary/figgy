@@ -1,0 +1,1549 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document><Folder><name>OGRGeoJSON</name>
+  <Placemark>
+	<name>FT. BOTTOM</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">1</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">dce35f6b-624c-4968-bbb4-7bcb0ce3aaf9</SimpleData>
+		<SimpleData name="POINAME">Ft. Bottom</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{FDECE7D2-9AC3-41A9-B94A-1A28D597DE08}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Ft. Bottom</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.031314430001061,38.452797545388336</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>TENT BOTTOM</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">2</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">a52249e7-15c6-4ebb-8883-45efbf2f80d6</SimpleData>
+		<SimpleData name="POINAME">Tent Bottom</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{101B6F58-6335-4780-83CA-A175AD44963F}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Tent Bottom</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.041912795036723,38.446265442124307</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>ANDERSON 1</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">3</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">c269d6d3-62e6-48e6-84b9-700dcf260d29</SimpleData>
+		<SimpleData name="POINAME">Anderson 1</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{FADFDD01-3BF8-4330-BCCD-BAB67F100984}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Anderson 1</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.014121359742006,38.368698689204038</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>ANDERSON 2</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">4</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">797a7205-48e4-4268-a3cc-40b150a6ffed</SimpleData>
+		<SimpleData name="POINAME">Anderson 2</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{2A8516F8-8029-42D5-87B6-1A3FD6223813}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Anderson 2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.01619252632058,38.367274164097182</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>ANDERSON 3</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">5</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">b68cb0f9-2535-423a-b71e-aea919af2c8d</SimpleData>
+		<SimpleData name="POINAME">Anderson 3</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{5D5BD432-743D-4DED-A474-D4FC6B9928EE}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Anderson 3</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.016957655829387,38.367249040265619</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>ANDERSON 4</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">6</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">49111aaa-5bb9-4a6c-99a2-7faffa4f1860</SimpleData>
+		<SimpleData name="POINAME">Anderson 4</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{BE6B522F-B33C-4ECD-9C5A-0CF07D24891F}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Anderson 4</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.015472867223451,38.363203696943941</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>ANDERSON 5</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">7</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">508d8e45-7e4b-4f13-9e8e-f323d9eeddb3</SimpleData>
+		<SimpleData name="POINAME">Anderson 5</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{B88E27AF-B1B8-466B-A480-767AABCDECDA}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Anderson 5</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.014667163515156,38.363480807233053</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>HOLEMAN</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">8</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">4f2b1154-7681-4e9e-a98a-b20d8c880eb7</SimpleData>
+		<SimpleData name="POINAME">Holeman</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{03E2F117-E7C0-49DA-8ECC-F000BA59A698}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Holeman</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.974826105749045,38.389319018356751</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>HOLEMAN 2</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">9</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">f06da2fb-b44a-44db-8e87-1252fae3c7ae</SimpleData>
+		<SimpleData name="POINAME">Holeman 2</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{062EA41F-770D-4DD1-8B0D-FF7FD473796C}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Holeman 2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.974074254148135,38.389096152847337</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>CABIN BOTTOM</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">10</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">a2802b8c-821e-4526-9dd3-6ed579aa3f14</SimpleData>
+		<SimpleData name="POINAME">Cabin Bottom</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{1D18D627-36A3-4C3A-87BD-2AE720487D57}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Cabin Bottom</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.983118047338408,38.350531491983382</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>CABIN BOTTOM2</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">11</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">b673de80-1fea-4bc2-a40b-391bb7b9b377</SimpleData>
+		<SimpleData name="POINAME">Cabin Bottom2</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{CAE13326-290E-44CA-8A0F-32097609E06C}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Cabin Bottom2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.980616212478225,38.348684831139579</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>TURKS HEAD</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">12</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">f4b46d20-79cb-4294-9bcd-6eccc894c607</SimpleData>
+		<SimpleData name="POINAME">Turks Head</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{B94B0B13-1C8C-4FBA-B433-03CC6B0355F8}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Turks Head</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.946927753517741,38.341619081052514</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>DEAD HORSE</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">13</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">711f6b72-6876-4f63-94cf-ed55000d0428</SimpleData>
+		<SimpleData name="POINAME">Dead Horse</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{1FCD809B-A201-45E3-B514-FE0A843D118A}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Dead Horse</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.966507647080761,38.329942453038505</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>MILE 17</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">14</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">82d09af5-8778-4970-9051-95e29bbcf2f5</SimpleData>
+		<SimpleData name="POINAME">Mile 17</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{54160A80-A4C9-4EC7-954E-4E729BBCEA15}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Mile 17</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.951310877412539,38.292596705101502</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>JASPER CANYON</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">15</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">86cb4908-27b4-46c1-8439-f1b5ca9aa773</SimpleData>
+		<SimpleData name="POINAME">Jasper Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{066626DF-F27B-45B3-99CC-743FDC0E9957}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Jasper Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.919346050196793,38.244704618596266</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>MILE 7.5</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">16</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">f98b4791-7d04-4a49-857b-03319423df97</SimpleData>
+		<SimpleData name="POINAME">Mile 7.5</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{475FA916-6AA1-457B-9290-6CE4935621D3}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Mile 7.5</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.89386889727335,38.238789595991541</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>MILE 7.0</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">17</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">0a40415d-78f0-45eb-8235-9aa96270c869</SimpleData>
+		<SimpleData name="POINAME">Mile 7.0</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{662EC000-BF7A-4B91-91CF-49D9EEF0DD17}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Mile 7.0</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.887764590047524,38.22920606953894</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>WATER CANYON</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">18</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">20a9d1ca-5ca4-47fa-82cc-97e7d12d2baa</SimpleData>
+		<SimpleData name="POINAME">Water Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{EE420BCA-B673-44A7-9494-100966BC20FE}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Water Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.919474467752707,38.216772588809974</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>MILE 1.0</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">19</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">d2f5d792-8bef-4d09-a887-bbaa9799da29</SimpleData>
+		<SimpleData name="POINAME">Mile 1.0</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{73242532-8EA5-4F63-96F4-F57A3F0A4FAD}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Mile 1.0</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.900903371550157,38.187292498805412</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>UPPER SPANISH</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">20</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">790702e0-c76f-4771-a1ca-bfe5df24a30a</SimpleData>
+		<SimpleData name="POINAME">Upper Spanish</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{B8D97B3C-FE2B-40B7-B557-93ED29AA9B49}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Upper Spanish</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.920668814017532,38.163813418109093</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>SPANISH HIGH</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">21</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">82633d03-3c04-4837-a456-2fe137ee1b7c</SimpleData>
+		<SimpleData name="POINAME">Spanish High</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{89AA033B-26BF-4383-9F03-EC9796BB1DE8}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Spanish High</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.921943137716809,38.163334743802466</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>SPANISH MIDDLE</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">22</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">cc71ba87-e689-4f1a-a15d-b32480172c09</SimpleData>
+		<SimpleData name="POINAME">Spanish Middle</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{6579A66D-EF7F-45C6-8DF2-A835EAFD9B5F}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Spanish Middle</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.930900530784498,38.159352097074262</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>SPANISH LOWER</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">23</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">c632e866-0e4c-4986-89d3-0b1b781d47a4</SimpleData>
+		<SimpleData name="POINAME">Spanish Lower</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{797D2E02-75D4-4D9A-9968-CF4F30C60749}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Spanish Lower</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.933158720518804,38.15658783743892</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>LOWER RED LAKE</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">24</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">73589c28-9cd2-4929-94f4-3d3d685c73fa</SimpleData>
+		<SimpleData name="POINAME">Lower Red Lake</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{C4AE1DC3-0B49-4978-81EA-20F994BA0E75}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Lower Red Lake</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.929716987220772,38.154767582326329</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>BROWN BETTY</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">25</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">5a87aaad-4b84-461b-ad43-525ba99cbfa4</SimpleData>
+		<SimpleData name="POINAME">Brown Betty</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{D46EC5CF-ED04-4CCD-8DC3-6042714DBDB1}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Brown Betty</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.928144224767493,38.1468134090983</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>RAPID 2</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">26</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">5cf2c067-3f9a-4197-959d-3b37ec047d31</SimpleData>
+		<SimpleData name="POINAME">Rapid 2</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{2E7C2DF6-7237-4963-B7E4-6D4798AF4D0F}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Rapid 2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.929102842469476,38.144325746609219</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>UPPER RAPID 5</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">27</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">1f93f764-ee9e-4b14-8ec3-af0330220c71</SimpleData>
+		<SimpleData name="POINAME">Upper Rapid 5</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{AF230603-1A80-4BD7-8BF7-804684BFEA4C}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Upper Rapid 5</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.946415724041955,38.134920255692258</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>LOWER RAPID 5</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">28</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">f8a87539-b2c3-49ef-a9f5-8685478dcf17</SimpleData>
+		<SimpleData name="POINAME">Lower Rapid 5</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{42353B06-3755-463E-86CC-2169A9DFCB40}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Lower Rapid 5</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.952387536430678,38.132531327302587</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>X AND Y</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">29</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">a9e4a6b5-d10e-4489-9ad3-6493fde8b925</SimpleData>
+		<SimpleData name="POINAME">X And Y</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{E508F274-6FD2-4E6D-8EAE-EDE864FB7C10}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">X And Y</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.967132398824276,38.11229629332783</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>BIG DROP 1 BEACH</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">30</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">cfb30851-df1a-4454-9c4c-653362324032</SimpleData>
+		<SimpleData name="POINAME">Big Drop 1 Beach</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{B85B5CFA-B9BD-4C9C-A3AE-AE2F0510CAAD}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Big Drop 1 Beach</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.037942386220578,38.081950940481981</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>10 CENT</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">31</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">02d6b5c6-c5ae-4dc3-8f10-208b69f3b1d0</SimpleData>
+		<SimpleData name="POINAME">10 Cent</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{40C60A1F-5FD2-4C0D-BC18-28DE8EFE39B9}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">10 Cent</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.042720791407589,38.055367064174618</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>IMPERIAL  RIVER LEFT - EAST</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">32</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">9438af36-6156-4b35-8e29-275b966ba290</SimpleData>
+		<SimpleData name="POINAME">Imperial  River Left - East</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{B52B0A9F-7140-4B67-A84B-BD46C324BC64}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Imperial  River Left - East</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.049244262489267,38.04797116362829</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>IMPERIAL RIVER RIGHT - WEST</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">33</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">6258e812-409d-4936-857a-eac22d468dc2</SimpleData>
+		<SimpleData name="POINAME">Imperial River Right - West</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{64AB939C-3B6D-438C-83D7-99BD02D58DCF}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Imperial River Right - West</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.049634436817229,38.049637129711087</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>GYPSUM HELIPORT</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">34</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">8634c6ce-541d-4aab-8664-56e48230b868</SimpleData>
+		<SimpleData name="POINAME">Gypsum Heliport</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{FDF9AA64-59CC-4BE7-B5C3-0D08F95F9D63}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Gypsum Heliport</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.071427921899129,38.00727648985783</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>DARK CANYON</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">35</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">173bfd92-a967-4fdb-9f3d-3fea63b9234c</SimpleData>
+		<SimpleData name="POINAME">Dark Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{8A7CAA2F-ED83-4B3F-93AB-FF59C549EB7B}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Dark Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.205222260734004,37.896408539732079</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>MILLIE CRAG</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">36</SimpleData>
+		<SimpleData name="added">2008-01-01T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">f4928bff-32d2-4189-ade0-74b74e65cb47</SimpleData>
+		<SimpleData name="POINAME">Millie Crag</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{BF615A3A-FA89-4A16-A178-3D3D021AA224}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Millie Crag</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.276590810944413,37.866218167238962</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Musselman Canyon</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">37</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">d14114f8-5d95-440d-a875-3218245b3bac</SimpleData>
+		<SimpleData name="POINAME">Musselman Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{EED403C4-54D7-4FC3-956E-DFBAF5D4C81B}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Musselman Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.74064650620096,38.430526186683139</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Little Bridge Canyon</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">38</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">9f5aeacf-7558-493f-a1af-bd8904134a89</SimpleData>
+		<SimpleData name="POINAME">Little Bridge Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{032613C3-F312-4B89-BFDB-62FAAE7238E5}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Little Bridge Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.750030224899774,38.407367557710067</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Lockhart Canyon</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">39</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">251af7ea-f46d-4e69-aac5-7a00d22f2388</SimpleData>
+		<SimpleData name="POINAME">Lockhart Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{869735AD-7767-45F4-9050-392ACF0DC45D}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Lockhart Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.734206319564237,38.361974937749068</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Lathrop Canyon</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">40</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">35c585e0-7907-4803-8595-1dfc97c201c6</SimpleData>
+		<SimpleData name="POINAME">Lathrop Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{0A1BEA69-92BB-4E62-AD00-A712B50831D1}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Lathrop Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.771577913357618,38.369758002773303</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Gooseberry Canyon</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">41</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">34696b55-40da-4e0e-8bfb-6c029d332554</SimpleData>
+		<SimpleData name="POINAME">Gooseberry Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{34BA45D0-DDF9-4492-B710-06E0D1A0A854}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Gooseberry Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.772955055652702,38.346312835801804</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">42</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">df8688de-7162-413d-9767-965c724daa1b</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{EF15059D-66FF-46FF-A495-071A72CBDCF8}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.770771246189284,38.328913385811795</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Rustler Canyon</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">43</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">0f1dc44f-6770-49d8-97e2-5b87efa3dfec</SimpleData>
+		<SimpleData name="POINAME">Rustler Canyon</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{F5F0C9A4-0D85-4058-B624-EFB5428B72D8}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Rustler Canyon</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.786836039358803,38.296223431337602</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">44</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">6e745c5f-c772-4d60-9e3f-fc70de87e26a</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{D2555203-350D-4E02-AF71-58A5D51AFBAC}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.808074592307378,38.254569541417986</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>The Loop</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">45</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">1a75d8d6-4b29-42e9-9e59-dce9db19a9ee</SimpleData>
+		<SimpleData name="POINAME">The Loop</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{79D8C759-1764-444B-881B-055078118EE4}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">The Loop</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.817768154351896,38.243363422321416</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>The Slide</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">46</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">8122a5e4-2738-4527-a444-96b033c8c622</SimpleData>
+		<SimpleData name="POINAME">The Slide</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{2621D47A-BC61-411C-8D29-6F7651944B34}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">The Slide</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.86284525507655,38.199801172933554</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>The Confluence</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">47</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">19a81fcd-37f9-4687-97e3-34c058e85d33</SimpleData>
+		<SimpleData name="POINAME">The Confluence</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{5AA45693-8A89-4D78-AE98-D02801760323}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">The Confluence</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.886923161136011,38.188861308704055</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">48</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">c0202494-655e-49f4-9f5f-86c0d18336f3</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{59DBF2BB-15DB-4117-B29C-BF62C785BBD9}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.894375178438565,38.180752930718889</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Red Lake South</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">49</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">32588804-3f32-4879-ae5f-ea00dd3d12f7</SimpleData>
+		<SimpleData name="POINAME">Red Lake South</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{91276E7A-B58F-4DFA-89EE-3F2E3A6F4713}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Red Lake South</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.927061631264237,38.15100288084453</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">50</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">1649a9ea-65a5-4a1e-a5f1-07a5d9d40613</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{66F6B8DE-9FE0-42D9-A72B-123EB01F48EE}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.968504122426225,38.113202756806508</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">51</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">64a2cfa6-d4e4-483a-a23b-2013ebf144a1</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{B6DA03DD-BC66-49BC-A91D-E1B5B459EE0C}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.970086364183871,38.112461219123219</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">52</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">09f8f587-525c-424e-807b-74e36fcb75f3</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{AAA1D873-B02E-45F1-AE6B-FC44ED7EAC21}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.970390679188597,38.111164794428085</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">53</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">7c6febd8-74f4-4074-a35b-49050cee2408</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{2C44DE71-F4EE-48DF-8ADD-431E20BBAF52}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.96869194505507,38.111693568158586</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">54</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">b2e669c4-fc5d-4dae-929d-874a0e8ee6db</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{C4ADC59A-D33C-4029-961D-521E8152902A}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.99007113198418,38.100254207869547</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">55</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">ac86e6c9-fb3d-4e3f-8624-597d17b0b923</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{981A881A-CA17-415A-977C-4EAF00A20F0D}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.993567738457898,38.099649923815058</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">56</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">ad25c8bb-d670-4a80-b80b-aede7d89c0e8</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{065E42EA-11E3-4417-9C5C-280D3E111519}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.019423889583081,38.104666970371539</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">57</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">be1d31c8-9486-4a34-ae95-624baabfeeb5</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{DDD3815A-84AD-4679-B912-244D41BF6D3C}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.041429795061205,38.079242856144432</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Upheaval Bottom</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">58</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">539f6955-6443-48c1-9bac-b08c351a03b8</SimpleData>
+		<SimpleData name="POINAME">Upheaval Bottom</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{D9CAA5AD-090D-41B0-B62F-7EFDA4CA6F9D}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Upheaval Bottom</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.003378628626862,38.477094974952522</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">59</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">f90b4331-e3a9-4c0d-9368-dbd9e3a0d265</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{7E47E2E6-B7B6-4564-A0DA-881E252C4802}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.038747071345213,38.458518513435358</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">60</SimpleData>
+		<SimpleData name="added">2011-03-22T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">aabe9746-71a9-41e9-aec0-a1d52349e321</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{BEAECF29-E8C5-44FD-AB3C-D9F579743184}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.03491114417001,38.446153871027228</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Potato Bottom</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">61</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">95007284-169f-4a2e-b6df-3b5649b661f2</SimpleData>
+		<SimpleData name="POINAME">Potato Bottom</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{ACD4B0C0-A7B2-4D45-91E9-B4DA922F869B}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Potato Bottom</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.019463659810071,38.436375620715886</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">62</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">71132352-526b-49ad-a6bf-3cd708c68d61</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{1153AD7C-25F7-491D-A1C6-30723A4E80AA}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.004225200006815,38.415844934185984</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Beaver Bottom</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">63</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">cf9fa592-87c2-4528-91ad-cca757bab01b</SimpleData>
+		<SimpleData name="POINAME">Beaver Bottom</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{8FA76B95-D766-4123-BA50-B69A6D67A76E}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Beaver Bottom</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.022850539132406,38.394505663914209</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Queen Anne Bottom</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">64</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">31d8d8c0-b1c4-4f44-82e2-d842235075e0</SimpleData>
+		<SimpleData name="POINAME">Queen Anne Bottom</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{9BE4C6EE-99E8-4237-A85D-00E5ED07EF02}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Queen Anne Bottom</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-110.034131844857214,38.387641083952467</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Turks Head</name>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">65</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">33069412-2022-4108-9ae5-e284a00760c1</SimpleData>
+		<SimpleData name="POINAME">Turks Head</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{8C69E07E-5856-449B-9937-629CE6DD009E}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+		<SimpleData name="POILABEL">Turks Head</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.942201439851928,38.353831936402479</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">66</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">daf273d7-17dc-4c6d-ad75-31c47b4c9e94</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{E00E7D58-42B4-45DC-A527-56ED9C01238E}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.928831435300879,38.282791064900557</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">67</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">7431c61e-2f72-402d-92ae-b41f1e2fccb7</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{0E2F2FFF-F9D4-4579-9202-A55953D6884E}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.918682872062035,38.24197078843563</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#OGRGeoJSON">
+		<SimpleData name="OBJECTID">68</SimpleData>
+		<SimpleData name="added">2011-03-24T00:00:00.000Z</SimpleData>
+		<SimpleData name="GlobalID">82da5c52-36a5-4cff-a07c-0db70d562460</SimpleData>
+		<SimpleData name="POITYPE">Campsite</SimpleData>
+		<SimpleData name="UNITCODE">CANY</SimpleData>
+		<SimpleData name="UNITNAME">Canyonlands National Park</SimpleData>
+		<SimpleData name="REGIONCODE">IMR</SimpleData>
+		<SimpleData name="RESTRICTION">Unrestricted</SimpleData>
+		<SimpleData name="DISTRIBUTE">Public</SimpleData>
+		<SimpleData name="CREATEDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="CREATEUSER">imrgis_nps</SimpleData>
+		<SimpleData name="EDITDATE">2017-01-13T20:02:38.382Z</SimpleData>
+		<SimpleData name="EDITUSER">imrgis_nps</SimpleData>
+		<SimpleData name="GEOMETRYID">{ABA66310-2C03-497C-9C04-E5AFE6753C05}</SimpleData>
+		<SimpleData name="INPLACES">Yes</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>-109.918331867951565,38.215046275010721</coordinates></Point>
+  </Placemark>
+</Folder>
+<Schema name="OGRGeoJSON" id="OGRGeoJSON">
+	<SimpleField name="OBJECTID" type="int"></SimpleField>
+	<SimpleField name="added" type="string"></SimpleField>
+	<SimpleField name="GlobalID" type="string"></SimpleField>
+	<SimpleField name="POINAME" type="string"></SimpleField>
+	<SimpleField name="POITYPE" type="string"></SimpleField>
+	<SimpleField name="POIFEATTYPE" type="string"></SimpleField>
+	<SimpleField name="UNITCODE" type="string"></SimpleField>
+	<SimpleField name="UNITNAME" type="string"></SimpleField>
+	<SimpleField name="GROUPCODE" type="string"></SimpleField>
+	<SimpleField name="REGIONCODE" type="string"></SimpleField>
+	<SimpleField name="LOCATIONID" type="string"></SimpleField>
+	<SimpleField name="ASSETID" type="string"></SimpleField>
+	<SimpleField name="ISEXTANT" type="string"></SimpleField>
+	<SimpleField name="MAPMETHOD" type="string"></SimpleField>
+	<SimpleField name="MAPSOURCE" type="string"></SimpleField>
+	<SimpleField name="SOURCESCALE" type="string"></SimpleField>
+	<SimpleField name="SOURCEDATE" type="string"></SimpleField>
+	<SimpleField name="XYERROR" type="string"></SimpleField>
+	<SimpleField name="NOTES" type="string"></SimpleField>
+	<SimpleField name="RESTRICTION" type="string"></SimpleField>
+	<SimpleField name="DISTRIBUTE" type="string"></SimpleField>
+	<SimpleField name="CREATEDATE" type="string"></SimpleField>
+	<SimpleField name="CREATEUSER" type="string"></SimpleField>
+	<SimpleField name="EDITDATE" type="string"></SimpleField>
+	<SimpleField name="EDITUSER" type="string"></SimpleField>
+	<SimpleField name="FEATUREID" type="string"></SimpleField>
+	<SimpleField name="GEOMETRYID" type="string"></SimpleField>
+	<SimpleField name="INPLACES" type="string"></SimpleField>
+	<SimpleField name="POILABEL" type="string"></SimpleField>
+</Schema>
+</Document></kml>

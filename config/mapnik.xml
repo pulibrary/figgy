@@ -1,0 +1,31 @@
+<Map background-color="white" srs="+init=epsg:4326" >
+  <Style name="features" filter-mode="first">
+    <Rule>
+      <MaxScaleDenominator>12500</MaxScaleDenominator>
+      <Filter>([mapnik::geometry_type] = polygon)</Filter>
+      <LineSymbolizer stroke-width="0.3" stroke-opacity="0.75" stroke="#483d8b" />
+      <PolygonSymbolizer fill-opacity="0.5" fill="#e4e3ea" />
+    </Rule>
+    <Rule>
+      <MinScaleDenominator>12500</MinScaleDenominator>
+      <Filter>([mapnik::geometry_type] = polygon)</Filter>
+      <LineSymbolizer stroke-width="0.3" stroke-opacity="0.5" stroke="#483d8b" />
+      <PolygonSymbolizer fill-opacity="0.3" fill="#e4e3ea" />
+    </Rule>
+    <Rule>
+      <Filter>([mapnik::geometry_type] = point)</Filter>
+      <MarkersSymbolizer width="10" transform="translate(0,-20)" marker-type="ellipse" stroke="#483d8b" stroke-width="4" allow-overlap="true" ignore-placement="true" placement="point" opacity="0.8" fill="#e4e3ea" />
+    </Rule>
+    <Rule>
+      <Filter>([mapnik::geometry_type] = linestring)</Filter>
+      <LineSymbolizer stroke-linecap="square" stroke-opacity="0.9" stroke="#483d8b" stroke-width="0.3" />
+    </Rule>
+  </Style>
+  <Layer name="layer" srs="+init=epsg:4326">
+    <StyleName>features</StyleName>
+    <Datasource>
+      <Parameter name="file">{{path}}</Parameter>
+      <Parameter name="type">shape</Parameter>
+    </Datasource>
+  </Layer>
+</Map>

@@ -32,7 +32,6 @@ The following dependencies will be installed via homebrew by `./bin/setup`:
 
 * [ImageMagick](https://www.imagemagick.org)
 * [GDAL](http://www.gdal.org/)
-* [Simple Tiles](http://propublica.github.io/simple-tiles/)
 * [Tesseract](https://github.com/tesseract-ocr/tesseract)
     * Note that version 3.04 is on the servers but homebrew installs 4.1.1
 * [MediaInfo](https://mediaarea.net/en/MediaInfo)
@@ -51,19 +50,6 @@ Other dependencies:
     * Start with rabbitmq-server
     * Used for publishing create/update/delete events for systems such as
       [Pomegranate](https://github.com/pulibrary/pomegranate)
-
-### Troubleshooting
-
-Occasionally tests may start to give messages about not finding the gdal package, the
-following steps usually resolve this issue:
-
-1. `gem uninstall simpler-tiles`
-1. `brew uninstall simple-tiles`
-1. (only sometimes required) `brew uninstall gdal`
-1. `brew install simple-tiles`
-1. `bundle install`
-
-This sort of dance sometimes helps with other similar errors.
 
 ## Automatically pull vault password from lastpass
 

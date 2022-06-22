@@ -376,10 +376,6 @@ GEM
       activesupport
       capybara
       i18n
-    geo_works-derivatives (0.6.0)
-      hydra-derivatives
-      mime-types
-      simpler-tiles
     geoserver-publish (0.5.0)
       faraday
     globalid (1.0.0)
@@ -846,7 +842,6 @@ GEM
     simplecov-html (0.10.2)
     simpleidn (0.1.1)
       unf (~> 0.1.4)
-    simpler-tiles (0.3.1)
     slop (3.6.0)
     solargraph (0.44.3)
       backport (~> 1.2)
@@ -1015,7 +1010,6 @@ DEPENDENCIES
   font-awesome-rails
   foreman
   formulaic
-  geo_works-derivatives (~> 0.6.0)
   geoserver-publish
   google-cloud-pubsub
   graphiql-rails
@@ -1098,4 +1092,4 @@ DEPENDENCIES
   whenever (~> 0.10)
 
 BUNDLED WITH
-   2.3.5
+   2.3.7
