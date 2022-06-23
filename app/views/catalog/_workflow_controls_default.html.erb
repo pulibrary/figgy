@@ -1,7 +1,6 @@
 <% if can?(:edit, resource) && @change_set.respond_to?(:workflow_class) && @change_set.respond_to?(:state) %>
   <div id="workflow_controls"class="card workflow-affix">
     <div class="card-header">Review and Approval</div>
-    </div>
     <div id="workflow_controls_collapse" class="card-body">
       <%= simple_form_for @change_set do |f| %>
         <div class="row">
