@@ -118,7 +118,7 @@ class VectorResourceDerivativeService
   end
 
   def run_derivatives
-    GeoWorks::Derivatives::Runners::VectorDerivatives.create(
+    GeoDerivatives::Runners::VectorDerivatives.create(
       filename, outputs: [instructions_for_display, instructions_for_thumbnail]
     )
   end

@@ -23,8 +23,7 @@ jobs:
       - checkout
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo lsof python3-pip python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
-      - run: sudo sh bin/ci_simple_tiles_install.sh
+      - run: sudo apt-get install gdal-bin libgdal-dev mediainfo lsof python3-pip python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_openjpeg_install.sh
       - run: sudo sh bin/ci_vips_install.sh
@@ -38,8 +37,6 @@ jobs:
       - restore_cache:
           keys:
             - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}
-      # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.7.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
       - run: gem install bundler -v '2.2.14'
       # Bundle install dependencies
@@ -87,8 +84,7 @@ jobs:
           at: '~/figgy'
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client ocrmypdf lsof python3-pip python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
-      - run: sudo sh bin/ci_simple_tiles_install.sh
+      - run: sudo apt-get install gdal-bin libgdal-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client ocrmypdf lsof python3-pip python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_openjpeg_install.sh
       - run: sudo sh bin/ci_vips_install.sh
@@ -103,8 +99,6 @@ jobs:
           command: node -v
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
-      # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.7.0/specifications/simpler-tiles-0.3.1.gemspec || true
       # Install Bundler
       - run: gem install bundler -v '2.2.14'
       # Bundle install dependencies
@@ -168,8 +162,7 @@ jobs:
           at: '~/figgy'
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev libcairo2-dev libpango1.0-dev mediainfo lsof python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
-      - run: sudo sh bin/ci_simple_tiles_install.sh
+      - run: sudo apt-get install gdal-bin libgdal-dev mediainfo lsof python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
       - run: sudo sh bin/ci_free_tds_install.sh
       - run: sudo sh bin/ci_openjpeg_install.sh
       - run: sudo sh bin/ci_vips_install.sh
@@ -179,8 +172,6 @@ jobs:
       - run:
           name: Check current version of node
           command: node -v
-      # Remove cached simpler-tiles - needs to be reinstalled every time.
-      - run: rm vendor/bundle/ruby/2.7.0/specifications/simpler-tiles-0.3.1.gemspec || true
       - run: gem install bundler -v '2.2.14'
       - run: bundle install --path vendor/bundle
       - run: bundle exec rake rubocop
