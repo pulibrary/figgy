@@ -1,4 +1,6 @@
+<div class="lux">
 <% if !resource.member_ids.empty? %>
   <playlist-members resource-id="<%= resource.id %>" :members="<%= proxies_with_recording_data(resource).to_json %>"></playlist-members>
 <% end %>
 <document-adder resource-id='<%= resource.id %>'></document-adder>
+</div>
