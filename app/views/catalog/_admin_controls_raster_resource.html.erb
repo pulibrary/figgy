@@ -13,7 +13,7 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="attachButton">
             <% decorated_resource.attachable_objects.each do |concern| %>
-              <%= link_to "Attach #{concern.human_readable_type}",  polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern)], parent_id: resource.id), class: "dropdown-item" %>
+              <%= link_to "Attach #{concern.human_readable_type}",  polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id), class: "dropdown-item" %>
             <% end %>
           </div>
         </div>
