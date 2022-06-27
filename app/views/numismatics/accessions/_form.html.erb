@@ -1,0 +1,15 @@
+<h2><%= form_title(params) %></h2>
+<%= simple_form_for @change_set do |f| %>
+<div class="row lux">
+  <div class="col-xs-12 col-sm-8" role="main">
+    <div class="form-panel-content" id="metadata">
+      <%= yield "metadata_tab".to_sym if content_for? "metadata_tab".to_sym %>
+      <%= render "form_metadata", f: f %>
+    </div>
+  </div>
+
+  <div id="savewidget" class="col-xs-12 col-sm-4" role="complementary">
+    <%= render 'form_progress', f: f %>
+  </div>
+</div>
+<% end %>
