@@ -2,10 +2,14 @@
 
 <div class="col-md-12">
   <div class="row">
-    <p>Ingest one or more individual, multi-volume, or mixed resources. Files selected must be contained in a parent directory.</p>
-    <button id="bulk_structure_example" type="button" class="btn btn-secondary browse-everything" data-toggle="modal" data-target="#bulk-structure-example-modal">
-      Show example directory structure
-    </button>
+    <div class="col-md-12">
+      <p>Ingest one or more individual, multi-volume, or mixed resources. Files selected must be contained in a parent directory.</p>
+    </div>
+    <div class="col-md-12">
+      <button id="bulk_structure_example" type="button" class="btn btn-info browse-everything" data-toggle="modal" data-target="#bulk-structure-example-modal">
+        Show example directory structure
+      </button>
+    </div>
   </div>
   <%= form_tag polymorphic_path([main_app, :browse_everything_files_bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do %>
     <div class="row">
@@ -36,7 +40,6 @@
             Select Folder on Server
           </button>
           <%= render 'browse_everything/modal' %>
-
         </div>
       </div>
     </div>
