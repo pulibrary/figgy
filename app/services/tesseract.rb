@@ -2,8 +2,8 @@
 class Tesseract
   class << self
     def languages
-      language_output.split("\n")[1..-1].map(&:to_sym).each_with_object({}) do |lang, hsh|
-        hsh[lang] = label(lang)
+      language_output.split("\n")[1..-1].map(&:to_sym).index_with do |lang|
+        label(lang)
       end
     end
 

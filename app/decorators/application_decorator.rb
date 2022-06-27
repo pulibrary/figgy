@@ -58,11 +58,9 @@ class ApplicationDecorator < Draper::Decorator
     end
 
     def to_h
-      Hash[
-        @keys.map do |attribute|
-          [attribute, Array.wrap(@subject.[](attribute))]
-        end
-      ]
+      @keys.index_with do |attribute|
+        Array.wrap(@subject.[](attribute))
+      end
     end
   end
 

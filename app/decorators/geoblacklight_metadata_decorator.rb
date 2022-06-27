@@ -23,9 +23,9 @@ class GeoblacklightMetadataDecorator < SimpleDelegator
     end
 
     def direct_attributes
-      Schema::Geo.attributes.map do |attribute|
-        [attribute, Array.wrap(__getobj__.[](attribute))]
-      end.to_h
+      Schema::Geo.attributes.index_with do |attribute|
+        Array.wrap(__getobj__.[](attribute))
+      end
     end
 
     # Keys that shouldn't be merged with imported metadata.
