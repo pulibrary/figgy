@@ -168,7 +168,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
 
       # Fixity
       expect(rendered).to have_selector "th", text: "Local Fixity"
-      expect(rendered).to have_selector "span.label-primary.fixity-count", text: "1"
+      expect(rendered).to have_selector "span.badge-primary.fixity-count", text: "1"
     end
   end
 

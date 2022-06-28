@@ -305,9 +305,9 @@ RSpec.describe ScannedResourceDecorator do
       decorator = described_class.new(mvw)
 
       expect(decorator.cloud_fixity_summary).to eq(
-        "<div>failed <span title=\"failed\" class=\"fixity-count label label-warning\">3</span></div>" \
-        " <div>succeeded <span title=\"succeeded\" class=\"fixity-count label label-primary\">1</span></div>" \
-        " <div>in progress <span title=\"in progress\" class=\"fixity-count label label-info\">1</span></div>"
+        "<div>failed <span title=\"failed\" class=\"fixity-count badge badge-warning\">3</span></div>" \
+        " <div>succeeded <span title=\"succeeded\" class=\"fixity-count badge badge-primary\">1</span></div>" \
+        " <div>in progress <span title=\"in progress\" class=\"fixity-count badge badge-info\">1</span></div>"
       )
     end
 
