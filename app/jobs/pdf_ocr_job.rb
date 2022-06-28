@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'active_storage/downloading'
+require "active_storage/downloading"
 
 class PdfOcrJob < ApplicationJob
   include ActiveStorage::Downloading
