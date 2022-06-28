@@ -37,64 +37,6 @@ RSpec.describe PDFGenerator do
       end
     end
 
-    context "when a IIIF Manifest does not have a canvas image service referenced" do
-      let(:manifest) do
-        {
-          "@type" => "sc:Manifest",
-          "sequences" => [
-            {
-              "@type" => "sc:Sequence",
-              "@id" => "http://www.example.com/concern/scanned_resources/c240f04d-d779-45ad-b7e4-acb28e7b8da6/manifest/sequence/normal",
-              "canvases" => [
-                {
-                  "@type" => "sc:Canvas",
-                  "images" => [
-                    {
-                      "@type" => "oa:Annotation",
-                      "motivation" => "sc:painting",
-                      "resource" => {
-                        "@type" => "dctypes:Image",
-                        "@id" => "http://www.example.com/image-service/9292c8c2-8480-42b7-8714-e7e6b45a3bee/full/!1000,/0/default.jpg",
-                        "height" => 200,
-                        "width" => 287,
-                        "service" => {}
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      end
-
-      let(:manifest_builder) { instance_double(ManifestBuilder) }
-
-      before do
-        stub_request(
-          :any,
-          "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg"
-        ).to_return(
-          body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")),
-          status: 200
-        )
-
-        file_set.original_file.width = 287
-        file_set.original_file.height = 200
-
-        persister.save(resource: file_set)
-
-        allow(Valkyrie.logger).to receive(:error)
-        allow(manifest_builder).to receive(:build).and_return(manifest)
-        allow(ManifestBuilder).to receive(:new).and_return(manifest_builder)
-      end
-
-      it "logs the error" do
-        expect { generator.render }.to raise_error(PDFGenerator::Error)
-        expect(Valkyrie.logger).to have_received(:error).with("PDFGenerator: Failed to generate a PDF for the resource #{resource.id}: IIIF Manifest image does not specify a service URL")
-      end
-    end
-
     context "when a IIIF Manifest does not have a width" do
       let(:manifest) do
         {
