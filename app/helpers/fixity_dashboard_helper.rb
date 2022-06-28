@@ -42,6 +42,6 @@ module FixityDashboardHelper
   end
 
   def format_fixity_count(val, count)
-    tag.span count, title: format_fixity_success(val), class: ["fixity-count", "label", "label-#{fixity_success_level(val)}"]
+    tag.span count, title: format_fixity_success(val), class: ["fixity-count", "badge", "badge-#{fixity_success_level(val)}"]
   end
 end
