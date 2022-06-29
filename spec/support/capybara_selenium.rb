@@ -9,7 +9,7 @@ Capybara.register_driver(:selenium) do |app|
     chromeOptions: { args: %w[headless disable-gpu disable-setuid-sandbox window-size=7680,4320] }
   )
   browser_options = ::Selenium::WebDriver::Chrome::Options.new
-  # browser_options.args << "--headless"
+  browser_options.args << "--headless"
   browser_options.args << "--disable-gpu"
 
   http_client = Selenium::WebDriver::Remote::Http::Default.new
