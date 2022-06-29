@@ -1003,7 +1003,7 @@ DEPENDENCIES
   bootstrap (~> 4.0)
   bootstrap_form (~> 4.5.0)
   browse-everything!
-  bundler
+  bundler (= 2.2.16)
   bundler-audit
   bunny
   capistrano (~> 3.7.1)
@@ -1111,4 +1111,4 @@ DEPENDENCIES
   whenever (~> 0.10)
 
 BUNDLED WITH
-   2.3.7
+   2.2.16
