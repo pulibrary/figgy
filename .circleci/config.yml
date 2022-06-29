@@ -113,7 +113,7 @@ jobs:
             curl -H 'Content-type: application/json' http://localhost:8984/api/collections/ -d '{create: {name: figgy-core-test, config: figgy, numShards: 1}}'
       - run: bundle exec rake db:environment:set
       - run: bundle exec rake db:migrate
-
+      - run: bundle exec spring stop
       - run:
           name: Run rspec in parallel
           command: |
@@ -176,6 +176,7 @@ jobs:
           command: node -v
       - run: gem install bundler -v '2.2.14'
       - run: bundle install --path vendor/bundle
+      - run: bundle exec spring stop
       - run: bundle exec rake rubocop
       - run: yarn lint
 workflows:

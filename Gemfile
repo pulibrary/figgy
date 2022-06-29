@@ -53,7 +53,6 @@ group :development do
   gem "ruby-prof"
   gem "solargraph", "~> 0.44.0"
   gem "spring"
-  gem "spring-commands-rspec"
   gem "web-console"
 end
 
