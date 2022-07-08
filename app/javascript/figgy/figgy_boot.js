@@ -98,6 +98,13 @@ export default class Initializer {
       let id = $(this).closest('.select2-results__options').attr('id');
       let index = $('.select2-results__group').index(this);
       optgroupState[id][index] = !optgroupState[id][index];
+      if(optgroupState[id][index]) {
+        $(this).addClass("open")
+        $(this).removeClass("closed")
+      } else {
+        $(this).addClass("closed")
+        $(this).removeClass("open")
+      }
     })
 
     let optgroupState = {};
@@ -112,6 +119,15 @@ export default class Initializer {
         }
         $.each(groups, (index, v) => {
           optgroupState[id][index] = optgroupState[id][index] || false;
+          if(optgroupState[id][index]) {
+            $(v).siblings().show();
+            $(v).addClass("open")
+            $(v).removeClass("closed")
+          } else {
+            $(v).siblings().hide();
+            $(v).addClass("closed")
+            $(v).removeClass("open")
+          }
           optgroupState[id][index] ? $(v).siblings().show() : $(v).siblings().hide();
         })
         $('.select2-dropdown--below').css('opacity', 1);

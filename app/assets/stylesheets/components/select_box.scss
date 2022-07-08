@@ -17,7 +17,24 @@ a span.check-mark {
 	max-height: 400px !important;
 }
 
-.select2-results__group {
+.select2-container--default .select2-results__group {
+  border-top: 1px solid #e5e5e5;
   color: #6c757d;
   font-size: 0.875rem;
+  cursor: pointer !important;
+  &::before {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+    margin-right: 0.3em;
+    transform: rotate(-90deg);
+    &.open {
+      transform: rotate(0deg);
+    }
+  }
 }
