@@ -96,5 +96,27 @@ RSpec.describe BulkEditService do
         expect(after.title).to eq(["updated"])
       end
     end
+
+    context "when refreshing metadata" do
+      before do
+        stub_catalog(bib_id: "123456")
+      end
+
+      it "updates the remote metadata" do
+        obj = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", member_of_collection_ids: [collection.id])
+        change_set = ChangeSet.for(obj)
+        change_set.validate(imported_metadata: nil, title: "test title")
+        ChangeSetPersister.default.save(change_set: change_set)
+        reloaded = query_service.find_by(id: obj.id)
+        expect(reloaded.title.first).to eq("test title")
+
+        attrs = { refresh_remote_metadata: "1" }
+        described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
+
+        reloaded = query_service.find_by(id: obj.id)
+        expect(reloaded.imported_metadata).not_to be_nil
+        expect(reloaded.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.")
+      end
+    end
   end
 end

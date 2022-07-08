@@ -14,6 +14,13 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-sm-2"><label>Remote Metadata</label></div>
+          <div class="checkbox">
+            <%= check_box_tag "refresh_remote_metadata" %>
+            <%= label_tag "refresh_remote_metadata", "Refresh remote metadata" %>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-sm-2"><%= label_tag "ocr_language", "OCR Language" %></div>
           <%= select_tag :ocr_language,
               options_from_collection_for_select(ControlledVocabulary.for(:ocr_language).all, "value", "label"),
