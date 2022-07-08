@@ -4,6 +4,7 @@ require "cancan/matchers"
 
 describe Ability do
   include ActiveJob::TestHelper
+  with_queue_adapter :test
   subject { described_class.new(current_user) }
   let(:zip_file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
   let(:zip_file_2) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }

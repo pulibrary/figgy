@@ -41,7 +41,7 @@ class PDFGenerator
       raise(InvalidIIIFManifestError, "IIIF Manifest image does not reference a resource") unless image.key?("resource")
       raise(InvalidIIIFManifestError, "IIIF Manifest image does not specify a width") unless image["resource"].key?("width") && image["resource"]["width"]
       raise(InvalidIIIFManifestError, "IIIF Manifest image does not specify a height") unless image["resource"].key?("height") && image["resource"]["height"]
-      raise(InvalidIIIFManifestError, "IIIF Manifest image does not specify a service URL") unless image["resource"].key?("service") && image["resource"]["service"].key?("@id")
+      raise(InvalidIIIFManifestError, "IIIF Manifest image does not specify a service URL") unless image["resource"].key?("@id")
     end
 
     # Access the width for the image
@@ -59,7 +59,7 @@ class PDFGenerator
     # Access the URL for the IIIF image server
     # @return [String]
     def url
-      image["resource"]["service"]["@id"]
+      image["resource"]["@id"].gsub(/\/full.*$/, "")
     end
   end
 end

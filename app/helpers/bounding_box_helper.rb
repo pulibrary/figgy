@@ -35,7 +35,7 @@ module BoundingBoxHelper
   ##
   # Returns markup for a row of read only bounding box inputs.
   # @return[String]
-  # rubocop:disable MethodLength
+  # rubocop:disable Metrics/MethodLength
   def bbox_display_inputs
     %(
       <div class="row bbox-inputs">
@@ -74,5 +74,5 @@ module BoundingBoxHelper
       </div>
     )
   end
-  # rubocop:enable MethodLength
+  # rubocop:enable Metrics/MethodLength
 end

@@ -22,7 +22,7 @@ RSpec.describe DownloadsController do
         expect(response.body).to eq(sample_file.read)
         expect(response.content_length).to eq(196_882)
         expect(response.content_type).to eq("image/tiff")
-        expect(response.headers["Content-Disposition"]).to eq('inline; filename="example.tif"')
+        expect(response.headers["Content-Disposition"]).to eq("inline; filename=\"example.tif\"; filename*=UTF-8''example.tif")
       end
 
       # The following appears to be from old items before we set this metadata.
@@ -35,7 +35,7 @@ RSpec.describe DownloadsController do
         expect(response.body).to eq(sample_file.read)
         expect(response.content_length).to eq(196_882)
         expect(response.content_type).to eq("image/tiff")
-        expect(response.headers["Content-Disposition"]).to eq('inline; filename="example.tif"')
+        expect(response.headers["Content-Disposition"]).to eq("inline; filename=\"example.tif\"; filename*=UTF-8''example.tif")
       end
 
       it "returns an 404 when the file_set doesn't exist" do

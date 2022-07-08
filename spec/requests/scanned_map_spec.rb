@@ -27,6 +27,6 @@ RSpec.describe "ScannedMap requests", type: :request do
     expect(response.body).not_to be_empty
     expect(response.content_length).to be > 0
     expect(response.content_type).to eq "application/pdf"
-    expect(response.headers["Content-Disposition"]).to eq 'inline; filename="derivative_pdf.pdf"'
+    expect(response.headers["Content-Disposition"]).to eq "inline; filename=\"derivative_pdf.pdf\"; filename*=UTF-8''derivative_pdf.pdf"
   end
 end
