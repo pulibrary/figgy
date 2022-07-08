@@ -115,7 +115,6 @@ jobs:
             curl -H 'Content-type: application/json' http://localhost:8984/api/collections/ -d '{create: {name: figgy-core-test, config: figgy, numShards: 1}}'
       - run: bundle exec rake db:environment:set
       - run: bundle exec rake db:migrate
-      - run: bundle exec spring stop
       - run:
           name: Run rspec in parallel
           command: |
