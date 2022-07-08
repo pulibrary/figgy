@@ -169,7 +169,7 @@ RSpec.describe ManifestBuilder do
       expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
       expect(output["thumbnail"]["service"]["@id"]).to eq first_image["resource"]["service"]["@id"]
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
-      expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-7b5f9384dfa5ca04f4851c6ee9e44e2d6953e55f893472a3e205e1591d3b2ca6.png")
+      expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png")
       expect(output["seeAlso"].length).to eq 2
       expect(output["seeAlso"].last).to include "@id" => "https://bibdata.princeton.edu/bibliographic/123456", "format" => "text/xml"
 
@@ -183,7 +183,7 @@ RSpec.describe ManifestBuilder do
       end
       it "provides the vatican logo" do
         output = manifest_builder.build
-        expect(output["logo"]).to eq("https://www.example.com/assets/vatican-f101dc8edbdd7cfb0b0152c2d2304e805c215cbff0e7ac25fb72dbfd1c568bfc.png")
+        expect(output["logo"]).to eq("https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png")
       end
     end
 
