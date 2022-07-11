@@ -95,7 +95,7 @@ gem "capistrano-rails-console"
 gem "coffee-rails"
 gem "damerau-levenshtein"
 gem "devise", ">= 4.6.0"
-gem "ezid-client", "1.7.1"
+gem "ezid-client", "1.8.0" # v1.9.0 introduces response errors in our tests/stubbing
 gem "faker"
 gem "filewatcher"
 gem "font-awesome-rails"
