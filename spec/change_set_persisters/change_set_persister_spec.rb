@@ -651,14 +651,15 @@ RSpec.describe ChangeSetPersister do
         allow(audio_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2009-03-30 19:49:13")
         allow(audio_track_attributes).to receive(:producer).and_return("PULibrary")
         allow(audio_track_attributes).to receive(:originalsourceform).and_return("cassette")
-        allow(audio_track_attributes).to receive(:duration).and_return(23.123)
+        allow(audio_track_attributes).to receive(:duration).and_return(23_123)
         allow(audio_track_attributes).to receive(:count).and_return 1
         allow(audio_track_attributes).to receive(:filesize).and_return 100
 
         allow(tracks).to receive(:track_types).and_return(["audio"])
         allow(tracks).to receive(:audio).and_return(audio_track_attributes)
         allow(tracks).to receive(:video).and_return(nil)
-
+        allow(tracks).to receive(:audio?).and_return(true)
+        allow(tracks).to receive(:video?).and_return(false)
         allow(MediaInfo).to receive(:from).and_return(tracks)
       end
 
