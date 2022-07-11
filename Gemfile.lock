@@ -370,8 +370,9 @@ GEM
     ethon (0.15.0)
       ffi (>= 1.15.0)
     execjs (2.8.1)
-    ezid-client (1.7.1)
+    ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
+      nokogiri
     factory_bot (4.8.2)
       activesupport (>= 3.0.0)
     factory_bot_rails (4.8.2)
@@ -1034,7 +1035,7 @@ DEPENDENCIES
   dnsruby
   dotenv-rails
   draper
-  ezid-client (= 1.7.1)
+  ezid-client (= 1.8.0)
   factory_bot_rails (= 4.8.2)
   faker
   filewatcher
