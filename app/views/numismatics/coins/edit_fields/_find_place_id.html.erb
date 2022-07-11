@@ -1,4 +1,4 @@
-<div class="form-group string optional">
+<div class="form-group string optional lux">
   <%= f.label :find_place_id, required: f.object.required?(:find_place_id) %>
   <%= link_to 'New Place', new_numismatics_place_path, class: 'btn btn-sm btn-primary new-link', target: '_blank'%>
   <%= f.hidden_field :find_place_id, ajax_select_type: "Place" %>
