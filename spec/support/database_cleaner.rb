@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.configure do |config|
   pg_adapter = Valkyrie::MetadataAdapter.find(:postgres)
-  pg_db_cleaner = DatabaseCleaner[:sequel, { connection: pg_adapter.connection }]
+  pg_db_cleaner = DatabaseCleaner[:sequel, db: pg_adapter.connection]
   ar_cleaner = DatabaseCleaner[:active_record]
   config.before(:suite) do
     pg_db_cleaner.clean_with(:deletion)
