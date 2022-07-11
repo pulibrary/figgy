@@ -735,9 +735,9 @@ GEM
       rdf (~> 3.2, >= 3.2.4)
     recipient_interceptor (0.3.1)
       mail
-    redis (3.3.5)
-    redis-namespace (1.5.3)
-      redis (~> 3.0, >= 3.0.4)
+    redis (4.1.4)
+    redis-namespace (1.8.2)
+      redis (>= 3.0.4)
     reform (2.2.4)
       disposable (>= 0.4.1)
       representable (>= 2.4.0, < 3.1.0)
@@ -1088,8 +1088,7 @@ DEPENDENCIES
   rails (= 6.0.5)
   rails-controller-testing
   recipient_interceptor
-  redis (= 3.3.5)
-  redis-namespace (= 1.5.3)
+  redis-namespace
   reform (= 2.2.4)
   riiif
   rsolr (>= 1.0)
