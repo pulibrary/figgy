@@ -190,6 +190,7 @@ RSpec.feature "Numismatics::Coins" do
     end
 
     scenario "users can create a new issue with duplicated metadata" do
+      page.fill_in "numismatics_coin_analysis", with: ""
       page.fill_in "numismatics_coin_analysis", with: "test analysis 2"
 
       page.click_on "Save and Duplicate Metadata"

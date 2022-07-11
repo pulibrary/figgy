@@ -90,6 +90,50 @@ export default class Initializer {
       allowClear: true
     })
 
+    // Allows collapsible optgroups in the subject select
+    // Pulled from
+    // https://stackoverflow.com/questions/52156973/collapse-expand-optgroup-using-select2
+    $("body").on('click', '.select2-container--open .select2-results__group', function() {
+      $(this).siblings().toggle();
+      let id = $(this).closest('.select2-results__options').attr('id');
+      let index = $('.select2-results__group').index(this);
+      optgroupState[id][index] = !optgroupState[id][index];
+      if(optgroupState[id][index]) {
+        $(this).addClass("open")
+        $(this).removeClass("closed")
+      } else {
+        $(this).addClass("closed")
+        $(this).removeClass("open")
+      }
+    })
+
+    let optgroupState = {};
+
+    $('select.select2').on('select2:open', function() {
+      $('.select2-dropdown--below').css('opacity', 0);
+      setTimeout(() => {
+        let groups = $('.select2-container--open .select2-results__group');
+        let id = $('.select2-results__options').attr('id');
+        if (!optgroupState[id]) {
+          optgroupState[id] = {};
+        }
+        $.each(groups, (index, v) => {
+          optgroupState[id][index] = optgroupState[id][index] || false;
+          if(optgroupState[id][index]) {
+            $(v).siblings().show();
+            $(v).addClass("open")
+            $(v).removeClass("closed")
+          } else {
+            $(v).siblings().hide();
+            $(v).addClass("closed")
+            $(v).removeClass("open")
+          }
+          optgroupState[id][index] ? $(v).siblings().show() : $(v).siblings().hide();
+        })
+        $('.select2-dropdown--below').css('opacity', 1);
+      }, 0);
+    })
+
     $(".document div.member-resources").each((_i, element) => {
       const $element = $(element)
       const $form = $element.parent('form')
