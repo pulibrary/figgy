@@ -141,5 +141,5 @@ gem "aws-sdk-s3"
 
 gem "bootsnap", require: false
 gem "dnsruby"
-gem "oai", "~> 1.0.0"
+gem "oai"
 gem "ruby-vips"
