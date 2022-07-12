@@ -13,6 +13,7 @@ jobs:
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
+          PSQL_PAGER: ''
       - image: postgres:10.6-alpine
         environment:
           POSTGRES_USER: figgy
@@ -67,6 +68,7 @@ jobs:
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
           MEDIAINFO_PATH: /usr/bin/mediainfo
+          PSQL_PAGER: ''
       - image: postgres:10.6-alpine
         environment:
           POSTGRES_USER: figgy
@@ -158,6 +160,7 @@ jobs:
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
+          PSQL_PAGER: ''
     steps:
       - browser-tools/install-browser-tools
       - attach_workspace:
