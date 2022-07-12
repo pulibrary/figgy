@@ -6,8 +6,8 @@ class BulkEditController < ApplicationController
   delegate :search_builder, :repository, to: :search_service
 
   def resources_edit
-    (solr_response, _document_list) = search_service.search_results do |search_builder|
-      search_builder.with(q: params["q"], f: params["f"])
+    (solr_response, _document_list) = search_service.search_results do |builder|
+      builder.with(edit_params)
     end
     @resources_count = solr_response["response"]["numFound"]
   end
@@ -29,8 +29,17 @@ class BulkEditController < ApplicationController
 
   private
 
+    # used by search state to access filter fields
+    def blacklight_config
+      @blacklight_config ||= CatalogController.new.blacklight_config
+    end
+
+    def edit_params
+      params.permit(:q, f: {})
+    end
+
     def search_params
-      params.permit(search_params: {})["search_params"]
+      @search_params ||= params.permit(search_params: {})["search_params"]
     end
 
     def load_collections
@@ -43,9 +52,12 @@ class BulkEditController < ApplicationController
         builder = initial_builder
         [].tap do |arr|
           loop do
-            response = repository.search(builder)
-            arr << response.documents.map(&:id)
-            break if (builder.page * builder.rows) >= response["response"]["numFound"]
+            (solr_response, document_list) = search_service.search_results do |_builder|
+              builder # use the builder we made
+            end
+
+            arr << document_list.map(&:id)
+            break if (builder.page * builder.rows) >= solr_response["response"]["numFound"]
             builder.start = builder.rows * builder.page
             builder.page += 1
           end
@@ -54,8 +66,7 @@ class BulkEditController < ApplicationController
     end
 
     def initial_builder
-      builder_params = { q: params["search_params"]["q"], f: params["search_params"]["f"] }
-      builder = search_builder.with(builder_params)
+      builder = search_builder.with(search_params)
       builder.rows = params["batch_size"] || 50
       builder
     end

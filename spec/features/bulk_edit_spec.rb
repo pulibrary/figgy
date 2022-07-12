@@ -93,7 +93,7 @@ RSpec.feature "Bulk edit", js: true do
     it "updates the object" do
       collection2 = FactoryBot.create_for_repository(:collection)
       visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
-      expect(page).to have_content "You searched for"
+      expect(page).to have_content "Bulk edit 1 resources"
       page.check("mark_complete")
       page.select collection2.title.first, from: "append_collection_ids", visible: false
       accept_alert do
