@@ -1,32 +1,71 @@
 # frozen_string_literal: true
 source "https://rubygems.org"
 
+gem "aasm"
+gem "arabic-letter-connector"
+gem "archivesspace-client"
 gem "autoprefixer-rails"
+gem "aws-sdk-s3"
 gem "bagit", "~> 0.4"
 gem "blacklight", "7.25.2"
+gem "blacklight_iiif_search"
 gem "blacklight_range_limit"
+gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
+gem "browse-everything", github: "samvera/browse-everything", branch: "2.x-stable-no-thor"
 gem "bundler", "2.2.16"
 gem "bunny"
+gem "capistrano-passenger"
+gem "capistrano-rails"
+gem "capistrano-rails-console"
+gem "cocoon"
+gem "coffee-rails"
 gem "dalli"
 gem "ddtrace", "0.16.0"
+gem "devise", ">= 4.6.0"
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
+gem "dnsruby"
 gem "draper"
+gem "ezid-client", "1.8.0" # v1.9.0 introduces response errors in our tests/stubbing
+gem "faker"
+gem "filewatcher"
 gem "flutie"
+gem "font-awesome-rails"
+gem "geoserver-publish"
+gem "google-cloud-pubsub"
+gem "graphiql-rails", "1.4.10", group: :development
+gem "graphql", "1.8.2"
 gem "honeybadger"
 gem "hydra-access-controls"
 gem "hydra-editor", "~> 6.0"
+gem "hydra-head"
+gem "hydra-role-management"
+gem "iiif_manifest", git: "https://github.com/samvera-labs/iiif_manifest"
+gem "iso-639"
 gem "jbuilder"
+gem "jquery-datatables"
 gem "jquery-rails"
 gem "jquery-ui-rails", "~> 5.0"
+gem "json-schema"
 gem "lcsort", ">= 0.9.1"
+gem "leaflet-rails"
 gem "lograge"
 gem "lograge-sql"
 gem "logstash-event"
+gem "loofah"
+gem "m3u8"
+gem "marc"
 gem "mediainfo", "~> 1.0"
 gem "mini_magick"
+gem "modernizr-rails"
+gem "normalize-rails"
+gem "oai"
+gem "omniauth"
+gem "omniauth-cas"
+gem "openseadragon"
 gem "pg"
+gem "prawn"
 gem "puma"
 gem "rack"
 gem "rack-cors", require: "rack/cors"
@@ -34,17 +73,29 @@ gem "rails", "6.0.5"
 gem "recipient_interceptor"
 gem "redis-namespace"
 gem "reform", "2.2.4"
+gem "riiif"
+gem "rsolr"
 gem "ruby-progressbar"
+gem "ruby-vips"
 gem "ruby_tika_app", github: "pulibrary/ruby_tika_app"
 gem "rubyzip"
+gem "shrine-google_cloud_storage"
 gem "simple_form"
 gem "sprockets"
 gem "sqlite3"
+gem "string_rtl"
 gem "title"
 gem "valkyrie", "~> 3.0.0-beta.1"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
+gem "valkyrie-sequel", "~> 3.0.0-beta.1"
+gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
 gem "webpacker", "~> 4.0"
+gem "whenever", "~> 0.10"
+
+source "https://gems.contribsys.com/" do
+  gem "sidekiq-pro"
+end
 
 group :development do
   gem "benchmark-ips"
@@ -69,6 +120,10 @@ group :development, :test do
   gem "rspec-rails"
 end
 
+group :development, :staging do
+  gem "rack-mini-profiler", require: false
+end
+
 group :test do
   gem "capybara-screenshot"
   gem "database_cleaner"
@@ -81,64 +136,3 @@ group :test do
   gem "webdrivers"
   gem "webmock"
 end
-
-gem "rsolr"
-
-gem "aasm"
-gem "arabic-letter-connector"
-gem "archivesspace-client"
-gem "browse-everything", github: "samvera/browse-everything", branch: "2.x-stable-no-thor"
-gem "capistrano-passenger"
-gem "capistrano-rails"
-gem "capistrano-rails-console"
-gem "coffee-rails"
-gem "devise", ">= 4.6.0"
-gem "ezid-client", "1.8.0" # v1.9.0 introduces response errors in our tests/stubbing
-gem "faker"
-gem "filewatcher"
-gem "font-awesome-rails"
-gem "geoserver-publish"
-gem "graphql", "1.8.2"
-gem "hydra-head"
-gem "hydra-role-management"
-gem "iiif_manifest", git: "https://github.com/samvera-labs/iiif_manifest"
-gem "iso-639"
-gem "jquery-datatables"
-gem "json-schema"
-gem "leaflet-rails"
-gem "loofah"
-gem "m3u8"
-gem "marc"
-gem "modernizr-rails"
-gem "normalize-rails"
-gem "omniauth"
-gem "omniauth-cas"
-gem "openseadragon"
-gem "prawn"
-gem "riiif"
-gem "string_rtl"
-gem "valkyrie-sequel", "~> 3.0.0-beta.1"
-gem "whenever", "~> 0.10"
-
-gem "blacklight_iiif_search"
-gem "graphiql-rails", "1.4.10", group: :development
-
-gem "cocoon"
-gem "google-cloud-pubsub"
-gem "shrine-google_cloud_storage"
-gem "valkyrie-shrine"
-
-source "https://gems.contribsys.com/" do
-  gem "sidekiq-pro"
-end
-
-group :development, :staging do
-  gem "rack-mini-profiler", require: false
-end
-
-gem "aws-sdk-s3"
-
-gem "bootsnap", require: false
-gem "dnsruby"
-gem "oai"
-gem "ruby-vips"
