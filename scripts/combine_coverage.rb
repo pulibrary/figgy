@@ -5,7 +5,7 @@ require "active_support/inflector"
 require "simplecov"
 
 class SimpleCovHelper
-  def self.report_coverage(base_dir: "./coverage")
+  def self.report_coverage(base_dir: "./coverage_results")
     SimpleCov.configure do
       minimum_coverage(100)
     end
