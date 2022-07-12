@@ -127,7 +127,7 @@ gem "graphiql-rails", "1.4.10", group: :development
 gem "cocoon"
 gem "google-cloud-pubsub"
 gem "shrine-google_cloud_storage"
-gem "valkyrie-shrine", "~> 0.4.0"
+gem "valkyrie-shrine"
 
 source "https://gems.contribsys.com/" do
   gem "sidekiq-pro"

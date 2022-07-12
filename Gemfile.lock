@@ -850,12 +850,12 @@ GEM
       pg (>= 0.18.0, != 1.2.0)
       sequel (>= 4.38.0)
     set (1.0.2)
-    shrine (2.19.4)
+    shrine (3.4.0)
       content_disposition (~> 1.0)
-      down (>= 4.1, < 6)
-    shrine-google_cloud_storage (2.0.1)
+      down (~> 5.1)
+    shrine-google_cloud_storage (3.2.0)
       google-cloud-storage (~> 1.6)
-      shrine (~> 2.11)
+      shrine (~> 3.0)
     sidekiq (6.5.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -955,9 +955,9 @@ GEM
       sequel (~> 5.0)
       sequel_pg (~> 1.0)
       valkyrie (>= 3.0.0.pre.beta.1)
-    valkyrie-shrine (0.4.0)
+    valkyrie-shrine (1.0.0)
       aws-sdk-s3 (~> 1)
-      shrine (~> 2.0)
+      shrine (>= 2.0, < 4.0)
       valkyrie (> 1.0)
     view_component (2.57.1)
       activesupport (>= 5.0.0, < 8.0)
@@ -1112,7 +1112,7 @@ DEPENDENCIES
   valkyrie (~> 3.0.0.pre.beta.1)
   valkyrie-derivatives!
   valkyrie-sequel (~> 3.0.0.pre.beta.1)
-  valkyrie-shrine (~> 0.4.0)
+  valkyrie-shrine
   view_component
   web-console
   webdrivers
