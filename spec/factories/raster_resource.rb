@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :raster_resource do
-    title "Title"
-    rights_statement RightsStatements.no_known_copyright
-    read_groups "public"
-    pdf_type ["gray"]
-    state "pending"
+    title { "Title" }
+    rights_statement { RightsStatements.no_known_copyright }
+    read_groups { "public" }
+    pdf_type { ["gray"] }
+    state { "pending" }
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
     transient do
-      files []
-      user nil
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-      import_metadata false
+      files { [] }
+      user { nil }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      import_metadata { false }
     end
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
@@ -36,40 +36,40 @@ FactoryBot.define do
       end
     end
     factory :open_raster_resource do
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     end
     factory :complete_open_raster_resource do
-      state "complete"
+      state { "complete" }
     end
     factory :complete_private_raster_resource do
-      state "complete"
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+      state { "complete" }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
     factory :takedown_raster_resource do
-      state "takedown"
+      state { "takedown" }
     end
     factory :flagged_raster_resource do
-      state "flagged"
+      state { "flagged" }
     end
     factory :pending_raster_resource do
-      state "pending"
+      state { "pending" }
     end
     factory :complete_campus_only_raster_resource do
-      state "complete"
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+      state { "complete" }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
     end
     factory :metadata_review_raster_resource do
-      state "metadata_review"
+      state { "metadata_review" }
     end
     factory :final_review_raster_resource do
-      state "final_review"
+      state { "final_review" }
     end
     factory :complete_raster_resource do
-      state "complete"
+      state { "complete" }
     end
 
     factory :raster_set do
-      state "complete"
+      state { "complete" }
       after(:build) do |resource, _evaluator|
         resource.member_ids ||= []
         resource.member_ids += [
@@ -80,7 +80,7 @@ FactoryBot.define do
     end
 
     factory :raster_set_with_files do
-      state "complete"
+      state { "complete" }
       after(:build) do |resource, _evaluator|
         file = IngestableFile.new(
           file_path: Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"),

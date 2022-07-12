@@ -61,7 +61,7 @@ group :development, :test do
   gem "bixby", "~> 3.0.0"
   gem "bundler-audit", require: false
   gem "dotenv-rails"
-  gem "factory_bot_rails", "4.8.2"
+  gem "factory_bot_rails"
   gem "pdf-reader", github: "yob/pdf-reader"
   gem "pry-byebug"
   gem "pry-rails"
