@@ -381,11 +381,11 @@ GEM
     ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
       nokogiri
-    factory_bot (4.8.2)
-      activesupport (>= 3.0.0)
-    factory_bot_rails (4.8.2)
-      factory_bot (~> 4.8.2)
-      railties (>= 3.0.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.2.0)
+      factory_bot (~> 6.2.0)
+      railties (>= 5.0.0)
     faker (2.21.0)
       i18n (>= 1.8.11, < 2)
     faraday (0.17.5)
@@ -522,7 +522,7 @@ GEM
       bundler (>= 1.5)
       cancancan
       json (>= 1.8)
-    i18n (1.10.0)
+    i18n (1.11.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iiif-image-api (0.2.0)
@@ -1045,7 +1045,7 @@ DEPENDENCIES
   dotenv-rails
   draper
   ezid-client (= 1.8.0)
-  factory_bot_rails (= 4.8.2)
+  factory_bot_rails
   faker
   filewatcher
   flutie
