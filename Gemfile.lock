@@ -1071,7 +1071,7 @@ DEPENDENCIES
   modernizr-rails
   normalize-rails
   oai (~> 1.0.0)
-  omniauth (~> 1.9)
+  omniauth
   omniauth-cas
   openseadragon
   pdf-reader!
