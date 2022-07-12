@@ -1017,7 +1017,6 @@ DEPENDENCIES
   bundler (= 2.2.16)
   bundler-audit
   bunny
-  capistrano (~> 3.17)
   capistrano-passenger
   capistrano-rails
   capistrano-rails-console
@@ -1075,11 +1074,11 @@ DEPENDENCIES
   omniauth-cas
   openseadragon
   pdf-reader!
-  pg (~> 1.0)
+  pg
   prawn
   pry-byebug
   pry-rails
-  puma (~> 5.6.4)
+  puma
   rack
   rack-cors
   rack-mini-profiler
@@ -1089,7 +1088,7 @@ DEPENDENCIES
   redis-namespace
   reform (= 2.2.4)
   riiif
-  rsolr (>= 1.0)
+  rsolr
   rspec-graphql_matchers (= 0.7.1)
   rspec-rails
   rspec_junit_formatter
