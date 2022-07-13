@@ -54,5 +54,7 @@ module Figgy
       end
     end
     config.action_mailer.deliver_later_queue_name = "high"
+
+    config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, Hash, HashWithIndifferentAccess]
   end
 end
