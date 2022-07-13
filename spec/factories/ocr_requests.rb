@@ -2,13 +2,13 @@
 
 FactoryBot.define do
   factory :ocr_request do
-    filename "sample.pdf"
-    state "enqueued"
-    note "notes"
-    user nil
+    filename { "sample.pdf" }
+    state { "enqueued" }
+    note { "notes" }
+    user { nil }
 
     transient do
-      file nil
+      file { nil }
     end
 
     after(:create) do |resource, evaluator|

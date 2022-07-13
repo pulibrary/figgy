@@ -1,37 +1,37 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :ephemera_folder do
-    barcode "12345678901234"
-    local_identifier "xyz1"
-    folder_number "one"
-    title "test folder"
-    language "test language"
-    genre "test genre"
-    width "10"
-    height "20"
-    page_count "30"
-    alternative_title "test alternative title"
-    series "test series"
-    subject "test subject"
-    creator "test creator"
-    contributor ["test contributor"]
-    publisher ["test publisher"]
-    description "test description"
-    date_created "1970/01/01"
-    provenance ["Donated by the Mario Bros."]
-    source_url "http://example.com"
-    dspace_url "http://example.com"
-    rights_statement RightsStatements.no_known_copyright
-    read_groups "public"
-    state "needs_qa"
-    member_of_collection_ids []
+    barcode { "12345678901234" }
+    local_identifier { "xyz1" }
+    folder_number { "one" }
+    title { "test folder" }
+    language { "test language" }
+    genre { "test genre" }
+    width { "10" }
+    height { "20" }
+    page_count { "30" }
+    alternative_title { "test alternative title" }
+    series { "test series" }
+    subject { "test subject" }
+    creator { "test creator" }
+    contributor { ["test contributor"] }
+    publisher { ["test publisher"] }
+    description { "test description" }
+    date_created { "1970/01/01" }
+    provenance { ["Donated by the Mario Bros."] }
+    source_url { "http://example.com" }
+    dspace_url { "http://example.com" }
+    rights_statement { RightsStatements.no_known_copyright }
+    read_groups { "public" }
+    state { "needs_qa" }
+    member_of_collection_ids { [] }
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
     transient do
-      files []
-      user nil
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      files { [] }
+      user { nil }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     end
     after(:build) do |resource, evaluator|
       resource.depositor = evaluator.user.uid if evaluator.user.present?
@@ -55,19 +55,19 @@ FactoryBot.define do
       end
     end
     factory :open_ephemera_folder do
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     end
     factory :private_ephemera_folder do
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
     factory :campus_only_ephemera_folder do
-      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
     end
     factory :complete_ephemera_folder do
-      state "complete"
+      state { "complete" }
     end
     factory :non_validating_ephemera_folder do
-      barcode nil
+      barcode { nil }
     end
   end
 end

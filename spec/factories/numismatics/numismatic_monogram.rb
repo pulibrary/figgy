@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :numismatic_monogram, class: Numismatics::Monogram do
-    title "Test Monogram"
+    title { "Test Monogram" }
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
     transient do
-      files []
+      files { [] }
     end
     after(:create) do |resource, evaluator|
       if evaluator.files.present?

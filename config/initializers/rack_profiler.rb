@@ -5,7 +5,7 @@ if Rails.env.development? || Rails.env.staging?
 
   # initialization is skipped so trigger it
   Rack::MiniProfilerRails.initialize!(Rails.application)
-  Rack::MiniProfiler.config.authorization_mode = :whitelist
+  Rack::MiniProfiler.config.authorization_mode = :allow_authorized
   if Rails.env.staging?
     require "redis"
     config = YAML.safe_load(ERB.new(IO.read(Rails.root.join("config", "redis.yml"))).result, [], [], true)[Rails.env].with_indifferent_access

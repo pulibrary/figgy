@@ -28,7 +28,7 @@ class MediainfoCharacterizationService
       date_of_digitization: media_encoded_date,
       producer: media.producer,
       source_media_type: media.originalsourceform,
-      duration: media.duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
+      duration: duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
       checksum: MultiChecksum.for(file_object),
       size: media.filesize,
       mime_type: mime_type
@@ -37,6 +37,15 @@ class MediainfoCharacterizationService
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @file_set = @persister.save(resource: @file_set) if save
     @file_set
+  end
+
+  def duration
+    if media.model.video?
+      media.duration
+    elsif media.model.audio?
+      # MediaInfo returns audio duration in milliseconds
+      media.duration.to_f / 1000
+    end
   end
 
   def mime_type
@@ -62,6 +71,12 @@ class MediainfoCharacterizationService
       # Implements the audio track accessor
       # @return [nil]
       def audio; end
+
+      # @return [nil]
+      def video?; end
+
+      # @return [nil]
+      def audio?; end
 
       # Implements the accessor for track types
       # Returns only a track of the type "null"
