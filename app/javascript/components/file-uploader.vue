@@ -31,7 +31,8 @@ export default {
     },
     csrfToken: {
       type: String,
-      default: document.getElementsByName('csrf-token')[0].content
+      default: document.getElementsByName('csrf-token')[0]
+        ? document.getElementsByName('csrf-token')[0].content : undefined
     },
     tableName: {
       type: String,

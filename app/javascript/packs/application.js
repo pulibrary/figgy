@@ -18,7 +18,7 @@ Vue.use(system)
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
   // Set CSRF token for axios requests.
-  axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : undefined
   var elements = document.getElementsByClassName('lux')
   for (var i = 0; i < elements.length; i++) {
     new Vue({

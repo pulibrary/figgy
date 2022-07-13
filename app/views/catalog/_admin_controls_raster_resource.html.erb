@@ -14,7 +14,7 @@
           <ul class="dropdown-menu">
             <% decorated_resource.attachable_objects.each do |concern| %>
               <li>
-                <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern)], parent_id: resource.id) %>
+                <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id) %>
               </li>
             <% end %>
           </ul>
