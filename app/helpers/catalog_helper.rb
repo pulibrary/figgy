@@ -17,7 +17,7 @@ module CatalogHelper
     document ||= @document
 
     # escape manually to allow <br /> to go through unescaped
-    val = Array.wrap(presenter(document).heading).map { |v| h(v) }.join("<br />")
+    val = Array.wrap(document_presenter(document).heading).map { |v| h(v) }.join("<br />")
     content_tag(tag, val, { itemprop: "name", dir: val.to_s.dir }, false)
   end
 
