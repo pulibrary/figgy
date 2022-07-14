@@ -12,7 +12,7 @@
   <tbody>
       <% @numismatic_monograms.each do |monogram| %>
         <tr>
-          <td><%= render_thumbnail_tag monogram, { onerror: default_icon_fallback }, suppress_link: true %></td>
+          <td><%= document_presenter(monogram).thumbnail.thumbnail_tag({ onerror: default_icon_fallback }, suppress_link: true)%></td>
           <td><%= monogram.decorated_filename %> </td>
           <td><%= monogram.title %></td></td>
           <td>
