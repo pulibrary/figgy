@@ -80,6 +80,10 @@ class CatalogController < ApplicationController
     # Interferes with thumbnail display in FileSet manager
     config.track_search_session = false
 
+    # Add extra permitted params
+    # https://github.com/projectblacklight/blacklight/blob/v7.28.0/lib/blacklight/parameters.rb#L84-L89
+    config.search_state_fields = config.search_state_fields + [:id]
+
     # configuration for Blacklight IIIF Content Search
     config.iiif_search = {
       full_text_field: "ocr_content_tsim",
