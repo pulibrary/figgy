@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Types
   include Dry.Types(default: :nominal)
-  URI = Dry::Types::Definition
+  URI = Dry::Types::Nominal
         .new(RDF::URI)
         .constructor do |input|
     if input.present?
