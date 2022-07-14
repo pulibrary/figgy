@@ -2,7 +2,7 @@
   <div class="input-group" id="search-input">
     <legend class="accessible-hidden">Search <%=t('product_name')%></legend>
     <%= label_tag :catalog_search, t('search.form.q.label'), :class => "accessible-hidden" %>
-    <%= render_hash_as_hidden_fields(search_state.params_for_search().except(:q, :search_field, :qt, :page, :utf8)) %>
+    <%= render Blacklight::HiddenSearchStateComponent.new(params: (search_state.params_for_search().except(:q, :search_field, :qt, :page, :utf8))) %>
     <%= text_field_tag(:q, params[:q], :class => "q search-query form-control", :id => "catalog_search", :placeholder => t('search.form.q.placeholder'), :size => "30", :tabindex => "1", :type => "search") %>
     <div class="input-group-append">
       <button type="submit" class="search-submit btn btn-primary" id="keyword-search-submit" tabindex="2">
