@@ -216,7 +216,7 @@ module ApplicationHelper
         per_page = (search_session["per_page"] || default_per_page).to_i
         counter = search_session["counter"].to_i
 
-        query_params[:per_page] = per_page unless search_session["per_page"].to_i == default_per_page
+        query_params[:per_page] = per_page unless search_session["per_page"].to_i == blacklight_config.default_per_page
         query_params[:page] = ((counter - 1) / per_page) + 1
       end
     end
