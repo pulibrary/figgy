@@ -82,7 +82,38 @@ class CatalogController < ApplicationController
 
     # Add extra permitted params
     # https://github.com/projectblacklight/blacklight/blob/v7.28.0/lib/blacklight/parameters.rb#L84-L89
-    config.search_state_fields = config.search_state_fields + [:id]
+    # pul_controller_params aren't used by the search state. We're adding them
+    # to this config to quiet deprecation warnings but we should try removing
+    # them when upgrading to blacklight 8, as we suspect it's fine to have them
+    # stripped out for search.
+    pul_controller_params = [
+      :arkid,
+      :all_models,
+      :append_collection_ids,
+      :auth_token,
+      :batch_size,
+      :change_set,
+      :commit,
+      :create_another,
+      :ephemera_project_id,
+      :formats,
+      :mark_complete,
+      :model_class,
+      :naan,
+      :no_redirect,
+      :ocr_language,
+      :parent_id,
+      :prefix,
+      :rights_statement,
+      :save_and_ingest_path,
+      :scanned_resource,
+      :search_params,
+      :solr_document_id,
+      :template_id,
+      :utf8,
+      :visibility
+    ]
+    config.search_state_fields = config.search_state_fields + [:id] + pul_controller_params
 
     # configuration for Blacklight IIIF Content Search
     config.iiif_search = {
