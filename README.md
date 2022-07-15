@@ -193,6 +193,21 @@ To enable:
    production or staging and deploy the branch.
 1. Deploy `main` again when reindexing is complete.
 
+## Maintaining CircleCI base image
+
+We maintain a Figgy Docker image for use in CircleCI. The Dockerfile is
+located in the `.circleci` directory. To update a package, dependency, or ruby
+version, make edits to the Dockerfile. Then build and push the image to Docker Hub using
+the following steps (be sure to increment the version):
+
+```
+cd .circleci/
+docker login # login to docker hub
+docker build -t pulibrary/ci-figgy:{version} .
+docker push pulibrary/ci-figgy:{version}
+```
+
+
 ## More
 Valkyrie Documentation:
 - For links to helpful valkyrie documentation and troubleshooting tips, visit the [Valkyrie wiki](https://github.com/samvera-labs/valkyrie/wiki).
