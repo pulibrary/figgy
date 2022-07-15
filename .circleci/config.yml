@@ -20,7 +20,8 @@ jobs:
           POSTGRES_DB: figgy_test
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - run: sudo apt update -y
       - run: sudo sh bin/ci_mediainfo_install.sh
@@ -81,7 +82,8 @@ jobs:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       COVERALLS_PARALLEL: true
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'
       - run: sudo apt update -y
@@ -161,7 +163,8 @@ jobs:
           FIGGY_DB_PASSWORD: ""
           PSQL_PAGER: ''
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'
       - run: sudo apt update -y
