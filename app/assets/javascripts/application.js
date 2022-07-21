@@ -34,12 +34,6 @@
 //= require openseadragon/openseadragon
 //= require openseadragon/jquery
 //= require bootstrap_select_dropdown
-//= //require bootstrap/affix
-//= require babel/polyfill
-//= require hydra-editor/hydra-editor
 //= require cocoon
 //= require blacklight_range_limit
 //= require_tree .
-$(document).ready(function() {
-  $('.multi_value.form-group').manage_fields();
-});
