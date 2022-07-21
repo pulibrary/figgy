@@ -14,6 +14,7 @@ import MemberResourcesTables from "figgy/relationships/member_resources_table"
 import ParentResourcesTables from "figgy/relationships/parent_resources_table"
 import BulkLabeler from "figgy/bulk_labeler/bulk_label"
 import BoundingBoxSelector from "figgy/bounding_box_selector"
+import FieldManager from "figgy/field_manager"
 
 export default class Initializer {
   constructor() {
@@ -31,6 +32,7 @@ export default class Initializer {
     this.auto_ingest_handler = new AutoIngestHandler
     this.bulk_labeler = new BulkLabeler
     this.sortable_placeholder()
+    this.initialize_multi_fields()
 
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
     // causing this to not run. Manually calling it so facet more links work.
@@ -160,5 +162,39 @@ export default class Initializer {
       ui.placeholder.width(found_element.width())
       ui.placeholder.height(found_element.height())
     })
+  }
+
+  initialize_multi_fields() {
+    const DEFAULTS = {
+      /* callback to run after add is called */
+      add:    null,
+      /* callback to run after remove is called */
+      remove: null,
+
+      controlsHtml:      '<span class=\"input-group-btn field-controls\">',
+      fieldWrapperClass: '.field-wrapper',
+      warningClass:      '.has-warning',
+      listClass:         '.listing',
+      inputTypeClass:    '.multi_value',
+
+      addHtml:           '<button type=\"button\" class=\"btn btn-link add\"><span class=\"glyphicon glyphicon-plus\"></span><span class="controls-add-text"></span></button>',
+      addText:           'Add another',
+
+      removeHtml:        '<button type=\"button\" class=\"btn btn-link remove\"><span class=\"glyphicon glyphicon-remove\"></span><span class="controls-remove-text"></span> <span class=\"sr-only\"> previous <span class="controls-field-name-text">field</span></span></button>',
+      removeText:         'Remove',
+
+      labelControls:      true,
+    }
+
+    $.fn.manage_fields = function(option) {
+        return this.each(function() {
+            var $this = $(this);
+            var data  = $this.data('manage_fields');
+            var options = $.extend({}, DEFAULTS, $this.data(), typeof option == 'object' && option);
+
+            if (!data) $this.data('manage_fields', (data = new FieldManager(this, options)));
+        })
+    }
+    $('.multi_value.form-group').manage_fields();
   }
 }

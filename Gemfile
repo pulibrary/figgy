@@ -38,7 +38,6 @@ gem "graphiql-rails", "1.4.10", group: :development
 gem "graphql", "1.8.2"
 gem "honeybadger"
 gem "hydra-access-controls"
-gem "hydra-editor", "~> 6.0"
 gem "hydra-head"
 gem "hydra-role-management"
 gem "iiif_manifest", git: "https://github.com/samvera-labs/iiif_manifest"
