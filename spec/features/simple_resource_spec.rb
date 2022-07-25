@@ -29,7 +29,7 @@ RSpec.feature "SimpleChangeSets" do
     expect(page).to have_css("title", text: "#{simple_resource.title.first} - Figgy", visible: false)
   end
 
-  scenario "creating a new resource" do
+  scenario "creating a new resource", js: true do
     visit new_simple_scanned_resources_path
 
     expect(page).to have_field "Title"
@@ -66,11 +66,22 @@ RSpec.feature "SimpleChangeSets" do
     # expect(page).to have_field "Subject"
     expect(page.find("#scanned_resource_change_set", visible: false).value).to eq "simple"
 
+    click_button "Add another Title"
+    expect(page).to have_content "cannot add another"
     fill_in "Title", with: "Test Title"
+    click_button "Add another Title"
+    input = find_all("*[name='scanned_resource[title][]']").last
+    input.fill_in(with: "Second Title")
+    click_button "Add another Title"
+    input = find_all("*[name='scanned_resource[title][]']").last
+    input.fill_in(with: "Third Title")
+    find_all("button.btn-link.remove").last.click
     # fill_in "Contributor", with: "Test Contributor"
     click_button "Save"
 
     expect(page).to have_content "Test Title"
+    expect(page).to have_content "Second Title"
+    expect(page).not_to have_content "Third Title"
   end
 
   scenario "creating an invalid resource" do
