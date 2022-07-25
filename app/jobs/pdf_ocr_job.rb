@@ -1,8 +1,5 @@
 # frozen_string_literal: true
-require "active_storage/downloading"
-
 class PdfOcrJob < ApplicationJob
-  include ActiveStorage::Downloading
   queue_as :high
   attr_reader :blob, :out_path, :resource
 
@@ -25,7 +22,7 @@ class PdfOcrJob < ApplicationJob
   end
 
   def run_pdf_ocr
-    download_blob_to_tempfile do |file|
+    ActiveStorage::Blob.open do |file|
       _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", file.path, out_path.to_s)
       return true if status.success?
       update_state(state: "Error", message: "PDF OCR job failed: #{error_str}")
