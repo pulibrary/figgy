@@ -5,7 +5,7 @@ require "open3"
 RSpec.describe GeoDerivatives::Processors::Raster::Info do
   let(:processor) { described_class.new(path) }
   let(:path) { "test.tif" }
-  let(:info_doc) { file_fixture("gdal/gdalinfo.txt").read }
+  let(:info_doc) { file_fixture("files/gdal/gdalinfo.txt").read }
 
   context "when initializing a new info class" do
     before do
@@ -51,7 +51,7 @@ RSpec.describe GeoDerivatives::Processors::Raster::Info do
     end
 
     context "when gdalinfo does not return data" do
-      let(:info_doc) { file_fixture("gdal/gdalinfo-blank.txt").read }
+      let(:info_doc) { file_fixture("files/gdal/gdalinfo-blank.txt").read }
 
       describe "#driver" do
         it "returns an empty string" do
@@ -79,7 +79,7 @@ RSpec.describe GeoDerivatives::Processors::Raster::Info do
     end
 
     context "when processor is run against a non-geo tiff" do
-      let(:info_doc) { file_fixture("gdal/gdalinfo-no-geo-tiff.txt").read }
+      let(:info_doc) { file_fixture("files/gdal/gdalinfo-no-geo-tiff.txt").read }
 
       describe "#bounds" do
         it "returns an empty string" do

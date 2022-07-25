@@ -13,7 +13,7 @@ describe PulMetadataServices::Client do
   describe ".retrieve" do
     context "with a Voyager-like id" do
       let(:id) { "4609321" }
-      let(:source) { file_fixture("bibdata/4609321.mrx").read }
+      let(:source) { file_fixture("files/bibdata/4609321.mrx").read }
       let(:full_source) { source }
       it "makes requests to Voyager" do
         expect(described_class.retrieve(id).source).to eq source
@@ -32,7 +32,7 @@ describe PulMetadataServices::Client do
     end
     context "with a Pulfa-like id, when the metadata contains non-ASCII characters" do
       let(:id) { "RBD1_c13076" }
-      let(:source) { file_fixture("pulfa/aspace/RBD1_c13076.json").read }
+      let(:source) { file_fixture("files/pulfa/aspace/RBD1_c13076.json").read }
       it "makes requests to PULFA and parses character encoding correctly" do
         expect(described_class.retrieve(id).source).to eq source
       end
@@ -41,7 +41,7 @@ describe PulMetadataServices::Client do
 
   describe ".retrieve_from_bibdata" do
     let(:id) { "4609321" }
-    let(:source) { file_fixture("bibdata/4609321.mrx").read }
+    let(:source) { file_fixture("files/bibdata/4609321.mrx").read }
     it "makes requests to Voyager" do
       expect(described_class.retrieve_from_bibdata(id)).to eq source
     end

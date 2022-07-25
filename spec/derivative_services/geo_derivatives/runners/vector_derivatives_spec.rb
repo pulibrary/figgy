@@ -38,7 +38,7 @@ RSpec.describe GeoDerivatives::Runners::VectorDerivatives do
     end
 
     context "with a zipped shapefile" do
-      let(:input_file_path) { Pathname.new(file_fixture("vector/shapefile.zip")) }
+      let(:input_file_path) { Pathname.new(file_fixture("files/vector/shapefile.zip")) }
       let(:input_mime_type) { 'application/zip; ogr-format="ESRI Shapefile"' }
       let(:display_vector_uri) { test_derivative_url("shapefile_display_vector", "zip") }
       let(:thumbnail_uri) { test_derivative_url("shapefile_thumbnail", "png") }
@@ -47,7 +47,7 @@ RSpec.describe GeoDerivatives::Runners::VectorDerivatives do
     end
 
     context "with a geojson file" do
-      let(:input_file_path) { Pathname.new(file_fixture("vector/geo.json")) }
+      let(:input_file_path) { Pathname.new(file_fixture("files/vector/geo.json")) }
       let(:input_mime_type) { "application/vnd.geo+json" }
       let(:display_vector_uri) { test_derivative_url("geojson_display_vector", "zip") }
       let(:thumbnail_uri) { test_derivative_url("geojson_thumbnail", "png") }
@@ -56,7 +56,7 @@ RSpec.describe GeoDerivatives::Runners::VectorDerivatives do
     end
 
     context "with a KML file" do
-      let(:input_file_path) { Pathname.new(file_fixture("vector/example.kml")) }
+      let(:input_file_path) { Pathname.new(file_fixture("files/vector/example.kml")) }
       let(:input_mime_type) { "application/vnd.google-earth.kml+xml" }
       let(:display_vector_uri) { test_derivative_url("kml_display_vector", "zip") }
       let(:thumbnail_uri) { test_derivative_url("kml_thumbnail", "png") }
