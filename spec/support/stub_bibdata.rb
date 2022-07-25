@@ -19,7 +19,7 @@ module BibdataStubbing
   end
 
   def bibdata_fixture_path(bib_id, content_type = CONTENT_TYPE_JSON_LD)
-    fixture_path = "bibdata/#{bib_id}"
+    fixture_path = "files/bibdata/#{bib_id}"
 
     case content_type
     when CONTENT_TYPE_JSON_LD
@@ -66,9 +66,9 @@ module BibdataStubbing
         headers: {
           "Content-Type" => "application/json"
         },
-        body: body || file_fixture("pulfa/aspace/#{pulfa_id}.json").read
+        body: body || file_fixture("files/pulfa/aspace/#{pulfa_id}.json").read
       )
-    ead = Pathname.new(file_fixture_path).join("pulfa/aspace/#{pulfa_id}.ead.xml")
+    ead = Pathname.new(file_fixture_path).join("files/pulfa/aspace/#{pulfa_id}.ead.xml")
     return unless File.exist?(ead)
     stub_request(:get, "#{pulfalight_domain}/catalog/#{pulfa_id.tr('.', '-')}.xml")
       .to_return(
@@ -100,7 +100,7 @@ module BibdataStubbing
   def stub_bibdata_context
     stub_request(:get, "https://bibdata.princeton.edu/context.json")
       .to_return(
-        body: file_fixture("bibdata/context.json").read,
+        body: file_fixture("files/bibdata/context.json").read,
         headers: {
           "Content-Type" => "application/json"
         }
