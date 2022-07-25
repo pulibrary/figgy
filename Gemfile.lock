@@ -203,7 +203,7 @@ GEM
       rubocop-performance
       rubocop-rails
       rubocop-rspec
-    blacklight (7.28.0)
+    blacklight (7.29.0)
       deprecation
       globalid
       hashdiff
@@ -1007,7 +1007,7 @@ DEPENDENCIES
   bagit (~> 0.4)
   benchmark-ips
   bixby (~> 3.0.0)
-  blacklight (= 7.28.0)
+  blacklight (= 7.29.0)
   blacklight_iiif_search
   blacklight_range_limit
   bootsnap
