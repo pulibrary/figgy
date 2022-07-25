@@ -109,4 +109,11 @@ class DownloadsController < ApplicationController
   def storage_adapter
     Valkyrie.config.storage_adapter
   end
+
+  def render_404
+    respond_to do |format|
+      format.html { render file: Rails.root.join("public", "404.html"), layout: false, status: :not_found }
+      format.any  { head :not_found }
+    end
+  end
 end
