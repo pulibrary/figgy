@@ -13,7 +13,7 @@ gem "blacklight_range_limit"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
-gem "browse-everything", github: "samvera/browse-everything", branch: "2.x-stable-no-thor"
+gem "browse-everything", github: "samvera/browse-everything", branch: "2.x-stable-no-thor-6-1"
 gem "bundler", "2.2.16"
 gem "bunny"
 gem "capistrano-passenger"
@@ -68,7 +68,7 @@ gem "prawn"
 gem "puma"
 gem "rack"
 gem "rack-cors", require: "rack/cors"
-gem "rails", "~> 6.0.5"
+gem "rails", "~> 6.1.0"
 gem "recipient_interceptor"
 gem "redis-namespace"
 gem "reform", "2.2.4"
@@ -91,6 +91,11 @@ gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
 gem "webpacker", "~> 4.0"
 gem "whenever", "~> 0.10"
+
+## Temporary Pins to support Rails 6.1
+
+gem "active-fedora", github: "samvera/active_fedora"
+gem "hydra-derivatives", github: "samvera/hydra-derivatives", branch: "support_rails_6_1"
 
 source "https://gems.contribsys.com/" do
   gem "sidekiq-pro"
