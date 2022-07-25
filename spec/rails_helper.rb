@@ -24,7 +24,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.use_transactional_fixtures = false
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
-  config.file_fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.file_fixture_path = "#{::Rails.root}/spec/fixtures/files"
 
   # Prevent leaking view contexts between tests
   # see https://github.com/drapergem/draper/issues/814
