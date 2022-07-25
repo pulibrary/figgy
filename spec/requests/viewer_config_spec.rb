@@ -12,7 +12,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
       expect(response.status).to eq 200
       expect(response.body).not_to be_empty
       expect(response.content_length).to be > 0
-      expect(response.content_type).to eq "application/json"
+      expect(response.media_type).to eq "application/json"
 
       response_values = JSON.parse(response.body)
       expect(response_values).to include "modules"
@@ -52,7 +52,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
         expect(response.status).to eq 200
         expect(response.body).not_to be_empty
         expect(response.content_length).to be > 0
-        expect(response.content_type).to eq "application/json"
+        expect(response.media_type).to eq "application/json"
 
         response_values = JSON.parse(response.body)
         expect(response_values).to include "modules"
@@ -74,7 +74,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty
           expect(response.content_length).to be > 0
-          expect(response.content_type).to eq "application/json"
+          expect(response.media_type).to eq "application/json"
 
           response_values = JSON.parse(response.body)
           expect(response_values).to include "modules"
@@ -97,7 +97,7 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
           expect(response.status).to eq 200
           expect(response.body).not_to be_empty
           expect(response.content_length).to be > 0
-          expect(response.content_type).to eq "application/json"
+          expect(response.media_type).to eq "application/json"
 
           response_values = JSON.parse(response.body)
           expect(response_values).to include "modules"

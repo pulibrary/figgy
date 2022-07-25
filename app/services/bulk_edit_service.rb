@@ -11,7 +11,7 @@ class BulkEditService
       if change_set.validate(append_or_replace_attributes(member.attributes, attributes))
         change_set_persister.save(change_set: change_set)
       else
-        logger.warn "  Failed validation: #{change_set.errors}"
+        logger.warn "  Failed validation: #{change_set.errors.full_messages.to_sentence}"
       end
     end
   end
