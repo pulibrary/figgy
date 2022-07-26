@@ -10,7 +10,7 @@ import axios from 'axios'
 import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
 import AjaxSelect from '../components/ajax-select'
-import setupAjaxSelect from '../helpers/setup_ajax_select.js'
+import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select.js'
 import FileUploader from '../components/file-uploader'
 import Initializer from '../figgy/figgy_boot'
 
@@ -36,8 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
       data: {
         options: []
       },
-      mounted: function () {
+      beforeCreate: function () {
         setupAjaxSelect()
+      },
+      mounted: function () {
+        setupCocoonLinks()
       }
     })
   }

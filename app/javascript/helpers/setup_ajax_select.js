@@ -34,13 +34,15 @@ function handleCocoonAfterInsert (event, elements) {
 
 // Inserts an ajax-select component before every input with a ajax_select_type
 // attribute. Example:  `<input ajax_select_type="Place"/>`
-export default function setupAjaxSelect () {
+export function setupAjaxSelect () {
   const ajaxInputs = document.querySelectorAll('input[ajax_select_type]')
   for (var i = 0; i < ajaxInputs.length; i++) {
     const ajaxInput = ajaxInputs[i]
     appendAjaxSelect(ajaxInput)
   }
+}
 
+export function setupCocoonLinks () {
   const cocoonLinks = document.querySelectorAll('.links')
   cocoonLinks.forEach(element => {
     // This needs to trigger the Vue components
