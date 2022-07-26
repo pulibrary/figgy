@@ -101,6 +101,12 @@ class EphemeraFolderChangeSetBase < ChangeSet
     super
   end
 
+  def validate(params)
+    result = super
+    return true if skip_validation == true
+    result
+  end
+
   def genre=(genre_value)
     return super(genre_value) if genre_value.blank?
     super(coerce_string_value(genre_value))
