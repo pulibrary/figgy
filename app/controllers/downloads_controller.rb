@@ -69,6 +69,13 @@ class DownloadsController < ApplicationController
     nil
   end
 
+  def render_404
+    respond_to do |format|
+      format.html { render file: Rails.root.join("public", "404.html"), layout: false, status: :not_found }
+      format.any  { head :not_found }
+    end
+  end
+
   def file_desc
     return unless resource
     @file_desc ||= resource.file_metadata.find { |m| m.id.to_s == params[:id] }
