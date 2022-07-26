@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 module OsdModalHelper
   include ::BlacklightHelper
-  def osd_modal_for(resource, &block)
+  def osd_modal_for(resource)
+    block = yield
     if !resource
-      yield
+      block
     else
-      tag.span class: "ignore-select", data: { modal_manifest: "#{ManifestBuilder::ManifestHelper.new.manifest_image_path(resource)}/info.json" }, &block
+      tag.span(block, class: "ignore-select", data: { modal_manifest: "#{ManifestBuilder::ManifestHelper.new.manifest_image_path(resource)}/info.json" })
     end
   rescue
-    tag.span
+    tag.span(block)
   end
 end
