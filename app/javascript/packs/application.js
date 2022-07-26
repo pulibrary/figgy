@@ -10,7 +10,7 @@ import axios from 'axios'
 import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
 import AjaxSelect from '../components/ajax-select'
-import setupAjaxSelect from '../helpers/setup_ajax_select.js'
+import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select.js'
 import FileUploader from '../components/file-uploader'
 import Initializer from '../figgy/figgy_boot'
 
@@ -18,7 +18,6 @@ Vue.use(system)
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
-  window.figgy = new Initializer()
   // Set CSRF token for axios requests.
   axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : undefined
   var elements = document.getElementsByClassName('lux')
@@ -37,10 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
       data: {
         options: []
       },
-      mounted: function () {
+      beforeCreate: function () {
         setupAjaxSelect()
+      },
+      mounted: function () {
+        setupCocoonLinks()
       }
     })
   }
   setupAuthLinkClipboard()
+  // It's important we initialize Figgy after mounting Vue, otherwise none of
+  // the JS will work because Vue takes it all over.
+  window.figgy = new Initializer()
 })
