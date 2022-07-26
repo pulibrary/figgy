@@ -82,7 +82,7 @@ before "deploy:assets:precompile", "deploy:whenever"
 namespace :deploy do
   desc "Run rake yarn install"
   task :yarn_install do
-    on roles(:web) do
+    on roles(:web, :worker) do
       within release_path do
         execute("cd #{release_path} && yarn install")
       end
