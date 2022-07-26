@@ -1,4 +1,4 @@
-<div class="form-group string optional lux">
+<div class="form-group string optional">
   <%= f.label :person_id, required: f.object.required?(:person_id) %>
   <%= link_to 'New Person', new_numismatics_person_path, class: 'btn btn-sm btn-primary new-link', target: '_blank'%>
   <%= f.hidden_field :person_id, ajax_select_type: "Person" %>

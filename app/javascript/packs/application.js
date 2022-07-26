@@ -18,7 +18,6 @@ Vue.use(system)
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
-  window.figgy = new Initializer()
   // Set CSRF token for axios requests.
   axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : undefined
   var elements = document.getElementsByClassName('lux')
@@ -43,4 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
   setupAuthLinkClipboard()
+  // It's important we initialize Figgy after mounting Vue, otherwise none of
+  // the JS will work because Vue takes it all over.
+  window.figgy = new Initializer()
 })
