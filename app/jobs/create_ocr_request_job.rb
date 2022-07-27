@@ -1,8 +1,6 @@
 # frozen_string_literal: true
-require "active_storage/downloading"
 
 class CreateOcrRequestJob < ApplicationJob
-  include ActiveStorage::Downloading
   queue_as :high
 
   def perform(file_path:)
