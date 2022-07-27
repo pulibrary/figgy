@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ManifestBuilder
-  class IIIFSearchBuilder
+  class IiifSearchBuilder
     attr_reader :resource
 
     ##

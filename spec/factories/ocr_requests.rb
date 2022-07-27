@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :ocr_request do
+  factory :ocr_request, class: OcrRequest do
     filename { "sample.pdf" }
     state { "enqueued" }
     note { "notes" }

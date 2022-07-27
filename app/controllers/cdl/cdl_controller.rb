@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Cdl
+module CDL
   class CdlController < ApplicationController
     def status
       @charge_manager = charge_manager(params[:id])
