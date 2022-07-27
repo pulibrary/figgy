@@ -23,6 +23,7 @@ RSpec.describe CleanDeletedSubjectJob do
       let(:change_set) { ChangeSet.for(resource) }
       let(:logger) { instance_double Logger }
       before do
+        allow(ChangeSet).to receive(:for).and_call_original
         allow(ChangeSet).to receive(:for).with(resource).and_return(change_set)
         allow(change_set).to receive(:valid?).and_return(false)
         allow(logger).to receive(:warn)

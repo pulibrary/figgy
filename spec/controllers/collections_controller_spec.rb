@@ -89,7 +89,7 @@ RSpec.describe CollectionsController, type: :controller do
           expect(Valkyrie.logger).to have_received(:warn).with(
             {
               source_metadata_identifier: [
-                error: "can't be blank"
+                error: :blank
               ],
               slug: [
                 {
