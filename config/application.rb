@@ -49,7 +49,6 @@ module Figgy
 
     # Redirect to CAS logout after signing out of Figgy
     config.x.after_sign_out_url = "https://fed.princeton.edu/cas/logout"
-    config.active_record.sqlite3.represent_boolean_as_integer = true
     # load overrides
     config.to_prepare do
       Dir.glob(Rails.root.join("app", "**", "*_override*.rb")) do |c|
