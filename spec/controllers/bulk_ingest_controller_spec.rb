@@ -13,7 +13,7 @@ RSpec.describe BulkIngestController do
 
   describe ".storage_adapter" do
     it "returns an adapter" do
-      expect(described_class.storage_adapter).to be_an InstrumentedStorageAdapter
+      expect(described_class.storage_adapter).to be_an Valkyrie::Storage::Disk
     end
   end
 

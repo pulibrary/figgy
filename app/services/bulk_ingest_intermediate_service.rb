@@ -30,7 +30,7 @@ class BulkIngestIntermediateService
     end
 
     # Retrieves the query service using the metadata adapter
-    # @return [InstrumentedAdapter::InstrumentedQueryService]
+    # @return [QueryService]
     delegate :query_service, to: :metadata_adapter
 
     # Query for the modified resource

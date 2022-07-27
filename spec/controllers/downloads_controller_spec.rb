@@ -44,6 +44,8 @@ RSpec.describe DownloadsController do
       end
 
       it "returns an 404 when the file is not found on disk" do
+        file_set
+        file_node
         allow(disk).to receive(:find_by).and_raise(Valkyrie::StorageAdapter::FileNotFound)
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
         expect(response.status).to eq(404)
