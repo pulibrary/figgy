@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 require_relative "figgy"
 Datadog.configure do |c|
-  c.tracer(enabled: false) unless Rails.env.production?
+  c.tracing.enabled = false unless Rails.env.production?
   # Rails
-  c.use :rails
+  c.tracing.instrument :rails
 
   # Redis
-  c.use :redis
+  c.tracing.instrument :redis
 
   # Net::HTTP
-  c.use :http
+  c.tracing.instrument :http
 
   # Sidekiq
-  c.use :sidekiq
+  c.tracing.instrument :sidekiq
 
   # Faraday
-  c.use :faraday
+  c.tracing.instrument :faraday
 
   # Sequel
-  c.use :sequel
+  c.tracing.instrument :sequel
 end
