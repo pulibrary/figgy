@@ -65,13 +65,13 @@ class IngestIntermediateFileJob < ApplicationJob
     end
 
     # Retrieves the storage adapter for copying files to disk
-    # @return [InstrumentedStorageAdapter]
+    # @return [Valkyrie::Storage::Disk]
     def storage_adapter
       Valkyrie::StorageAdapter.find(:disk_via_copy)
     end
 
     # Retrieves the query service using the metadata adapter
-    # @return [InstrumentedAdapter::InstrumentedQueryService]
+    # @return [QueryService]
     delegate :query_service, to: :metadata_adapter
 
     # Constructs a new change set persister for ingesting the resources

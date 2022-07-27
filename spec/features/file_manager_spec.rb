@@ -105,11 +105,11 @@ RSpec.feature "File Manager" do
     end
 
     it "uses cached parents for thumbnails" do
+      resource
       allow(adapter.query_service).to receive(:find_inverse_references_by).and_call_original
 
       visit polymorphic_path [:file_manager, resource]
 
-      # Call for parents once, call for tombstones once.
       expect(adapter.query_service).to have_received(:find_inverse_references_by).exactly(2).times
     end
   end

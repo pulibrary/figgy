@@ -508,7 +508,7 @@ RSpec.describe EphemeraFoldersController, type: :controller do
   # TODO: remove this block when stubbing above has been removed
   context "coverage for lines skipped because of stubbing" do
     it "has a storage adapter" do
-      expect(@controller.storage_adapter).to be_a(InstrumentedStorageAdapter)
+      expect(@controller.storage_adapter).to be_a(Valkyrie::Storage::Disk)
     end
   end
   # rubocop:enable RSpec/InstanceVariable

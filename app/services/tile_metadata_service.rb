@@ -47,7 +47,7 @@ class TileMetadataService
     if storage_adapter.is_a? Valkyrie::Storage::Shrine
       "s3://#{storage_adapter.shrine.bucket.name}"
     else
-      storage_adapter.storage_adapter.base_path.to_s
+      storage_adapter.base_path.to_s
     end
   end
 
