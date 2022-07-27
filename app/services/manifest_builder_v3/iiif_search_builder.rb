@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ManifestBuilderV3
-  class IIIFSearchBuilder < ManifestBuilder::IIIFSearchBuilder
+  class IiifSearchBuilder < ManifestBuilder::IiifSearchBuilder
     def apply(manifest)
       return manifest unless resource.try(:search_enabled?)
       manifest["service"] ||= []

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe OcrRequestsController, type: :controller do
+RSpec.describe OCRRequestsController, type: :controller do
   with_queue_adapter :inline
   let(:user) { FactoryBot.create(:staff) }
   let(:valid_params) do

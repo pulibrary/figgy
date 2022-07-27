@@ -82,7 +82,7 @@ class ManifestBuilderV3
       end
 
       def iiif_search_builder
-        ManifestBuilderV3::IIIFSearchBuilder
+        ManifestBuilderV3::IiifSearchBuilder
       end
 
       ##
