@@ -55,7 +55,7 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
 
   context "when a FileSet has errors" do
     let(:original_file) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], error_message: ["errors"]) }
-    let(:file_set) { FactoryBot.build(:file_set, file_metadata: [original_file]) }
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [original_file]) }
     let(:member) { FileSetChangeSet.new(file_set) }
 
     it "displays an error message" do
