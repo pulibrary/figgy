@@ -6,8 +6,6 @@
     "lint": "yarn run eslint -- --ext .vue app/javascript"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.18.9",
-    "@babel/preset-react": "^7.8.3",
     "@google-cloud/pubsub": "^0.31.0",
     "@google-cloud/storage": "^5.8.4",
     "@vitejs/plugin-react": "^2.0.0",
@@ -42,12 +40,7 @@
     "vuex": "^2.4.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.9.0",
     "@vue/test-utils": "^1.0.0-beta.25",
-    "babel-core": "^7.0.0-bridge",
-    "babel-jest": "^23.6.0",
-    "babel-loader": "^8.0.6",
     "eslint": "^5.11.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-loader": "^2.1.1",
@@ -86,9 +79,7 @@
       "vue"
     ],
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
-      "^.+\\.es6$": "<rootDir>/node_modules/babel-jest"
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
     },
     "snapshotSerializers": [
       "<rootDir>/node_modules/jest-serializer-vue"
