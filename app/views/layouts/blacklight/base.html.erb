@@ -14,6 +14,8 @@
     <%= csrf_meta_tag %>
     <%= stylesheet_link_tag "application", media: "all" %>
     <%= javascript_include_tag "application" %>
+    <%= vite_javascript_tag 'application' %>
+    <%= vite_stylesheet_tag 'application' %>
     <%# There were errors when we tried to include this webpack %>
     <%# see comments culminating with https://github.com/pulibrary/figgy/pull/3754#issuecomment-598510375 %>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
@@ -22,8 +24,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
 
-    <%= stylesheet_pack_tag 'application' %>
-    <%= javascript_pack_tag "application" %>
     <%= content_for(:head) %>
   </head>
   <body class="<%= render_body_class %>">

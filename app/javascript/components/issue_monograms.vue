@@ -11,7 +11,7 @@
     <tbody>
       <tr>
         <template v-for="monogram in members">
-          <td :key="monogram.id">
+          <td>
             <issue-monogram
               :key="monogram.id"
               :resource="monogram"
@@ -44,7 +44,7 @@
 
 </template>
 <script>
-import IssueMonogram from './issue_monogram'
+import IssueMonogram from './issue_monogram.vue'
 
 export default {
   name: 'IssueMonograms',

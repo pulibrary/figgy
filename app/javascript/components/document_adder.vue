@@ -30,9 +30,7 @@
           <template
             v-for="recording in recordings"
           >
-            <tr
-              :key="recording.id"
-            >
+            <tr :key="recording.id" >
               <td>
                 <a :href="'/catalog/' + recording.id">
                   {{ recording.title }}

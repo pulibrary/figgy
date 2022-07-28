@@ -1,0 +1,10 @@
+/* node_modules/browse-everything-react/src/containers/UploadForm.css */
+/* node_modules/browse-everything-react/src/containers/SelectProvider.css */
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+  top: -0.65rem;
+}
+
+/* node_modules/browse-everything-react/src/containers/BrowseEverything.css */
+body {
+  background: #efefef;
+}

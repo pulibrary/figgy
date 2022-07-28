@@ -1,4 +1,4 @@
-import lg from "figgy/bulk_labeler/label_generator"
+import lg from "./label_generator.js"
 export default class LabelerActionsManager {
   constructor(element) {
     this.element = element
