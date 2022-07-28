@@ -49,7 +49,6 @@ Rails.application.config.to_prepare do
   )
 
   if ENV["STORAGE_PROJECT"] && ENV["STORAGE_CREDENTIALS"] && !Rails.env.test?
-    require "shrine/storage/google_cloud_storage"
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
       versioned_preservation: Shrine::Storage::VersionedGoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"])
@@ -108,7 +107,6 @@ Rails.application.config.to_prepare do
   )
 
   if Figgy.config["pyramidals_bucket"].present? && !Rails.env.test?
-    require "shrine/storage/s3"
     Shrine.storages = (Shrine.storages || {}).merge(
       pyramidal_storage: Shrine::Storage::S3.new(
         bucket: Figgy.config["pyramidals_bucket"],
@@ -162,7 +160,6 @@ Rails.application.config.to_prepare do
   )
 
   if Figgy.config["aws_access_key_id"].present? && Figgy.config["cloud_geo_bucket"].present? && !Rails.env.test?
-    require "shrine/storage/s3"
     Shrine.storages = (Shrine.storages || {}).merge(
       cloud_geo_storage: Shrine::Storage::S3.new(
         bucket: Figgy.config["cloud_geo_bucket"],

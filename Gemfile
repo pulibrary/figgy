@@ -120,7 +120,7 @@ group :development, :test do
 end
 
 group :development, :staging do
-  gem "rack-mini-profiler", require: false
+  gem "rack-mini-profiler", require: ["prepend_net_http_patch"]
 end
 
 group :test do
