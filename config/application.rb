@@ -12,6 +12,8 @@ require "action_view/railtie"
 require "action_cable/engine"
 require "sprockets/railtie"
 require "active_storage/engine"
+require "shrine/storage/s3"
+require "shrine/storage/google_cloud_storage"
 Bundler.require(*Rails.groups)
 module Figgy
   class Application < Rails::Application
