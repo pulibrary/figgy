@@ -5,7 +5,7 @@ describe PulMetadataServices::BibRecord do
   subject(:record) { described_class.new(source) }
 
   let(:bib_id) { "1160682" }
-  let(:source) { file_fixture("bibdata/#{bib_id}.mrx").read }
+  let(:source) { file_fixture("files/bibdata/#{bib_id}.mrx").read }
 
   before do
     stub_bibdata(bib_id: "1160682")

@@ -5,8 +5,8 @@ require "open3"
 RSpec.describe GeoDerivatives::Processors::Vector::Info do
   let(:processor) { described_class.new(path) }
   let(:path) { "test.tif" }
-  let(:polygon_info_doc) { file_fixture("gdal/ogrinfo_polygon.txt").read }
-  let(:line_info_doc) { file_fixture("gdal/ogrinfo_line.txt").read }
+  let(:polygon_info_doc) { file_fixture("files/gdal/ogrinfo_polygon.txt").read }
+  let(:line_info_doc) { file_fixture("files/gdal/ogrinfo_line.txt").read }
 
   context "when initializing a new info class" do
     before do
