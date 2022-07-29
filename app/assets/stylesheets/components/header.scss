@@ -1,5 +1,12 @@
+#title-bar {
+  width: 100%;
+}
+
 #site-search {
   margin: 1.5em 0;
+  .form-control {
+    height: 45px;
+  }
 }
 
 .search-form {
