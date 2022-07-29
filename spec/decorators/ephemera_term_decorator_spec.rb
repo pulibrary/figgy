@@ -37,7 +37,7 @@ RSpec.describe EphemeraTermDecorator do
     context "when the term contains UTF-8 characters" do
       let(:resource) { FactoryBot.create_for_repository(:ephemera_term, label: "San José, Costa Rica", member_of_vocabulary_id: vocabulary.id) }
       it "still generates a figgy uri" do
-        expect(resource.decorate.internal_url.to_s).to eq "https://figgy.princeton.edu/ns/testVocabulary/sanJos%C3%A9,CostaRica"
+        expect(resource.decorate.internal_url.to_s).to eq "https://figgy.princeton.edu/ns/testVocabulary/sanJos%C3%A9%2CCostaRica"
       end
     end
 
