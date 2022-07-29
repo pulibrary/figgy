@@ -983,7 +983,7 @@ DEPENDENCIES
   bootsnap
   bootstrap-sass (~> 3.4)
   browse-everything!
-  bundler (= 2.3.18)
+  bundler (~> 2.0)
   bundler-audit
   bunny
   capistrano (~> 3.7.1)
@@ -1092,4 +1092,4 @@ DEPENDENCIES
   whenever (~> 0.10)
 
 BUNDLED WITH
-   2.3.18
+   2.3.17
