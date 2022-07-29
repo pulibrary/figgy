@@ -36,4 +36,5 @@
 //= require bootstrap_select_dropdown
 //= require cocoon
 //= require blacklight_range_limit
+//= require browse_everything
 //= require_tree .

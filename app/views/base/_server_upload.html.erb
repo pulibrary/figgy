@@ -6,10 +6,8 @@
           <%= hidden_field_tag 'parent_id', params[:parent_id] %>
         <% end %>
 
-        <button id="browse_everything" type="button" class="btn btn-primary browse-everything" data-toggle="modal" data-target="#browse-everything-modal">
-          Upload Files from Server
-        </button>
-        <%= render 'browse_everything/modal' %>
+        <button type="button" data-toggle="browse-everything" data-route="<%=browse_everything_engine.root_path%>"
+  data-target="#browse-everything-form" class="btn btn-primary browse-everything" id="browse_everything">Upload Files from Server</button>
       <% end %>
     </div>
   </div>

@@ -3,7 +3,7 @@
 # The file_system provider can be a path to any directory on the server where your application is running.
 #
 ---
-fast_file_system:
+file_system:
   home: <%= Figgy.config["ingest_folder_path"] %>
 google_drive:
   client_id: <%= ENV["GOOGLE_CLIENT_ID"] || 'client_id' %>

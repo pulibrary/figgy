@@ -13,7 +13,7 @@ gem "blacklight_range_limit"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
-gem "browse-everything", github: "samvera/browse-everything", branch: "2.x-stable-no-thor-6-1"
+gem "browse-everything", "1.2.0"
 gem "bundler", "2.2.16"
 gem "bunny"
 gem "capistrano-passenger"
