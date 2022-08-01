@@ -32,6 +32,7 @@ module ThumbnailHelper
 
   def geo_thumbnail?(document)
     parent = document.is_a?(FileSet) ? document.decorate.parent : document
+    return false unless parent
     return false if parent.class.can_have_manifests?
     parent.try(:geo_resource?) ? true : false
   end

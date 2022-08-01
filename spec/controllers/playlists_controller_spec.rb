@@ -331,7 +331,7 @@ RSpec.describe PlaylistsController, type: :controller do
         )
 
         query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
-        allow(query_service).to receive(:find_by).with(id: resource.id).and_call_original
+        allow(query_service).to receive(:find_by).and_call_original
         allow(query_service).to receive(:find_inverse_references_by)
         get :structure, params: { id: resource.id.to_s }
 
@@ -339,6 +339,7 @@ RSpec.describe PlaylistsController, type: :controller do
         expect(response.body).to have_field("label", with: "Chapter 1")
         expect(response.body).to have_link resource.title.first, href: solr_document_path(id: resource.id)
         expect(query_service).not_to have_received(:find_inverse_references_by)
+        expect(query_service).to have_received(:find_by).with(id: resource.id)
       end
     end
   end
