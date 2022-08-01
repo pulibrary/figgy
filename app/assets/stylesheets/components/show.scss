@@ -38,18 +38,11 @@ ul.tabular {
     text-align: center;
       @media (min-width: $bp-small) {
         padding-top: inherit;
-	padding-bottom: inherit;
+        padding-bottom: inherit;
       }
-
-      .submit {
-        @media (min-width: $bp-medium) {
-        float: right;
-      }
-    }
   }
 
   .summary {
-    float: right;
     p {
       color: #888888;
       font-style: italic;
@@ -137,4 +130,8 @@ table.dataTable thead > tr > th {
 
 .claim-btn {
   margin-bottom: 1em;
+}
+
+h2.card-title {
+  margin-top: .75em;
 }
