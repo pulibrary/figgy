@@ -58,5 +58,8 @@ module Figgy
     config.action_mailer.deliver_later_queue_name = "high"
 
     config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, Hash, HashWithIndifferentAccess]
+    # This got set on Rails 5.2 to be true, but breaks BrowseEverything. When we
+    # remove BrowseEverything, remove this.
+    config.action_controller.default_protect_from_forgery = false
   end
 end
