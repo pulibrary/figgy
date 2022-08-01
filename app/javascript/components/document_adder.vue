@@ -159,13 +159,12 @@ export default {
           return response.json()
         })
         .then(function (data) { // Map to objects
-          return data['response']['docs'].map(
+          return data['data'].map(
             function (recordingDocument) {
-              const titles = recordingDocument['title_ssim'] ||
-recordingDocument['figgy_title_ssim']
+              const titles = recordingDocument['attributes']['figgy_title_ssi']
               return {
                 id: recordingDocument['id'],
-                title: titles[0],
+                title: titles['attributes']['value'],
                 tracks: []
               }
             }
