@@ -2,18 +2,18 @@
   <div id="bulk-edit-constraints">
     <%= render partial: "catalog/constraints" %>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">Bulk edit <%= @resources_count %> resources</div>
-    <div class="panel-body">
+  <div class="card">
+    <div class="card-header">Bulk edit <%= @resources_count %> resources</div>
+    <div class="card-body">
       <%= form_tag bulk_edit_resources_update_url(search_params: search_state.params_for_search), id: "bulk-edit-form", class: "form-group" do %>
-        <div>
+        <div class="row">
           <div class="col-sm-2"><label>Workflow State</label></div>
           <div class="checkbox">
             <%= check_box_tag "mark_complete" %>
             <%= label_tag "mark_complete", "Mark all complete" %>
           </div>
         </div>
-        <div>
+        <div class="row">
           <div class="col-sm-2"><%= label_tag "ocr_language", "OCR Language" %></div>
           <%= select_tag :ocr_language,
               options_from_collection_for_select(ControlledVocabulary.for(:ocr_language).all, "value", "label"),
@@ -22,7 +22,7 @@
               input_html: { class: 'form-control ocr-language' },
               required: false %>
         </div>
-        <div>
+        <div class="row">
           <div class="col-sm-2"><%= label_tag "rights_statement", "Rights Statement" %></div>
           <%= select_tag :rights_statement,
               options_from_collection_for_select(ControlledVocabulary.for(:rights_statement).all, "value", "label"),
@@ -30,7 +30,7 @@
               input_html: { class: 'form-control rights-statement' },
               required: false %>
         </div>
-        <div>
+        <div class="row">
           <div class="col-sm-2"><%= label_tag "visibility", "Visibility" %></div>
           <%= select_tag :visibility,
               options_from_collection_for_select(ControlledVocabulary.for(:visibility).all, "value", "label"),
@@ -38,7 +38,7 @@
               input_html: { class: 'form-control rights-statement' },
               required: false %>
         </div>
-        <div>
+        <div class="row">
           <div class="col-sm-2"><%= label_tag "append_collection_ids", "Add to Collection" %></div>
           <%= select_tag :append_collection_ids,
               options_from_collection_for_select(@collections, "id", "title"),
@@ -47,7 +47,7 @@
               multiple: true,
               required: false %>
         </div>
-        <div class="panel-footer panel-save-controls pull-right">
+        <div class="card-footer card-save-controls pull-right">
           <%= submit_tag "Apply Edits",
             id: 'bulk-edit-submit',
             class: 'btn btn-primary',
