@@ -1,9 +1,9 @@
 <% if @change_set.respond_to?(:auth_token) && @change_set.resource.decorate.public_readable_state? %>
-  <div id="auth_link" class="panel panel-default auth-link">
-    <div class="panel-heading">
-      <h2 class="panel-title">Authorized Link</h2>
+  <div id="auth_link" class="card auth-link">
+    <div class="card-header">
+      <h2 class="card-title">Authorized Link</h2>
     </div>
-    <div class="row panel-body">
+    <div class="row card-body">
       <div class="col-sm-8" id="authorized-link">
         <%= build_authorized_link %>
       </div>
@@ -21,7 +21,7 @@
       </div>
     </div>
     <% if can?(:edit, resource) %>
-      <div class="row panel-body">
+      <div class="row card-body">
         <div class="col-sm-6 summary">
           <p>Authorized links provide anonymous, public users with the ability to view playlists and play tracks.  Each link is unique, and one may generate only a single link for any given playlist.  Regeneration replaces the current link, rendering any previous links invalid.</p>
         </div>
