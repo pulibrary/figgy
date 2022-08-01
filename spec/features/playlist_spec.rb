@@ -30,7 +30,7 @@ RSpec.feature "PlaylistChangeSets" do
 
   context "when tracks have been added to a playlist" do
     let(:file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
-    let(:recording) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+    let(:recording) { FactoryBot.create_for_repository(:scanned_resource, files: [file], title: "Super Mario Theme") }
     let(:file_set) { recording.decorate.members.first }
     let(:change_set) do
       cs = PlaylistChangeSet.new(resource)
@@ -38,17 +38,29 @@ RSpec.feature "PlaylistChangeSets" do
       cs
     end
 
-    scenario "viewing the tracks" do
+    scenario "viewing, removing, adding tracks", js: true do
       persisted = adapter.query_service.find_by(id: resource.id)
 
       visit solr_document_path persisted
-      # This cannot be tested any further due to the errors related to Webpack on headless-chrome
-      doc = Nokogiri::HTML(page.body)
-      expect(doc.xpath("//playlist-members")).not_to be_empty
-      playlist_members_elements = doc.xpath("//playlist-members[@resource-id='#{resource.id}']")
-      expect(playlist_members_elements).not_to be_empty
-      playlist_members_element = playlist_members_elements.first
-      expect(JSON.parse(playlist_members_element.attributes[":members"].value)).to eq JSON.parse(json_fixture(resource.decorate.decorated_proxies.first, recording))
+
+      members_table = page.find("table.member-recordings")
+      within members_table do
+        expect(page).to have_content(resource.decorate.members.first.title.first)
+        click_button("Detach")
+      end
+      expect(page).not_to have_selector("table.member-recordings")
+
+      tracks_div = page.find(".playlist-tracks")
+      within tracks_div do
+        fill_in("recording-query", with: "Super Mario Theme")
+        click_button "Search"
+        click_button "Add Track"
+      end
+
+      members_table = page.find("table.member-recordings")
+      within members_table do
+        expect(page).to have_content(resource.decorate.members.first.title.first)
+      end
     end
 
     scenario "returning to search results" do
