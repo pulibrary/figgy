@@ -11,4 +11,8 @@ class ProxyFileSet < Resource
   def title
     label
   end
+
+  def thumbnail_id
+    proxied_file_id
+  end
 end

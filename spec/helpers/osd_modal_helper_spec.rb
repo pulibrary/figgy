@@ -11,6 +11,15 @@ RSpec.describe OsdModalHelper do
         expect(output).to eq "bla"
       end
     end
+    context "when given a block and a resource" do
+      it "wraps the content" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        output = helper.osd_modal_for(resource) do
+          "bla"
+        end
+        expect(output).to eq "<span class=\"ignore-select\" data-modal-manifest=\"http://www.example.com/image-service/#{resource.id}/info.json\">bla</span>"
+      end
+    end
     context "when encountering an error retrieving the derivative" do
       let(:file_set) { FactoryBot.create_for_repository(:file_set) }
       let(:manifest_helper_class) { class_double(ManifestBuilder::ManifestHelper).as_stubbed_const(transfer_nested_constants: true) }

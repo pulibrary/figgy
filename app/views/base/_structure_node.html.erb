@@ -21,8 +21,8 @@
       </div>
       <% if node.proxy.present? %>
         <div class="card-body">
-          <%= osd_modal_for(node.proxy_for_object) do %>
-            <%= document_presenter(node.proxy_for_object).thumbnail.thumbnail_tag({ onerror: default_icon_fallback })%>
+          <%= osd_modal_for(node.proxy_for_object) do -%>
+            <%= document_presenter(node.proxy_for_object).thumbnail.thumbnail_tag({ onerror: default_icon_fallback }, suppress_link: true)%>
           <% end %>
         </div>
       <% end %>
