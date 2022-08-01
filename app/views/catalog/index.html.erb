@@ -1,15 +1,11 @@
-<% if has_search_parameters? %>
-  <div id="sidebar" class="<%= sidebar_classes %>">
+<% unless has_search_parameters? %>
+  <%# if there are no input/search related params, display the "home" partial -%>
+  <%= render 'home' %>
+  <%= render 'shared/sitelinks_search_box' %>
+<% else %>
+  <% content_for(:sidebar) do %>
     <%= render 'search_sidebar' %>
-  </div>
-<% end %>
-
-<div id="content" class="<%= main_content_classes %>">
-  <% unless has_search_parameters? %>
-    <%# if there are no input/search related params, display the "home" partial -%>
-    <%= render 'home' %>
-    <%= render 'shared/sitelinks_search_box' %>
-  <% else %>
-    <%= render 'search_results' %>
   <% end %>
-</div>
+
+  <%= render 'search_results' %>
+<% end %>

@@ -84,7 +84,7 @@ class ManifestBuilder
       end
 
       def iiif_search_builder
-        ManifestBuilder::IIIFSearchBuilder
+        ManifestBuilder::IiifSearchBuilder
       end
 
       def media_sequence_builder

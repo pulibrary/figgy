@@ -1,5 +1,7 @@
 /* Follows minor third modular scale of 1.200 */
 @import 'variables/typography';
+$brand-danger: $danger;
+$border-radius-base: $border-radius;
 
 html {
     font-size: 1em;
@@ -53,10 +55,10 @@ body .form-control {
     line-height: 1.1em;
   }
 
-  h3.panel-title {
-    font-size: 1.3em;
-  }
-
+  // h3.panel-title {
+  //   font-size: 1.3em;
+  // }
+  //
   .document {
     h3 {
       font-size: 1.3em;

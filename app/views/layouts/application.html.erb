@@ -1,66 +1,24 @@
-<% provide :body do %>
-<div class="lux">
-  <%= render 'shared/header' %>
-</div>
-<%= render 'shared/flash_message' %>
-<main>
-  <div id="main" role="main" class="<%= container_type %> <%= yield(:page_class) if content_for?(:page_class)%> lux">
-  <% if content_for?(:page_header) %>
-    <div class="row">
-      <div class="col-md-12 main-header ">
-        <%= yield(:page_header) %>
-      </div>
-    </div>
-  <% end %>
-    <%= content_for?(:main) ? yield(:main) : yield %>
+<% content_for(:above_container) do %>
+  <div>
+    <%= render "shared/header" %>
   </div>
-</main>
-
-  <%= render 'shared/footer' %>
-  <%= render 'shared/osd_modal' %>
+  <%= render "shared/flash_message" %>
 <% end %>
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title><%= content_for?(:page_title) ? yield(:page_title) : default_page_title %></title>
-    <meta name="viewport" content="width=device-width">
-    <%= csrf_meta_tag %>
-    <meta name="google-site-verification" content="ahsnadaG77nHGY5J1JM9ZBi9yIjK8HkHUtGLRbKjkTc" />
-    <%= stylesheet_link_tag 'application' %>
-    <%= stylesheet_pack_tag 'application' %>
-    <%= render 'shared/analytics' if Rails.env.production? %>
-    <%= yield :head %>
-  </head>
-  <body>
-    <%= content_for?(:body) ? yield(:body) : yield %>
-    <%= render 'shared/ajax_modal' %>
-    <%# There were errors when we tried to include this webpack %>
-    <%# see comments culminating with https://github.com/pulibrary/figgy/pull/3754#issuecomment-598510375 %>
-    <script src="//cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.js"></script>
-    <%= javascript_include_tag 'application' %>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<% content_for(:content) do %>
+  <% if content_for? :sidebar %>
+    <section id="sidebar" class="<%= sidebar_classes %>" aria-label="<%= t('blacklight.search.documents.aria.limit_search') %>">
+      <%= content_for(:sidebar) %>
+    </section>
 
-    <%= javascript_tag do %>
-      oldDefine = define;
-      define = null;
-    <% end %>
+    <section id="content" class="<%= main_content_classes %> container" aria-label="<%= t('blacklight.search.documents.aria.search_results') %>">
+      <%= yield %>
+    </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.js"></script>
+  <% else %>
+    <section class="col-md-12">
+      <%= yield %>
+    </section>
+  <% end %>
+<% end %>
 
-    <%= javascript_tag do %>
-      define = oldDefine;
-    <% end %>
-
-    <%= javascript_tag do %>
-      window.Global = {
-        figgy: { resource: { defaultThumbnail: "<%= image_url('default_thumbnail.png') %>" } }
-      };
-    <% end %>
-    <%= javascript_pack_tag 'application' %>
-  </body>
-</html>
+<%= render template: "layouts/blacklight/base" %>

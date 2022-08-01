@@ -21,7 +21,7 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
   def internal_url
     return Array.wrap(model.uri).first if vocabulary.blank?
     vocabulary_uri = vocabulary.uri.to_s.end_with?("/") ? vocabulary.uri.to_s : vocabulary.uri.to_s + "/"
-    URI.join(vocabulary_uri, URI.escape(camelized_label))
+    URI.join(vocabulary_uri, CGI.escape(camelized_label))
   end
 
   def uri
@@ -34,6 +34,10 @@ class EphemeraTermDecorator < Valkyrie::ResourceDecorator
 
   def manageable_structure?
     false
+  end
+
+  def breadcrumb_hierarchy
+    [wayfinder.decorated_vocabulary].compact
   end
 
   private

@@ -38,7 +38,7 @@ RSpec.describe GeoDerivatives::Runners::RasterDerivatives do
     end
 
     context "with a geotiff with a color map" do
-      let(:input_file_path) { Pathname.new(file_fixture("raster/geotiff-color-map.tif")) }
+      let(:input_file_path) { Pathname.new(file_fixture("files/raster/geotiff-color-map.tif")) }
       let(:input_mime_type) { "image/tiff; gdal-format=GTiff" }
       let(:display_raster_uri) { test_derivative_url("geotiff_color_map_display_raster", "tif") }
       let(:thumbnail_uri) { test_derivative_url("geotiff_color_map_thumbnail", "png") }
@@ -47,7 +47,7 @@ RSpec.describe GeoDerivatives::Runners::RasterDerivatives do
     end
 
     context "with a geotiff with no color map" do
-      let(:input_file_path) { Pathname.new(file_fixture("raster/geotiff-no-color-map.tif")) }
+      let(:input_file_path) { Pathname.new(file_fixture("files/raster/geotiff-no-color-map.tif")) }
       let(:input_mime_type) { "image/tiff; gdal-format=GTiff" }
       let(:display_raster_uri) { test_derivative_url("geotiff_no_color_map_display_raster", "tif") }
       let(:thumbnail_uri) { test_derivative_url("geotiff_no_color_map_thumbnail", "png") }
@@ -56,7 +56,7 @@ RSpec.describe GeoDerivatives::Runners::RasterDerivatives do
     end
 
     context "with an ArcGrid file" do
-      let(:input_file_path) { Pathname.new(file_fixture("raster/arcgrid.zip")) }
+      let(:input_file_path) { Pathname.new(file_fixture("files/raster/arcgrid.zip")) }
       let(:input_mime_type) { "application/octet-stream; gdal-format=AIG" }
       let(:display_raster_uri) { test_derivative_url("arcgrid_display_raster", "tif") }
       let(:thumbnail_uri) { test_derivative_url("arcgrid_thumbnail", "png") }
@@ -65,7 +65,7 @@ RSpec.describe GeoDerivatives::Runners::RasterDerivatives do
     end
 
     context "with a digital elevation model file" do
-      let(:input_file_path) { Pathname.new(file_fixture("raster/example.dem")) }
+      let(:input_file_path) { Pathname.new(file_fixture("files/raster/example.dem")) }
       let(:input_mime_type) { "text/plain; gdal-format=USGSDEM" }
       let(:display_raster_uri) { test_derivative_url("dem_display_raster", "tif") }
       let(:thumbnail_uri) { test_derivative_url("dem_thumbnail", "png") }

@@ -12,9 +12,12 @@ require "action_view/railtie"
 require "action_cable/engine"
 require "sprockets/railtie"
 require "active_storage/engine"
+require "shrine/storage/s3"
+require "shrine/storage/google_cloud_storage"
 Bundler.require(*Rails.groups)
 module Figgy
   class Application < Rails::Application
+    config.load_defaults "6.0"
     config.assets.quiet = true
     config.generators do |generate|
       generate.helper false
@@ -46,7 +49,6 @@ module Figgy
 
     # Redirect to CAS logout after signing out of Figgy
     config.x.after_sign_out_url = "https://fed.princeton.edu/cas/logout"
-    config.active_record.sqlite3.represent_boolean_as_integer = true
     # load overrides
     config.to_prepare do
       Dir.glob(Rails.root.join("app", "**", "*_override*.rb")) do |c|
@@ -56,5 +58,8 @@ module Figgy
     config.action_mailer.deliver_later_queue_name = "high"
 
     config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, Hash, HashWithIndifferentAccess]
+    # This got set on Rails 5.2 to be true, but breaks BrowseEverything. When we
+    # remove BrowseEverything, remove this.
+    config.action_controller.default_protect_from_forgery = false
   end
 end

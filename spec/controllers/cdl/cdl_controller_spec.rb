@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Cdl::CdlController, type: :controller do
+RSpec.describe CDL::CdlController, type: :controller do
   before do
     allow(CDL::EventLogging).to receive(:google_charge_event)
     allow(CDL::EventLogging).to receive(:google_hold_event)

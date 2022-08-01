@@ -1,12 +1,14 @@
-<div class="row">
-  <div id="content" class="<%= show_content_classes %>">
-    <%= render_document_main_content_partial %>
+<% if current_search_session %>
+  <div id="appliedParams" class="clearfix constraints-container">
+    <%= render 'start_over' %>
+    <%= link_back_to_catalog class: 'btn btn-outline-secondary' %>
   </div>
+<% end %>
 
-  <%# this is action bar buttons; hide unless logged in %>
+<%= render 'show_main_content' %>
+
+<% content_for(:sidebar) do %>
   <% if current_user %>
-    <div id="sidebar" class="show-sidebar <%= show_sidebar_classes %>">
-      <%= render_document_sidebar_partial %>
-    </div>
+    <%= render_document_sidebar_partial @document %>
   <% end %>
-</div>
+<% end %>

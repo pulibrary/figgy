@@ -1,7 +1,7 @@
 <template>
   <div>
     <heading level="h2">
-      Generate Labels <small>for selected items</small>
+      Generate Labels <small class="text-muted">for selected items</small>
     </heading>
     <form
       id="app"

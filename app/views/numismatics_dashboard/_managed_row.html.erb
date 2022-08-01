@@ -1,13 +1,13 @@
-<div class="col-md-12">
-  <div class="panel-body">
-    <% label.each do |name| %>
-      <ul class="classify-work classify-<%= name.downcase %>">
-        <li class="work-type">
+<% labels.each do |name| %>
+  <div class="work-type-card-col">
+    <div class="card work-type classify-<%= name.downcase %>">
+      <div class="card-body">
+        <div class="card-text">
           <%= instance_variable_get"@#{name.downcase}" %>
-          <h4 class="title"><%= name %></h4>
-          <%= link_to "Manage", send("numismatics_#{name.downcase}_path"), class: "btn btn-primary manage-#{name.downcase}" %>
-        </li>
-      </ul>
-    <% end %>
+        </div>
+        <div class="card-title"><%= name %></div>
+        <%= link_to "Manage", send("numismatics_#{name.downcase}_path"), class: "btn btn-primary manage-#{name.downcase}" %>
+      </div>
+    </div>
   </div>
-</div>
+<% end %>

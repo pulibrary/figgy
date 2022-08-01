@@ -1,15 +1,15 @@
 <% if @change_set.primary_terms.is_a?(Array) %>
-  <div class="panel panel-default">
-    <div class="panel-heading">Metadata</div>
+  <div class="card">
+    <div class="card-header">Metadata</div>
     <%= render partial: 'form_metadata_inner', locals: { fields: @change_set.primary_terms, f: f } %>
   </div>
 <% elsif @change_set.primary_terms.is_a?(Hash) %>
   <% @change_set.primary_terms.each_pair do |label, fields| %>
-    <div class="panel panel-default">
+    <div class="card">
       <% unless label.empty? %>
-        <div class="panel-heading"><%= label %></div>
+        <div class="card-header"><%= label %></div>
       <% else %>
-        <div class="panel-heading">Metadata</div>
+        <div class="card-header">Metadata</div>
       <% end %>
       <%= render partial: 'form_metadata_inner', locals: { fields: fields, f: f } %>
     </div>

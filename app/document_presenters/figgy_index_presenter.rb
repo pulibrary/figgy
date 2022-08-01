@@ -22,6 +22,6 @@ class FiggyIndexPresenter < ::Blacklight::IndexPresenter
             end
 
     value ||= document.id
-    field_values(config, value: value)
+    field_value(config, value: value)
   end
 end

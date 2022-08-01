@@ -1,12 +1,12 @@
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h2 class="panel-title">Parent Scanned Maps</h2>
+  <div class="card mb-4">
+    <div class="card-header">
+      Parent Scanned Maps
     </div>
-    <div class="panel-body parent-resources">
+    <div class="card-body parent-resources">
       <%= simple_form_for @change_set do |f| %>
         <div class="row">
           <div class="col-md-12">
-            <div class="loading-status hidden">Loading...</div>
+            <div class="loading-status d-none">Loading...</div>
             <table id="parent-scanned-maps"
                   class="table table-striped parent-resources parent-scanned-maps"
                   data-update-url="<%= polymorphic_url([resource]) %>"
@@ -33,8 +33,8 @@
                     <td><%= scanned_map.created_at %></td>
                     <td><%= scanned_map.visibility_badge.first.html_safe %></td>
                     <td>
-                      <%= link_to 'View', scanned_map_url, class: 'btn btn-default' %>
-                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-default' %>
+                      <%= link_to 'View', scanned_map_url, class: 'btn btn-secondary' %>
+                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, scanned_map]), class: 'btn btn-secondary' %>
                       <span class="input-group-btn">
                         <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
                       </span>

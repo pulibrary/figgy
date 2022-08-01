@@ -52,7 +52,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(row1[:geographic_origin]).to eq "test geo origin"
       expect(row1[:collection_titles]).to eq "test collection"
 
-      expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"test-project-data-#{Time.zone.today}.csv\"")
+      expect(response.headers["Content-Disposition"]).to eq("attachment; filename=\"test-project-data-#{Time.zone.today}.csv\"; filename*=UTF-8''test-project-data-#{Time.zone.today}.csv")
     end
     context "when no project is specified" do
       render_views

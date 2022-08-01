@@ -2,20 +2,19 @@
       <% decorated_resource = resource.decorate %>
       <% if decorated_resource.attachable_objects.length == 1 %>
         <% concern = decorated_resource.attachable_objects.first %>
-        <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id), class: 'btn btn-default' %>
+        <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id), class: 'btn btn-light' %>
       <% end %>
+
       <% if decorated_resource.attachable_objects.length > 1 %>
-          <div class="btn-group dropup">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div class="btn-group">
+            <button type="button" class="btn btn-light dropdown-toggle" id="attachButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Attach Child <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
+            <div class="dropdown-menu" aria-labelledby="attachButton">
               <% decorated_resource.attachable_objects.each do |concern| %>
-                <li>
-                  <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id) %>
-                </li>
+                <%= link_to "Attach #{concern.human_readable_type}",  polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id), class: "dropdown-item" %>
               <% end %>
-            </ul>
+            </div>
           </div>
       <% end %>
     <% end %>

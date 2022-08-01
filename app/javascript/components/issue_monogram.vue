@@ -14,12 +14,12 @@
     <div class="monogram-options">
       <a
         :href="resource.url"
-        class="btn btn-default"
+        class="btn btn-secondary"
       >View</a>
       <template v-if="isAttached">
         <button
           name="button"
-          class="btn btn-default btn btn-danger btn-remove-row"
+          class="btn btn-danger btn-remove-row"
           @click.prevent="detach"
         >
           Detach
@@ -28,7 +28,7 @@
       <template v-else>
         <button
           name="button"
-          class="btn btn-default btn btn-primary btn-add-row"
+          class="btn btn-primary btn-add-row"
           @click.prevent="attach"
         >
           Attach

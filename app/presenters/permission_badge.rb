@@ -13,7 +13,7 @@ class PermissionBadge
   # Draws div tags with bootstrap labels representing the items visibility
   # @return [String] the span markup
   def render
-    tag.div(children, class: "label #{label_class}") + computed_visibility_notice
+    tag.div(children, class: "badge #{label_class}") + computed_visibility_notice
   end
 
   # Retrieve the text for the badge

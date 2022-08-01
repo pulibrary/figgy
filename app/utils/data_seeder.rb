@@ -233,7 +233,7 @@ class DataSeeder
           width: rand(50),
           height: rand(100),
           page_count: rand(600),
-          description: Faker::Matz.quote
+          description: Faker::Quote.matz
         )
         folder = change_set_persister.save(change_set: change_set)
         add_file(resource: folder)
@@ -258,7 +258,7 @@ class DataSeeder
     def attributes_hash
       {
         title: Faker::Space.star,
-        description: Faker::Matz.quote,
+        description: Faker::Quote.matz,
         rights_statement: rights_statements[rand(rights_statements.count)].value,
         files: [],
         read_groups: "public",

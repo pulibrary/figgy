@@ -85,7 +85,7 @@ RSpec.feature "File Manager" do
     scenario "users extract metadata from an fgdc metadata file", js: true do
       visit polymorphic_path [:file_manager, resource]
       expect(page).to have_selector("form.extract_metadata button")
-      click_button "Extract"
+      click_button "Extract Metadata"
       expect(page).to have_selector ".alert-success .text", text: "Metadata is being extracted"
     end
   end
@@ -105,11 +105,11 @@ RSpec.feature "File Manager" do
     end
 
     it "uses cached parents for thumbnails" do
+      resource
       allow(adapter.query_service).to receive(:find_inverse_references_by).and_call_original
 
       visit polymorphic_path [:file_manager, resource]
 
-      # Call for parents once, call for tombstones once.
       expect(adapter.query_service).to have_received(:find_inverse_references_by).exactly(2).times
     end
   end

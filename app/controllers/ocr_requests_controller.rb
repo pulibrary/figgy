@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OcrRequestsController < ApplicationController
+class OCRRequestsController < ApplicationController
   before_action :set_ocr_request, only: [:destroy, :show]
 
   def index

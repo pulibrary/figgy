@@ -1,3 +1,3 @@
 <%= osd_modal_for(node.resource) do %>
-  <%= render_thumbnail_tag node, { onerror: default_icon_fallback } %>
+  <%= document_presenter(node).thumbnail.thumbnail_tag({ onerror: default_icon_fallback }, suppress_link: true) %>
 <% end %>

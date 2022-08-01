@@ -1,9 +1,9 @@
 <% if can?(:show, Report.new) %>
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-reports panel-classify-work">
-        <div class="panel-heading">Reports</div>
-        <div class="panel-body">
+      <div class="card card-classify-work">
+        <div class="card-header">Reports</div>
+        <div class="card-body">
           <ul>
             <% Report.all.sort.each do |report| %>
               <li class="title"><%= link_to report.to_s.titleize, send("#{report}_path") %></li>

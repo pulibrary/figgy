@@ -7,7 +7,9 @@ exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
   >
     
     Edit 
-    <small>
+    <small
+      class="text-muted"
+    >
       the selected item
     </small>
   </heading-stub>

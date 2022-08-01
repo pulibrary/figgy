@@ -1,20 +1,20 @@
   <div class="admin-controls">
     <% if can?(:update, resource) %>
-      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-default' %>
+      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-light' %>
     <% end %>
     <% if can?(:file_manager, resource) %>
       <% if decorated_resource.manageable_files? %>
-        <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-default' %>
+        <%= link_to "File Manager", main_app.polymorphic_path([:file_manager, resource]), class: 'btn btn-light' %>
       <% end %>
     <% end %>
     <% if can?(:order_manager, resource) %>
       <% if decorated_resource.orderable_files? %>
-        <%= link_to "Order Manager", main_app.polymorphic_path([:order_manager, resource]), class: 'btn btn-default' %>
+        <%= link_to "Order Manager", main_app.polymorphic_path([:order_manager, resource]), class: 'btn btn-light' %>
       <% end %>
     <% end %>
     <% if can?(:structure, resource) %>
       <% if decorated_resource.manageable_structure? %>
-        <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-default' %>
+        <%= link_to "Structure Manager", main_app.polymorphic_path([:structure, resource]), class: 'btn btn-light' %>
       <% end %>
     <% end %>
     <%= render "attach_child_default", resource: resource %>

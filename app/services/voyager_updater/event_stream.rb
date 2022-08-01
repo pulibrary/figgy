@@ -27,7 +27,7 @@ module VoyagerUpdater
       # Retrieve the event values and parse the response from JSON
       # @return [Hash]
       def parsed_json
-        @parsed_json ||= JSON.parse(open(url).read)
+        @parsed_json ||= JSON.parse(URI.open(url).read)
       end
   end
 end

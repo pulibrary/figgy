@@ -5,9 +5,9 @@ FactoryBot.define do
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
     transient do
-      expired_hold_netids []
-      active_hold_netids []
-      inactive_hold_netids []
+      expired_hold_netids { [] }
+      active_hold_netids { [] }
+      inactive_hold_netids { [] }
     end
     after(:build) do |resource, evaluator|
       if evaluator.expired_hold_netids.present?

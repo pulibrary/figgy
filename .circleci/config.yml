@@ -7,26 +7,22 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: cimg/ruby:2.7.5-browsers
+      - image: pulibrary/ci-figgy:1.2
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
+          PSQL_PAGER: ''
       - image: postgres:10.6-alpine
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
-      - run: sudo apt update -y
-      - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev mediainfo lsof python3-pip python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
-      - run: sudo sh bin/ci_free_tds_install.sh
-      - run: sudo sh bin/ci_openjpeg_install.sh
-      - run: sudo sh bin/ci_vips_install.sh
       - node/install:
           install-yarn: true
           node-version: '12.16.1'
@@ -60,13 +56,14 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: cimg/ruby:2.7.5-browsers
+      - image: pulibrary/ci-figgy:1.2
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
           MEDIAINFO_PATH: /usr/bin/mediainfo
+          PSQL_PAGER: ''
       - image: postgres:10.6-alpine
         environment:
           POSTGRES_USER: figgy
@@ -79,18 +76,10 @@ jobs:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       COVERALLS_PARALLEL: true
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'
-      - run: sudo apt update -y
-      - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client ocrmypdf lsof python3-pip python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
-      - run: sudo sh bin/ci_free_tds_install.sh
-      - run: sudo sh bin/ci_openjpeg_install.sh
-      - run: sudo sh bin/ci_vips_install.sh
-      - run: sudo pip3 install pip -U
-      - run: sudo pip3 install setuptools -U
-      - run: sudo pip3 install cogeo-mosaic
       - node/install:
           install-yarn: true
           node-version: '12.16.1'
@@ -111,6 +100,7 @@ jobs:
             zip -1 -r solr_config.zip ./*
             curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://localhost:8984/solr/admin/configs?action=UPLOAD&name=figgy"
             curl -H 'Content-type: application/json' http://localhost:8984/api/collections/ -d '{create: {name: figgy-core-test, config: figgy, numShards: 1}}'
+      - run: bundle exec rake db:environment:set
       - run: bundle exec rake db:migrate
       - run:
           name: Run rspec in parallel
@@ -134,12 +124,12 @@ jobs:
   coverage_report:
     working_directory: ~/figgy
     docker:
-      - image: circleci/ruby:2.7.5-node-browsers
+      - image: pulibrary/ci-figgy:1.2
     steps:
       - attach_workspace:
           at: '~/figgy'
-      - run: gem install simplecov -v '~> 0.16.0'
-      - run: gem install activesupport -v 5.1.6.2
+      - run: gem install simplecov -v '~> 0.21.2'
+      - run: gem install activesupport -v 6.0.5
       - run:
           name: Merge and check coverage
           command: |
@@ -150,22 +140,18 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: cimg/ruby:2.7.5-browsers
+      - image: pulibrary/ci-figgy:1.2
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
+          PSQL_PAGER: ''
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'
-      - run: sudo apt update -y
-      - run: sudo sh bin/ci_mediainfo_install.sh
-      - run: sudo apt-get install gdal-bin libgdal-dev mediainfo lsof python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev
-      - run: sudo sh bin/ci_free_tds_install.sh
-      - run: sudo sh bin/ci_openjpeg_install.sh
-      - run: sudo sh bin/ci_vips_install.sh
       - node/install:
           install-yarn: true
           node-version: '12.16.1'
@@ -174,6 +160,7 @@ jobs:
           command: node -v
       - run: gem install bundler -v '2.2.14'
       - run: bundle install --path vendor/bundle
+      - run: bundle exec spring stop
       - run: bundle exec rake rubocop
       - run: yarn lint
 workflows:

@@ -22,6 +22,15 @@ RSpec.describe OsdModalHelper do
       it "generates an empty <span>" do
         expect(helper.osd_modal_for(file_set.id)).to eq "<span></span>"
       end
+
+      context "when given a block" do
+        it "generates a <span> that wraps the block value" do
+          output = helper.osd_modal_for(file_set.id) do
+            "bla"
+          end
+          expect(output).to eq "<span>bla</span>"
+        end
+      end
     end
   end
 end

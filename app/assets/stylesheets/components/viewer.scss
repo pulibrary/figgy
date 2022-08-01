@@ -10,12 +10,13 @@
   }
   button.close {
     margin-bottom: 10px;
+    text-align: right;
   }
 }
 
 .intrinsic-container {
     position: relative;
-    height: 0;
+    height: 100%;
     overflow: hidden;
     margin-bottom: 15px;
 }

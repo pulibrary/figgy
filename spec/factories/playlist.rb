@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :playlist do
-    title "My Playlist"
-    state "draft"
-    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    title { "My Playlist" }
+    state { "draft" }
+    visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
 
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
 
     transient do
-      recording []
-      user nil
+      recording { [] }
+      user { nil }
     end
 
     after(:create) do |resource, evaluator|
@@ -26,7 +26,7 @@ FactoryBot.define do
     end
 
     factory :complete_playlist do
-      state "complete"
+      state { "complete" }
     end
   end
 end

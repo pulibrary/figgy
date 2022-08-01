@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :ocr_request do
-    filename "sample.pdf"
-    state "enqueued"
-    note "notes"
-    user nil
+  factory :ocr_request, class: OcrRequest do
+    filename { "sample.pdf" }
+    state { "enqueued" }
+    note { "notes" }
+    user { nil }
 
     transient do
-      file nil
+      file { nil }
     end
 
     after(:create) do |resource, evaluator|

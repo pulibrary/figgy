@@ -54,7 +54,7 @@ RSpec.describe BulkEditService do
         attrs = { rights_statement: bad_rights }
         described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
 
-        expect(logger).to have_received(:warn).with("  Failed validation: {:rights_statement=>[\"http://rightsstatements.org/vocab/BAD/1.0/ is not a valid rights_statement\"]}")
+        expect(logger).to have_received(:warn).with("  Failed validation: Rights statement http://rightsstatements.org/vocab/BAD/1.0/ is not a valid rights_statement")
         after = query_service.find_by(id: obj.id)
         expect(after.rights_statement).to eq([initial_rights])
       end

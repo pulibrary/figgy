@@ -10,8 +10,9 @@ import axios from 'axios'
 import OrderManager from '../components/OrderManager.vue'
 import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
 import AjaxSelect from '../components/ajax-select'
-import setupAjaxSelect from '../helpers/setup_ajax_select.js'
+import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select.js'
 import FileUploader from '../components/file-uploader'
+import Initializer from '../figgy/figgy_boot'
 
 Vue.use(system)
 
@@ -33,13 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
         'file-uploader': FileUploader
       },
       data: {
-        options: [],
+        options: []
       },
-      // Functions to run after Vue is mounted
-      mounted: function () {
+      beforeCreate: function () {
         setupAjaxSelect()
+      },
+      mounted: function () {
+        setupCocoonLinks()
       }
     })
   }
   setupAuthLinkClipboard()
+  // It's important we initialize Figgy after mounting Vue, otherwise none of
+  // the JS will work because Vue takes it all over.
+  window.figgy = new Initializer()
 })

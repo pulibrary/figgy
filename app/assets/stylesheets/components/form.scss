@@ -1,7 +1,4 @@
 #metadata {
-  .checkbox input[type='checkbox'] {
-    margin-left: 0;
-  }
   .nested-fields {
     border: 1px solid #ddd;
     margin: 15px;
@@ -38,22 +35,37 @@
       width: 75%;
     }
   }
+
+  .badge {
+    padding: .5em;
+  }
 }
-.form-group .radio input.radio_buttons {
-  margin-left: 0;
+
+// Format radio buttons for Bootstrap 4.
+// https://getbootstrap.com/docs/4.0/components/forms/#default-stacked
+// Another (better?) possibility is to create a custom SimpleForm input
+.radio {
+  @extend .form-check;
+  input {
+    @extend .form-check-input;
+  }
+  label {
+    @extend .form-check-label;
+  }
 }
-.panel-delete-controls {
+
+.card-delete-controls {
   border-top-width: 0px;
   padding-top: 1em;
 }
+
 .set-access-controls, #attributes, #members {
   .radio {
     display: inline-block;
   }
-  .label {
+  .badge {
     font-size: 14px;
     font-variant: small-caps;
-    padding-top: 0px;
     span {
       display: inline-block;
     }
@@ -72,8 +84,6 @@
       background-color: $white;
       color: $university-black;
       border: 2px solid $gainsboro;
-      padding-bottom: 2px;
-      padding-right: 6px;
       .icon {
         background-image: image-url("open_visibility.png");
       }
@@ -82,24 +92,20 @@
       background-color: $princeton-orange;
       color: $university-black;
       border: 2px solid $university-black;
-      padding-bottom: 2px;
-      padding-right: 6px;
       .icon {
         background-image: image-url("authenticated_visibility.png");
       }
     }
     &-warning {
       background-color: $university-black;
+      color: $white;
       border: 2px solid $university-black;
-      padding-bottom: 2px;
-      padding-right: 6px;
       .icon {
         background-image: image-url("authenticated_visibility_white.png");
       }
     }
     &-danger {
       background-color: $university-black;
-      padding-left: 10px;
       .icon {
         background-image: image-url("restricted_visibility.png");
       }
@@ -121,14 +127,14 @@
 aside.form-progress {
   .incomplete::before {
     content: "\e101";
-    color: $brand-danger;
+    color: $danger;
     font-family: 'Glyphicons Halflings';
     padding-right: 5px;
   }
 
   .complete::before {
     content: "\e013";
-    color: $brand-success;
+    color: $success;
     font-family: 'Glyphicons Halflings';
     padding-right: 5px;
   }
@@ -144,6 +150,20 @@ legend small {
   color: #999999;
   font-size: 15px;
 }
+
+
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 25px;
+  font-size: 24px;
+  line-height: inherit;
+  color: #333333;
+  border: 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
 
 .label-large {
   font-size: 110%;
@@ -171,7 +191,7 @@ legend small {
 .form-group.has-error input,
 .form-group.has-error option,
 .form-group.has-error textarea {
-  color:$gray-dark;
+  color: $gray-800;
 }
 
 .form-actions {
@@ -259,21 +279,25 @@ form.button-to {
   width: auto;
 }
 
-.panel-heading a.monograms:after {
+.card-header a.monograms:after {
     font-family:'Glyphicons Halflings';
     content:"\2212";
     float: left;
     padding-right:5px;
     color: $green;
 }
-.panel-heading a.monograms.collapsed:after {
-    content:"\2b";
-    float: left;
-    padding-right:5px;
-    color: $green;
+.card-header a.monograms.collapsed:after {
+  content:"\2b";
+  float: left;
+  padding-right:5px;
+  color: $green;
 }
 
-.form-numismatics .panel-body {
+.card {
+  margin-bottom: 25px;
+}
+
+.form-numismatics .card-body {
   padding: 8px;
   div.form-group {
     margin-bottom: 0.5em;
@@ -317,6 +341,7 @@ form.button-to {
 
             .thumbnail-inner {
               min-height: 221px;
+              width: 200px;
             }
           }
         }

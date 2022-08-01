@@ -21,8 +21,8 @@ RSpec.describe DownloadsController do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
         expect(response.body).to eq(sample_file.read)
         expect(response.content_length).to eq(196_882)
-        expect(response.content_type).to eq("image/tiff")
-        expect(response.headers["Content-Disposition"]).to eq('inline; filename="example.tif"')
+        expect(response.media_type).to eq("image/tiff")
+        expect(response.headers["Content-Disposition"]).to eq("inline; filename=\"example.tif\"; filename*=UTF-8''example.tif")
       end
 
       # The following appears to be from old items before we set this metadata.
@@ -34,8 +34,8 @@ RSpec.describe DownloadsController do
 
         expect(response.body).to eq(sample_file.read)
         expect(response.content_length).to eq(196_882)
-        expect(response.content_type).to eq("image/tiff")
-        expect(response.headers["Content-Disposition"]).to eq('inline; filename="example.tif"')
+        expect(response.media_type).to eq("image/tiff")
+        expect(response.headers["Content-Disposition"]).to eq("inline; filename=\"example.tif\"; filename*=UTF-8''example.tif")
       end
 
       it "returns an 404 when the file_set doesn't exist" do
@@ -44,6 +44,8 @@ RSpec.describe DownloadsController do
       end
 
       it "returns an 404 when the file is not found on disk" do
+        file_set
+        file_node
         allow(disk).to receive(:find_by).and_raise(Valkyrie::StorageAdapter::FileNotFound)
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
         expect(response.status).to eq(404)
@@ -85,7 +87,7 @@ RSpec.describe DownloadsController do
       it "allows downloading the file" do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
         expect(response.content_length).to eq(196_882)
-        expect(response.content_type).to eq("image/tiff")
+        expect(response.media_type).to eq("image/tiff")
         expect(response.body).to eq(sample_file.read)
       end
     end
@@ -95,7 +97,7 @@ RSpec.describe DownloadsController do
         token = AuthToken.create!(group: ["admin"], label: "admin_token")
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: token.token }
         expect(response.content_length).to eq(196_882)
-        expect(response.content_type).to eq("image/tiff")
+        expect(response.media_type).to eq("image/tiff")
         expect(response.body).to eq(sample_file.read)
       end
     end
@@ -117,7 +119,7 @@ RSpec.describe DownloadsController do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token }
 
         expect(response.content_length).to eq(5452)
-        expect(response.content_type).to eq("video/MP2T")
+        expect(response.media_type).to eq("video/MP2T")
       end
     end
 
@@ -210,7 +212,7 @@ RSpec.describe DownloadsController do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token }
 
         expect(response.content_length).to eq(147_550)
-        expect(response.content_type).to eq("audio/x-wav")
+        expect(response.media_type).to eq("audio/x-wav")
         expect(response.body).to eq(sample_file.read)
       end
     end

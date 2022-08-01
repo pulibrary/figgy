@@ -4,31 +4,37 @@
  *= require jquery-ui/datepicker
  *= require jquery-ui/slider
  *= require jqueryui-timepicker-addon
- *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  *= require leaflet
  *= require Control.Geocoder
  *= require leaflet-boundingbox
 */
 @charset "utf-8";
+@import "../../../node_modules/lux-design-system/dist/system/system.utils.scss";
 @import 'variables/typography';
 @import 'variables/breaks';
 @import 'variables/colors';
 @import 'variables/typography';
 @import 'variables/visibility_widget';
-@import "../../../node_modules/lux-design-system/dist/system/system.utils.scss";
+@import 'variables/bootstrap';
 @import "../../../node_modules/vue-select/src/scss/vue-select.scss";
 
-@import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
+// @import 'datatables';
+
+@import 'datatables/dataTables.bootstrap4';
+@import 'datatables/extensions/Responsive/responsive.bootstrap4';
+@import 'datatables/extensions/Buttons/buttons.bootstrap4';
 
 // PUL specific styles
 @import 'abstractions/mixins';
 
 @import 'base/typography';
 @import 'icons/icons';
+@import 'icons/glyphicons';
 
 @import 'components/alert_inline';
+@import 'components/badge';
 @import 'components/batch_upload';
 @import 'components/bulk_ingest';
 @import 'components/bulk_edit';
@@ -56,10 +62,10 @@
 @import 'components/browse_everything';
 @import 'components/thumbnail';
 @import 'components/vue_select';
+@import 'components/facets';
+@import 'components/inputs';
 
 @import 'blacklight/blacklight';
-@import "hydra-editor/hydra-editor";
 @import "openseadragon/openseadragon";
-@import 'bootstrap-select';
 
 @import 'components/pagination';

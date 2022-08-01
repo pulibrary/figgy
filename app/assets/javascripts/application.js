@@ -16,8 +16,11 @@
 //= require leaflet
 //= require Control.Geocoder
 //= require leaflet-boundingbox
-//
+//= require datatables
+
 // Required by Blacklight
+//= require popper
+//= require bootstrap
 //= require blacklight/blacklight
 //= require cable
 //= require form/mutex
@@ -26,24 +29,11 @@
 //= require jquery-ui/slider
 //= require jquery-ui/datepicker
 //= require jquery-ui/selectable
-//= require dataTables/jquery.dataTables
-//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require jqueryui-timepicker-addon
 //= require nestedSortable/jquery.mjs.nestedSortable
 //= require openseadragon/openseadragon
 //= require openseadragon/jquery
-//= require bootstrap-select
 //= require bootstrap_select_dropdown
-//= require bootstrap/affix
-//= require babel/polyfill
-//= require hydra-editor/hydra-editor
 //= require cocoon
-//= require range_limit
+//= require blacklight_range_limit
 //= require_tree .
-$(document).ready(function() {
-  Initializer = require('figgy_boot')
-  window.figgy = new Initializer()
-})
-$(document).ready(function() {
-  $('.multi_value.form-group').manage_fields();
-});

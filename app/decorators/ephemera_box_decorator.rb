@@ -53,10 +53,6 @@ class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
     def templates
       []
     end
-
-    def nil?
-      true
-    end
   end
 
   def manageable_files?

@@ -1,9 +1,19 @@
+// Show content above sidebar on show page
+body.blacklight-catalog-show #content {
+  @extend .order-first;
+}
+
 .relationships, .attributes {
   tbody th {
     width: 20%;
   }
   ul.tabular {
     padding-left: 0px;
+    margin-bottom: 0px;
+    li.attribute {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
   }
 }
 
@@ -93,6 +103,31 @@ table.dataTable thead > tr > th {
   border: 1px solid transparent;
   border-radius: 4px;
   border-color: #ddd;
+  width: 100%;
   /* leaflet controls are 1000; this needs to scroll over them on map show pages */
   z-index: 1000;
+}
+
+#document {
+  .card-header {
+    font-size: 18px;
+    color: $blue;
+  }
+
+  .table-heading {
+    & {
+      font-size: 18px;
+      color: $blue;
+    }
+  }
+  .workflow-actions {
+    // Align workflow actions and comments columns
+    h3 {
+      margin-top: 0;
+    }
+  }
+}
+
+.claim-btn {
+  margin-bottom: 1em;
 }

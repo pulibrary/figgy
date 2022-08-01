@@ -12,7 +12,6 @@
 /coverage/*
 /db/*.sqlite3
 /log/*
-/node_modules
 /public/assets
 /public/packs
 /public/packs-test

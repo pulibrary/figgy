@@ -23,13 +23,7 @@ class SimpleCovHelper
   end
 
   def merge_results
-    results = all_results.map { |file| SimpleCov::Result.from_hash(JSON.parse(File.read(file))) }
-    results = SimpleCov::ResultMerger.merge_results(*results)
-    results.format!
-    covered_percent = results.covered_percent.round(2)
-    return unless covered_percent < SimpleCov.minimum_coverage
-    $stderr.printf("Coverage (%.2f%%) is below the expected minimum coverage (%.2f%%).\n", covered_percent, SimpleCov.minimum_coverage)
-    Kernel.exit SimpleCov::ExitCodes::MINIMUM_COVERAGE
+    SimpleCov.collate all_results
   end
 end
 

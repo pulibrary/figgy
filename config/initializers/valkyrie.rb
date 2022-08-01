@@ -13,29 +13,23 @@ Rails.application.config.to_prepare do
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["repository_path"],
-        file_mover: lambda { |old_path, new_path|
-                      FileUtils.mv(old_path, new_path)
-                      FileUtils.chmod(0o644, new_path)
-                    }
-      ),
-      tracer: Datadog.tracer
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["repository_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
     ),
     :disk
   )
 
   Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["stream_derivatives_path"],
-        file_mover: lambda { |old_path, new_path|
-                      FileUtils.mv(old_path, new_path)
-                      FileUtils.chmod(0o644, new_path)
-                    }
-      ),
-      tracer: Datadog.tracer
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["stream_derivatives_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
     ),
     :stream_derivatives
   )
@@ -47,18 +41,14 @@ Rails.application.config.to_prepare do
   # is deployed on the same file system as the one storing the files being uploaded
   # NOTE: Separate inodes are created
   Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["repository_path"],
-        file_mover: FileUtils.method(:cp)
-      ),
-      tracer: Datadog.tracer
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["repository_path"],
+      file_mover: FileUtils.method(:cp)
     ),
     :disk_via_copy
   )
 
   if ENV["STORAGE_PROJECT"] && ENV["STORAGE_CREDENTIALS"] && !Rails.env.test?
-    require "shrine/storage/google_cloud_storage"
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
       versioned_preservation: Shrine::Storage::VersionedGoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"])
@@ -106,21 +96,17 @@ Rails.application.config.to_prepare do
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["derivative_path"],
-        file_mover: lambda { |old_path, new_path|
-                      FileUtils.mv(old_path, new_path)
-                      FileUtils.chmod(0o644, new_path)
-                    }
-      ),
-      tracer: Datadog.tracer
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["derivative_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
     ),
     :derivatives
   )
 
   if Figgy.config["pyramidals_bucket"].present? && !Rails.env.test?
-    require "shrine/storage/s3"
     Shrine.storages = (Shrine.storages || {}).merge(
       pyramidal_storage: Shrine::Storage::S3.new(
         bucket: Figgy.config["pyramidals_bucket"],
@@ -142,15 +128,12 @@ Rails.application.config.to_prepare do
     # Fall back to disk storage for development/test or if S3 is not
     # configured.
     Valkyrie::StorageAdapter.register(
-      InstrumentedStorageAdapter.new(
-        storage_adapter: Valkyrie::Storage::Disk.new(
-          base_path: Figgy.config["pyramidal_derivative_path"],
-          file_mover: lambda { |old_path, new_path|
-            FileUtils.mv(old_path, new_path)
-            FileUtils.chmod(0o644, new_path)
-          }
-        ),
-        tracer: Datadog.tracer
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["pyramidal_derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
       ),
       :pyramidal_derivatives
     )
@@ -166,21 +149,17 @@ Rails.application.config.to_prepare do
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["geo_derivative_path"],
-        file_mover: lambda { |old_path, new_path|
-                      FileUtils.mv(old_path, new_path)
-                      FileUtils.chmod(0o644, new_path)
-                    }
-      ),
-      tracer: Datadog.tracer
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["geo_derivative_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
     ),
     :geo_derivatives
   )
 
   if Figgy.config["aws_access_key_id"].present? && Figgy.config["cloud_geo_bucket"].present? && !Rails.env.test?
-    require "shrine/storage/s3"
     Shrine.storages = (Shrine.storages || {}).merge(
       cloud_geo_storage: Shrine::Storage::S3.new(
         bucket: Figgy.config["cloud_geo_bucket"],
@@ -202,15 +181,12 @@ Rails.application.config.to_prepare do
     # Fall back to disk storage for development/test or if S3 is not
     # configured.
     Valkyrie::StorageAdapter.register(
-      InstrumentedStorageAdapter.new(
-        storage_adapter: Valkyrie::Storage::Disk.new(
-          base_path: Figgy.config["test_cloud_geo_derivative_path"],
-          file_mover: lambda { |old_path, new_path|
-            FileUtils.mv(old_path, new_path)
-            FileUtils.chmod(0o644, new_path)
-          }
-        ),
-        tracer: Datadog.tracer
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["test_cloud_geo_derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
       ),
       :cloud_geo_derivatives
     )
@@ -219,11 +195,8 @@ Rails.application.config.to_prepare do
   # Registers a storage adapter for storing a Bag on a *NIX file system
   # @see https://tools.ietf.org/html/draft-kunze-bagit-14
   Valkyrie::StorageAdapter.register(
-    InstrumentedStorageAdapter.new(
-      storage_adapter: Bagit::StorageAdapter.new(
-        base_path: Figgy.config["bag_path"]
-      ),
-      tracer: Datadog.tracer
+    Bagit::StorageAdapter.new(
+      base_path: Figgy.config["bag_path"]
     ),
     :bags
   )
@@ -256,12 +229,8 @@ Rails.application.config.to_prepare do
   # Registers a metadata adapter for storing resource metadata into PostgreSQL as JSON
   # (see Valkyrie::Persistence::Postgres::MetadataAdapter)
   Valkyrie::MetadataAdapter.register(
-    InstrumentedAdapter.new(
-      metadata_adapter:
-        Valkyrie::Sequel::MetadataAdapter.new(
-          connection: connection
-        ),
-      tracer: Datadog.tracer
+    Valkyrie::Sequel::MetadataAdapter.new(
+      connection: connection
     ),
     :postgres
   )

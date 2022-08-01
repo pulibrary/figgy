@@ -15,7 +15,7 @@ RSpec.describe "catalog/_members_ephemera_project" do
 
     it "shows them" do
       expect(rendered).to have_selector "h2", text: "Boxes"
-      expect(rendered).to have_selector "span.label-default", text: "New"
+      expect(rendered).to have_selector "span.badge-dark", text: "New"
       expect(rendered).to have_selector "td", text: "1"
       expect(rendered).to have_selector "td", text: "00000000000000"
       expect(rendered).to have_selector "td", text: "11111111111110"

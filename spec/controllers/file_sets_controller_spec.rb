@@ -47,7 +47,7 @@ RSpec.describe FileSetsController, type: :controller do
       file_set = FactoryBot.create_for_repository(:file_set, ocr_content: "blabla test")
       get :text, params: { id: file_set.id.to_s }
       expect(response.body).to eq "blabla test"
-      expect(response.content_type).to eq "text/plain"
+      expect(response.media_type).to eq "text/plain"
     end
   end
 

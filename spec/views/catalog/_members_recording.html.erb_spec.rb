@@ -15,7 +15,7 @@ RSpec.describe "catalog/_members_recording" do
     it "shows them" do
       expect(rendered).to have_selector "h2", text: "Members"
       expect(rendered).to have_selector "td", text: "vol1"
-      expect(rendered).to have_selector "div.label-success .text", text: "open"
+      expect(rendered).to have_selector "div.badge-success .text", text: "open"
       expect(rendered).not_to have_link href: solr_document_path(child)
       expect(rendered).to have_link "View", href: parent_solr_document_path(parent, child.id)
       expect(rendered).to have_link "Edit", href: edit_scanned_resource_path(child.id)

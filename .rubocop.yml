@@ -13,6 +13,8 @@ AllCops:
     - 'spec/support/**/*'
     - 'node_modules/**/*'
     - 'tmp/**/*'
+    - 'db/migrate/20220727213333_create_active_storage_variant_records.active_storage.rb'
+    - 'db/migrate/20220727213332_add_service_name_to_active_storage_blobs.active_storage.rb'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true
 Lint/ParenthesesAsGroupedExpression:
@@ -142,6 +144,7 @@ Layout/LineLength:
     - 'spec/controllers/collections_controller_spec.rb'
     - 'spec/models/oai/figgy/valkyrie_provider_model_spec.rb'
     - 'spec/decorators/numismatics/accession_decorator_spec.rb'
+    - 'config/initializers/simple_form_bootstrap.rb'
 Metrics/MethodLength:
   Exclude:
     - 'db/migrate/**/*'

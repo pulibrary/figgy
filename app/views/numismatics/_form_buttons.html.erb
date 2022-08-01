@@ -6,6 +6,6 @@
   <%# send user back to object from edit, back to home from new %>
   <%= link_to t(:'helpers.action.cancel'),
               f.object.id ? solr_document_path(id: f.object.id) : main_app.root_path,
-              class: 'btn btn-default' %>
+              class: 'btn btn-secondary' %>
   <%= link_to "Delete This #{f.object.resource.human_readable_type}", main_app.polymorphic_path([f.object.resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{f.object.resource.human_readable_type}?" }, method: :delete %>
 <% end %>

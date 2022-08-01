@@ -1,15 +1,13 @@
-<div class="row">
-  <div id="obverse_attribute">
-    <%= f.simple_fields_for :obverse_attribute, wrapper: :inline_form do |g| %>
-      <%= render 'obverse_attribute_fields', f: g %>
-    <% end %>
-  </div>
-  <div class="links">
-    <%= link_to_add_association f, :obverse_attribute, partial: 'obverse_attribute_fields', force_non_association_create: true do %>
-      <button type="button" class="btn btn-link add">
-        <span class="glyphicon glyphicon-plus"></span>
-        <span class="controls-add-text">Add another Attribute</span>
-      </button>
-    <% end %>
-  </div>
+<div id="obverse_attribute">
+  <%= f.simple_fields_for :obverse_attribute, wrapper: :inline_form do |g| %>
+    <%= render 'obverse_attribute_fields', f: g %>
+  <% end %>
+</div>
+<div class="links">
+  <%= link_to_add_association f, :obverse_attribute, partial: 'obverse_attribute_fields', force_non_association_create: true do %>
+    <button type="button" class="btn btn-link add">
+      <span class="glyphicon glyphicon-plus"></span>
+      <span class="controls-add-text">Add another Attribute</span>
+    </button>
+  <% end %>
 </div>

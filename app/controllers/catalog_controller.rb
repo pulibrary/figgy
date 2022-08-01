@@ -70,12 +70,51 @@ class CatalogController < ApplicationController
   end
 
   def iiif_search
-    _, @document = fetch(params[:solr_document_id])
+    _, @document = search_service.fetch(params[:solr_document_id])
     authorize! :iiif_search, resource
     super
   end
 
   configure_blacklight do |config|
+    # Turn off search session tracking
+    # Interferes with thumbnail display in FileSet manager
+    config.track_search_session = false
+
+    # Add extra permitted params
+    # https://github.com/projectblacklight/blacklight/blob/v7.28.0/lib/blacklight/parameters.rb#L84-L89
+    # pul_controller_params aren't used by the search state. We're adding them
+    # to this config to quiet deprecation warnings but we should try removing
+    # them when upgrading to blacklight 8, as we suspect it's fine to have them
+    # stripped out for search.
+    pul_controller_params = [
+      :arkid,
+      :all_models,
+      :append_collection_ids,
+      :auth_token,
+      :batch_size,
+      :change_set,
+      :commit,
+      :create_another,
+      :ephemera_project_id,
+      :formats,
+      :mark_complete,
+      :model_class,
+      :naan,
+      :no_redirect,
+      :ocr_language,
+      :parent_id,
+      :prefix,
+      :rights_statement,
+      :save_and_ingest_path,
+      :scanned_resource,
+      :search_params,
+      :solr_document_id,
+      :template_id,
+      :utf8,
+      :visibility
+    ]
+    config.search_state_fields = config.search_state_fields + [:id] + pul_controller_params
+
     # configuration for Blacklight IIIF Content Search
     config.iiif_search = {
       full_text_field: "ocr_content_tsim",
@@ -95,6 +134,7 @@ class CatalogController < ApplicationController
 
     config.index.title_field = "figgy_title_ssim"
     config.index.display_type_field = "human_readable_type_ssim"
+    config.show.display_type_field = "human_readable_type_ssim"
     config.add_facet_field "member_of_collection_titles_ssim", label: "Collections", limit: 5
     config.add_facet_field "human_readable_type_ssim", label: "Type of Work", limit: 5
     config.add_facet_field "ephemera_project_ssim", label: "Ephemera Project", limit: 5
@@ -112,6 +152,13 @@ class CatalogController < ApplicationController
       segments: true
     }
     config.add_facet_fields_to_solr_request!
+
+    config.add_results_collection_tool(:sort_widget)
+    config.add_results_collection_tool(:per_page_widget)
+    config.add_results_collection_tool(:view_type_group)
+    config.add_results_collection_tool(:bulk_edit_button)
+    config.add_results_document_tool(:bookmark, partial: "bookmark_control", if: :render_bookmarks_control?)
+    config.add_nav_action(:bookmark, partial: "blacklight/nav/bookmark", if: :render_bookmarks_control?)
 
     config.add_search_field "all_fields", label: "All Fields"
 
@@ -139,6 +186,9 @@ class CatalogController < ApplicationController
     config.show.document_presenter_class = ValkyrieShowPresenter
     config.index.document_presenter_class = FiggyIndexPresenter
 
+    # Configuration to correctly render show page title element
+    config.show.html_title_field = "figgy_title_ssim"
+
     # "sort results by" options
     config.add_sort_field "score desc, updated_at_dtsi desc", label: "relevance \u25BC"
     config.add_sort_field "title_ssort asc", label: "title (A-Z)"
@@ -156,6 +206,7 @@ class CatalogController < ApplicationController
     config.add_index_field "call_number_tsim", label: "Call Number"
     config.add_index_field "part_of_ssim", label: "Part Of"
     config.add_index_field "imported_date_created_tesim", label: "Date"
+    config.add_index_field "figgy_title_ssi"
   end
 
   # Determine whether or not a user can edit the resource in the current context
@@ -184,11 +235,13 @@ class CatalogController < ApplicationController
 
   def set_parent_document
     if params[:parent_id]
-      _, @parent_document = fetch(params[:parent_id])
+      _, @parent_document = search_service.fetch(params[:parent_id])
     # we know in our data a fileset never has more than one parent; grab it for breadcrumb convenience
     elsif @document[:internal_resource_ssim].include? "FileSet"
       query = "member_ids_ssim:id-#{params['id']}"
-      _, result = search_results(q: query, rows: 1)
+      _, result = search_service.search_results do |search_builder|
+        search_builder.with(q: query, rows: 1)
+      end
       @parent_document = result.first if result.first
     elsif params[:parent_id].nil? && @document.decorated_resource.try(:decorated_parent)
       set_coin_parent
@@ -197,13 +250,15 @@ class CatalogController < ApplicationController
 
   def set_coin_parent
     params[:parent_id] = @document.decorated_resource.decorated_parent["id"].to_s
-    _, @parent_document = fetch(params[:parent_id])
+    _, @parent_document = search_service.fetch(params[:parent_id])
   end
 
   def lookup_manifest
     ark = "#{params[:prefix]}/#{params[:naan]}/#{params[:arkid]}"
     query = "identifier_ssim:#{RSolr.solr_escape(ark)}"
-    _, result = search_results(q: query, fl: "id, internal_resource_ssim", rows: 1)
+    _, result = search_service.search_results do |search_builder|
+      search_builder.with(q: query, fl: "id, internal_resource_ssim", rows: 1)
+    end
 
     if result.first
       object_id = result.first["id"]
@@ -218,7 +273,7 @@ class CatalogController < ApplicationController
   # This endpoint redirects to download an original pdf if present,
   # or redirects to the resource pdf endpoint if one needs to be generated
   def pdf
-    _, @document = fetch(params[:solr_document_id])
+    _, @document = search_service.fetch(params[:solr_document_id])
 
     source_pdf = Wayfinder.for(resource).source_pdf
     if source_pdf

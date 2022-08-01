@@ -1,35 +1,35 @@
 <% if can?(:edit, resource) && @change_set.respond_to?(:workflow_class) && @change_set.respond_to?(:state) %>
-  <div id="workflow_controls"class="panel panel-default workflow-affix">
-    <div class="panel-heading">
-      <h2 class="panel-title">Review and Approval</h2>
-    </div>
-    <div id="workflow_controls_collapse" class="row panel-body">
+  <div id="workflow_controls"class="card workflow-affix">
+    <div class="card-header">Review and Approval</div>
+    <div id="workflow_controls_collapse" class="card-body">
       <%= simple_form_for @change_set do |f| %>
-        <div class="col-sm-6 workflow-actions">
-          <h3>Actions</h3>
-  
-          <%= f.input :state, as: :radio_buttons,
-            collection: ControlledVocabulary.for(:"state_#{f.object.workflow_class.to_s.underscore}").all(f.object),
-            required: f.object.required?(:state),
-            label_method: :label,
-            value_method: :value,
-            label: false %>
-        </div>
-        <div class="col-sm-6 workflow-comments">
-          <%= f.simple_fields_for :new_workflow_note do |note| %>
-            <%= note.input :note, as: :text, required: note.object.required?(:note), label: "Review comment"  %>
-            <%= note.input :author, as: :hidden, input_html: { value: current_user.uid }, required: note.object.required?(:author) %>
-          <% end %>
-
-          <input class="btn btn-primary" type="submit" value="Submit">
-
-          <h4>Previous Comments</h4>
-          <dl>
-            <% @change_set.workflow_note.map(&:decorate).each do |comment| %>
-              <dt><%= comment.author %></dt>
-              <dd><%= comment.note %></dd>
+        <div class="row">
+          <div class="col-sm-6 workflow-actions">
+            <h3>Actions</h3>
+    
+            <%= f.input :state, as: :radio_buttons,
+              collection: ControlledVocabulary.for(:"state_#{f.object.workflow_class.to_s.underscore}").all(f.object),
+              required: f.object.required?(:state),
+              label_method: :label,
+              value_method: :value,
+              label: false %>
+          </div>
+          <div class="col-sm-6 workflow-comments">
+            <%= f.simple_fields_for :new_workflow_note do |note| %>
+              <%= note.input :note, as: :text, required: note.object.required?(:note), label: "Review comment"  %>
+              <%= note.input :author, as: :hidden, input_html: { value: current_user.uid }, required: note.object.required?(:author) %>
             <% end %>
-          </dl>
+
+            <input class="btn btn-primary" type="submit" value="Submit">
+
+            <h4>Previous Comments</h4>
+            <dl>
+              <% @change_set.workflow_note.map(&:decorate).each do |comment| %>
+                <dt><%= comment.author %></dt>
+                <dd><%= comment.note %></dd>
+              <% end %>
+            </dl>
+          </div>
         </div>
       <% end %>
     </div>

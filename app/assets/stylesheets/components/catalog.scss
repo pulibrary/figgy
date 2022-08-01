@@ -1,42 +1,34 @@
-dl.document-metadata {
-  ul {
-    list-style: none;
-    padding-left: 0;
-  }
-}
-#documents .document {
-  > .btn-group {
-    float: right;
-  }
-  > .document-metadata {
-    width: 60%;
-  }
-  > .document-thumbnail {
-    margin-top: 20px;
-    padding-left: 0;
-    > a img {
-      max-width: 200px;
-    }
-  }
-}
-
 .back-to-search {
   margin-bottom: 10px;
-}
-
-.attribute-table {
-  ul {
-    list-style: none;
-  }
 }
 
 #sortAndPerPage {
   margin-top: 1em;
 }
 
-div.pagination {
-  a.disabled {
-    color: gray;
-    pointer-events: none;
+#main-container {
+  padding-top: 1em;
+}
+
+#document {
+  @extend .border-top, .mt-3, .pt-3;
+
+  caption {
+    caption-side: top;
+  }
+
+  td {
+    padding: 8px;
+  }
+}
+
+.documents-list {
+  dt, dd {
+    // Field `figgy_title_ssi` needed in JSON catalog rendering for numismatics
+    // attribute search, but redundant in search results display.
+    &.blacklight-figgy_title_ssi {
+      visibility: hidden;
+      display: none;
+    }
   }
 }

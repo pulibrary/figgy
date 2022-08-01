@@ -36,7 +36,7 @@ RSpec.feature "Numismatics::Coins" do
     it "shows parent when there is no parent param in the url" do
       visit solr_document_path(coin)
       expect(page).to have_css ".breadcrumb", text: "#{numismatic_issue.title.join} #{coin.title.join}"
-      expect(page).to have_selector("#doc_#{coin.id} > ol > li:nth-child(1) > a")
+      expect(page).to have_selector("#doc_#{coin.id} ol > li:nth-child(1) > a")
       expect(page).to have_link "Issue: 1", href: solr_document_path(numismatic_issue)
     end
   end
@@ -190,6 +190,7 @@ RSpec.feature "Numismatics::Coins" do
     end
 
     scenario "users can create a new issue with duplicated metadata" do
+      page.fill_in "numismatics_coin_analysis", with: ""
       page.fill_in "numismatics_coin_analysis", with: "test analysis 2"
 
       page.click_on "Save and Duplicate Metadata"

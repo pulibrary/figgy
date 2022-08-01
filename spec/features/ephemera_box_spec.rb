@@ -33,7 +33,7 @@ RSpec.feature "Ephemera Boxes" do
 
     scenario "users see validation errors" do
       visit polymorphic_path [:edit, ephemera_box]
-      expect(page.find(:css, ".has-error")).to have_content "has an invalid checkdigit"
+      expect(page).to have_content "has an invalid checkdigit"
     end
   end
 
@@ -72,13 +72,14 @@ RSpec.feature "Ephemera Boxes" do
 
       scenario "users see a warning if they try to use duplicate barcodes", js: true do
         visit polymorphic_path [:edit, ephemera_box]
-        page.fill_in "ephemera_box_barcode", with: "11111111111110"
-        page.fill_in "ephemera_box_box_number", with: "1"
-        expect(page).to have_content "This barcode is already in use"
-
         page.fill_in "ephemera_box_barcode", with: "22222222222222"
         page.fill_in "ephemera_box_box_number", with: "2"
         expect(page).not_to have_content "This barcode is already in use"
+
+        page.fill_in "ephemera_box_barcode", with: ""
+        page.fill_in "ephemera_box_barcode", with: "11111111111110"
+        page.fill_in "ephemera_box_box_number", with: "1"
+        expect(page).to have_content "This barcode is already in use"
       end
     end
   end

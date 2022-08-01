@@ -7,7 +7,9 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
   >
     
     Generate Labels 
-    <small>
+    <small
+      class="text-muted"
+    >
       for selected items
     </small>
   </heading-stub>

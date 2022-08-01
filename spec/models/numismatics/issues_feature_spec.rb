@@ -78,10 +78,10 @@ RSpec.feature "Numismatics::Issues" do
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Master"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Reference"
     expect(page).to have_css "a.btn.btn-sm.btn-primary.new-link", text: "New Ruler"
-    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_earliest_date"
-    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_latest_date"
-    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_era"
-    expect(page).to have_css "div.panel.panel-default div.panel-body div.col-sm-6 div.form-group div.col-sm-6 div.form-group input#numismatics_issue_object_date"
+    expect(page).to have_css "div.form-group input#numismatics_issue_earliest_date"
+    expect(page).to have_css "div.form-group input#numismatics_issue_latest_date"
+    expect(page).to have_css "div.form-group input#numismatics_issue_era"
+    expect(page).to have_css "div.form-group input#numismatics_issue_object_date"
   end
 
   context "when another issue already exists", js: true do
@@ -349,6 +349,7 @@ RSpec.feature "Numismatics::Issues" do
 
       issue_monogram_elements = doc.xpath("//*[@class='monogram-content']").map(&:to_s)
       issue_monogram_element = issue_monogram_elements.first
+
       expect(issue_monogram_element).to include("Test Monogram")
       expect(issue_monogram_element).to include(file_set.id.to_s)
 
@@ -398,8 +399,8 @@ RSpec.feature "Numismatics::Issues" do
 
     it "displays a collapsed Monograms panel" do
       visit new_numismatics_issue_path
-      page.find(".panel-heading a.collapsed.monograms").click
-      expect(page).not_to have_css(".panel-heading a.collapsed.monograms")
+      page.find(".card-header a.collapsed.monograms").click
+      expect(page).not_to have_css(".card-header a.collapsed.monograms")
     end
 
     context "when Issues have been saved" do
