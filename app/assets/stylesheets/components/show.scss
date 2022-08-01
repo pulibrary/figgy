@@ -85,6 +85,13 @@ table.dataTable thead > tr > th {
   }
 }
 
+.playlist-tracks-card {
+  padding: 0;
+  .table {
+    margin: 0;
+  }
+}
+
 .member-resources {
   &-attach, .parent-resources-attach {
     .form-group.select {

@@ -1,13 +1,13 @@
 <template>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h2 class="panel-title">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">
         Tracks
       </h2>
     </div>
-    <div class="row panel-body">
+    <div class="card-body playlist-tracks-card">
       <form @submit.prevent="submit">
-        <table class="table table-striped member-resources member-recordings">
+        <table class="table table-striped member-recordings">
           <thead>
             <tr>
               <th class="member-checkbox">
