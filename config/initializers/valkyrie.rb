@@ -256,7 +256,8 @@ Rails.application.config.to_prepare do
     ParentIssueIndexer,
     SortingIndexer,
     TitleIndexer,
-    TrackIndexer
+    TrackIndexer,
+    ParallelTestIndexer
   )
 
   solr_adapter = Valkyrie::Persistence::Solr::MetadataAdapter.new(

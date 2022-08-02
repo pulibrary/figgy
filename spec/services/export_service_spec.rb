@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe ExportService do
   let(:query_service) { metadata_adapter.query_service }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
-  let(:export_path) { Rails.root.join("tmp", "test_export") }
+  let(:export_path) { Pathname.new(Figgy.config["export_base"]) }
 
   before do
     FileUtils.rm_rf(export_path) if File.exist?(export_path)

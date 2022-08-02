@@ -5,7 +5,7 @@ require "valkyrie/specs/shared_specs"
 RSpec.describe Bagit::QueryService do
   let(:adapter) do
     Bagit::MetadataAdapter.new(
-      base_path: Rails.root.join("tmp", "bags")
+      base_path: Figgy.config["bag_path"]
     )
   end
   let(:query_service) { adapter.query_service }
