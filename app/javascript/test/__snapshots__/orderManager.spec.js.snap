@@ -4,7 +4,11 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
 <div
   class="lux-orderManager"
 >
-  <!---->
+  <transition-stub
+    name="fade"
+  >
+    <!---->
+  </transition-stub>
    
   <!---->
    
