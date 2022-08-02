@@ -246,16 +246,16 @@ test:
   archivespace_user: "test"
   archivespace_password: "password"
   cdl_in_path: <%= Rails.root.join("tmp", "test_cdl_in") %>
-  ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in") %>
-  ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out") %>
-  repository_path: <%= Rails.root.join("tmp", "test_files") %>
-  derivative_path: <%= Rails.root.join("tmp", "test_derivatives") %>
-  pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives") %>
-  geo_derivative_path: <%= Rails.root.join("tmp", "test_geo_derivatives") %>
-  bag_path: <%= Rails.root.join("tmp", "test_bags") %>
-  export_base: <%= Rails.root.join("tmp", "test_export") %>
+  ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in#{ENV["TEST_ENV_NUMBER"]}") %>
+  ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out#{ENV["TEST_ENV_NUMBER"]}") %>
+  repository_path: <%= Rails.root.join("tmp", "test_files#{ENV["TEST_ENV_NUMBER"]}") %>
+  derivative_path: <%= Rails.root.join("tmp", "test_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
+  pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
+  geo_derivative_path: <%= Rails.root.join("tmp", "test_geo_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
+  bag_path: <%= Rails.root.join("tmp", "test_bags#{ENV["TEST_ENV_NUMBER"]}") %>
+  export_base: <%= Rails.root.join("tmp", "test_export#{ENV["TEST_ENV_NUMBER"]}") %>
   pudl_root: <%= Rails.root.join("spec", "fixtures", "test_pudl_root") %>
-  disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup_test") %>
+  disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup_test#{ENV["TEST_ENV_NUMBER"]}") %>
   cantaloupe_url: 'http://localhost:8182/iiif/2/'
   pyramidal_url: 'http://localhost:8182/pyramidals/iiif/2/'
   events:

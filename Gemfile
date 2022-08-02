@@ -117,6 +117,7 @@ group :development, :test do
   gem "pry-rails"
   gem "rails-controller-testing"
   gem "rspec-rails"
+  gem "turbo_tests"
 end
 
 group :development, :staging do
