@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module CDL
-  class CdlController < ApplicationController
+  class CDLController < ApplicationController
     def status
       @charge_manager = charge_manager(params[:id])
       render json: CDL::Status.new(charge_manager: @charge_manager, user: current_user)
