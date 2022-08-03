@@ -104,6 +104,10 @@ If you'd like to run the test suite in parallel do the following:
 1. `PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup`
 1. `DISABLE_SPRING=true RAILS_ENV=test bundle exec turbo_tests`
 
+To run in parallel with working coverage, but worse output, do:
+
+1. `bundle exec parallel_rspec --first-is-1 --runtime-log tmp/turbo_rspec_runtime.log`
+
 ## Load sample development data
 
 1. Log in to your development instance using your princeton credentials; this creates your user in figgy's db. If you only have user access and need admin access, run `bundle exec rake figgy:set_admin_user`
