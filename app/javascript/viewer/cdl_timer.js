@@ -25,8 +25,12 @@ export default class CDLTimer {
     // Set form submission target (we don't know the id in the view)
     const formAction = `/cdl/${this.figgyId}/return`
     const form = document.getElementById('return-early-form')
+    const token = document.querySelector('meta[name="csrf-token"]').content
     form.setAttribute('action', formAction)
     form.lastElementChild.setAttribute('value', this.figgyId)
+    // The auth token for the form doesn't work, so use the one for JS in the
+    // meta tag.
+    document.querySelector("input[name='authenticity_token']").value = token
   }
 
   // button to return early
