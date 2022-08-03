@@ -21,4 +21,6 @@ Rails.application.configure do
   config.action_controller.action_on_unpermitted_parameters = false
   config.active_storage.service = :test
   config.cache_store = :null_store
+  # Mocking login only works with lax cookies.
+  config.action_dispatch.cookies_same_site_protection = :lax
 end
