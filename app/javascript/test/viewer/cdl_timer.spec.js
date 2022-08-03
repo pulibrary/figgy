@@ -1,7 +1,9 @@
 import CDLTimer from 'viewer/cdl_timer'
 describe('CDLTimer', () => {
   const initialHTML =
+    '<meta name="csrf-token" content="YxKJmi/UUkd9MN+10GTo9/xKPqAvVdUIWtKxXzH9VpjVVwFLbT1swegQ6rcTZ517G5Y88pr/ndxzoyulCVZeQA==">' +
     '<form id="return-early-form" action="/viewer" method="post">' +
+    '  <input type="hidden" name="authenticity_token" value="y+lCzpQ4pMHgLI+re6Gzm5y9XBo04YAvcpVS6DMP1h7RmQw1Zuq6QsVorC0UUvdpB5xXuNqUK/EbbSAv4ngFpw==" autocomplete="off">' +
     '  <input type="hidden" name="id" id="id">' +
     '</form>' +
   '<div id="uv"><div></div></div>'
@@ -138,6 +140,8 @@ describe('CDLTimer', () => {
       await timer.initializeTimer()
 
       const formElement = document.getElementById('return-early-form')
+      console.log(formElement.firstChild)
+      expect(document.querySelector("input[name='authenticity_token']").getAttribute('value')).toBe('YxKJmi/UUkd9MN+10GTo9/xKPqAvVdUIWtKxXzH9VpjVVwFLbT1swegQ6rcTZ517G5Y88pr/ndxzoyulCVZeQA==')
       expect(formElement.getAttribute('action')).toBe(`/cdl/${id}/return`)
       expect(formElement.lastChild.getAttribute('value')).toBe(id)
       const buttonElement = document.getElementById('return-early-button')
