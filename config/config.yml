@@ -256,6 +256,7 @@ test:
   export_base: <%= Rails.root.join("tmp", "test_export#{ENV["TEST_ENV_NUMBER"]}") %>
   pudl_root: <%= Rails.root.join("spec", "fixtures", "test_pudl_root") %>
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup_test#{ENV["TEST_ENV_NUMBER"]}") %>
+  test_cloud_geo_derivative_path: <%= Rails.root.join("tmp", "cloud_geo_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   cantaloupe_url: 'http://localhost:8182/iiif/2/'
   pyramidal_url: 'http://localhost:8182/pyramidals/iiif/2/'
   events:

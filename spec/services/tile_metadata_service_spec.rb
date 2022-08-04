@@ -7,6 +7,7 @@ RSpec.describe TileMetadataService do
     # Clean up mosaic.json documents and cloud rasters after test suite
     FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
   end
+  let(:cloud_path) { Pathname.new(Figgy.config["test_cloud_geo_derivative_path"]) }
 
   describe "#path" do
     with_queue_adapter :inline
@@ -22,7 +23,7 @@ RSpec.describe TileMetadataService do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
         fingerprinted_path = generator.path
-        default_path = Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
+        default_path = cloud_path.join("33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
         expect(MosaicGenerator).to have_received(:new)
         expect(File.exist?(fingerprinted_path)).to be true
         expect(File.exist?(default_path)).to be true
@@ -59,7 +60,7 @@ RSpec.describe TileMetadataService do
         path = described_class.new(resource: raster_set).path
         fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         expect(MosaicGenerator).not_to have_received(:new)
-        expect(path).to eq(Rails.root.join("tmp", "cloud_geo_derivatives", "33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic-#{fingerprint}.json").to_s)
+        expect(path).to eq(cloud_path.join("33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic-#{fingerprint}.json").to_s)
       end
     end
 
@@ -77,7 +78,7 @@ RSpec.describe TileMetadataService do
       it "returns a local path" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect(generator.base_path).to end_with("tmp/cloud_geo_derivatives")
+        expect(generator.base_path).to end_with("tmp/cloud_geo_derivatives#{ENV['TEST_ENV_NUMBER']}")
       end
     end
 
@@ -104,7 +105,7 @@ RSpec.describe TileMetadataService do
         fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         generator = described_class.new(resource: raster_set)
 
-        expect(generator.mosaic_file_id).to eq("disk://#{Rails.root.join('tmp', 'cloud_geo_derivatives', '33', '1d', '70', '331d70a54bd94a6580e4763c8f6b34fd', "mosaic-#{fingerprint}.json")}")
+        expect(generator.mosaic_file_id).to eq("disk://#{cloud_path.join('33', '1d', '70', '331d70a54bd94a6580e4763c8f6b34fd', "mosaic-#{fingerprint}.json")}")
       end
     end
 
