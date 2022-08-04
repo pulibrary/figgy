@@ -66,7 +66,7 @@ module GeoDiscovery
           rights_statement_s: rendered_rights_statement
         }
       end
-      # rubocop:enable Metrics/LineLength, Metrics/AbcSize
+      # rubocop:enable Metrics/MethodLength
 
       def document_hash_required
         {
@@ -123,6 +123,7 @@ module GeoDiscovery
 
       # Builds the dct_references hash.
       # @return [Hash] geoblacklight references as a hash
+      # rubocop:disable Metrics/MethodLength
       def references
         {
           "http://schema.org/url" => url,
@@ -140,6 +141,7 @@ module GeoDiscovery
           "https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames" => xyz_path
         }
       end
+      # rubocop:enable Metrics/MethodLength
 
       def restricted_visibility
         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
