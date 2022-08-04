@@ -31,9 +31,9 @@ RSpec.describe PDFGenerator do
       end
       it "raises a PDFGeneratorError and logs an error for each attempted download" do
         expect { generator.render }.to raise_error(PDFGenerator::Error)
-        # rubocop:disable Metrics/LineLength
+        # rubocop:disable Layout/LineLength
         expect(Valkyrie.logger).to have_received(:error).exactly(5).times.with("PDFGenerator: Failed to download a PDF using the following URI as a base: http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg: 500 ")
-        # rubocop:enable Metrics/LineLength
+        # rubocop:enable Layout/LineLength
       end
     end
 

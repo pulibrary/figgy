@@ -80,7 +80,7 @@ describe IngestEphemeraCSV do
                                      label: ["Pamphlet"],
                                      member_of_vocabulary_id: genres.id)
   end
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
 
   context "validate" do
     it "handles validation" do
