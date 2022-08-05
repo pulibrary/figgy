@@ -215,7 +215,7 @@ class PbcoreParser
   end
 
   def main_title
-    @main_title ||= xml.xpath('//pbcoreTitle[@titleType="Main"]').first.text
+    @main_title ||= xml.xpath("//pbcoreTitle").first.text
   end
 
   def barcode

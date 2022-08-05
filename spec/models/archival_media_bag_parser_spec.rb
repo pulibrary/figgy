@@ -41,6 +41,17 @@ RSpec.describe ArchivalMediaBagParser do
           "Side B: Feedback heard throughout program on tape, gradual increass in speed throughout program on tape; "
       end
       it { expect(amb_parser.pbcore_parser(barcode: barcode).transfer_notes).to eq expected }
+
+      context "when given a new vendor pbcore file" do
+        let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "new_pbcore_bag") }
+        let(:expected) do
+          "Transferred by Marissa Schwabe; 6/1/2022 MSc: Shifting stereo image at the start of side 2 is due to the azimuth.  ; " \
+            "Audio Distortion, Audio Hiss, Beginning Cut Off, Print Through, End Cut Off, Audio Pops and/or Clicks"
+        end
+        it "returns transfer notes" do
+          expect(amb_parser.pbcore_parser(barcode: barcode).transfer_notes).to eq expected
+        end
+      end
     end
 
     describe "#original_filename" do
@@ -50,6 +61,12 @@ RSpec.describe ArchivalMediaBagParser do
     describe "#main_title" do
       it "returns the title from pbcore" do
         expect(amb_parser.pbcore_parser(barcode: barcode).main_title).to eq "Interview: ERM / Jose Donoso (A2)"
+      end
+      context "when given a new vendor pbcore file" do
+        let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "new_pbcore_bag") }
+        it "returns title from pbcore" do
+          expect(amb_parser.pbcore_parser(barcode: barcode).main_title).to eq "Sundance #1 A&B"
+        end
       end
     end
   end
