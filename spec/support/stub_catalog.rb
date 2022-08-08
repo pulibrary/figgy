@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module BibdataStubbing
+module CatalogStubbing
   BIBDATA_SCHEME = "https"
   BIBDATA_HOST = "catalog.princeton.edu"
   BIBDATA_PATH = "/catalog"
@@ -111,5 +111,5 @@ module BibdataStubbing
 end
 
 RSpec.configure do |config|
-  config.include BibdataStubbing
+  config.include CatalogStubbing
 end
