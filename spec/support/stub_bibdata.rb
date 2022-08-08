@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 module BibdataStubbing
   BIBDATA_SCHEME = "https"
-  BIBDATA_HOST = "bibdata.princeton.edu"
-  BIBDATA_PATH = "/bibliographic"
+  BIBDATA_HOST = "catalog.princeton.edu"
+  BIBDATA_PATH = "/catalog"
   CONTENT_TYPE_JSON_LD = Mime::Type.lookup_by_extension("jsonld")
   CONTENT_TYPE_XML = Mime::Type.lookup_by_extension("xml")
   CONTENT_TYPE_MARC_XML = "application/marcxml+xml"
@@ -11,7 +11,9 @@ module BibdataStubbing
     path = [BIBDATA_PATH, bib_id].join("/")
     case content_type
     when CONTENT_TYPE_JSON_LD
-      path = [path, "jsonld"].join("/")
+      path = [path, "jsonld"].join(".")
+    when CONTENT_TYPE_MARC_XML
+      path = [path, "marcxml"].join(".")
     end
 
     uri = URI::Generic.build(scheme: BIBDATA_SCHEME, host: BIBDATA_HOST, path: path)

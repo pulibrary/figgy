@@ -46,8 +46,8 @@ module PulMetadataServices
       # @param id [String]
       # @return [String] string-serialized XML for the MARC record
       def retrieve_from_bibdata(id)
-        conn = Faraday.new(url: Figgy.config[:bibdata_url])
-        response = conn.get(id)
+        conn = Faraday.new(url: Figgy.config[:catalog_url])
+        response = conn.get("#{id}.marcxml")
         response.body
       end
     end

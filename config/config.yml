@@ -34,7 +34,7 @@ defaults: &defaults
   default_search_directory: studio_new/DPUL
   enable_pyramidal_access: true
   findingaids_url: https://findingaids.princeton.edu/catalog/
-  bibdata_url: https://bibdata.princeton.edu/bibliographic/
+  catalog_url: https://catalog.princeton.edu/catalog/
   jp2_recipes:
     default_color: >
       -rate 2.4,1.48331273,.91673033,.56657224,.35016049,.21641118,.13374944,.08266171
