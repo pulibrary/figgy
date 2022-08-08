@@ -7,7 +7,7 @@ module CatalogStubbing
   CONTENT_TYPE_XML = Mime::Type.lookup_by_extension("xml")
   CONTENT_TYPE_MARC_XML = "application/marcxml+xml"
 
-  def bibdata_url(bib_id, content_type = CONTENT_TYPE_JSON_LD)
+  def catalog_url(bib_id, content_type = CONTENT_TYPE_JSON_LD)
     path = [BIBDATA_PATH, bib_id].join("/")
     case content_type
     when CONTENT_TYPE_JSON_LD
@@ -20,8 +20,8 @@ module CatalogStubbing
     uri.to_s
   end
 
-  def bibdata_fixture_path(bib_id, content_type = CONTENT_TYPE_JSON_LD)
-    fixture_path = "files/bibdata/#{bib_id}"
+  def catalog_fixture_path(bib_id, content_type = CONTENT_TYPE_JSON_LD)
+    fixture_path = "files/catalog/#{bib_id}"
 
     case content_type
     when CONTENT_TYPE_JSON_LD
@@ -35,10 +35,10 @@ module CatalogStubbing
   end
 
   def stub_catalog(bib_id:, status: 200, content_type: CONTENT_TYPE_JSON_LD)
-    url = bibdata_url(bib_id, content_type)
+    url = catalog_url(bib_id, content_type)
 
     if status == 200
-      fixture_path = bibdata_fixture_path(bib_id, content_type)
+      fixture_path = catalog_fixture_path(bib_id, content_type)
 
       stub_request(:get, url)
         .to_return(
@@ -52,7 +52,7 @@ module CatalogStubbing
         .to_return(
           status: status
         )
-      stub_request(:get, bibdata_url("99#{bib_id}3506421", content_type))
+      stub_request(:get, catalog_url("99#{bib_id}3506421", content_type))
         .to_return(
           status: status
         )
@@ -102,7 +102,7 @@ module CatalogStubbing
   def stub_catalog_context
     stub_request(:get, "https://bibdata.princeton.edu/context.json")
       .to_return(
-        body: file_fixture("files/bibdata/context.json").read,
+        body: file_fixture("files/catalog/context.json").read,
         headers: {
           "Content-Type" => "application/json"
         }

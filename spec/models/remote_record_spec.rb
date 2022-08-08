@@ -16,28 +16,28 @@ RSpec.describe RemoteRecord, type: :model do
     end
   end
 
-  describe ".bibdata?" do
+  describe ".catalog?" do
     context "with a Voyager record ID" do
       it "validates that this is a bib. ID" do
-        expect(described_class.bibdata?("4609321")).to be_truthy
+        expect(described_class.catalog?("4609321")).to be_truthy
       end
     end
 
     context "with an Alma ID" do
       it "is true" do
-        expect(described_class.bibdata?("994241263506421")).to be_truthy
+        expect(described_class.catalog?("994241263506421")).to be_truthy
       end
     end
 
     context "with a tiny ID" do
       it "is not true" do
-        expect(described_class.bibdata?("1")).to be_falsey
+        expect(described_class.catalog?("1")).to be_falsey
       end
     end
 
     context "with a PULFA record ID" do
       it "validates that this is a not a bib. ID" do
-        expect(described_class.bibdata?("AC044_c0003")).to be_falsy
+        expect(described_class.catalog?("AC044_c0003")).to be_falsy
       end
     end
   end

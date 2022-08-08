@@ -7,7 +7,7 @@ module CDL
     # with alma the field will be "cdl": true
     class << self
       def item_ids(source_metadata_identifier:)
-        return [] unless RemoteRecord.bibdata?(source_metadata_identifier)
+        return [] unless RemoteRecord.catalog?(source_metadata_identifier)
         item_ids = get_item_ids(source_metadata_identifier: source_metadata_identifier)
         # If no matches, try the alma ID version.
         if item_ids.empty?

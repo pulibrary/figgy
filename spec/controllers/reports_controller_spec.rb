@@ -95,7 +95,7 @@ RSpec.describe ReportsController, type: :controller do
   end
 
   describe "GET #ark_report" do
-    let(:bibdata_resource) do
+    let(:catalog_resource) do
       r = FactoryBot.build(:complete_scanned_resource, title: [])
       change_set = ScannedResourceChangeSet.new(r)
       change_set.validate(source_metadata_identifier: "123456", state: ["complete"])
@@ -136,7 +136,7 @@ RSpec.describe ReportsController, type: :controller do
       stub_findingaid(pulfa_id: "C0652_c0377")
       stub_findingaid(pulfa_id: "RBD1_c13076")
       stub_ezid(shoulder: "99999/fk4", blade: "8675309")
-      bibdata_resource
+      catalog_resource
       pulfa_resource
       pulfa_resource2
       pulfa_resource3

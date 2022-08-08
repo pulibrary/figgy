@@ -6,8 +6,8 @@ module PulMetadataServices
       # @param id [String] the identifier
       # @return [PulMetadataServices::BibRecord, PulMetadataServices::AspacePulfaRecord]
       def retrieve(id)
-        if bibdata?(id)
-          src = retrieve_from_bibdata(id)
+        if catalog?(id)
+          src = retrieve_from_catalog(id)
           PulMetadataServices::BibRecord.new(src)
         elsif (src = retrieve_from_aspace_pulfa(id))
           PulMetadataServices::AspacePulfaRecord.new(src)
@@ -33,7 +33,7 @@ module PulMetadataServices
       # Determines whether or not a remote metadata identifier is an identifier for Voyager records
       # @param source_metadata_id [String] the remote metadata identifier
       # @return [Boolean]
-      def bibdata?(source_metadata_id)
+      def catalog?(source_metadata_id)
         # 99*6421 will be in all alma IDs, and old Voyager records are
         # converted. We keep ID at 4 because the test suite has some low-number
         # IDs.
@@ -45,7 +45,7 @@ module PulMetadataServices
       # Retrieves a MARC record (serialized in XML) from Voyager using an ID
       # @param id [String]
       # @return [String] string-serialized XML for the MARC record
-      def retrieve_from_bibdata(id)
+      def retrieve_from_catalog(id)
         conn = Faraday.new(url: Figgy.config[:catalog_url])
         response = conn.get("#{id}.marcxml")
         response.body

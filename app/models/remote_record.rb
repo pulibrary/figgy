@@ -5,15 +5,15 @@ class RemoteRecord
   # @param resource [Resource]
   # @return [RemoteRecord, RemoteRecord::PulfaRecord]
   def self.retrieve(source_metadata_identifier, resource: nil)
-    if bibdata?(source_metadata_identifier)
+    if catalog?(source_metadata_identifier)
       new(source_metadata_identifier)
     elsif pulfa?(source_metadata_identifier)
       PulfaRecord.new(source_metadata_identifier)
     end
   end
 
-  def self.bibdata?(source_metadata_identifier)
-    PulMetadataServices::Client.bibdata?(source_metadata_identifier)
+  def self.catalog?(source_metadata_identifier)
+    PulMetadataServices::Client.catalog?(source_metadata_identifier)
   end
 
   def self.pulfa?(source_metadata_identifier)
@@ -35,17 +35,17 @@ class RemoteRecord
   end
 
   def self.valid?(source_metadata_identifier)
-    bibdata?(source_metadata_identifier) || pulfa?(source_metadata_identifier)
+    catalog?(source_metadata_identifier) || pulfa?(source_metadata_identifier)
   end
 
   def self.source_metadata_url(id)
-    return "#{Figgy.config[:catalog_url]}#{id}" if bibdata?(id)
+    return "#{Figgy.config[:catalog_url]}#{id}" if catalog?(id)
     "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}.xml" if pulfa?(id)
   end
 
   def self.record_url(id)
     return unless id
-    return "https://catalog.princeton.edu/catalog/#{id}" if bibdata?(id)
+    return "https://catalog.princeton.edu/catalog/#{id}" if catalog?(id)
     "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}" if pulfa?(id)
   end
 

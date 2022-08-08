@@ -88,7 +88,7 @@ RSpec.describe IdentifierService do
       allow(identifier).to receive(:id).and_return(ark)
     end
 
-    context "with a bibdata source_metadata_identifier" do
+    context "with a catalog source_metadata_identifier" do
       let(:bib) { "123456" }
       let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/#{bib}#view") }
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: bib }

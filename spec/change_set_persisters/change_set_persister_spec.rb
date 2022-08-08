@@ -29,7 +29,7 @@ RSpec.describe ChangeSetPersister do
       stub_catalog(bib_id: "123456")
     end
 
-    it "applies remote metadata from bibdata to an imported metadata resource" do
+    it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "123456")
@@ -75,7 +75,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_catalog(bib_id: "10001789")
     end
-    it "applies remote metadata from bibdata to an imported metadata resource" do
+    it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "10001789")
@@ -103,7 +103,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_catalog(bib_id: "9649080")
     end
-    it "applies remote metadata from bibdata to an imported metadata resource" do
+    it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:vector_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "9649080")
@@ -132,7 +132,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_catalog(bib_id: "9637153")
     end
-    it "applies remote metadata from bibdata to an imported metadata resource" do
+    it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:raster_resource, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "9637153")
@@ -401,7 +401,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_catalog(bib_id: "123456")
     end
-    it "applies remote metadata from bibdata" do
+    it "applies remote metadata from catalog" do
       resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", imported_metadata: [{ applicant: "Test" }], source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "1")
@@ -419,7 +419,7 @@ RSpec.describe ChangeSetPersister do
     before do
       stub_catalog(bib_id: "6866386")
     end
-    it "applies remote metadata from bibdata" do
+    it "applies remote metadata from catalog" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
       change_set.validate(source_metadata_identifier: "6866386")

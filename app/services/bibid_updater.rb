@@ -41,7 +41,7 @@ class BibidUpdater
             id = resource.source_metadata_identifier.first
             next if /99.*3506421/.match?(id)
             next if transform_id(id).length > 18
-            RemoteRecord.bibdata?(id)
+            RemoteRecord.catalog?(id)
           end.to_a
         end
     end

@@ -13,7 +13,7 @@ describe PulMetadataServices::Client do
   describe ".retrieve" do
     context "with a Voyager-like id" do
       let(:id) { "4609321" }
-      let(:source) { file_fixture("files/bibdata/4609321.mrx").read }
+      let(:source) { file_fixture("files/catalog/4609321.mrx").read }
       let(:full_source) { source }
       it "makes requests to Voyager" do
         expect(described_class.retrieve(id).source).to eq source
@@ -39,11 +39,11 @@ describe PulMetadataServices::Client do
     end
   end
 
-  describe ".retrieve_from_bibdata" do
+  describe ".retrieve_from_catalog" do
     let(:id) { "4609321" }
-    let(:source) { file_fixture("files/bibdata/4609321.mrx").read }
+    let(:source) { file_fixture("files/catalog/4609321.mrx").read }
     it "makes requests to Voyager" do
-      expect(described_class.retrieve_from_bibdata(id)).to eq source
+      expect(described_class.retrieve_from_catalog(id)).to eq source
     end
   end
 end

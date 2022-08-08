@@ -99,7 +99,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
 
   def create_scanned_resource(source_metadata_identifier:, collection_id:, member_ids: [], append_id: nil, state: "complete", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, rights_statement: RightsStatements.no_known_copyright)
     stub_catalog(bib_id: source_metadata_identifier)
-    stub_catalog(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(bibdata_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
+    stub_catalog(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml") if File.exist?(catalog_fixture_path(source_metadata_identifier, BibdataStubbing::CONTENT_TYPE_MARC_XML))
     stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
     FactoryBot.create_for_repository(
       :complete_scanned_resource,

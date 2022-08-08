@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe FacetIndexer do
   describe ".to_solr" do
-    context "when the resource has imported bibdata metadata" do
+    context "when the resource has imported catalog metadata" do
       it "indexes relevant facets" do
         stub_catalog(bib_id: "123456")
         scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)

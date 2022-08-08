@@ -85,7 +85,7 @@ class BulkIngestService
     #   regex if a string is title or a component ID, and we don't currently
     #   have a use case for them to be component IDs.
     def title_or_identifier(klass, path_basename)
-      if klass.attribute_names.include?(:source_metadata_identifier) && RemoteRecord.bibdata?(path_basename.to_s)
+      if klass.attribute_names.include?(:source_metadata_identifier) && RemoteRecord.catalog?(path_basename.to_s)
         { source_metadata_identifier: path_basename.to_s }
       else
         { title: path_basename }

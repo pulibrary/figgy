@@ -13,7 +13,7 @@ RSpec.describe ImportedMetadataIndexer do
     before do
       stub_catalog(bib_id: source_id)
     end
-    it "applies remote metadata from bibdata to an imported metadata resource" do
+    it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = ScannedMapChangeSet.new(resource)
       change_set.validate(source_metadata_identifier: "10001789")

@@ -21,7 +21,7 @@ class IdentifierService
 
   def self.url_for(resource)
     return Rails.application.routes.url_helpers.solr_document_url(resource, host: Figgy.default_url_options[:host]) if resource.try(:source_metadata_identifier).blank?
-    return "https://catalog.princeton.edu/catalog/#{resource.source_metadata_identifier.first}#view" if PulMetadataServices::Client.bibdata?(resource.source_metadata_identifier.first)
+    return "https://catalog.princeton.edu/catalog/#{resource.source_metadata_identifier.first}#view" if PulMetadataServices::Client.catalog?(resource.source_metadata_identifier.first)
     "http://findingaids.princeton.edu/collections/#{resource.source_metadata_identifier.first.tr('_', '/')}"
   end
 
