@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pbcoreCollection xmlns="http://www.pbcore.org/PBCore/PBCoreNamespace.html" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.pbcore.org/PBCore/PBCoreNamespace.html http://pbcore.org/xsd/pbcore-2.0.xsd" collectionTitle="Marc Gaede Papers (C1436)" collectionDescription="" collectionRef="" collectionDate="">
+	<pbcoreDescriptionDocument>
+		<pbcoreAssetType>Compact Cassette (Audio cassette)</pbcoreAssetType>
+		<pbcoreAssetDate dateType="date_of_creation">1991-02-05</pbcoreAssetDate>
+		<pbcoreIdentifier source="Princeton University Library" annotation="local_identifier">32101103191688</pbcoreIdentifier>
+		<pbcoreTitle titleType="item_title">Sundance #1 A&amp;B</pbcoreTitle>
+		<pbcoreSubject/>
+		<pbcoreDescription/>
+		<pbcoreCreator>
+			<creator>Gaede, Marc</creator>
+			<creatorRole>creator</creatorRole>
+		</pbcoreCreator>
+		<pbcoreInstantiation>
+			<!-- Physical Asset -->
+			<instantiationIdentifier source="Princeton University Library" annotation="local_identifier">32101103191688</instantiationIdentifier>
+			<instantiationDate dateType="date_of_creation">1991-02-05</instantiationDate>
+			<instantiationPhysical>Compact Cassette (Audio cassette)</instantiationPhysical>
+			<instantiationStandard/>
+			<instantiationLocation>
+				<!-- Required Field -->
+			</instantiationLocation>
+			<instantiationMediaType>Sound</instantiationMediaType>
+			<instantiationGenerations>Master</instantiationGenerations>
+			<instantiationDuration>01:32:21</instantiationDuration>
+			<instantiationTracks>2 audio tracks</instantiationTracks>
+			<instantiationChannelConfiguration>Stereo; Ch1, Ch2</instantiationChannelConfiguration>
+			<instantiationLanguage source="ISO 639.2">eng</instantiationLanguage>
+			<instantiationEssenceTrack>
+				<essenceTrackType>Audio</essenceTrackType>
+				<essenceTrackPlaybackSpeed unitsOfMeasure="ips">1 7/8 ips</essenceTrackPlaybackSpeed>
+			</instantiationEssenceTrack>
+			<instantiationAnnotation annotationType="Stock Manufacturer">Maxell_XLII_90</instantiationAnnotation>
+			<instantiationAnnotation annotationType="Oxide Type">Type II</instantiationAnnotation>
+			<instantiationPart>
+				<instantiationIdentifier source="Princeton University Library" annotation="local_identifier">32101103191688_1</instantiationIdentifier>
+				<instantiationLocation>
+					<!-- Required Field -->
+				</instantiationLocation>
+				<instantiationDuration>00:45:19</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackPlaybackSpeed unitsOfMeasure="ips">1 7/8 ips</essenceTrackPlaybackSpeed>
+				</instantiationEssenceTrack>
+			</instantiationPart>
+			<instantiationPart>
+				<instantiationIdentifier source="Princeton University Library" annotation="local_identifier">32101103191688_2</instantiationIdentifier>
+				<instantiationLocation>
+					<!-- Required Field -->
+				</instantiationLocation>
+				<instantiationDuration>00:47:02</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackPlaybackSpeed unitsOfMeasure="ips">1 7/8 ips</essenceTrackPlaybackSpeed>
+				</instantiationEssenceTrack>
+			</instantiationPart>
+		</pbcoreInstantiation>
+		<pbcoreInstantiation>
+			<!-- Archival Master -->
+			<instantiationIdentifier source="George Blood Audio Video Film">32101103191688_pm</instantiationIdentifier>
+			<instantiationDate>2022-05-26</instantiationDate>
+			<instantiationDigital>audio/vnd.wave</instantiationDigital>
+			<instantiationStandard>Linear PCM Audio</instantiationStandard>
+			<instantiationLocation>
+				<!-- required field -->
+			</instantiationLocation>
+			<instantiationMediaType>Sound</instantiationMediaType>
+			<instantiationGenerations>Preservation Master</instantiationGenerations>
+			<instantiationTracks>2 audio tracks</instantiationTracks>
+			<instantiationChannelConfiguration>Stereo; Ch1, Ch2</instantiationChannelConfiguration>
+			<instantiationLanguage source="ISO 639.2">eng</instantiationLanguage>
+			<instantiationPart>
+				<instantiationIdentifier source="George Blood Audio Video Film" annotation="File Name">32101103191688_1_pm.wav</instantiationIdentifier>
+				<instantiationIdentifier source="George Blood Audio Video Film 2022-06-01" annotation="messageDigest" version="SHA256">a3e530e7cbfd9069f604b927671dfdc9b16830f985970b8c48e81c60fd6a8827</instantiationIdentifier>
+				<instantiationDate>2022-05-26</instantiationDate>
+				<instantiationLocation>
+					<!-- required field -->
+				</instantiationLocation>
+				<instantiationFileSize unitsOfMeasure="GiB">1.46</instantiationFileSize>
+				<instantiationDuration>00:45:19</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackStandard>Wave</essenceTrackStandard>
+					<essenceTrackSamplingRate unitsOfMeasure="kHz">96.0</essenceTrackSamplingRate>
+					<essenceTrackBitDepth>24</essenceTrackBitDepth>
+				</instantiationEssenceTrack>
+				<instantiationRelation>
+					<instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+					<instantiationRelationIdentifier annotation="local_identifier">32101103191688_1</instantiationRelationIdentifier>
+				</instantiationRelation>
+				<instantiationAnnotation annotationType="Creating Application">MIO Console 5.5.01.208</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Source Deck">TASCAM_122MKIII; 7300106</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Digitizer">MetricHalo_LIO8; (26)00720</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Quality Control">Quality Control was performed by George Blood Audio/Video/Film and included a spot check of content, as well as the validation of the folder nest, file name, duration, format variation, and metadata</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Transfer Comments">Transferred by Marissa Schwabe; 6/1/2022 MSc: Shifting stereo image at the start of side 2 is due to the azimuth.  ; Audio Distortion, Audio Hiss, Beginning Cut Off, Print Through, End Cut Off, Audio Pops and/or Clicks</instantiationAnnotation>
+			</instantiationPart>
+			<instantiationPart>
+				<instantiationIdentifier source="George Blood Audio Video Film" annotation="File Name">32101103191688_2_pm.wav</instantiationIdentifier>
+				<instantiationIdentifier source="George Blood Audio Video Film 2022-06-01" annotation="messageDigest" version="SHA256">c3230d8e3ca821045d1dfc403234f0ca6b0a04282bb1e64d1ef10795aad7d8e7</instantiationIdentifier>
+				<instantiationDate>2022-05-26</instantiationDate>
+				<instantiationLocation>
+					<!-- required field -->
+				</instantiationLocation>
+				<instantiationFileSize unitsOfMeasure="GiB">1.51</instantiationFileSize>
+				<instantiationDuration>00:47:02</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackStandard>Wave</essenceTrackStandard>
+					<essenceTrackSamplingRate unitsOfMeasure="kHz">96.0</essenceTrackSamplingRate>
+					<essenceTrackBitDepth>24</essenceTrackBitDepth>
+				</instantiationEssenceTrack>
+				<instantiationRelation>
+					<instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+					<instantiationRelationIdentifier annotation="local_identifier">32101103191688_2</instantiationRelationIdentifier>
+				</instantiationRelation>
+				<instantiationAnnotation annotationType="Creating Application">MIO Console 5.5.01.208</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Source Deck">TASCAM_122MKIII; 7300106</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Digitizer">MetricHalo_LIO8; (26)00720</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Quality Control">Quality Control was performed by George Blood Audio/Video/Film and included a spot check of content, as well as the validation of the folder nest, file name, duration, format variation, and metadata</instantiationAnnotation>
+				<instantiationAnnotation annotationType="Transfer Comments">Transferred by Marissa Schwabe; 6/1/2022 MSc: Shifting stereo image at the start of side 2 is due to the azimuth.  ; Audio Distortion, Audio Hiss, Print Through, End Cut Off, Audio Pops and/or Clicks</instantiationAnnotation>
+			</instantiationPart>
+		</pbcoreInstantiation>
+		<pbcoreInstantiation>
+			<!-- Production Master -->
+			<instantiationIdentifier source="George Blood Audio Video Film">32101103191688_i</instantiationIdentifier>
+			<instantiationDate>2022-05-26</instantiationDate>
+			<instantiationDigital>audio/vnd.wave</instantiationDigital>
+			<instantiationLocation>
+				<!-- required field -->
+			</instantiationLocation>
+			<instantiationMediaType>Sound</instantiationMediaType>
+			<instantiationGenerations>Production Master</instantiationGenerations>
+			<instantiationTracks>2 audio tracks</instantiationTracks>
+			<instantiationChannelConfiguration/>
+			<instantiationLanguage source="ISO 639.2">eng</instantiationLanguage>
+			<instantiationPart>
+				<instantiationIdentifier source="George Blood Audio Video Film" annotation="File Name">32101103191688_1_i.wav</instantiationIdentifier>
+				<instantiationIdentifier source="George Blood Audio Video Film 2022-06-01" annotation="messageDigest" version="SHA256">a7dd8fd40c6c88e1c3456e27bde7d79812edd3a6f69a266b4101f420722767af</instantiationIdentifier>
+				<instantiationDate>2022-05-26</instantiationDate>
+				<instantiationLocation>
+					<!-- required field -->
+				</instantiationLocation>
+				<instantiationFileSize unitsOfMeasure="MiB">457</instantiationFileSize>
+				<instantiationDuration>00:45:19</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackStandard>Wave</essenceTrackStandard>
+					<essenceTrackSamplingRate unitsOfMeasure="kHz">44.1</essenceTrackSamplingRate>
+					<essenceTrackBitDepth>16</essenceTrackBitDepth>
+				</instantiationEssenceTrack>
+				<instantiationRelation>
+					<instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+					<instantiationRelationIdentifier annotation="File Name">32101103191688_1_pm.wav</instantiationRelationIdentifier>
+				</instantiationRelation>
+				<instantiationAnnotation annotationType="Quality Control">Quality Control was performed by George Blood Audio/Video/Film and included a spot check of content, as well as the validation of the folder nest, file name, duration, format variation, and metadata</instantiationAnnotation>
+			</instantiationPart>
+			<instantiationPart>
+				<instantiationIdentifier source="George Blood Audio Video Film" annotation="File Name">32101103191688_2_i.wav</instantiationIdentifier>
+				<instantiationIdentifier source="George Blood Audio Video Film 2022-06-01" annotation="messageDigest" version="SHA256">c92e7d70e69243749c4075150efb0b906f1b8a5a3e8705bc6dccb28af52fa672</instantiationIdentifier>
+				<instantiationDate>2022-05-26</instantiationDate>
+				<instantiationLocation>
+					<!-- required field -->
+				</instantiationLocation>
+				<instantiationFileSize unitsOfMeasure="MiB">475</instantiationFileSize>
+				<instantiationDuration>00:47:02</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackStandard>Wave</essenceTrackStandard>
+					<essenceTrackSamplingRate unitsOfMeasure="kHz">44.1</essenceTrackSamplingRate>
+					<essenceTrackBitDepth>16</essenceTrackBitDepth>
+				</instantiationEssenceTrack>
+				<instantiationRelation>
+					<instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+					<instantiationRelationIdentifier annotation="File Name">32101103191688_2_pm.wav</instantiationRelationIdentifier>
+				</instantiationRelation>
+				<instantiationAnnotation annotationType="Quality Control">Quality Control was performed by George Blood Audio/Video/Film and included a spot check of content, as well as the validation of the folder nest, file name, duration, format variation, and metadata</instantiationAnnotation>
+			</instantiationPart>
+		</pbcoreInstantiation>
+		<pbcoreInstantiation>
+			<!-- Derivative -->
+			<instantiationIdentifier source="George Blood Audio Video Film">32101103191688_a</instantiationIdentifier>
+			<instantiationDate>2022-05-26</instantiationDate>
+			<instantiationDigital>audio/mpeg</instantiationDigital>
+			<instantiationLocation>
+				<!-- required field -->
+			</instantiationLocation>
+			<instantiationMediaType>Sound</instantiationMediaType>
+			<instantiationGenerations>Derivative</instantiationGenerations>
+			<instantiationTracks>2 audio tracks</instantiationTracks>
+			<instantiationChannelConfiguration/>
+			<instantiationLanguage source="ISO 639.2">eng</instantiationLanguage>
+			<instantiationPart>
+				<instantiationIdentifier source="George Blood Audio Video Film" annotation="File Name">32101103191688_1_a.mp3</instantiationIdentifier>
+				<instantiationIdentifier source="George Blood Audio Video Film 2022-06-01" annotation="messageDigest" version="SHA256">dbb7557cfbf04f02832c55a315cdb537672ce5fc2f1df837966f95cfe4dab77e</instantiationIdentifier>
+				<instantiationDate>2022-05-26</instantiationDate>
+				<instantiationLocation>
+					<!-- required field -->
+				</instantiationLocation>
+				<instantiationFileSize unitsOfMeasure="MiB">83.0</instantiationFileSize>
+				<instantiationDuration>00:45:19</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackStandard>MPEG Audio</essenceTrackStandard>
+					<essenceTrackSamplingRate unitsOfMeasure="kHz">44.1</essenceTrackSamplingRate>
+				</instantiationEssenceTrack>
+				<instantiationRelation>
+					<instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+					<instantiationRelationIdentifier annotation="File Name">32101103191688_1_pm.wav</instantiationRelationIdentifier>
+				</instantiationRelation>
+				<instantiationAnnotation annotationType="Quality Control">Quality Control was performed by George Blood Audio/Video/Film and included a spot check of content, as well as the validation of the folder nest, file name, duration, format variation, and metadata</instantiationAnnotation>
+			</instantiationPart>
+			<instantiationPart>
+				<instantiationIdentifier source="George Blood Audio Video Film" annotation="File Name">32101103191688_2_a.mp3</instantiationIdentifier>
+				<instantiationIdentifier source="George Blood Audio Video Film 2022-06-01" annotation="messageDigest" version="SHA256">e99221c5fe5554de97acbf280dcf45801da5382db87f3fd67a721c842a73c2cf</instantiationIdentifier>
+				<instantiationDate>2022-05-26</instantiationDate>
+				<instantiationLocation>
+					<!-- required field -->
+				</instantiationLocation>
+				<instantiationFileSize unitsOfMeasure="MiB">86.1</instantiationFileSize>
+				<instantiationDuration>00:47:02</instantiationDuration>
+				<instantiationEssenceTrack>
+					<essenceTrackType>Audio</essenceTrackType>
+					<essenceTrackStandard>MPEG Audio</essenceTrackStandard>
+					<essenceTrackSamplingRate unitsOfMeasure="kHz">44.1</essenceTrackSamplingRate>
+				</instantiationEssenceTrack>
+				<instantiationRelation>
+					<instantiationRelationType source="PBCore relationType">Derived from</instantiationRelationType>
+					<instantiationRelationIdentifier annotation="File Name">32101103191688_2_pm.wav</instantiationRelationIdentifier>
+				</instantiationRelation>
+				<instantiationAnnotation annotationType="Quality Control">Quality Control was performed by George Blood Audio/Video/Film and included a spot check of content, as well as the validation of the folder nest, file name, duration, format variation, and metadata</instantiationAnnotation>
+			</instantiationPart>
+		</pbcoreInstantiation>
+		<pbcoreAnnotation annotationType="PrincetonUL Quality Control"/>
+	</pbcoreDescriptionDocument>
+</pbcoreCollection>
