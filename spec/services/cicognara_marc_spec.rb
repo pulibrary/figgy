@@ -50,7 +50,7 @@ RSpec.describe CicognaraMarc do
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
         allow(writer).to receive(:close)
-        stub_catalog(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
       end
 
       it "doesn't error and doesn't write that record" do
@@ -201,7 +201,7 @@ RSpec.describe CicognaraMarc do
 
       before do
         stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
         allow(resource2).to receive(:imported_metadata).and_return([metadata_mock])
         allow(metadata_mock).to receive(:references).and_return(["Cicognara, 3724"])
       end

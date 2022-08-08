@@ -13,7 +13,7 @@ RSpec.describe MarcRecordEnhancer do
       end
       before do
         stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
       end
       it "returns a MarcRecordEnhancer with a marc record" do
         service = described_class.for(resource)
@@ -78,7 +78,7 @@ RSpec.describe MarcRecordEnhancer do
     let(:metadata_mock) { double }
     before do
       stub_catalog(bib_id: "8543429")
-      stub_catalog(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+      stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
       allow(resource).to receive(:imported_metadata).and_return([metadata_mock])
       allow(metadata_mock).to receive(:references).and_return(["Cicognara, 3723"])
     end
@@ -326,7 +326,7 @@ RSpec.describe MarcRecordEnhancer do
     let(:enhancer) { described_class.new(marc: marc_record, resource: resource) }
     before do
       stub_catalog(bib_id: "2085282")
-      stub_catalog(bib_id: "2085282", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+      stub_catalog(bib_id: "2085282", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
     end
 
     context "when the record had the cico number in a 510 but with a suffix" do
