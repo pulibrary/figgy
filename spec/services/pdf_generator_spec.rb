@@ -287,7 +287,7 @@ RSpec.describe PDFGenerator do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"], source_metadata_identifier: "123456") }
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
         allow(IdentifierService).to receive(:url_for).and_call_original

@@ -34,7 +34,7 @@ module BibdataStubbing
     fixture_path
   end
 
-  def stub_bibdata(bib_id:, status: 200, content_type: CONTENT_TYPE_JSON_LD)
+  def stub_catalog(bib_id:, status: 200, content_type: CONTENT_TYPE_JSON_LD)
     url = bibdata_url(bib_id, content_type)
 
     if status == 200
@@ -99,7 +99,7 @@ module BibdataStubbing
     "https://findingaids.princeton.edu"
   end
 
-  def stub_bibdata_context
+  def stub_catalog_context
     stub_request(:get, "https://bibdata.princeton.edu/context.json")
       .to_return(
         body: file_fixture("files/bibdata/context.json").read,

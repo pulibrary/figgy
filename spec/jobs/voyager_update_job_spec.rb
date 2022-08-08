@@ -8,8 +8,8 @@ describe VoyagerUpdateJob do
   let(:ids) { resources.map(&:id) }
 
   before do
-    stub_bibdata(bib_id: "123456")
-    stub_bibdata(bib_id: "4609321")
+    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "4609321")
   end
   let(:resources) do
     [

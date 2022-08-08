@@ -114,8 +114,8 @@ RSpec.describe BulkIngestController do
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
-        stub_bibdata(bib_id: "123456")
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob)
@@ -163,7 +163,7 @@ RSpec.describe BulkIngestController do
           }
         allow(IngestFolderJob).to receive(:perform_later)
         stub_findingaid(pulfa_id: "AC044_c0003")
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "4609321")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob)
@@ -241,7 +241,7 @@ RSpec.describe BulkIngestController do
     # We do need coverage of the bibid extraction
     context "with one single-volume resource where the directory is the bibid" do
       before do
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "4609321")
       end
 
       it "ingests the directory as a single resource" do
@@ -366,7 +366,7 @@ RSpec.describe BulkIngestController do
 
     it "ingests two resources" do
       FileUtils.rm_rf(Rails.root.join("tmp", "storage#{ENV['TEST_ENV_NUMBER']}"))
-      stub_bibdata(bib_id: "4609321")
+      stub_catalog(bib_id: "4609321")
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
@@ -462,7 +462,7 @@ RSpec.describe BulkIngestController do
           resource_type: "scanned_resource",
           browse_everything: { "uploads" => [upload.uuid] }
         }
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
 
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
 

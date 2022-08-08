@@ -8,10 +8,10 @@ describe PulMetadataServices::BibRecord do
   let(:source) { file_fixture("files/bibdata/#{bib_id}.mrx").read }
 
   before do
-    stub_bibdata(bib_id: "1160682")
-    stub_bibdata(bib_id: "7214786")
-    stub_bibdata(bib_id: "345682")
-    stub_bibdata(bib_id: "10068705")
+    stub_catalog(bib_id: "1160682")
+    stub_catalog(bib_id: "7214786")
+    stub_catalog(bib_id: "345682")
+    stub_catalog(bib_id: "10068705")
   end
 
   describe "#formatted_fields_as_array" do

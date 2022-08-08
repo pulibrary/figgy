@@ -24,7 +24,7 @@ RSpec.describe CDL::CDLController, type: :controller do
     context "when logged in and already held" do
       it "redirects back to auth" do
         user = FactoryBot.create(:user)
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
         allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
         charged_items = [
@@ -46,7 +46,7 @@ RSpec.describe CDL::CDLController, type: :controller do
     context "when logged in not held" do
       it "creates a hold and redirects to auth" do
         user = FactoryBot.create(:user)
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
         allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
         charged_items = [
@@ -64,7 +64,7 @@ RSpec.describe CDL::CDLController, type: :controller do
       context "and it raises a stale error" do
         it "retries" do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           charge_manager = instance_double(CDL::ChargeManager)
           # Raise first time, return second time.
@@ -101,7 +101,7 @@ RSpec.describe CDL::CDLController, type: :controller do
       context "when logged in and not available" do
         it "sets a flash message and redirects back to the auth page" do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
           charged_items = [
@@ -120,7 +120,7 @@ RSpec.describe CDL::CDLController, type: :controller do
       context "when logged in and it's available" do
         it "charges the item and redirects to the auth page (which redirects to viewer)" do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
           FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)
@@ -136,7 +136,7 @@ RSpec.describe CDL::CDLController, type: :controller do
         context "and it raises a stale error" do
           it "retries" do
             user = FactoryBot.create(:user)
-            stub_bibdata(bib_id: "123456")
+            stub_catalog(bib_id: "123456")
             resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
             charge_manager = instance_double(CDL::ChargeManager)
             # Raise first time, return second time.
@@ -173,7 +173,7 @@ RSpec.describe CDL::CDLController, type: :controller do
     context "with a non-charging user logged in" do
       it "returns the availability" do
         user = FactoryBot.create(:user)
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
         allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
         sign_in user
@@ -190,7 +190,7 @@ RSpec.describe CDL::CDLController, type: :controller do
       it "returns the availability and expiration" do
         Timecop.freeze do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
           charged_items = [
@@ -213,7 +213,7 @@ RSpec.describe CDL::CDLController, type: :controller do
       it "returns charged false and available true" do
         Timecop.freeze do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
           charged_items = [
@@ -246,7 +246,7 @@ RSpec.describe CDL::CDLController, type: :controller do
     context "when logged in and charged" do
       it "removes the charge and redirects back to auth" do
         user = FactoryBot.create(:user)
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
         allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
         charged_items = [
@@ -266,7 +266,7 @@ RSpec.describe CDL::CDLController, type: :controller do
       context "and it raises a stale error" do
         it "retries" do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           charge_manager = instance_double(CDL::ChargeManager)
           # Raise first time, return second time.
@@ -288,7 +288,7 @@ RSpec.describe CDL::CDLController, type: :controller do
     context "when logged in and not charged" do
       it "redirects back to auth" do
         user = FactoryBot.create(:user)
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
         allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)

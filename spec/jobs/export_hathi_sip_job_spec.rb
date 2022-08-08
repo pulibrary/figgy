@@ -21,7 +21,7 @@ RSpec.describe ExportHathiSipJob do
 
   before do
     FileUtils.mkdir_p deposit_path
-    stub_bibdata(bib_id: "123456")
+    stub_catalog(bib_id: "123456")
   end
 
   after do

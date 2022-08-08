@@ -11,7 +11,7 @@ RSpec.describe ImportedMetadataIndexer do
     end
 
     before do
-      stub_bibdata(bib_id: source_id)
+      stub_catalog(bib_id: source_id)
     end
     it "applies remote metadata from bibdata to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])

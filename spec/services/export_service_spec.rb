@@ -17,7 +17,7 @@ RSpec.describe ExportService do
       let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", files: [file1]) }
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         described_class.export(scanned_resource)
       end
 
@@ -34,7 +34,7 @@ RSpec.describe ExportService do
       let(:multi_volume_work) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "4609321", member_ids: [vol1.id, vol2.id]) }
 
       before do
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "4609321")
         described_class.export(multi_volume_work)
       end
 
@@ -53,7 +53,7 @@ RSpec.describe ExportService do
       let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", files: [file1], pdf_type: ["gray"]) }
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
         file_set.original_file.width = 287

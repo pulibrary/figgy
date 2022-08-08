@@ -58,7 +58,7 @@ RSpec.describe ViewerController do
       context "and the resource is CDL eligible" do
         it "displays a CDL-specific login button" do
           allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "123456").and_return(["12345"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
 
           get :auth, params: { id: resource.id.to_s }
@@ -74,7 +74,7 @@ RSpec.describe ViewerController do
         it "displays a copyright statement and a check-out button" do
           user = FactoryBot.create(:user)
           allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "123456").and_return(["12345"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           sign_in user
 
@@ -88,7 +88,7 @@ RSpec.describe ViewerController do
       context "when the item is checked out to the user" do
         it "redirects to the viewer" do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
           charged_items = [
@@ -105,7 +105,7 @@ RSpec.describe ViewerController do
       context "when the item is unavailable and the user has a hold on the item" do
         it "displays a copyright statement and information about their hold" do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
           charged_items = [
@@ -132,7 +132,7 @@ RSpec.describe ViewerController do
       context "when the item is unavailable" do
         it "displays a copyright statement and a hold button" do
           user = FactoryBot.create(:user)
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456")
           allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
           charged_items = [

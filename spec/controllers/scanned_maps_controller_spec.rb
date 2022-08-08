@@ -139,7 +139,7 @@ RSpec.describe ScannedMapsController, type: :controller do
       end
 
       before do
-        stub_bibdata(bib_id: "5144620")
+        stub_catalog(bib_id: "5144620")
       end
 
       it "generates a resource with a valid geoblacklight document" do

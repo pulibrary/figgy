@@ -12,7 +12,7 @@ RSpec.describe Bagit::BagFactory, run_real_derivatives: true do
   let(:bag_path) { Rails.root.join("tmp", "test_bags") }
   let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], source_metadata_identifier: "123456", identifier: "ark:/88435/7d278t10z") }
   before do
-    stub_bibdata(bib_id: "123456")
+    stub_catalog(bib_id: "123456")
   end
   after do
     FileUtils.rm_rf(bag_path) if File.exist?(bag_path)

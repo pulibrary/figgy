@@ -48,21 +48,21 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return a resource by its bibid" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         type = described_class.new(nil, context)
         expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [scanned_resource.id]
       end
 
       it "can return a raster resource by its bibid" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         raster_resource = FactoryBot.create_for_repository(:raster_resource, source_metadata_identifier: "7214786")
         type = described_class.new(nil, context)
         expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [raster_resource.id]
       end
 
       it "can return a vector resource by its bibid" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         vector_resource = FactoryBot.create_for_repository(:vector_resource, source_metadata_identifier: "7214786")
         type = described_class.new(nil, context)
         expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [vector_resource.id]
@@ -75,7 +75,7 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         type = described_class.new(nil, context)
         expect(type.resources_by_bibid(bib_id: "7214786")).to eq []
@@ -93,8 +93,8 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return resources by its bibid" do
-        stub_bibdata(bib_id: "7214786")
-        stub_bibdata(bib_id: "8543429")
+        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "8543429")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
         type = described_class.new(nil, context)
@@ -108,8 +108,8 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_bibdata(bib_id: "7214786")
-        stub_bibdata(bib_id: "8543429")
+        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "8543429")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
         type = described_class.new(nil, context)
@@ -164,7 +164,7 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         FactoryBot.create_for_repository(:coin, coin_number: 1)
         FactoryBot.create_for_repository(:coin, coin_number: 2)
         type = described_class.new(nil, context)
@@ -183,14 +183,14 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return a resource by its bibid" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         type = described_class.new(nil, context)
         expect(type.resources_by_orangelight_id(id: "7214786").map(&:id)).to eq [scanned_resource.id]
       end
 
       it "can return a resource by its alma ID" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         type = described_class.new(nil, context)
         expect(type.resources_by_orangelight_id(id: "9972147863506421").map(&:id)).to eq [scanned_resource.id]
@@ -243,8 +243,8 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return resources by bibids" do
-        stub_bibdata(bib_id: "7214786")
-        stub_bibdata(bib_id: "8543429")
+        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "8543429")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
         type = described_class.new(nil, context)
@@ -252,8 +252,8 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return resources by BibIDs even if some are ingested without alma IDs" do
-        stub_bibdata(bib_id: "991234563506421")
-        stub_bibdata(bib_id: "8543429")
+        stub_catalog(bib_id: "991234563506421")
+        stub_catalog(bib_id: "8543429")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421")
         scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
 
@@ -270,7 +270,7 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return resources by bibid and coin_id" do
-        stub_bibdata(bib_id: "7214786")
+        stub_catalog(bib_id: "7214786")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         coin = FactoryBot.create_for_repository(:coin, coin_number: 45)
         type = described_class.new(nil, context)
@@ -284,8 +284,8 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_bibdata(bib_id: "7214786")
-        stub_bibdata(bib_id: "8543429")
+        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "8543429")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
         type = described_class.new(nil, context)

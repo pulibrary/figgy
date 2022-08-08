@@ -16,8 +16,8 @@ RSpec.feature "Scanned Resources" do
   end
 
   before do
-    stub_bibdata(bib_id: "4612596")
-    stub_bibdata(bib_id: "8543429")
+    stub_catalog(bib_id: "4612596")
+    stub_catalog(bib_id: "8543429")
     change_set.source_metadata_identifier = "4612596"
     change_set_persister.save(change_set: change_set)
     sign_in user

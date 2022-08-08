@@ -7,7 +7,7 @@ RSpec.describe ScannedMapChangeSet do
   let(:scanned_map) { ScannedMap.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "pending") }
   let(:form_resource) { scanned_map }
   before do
-    stub_bibdata(bib_id: "123456")
+    stub_catalog(bib_id: "123456")
   end
 
   it_behaves_like "a ChangeSet with EmbargoDate"

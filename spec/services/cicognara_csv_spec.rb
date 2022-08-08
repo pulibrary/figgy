@@ -17,7 +17,7 @@ RSpec.describe CicognaraCSV do
 
   describe "#values" do
     before do
-      stub_bibdata(bib_id: "2068747")
+      stub_catalog(bib_id: "2068747")
       stub_ezid(shoulder: "99999/fk4", blade: "4609321")
     end
 

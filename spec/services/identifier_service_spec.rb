@@ -16,7 +16,7 @@ RSpec.describe IdentifierService do
     let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: "123456", identifier: ark }
 
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       allow(described_class).to receive(:minter).and_return(minter)
       allow(described_class).to receive(:minter_user).and_return("pudiglib")
       allow(minter).to receive(:modify)
@@ -66,7 +66,7 @@ RSpec.describe IdentifierService do
     let(:ark) { "ark:/88435/jq085p05h" }
 
     before do
-      stub_bibdata(bib_id: "10001789")
+      stub_catalog(bib_id: "10001789")
       stub_ezid(shoulder: "88435", blade: "jq085p05h")
       allow(described_class).to receive(:minter).and_return(minter)
       allow(described_class).to receive(:minter_user).and_return("pudiglib")
@@ -94,7 +94,7 @@ RSpec.describe IdentifierService do
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: bib }
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
       end
 
       it "links to OrangeLight" do
