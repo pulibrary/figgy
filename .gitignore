@@ -9,6 +9,7 @@
 /.bundle
 /.byebug_history
 /.env.local
+/.env.test
 /coverage/*
 /db/*.sqlite3
 /log/*

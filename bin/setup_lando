@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+# This file preloads lando into .env.test, so the environment variables don't
+# have to be parsed for every core.
+require 'json'
+begin
+  lando_services = JSON.parse(`lando info --format json`, symbolize_names: true)
+  variables = { "LANDO_PRELOADED" => "1" }
+  lando_services.each do |service|
+    service[:external_connection]&.each do |key, value|
+      variables["lando_#{service[:service]}_conn_#{key}"] = value
+    end
+    next unless service[:creds]
+    service[:creds].each do |key, value|
+      variables["lando_#{service[:service]}_creds_#{key}"] = value
+    end
+  end
+  File.open(".env.test", "w") do |f|
+    variables.each do |key, value|
+      f.puts "#{key}=#{value}"
+    end
+  end
+rescue StandardError
+  puts "broke"
+  nil
+end

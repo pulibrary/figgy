@@ -102,7 +102,7 @@ If you'd like to run the test suite in parallel do the following:
 
 1. `bundle exec rake servers:start`
 1. `PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup`
-1. `DISABLE_SPRING=true RAILS_ENV=test bundle exec turbo_tests`
+1. `./bin/turbo_test`
 
 To run in parallel with working coverage, but worse output, do:
 
