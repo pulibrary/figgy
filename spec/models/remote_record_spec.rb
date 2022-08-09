@@ -96,7 +96,7 @@ RSpec.describe RemoteRecord, type: :model do
   describe ".source_metadata_url" do
     context "with a Voyager record ID" do
       it "provides a link to the catalog record" do
-        expect(described_class.source_metadata_url("4609321")).to eq "https://bibdata.princeton.edu/bibliographic/4609321"
+        expect(described_class.source_metadata_url("4609321")).to eq "https://catalog.princeton.edu/catalog/4609321.marcxml"
       end
     end
 

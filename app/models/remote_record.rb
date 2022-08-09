@@ -39,7 +39,7 @@ class RemoteRecord
   end
 
   def self.source_metadata_url(id)
-    return "#{Figgy.config[:catalog_url]}#{id}" if catalog?(id)
+    return "#{Figgy.config[:catalog_url]}#{id}.marcxml" if catalog?(id)
     "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}.xml" if pulfa?(id)
   end
 

@@ -171,7 +171,7 @@ RSpec.describe ManifestBuilder do
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
       expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png")
       expect(output["seeAlso"].length).to eq 2
-      expect(output["seeAlso"].last).to include "@id" => "https://bibdata.princeton.edu/bibliographic/123456", "format" => "text/xml"
+      expect(output["seeAlso"].last).to include "@id" => "https://catalog.princeton.edu/catalog/123456.marcxml", "format" => "text/xml"
 
       expect(output["service"]["label"]).to eq "Search within this item"
     end
