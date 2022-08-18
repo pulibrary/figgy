@@ -83,6 +83,20 @@ RSpec.describe Mutations::UpdateResource do
         expect(output[:errors]).to be_nil
         expect(output[:resource].member_ids).to eq [member2.id, member1.id]
       end
+
+      context "when there is a non-existant member id in the resource" do
+        it "does not error" do
+          member1 = FactoryBot.create_for_repository(:file_set)
+          member2 = FactoryBot.create_for_repository(:file_set)
+          id = Valkyrie::ID.new(SecureRandom.uuid)
+          resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [member1.id, member2.id, id])
+          mutation = create_mutation
+
+          output = mutation.resolve(id: resource.id, member_ids: [member2.id.to_s, member1.id.to_s])
+          expect(output[:errors]).to be_nil
+          expect(output[:resource].member_ids).to eq [member2.id, member1.id]
+        end
+      end
     end
   end
 

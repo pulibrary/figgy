@@ -49,7 +49,7 @@ class Mutations::UpdateResource < Mutations::BaseMutation
 
   def valid_member_ids?(change_set, attributes)
     return true if attributes[:member_ids].blank?
-    change_set_ids = change_set.resource.member_ids.map(&:to_s)
+    change_set_ids = query_service.custom_queries.find_persisted_member_ids(resource: change_set.resource)
     member_ids = attributes[:member_ids].map(&:to_s)
     return true if change_set_ids.sort == member_ids.sort
     change_set.errors.add(:member_ids, "can only be used to re-order.")
