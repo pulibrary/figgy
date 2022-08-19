@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class IngestableFile < Valkyrie::Resource
+  delegate_missing_to :opened_file
   attribute :file_path, Valkyrie::Types::String
   attribute :mime_type, Valkyrie::Types::String
   attribute :original_filename, Valkyrie::Types::String
@@ -33,6 +34,13 @@ class IngestableFile < Valkyrie::Resource
   end
 
   private
+
+    def opened_file
+      @opened_file ||=
+        begin
+          File.open(path)
+        end
+    end
 
     def copied_file_name
       return @copied_file_name if @copied_file_name
