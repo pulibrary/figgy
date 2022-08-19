@@ -120,6 +120,7 @@ class FileAppender
       original_filename = file.original_filename
       upload_options = file.try(:upload_options) || {}
       stored_file = storage_adapter.upload(file: file, resource: node, original_filename: original_filename, **upload_options)
+      file.try(:close)
       node.file_identifiers = node.file_identifiers + [stored_file.id]
       node
     rescue StandardError => error

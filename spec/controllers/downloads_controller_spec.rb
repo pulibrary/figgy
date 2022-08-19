@@ -6,10 +6,17 @@ RSpec.describe DownloadsController do
   let(:disk) { Valkyrie.config.storage_adapter }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: meta, storage_adapter: disk) }
   let(:sample_file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:file_contents) { sample_file.read }
   let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [sample_file]) }
   let(:file_set) { resource.member_ids.map { |id| meta.query_service.find_by(id: id) }.first }
   let(:file_node) { file_set.file_metadata.first }
   let(:user) { FactoryBot.create(:admin) }
+
+  before do
+    # Stash the contents in the let before the FileAppender closes the file
+    # handle.
+    file_contents
+  end
 
   describe "GET /downloads/:obj/file/:id" do
     context "when logged in" do
@@ -19,7 +26,7 @@ RSpec.describe DownloadsController do
 
       it "serves files that exist" do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
-        expect(response.body).to eq(sample_file.read)
+        expect(response.body).to eq(file_contents)
         expect(response.content_length).to eq(196_882)
         expect(response.media_type).to eq("image/tiff")
         expect(response.headers["Content-Disposition"]).to eq("inline; filename=\"example.tif\"; filename*=UTF-8''example.tif")
@@ -32,7 +39,7 @@ RSpec.describe DownloadsController do
 
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
 
-        expect(response.body).to eq(sample_file.read)
+        expect(response.body).to eq(file_contents)
         expect(response.content_length).to eq(196_882)
         expect(response.media_type).to eq("image/tiff")
         expect(response.headers["Content-Disposition"]).to eq("inline; filename=\"example.tif\"; filename*=UTF-8''example.tif")
@@ -88,7 +95,7 @@ RSpec.describe DownloadsController do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s }
         expect(response.content_length).to eq(196_882)
         expect(response.media_type).to eq("image/tiff")
-        expect(response.body).to eq(sample_file.read)
+        expect(response.body).to eq(file_contents)
       end
     end
 
@@ -98,7 +105,7 @@ RSpec.describe DownloadsController do
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: token.token }
         expect(response.content_length).to eq(196_882)
         expect(response.media_type).to eq("image/tiff")
-        expect(response.body).to eq(sample_file.read)
+        expect(response.body).to eq(file_contents)
       end
     end
 
@@ -213,7 +220,7 @@ RSpec.describe DownloadsController do
 
         expect(response.content_length).to eq(147_550)
         expect(response.media_type).to eq("audio/x-wav")
-        expect(response.body).to eq(sample_file.read)
+        expect(response.body).to eq(file_contents)
       end
     end
 

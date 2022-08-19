@@ -30,6 +30,7 @@ module Bagit
         file_identifiers.each do |file_identifier|
           file = Valkyrie::StorageAdapter.find_by(id: file_identifier)
           bag_file = storage_adapter.upload(file: file, original_filename: original_file.original_filename.first, resource: resource)
+          file.close
           resource.original_file.file_identifiers = [bag_file.id]
         end
         metadata_adapter.persister.save(resource: resource, external_resource: true)

@@ -48,14 +48,15 @@ class Preserver
       local_checksum = file_metadata.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
-
+      f = File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path)
       uploaded_file = storage_adapter.upload(
-        file: File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path),
+        file: f,
         original_filename: file_metadata.label.first,
         resource: resource,
         md5: local_md5_checksum,
         metadata: preservation_metadata
       )
+      f.close
       file_metadata.checksum = resource_binary_node.calculate_checksum
       unless file_metadata.file_identifiers.empty? || file_metadata.file_identifiers.include?(uploaded_file.id)
         CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))
@@ -95,6 +96,7 @@ class Preserver
         md5: local_md5_checksum,
         metadata: preservation_metadata
       )
+      temp_metadata_file.io.close
       metadata_node.file_identifiers = uploaded_file.id
       if preservation_object.metadata_node&.file_identifiers.present? && preservation_object.metadata_node.file_identifiers[0] != uploaded_file.id
         # Parent structure has changed, re-preserve children.
