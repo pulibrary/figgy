@@ -20,11 +20,16 @@ class MemberValidator < ActiveModel::Validator
 
     def validate_member(record)
       return true if Array.wrap(record.member_ids).first.blank?
+      return true unless record.changed?(:member_ids)
       valid_ids = record.member_ids.select { |id| valid_uuid?(id.to_s) }
       (record.member_ids - valid_ids).each do |member_id|
         record.errors.add(:member_ids, "#{member_id} is not a valid UUID")
       end
-      nonexistent_ids(valid_ids).each do |id|
+      # Check for any new member IDs that are pointed at nonexistent resources.
+      # Don't check old ones, there may be stale data in there and we don't want
+      # to prevent it saving for our users over that.
+      new_ids = valid_ids - record.resource.member_ids
+      nonexistent_ids(new_ids).each do |id|
         record.errors.add(:member_ids, "#{id} does not resolve to a resource")
       end
     end
