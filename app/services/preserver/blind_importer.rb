@@ -43,11 +43,13 @@ class Preserver::BlindImporter
       file_metadata.file_identifiers.map! do |file_identifier|
         file = source_storage_adapter.find_by(id: file_identifier)
         disk_path = file.disk_path
+        f = File.open(disk_path)
         uploaded_file = storage_adapter.upload(
           file: File.open(disk_path),
           original_filename: file_metadata.original_filename.first,
           resource: file_metadata
         )
+        f.close
         uploaded_file.id
       end
     end

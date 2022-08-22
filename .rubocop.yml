@@ -201,6 +201,7 @@ Metrics/MethodLength:
     - 'spec/support/stub_aspace.rb'
     - 'spec/services/manifest_builder_v3_spec.rb'
     - 'app/services/cdl/charge_manager.rb'
+    - 'app/services/preserver/blind_importer.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
