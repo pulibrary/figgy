@@ -32,7 +32,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :replaces, multiple: true, require: false
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::DateTime
+  property :embargo_date, multiple: false, required: false, type: ::Types::DateEastern
 
   # MARCRelator attributes
   Schema::MARCRelators.attributes.each { |field| property field }

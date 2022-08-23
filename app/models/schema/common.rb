@@ -13,7 +13,7 @@ module Schema
       {
         claimed_by: Valkyrie::Types::String,
         cached_parent_id: Valkyrie::Types::ID.optional,
-        embargo_date: Valkyrie::Types::DateTime.optional
+        embargo_date: ::Types::DateEastern.optional
       }
     end
 

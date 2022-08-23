@@ -30,7 +30,7 @@ RSpec.describe Schema::Common do
       resource.holding_location = "test location"
       resource.ocr_language = "test value4"
       resource.resource_type = "test format"
-      resource.embargo_date = Time.zone.now
+      resource.embargo_date = Time.zone.now.in_time_zone("Eastern Time (US & Canada)")
     end
 
     it "mixes in the module" do
