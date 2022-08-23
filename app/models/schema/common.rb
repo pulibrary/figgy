@@ -90,6 +90,7 @@ module Schema
       end
       attribute :claimed_by, Valkyrie::Types::String
       attribute :cached_parent_id, Valkyrie::Types::ID.optional
+      attribute :embargo_date, Valkyrie::Types::DateTime.optional
     end
   end
 end
