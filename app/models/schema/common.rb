@@ -6,6 +6,18 @@ module Schema
     extend ActiveSupport::Concern
 
     def self.attributes
+      untyped_attributes + typed_attributes.keys
+    end
+
+    def self.typed_attributes
+      {
+        claimed_by: Valkyrie::Types::String,
+        cached_parent_id: Valkyrie::Types::ID.optional,
+        embargo_date: Valkyrie::Types::DateTime.optional
+      }
+    end
+
+    def self.untyped_attributes
       Schema::IIIF.attributes +
         Schema::MARCRelators.attributes +
         [
@@ -85,12 +97,13 @@ module Schema
     end
 
     included do
-      Common.attributes.each do |common_attribute|
+      Common.untyped_attributes.each do |common_attribute|
         attribute common_attribute
       end
-      attribute :claimed_by, Valkyrie::Types::String
-      attribute :cached_parent_id, Valkyrie::Types::ID.optional
-      attribute :embargo_date, Valkyrie::Types::DateTime.optional
+
+      Common.typed_attributes.each do |name, type|
+        attribute name, type
+      end
     end
   end
 end
