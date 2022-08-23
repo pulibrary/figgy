@@ -1,3 +1,4 @@
 <div>
-  <lux-date-picker id="embargo-date" name="embargo_date" label="Embargo Date" mode="single" />
+  <lux-date-picker id="embargo-date" name="embargo_date_string" label="Embargo Date" mode="single" <% if f.embargo_date_string %>:defaultDate="<%= f.embargo_date_string %>"/>
+  <%# TODO: add a dynamic placeholder date, one year in the future? %>
 </div>
