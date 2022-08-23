@@ -10315,10 +10315,10 @@ lru-cache@^7.4.4, lru-cache@^7.5.1, lru-cache@^7.7.1:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.13.1.tgz#267a81fbd0881327c46a81c5922606a2cfe336c4"
   integrity sha512-CHqbAq7NFlW3RSnoWXLJBxCWaZVBrfa9UEHId2M3AW8iEBurbqduNexEUCGc3SHc6iCYXNJCDi903LajSVAEPQ==
 
-lux-design-system@3.1.5:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-3.1.5.tgz#c39246a9c01b8dc5fc87ae4b338e2ea02c702b5d"
-  integrity sha512-dSwQc4j5KbTPwi5uZa2INkubYcp5INVoWK5ISTeKVUDiIQywfw4prCXVTldf0vInsXbZPR4pYA5YX1xP1pxR3w==
+lux-design-system@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-4.0.1.tgz#b57c2fe3f9ee84b28c464b9d9bc3d55ed44f8d07"
+  integrity sha512-vW3QFJjd4GDC+3mpSCnDq/Pk1LMp7+X3D9XVMwDoCpalhwr4eNsz1JmnwxjqObsVSbobvSCgT0iqir5Hf/b8xQ==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.4.5"
