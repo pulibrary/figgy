@@ -41,6 +41,13 @@ RSpec.describe ScannedResourceChangeSet do
     end
   end
 
+  describe "#embargo_date" do
+    let(:form_resource) { scanned_resource.new(embargo_date: Time.zone.now) }
+    it "uses Eastern time zone" do
+      expect(change_set.embargo_date.time_zone.name).to eq "Eastern Time (US & Canada)"
+    end
+  end
+
   describe "#holding_location" do
     it "converts values to RDF::URIs" do
       change_set.validate(holding_location: "http://test.com/")
