@@ -66,7 +66,8 @@ class ScannedResourceChangeSet < ChangeSet
       :ocr_language,
       :portion_note,
       :nav_date,
-      :append_id
+      :append_id,
+      :embargo_date
     ]
   end
 end
