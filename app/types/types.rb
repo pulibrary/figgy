@@ -19,10 +19,14 @@ module Types
   DateEastern = Dry::Types::Nominal
                 .new(ActiveSupport::TimeWithZone)
                 .constructor do |input|
-    m, d, y = input.split("/")
-    raise(::Types::CoercionError, "expected format is M/D/YYYY") unless y.length == 4
-    ::Time.use_zone("Eastern Time (US & Canada)") do
-      ::Time.zone.parse("#{y}-#{m}-#{d}").midnight
+    if input.nil?
+      nil
+    else
+      m, d, y = input.split("/")
+      raise(::Types::CoercionError, "expected format is M/D/YYYY") unless y.length == 4
+      ::Time.use_zone("Eastern Time (US & Canada)") do
+        ::Time.zone.parse("#{y}-#{m}-#{d}").midnight
+      end
     end
   end
 end

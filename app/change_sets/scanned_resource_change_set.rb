@@ -32,7 +32,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :replaces, multiple: true, require: false
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::DateTime
+  property :embargo_date, multiple: false, required: false, type: ::Types::DateEastern
 
   # MARCRelator attributes
   Schema::MARCRelators.attributes.each { |field| property field }
@@ -52,14 +52,8 @@ class ScannedResourceChangeSet < ChangeSet
   validates_with RightsStatementValidator
   validates :visibility, presence: true
 
-  def embargo_date_string=(value)
-    self.embargo_date = Time.use_zone("Eastern Time (US & Canada)") do
-      Time.zone.parse(value).at_midnight
-    end
-  end
-
-  def embargo_date_string
-    embargo_date.strftime("%m/%d/%Y")
+  def embargo_date
+    super&.strftime("%m/%d/%Y")
   end
 
   def primary_terms
@@ -77,7 +71,7 @@ class ScannedResourceChangeSet < ChangeSet
       :portion_note,
       :nav_date,
       :append_id,
-      :embargo_date_string
+      :embargo_date
     ]
   end
 end
