@@ -53,6 +53,7 @@ class ScannedResourceChangeSet < ChangeSet
   validates :visibility, presence: true
 
   # use the format preferred by the lux datepicker
+  # TODO: should this have a different name?
   def embargo_date
     super&.strftime("%-m/%-d/%Y")
   end
