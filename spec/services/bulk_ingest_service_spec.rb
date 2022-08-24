@@ -240,7 +240,8 @@ RSpec.describe BulkIngestService do
           file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          collection: coll
+          collection: coll,
+          depositor: "tpend"
         )
 
         updated_collection = query_service.find_by(id: coll.id)
@@ -251,8 +252,9 @@ RSpec.describe BulkIngestService do
         resource = decorated_collection.members.to_a.first
         expect(resource.source_metadata_identifier).to include(bib)
         expect(resource.local_identifier).to include(local_id)
-        expect(resource.viewing_hint).to eq ["paged"]
+        expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
         expect(resource.member_ids.length).to eq 2 # color.tif and gray.tif
+        expect(resource.depositor).to eq ["tpend"]
       end
     end
 

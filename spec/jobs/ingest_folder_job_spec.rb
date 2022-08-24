@@ -65,7 +65,8 @@ RSpec.describe IngestFolderJob do
           directory: single_dir,
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          member_of_collection_ids: [coll.id]
+          member_of_collection_ids: [coll.id],
+          depositor: "tpend"
         )
 
         expect(ingest_service).to have_received(:attach_dir).with(
@@ -74,7 +75,8 @@ RSpec.describe IngestFolderJob do
           file_filters: [".tif", ".wav", ".pdf", ".zip"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          member_of_collection_ids: [coll.id]
+          member_of_collection_ids: [coll.id],
+          depositor: "tpend"
         )
       end
     end
