@@ -42,9 +42,9 @@ RSpec.describe ScannedResourceChangeSet do
   end
 
   describe "#embargo_date" do
-    let(:form_resource) { scanned_resource.new(embargo_date: Time.zone.now) }
+    let(:form_resource) { scanned_resource.new(embargo_date: "1/13/2023") }
     it "uses Eastern time zone" do
-      expect(change_set.embargo_date.time_zone.name).to eq "Eastern Time (US & Canada)"
+      expect(change_set.resource.embargo_date.time_zone.name).to eq "Eastern Time (US & Canada)"
     end
   end
 
