@@ -22,7 +22,7 @@ module Types
                 .constructor do |input|
     if input.nil?
       nil
-    elsif input.acts_like_time?
+    elsif input.try(:acts_like_time?)
       raise(::Types::CoercionError, "Provide string as M/D/YYYY or Time in zone: #{EASTERN_ZONE}") unless input.time_zone.name == EASTERN_ZONE
       input
     else

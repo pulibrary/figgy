@@ -52,8 +52,9 @@ class ScannedResourceChangeSet < ChangeSet
   validates_with RightsStatementValidator
   validates :visibility, presence: true
 
+  # use the format preferred by the lux datepicker
   def embargo_date
-    super&.strftime("%m/%d/%Y")
+    super&.strftime("%-m/%-d/%Y")
   end
 
   def primary_terms
