@@ -46,12 +46,19 @@ class BulkIngestService
     # Assign a title if source_metadata_identifier is not set
     title = [directory_path.basename]
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
+    attributes.merge!(figgy_metadata_file_attributes(base_path: directory_path))
     resource = find_or_create_by(property: property, value: file_name, **attributes)
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
     attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
   end
 
   private
+
+    def figgy_metadata_file_attributes(base_path:)
+      figgy_metadata_path = base_path.join("figgy_metadata.json")
+      return {} unless figgy_metadata_path.exist?
+      JSON.parse(figgy_metadata_path.read, symbolize_names: true)
+    end
 
     # Generate an absolute path to a file system node (i. e. directories, files, links, and pipes)
     # @param directory_path [String] the path to the file system node
