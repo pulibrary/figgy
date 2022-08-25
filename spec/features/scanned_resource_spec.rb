@@ -14,9 +14,8 @@ RSpec.feature "Scanned Resource" do
     visit new_scanned_resource_path
 
     fill_in "Title", with: "Test Title"
-    # fill_in
+    fill_in "Embargo Date", with: "1/14/2025"
     click_button "Save"
-
     expect(page).to have_content "Embargo Date"
   end
 end
