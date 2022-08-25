@@ -17,7 +17,8 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
            :rights_statement,
            :actor,
            :holding_location, # suppressed in superclass, but added back in with Schema::Common
-           :downloadable
+           :downloadable,
+           :cached_parent
 
   display_in_manifest displayed_attributes, :location
   suppress_from_manifest Schema::IIIF.attributes,
