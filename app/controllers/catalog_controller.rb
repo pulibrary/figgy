@@ -76,6 +76,10 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+    # Ensures that JSON representations of resources can be retrieved using
+    # the path /catalog/:id/raw
+    config.raw_endpoint.enabled = true
+
     # Turn off search session tracking
     # Interferes with thumbnail display in FileSet manager
     config.track_search_session = false
