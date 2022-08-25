@@ -23,11 +23,12 @@ module Types
     if input.nil?
       nil
     elsif input.try(:acts_like_time?)
-      # TODO: test how it behaves when passed a DateTime. Maybe roll that into
-      # the string behavior? Use a check other than acts_like_time? here?
-      # ::Time.parse(input.to_s).in_time_zone("Eastern Time (US & Canada)")
-      raise(::Types::CoercionError, "Provide string as M/D/YYYY or Time in zone: #{EASTERN_ZONE}") unless input.time_zone.name == EASTERN_ZONE
-      input
+      if input.class == ::DateTime
+        ::Time.parse(input.to_s).in_time_zone("Eastern Time (US & Canada)")
+      else
+        raise(::Types::CoercionError, "Provide string as M/D/YYYY or Time in zone: #{EASTERN_ZONE}") unless input.time_zone.name == EASTERN_ZONE
+        input
+      end
     else
       m, d, y = input.split("/")
       raise(::Types::CoercionError, "Provide string as M/D/YYYY or Time in zone: #{EASTERN_ZONE}") unless y.length == 4

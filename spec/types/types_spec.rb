@@ -19,7 +19,7 @@ RSpec.describe Types do
     end
   end
 
-  context "when input is a Time" do
+  context "when input is a TimeWithZone" do
     it "accepts a Time object if it's in eastern time zone already" do
       time = Time.zone.now.in_time_zone("Eastern Time (US & Canada)")
       date_eastern = Types::DateEastern.call(time)
@@ -29,6 +29,15 @@ RSpec.describe Types do
     it "errors if it's not in the eastern time zone" do
       time = Time.zone.now
       expect { Types::DateEastern.call(time) }.to raise_error(Types::CoercionError)
+    end
+  end
+
+  context "when input is a DateTime" do
+    it "coerces it if it's in eastern time zone already" do
+      time = Time.zone.now.in_time_zone("Eastern Time (US & Canada)")
+      date_time = DateTime.parse(time.to_s)
+      date_eastern = Types::DateEastern.call(date_time)
+      expect(date_eastern).to be_a ActiveSupport::TimeWithZone
     end
   end
 end
