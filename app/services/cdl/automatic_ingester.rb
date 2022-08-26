@@ -14,6 +14,7 @@ module CDL
 
     def run!
       Dir.glob(root_path.join("*.pdf")).each do |file|
+        Rails.logger.info("AutomaticIngester evaluating #{file} for CDL ingest")
         file = Pathname.new(file)
         next unless RemoteRecord.bibdata?(file.basename(".*").to_s)
         next unless Time.current - File.mtime(file.to_s) > 1.hour
