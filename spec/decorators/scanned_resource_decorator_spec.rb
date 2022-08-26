@@ -37,6 +37,12 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.imported_created).to eq ["1970"]
       end
     end
+    context "with un-parsable date" do
+      let(:imported_metadata) { [{ created: "1941/1942-01-28" }] }
+      it "returns a nil value" do
+        expect(decorator.imported_created).to eq []
+      end
+    end
   end
 
   describe "#human_readable_type" do
