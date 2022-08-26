@@ -148,7 +148,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
     output = imported_attribute(:created)
     return if output.blank?
     # we know these will always be iso8601 so if there's a slash it's a range
-    return output.map { |entry| display_date_range(entry) } if output.to_s.include? "/"
+    return output.map { |entry| display_date_range(entry) }.compact if output.to_s.include? "/"
     output.map do |date|
       date_string(date)
     end
@@ -195,5 +195,7 @@ class ScannedResourceDecorator < Valkyrie::ResourceDecorator
       dates = date_value.to_s.split("/")
       dates.map! { |date| Date.parse(date).year }
       dates.join "-"
+    rescue Date::Error
+      nil
     end
 end
