@@ -13,6 +13,7 @@ RSpec.describe ScannedResourceChangeSet do
   end
 
   it_behaves_like "a ChangeSet"
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "validations" do
     context "when neither title or metadata identifier is set" do
@@ -38,18 +39,6 @@ RSpec.describe ScannedResourceChangeSet do
         change_set.validate(state: "takedown")
         expect(change_set).not_to be_valid
       end
-    end
-  end
-
-  describe "#embargo_date" do
-    let(:form_resource) { scanned_resource.new(embargo_date: "1/13/2023") }
-
-    it "provides a string for the form to use" do
-      expect(change_set.embargo_date).to eq "1/13/2023"
-    end
-
-    it "stores a Time on the resource" do
-      expect(change_set.resource.embargo_date.time_zone.name).to eq "Eastern Time (US & Canada)"
     end
   end
 
