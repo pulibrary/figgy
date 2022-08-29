@@ -180,11 +180,12 @@ class BulkIngestService
         end
       end
       # Include figgy_metadata if it exists.
-      if path.join("figgy_metadata.json").exist?
-        file_paths += [path.join("figgy_metadata.json")]
-      end
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
+      file_paths.sort!
+      if path.join("figgy_metadata.json").exist?
+        file_paths = [path.join("figgy_metadata.json")] + file_paths
+      end
 
       BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource, preserve_file_names: preserve_file_names).to_a
     end
@@ -193,7 +194,7 @@ class BulkIngestService
     class BulkFilePathConverter
       attr_reader :file_paths, :parent_resource, :preserve_file_names
       def initialize(file_paths:, parent_resource:, preserve_file_names: false)
-        @file_paths = file_paths.sort
+        @file_paths = file_paths
         @parent_resource = parent_resource
         @preserve_file_names = preserve_file_names
       end
@@ -208,17 +209,22 @@ class BulkIngestService
 
       def to_a
         nodes = []
-        file_paths.each_with_index do |f, idx|
+        count = 0
+        file_paths.each do |f|
           basename = File.basename(f)
           mime_type = mime_type(basename)
           service_targets = "tiles" if raster_resource_parent? && mosaic_service_target?(basename)
+          file_title = file_title(basename, mime_type, count)
+          # Only increment the count to label files if this one was named as a
+          # number.
+          count += 1 if Array.wrap(file_title).first.to_i.to_s == file_title
           nodes << IngestableFile.new(
             file_path: f,
             mime_type: mime_type.content_type,
             original_filename: basename,
             copyable: true,
             container_attributes: {
-              title: file_title(basename, mime_type, idx),
+              title: file_title,
               service_targets: service_targets
             }
           )
@@ -264,7 +270,7 @@ class BulkIngestService
       end
 
       def preserved_file_name_mime_types
-        ["audio/x-wav"]
+        ["audio/x-wav", "application/json"]
       end
     end
 

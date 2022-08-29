@@ -255,6 +255,11 @@ RSpec.describe BulkIngestService do
         expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
         expect(resource.member_ids.length).to eq 3 # color.tif, gray.tif, and figgy_metadata.json
         expect(resource.depositor).to eq ["tpend"]
+
+        first_member = Wayfinder.for(resource).members.first
+        expect(first_member.title).to eq ["figgy_metadata.json"]
+        second_member = Wayfinder.for(resource).members.second
+        expect(second_member.title).to eq ["1"]
       end
     end
 
