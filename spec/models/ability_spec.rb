@@ -137,6 +137,17 @@ describe Ability do
     FactoryBot.create_for_repository(:complete_playlist, user: creating_user, recording: complete_recording)
   end
 
+  let(:embargoed_scanned_resource) do
+    # Future date
+    date = (Time.zone.today + 1).strftime("%-m/%-d/%Y")
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, embargo_date: date, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
+  end
+
+  let(:out_of_embargo_scanned_resource) do
+    date = "1/1/1999"
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, embargo_date: date, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
+  end
+
   let(:complete_recording) do
     FactoryBot.create_for_repository(:complete_recording, user: creating_user, files: [audio_file])
   end
@@ -297,6 +308,14 @@ describe Ability do
       is_expected.to be_able_to(:download, no_public_download_open_file)
       is_expected.to be_able_to(:download, token_downloadable_audio_file)
       is_expected.to be_able_to(:refresh_remote_metadata, private_scanned_resource)
+
+      # Resources with embargo_date
+      is_expected.to be_able_to(:read, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:manifest, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:discover, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:read, embargoed_scanned_resource)
+      is_expected.to be_able_to(:manifest, embargoed_scanned_resource)
+      is_expected.to be_able_to(:discover, embargoed_scanned_resource)
     }
 
     context "when index read-only mode is on" do
@@ -435,6 +454,14 @@ describe Ability do
       is_expected.not_to be_able_to(:create, Role.new)
       is_expected.not_to be_able_to(:destroy, role)
       is_expected.not_to be_able_to(:refresh_remote_metadata, :json_document)
+
+      # Resources with embargo_date
+      is_expected.to be_able_to(:read, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:manifest, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:discover, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:read, embargoed_scanned_resource)
+      is_expected.to be_able_to(:manifest, embargoed_scanned_resource)
+      is_expected.to be_able_to(:discover, embargoed_scanned_resource)
     }
 
     context "when read-only mode is on" do
@@ -616,6 +643,14 @@ describe Ability do
       is_expected.to be_able_to(:download, reading_room_zip_file_with_metadata)
       # Unable to download zip files I'm not a collection restricted viewer for.
       is_expected.not_to be_able_to(:download, reading_room_ineligible_zip_file_with_metadata)
+
+      # Resources with embargo_date
+      is_expected.to be_able_to(:read, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:manifest, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:discover, out_of_embargo_scanned_resource)
+      is_expected.not_to be_able_to(:read, embargoed_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, embargoed_scanned_resource)
+      is_expected.not_to be_able_to(:discover, embargoed_scanned_resource)
     }
 
     context "when index read-only mode is on" do
@@ -890,6 +925,14 @@ describe Ability do
       is_expected.to be_able_to(:discover, reading_room_collection_restricted_viewer_scanned_resource)
       is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource)
       is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource.decorate.members.first)
+
+      # Resources with embargo_date
+      is_expected.to be_able_to(:read, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:manifest, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:discover, out_of_embargo_scanned_resource)
+      is_expected.not_to be_able_to(:read, embargoed_scanned_resource)
+      is_expected.not_to be_able_to(:manifest, embargoed_scanned_resource)
+      is_expected.not_to be_able_to(:discover, embargoed_scanned_resource)
     }
 
     context "when accessing figgy via a campus IP" do
