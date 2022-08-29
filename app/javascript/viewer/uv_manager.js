@@ -125,8 +125,16 @@ export default class UVManager {
     return this.manifest.replace('/manifest', '').replace(/.*\//, '')
   }
 
+  get isFiggyManifest () {
+    return this.manifest.includes('concern') && this.manifest.includes('/manifest')
+  }
+
   get configURI () {
-    return '/viewer/config/' + this.manifest.replace('/manifest', '').replace(/.*\//, '') + '.json'
+    if (this.isFiggyManifest) {
+      return '/viewer/config/' + this.manifest.replace('/manifest', '').replace(/.*\//, '') + '.json'
+    } else {
+      return this.urlDataProvider.get('config')
+    }
   }
 
   processTitle (jqXHR) {
