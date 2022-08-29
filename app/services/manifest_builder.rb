@@ -276,7 +276,8 @@ class ManifestBuilder
           "application/xml",
           "application/xml; schema=mets",
           "application/xml; schema=mods",
-          "application/xml; schema=pbcore"
+          "application/xml; schema=pbcore",
+          "application/json; charset=ISO-8859-1"
         ]
         (ignore_list & Array.wrap(mime_type)).empty?
       end

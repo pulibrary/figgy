@@ -179,6 +179,10 @@ class BulkIngestService
           results.reduce(:|)
         end
       end
+      # Include figgy_metadata if it exists.
+      if path.join("figgy_metadata.json").exist?
+        file_paths += [path.join("figgy_metadata.json")]
+      end
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
 
