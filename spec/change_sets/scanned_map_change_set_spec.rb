@@ -2,8 +2,8 @@
 require "rails_helper"
 
 RSpec.describe ScannedMapChangeSet do
-  let(:resource_klass) { ScannedMap }
   subject(:change_set) { described_class.new(form_resource) }
+  let(:resource_klass) { ScannedMap }
   let(:scanned_map) { ScannedMap.new(title: "Test", rights_statement: "Stuff", visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "pending") }
   let(:form_resource) { scanned_map }
   before do

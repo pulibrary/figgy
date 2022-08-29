@@ -30,7 +30,7 @@ RSpec.describe Schema::Common do
       resource.holding_location = "test location"
       resource.ocr_language = "test value4"
       resource.resource_type = "test format"
-      resource.embargo_date = Time.zone.now.in_time_zone("Eastern Time (US & Canada)")
+      resource.embargo_date = "8/29/2022"
     end
 
     it "mixes in the module" do
@@ -52,7 +52,7 @@ RSpec.describe Schema::Common do
       expect(resource.holding_location).to include "test location"
       expect(resource.ocr_language).to include "test value4"
       expect(resource.resource_type).to include "test format"
-      expect(resource.embargo_date).to be_a Time
+      expect(resource.embargo_date).to eq "8/29/2022"
     end
   end
 end
