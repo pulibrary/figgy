@@ -658,7 +658,7 @@ RSpec.describe ManifestBuilder do
       stub_bibdata(bib_id: "123456")
     end
 
-    it "builds a IIIF document without the mets file", run_real_characterization: true do
+    it "builds a IIIF document without the JSON file", run_real_characterization: true do
       output = manifest_builder.build
       expect(output["sequences"]).to be_nil
     end
