@@ -7,7 +7,7 @@ RSpec.describe FindResourcesWithoutMembers do
   let(:coin2) { FactoryBot.create_for_repository(:coin, member_ids: [Valkyrie::ID.new("foo")]) }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
 
-  describe "#find_by_property_and_model" do
+  describe "#find_resources_without_members" do
     context "when no objects have the string in that property" do
       it "returns no results" do
         coin1

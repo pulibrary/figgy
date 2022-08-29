@@ -420,7 +420,8 @@ Rails.application.config.to_prepare do
     FindBySourceMetadataIdentifier,
     MosaicFingerprintQuery,
     MosaicFileSetQuery,
-    FindPersistedMemberIds
+    FindPersistedMemberIds,
+    FindResourcesWithExpiredEmbargoes
   ].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
