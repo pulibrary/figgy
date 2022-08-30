@@ -42,7 +42,7 @@ describe('UVManager', () => {
       delete global.createUV
     }
   })
-  function buildMocks (status) {
+  function buildMocks (status, externalManifest = false) {
     // Mock jQuery
     const clickable = { click: () => clickable, on: () => clickable, is: () => clickable, outerHeight: () => clickable, width: () => clickable, height: () => clickable, hide: () => clickable, show: () => clickable, children: () => clickable }
     global.$ = jest.fn().mockImplementation(() => clickable)
@@ -54,7 +54,15 @@ describe('UVManager', () => {
       if (status !== 200) { return jQ.Deferred().reject(data, status, jqxhr) } else { return jQ.Deferred().resolve(data, status, jqxhr) }
     })
     const getResult = jest.fn().mockImplementation(function (k) {
-      if (k === 'manifest') { return 'https://localhost/12345/manifest' } else { return null }
+      if (k === 'manifest') {
+        if (externalManifest === true) {
+          return 'https://example.org/other/iiif/manifest'
+        } else {
+          return 'https://localhost/concern/scanned_resources/12345/manifest'
+        }
+      } else if (k === 'config') {
+        return 'https://figgy.princeton.edu/uv/uv_config.json'
+      } else { return null }
     })
     // Mock UV Provider
     const provider = jest.fn().mockImplementation(() => {
@@ -76,6 +84,14 @@ describe('UVManager', () => {
       await uvManager.initialize()
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
       expect(LeafletViewer).not.toHaveBeenCalled()
+    })
+    it('falls back to a default viewer URI if not using a figgy manifest', async () => {
+      document.body.innerHTML = initialHTML
+      buildMocks(401, true)
+
+      // Initialize
+      const uvManager = new UVManager()
+      expect(uvManager.configURI).toEqual('https://figgy.princeton.edu/uv/uv_config.json')
     })
   })
 })
