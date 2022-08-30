@@ -1015,6 +1015,35 @@ describe Ability do
         is_expected.not_to be_able_to(:download, vector_file)
       }
     end
+
+    context "when an embargo date is set on a resource" do
+      let(:embargoed_scanned_resource) do
+        date = "8/30/2022"
+        FactoryBot.create_for_repository(:complete_open_scanned_resource, embargo_date: date, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
+      end
+
+      context "and the server time is one hour before midnight the previous day" do
+        before { Timecop.freeze(Time.zone.local(2022, 8, 29, 23, 0, 0)) }
+        after { Timecop.return }
+
+        it {
+          is_expected.not_to be_able_to(:read, embargoed_scanned_resource)
+          is_expected.not_to be_able_to(:manifest, embargoed_scanned_resource)
+          is_expected.not_to be_able_to(:discover, embargoed_scanned_resource)
+        }
+      end
+
+      context "and the server time is midnight on the embargo release day" do
+        before { Timecop.freeze(Time.zone.local(2022, 8, 30, 0, 0, 0)) }
+        after { Timecop.return }
+
+        it {
+          is_expected.to be_able_to(:read, embargoed_scanned_resource)
+          is_expected.to be_able_to(:manifest, embargoed_scanned_resource)
+          is_expected.to be_able_to(:discover, embargoed_scanned_resource)
+        }
+      end
+    end
   end
 
   describe "token auth" do
