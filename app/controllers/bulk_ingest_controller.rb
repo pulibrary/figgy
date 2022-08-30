@@ -69,6 +69,7 @@ class BulkIngestController < ApplicationController
   end
 
   def browse_everything_files
+    authorize! :create, resource_class
     unless files_to_upload?
       flash[:alert] = "Please select some files to ingest."
       return redirect_to bulk_ingest_show_path
@@ -110,7 +111,8 @@ class BulkIngestController < ApplicationController
         member_of_collection_ids: collection_ids,
         state: params[:workflow][:state],
         visibility: params[:visibility],
-        preserve_file_names: params[:preserve_file_names] == "1"
+        preserve_file_names: params[:preserve_file_names] == "1",
+        depositor: current_user&.uid
       }
     end
 

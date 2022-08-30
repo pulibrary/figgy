@@ -222,6 +222,47 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "when subdirectories have a figgy_metadata.json" do
+      let(:logger) { Logger.new(nil) }
+      let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single_figgy_metadata") }
+      let(:bib) { "4609321" }
+      let(:local_id) { "cico:xyz" }
+      let(:replaces) { "pudl0001/4609321/331" }
+      let(:coll) { FactoryBot.create_for_repository(:collection) }
+      before do
+        stub_bibdata(bib_id: "4609321")
+        stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+      end
+
+      it "applies that metadata" do
+        ingester.attach_dir(
+          base_directory: single_dir,
+          file_filters: [".tif"],
+          source_metadata_identifier: bib,
+          local_identifier: local_id,
+          collection: coll,
+          depositor: "tpend"
+        )
+
+        updated_collection = query_service.find_by(id: coll.id)
+        decorated_collection = updated_collection.decorate
+        expect(decorated_collection.members.to_a.length).to eq 1
+        expect(decorated_collection.members.first.member_ids.length).to eq 3
+
+        resource = decorated_collection.members.to_a.first
+        expect(resource.source_metadata_identifier).to include(bib)
+        expect(resource.local_identifier).to include(local_id)
+        expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
+        expect(resource.member_ids.length).to eq 3 # color.tif, gray.tif, and figgy_metadata.json
+        expect(resource.depositor).to eq ["tpend"]
+
+        first_member = Wayfinder.for(resource).members.first
+        expect(first_member.title).to eq ["figgy_metadata.json"]
+        second_member = Wayfinder.for(resource).members.second
+        expect(second_member.title).to eq ["1"]
+      end
+    end
+
     context "when ingesting a RasterSet" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: RasterResource) }
       it "ingests a RasterSet with file_sets marked as mosaic service targets" do

@@ -25,15 +25,16 @@ RSpec.describe BulkIngestController do
     end
   end
 
+  let(:user) { FactoryBot.create(:admin) }
+
+  before do
+    sign_in user if user
+  end
+
   describe "GET #show" do
-    let(:user) { FactoryBot.create(:admin) }
     let(:persister) { adapter.persister }
 
     context "when logged in" do
-      before do
-        sign_in user if user
-      end
-
       it "assigns workflow states based on the resource type" do
         get :show, params: { resource_type: "scanned_maps" }
         expect(assigns(:states)).to eq ["pending", "final_review", "complete", "takedown", "flagged"]
@@ -47,6 +48,7 @@ RSpec.describe BulkIngestController do
     end
 
     context "when not logged in" do
+      let(:user) { nil }
       it "redirects to login" do
         get :show, params: { resource_type: "scanned_maps" }
         expect(response).to redirect_to("/users/auth/cas")
@@ -80,6 +82,14 @@ RSpec.describe BulkIngestController do
     before do
       # Cleanup happens in the IngestFolderJob, stubbed out in these tests
       FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
+    end
+
+    context "when not logged in" do
+      let(:user) { nil }
+      it "requests authorization" do
+        post :browse_everything_files, params: { resource_type: "scanned_resource" }
+        expect(response).to redirect_to("/users/auth/cas")
+      end
     end
 
     context "Many Multi-volume works with a parent directory" do
@@ -127,7 +137,8 @@ RSpec.describe BulkIngestController do
               state: "pending",
               visibility: "open",
               member_of_collection_ids: ["4609321"],
-              source_metadata_identifier: "123456"
+              source_metadata_identifier: "123456",
+              depositor: user.uid
             )
           )
       end
@@ -205,8 +216,10 @@ RSpec.describe BulkIngestController do
         browse_everything: browse_everything
       }
     end
+    let(:user) { FactoryBot.create(:admin) }
 
     before do
+      sign_in user if user
       allow(upload_file).to receive(:purge_bytestream)
       allow(upload_file).to receive(:download).and_return(file.read)
       allow(upload_file).to receive(:bytestream).and_return(bytestream)

@@ -46,12 +46,19 @@ class BulkIngestService
     # Assign a title if source_metadata_identifier is not set
     title = [directory_path.basename]
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
+    attributes.merge!(figgy_metadata_file_attributes(base_path: directory_path))
     resource = find_or_create_by(property: property, value: file_name, **attributes)
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
     attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
   end
 
   private
+
+    def figgy_metadata_file_attributes(base_path:)
+      figgy_metadata_path = base_path.join("figgy_metadata.json")
+      return {} unless figgy_metadata_path.exist?
+      JSON.parse(figgy_metadata_path.read, symbolize_names: true)
+    end
 
     # Generate an absolute path to a file system node (i. e. directories, files, links, and pipes)
     # @param directory_path [String] the path to the file system node
@@ -172,89 +179,15 @@ class BulkIngestService
           results.reduce(:|)
         end
       end
+      # Include figgy_metadata if it exists.
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
+      file_paths.sort!
+      if path.join("figgy_metadata.json").exist?
+        file_paths = [path.join("figgy_metadata.json")] + file_paths
+      end
 
       BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource, preserve_file_names: preserve_file_names).to_a
-    end
-
-    # Converts file paths to IngestableFiles to attach to a parent.
-    class BulkFilePathConverter
-      attr_reader :file_paths, :parent_resource, :preserve_file_names
-      def initialize(file_paths:, parent_resource:, preserve_file_names: false)
-        @file_paths = file_paths.sort
-        @parent_resource = parent_resource
-        @preserve_file_names = preserve_file_names
-      end
-
-      # Mosaic target if creating a raster and there's either one file or the
-      # given file has _cropped in the name.
-      def mosaic_service_target?(file_basename)
-        return false unless raster_resource_parent?
-        return true if file_paths.length == 1
-        file_basename.to_s.include?("_cropped")
-      end
-
-      def to_a
-        nodes = []
-        file_paths.each_with_index do |f, idx|
-          basename = File.basename(f)
-          mime_type = mime_type(basename)
-          service_targets = "tiles" if raster_resource_parent? && mosaic_service_target?(basename)
-          nodes << IngestableFile.new(
-            file_path: f,
-            mime_type: mime_type.content_type,
-            original_filename: basename,
-            copyable: true,
-            container_attributes: {
-              title: file_title(basename, mime_type, idx),
-              service_targets: service_targets
-            }
-          )
-        end
-        nodes
-      end
-
-      def file_title(basename, mime_type, membership_index)
-        if mime_type && preserved_file_name_mime_types.include?(mime_type.content_type)
-          basename
-        elsif preserve_file_names
-          basename.gsub(File.extname(basename), "")
-          # Add cropped title if there's cropped/uncropped
-        elsif cropped_title?(basename, file_paths)
-          "#{parent_resource.title.first} (Cropped)"
-        elsif raster_resource_parent? || scanned_map_parent?
-          parent_resource.title.map(&:to_s)
-        else
-          (membership_index + 1).to_s
-        end
-      end
-
-      def cropped_title?(basename, file_paths)
-        raster_resource_parent? && mosaic_service_target?(basename) && file_paths.size > 1
-      end
-
-      def mime_type(basename)
-        mime_types = MIME::Types.type_for(basename)
-        # New mime-types gem prefers audio/wav, but all our code is set up for
-        # audio/x-wav, so do this so it picks x-wav.
-        preferred_mime_type = mime_types.find do |mime_type|
-          preserved_file_name_mime_types.include?(mime_type.to_s)
-        end
-        preferred_mime_type || mime_types.first
-      end
-
-      def scanned_map_parent?
-        parent_resource.is_a?(ScannedMap)
-      end
-
-      def raster_resource_parent?
-        parent_resource.is_a?(RasterResource)
-      end
-
-      def preserved_file_name_mime_types
-        ["audio/x-wav"]
-      end
     end
 
     def ignored_file_names
