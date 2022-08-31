@@ -6,10 +6,14 @@ RSpec.describe RasterResourceChangeSet do
   let(:rights_statement) { RightsStatements.no_known_copyright.to_s }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
   let(:raster_resource) { RasterResource.new(title: "Test", rights_statement: rights_statement, visibility: visibility, state: "pending") }
+  let(:resource_klass) { RasterResource }
   let(:form_resource) { raster_resource }
+
   before do
     stub_bibdata(bib_id: "6592452")
   end
+
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "#workflow" do
     it "has a workflow" do

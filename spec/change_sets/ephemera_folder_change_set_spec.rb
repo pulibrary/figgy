@@ -2,9 +2,13 @@
 require "rails_helper"
 
 RSpec.describe EphemeraFolderChangeSet do
-  let(:change_set) { described_class.new(FactoryBot.build(:ephemera_folder)) }
+  let(:change_set) { described_class.new(form_resource) }
+  let(:form_resource) { FactoryBot.build(:ephemera_folder) }
+  let(:ephemera_folder) { form_resource }
+  let(:resource_klass) { EphemeraFolder }
 
   it_behaves_like "an ephemera folder change set", described_class
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "#barcode" do
     it "is required" do

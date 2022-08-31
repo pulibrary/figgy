@@ -3,6 +3,7 @@ require "rails_helper"
 
 RSpec.describe ArchivalMediaCollectionChangeSet do
   let(:change_set) { described_class.new(collection, bag_path: "") }
+  let(:resource_klass) { ScannedResource }
   let(:collection) { FactoryBot.build(:collection, state: "draft") }
   let(:form_resource) { collection }
 

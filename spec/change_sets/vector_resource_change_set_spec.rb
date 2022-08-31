@@ -5,10 +5,14 @@ RSpec.describe VectorResourceChangeSet do
   subject(:change_set) { described_class.new(form_resource) }
   let(:vector_resource) { VectorResource.new(title: "Test", rights_statement: rights_statement, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, state: "pending") }
   let(:rights_statement) { RightsStatements.no_known_copyright }
+  let(:resource_klass) { VectorResource }
   let(:form_resource) { vector_resource }
+
   before do
     stub_bibdata(bib_id: "6592452")
   end
+
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "#workflow" do
     it "has a workflow" do

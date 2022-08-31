@@ -10,7 +10,7 @@ RSpec.describe ScannedMapChangeSet do
     stub_bibdata(bib_id: "123456")
   end
 
-  # it_behaves_like "a ChangeSet with EmbargoDate"
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "#workflow" do
     it "has a workflow" do

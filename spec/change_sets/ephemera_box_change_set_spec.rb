@@ -3,7 +3,12 @@ require "rails_helper"
 
 RSpec.describe EphemeraBoxChangeSet do
   subject(:change_set) { described_class.new(ephemera_box) }
-  let(:ephemera_box) { FactoryBot.build(:ephemera_box) }
+  let(:form_resource) { FactoryBot.build(:ephemera_box) }
+  let(:ephemera_box) { form_resource }
+  let(:resource_klass) { EphemeraBox }
+
+  it_behaves_like "a ChangeSet with EmbargoDate"
+
   describe "#visibility" do
     it "exposes the visibility" do
       expect(change_set.visibility).to include Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
