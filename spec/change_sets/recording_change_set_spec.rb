@@ -6,7 +6,10 @@ RSpec.describe RecordingChangeSet do
   let(:rights_statement) { RightsStatements.no_known_copyright.to_s }
   let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
   let(:scanned_resource) { ScannedResource.new(title: "Test", rights_statement: rights_statement, visibility: visibility, state: "draft") }
+  let(:resource_klass) { ScannedResource }
   let(:form_resource) { scanned_resource }
+
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "validations" do
     it "is valid by default" do

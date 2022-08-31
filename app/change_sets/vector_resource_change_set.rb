@@ -21,6 +21,7 @@ class VectorResourceChangeSet < ChangeSet
   property :depositor, multiple: false, require: false
   property :portion_note, multiple: false, required: false
   property :downloadable, multiple: false, require: true, default: "public"
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::Date
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -59,7 +60,8 @@ class VectorResourceChangeSet < ChangeSet
         :cartographic_scale,
         :cartographic_projection,
         :coverage,
-        :held_by
+        :held_by,
+        :embargo_date
       ],
       "Geospatial Web Service Overrides" => [
         :wms_url,

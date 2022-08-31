@@ -67,6 +67,7 @@ class SimpleChangeSet < ChangeSet
   property :geographic_origin, multiple: false, required: false, default: []
   property :resource_type, multiple: false, required: false, default: []
   property :change_set, require: true, default: "simple"
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::Date
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -94,7 +95,8 @@ class SimpleChangeSet < ChangeSet
       :member_of_collection_ids,
       :append_id,
       :holding_location,
-      :change_set
+      :change_set,
+      :embargo_date
       # The following were disabled until we have support for already-ingested
       # content that have complicated values in these fields. See #1714 and #1713
       # :sort_title,
