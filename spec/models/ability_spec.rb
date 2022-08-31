@@ -1023,7 +1023,7 @@ describe Ability do
       end
 
       context "and the server time is one hour before midnight the previous day" do
-        before { Timecop.freeze(Time.zone.local(2022, 8, 29, 23, 0, 0)) }
+        before { Timecop.freeze(ActiveSupport::TimeZone["Eastern Time (US & Canada)"].parse("2022-08-29 23:00:00")) }
         after { Timecop.return }
 
         it {
@@ -1034,7 +1034,7 @@ describe Ability do
       end
 
       context "and the server time is midnight on the embargo release day" do
-        before { Timecop.freeze(Time.zone.local(2022, 8, 30, 0, 0, 0)) }
+        before { Timecop.freeze(ActiveSupport::TimeZone["Eastern Time (US & Canada)"].parse("2022-08-30 00:00:00")) }
         after { Timecop.return }
 
         it {
