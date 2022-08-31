@@ -24,6 +24,7 @@ class EphemeraBoxChangeSet < ChangeSet
   validates_with StateValidator
   validates_with MemberValidator
   validates_with RightsStatementValidator
+  validates_with EmbargoDateValidator
 
   def barcode_valid?
     return if Barcode.new(Array.wrap(barcode).first).valid?

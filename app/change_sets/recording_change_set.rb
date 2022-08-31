@@ -29,6 +29,7 @@ class RecordingChangeSet < ChangeSet
   validates_with MemberValidator
   validates_with CollectionValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
+  validates_with EmbargoDateValidator
   validates :visibility, presence: true
 
   def primary_terms
