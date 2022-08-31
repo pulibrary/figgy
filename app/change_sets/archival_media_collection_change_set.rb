@@ -15,7 +15,7 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   property :depositor, multiple: false, required: false, virtual: true
   property :read_groups, multiple: true, required: false
   property :change_set, require: true, default: "archival_media_collection"
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::Date
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
 
   property :reorganize, virtual: true, require: false, default: false, type: Dry::Types["params.bool"]
 

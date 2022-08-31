@@ -67,7 +67,7 @@ class SimpleChangeSet < ChangeSet
   property :geographic_origin, multiple: false, required: false, default: []
   property :resource_type, multiple: false, required: false, default: []
   property :change_set, require: true, default: "simple"
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::Date
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
