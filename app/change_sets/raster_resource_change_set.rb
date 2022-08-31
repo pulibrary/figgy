@@ -21,6 +21,7 @@ class RasterResourceChangeSet < ChangeSet
   property :depositor, multiple: false, require: false
   property :portion_note, multiple: false, required: false
   property :downloadable, multiple: false, require: true, default: "public"
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -32,6 +33,7 @@ class RasterResourceChangeSet < ChangeSet
   validates_with MemberValidator
   validates_with CollectionValidator
   validates_with RightsStatementValidator
+  validates_with EmbargoDateValidator
   validates :visibility, presence: true
 
   # rubocop:disable Metrics/MethodLength
@@ -59,7 +61,8 @@ class RasterResourceChangeSet < ChangeSet
         :cartographic_scale,
         :cartographic_projection,
         :coverage,
-        :held_by
+        :held_by,
+        :embargo_date
       ],
       "Geospatial Web Service Overrides" => [
         :wms_url,

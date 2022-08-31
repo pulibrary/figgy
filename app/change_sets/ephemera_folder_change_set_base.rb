@@ -7,6 +7,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   validates_with RightsStatementValidator
   validates_with MemberValidator
   validates_with CollectionValidator
+  validates_with EmbargoDateValidator
 
   include VisibilityProperty
   include DateRangeProperty
@@ -42,6 +43,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :pending_uploads, multiple: true, required: false
   property :append_id, virtual: true, multiple: false, required: false
   property :keywords, multiple: true, required: false
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
 
   property :start_canvas, required: false
   property :viewing_direction, required: false
@@ -92,7 +94,8 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :pdf_type,
       :holding_location,
       :rights_statement,
-      :member_of_collection_ids
+      :member_of_collection_ids,
+      :embargo_date
     ]
   end
 

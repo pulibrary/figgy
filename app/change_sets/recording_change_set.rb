@@ -19,6 +19,7 @@ class RecordingChangeSet < ChangeSet
   property :change_set, require: true, default: "recording"
   property :part_of, require: false, default: []
   property :upload_set_id, multiple: false, require: false, type: Valkyrie::Types::ID
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -28,6 +29,7 @@ class RecordingChangeSet < ChangeSet
   validates_with MemberValidator
   validates_with CollectionValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
+  validates_with EmbargoDateValidator
   validates :visibility, presence: true
 
   def primary_terms
@@ -40,7 +42,8 @@ class RecordingChangeSet < ChangeSet
       :local_identifier,
       :part_of,
       :append_id,
-      :change_set
+      :change_set,
+      :embargo_date
     ]
   end
 

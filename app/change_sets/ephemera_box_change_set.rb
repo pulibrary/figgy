@@ -16,6 +16,7 @@ class EphemeraBoxChangeSet < ChangeSet
   property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
   delegate :human_readable_type, to: :model
   validates :barcode, :box_number, :visibility, presence: true
   validate :barcode_valid?
@@ -23,6 +24,7 @@ class EphemeraBoxChangeSet < ChangeSet
   validates_with StateValidator
   validates_with MemberValidator
   validates_with RightsStatementValidator
+  validates_with EmbargoDateValidator
 
   def barcode_valid?
     return if Barcode.new(Array.wrap(barcode).first).valid?
@@ -42,7 +44,8 @@ class EphemeraBoxChangeSet < ChangeSet
       :received_date,
       :tracking_number,
       :drive_barcode,
-      :append_id
+      :append_id,
+      :embargo_date
     ]
   end
 

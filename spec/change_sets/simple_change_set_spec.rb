@@ -9,6 +9,7 @@ RSpec.describe SimpleChangeSet do
   let(:form_resource) { resource }
 
   it_behaves_like "a ChangeSet"
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "#workflow" do
     it "has a workflow" do

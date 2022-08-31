@@ -32,6 +32,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :replaces, multiple: true, require: false
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
+  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
 
   # MARCRelator attributes
   Schema::MARCRelators.attributes.each { |field| property field }
@@ -49,6 +50,7 @@ class ScannedResourceChangeSet < ChangeSet
   validates_with MemberValidator
   validates_with CollectionValidator
   validates_with RightsStatementValidator
+  validates_with EmbargoDateValidator
   validates :visibility, presence: true
 
   def primary_terms
@@ -65,7 +67,8 @@ class ScannedResourceChangeSet < ChangeSet
       :ocr_language,
       :portion_note,
       :nav_date,
-      :append_id
+      :append_id,
+      :embargo_date
     ]
   end
 end

@@ -158,6 +158,7 @@ class Ability
   end
 
   def valkyrie_test_manifest(obj)
+    return false if embargoed?(obj)
     return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj) || restricted_collection_viewer?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
@@ -207,6 +208,7 @@ class Ability
   end
 
   def valkyrie_test_read(obj)
+    return false if embargoed?(obj)
     return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj) || restricted_collection_viewer?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
@@ -374,7 +376,7 @@ class Ability
     # @param obj [Resource]
     # @return [Boolean]
     def private?(obj)
-      obj.decorate.try(:private_visibility?)
+      embargoed?(obj) || obj.decorate.try(:private_visibility?)
     end
 
     # Determines whether a resource's parent is readable because of an auth token
@@ -389,5 +391,15 @@ class Ability
     # @return [Boolean]
     def can_read_parent?(resource)
       can?(:read, resource.decorate.parent&.object)
+    end
+
+    def embargoed?(obj)
+      if obj.respond_to?(:embargo_date) && obj.embargo_date.present?
+        current_date = DateTime.now.in_time_zone("Eastern Time (US & Canada)")
+        embargo_date = DateTime.strptime("#{obj.embargo_date}T00:00:00#{current_date.formatted_offset}", "%m/%d/%YT%H:%M:%S%z")
+        embargo_date > current_date
+      else
+        false
+      end
     end
 end

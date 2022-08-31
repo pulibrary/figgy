@@ -13,6 +13,7 @@ RSpec.describe ScannedResourceChangeSet do
   end
 
   it_behaves_like "a ChangeSet"
+  it_behaves_like "a ChangeSet with EmbargoDate"
 
   describe "validations" do
     context "when neither title or metadata identifier is set" do
