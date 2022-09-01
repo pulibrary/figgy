@@ -10,7 +10,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
 
-  def perform(collection_component:, bag_path:, user:)
+  def perform(collection_component: nil, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
     # This requires a resource
     bag = ArchivalMediaBagParser.new(path: bag_path, component_id: collection_component)

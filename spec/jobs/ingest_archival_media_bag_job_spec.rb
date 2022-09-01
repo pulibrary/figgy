@@ -23,6 +23,14 @@ RSpec.describe IngestArchivalMediaBagJob do
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
+    context "when not given a collection_component" do
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "bulk_ingest", "c0652_2017_05_bag") }
+      let(:collection_cid) { nil }
+      it "pulls it from the bag path" do
+        expect(query_service.find_all_of_model(model: FileSet).map(&:title)).to include ["32101047382401_1"], ["32101047382401_2"]
+      end
+    end
+
     it "creates one FileSet per barcode (with part, e.g., 32101047382401_1)" do
       expect(query_service.find_all_of_model(model: FileSet).map(&:title)).to include ["32101047382401_1"], ["32101047382401_2"]
       expect(query_service.find_all_of_model(model: FileSet).map(&:mime_type).to_a).to include ["audio/x-wav"]
