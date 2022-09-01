@@ -394,12 +394,6 @@ class Ability
     end
 
     def embargoed?(obj)
-      if obj.respond_to?(:embargo_date) && obj.embargo_date.present?
-        current_date = DateTime.now.in_time_zone("Eastern Time (US & Canada)")
-        embargo_date = DateTime.strptime("#{obj.embargo_date}T00:00:00#{current_date.formatted_offset}", "%m/%d/%YT%H:%M:%S%z")
-        embargo_date > current_date
-      else
-        false
-      end
+      obj.decorate.embargoed?
     end
 end

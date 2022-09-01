@@ -37,6 +37,9 @@ en:
     suppressed_workflow:
       class: "alert-warning"
       note_html: "Users will not be able to view this digital object on discovery sites due to the workflow status."
+    embargoed:
+      class: "alert-warning"
+      note_html: "Users will not be able to view this digital object on discovery sites because the resource is embargoed."
   base:
     form_progress:
       requirements: 'Requirements'

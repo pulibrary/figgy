@@ -298,6 +298,15 @@ RSpec.describe Valkyrie::ResourceDecorator do
         expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
       end
     end
+
+    context "complete embargoed resource" do
+      let(:date) { (Time.zone.today + 2).strftime("%-m/%-d/%Y") }
+      let(:resource) { FactoryBot.build(:complete_scanned_resource, embargo_date: date) }
+
+      it "has a warning about the embargo status" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites because the resource is embargoed.")
+      end
+    end
   end
   describe "#visibility_badge" do
     let(:resource) { FactoryBot.build(:complete_scanned_resource) }
