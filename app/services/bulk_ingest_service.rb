@@ -34,6 +34,7 @@ class BulkIngestService
   # @param file_filters [Array] the filter used for matching against the filename extension
   def attach_dir(base_directory:, property: nil, file_filters: [], preserve_file_names: false, **attributes)
     raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
+    return ingest_bag(base_directory: base_directory, **attributes) if archival_media_bag?(base_directory)
 
     file_entries = Dir["#{base_directory}/*"]
     # Filter for hidden files
@@ -52,7 +53,15 @@ class BulkIngestService
     attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
   end
 
+  def archival_media_bag?(directory)
+    Pathname.new(directory).join("bagit.txt").exist?
+  end
+
   private
+
+    def ingest_bag(base_directory:, **attributes)
+      IngestArchivalMediaBagJob.perform_later(bag_path: base_directory.to_s, user: nil, **attributes)
+    end
 
     def figgy_metadata_file_attributes(base_path:)
       figgy_metadata_path = base_path.join("figgy_metadata.json")

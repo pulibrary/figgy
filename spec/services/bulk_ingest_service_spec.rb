@@ -263,6 +263,38 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "when ingesting AV bags" do
+      let(:logger) { Logger.new(nil) }
+      let(:single_dir) { Rails.root.join("spec", "fixtures", "av", "bulk_ingest", "c0652_2017_05_bag") }
+      let(:bib) { nil }
+      let(:coll) { FactoryBot.create_for_repository(:collection) }
+      before do
+        stub_bibdata(bib_id: "4609321")
+        stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+        stub_findingaid(pulfa_id: "C0652")
+        stub_findingaid(pulfa_id: "C0652_c0377")
+      end
+      with_queue_adapter :inline
+      it "ingests the bag as an archival media bag" do
+        ingester.attach_dir(
+          base_directory: single_dir,
+          file_filters: [".tif"],
+          source_metadata_identifier: bib,
+          member_of_collection_ids: [coll.id.to_s],
+          visibility: "open",
+          depositor: "tpend"
+        )
+        resources = Wayfinder.for(coll).members
+        expect(resources.length).to eq 1
+        expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 2
+        file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.side&.include? "1" }
+        expect(file_set.barcode).to contain_exactly "32101047382401"
+        expect(file_set.side).to contain_exactly "1"
+        expect(file_set.transfer_notes.first).to start_with "Side A"
+        expect(resources.first.read_groups).to eq ["public"]
+      end
+    end
+
     context "when ingesting a RasterSet" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: RasterResource) }
       it "ingests a RasterSet with file_sets marked as mosaic service targets" do
