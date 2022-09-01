@@ -45,7 +45,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
 
   def visibility
     Array(super).map do |visibility|
-      h.visibility_badge(visibility, public_readable_state?)
+      h.visibility_badge(visibility, public_readable_state?, embargoed?)
     end
   end
 
@@ -185,6 +185,19 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   def public_readable_state?
     return true unless manages_state?
     workflow_class.public_read_states.include? Array.wrap(state).first.underscore
+  end
+
+  # Is the resource embargoed?
+  # @return [TrueClass, FalseClass]
+  def embargoed?
+    return false unless model.respond_to?(:embargo_date) && model.embargo_date.present?
+    m, d, y = model.embargo_date.split("/")
+    return false unless m && d && y
+    embargo_date_time = Time.use_zone("Eastern Time (US & Canada)") do
+      Time.zone.parse("#{y}-#{m}-#{d}").midnight
+    end
+
+    embargo_date_time > Time.now.in_time_zone("Eastern Time (US & Canada)")
   end
 
   # Should this simple resource have an ARK minted?

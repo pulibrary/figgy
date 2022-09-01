@@ -5,9 +5,12 @@ class PermissionBadge
 
   # Constructor
   # @param visibility [String] the current visibility
-  def initialize(visibility, public_readable_state = nil)
+  # @param public_readable_state [Boolean] is the resource publically readable
+  # @param embargoed [Boolean] is the resource embargoed
+  def initialize(visibility, public_readable_state = nil, embargoed = nil)
     @visibility = visibility
     @public_readable_state = public_readable_state
+    @embargoed = embargoed
   end
 
   # Draws div tags with bootstrap labels representing the items visibility
@@ -38,6 +41,7 @@ class PermissionBadge
 
     # Generate a note of the final visibility, including both the visibility property and workflow state
     def computed_visibility
+      return "embargoed" if @embargoed
       return "suppressed_workflow" unless @public_readable_state
       @visibility
     end
