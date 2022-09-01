@@ -829,7 +829,7 @@ RSpec.describe ManifestBuilder do
     end
 
     context "when given an ArchivalMediaCollection", run_real_characterization: true, run_real_derivatives: true do
-      let(:collection) { query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: "C0652").last }
+      let(:collection) { FactoryBot.create_for_repository(:archival_media_collection) }
       let(:collection_members) { collection.decorate.members }
       let(:recording) { collection_members.first.decorate.members.first }
       let(:manifest_builder) { described_class.new(collection) }
@@ -840,7 +840,7 @@ RSpec.describe ManifestBuilder do
         user = User.first
         stub_findingaid(pulfa_id: "C0652")
         stub_findingaid(pulfa_id: "C0652_c0377")
-        IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
+        IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user, member_of_collection_ids: [collection.id.to_s])
       end
 
       it "builds a presentation 3 manifest with recordings as separate canvases" do

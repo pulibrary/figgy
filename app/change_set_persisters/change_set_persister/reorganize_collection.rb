@@ -20,7 +20,9 @@ class ChangeSetPersister
         barcode_lookup: barcode_lookup,
         component_groups: component_groups,
         changeset_persister: change_set_persister,
-        collection: post_save_resource
+        recording_attributes: {
+          member_of_collection_ids: [post_save_resource.id]
+        }
       ).build!
     end
 
