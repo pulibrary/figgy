@@ -190,14 +190,25 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   # Is the resource embargoed?
   # @return [TrueClass, FalseClass]
   def embargoed?
-    return false unless model.respond_to?(:embargo_date) && model.embargo_date.present?
-    m, d, y = model.embargo_date.split("/")
-    return false unless m && d && y
-    embargo_date_time = Time.use_zone("Eastern Time (US & Canada)") do
-      Time.zone.parse("#{y}-#{m}-#{d}").midnight
+    if embargo_date_time.present?
+      embargo_date_time > Time.now.in_time_zone("Eastern Time (US & Canada)")
+    else
+      # For MVWs, inherit embargo state from parent.
+      return unless persisted?
+      wayfinder.parent&.decorate.try(:embargoed?) || false
     end
+  end
 
-    embargo_date_time > Time.now.in_time_zone("Eastern Time (US & Canada)")
+  def embargo_date_time
+    @embargo_date_time ||=
+      begin
+        return if model.try(:embargo_date).blank?
+        m, d, y = model.embargo_date.split("/")
+        return false unless m && d && y
+        Time.use_zone("Eastern Time (US & Canada)") do
+          Time.zone.parse("#{y}-#{m}-#{d}").midnight
+        end
+      end
   end
 
   # Should this simple resource have an ARK minted?
