@@ -142,6 +142,13 @@ describe Ability do
     date = (Time.zone.today + 1).strftime("%-m/%-d/%Y")
     FactoryBot.create_for_repository(:complete_open_scanned_resource, embargo_date: date, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
   end
+  let(:embargoed_mvw) do
+    date = (Time.zone.today + 1).strftime("%-m/%-d/%Y")
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, embargo_date: date, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"], member_ids: [embargoed_mvw_child.id])
+  end
+  let(:embargoed_mvw_child) do
+    FactoryBot.create_for_repository(:complete_open_scanned_resource)
+  end
 
   let(:out_of_embargo_scanned_resource) do
     date = "1/1/1999"
@@ -316,6 +323,12 @@ describe Ability do
       is_expected.to be_able_to(:read, embargoed_scanned_resource)
       is_expected.to be_able_to(:manifest, embargoed_scanned_resource)
       is_expected.to be_able_to(:discover, embargoed_scanned_resource)
+      is_expected.to be_able_to(:read, embargoed_mvw)
+      is_expected.to be_able_to(:manifest, embargoed_mvw)
+      is_expected.to be_able_to(:discover, embargoed_mvw)
+      is_expected.to be_able_to(:read, embargoed_mvw_child)
+      is_expected.to be_able_to(:manifest, embargoed_mvw_child)
+      is_expected.to be_able_to(:discover, embargoed_mvw_child)
     }
 
     context "when index read-only mode is on" do
@@ -462,6 +475,12 @@ describe Ability do
       is_expected.to be_able_to(:read, embargoed_scanned_resource)
       is_expected.to be_able_to(:manifest, embargoed_scanned_resource)
       is_expected.to be_able_to(:discover, embargoed_scanned_resource)
+      is_expected.to be_able_to(:read, embargoed_mvw)
+      is_expected.to be_able_to(:manifest, embargoed_mvw)
+      is_expected.to be_able_to(:discover, embargoed_mvw)
+      is_expected.to be_able_to(:read, embargoed_mvw_child)
+      is_expected.to be_able_to(:manifest, embargoed_mvw_child)
+      is_expected.to be_able_to(:discover, embargoed_mvw_child)
     }
 
     context "when read-only mode is on" do
@@ -651,6 +670,12 @@ describe Ability do
       is_expected.not_to be_able_to(:read, embargoed_scanned_resource)
       is_expected.not_to be_able_to(:manifest, embargoed_scanned_resource)
       is_expected.not_to be_able_to(:discover, embargoed_scanned_resource)
+      is_expected.not_to be_able_to(:read, embargoed_mvw)
+      is_expected.not_to be_able_to(:manifest, embargoed_mvw)
+      is_expected.not_to be_able_to(:discover, embargoed_mvw)
+      is_expected.not_to be_able_to(:read, embargoed_mvw_child)
+      is_expected.not_to be_able_to(:manifest, embargoed_mvw_child)
+      is_expected.not_to be_able_to(:discover, embargoed_mvw_child)
     }
 
     context "when index read-only mode is on" do
