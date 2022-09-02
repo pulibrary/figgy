@@ -70,3 +70,52 @@ so that they both appear in a viewer. The recording and PDF are ingested
 separately, and a link to the PDF is entered into the catalog record 856 field
 as `https://arks.princeton.edu/<arkhere>/pdf`. This means that our system needs
 to support that route moving forward, or we would lose access to these pdfs.
+
+## Bulk Ingest ETDs from RDSS
+
+Every year RDSS bulk ingests senior theses and dissertations into Figgy, with
+per-resource visibility and embargoes set. Every thesis has a record in Alma
+identified by an MMS ID.
+
+RDSS sets up a directory structure that looks like this on the isilon:
+
+* 📁 theses_ingest_2022
+    * 📁 \<mmsid\>
+        * 💿 figgy_metadata.json
+        * 💿 \<filename\>.pdf
+    * 📁 \<mmsid\>
+        * 💿 figgy_metadata.json
+        * 💿 \<filename\>.pdf
+
+### figgy_metadata.json
+
+The JSON file has a structure that looks like this:
+
+```json
+{
+  "embargo_date": "01/21/2023",
+  "visibility": "open",
+  "notice_type": "senior_thesis"
+}
+```
+`embargo_date` is in the format `mm/dd/yyyy`, and is optional
+
+`visibility` is either:
+
+* `open`: Viewable and downloadable by all users.
+* `princeton`: Viewable by users with Princeton NetIDs
+* `on campus`: Viewable by users on VPN or on Campus.
+* `reading room`: Viewable by users in the reading room or via Virtual Reading
+Room.
+* `private`: Not viewable by anyone (except library staff with Figgy staff/admin access)
+
+`notice_type` being set to "senior_thesis" makes the senior thesis click-through
+in the viewer happen.
+
+### Ingest
+
+After setting up the structure, RDSS uses the "Bulk Ingest Scanned Resources"
+interface in Figgy to select `thesis_ingest_2022`, select a collection to put
+them into if appropriate, and then submits. The visibility chosen in the
+interface will be the default for any resource which doesn't have visibility set
+in `figgy_metadata.json`.
