@@ -11,7 +11,7 @@ module GeoDiscovery
       # Builds fields about the geospatial file such as geometry and format.
       # @param [AbstractDocument] discovery document
       def build(document)
-        document.geom_type = geom_type
+        document.geom_types = geom_types
         document.format = format
       end
 
@@ -47,11 +47,22 @@ module GeoDiscovery
 
         # Uses parent work class to determine file geometry type.
         # These geom types are used in geoblacklight documents.
-        # @return [String] file geometry type
-        def geom_type
-          return "Image" if resource_decorator.model.is_a?(ScannedMap)
-          return "Raster" if resource_decorator.model.is_a?(RasterResource)
-          return vector_geom_type if resource_decorator.model.is_a?(VectorResource)
+        # A ScannedMap should have multiple geom types if it has Raster
+        # descendents
+        # @return [Array<String>] file geometry types
+        def geom_types
+          case resource_decorator.model
+          when ScannedMap
+            if resource_decorator.mosaic_file_count.positive?
+              ["Image", "Raster"]
+            else
+              ["Image"]
+            end
+          when RasterResource
+            ["Raster"]
+          when VectorResource
+            [vector_geom_type]
+          end
         end
 
         # Returns the geometry for a vector file.

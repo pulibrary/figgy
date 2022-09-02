@@ -4,7 +4,7 @@ module GeoDiscovery
   class AbstractDocument
     attr_accessor :access_rights, :all_subject, :call_number, :creator,
                   :dct_references, :description, :download, :fgdc, :format,
-                  :geom_type, :identifier, :iiif, :iiif_manifest, :iso19139,
+                  :geom_types, :identifier, :iiif, :iiif_manifest, :iso19139,
                   :issued, :language, :layer_modified, :layer_year, :mods,
                   :held_by, :publisher, :resource_type, :rendered_rights_statement,
                   :slug, :solr_coverage, :source, :spatial, :subject,

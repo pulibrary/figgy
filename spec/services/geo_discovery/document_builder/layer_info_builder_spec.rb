@@ -32,7 +32,7 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
     context "with a geometry value of None" do
       it "returns a value of Mixed" do
         builder.build(document)
-        expect(document.geom_type).to eq("Mixed")
+        expect(document.geom_types).to eq(["Mixed"])
       end
     end
 
@@ -41,7 +41,7 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
 
       it "returns a value of Point" do
         builder.build(document)
-        expect(document.geom_type).to eq("Point")
+        expect(document.geom_types).to eq(["Point"])
       end
     end
 
@@ -50,7 +50,7 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
 
       it "returns a value of Line" do
         builder.build(document)
-        expect(document.geom_type).to eq("Line")
+        expect(document.geom_types).to eq(["Line"])
       end
     end
 
@@ -59,7 +59,7 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
 
       it "returns a value of Line" do
         builder.build(document)
-        expect(document.geom_type).to eq("Line")
+        expect(document.geom_types).to eq(["Line"])
       end
     end
   end
