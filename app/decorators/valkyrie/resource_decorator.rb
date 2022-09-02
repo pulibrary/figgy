@@ -194,6 +194,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       embargo_date_time > Time.now.in_time_zone("Eastern Time (US & Canada)")
     else
       # For MVWs, inherit embargo state from parent.
+      return unless persisted?
       wayfinder.parent&.decorate.try(:embargoed?) || false
     end
   end
