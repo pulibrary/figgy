@@ -61,7 +61,13 @@ RSpec.describe IdentifierService do
         storage_adapter: Valkyrie.config.storage_adapter
       )
     end
-    let(:base_metadata) { { dc_publisher: "Princeton University Library", dc_title: "Cameroons under United Kingdom Trusteeship 1949", dc_type: "Text" } }
+    let(:base_metadata) do
+      {
+        dc_publisher: "Princeton University Library",
+        dc_title: "Cameroons under United Kingdom Trusteeship 1949 / drawn & reproduced by Survey Department, Lagos, Nigeria.",
+        dc_type: "Text"
+      }
+    end
     let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/10001789#view") }
     let(:ark) { "ark:/88435/jq085p05h" }
 

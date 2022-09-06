@@ -1,1 +1,76 @@
-{"@context":"http://bibdata.princeton.edu/context.json","@id":"http://bibdata.princeton.edu/bibliographic/4609321","title":{"@value":"Bible, Latin","@language":"lat"},"language":"lat","call_number":["48.1","113.2"],"extent":"2 v. (324; 319 leaves) ; 40.5 x 28.8 cm. (fol.)","format":"Book","description":["Commonly known in English as the Gutenberg Bible, also known as the Mazarine Bible.","WHS copy has 12 leaves supplied from other copies and 5 leaves supplied in facsimile; the 17 leaves are vol. I fo. 1 and vol. II fo. 1, 17, 25, 46, 70, 149, 155, 156, 191, 217, 235, 268, 270, 275, 279, and 305.","Princeton copy 2: A single imperfect paper leaf from the Gutenberg Bible, the first printed Bible. The leaf is vol. II fo. 122 (the 2nd leaf of quire 13), with text of the last verses of Ezekiel 33, all of Ezekiel 34, and beginning verses of Ezekiel 35. The leaf comes from an otherwise lost copy of the Gutenberg Bible. It is one of nineteen such leaves, all belonging to quires 13 and 14 of volume II, that were cut down to a smaller size and pasted together to create pasteboard for some unidentified bookbinding, probably in the sixteenth century. About a dozen copies of the Gutenberg Bible, most of which were printed on vellum, are known only from fragmentary preservation as bookbinding materials. These cut-down paper leaves came to light when the Vienna bookdealers Gilhofer \u0026 Ranschburg offered them leaf by leaf in an auction of 3 April 1911. Two other leaves from this group are at the Library of Congress, a third is at Dartmouth College Library, and a fourth is at the State Library of New South Wales in Sydney. The rubrication of the copy is simple, using only red ink."],"publisher":"[Mainz : Johann Gutenberg and Johann Fust, before August 1456].","title_sort":"Bible, Latin.","alternative":["Gutenberg Bible","Mazarin Bible","Mazarine Bible"],"uniform_title":"Bible. Latin. Vulgate. 1456","binding_note":"WHS copy is one of three copies bound in the workshop of Johannes Fogel of Erfurt.","provenance":"WHS copy has provenance: Predigerkirche, Erfurt, Germany; George Brinley; Brayton Ives; Hamilton Cole; and James W. Ellsworth.","references":["GW 4201.","Goff B-526."],"printer":["Gutenberg, Johann, 1397?-1468"],"binder":["Fogel, Johannes, active 1455-1462"],"former_owner":["Predigerkirche (Erfurt, Germany)","Brinley, George, 1817-1875","Ives, Brayton, 1840-1914","Cole, Hamilton","Ellsworth, James W. (James William), 1849-1925"],"created":"1456-01-01T00:00:00Z","date":"1456","location":["WHS 48.1","WHS 113.2"]}
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9946093213506421",
+  "title": [
+    {
+      "@value": "Bible, Latin.",
+      "@language": "lat"
+    }
+  ],
+  "language": "lat",
+  "call_number": [
+    "48.1",
+    "113.2"
+  ],
+  "extent": "2 v. (324; 319 leaves) ; 40.5 x 28.8 cm. (fol.)",
+  "format": "Book",
+  "description": [
+    "Commonly known in English as the Gutenberg Bible, also known as the Mazarine Bible.",
+    "WHS copy has 12 leaves supplied from other copies and 5 leaves supplied in facsimile; the 17 leaves are vol. I fo. 1 and vol. II fo. 1, 17, 25, 46, 70, 149, 155, 156, 191, 217, 235, 268, 270, 275, 279, and 305.",
+    "Princeton copy 2: A single imperfect paper leaf from the Gutenberg Bible, the first printed Bible. The leaf is vol. II fo. 122 (the 2nd leaf of quire 13), with text of the last verses of Ezekiel 33, all of Ezekiel 34, and beginning verses of Ezekiel 35. The leaf comes from an otherwise lost copy of the Gutenberg Bible. It is one of nineteen such leaves, all belonging to quires 13 and 14 of volume II, that were cut down to a smaller size and pasted together to create pasteboard for some unidentified bookbinding, probably in the sixteenth century. About a dozen copies of the Gutenberg Bible, most of which were printed on vellum, are known only from fragmentary preservation as bookbinding materials. These cut-down paper leaves came to light when the Vienna bookdealers Gilhofer & Ranschburg offered them leaf by leaf in an auction of 3 April 1911. Two other leaves from this group are at the Library of Congress, a third is at Dartmouth College Library, and a fourth is at the State Library of New South Wales in Sydney. The rubrication of the copy is simple, using only red ink."
+  ],
+  "publisher": "[Mainz : Johann Gutenberg and Johann Fust, before August 1456].",
+  "alternative": [
+    "Gutenberg Bible",
+    "Mazarin Bible",
+    "Mazarine Bible"
+  ],
+  "uniform_title": "Bible. Latin. Vulgate. 1456",
+  "binding_note": "WHS copy is one of three copies bound in the workshop of Johannes Fogel of Erfurt.",
+  "provenance": "WHS copy has provenance: Predigerkirche, Erfurt, Germany; George Brinley; Brayton Ives; Hamilton Cole; and James W. Ellsworth.",
+  "references": [
+    "GW 4201.",
+    "Goff B-526."
+  ],
+  "printer": [
+    "Gutenberg, Johann, 1397?-1468"
+  ],
+  "binder": [
+    "Fogel, Johannes, active 1455-1462"
+  ],
+  "former_owner": [
+    "Brinley, George, 1817-1875",
+    "Ives, Brayton, 1840-1914",
+    "Cole, Hamilton",
+    "Ellsworth, James W. (James William), 1849-1925",
+    "Predigerkirche (Erfurt, Germany)"
+  ],
+  "created": "1456-01-01T00:00:00Z",
+  "date": "1456",
+  "identifier": "http://arks.princeton.edu/ark:/88435/7d278t10z",
+  "location": [
+    "Special Collections 48.1",
+    "Special Collections 113.2"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://catalog.princeton.edu/catalog/4609321#view",
+      "label": [
+        "Digital content"
+      ]
+    },
+    {
+      "@id": "https://drive.google.com/open?id=0B3HwfRG3YqiNVVR4bXNvRzNwaGs",
+      "label": [
+        "drive.google.com",
+        "Curatorial documentation"
+      ]
+    },
+    {
+      "@id": "iiif_manifest_paths",
+      "label": {
+        "http://arks.princeton.edu/ark:/88435/7d278t10z": "https://figgy.princeton.edu/concern/scanned_resources/d446107a-bdfd-4a5d-803c-f315b7905bf4/manifest"
+      }
+    }
+  ]
+}

@@ -1,14 +1,18 @@
 {
-  "@context": "http://bibdata.princeton.edu/context.json",
-  "@id": "http://bibdata.princeton.edu/bibliographic/9637153",
-  "title": "Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps",
-  "language":"eng",
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9996371533506421",
+  "title": [
+    {
+      "@value": "Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps.",
+      "@language": "   "
+    }
+  ],
+  "language": "   ",
   "creator": "Land Info Worldwide Mapping, LLC",
   "extent": "External Hard Drive",
   "format": "Map",
   "description": "1:50,000 Scale",
   "publisher": "Highlands Ranch, Co.: Land Info Worldwide Mapping, [2016]",
-  "title_sort": "Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps.",
   "alternative": "Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps : Laos",
   "author": "Land Info Worldwide Mapping, LLC",
   "created": "2016-01-01T00:00:00Z",

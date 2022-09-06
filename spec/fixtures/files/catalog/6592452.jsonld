@@ -1,1 +1,66 @@
-{"@context":"http://bibdata.princeton.edu/context.json","@id":"http://bibdata.princeton.edu/bibliographic/6592452","title":{"@value":"Brazil, Uruguay, Paraguay \u0026 Guyana","@language":"eng"},"language":"eng","creator":"Bartholomew, John, 1805-1861","call_number":["HMC01.6181","Electronic Resource"],"extent":["Scale [ca. 1:14,000,000] (W 67⁰--W 37⁰/N 08⁰--S 35⁰).","1 map : hand col. ; 38 x 28 cm."],"format":"Map","type":"Maps","description":["In margin: 51.","Relief shown by hachures.","Probably issued in: General atlas of the world ... [Edinburgh : Adam and Charles Black, 1889?]","John Bartholomew designed and engraved the maps for the 1846 edition of Adam and Charles Black's General atlas of the world, which appeared in several editions up to 1900. cf. Tooley's dictionary of mapmakers."],"publisher":"[Edinburgh? : Published by A. \u0026 C. Black?, 1889?]","subject":["Brazil—Maps","Guiana—Maps","Paraguay—Maps","Uruguay—Maps"],"title_sort":"Brazil, Uruguay, Paraguay \u0026 Guyana [map].","cartographic_scale":"Scale [ca. 1:14,000,000]","spatial":["Brazil","Uruguay","Paraguay","Guyana"],"author":"Bartholomew, John, 1805-1861","created":"1889-01-01T00:00:00Z","date":"1889"}
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9965924523506421",
+  "title": [
+    {
+      "@value": "Brazil, Uruguay, Paraguay & Guyana [map].",
+      "@language": "eng"
+    }
+  ],
+  "language": "eng",
+  "creator": "Bartholomew, John, 1805-1861",
+  "call_number": "D Alcove 30, Drawer 10 HMC01.6181",
+  "extent": [
+    "(W 67°15ʹ00ʺ--W 33°00ʹ00ʺ/N 7°30ʹ00ʺ--S 35°00ʹ00ʺ).",
+    "1 map : hand col. ; 38 x 28 cm."
+  ],
+  "format": "Map",
+  "description": [
+    "In margin: 51.",
+    "Relief shown by hachures.",
+    "Probably issued in: General atlas of the world ... [Edinburgh : Adam and Charles Black, 1889?]",
+    "John Bartholomew designed and engraved the maps for the 1846 edition of Adam and Charles Black's General atlas of the world, which appeared in several editions up to 1900. cf. Tooley's dictionary of mapmakers."
+  ],
+  "publisher": "[Edinburgh? : Published by A. & C. Black?, 1889?]",
+  "subject": [
+    "Brazil—Maps",
+    "Guiana—Maps",
+    "Paraguay—Maps",
+    "Uruguay—Maps",
+    "Maps—Brazil—1889",
+    "Maps—Guiana—1889",
+    "Maps—Paraguay—1889",
+    "Maps—Uruguay—1889",
+    "Maps"
+  ],
+  "coverage": "northlimit=007.5014; eastlimit=-033.0062; southlimit=-035.0052; westlimit=-067.2616; units=degrees; projection=EPSG:4326",
+  "cartographic_scale": "Scale [ca. 1:14,000,000]",
+  "spatial": [
+    "Brazil",
+    "Uruguay",
+    "Paraguay",
+    "Guyana"
+  ],
+  "author": "Bartholomew, John, 1805-1861",
+  "created": "1889-01-01T00:00:00Z",
+  "date": "1889",
+  "identifier": "http://arks.princeton.edu/ark:/88435/wp988n271",
+  "location": [
+    "Special Collections D Alcove 30, Drawer 10 HMC01.6181"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://catalog.princeton.edu/catalog/6592452#view",
+      "label": [
+        "Digital content",
+        "See the map"
+      ]
+    },
+    {
+      "@id": "iiif_manifest_paths",
+      "label": {
+        "http://arks.princeton.edu/ark:/88435/wp988n271": "https://figgy.princeton.edu/concern/scanned_maps/df1d77fe-307c-47a8-8f31-6f15e9d5856a/manifest"
+      }
+    }
+  ]
+}

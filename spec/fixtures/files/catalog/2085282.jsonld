@@ -1,1 +1,50 @@
-{"@context":"http://bibdata.princeton.edu/context.json","@id":"http://bibdata.princeton.edu/bibliographic/2085282","title":{"@value":"Lettera di messer Bartolomeo Ammannati architetto, e scvltor fiorentino. A gli honoratissimi Accademici del Disegno","@language":"ita"},"language":"ita","creator":"Ammannati, Bartolomeo, 1511-1592","call_number":["N61 .A51","Electronic Resource"],"extent":"[15] p. 24 cm.","format":"Book","type":["correspondence","Early works to 1800"],"description":["One instance of bracket made in iron gall ink in margin, text otherwise clean.","Bookseller's stamp: Sansoni Antiquariato Via Ricasoli, 44 Firenze\"."],"publisher":"In Firenze, Nella stamperia di B. Sermartelli, 1582.","subject":["Accademia delle arti del disegno (Florence, Italy)","Artists—correspondence","Art—Early works to 1800"],"title_sort":"Lettera di messer Bartolomeo Ammannati architetto, e scvltor fiorentino. A gli honoratissimi Accademici del Disegno.","references":"Catalogo ragionato dei libri d'arte e d'antichità posseduti dal conte Cicognara 2196D","author":"Ammannati, Bartolomeo, 1511-1592","created":"1582-01-01T00:00:00Z","date":"1582","identifier":"http://arks.princeton.edu/ark:/88435/8623j137z","local_identifier":["dcl:s7z"],"location":["SAX N61 .A51","SAX Electronic Resource","ELF1 N61 .A51","ELF1 Electronic Resource"]}
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9920852823506421",
+  "title": [
+    {
+      "@value": "Lettera di messer Bartolomeo Ammannati architetto, e scvltor fiorentino. A gli honoratissimi Accademici del Disegno.",
+      "@language": "ita"
+    }
+  ],
+  "language": "ita",
+  "creator": "Ammannati, Bartolomeo, 1511-1592",
+  "call_number": "N61 .A51",
+  "extent": "[15] p. 24 cm.",
+  "format": "Book",
+  "description": [
+    "One instance of bracket made in iron gall ink in margin, text otherwise clean.",
+    "Bookseller's stamp: Sansoni Antiquariato Via Ricasoli, 44 Firenze\"."
+  ],
+  "publisher": "In Firenze, Nella stamperia di B. Sermartelli, 1582.",
+  "subject": [
+    "Accademia delle arti del disegno (Florence, Italy)",
+    "Artists—Correspondence",
+    "Art—Early works to 1800"
+  ],
+  "references": "Catalogo ragionato dei libri d'arte e d'antichità posseduti dal conte Cicognara 2196D",
+  "author": "Ammannati, Bartolomeo, 1511-1592",
+  "created": "1582-01-01T00:00:00Z",
+  "date": "1582",
+  "identifier": "http://arks.princeton.edu/ark:/88435/8623j137z",
+  "local_identifier": [
+    "dcl:s7z"
+  ],
+  "location": [
+    "Marquand Library N61 .A51"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://catalog.princeton.edu/catalog/2085282#view",
+      "label": [
+        "Digital content"
+      ]
+    },
+    {
+      "@id": "iiif_manifest_paths",
+      "label": {
+        "http://arks.princeton.edu/ark:/88435/8623j137z": "https://figgy.princeton.edu/concern/scanned_resources/e2ee3f54-9821-4137-83ff-b875b7b8c153/manifest"
+      }
+    }
+  ]
+}

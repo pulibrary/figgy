@@ -1,27 +1,34 @@
 {
-   "@context":"http://bibdata.princeton.edu/context.json",
-   "@id":"http://bibdata.princeton.edu/bibliographic/3013481",
-   "title":{
-      "@value":"Cabinet des singularitez dárchitecture, peinture, sculpture, et graveure : ou, Introduction a la connoissance des plus beaux arts, figurés sous les tableaux, les statuës, \u0026 les estampes",
-      "@language":"fra"
-   },
-   "language":"fra",
-   "creator":"Le Comte, Florent, -1712",
-   "call_number":"N7420 .L49",
-   "extent":"3 v. fronts. 17 cm.",
-   "format":"Book",
-   "type":"Early works to 1800",
-   "description":"Imperfect: t.-p. and front. of v. 2 wanting; typed t.-p. supplied.",
-   "publisher":"Paris : N. Le Clerc, 1699-1700.",
-   "subject":[
-      "Art—Early works to 1800",
-      "Artists"
-   ],
-   "title_sort":"Cabinet des singularitez dárchitecture, peinture, sculpture, et graveure : ou, Introduction a la connoissance des plus beaux arts, figurés sous les tableaux, les statuës, \u0026 les estampes.",
-   "contributor":[
-      "Burdon, Rowland"
-   ],
-   "author":"Le Comte, Florent, -1712",
-   "created":"1699-01-01T00:00:00Z/1700-12-31T23:59:59Z",
-   "date":"1699-1700"
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9930134813506421",
+  "title": [
+    {
+      "@value": "Cabinet des singularitez dárchitecture, peinture, sculpture, et graveure : ou, Introduction a la connoissance des plus beaux arts, figurés sous les tableaux, les statuës, & les estampes.",
+      "@language": "fre"
+    }
+  ],
+  "language": "fre",
+  "creator": "Le Comte, Florent, -1712",
+  "call_number": "N7420 .L49",
+  "extent": "3 v. fronts. 17 cm.",
+  "format": "Book",
+  "description": "Imperfect: t.-p. and front. of v. 2 wanting; typed t.-p. supplied.",
+  "publisher": "Paris : N. Le Clerc, 1699-1700.",
+  "subject": [
+    "Art—Early works to 1800",
+    "Artists"
+  ],
+  "references": "Catalogo ragionato dei libri d'arte e d'antichità posseduti dal conte Cicognara 20",
+  "contributor": [
+    "Burdon, Rowland"
+  ],
+  "author": "Le Comte, Florent, -1712",
+  "created": "1699-01-01T00:00:00Z/1700-12-31T23:59:59Z",
+  "date": "1699-1700",
+  "local_identifier": [
+    "hnz"
+  ],
+  "location": [
+    "Marquand Library N7420 .L49"
+  ]
 }

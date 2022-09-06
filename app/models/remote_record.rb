@@ -81,10 +81,21 @@ class RemoteRecord
   def attributes
     hash = JSONLDBuilder.for(jsonld).result
     hash[:content_type] = hash[:format] # we can't use format because it's a rails reserved word
+    hash[:identifier] = coerce_identifier(hash[:identifier])
     hash.merge(source_jsonld: jsonld.to_json)
   end
 
   private
+
+    # Catalog returns a hash of identifier to label now - coerce it back to a single
+    # identifier.
+    def coerce_identifier(identifier)
+      if identifier.is_a?(Hash)
+        identifier.keys.map(&:to_s).first
+      else
+        identifier
+      end
+    end
 
     def jsonld_request
       @jsonld_request ||=

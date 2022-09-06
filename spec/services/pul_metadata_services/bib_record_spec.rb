@@ -244,7 +244,10 @@ describe PulMetadataServices::BibRecord do
       let(:bib_id) { "7214786" }
 
       it "extracts the values" do
-        expect(record.title).to eq ["Be-darkhe avot", "בדרכי אבות"]
+        expect(record.title).to eq [
+          "Be-darkhe avot : ʻiyun be-darke ha-avot ṿe-hanhagotehem be-ḳiyum ha-Torah ʻod li-fene she-nitnah",
+          "בדרכי אבות : עיון בדרכי האבות והנהגותיהם בקיום התורה עוד לפני שניתנה"
+        ]
       end
     end
 
@@ -253,7 +256,10 @@ describe PulMetadataServices::BibRecord do
       let(:include_initial_article) { false }
 
       it "extracts the values without an initial article" do
-        expect(record.title(include_initial_article)).to eq ["Be-darkhe avot", "בדרכי אבות"]
+        expect(record.title(include_initial_article)).to eq [
+          "Be-darkhe avot : ʻiyun be-darke ha-avot ṿe-hanhagotehem be-ḳiyum ha-Torah ʻod li-fene she-nitnah",
+          "בדרכי אבות : עיון בדרכי האבות והנהגותיהם בקיום התורה עוד לפני שניתנה"
+        ]
       end
     end
 
