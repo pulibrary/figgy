@@ -106,7 +106,7 @@ If you'd like to run the test suite in parallel do the following:
 
 To run in parallel with working coverage, but worse output, do:
 
-1. `bundle exec parallel_rspec --first-is-1 --runtime-log tmp/turbo_rspec_runtime.log`
+1. `./bin/parallel_rspec`
 
 ## Load sample development data
 
