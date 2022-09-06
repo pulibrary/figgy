@@ -78,7 +78,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, visibility: vis_auth, member_of_collection_ids: [coll.id])
     end
 
-    context "when collection is set to authenticated" do
+    context "when visbility is set to authenticated" do
       let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED }
 
@@ -92,7 +92,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
     end
 
-    context "when collection is set to public" do
+    context "when visibility is set to public" do
       let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC }
 
@@ -102,6 +102,20 @@ RSpec.describe IngestArchivalMediaBagJob do
         file_sets = query_service.find_all_of_model(model: FileSet)
         expect(file_sets.map(&:read_groups).to_a).to eq [
           [read_auth], [read_auth], [read_auth], [read_auth]
+        ]
+      end
+    end
+
+    context "when visibility is set to private" do
+      let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+      let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PRIVATE }
+
+      it "assigns correct visibility and read_groups access control to each resource and file_set" do
+        expect(query_service.find_all_of_model(model: ScannedResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
+
+        file_sets = query_service.find_all_of_model(model: FileSet)
+        expect(file_sets.map(&:read_groups).to_a).to eq [
+          [], [], [], []
         ]
       end
     end
