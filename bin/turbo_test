@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-
-rm -f .env.test
-./bin/setup_lando && DISABLE_SPRING=true RAILS_ENV=test bundle exec turbo_tests
