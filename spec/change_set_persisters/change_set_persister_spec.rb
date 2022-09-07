@@ -81,7 +81,12 @@ RSpec.describe ChangeSetPersister do
       change_set.validate(source_metadata_identifier: "10001789")
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Cameroons under United Kingdom Trusteeship 1949 / drawn & reproduced by Survey Department, Lagos, Nigeria.", language: :eng)]
+      expect(output.primary_imported_metadata.title).to eq [
+        RDF::Literal.new(
+          "Cameroons under United Kingdom Trusteeship 1949 / drawn & reproduced by Survey Department, Lagos, Nigeria.",
+          language: :eng
+        )
+      ]
       expect(output.primary_imported_metadata.creator).to eq ["Nigeria. Survey Department"]
       expect(output.primary_imported_metadata.subject).to include "Administrative and political divisions—Maps"
       expect(output.primary_imported_metadata.spatial).to eq ["Cameroon", "Nigeria"]
@@ -425,7 +430,12 @@ RSpec.describe ChangeSetPersister do
       change_set.validate(source_metadata_identifier: "6866386")
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Eastern Turkey in Asia. Sheet 16 Malatia / compiled at the Intelligence Division, War Office by Major F.R. Maunsell, R.A.., W.J. Anderson", language: :eng)]
+      expect(output.primary_imported_metadata.title).to eq [
+        RDF::Literal.new(
+          "Eastern Turkey in Asia. Sheet 16 Malatia / compiled at the Intelligence Division, War Office by Major F.R. Maunsell, R.A.., W.J. Anderson",
+          language: :eng
+        )
+      ]
       expect(output.source_metadata_identifier).to eq ["6866386"]
     end
   end
