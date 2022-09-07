@@ -703,7 +703,7 @@ RSpec.describe CatalogController do
 
         expect(response).to be_successful
         json_body = MultiJson.load(response.body, symbolize_keys: true)
-        expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain"
+        expect(json_body[:title][0][:@value]).to eq "Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord."
         expect(json_body[:title][1][:@value]).to eq "test"
         expect(json_body[:identifier]).not_to be_blank
         expect(json_body[:scopeNote]).not_to be_blank

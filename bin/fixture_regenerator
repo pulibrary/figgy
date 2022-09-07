@@ -55,9 +55,20 @@ def get_jsonld(id)
   puts "Getting JSONLD for #{id}"
   json = URI.open("https://catalog.princeton.edu/catalog/#{id}.jsonld").read
   parsed = JSON.parse(json)
+  parsed = process(parsed)
   JSON.pretty_generate(parsed)
 rescue StandardError => e
   puts "Error: #{e}"
+end
+
+# Handles records which are changed a little bit for tests.
+def process(parsed)
+ if(parsed["@id"].include?("991234563506421"))
+   # We change the language to fr to make sure non-eng languages are parsed in
+   # the test suite.
+   parsed["title"][0]["@language"] = "fr"
+ end
+ return parsed
 end
 
 files.each do |file|

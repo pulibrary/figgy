@@ -29,7 +29,7 @@ describe VoyagerUpdateJob do
     it "queries for all resources and updates them asynchronously" do
       resource1 = find_resource(resources.first.id)
       resource2 = find_resource(resources.last.id)
-      expect(resource1.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain")
+      expect(resource1.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.")
       expect(resource2.title.first.to_s).to eq("Bible, Latin")
     end
   end

@@ -35,7 +35,7 @@ RSpec.describe ChangeSetPersister do
       change_set.validate(source_metadata_identifier: "123456")
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.", language: :fr)]
       expect(output.primary_imported_metadata.creator).to eq ["Bord, Janet, 1945-"]
       expect(output.primary_imported_metadata.call_number).to eq ["BL980.G7 B66 1982"]
       expect(output.primary_imported_metadata.source_jsonld).not_to be_blank
@@ -118,7 +118,7 @@ RSpec.describe ChangeSetPersister do
     it "uses the given title" do
       stub_catalog(bib_id: "123456")
       resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
-      expect(resource.title.first.to_s).to eq "Earth rites : fertility rites in pre-industrial Britain"
+      expect(resource.title.first.to_s).to eq "Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord."
       change_set = ChangeSet.for(resource)
       change_set.validate(source_metadata_identifier: "", title: "Test")
       output = change_set_persister.save(change_set: change_set)
@@ -319,7 +319,7 @@ RSpec.describe ChangeSetPersister do
       expect(change_set.validate(source_metadata_identifier: "123456")).to eq true
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.", language: :fr)]
     end
   end
   context "when a source_metadata_identifier is set and it's from aspace pulfalight" do
@@ -407,7 +407,7 @@ RSpec.describe ChangeSetPersister do
       change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "1")
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain", language: :fr)]
+      expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.", language: :fr)]
       expect(output.primary_imported_metadata.applicant).to be_blank
       expect(output.source_metadata_identifier).to eq ["123456"]
     end
