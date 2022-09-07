@@ -107,7 +107,7 @@ If you'd like to run the test suite in parallel do the following:
 The output from the parallel runs will be interspersed, and the failures will be
 listed separately for each parallel run, but final run time and coverage will be
 reported accurate, and the file that powers the --only-failures will be
-correctlyl generated.
+correctly generated.
 
 ## Load sample development data
 
