@@ -230,7 +230,7 @@ RSpec.describe BulkIngestService do
       let(:replaces) { "pudl0001/4609321/331" }
       let(:coll) { FactoryBot.create_for_repository(:collection) }
       before do
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "4609321")
         stub_ezid(shoulder: "99999/fk4", blade: "4609321")
       end
 

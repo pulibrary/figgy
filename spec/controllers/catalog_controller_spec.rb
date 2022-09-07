@@ -112,7 +112,7 @@ RSpec.describe CatalogController do
         stub_catalog(bib_id: "8543429")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
         persister.save(resource: FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429", import_metadata: true))
-        get :index, params: { q: "cico:xjt" }
+        get :index, params: { q: "dcl:xjt" }
         expect(assigns(:response).documents.length).to eq 1
       end
       it "can search by call number" do

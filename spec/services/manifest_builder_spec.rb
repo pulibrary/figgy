@@ -655,7 +655,7 @@ RSpec.describe ManifestBuilder do
   context "when given a scanned resource with an ingested JSON file" do
     let(:file) { fixture_file_upload("ingest_single_figgy_metadata/figgy_metadata.json", "") }
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
     end
 
     it "builds a IIIF document without the JSON file", run_real_characterization: true do

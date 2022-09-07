@@ -30,7 +30,7 @@ describe VoyagerUpdateJob do
       resource1 = find_resource(resources.first.id)
       resource2 = find_resource(resources.last.id)
       expect(resource1.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.")
-      expect(resource2.title.first.to_s).to eq("Bible, Latin")
+      expect(resource2.title.first.to_s).to eq("Bible, Latin.")
     end
   end
 
