@@ -101,8 +101,13 @@ destroy` or turn off all services with `lando poweroff`.
 If you'd like to run the test suite in parallel do the following:
 
 1. `bundle exec rake servers:start`
-1. `PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup`
+1. `PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup` (Sets up suport database; only needed after db has been destroyed)
 1. `./bin/parallel_rspec_coverage`
+
+The output from the parallel runs will be interspersed, and the failures will be
+listed separately for each parallel run, but final run time and coverage will be
+reported accurate, and the file that powers the --only-failures will be
+correctlyl generated.
 
 ## Load sample development data
 
