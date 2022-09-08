@@ -630,7 +630,7 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     oj (3.13.18)
-    omniauth (1.9.1)
+    omniauth (1.9.2)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
     omniauth-cas (2.0.0)
