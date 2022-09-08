@@ -4,10 +4,10 @@
   "title": [
     {
       "@value": "Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps.",
-      "@language": "   "
+      "@language": null
     }
   ],
-  "language": "   ",
+  "language": null,
   "creator": "Land Info Worldwide Mapping, LLC",
   "extent": "External Hard Drive",
   "format": "Map",

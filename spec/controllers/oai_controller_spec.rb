@@ -147,9 +147,9 @@ RSpec.describe OaiController do
           expect(result.xpath("//type").map(&:text)).to eq ["image", "maps"]
           descriptions = result.xpath("//description").map(&:text)
           expect(descriptions.count).to eq 3
-          expect(descriptions.first).to start_with("Great Britain")
-          expect(result.xpath("//contributor").map(&:text)).to eq ["Maunsell, F. R."]
-          expect(result.xpath("//subject").map(&:text)).to eq ["Topographic maps", "Turkey—Maps"]
+          expect(descriptions.first).to start_with("Relief shown by form lines and spot heights.")
+          expect(result.xpath("//contributor").map(&:text)).to eq ["Great Britain. War Office. General Staff. Geographical Section"]
+          expect(result.xpath("//subject").map(&:text)).to eq ["Topographic maps", "Turkey—Maps", "Maps"]
         end
       end
 

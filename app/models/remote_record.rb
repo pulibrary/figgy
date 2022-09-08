@@ -118,11 +118,15 @@ class RemoteRecord
     class TypedLiteral < ::Valkyrie::ValueMapper
       JSONLDBuilder.register(self)
       def self.handles?(value)
-        value.is_a?(Hash) && value[:@value] && value[:@language]
+        value.is_a?(Hash) && value[:@value] && value.key?(:@language)
       end
 
       def result
-        RDF::Literal.new(value[:@value], language: value[:@language])
+        if value[:@language]
+          RDF::Literal.new(value[:@value], language: value[:@language])
+        else
+          value[:@value]
+        end
       end
     end
 

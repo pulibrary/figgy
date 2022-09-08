@@ -143,7 +143,7 @@ RSpec.describe ChangeSetPersister do
       change_set.validate(source_metadata_identifier: "9637153")
       output = change_set_persister.save(change_set: change_set)
 
-      expect(output.primary_imported_metadata.title).to eq ["Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps"]
+      expect(output.primary_imported_metadata.title).to eq ["Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps."]
       expect(output.primary_imported_metadata.creator).to eq ["Land Info Worldwide Mapping, LLC"]
     end
   end

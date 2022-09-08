@@ -4,14 +4,15 @@
   "title": [
     {
       "@value": "Piano sonatas [sound recording] / Beethoven.",
-      "@language": "   "
+      "@language": null
     }
   ],
-  "language": "   ",
+  "language": null,
   "creator": "Beethoven, Ludwig van, 1770-1827",
   "call_number": "CD- 9455",
   "extent": "10 sound discs (642 min.) : digital, stereo. ; 4 3/4 in.",
   "format": "Audio",
+  "type": "Sonatas",
   "description": [
     "London: 425 590-2 (425 591-2--425 600-2).",
     "Title from containers.",
