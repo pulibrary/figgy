@@ -90,19 +90,61 @@ RSpec.describe ScannedResourceChangeSet do
     end
     let(:resource1) { FactoryBot.create_for_repository(:file_set) }
     let(:resource2) { FactoryBot.create_for_repository(:file_set) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource1.id, resource2.id]) }
+
     it "can set a whole structure all at once" do
       expect(change_set.validate(logical_structure: [structure])).to eq true
 
-      expect(change_set.logical_structure[0].label).to eq ["Top!"]
-      expect(change_set.logical_structure[0].nodes[0].label).to eq ["Chapter 1"]
-      expect(change_set.logical_structure[0].nodes[0].nodes[0].proxy).to eq [resource1.id]
-      expect(change_set.logical_structure[0].nodes[1].label).to eq ["Chapter 2"]
-      expect(change_set.logical_structure[0].nodes[1].nodes[0].proxy).to eq [resource2.id]
+      structure = change_set.logical_structure
+      expect(structure[0].label).to eq ["Top!"]
+      expect(structure[0].nodes[0].label).to eq ["Chapter 1"]
+      expect(structure[0].nodes[0].nodes[0].proxy).to eq [resource1.id]
+      expect(structure[0].nodes[1].label).to eq ["Chapter 2"]
+      expect(structure[0].nodes[1].nodes[0].proxy).to eq [resource2.id]
     end
+
     it "has a default label" do
       expect(change_set.logical_structure[0].label).to eq ["Logical"]
     end
+
+    context "when a proxied resource does not exist" do
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource1.id]) }
+      let(:structure) do
+        {
+          "label": "Top!",
+          "nodes": [
+            {
+              "label": "Chapter 1",
+              "nodes": [
+                {
+                  "proxy": resource1.id
+                }
+              ]
+            },
+            {
+              "label": "Chapter 2",
+              "nodes": [
+                {
+                  "proxy": "nonexistentresourceid"
+                }
+              ]
+            }
+          ]
+        }
+      end
+      it "filters out those nodes" do
+        expect(change_set.validate(logical_structure: [structure])).to eq true
+
+        structure = change_set.logical_structure
+        expect(structure[0].label).to eq ["Top!"]
+        expect(structure[0].nodes[0].label).to eq ["Chapter 1"]
+        expect(structure[0].nodes[0].nodes[0].proxy).to eq [resource1.id]
+        expect(structure[0].nodes[1].label).to eq ["Chapter 2"]
+        expect(structure[0].nodes[1].nodes).to eq []
+      end
+    end
   end
+
   context "when a ScannedResource has ScannedResource members" do
     subject(:change_set) { described_class.new(scanned_resource) }
     let(:scanned_resource_member) { FactoryBot.create_for_repository(:scanned_resource) }
