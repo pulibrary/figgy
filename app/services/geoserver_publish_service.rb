@@ -95,6 +95,7 @@ class GeoserverPublishService
     # Provide the type of geospatial layer type
     # @return [String]
     def layer_type
+      return "geotiff" if parent.model.is_a?(RasterResource)
       "shapefile"
     end
 
