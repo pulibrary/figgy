@@ -108,5 +108,31 @@ RSpec.describe GeoserverPublishService do
         expect(Geoserver::Publish).to have_received(:shapefile)
       end
     end
+
+    context "with a raster resource" do
+      let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
+      let(:tika_output) { tika_tiff_output }
+      let(:resource) do
+        FactoryBot.create_for_repository(
+          :raster_resource,
+          files: [file],
+          title: RDF::Literal.new(resource_title, language: :en),
+          visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        )
+      end
+
+      before do
+        allow(Geoserver::Publish).to receive(:delete_geotiff)
+        allow(Geoserver::Publish).to receive(:geotiff)
+      end
+
+      it "calls delete on both public and authenticated workspaces and creates new layer" do
+        service.update
+
+        expect(Geoserver::Publish).to have_received(:delete_geotiff).with(hash_including(workspace_name: Figgy.config["geoserver"]["authenticated"]["workspace"]))
+        expect(Geoserver::Publish).to have_received(:delete_geotiff).with(hash_including(workspace_name: Figgy.config["geoserver"]["open"]["workspace"]))
+        expect(Geoserver::Publish).to have_received(:geotiff)
+      end
+    end
   end
 end
