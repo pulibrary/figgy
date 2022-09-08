@@ -16,6 +16,8 @@ development:
 test: &test
   adapter: solr
   url: <%= ENV['SOLR_URL'] || "http://#{ENV["lando_figgy_test_solr_conn_host"] || "127.0.0.1"}:#{ENV['TEST_JETTY_PORT'] || ENV["lando_figgy_test_solr_conn_port"] || 8984}/solr/figgy-core-test" %>
+  timeout: 600
+  open_timeout: 600
 production:
   adapter: solr
   url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8983/solr/figgy-core" %>

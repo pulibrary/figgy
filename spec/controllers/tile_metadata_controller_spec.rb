@@ -12,6 +12,8 @@ RSpec.describe TileMetadataController, type: :controller do
     FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
   end
 
+  let(:cloud_path) { Pathname.new(Figgy.config["test_cloud_geo_derivative_path"]) }
+
   describe "#tilejson" do
     with_queue_adapter :inline
     it "redirects to the tilejson URL" do
@@ -44,7 +46,7 @@ RSpec.describe TileMetadataController, type: :controller do
         fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         get :metadata, params: { id: raster_set.id, format: :json }
 
-        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{fingerprint}.json")
+        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives#{ENV['TEST_ENV_NUMBER']}/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{fingerprint}.json")
       end
     end
 
@@ -65,8 +67,8 @@ RSpec.describe TileMetadataController, type: :controller do
         second_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
 
         get :metadata, params: { id: raster_set.id, format: :json }
-        expect(JSON.parse(response.body)["uri"]).not_to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{first_fingerprint}.json")
-        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{second_fingerprint}.json")
+        expect(JSON.parse(response.body)["uri"]).not_to end_with("tmp/cloud_geo_derivatives#{ENV['TEST_ENV_NUMBER']}/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{first_fingerprint}.json")
+        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives#{ENV['TEST_ENV_NUMBER']}/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{second_fingerprint}.json")
       end
     end
 
@@ -97,7 +99,7 @@ RSpec.describe TileMetadataController, type: :controller do
         fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
         get :metadata, params: { id: map_set.id, format: :json }
 
-        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{fingerprint}.json")
+        expect(JSON.parse(response.body)["uri"]).to end_with("tmp/cloud_geo_derivatives#{ENV['TEST_ENV_NUMBER']}/33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{fingerprint}.json")
       end
     end
 

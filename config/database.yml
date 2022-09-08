@@ -18,7 +18,7 @@ test:
   password: <%= (Figgy.read_only_mode ? ENV["FIGGY_DB_RO_PASSWORD"] : ENV["FIGGY_DB_PASSWORD"]) || ENV["lando_figgy_database_creds_password"] %>
   host: <%= ENV["FIGGY_DB_HOST"] || ENV["lando_figgy_database_conn_host"] %>
   port: <%= ENV["FIGGY_DB_HOST"] ? nil : ENV["lando_figgy_database_conn_port"] %>
-  database: figgy_test
+  database: figgy_test<%= ENV['TEST_ENV_NUMBER'] %>
 
 production: &deploy
   <<: *default

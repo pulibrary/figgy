@@ -112,6 +112,7 @@ group :development, :test do
   gem "bundler-audit", require: false
   gem "dotenv-rails"
   gem "factory_bot_rails"
+  gem "parallel_tests"
   gem "pdf-reader", github: "yob/pdf-reader"
   gem "pry-byebug"
   gem "pry-rails"

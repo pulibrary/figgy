@@ -2,6 +2,10 @@
 require_relative "boot"
 require_relative "read_only_mode"
 require "rails"
+require "dotenv/rails-now"
+if ["development", "test"].include? ENV["RAILS_ENV"]
+  Dotenv::Railtie.load
+end
 require_relative "lando_env"
 require "active_model/railtie"
 require "active_job/railtie"

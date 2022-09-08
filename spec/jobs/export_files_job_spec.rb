@@ -5,7 +5,7 @@ RSpec.describe ExportFilesJob do
   describe ".perform" do
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, title: "export me", files: [file]) }
     let(:file) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
-    let(:export_path) { Rails.root.join("tmp", "test_export") }
+    let(:export_path) { Figgy.config["export_base"] }
 
     before do
       FileUtils.rm_rf(export_path) if File.exist?(export_path)

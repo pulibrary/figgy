@@ -6,7 +6,7 @@ RSpec.describe Hathi::SubmissionInformationPackage do
   subject(:depositor) { described_class.new(package: package, base_path: deposit_path) }
   let(:file1) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:deposit_path) { Rails.root.join("tmp", "test_hathi") }
+  let(:deposit_path) { Rails.root.join("tmp", "test_hathi#{ENV['TEST_ENV_NUMBER']}") }
   let(:package) { Hathi::ContentPackage.new(resource: resource) }
   with_queue_adapter :inline
   let(:resource) do

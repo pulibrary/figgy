@@ -645,6 +645,8 @@ GEM
     os (1.1.4)
     ostruct (0.5.5)
     parallel (1.22.1)
+    parallel_tests (3.11.1)
+      parallel
     parser (3.1.2.0)
       ast (~> 2.4.1)
     pdf-core (0.9.0)
@@ -1058,6 +1060,7 @@ DEPENDENCIES
   omniauth
   omniauth-cas
   openseadragon
+  parallel_tests
   pdf-reader!
   pg
   prawn

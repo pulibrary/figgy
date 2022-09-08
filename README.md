@@ -96,6 +96,19 @@ destroy` or turn off all services with `lando poweroff`.
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
    - Access Figgy at http://localhost:3000/
 
+### Parallel Tests
+
+If you'd like to run the test suite in parallel do the following:
+
+1. `bundle exec rake servers:start`
+1. `PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup` (Sets up suport database; only needed after db has been destroyed)
+1. `./bin/parallel_rspec_coverage`
+
+The output from the parallel runs will be interspersed, and the failures will be
+listed separately for each parallel run, but final run time and coverage will be
+reported accurate, and the file that powers the --only-failures flag will be
+correctly generated.
+
 ## Load sample development data
 
 1. Log in to your development instance using your princeton credentials; this creates your user in figgy's db. If you only have user access and need admin access, run `bundle exec rake figgy:set_admin_user`

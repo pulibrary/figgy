@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+rm -f .env.test
+./bin/setup_lando && bundle exec parallel_rspec --first-is-1 --runtime-log tmp/turbo_rspec_runtime.log -o "--format progress"
