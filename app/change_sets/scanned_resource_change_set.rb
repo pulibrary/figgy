@@ -56,9 +56,7 @@ class ScannedResourceChangeSet < ChangeSet
   # filters out structure nodes that proxy deleted resources
   def logical_structure
     logical_order = (Array(fields["logical_structure"] || resource.logical_structure).first || Structure.new)
-    members = Wayfinder.for(resource).members_with_parents
-    structure_with_proxies = WithProxyForObject.new(logical_order, members)
-    logical_order.nodes = recursive_structure_node_delete(structure_with_proxies.nodes)
+    logical_order.nodes = recursive_structure_node_delete(logical_order.nodes)
     Array(logical_order)
   end
 
@@ -85,14 +83,11 @@ class ScannedResourceChangeSet < ChangeSet
 
     def recursive_structure_node_delete(nodes)
       nodes.map do |node|
-        if node.proxy.present? && node.proxy_for_object.nil?
-          nil
-        elsif node.nodes.present?
+        next if node.proxy.present? && member_ids.exclude?(node.proxy.first.id)
+        if node.nodes.present?
           node.nodes = recursive_structure_node_delete(node.nodes)
-          node
-        else
-          node
         end
+        node
       end.compact
     end
 end
