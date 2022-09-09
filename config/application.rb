@@ -2,8 +2,8 @@
 require_relative "boot"
 require_relative "read_only_mode"
 require "rails"
-require "dotenv/rails-now"
 if ["development", "test"].include? ENV["RAILS_ENV"]
+  require "dotenv/rails-now"
   Dotenv::Railtie.load
 end
 require_relative "lando_env"
