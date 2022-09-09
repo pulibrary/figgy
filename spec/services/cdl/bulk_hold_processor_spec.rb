@@ -33,9 +33,9 @@ RSpec.describe CDL::BulkHoldProcessor do
     allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
     User.create!(uid: "one", email: "one@princeton.edu")
     User.create!(uid: "two", email: "two@princeton.edu")
-    stub_bibdata(bib_id: "123456")
-    stub_bibdata(bib_id: "8543429")
-    stub_bibdata(bib_id: "4609321")
+    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "8543429")
+    stub_catalog(bib_id: "4609321")
     resource_charge_list1 = FactoryBot.create_for_repository(
       :resource_charge_list,
       resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456").id,

@@ -9,7 +9,7 @@ RSpec.describe ScannedResourceChangeSet do
   let(:form_resource) { scanned_resource }
 
   before do
-    stub_bibdata(bib_id: "123456")
+    stub_catalog(bib_id: "123456")
   end
 
   it_behaves_like "a ChangeSet"

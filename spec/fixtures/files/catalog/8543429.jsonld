@@ -1,0 +1,60 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9985434293506421",
+  "title": [
+    {
+      "@value": "La bolla d'oro de' fanciulli nobili romani e quella de' libertini [microform] : ed altre singolarità spettanti a' mausolei nuovamente scopertisi / brevemente spiegate, e divise in II. parti da Francesco de' Ficoroni ...",
+      "@language": "ita"
+    }
+  ],
+  "language": "ita",
+  "creator": "Ficoroni, Francesco, 1664-1747",
+  "call_number": "MICROFICHE 5",
+  "extent": "76 p. : ill.",
+  "format": "Book",
+  "description": "Fiche no. 3724 (1) appears to be a second copy.",
+  "publisher": "In Roma : Nella stamperia di Antonio de' Rossi, 1732.",
+  "subject": [
+    "Jewelry—Rome—Early works to 1800",
+    "Tombs—Italy—Early works to 1800",
+    "Rome—Antiquities—Early works to 1800"
+  ],
+  "spatial": "Italy",
+  "references": "Cicognara, 3723",
+  "contributor": [
+    "Fondo Cicognara (Biblioteca apostolica vaticana)",
+    "Leopoldo Cicognara Program (University of Illinois at Urbana-Champaign)"
+  ],
+  "author": "Ficoroni, Francesco, 1664-1747",
+  "created": "1732-01-01T00:00:00Z",
+  "date": "1732",
+  "identifier": "http://arks.princeton.edu/ark:/88435/jm214s442",
+  "local_identifier": [
+    "dcl:xjt",
+    "dcl:1pt"
+  ],
+  "location": [
+    "Marquand Library MICROFICHE 5"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://catalog.princeton.edu/catalog/8543429#view",
+      "label": [
+        "Digital content"
+      ]
+    },
+    {
+      "@id": "https://catalog.princeton.edu/catalog/8543429#view_1",
+      "label": [
+        "Digital content"
+      ]
+    },
+    {
+      "@id": "iiif_manifest_paths",
+      "label": {
+        "http://arks.princeton.edu/ark:/88435/jm214s442": "https://figgy.princeton.edu/concern/scanned_resources/4cf98d8d-073b-4ec4-b743-4f07f8a3a239/manifest",
+        "http://arks.princeton.edu/ark:/88435/73666780q": "https://figgy.princeton.edu/concern/scanned_resources/5979aaae-b328-494b-ad4a-3708dbd0dcf6/manifest"
+      }
+    }
+  ]
+}

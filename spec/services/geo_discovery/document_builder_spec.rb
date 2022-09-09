@@ -99,7 +99,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     let(:change_set) { ScannedMapChangeSet.new(geo_work, files: []) }
 
     before do
-      stub_bibdata(bib_id: "5144620")
+      stub_catalog(bib_id: "5144620")
       change_set_persister.save(change_set: change_set)
     end
 

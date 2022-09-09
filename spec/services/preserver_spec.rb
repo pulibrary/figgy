@@ -33,7 +33,7 @@ describe Preserver do
   describe "#preserve!" do
     before do
       stub_ezid(shoulder: shoulder, blade: blade)
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
     end
 
     it "preserves the metadata node" do

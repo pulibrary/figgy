@@ -9,7 +9,7 @@ RSpec.describe VectorResourceChangeSet do
   let(:form_resource) { vector_resource }
 
   before do
-    stub_bibdata(bib_id: "6592452")
+    stub_catalog(bib_id: "6592452")
   end
 
   it_behaves_like "a ChangeSet with EmbargoDate"

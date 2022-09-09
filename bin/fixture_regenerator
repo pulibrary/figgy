@@ -1,0 +1,81 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+# This script re-pulls all the JSON and MARC-XML for fixture documents in
+# spec/fixtures/files/catalog from the catalog. We ran this when migrating from
+# bibdata to the catalog as the data source.
+require "open-uri"
+require "pathname"
+require "pry"
+require "json"
+
+files = Dir.glob("./spec/fixtures/files/catalog/**")
+files.map! do |file|
+  Pathname.new(file)
+end
+
+def get_result(file)
+  return if skipped_records.include?(file.basename.to_s.split(".").first)
+  if file.basename.to_s.end_with?("mrx")
+    get_marc(get_id(file))
+  elsif file.basename.to_s.end_with?("jsonld")
+    get_jsonld(get_id(file))
+  else
+    nil
+  end
+end
+
+# These records have hand-crafted or adjusted fixtures to test specific
+# functionality.
+def skipped_records
+  [
+    "1160682", # Example for custom titles/authors
+    "345682", # Example for custom rights.
+    "10068705", # Example for 'parts' in 740 field.
+    "2068747" # Example for Cicognara CSV ingest - has since changed from cico: to dcl: since it's done in production.
+  ]
+end
+
+def get_id(file)
+  file_name, _extension = file.basename.to_s.split(".")
+  if file_name.start_with?("99")
+    file_name
+  else
+    "99#{file_name}3506421"
+  end
+end
+
+def get_marc(id)
+  puts "Getting MARC for #{id}"
+  URI.open("https://catalog.princeton.edu/catalog/#{id}.marcxml").read
+rescue StandardError => e
+  puts "Error: #{e}"
+end
+
+def get_jsonld(id)
+  puts "Getting JSONLD for #{id}"
+  json = URI.open("https://catalog.princeton.edu/catalog/#{id}.jsonld").read
+  parsed = JSON.parse(json)
+  parsed = process(parsed)
+  JSON.pretty_generate(parsed)
+rescue StandardError => e
+  puts "Error: #{e}"
+end
+
+# Handles records which are changed a little bit for tests.
+def process(parsed)
+ if(parsed["@id"].include?("991234563506421"))
+   # We change the language to fr to make sure non-eng languages are parsed in
+   # the test suite.
+   parsed["title"][0]["@language"] = "fr"
+ end
+ return parsed
+end
+
+files.each do |file|
+  puts "Fetching #{file}"
+  result = get_result(file)
+  next if result.nil?
+  File.open(file, 'w') do |f|
+    f.puts(result)
+  end
+end

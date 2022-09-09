@@ -139,7 +139,7 @@ RSpec.describe ScannedMapsController, type: :controller do
       end
 
       before do
-        stub_bibdata(bib_id: "5144620")
+        stub_catalog(bib_id: "5144620")
       end
 
       it "generates a resource with a valid geoblacklight document" do
@@ -148,7 +148,7 @@ RSpec.describe ScannedMapsController, type: :controller do
         id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
         resource = find_resource(id)
         builder = GeoDiscovery::DocumentBuilder.new(resource, GeoDiscovery::GeoblacklightDocument.new)
-        expect(builder.to_hash[:dc_title_s]).to eq "Mount Holly, N.J."
+        expect(builder.to_hash[:dc_title_s]).to eq "Mount Holly, N.J. [map]."
       end
     end
     it "renders the form if it doesn't create a map image" do

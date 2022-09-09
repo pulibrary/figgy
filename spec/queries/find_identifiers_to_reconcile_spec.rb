@@ -10,7 +10,7 @@ RSpec.describe FindIdentifiersToReconcile do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
 
   before do
-    stub_bibdata(bib_id: "123456")
+    stub_catalog(bib_id: "123456")
     stub_ezid(shoulder: "99999/fk4", blade: "8675309")
   end
 

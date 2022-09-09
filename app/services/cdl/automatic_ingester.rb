@@ -15,7 +15,7 @@ module CDL
     def run!
       Dir.glob(root_path.join("*.pdf")).each do |file|
         file = Pathname.new(file)
-        next unless RemoteRecord.bibdata?(file.basename(".*").to_s)
+        next unless RemoteRecord.catalog?(file.basename(".*").to_s)
         next unless Time.current - File.mtime(file.to_s) > 1.hour
         FileUtils.mv(file, root_path.join("ingesting", file.basename))
         CDL::PDFIngestJob.perform_later(file_name: file.basename.to_s)

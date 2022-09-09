@@ -1,0 +1,142 @@
+{
+  "f": [
+    {
+      "holding_id": 1581046,
+      "call_number": "NA203 .G5 1967",
+      "items": [
+        {
+          "id": 1666778,
+          "on_reserve": "N",
+          "copy_number": 1,
+          "item_sequence_number": 1,
+          "temp_location": null,
+          "perm_location": "f",
+          "circ_group_id": 1,
+          "pickup_location_code": "fcirc",
+          "pickup_location_id": 299,
+          "enum": null,
+          "chron": null,
+          "barcode": "32101003160700",
+          "item_type": "Gen",
+          "due_date": null,
+          "status": [
+            "Not Charged"
+          ]
+        }
+      ],
+      "sortable_call_number": "NA.0203.G5.1967"
+    }
+  ],
+  "st": [
+    {
+      "holding_id": 1581047,
+      "call_number": "NA200 .G38 1967",
+      "items": [
+        {
+          "id": 1666779,
+          "patron_group_charged":"CDL",
+          "on_reserve": "N",
+          "copy_number": 1,
+          "item_sequence_number": 1,
+          "temp_location": null,
+          "perm_location": "st",
+          "circ_group_id": 14,
+          "pickup_location_code": "stcirc",
+          "pickup_location_id": 345,
+          "enum": null,
+          "chron": null,
+          "barcode": "32101015237520",
+          "item_type": "Gen",
+          "due_date": null,
+          "status": [
+            "Not Charged"
+          ]
+        }
+      ]
+    }
+  ],
+  "sa": [
+    {
+      "holding_id": 1581048,
+      "call_number": "NA200 .G38 1967",
+      "items": [
+        {
+          "id": 1666780,
+          "patron_group_charged":"CDL",
+          "on_reserve": "N",
+          "copy_number": 1,
+          "item_sequence_number": 1,
+          "temp_location": null,
+          "perm_location": "sa",
+          "circ_group_id": 7,
+          "pickup_location_code": "sacirc",
+          "pickup_location_id": 321,
+          "enum": null,
+          "chron": null,
+          "barcode": "32101026258903",
+          "item_type": "Closed",
+          "due_date": null,
+          "status": [
+            "Not Charged"
+          ]
+        }
+      ]
+    }
+  ],
+  "ues": [
+    {
+      "holding_id": 1581049,
+      "call_number": "NA203 .G5 1967",
+      "items": [
+        {
+          "id": 1666781,
+          "patron_group_charged":"CDL",
+          "on_reserve": "N",
+          "copy_number": 1,
+          "item_sequence_number": 1,
+          "temp_location": null,
+          "perm_location": "ues",
+          "circ_group_id": 5,
+          "pickup_location_code": "uescirc",
+          "pickup_location_id": 356,
+          "enum": null,
+          "chron": null,
+          "barcode": "32101075843795",
+          "item_type": "Gen",
+          "due_date": null,
+          "status": [
+            "Not Charged"
+          ]
+        }
+      ]
+    }
+  ],
+  "uesrf": [
+    {
+      "holding_id": 1581050,
+      "call_number": "NA203 .G5 1967",
+      "items": [
+        {
+          "id": 1666782,
+          "patron_group_charged":"GRAD",
+          "on_reserve": "N",
+          "copy_number": 2,
+          "item_sequence_number": 1,
+          "temp_location": null,
+          "perm_location": "uesrf",
+          "circ_group_id": 5,
+          "pickup_location_code": "uescirc",
+          "pickup_location_id": 356,
+          "enum": null,
+          "chron": null,
+          "barcode": "32101019151941",
+          "item_type": "NoCirc",
+          "due_date": null,
+          "status": [
+            "Not Charged"
+          ]
+        }
+      ]
+    }
+  ]
+}

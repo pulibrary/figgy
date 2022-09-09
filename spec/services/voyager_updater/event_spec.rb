@@ -71,8 +71,8 @@ describe VoyagerUpdater::Event do
 
     before do
       allow(VoyagerUpdateJob).to receive(:perform_later)
-      stub_bibdata(bib_id: "123456")
-      stub_bibdata(bib_id: "4609321")
+      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "4609321")
       resource1
       resource2
       stub_request(:get, dump_url).to_return(body: dump_data.to_json)

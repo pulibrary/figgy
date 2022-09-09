@@ -17,7 +17,7 @@ RSpec.describe Hathi::ContentPackage do
   end
 
   before do
-    stub_bibdata(bib_id: "123456")
+    stub_catalog(bib_id: "123456")
   end
 
   describe ".id" do

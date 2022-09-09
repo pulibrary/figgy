@@ -15,7 +15,7 @@ RSpec.describe Types::RasterResourceType do
   let(:file_set) { FactoryBot.create_for_repository(:file_set) }
 
   before do
-    stub_bibdata(bib_id: bibid)
+    stub_catalog(bib_id: bibid)
   end
 
   describe "class methods" do

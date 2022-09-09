@@ -39,7 +39,7 @@ RSpec.describe BulkIngestIntermediateService do
     let(:file_set) { resource.decorate.decorated_file_sets.first }
 
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       resource
     end
 

@@ -19,7 +19,7 @@ RSpec.describe LinkedData::LinkedImportedResource do
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: source_id, member_of_collection_ids: [collection.id]) }
     it "returns a link to the catalog" do
-      stub_bibdata(bib_id: source_id)
+      stub_catalog(bib_id: source_id)
       expect(linked_resource.as_jsonld["link_to_catalog"]).to eq "https://catalog.princeton.edu/catalog/#{source_id}"
       expect(linked_resource.as_jsonld["member_of_collections"]).to be_nil
     end

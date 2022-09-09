@@ -1,0 +1,56 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9951446203506421",
+  "title": [
+    {
+      "@value": "Mount Holly, N.J. [map].",
+      "@language": "eng"
+    }
+  ],
+  "language": "eng",
+  "creator": "Sanborn Map Company",
+  "call_number": "HMC04 (Mount Holly)",
+  "extent": "1 map on 5 sheets : col. ; each 64 x 54 cm.",
+  "format": "Map",
+  "type": "Maps",
+  "description": [
+    "\"Dec. 1884.\"",
+    "Includes key and text.",
+    "North oriented toward upper right."
+  ],
+  "publisher": "New York : Sanborn Map & Publishing Co., Limited, 1884.",
+  "subject": [
+    "Real property—New Jersey—Mount Holly—Maps",
+    "Mount Holly (N.J.)—Maps",
+    "Fire insurance maps—New Jersey—Mount Holly—1884",
+    "Maps—New Jersey—Mount Holly—1884",
+    "Maps"
+  ],
+  "cartographic_scale": "Scale [ca. 1:600]. 50 ft. to an inch.",
+  "spatial": "New Jersey",
+  "provenance": "Historic Maps copy has stamp of Map Division, Library of Congress, dated Apr. 10, 1885.",
+  "former_owner": [
+    "Library of Congress. Map Division"
+  ],
+  "author": "Sanborn Map Company",
+  "created": "1884-01-01T00:00:00Z",
+  "date": "1884",
+  "identifier": "http://arks.princeton.edu/ark:/88435/x346d706h",
+  "location": [
+    "Special Collections HMC04 (Mount Holly)"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://catalog.princeton.edu/catalog/5144620#view",
+      "label": [
+        "Digital content"
+      ]
+    },
+    {
+      "@id": "iiif_manifest_paths",
+      "label": {
+        "http://arks.princeton.edu/ark:/88435/x346d706h": "https://figgy.princeton.edu/concern/scanned_maps/471c6696-8b4b-4c0d-85df-4a2f5d18764f/manifest"
+      }
+    }
+  ]
+}

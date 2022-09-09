@@ -27,7 +27,7 @@ describe CDL::ChargeManager do
 
   describe "#initialize" do
     it "clears expired charges from in-memory array" do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
       eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
 
@@ -55,7 +55,7 @@ describe CDL::ChargeManager do
           CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
         ]
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, inactive_hold_netids: ["zelda"])
@@ -73,7 +73,7 @@ describe CDL::ChargeManager do
           CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current - 3.hours)
         ]
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         resource_charge_list = FactoryBot.create_for_repository(
@@ -100,7 +100,7 @@ describe CDL::ChargeManager do
         User.create!(uid: "skye", email: "skye@princeton.edu")
         User.create!(uid: "miku", email: "miku@princeton.edu")
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         resource_charge_list = FactoryBot.create_for_repository(
@@ -135,7 +135,7 @@ describe CDL::ChargeManager do
         ]
         User.create!(uid: "skye", email: "skye@princeton.edu")
         eligible_item_service = EligibleItemService.new(item_ids: ["1234", "4567"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         resource_charge_list = FactoryBot.create_for_repository(
@@ -167,7 +167,7 @@ describe CDL::ChargeManager do
             CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
           ]
           eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
           resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, inactive_hold_netids: ["zelda"])
@@ -184,7 +184,7 @@ describe CDL::ChargeManager do
             CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
           ]
           eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
           resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items, expired_hold_netids: ["zelda"])
@@ -203,7 +203,7 @@ describe CDL::ChargeManager do
             CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
           ]
           eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
           resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
@@ -221,7 +221,7 @@ describe CDL::ChargeManager do
       it "creates a charge instead" do
         charged_items = []
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
@@ -240,7 +240,7 @@ describe CDL::ChargeManager do
       context "there is a ResourceChargeList" do
         it "creates a charge" do
           eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
           resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)
@@ -254,7 +254,7 @@ describe CDL::ChargeManager do
         end
         it "removes any existing holds for that netid" do
           eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
           resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, hold_queue: CDL::Hold.new(netid: "skye", expiration_time: Time.current + 1.hour))
@@ -273,7 +273,7 @@ describe CDL::ChargeManager do
       context "there is no ResourceChargeList" do
         it "creates a ResourceChargeList and places a Charge in it" do
           eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-          stub_bibdata(bib_id: "123456")
+          stub_catalog(bib_id: "123456")
           resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
           charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
@@ -289,7 +289,7 @@ describe CDL::ChargeManager do
     context "the user already has the item charged" do
       it "doesn't add a new charge" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)
@@ -307,7 +307,7 @@ describe CDL::ChargeManager do
     context "it is not available for charge" do
       it "raises a CDL::UnavailableForCharge" do
         eligible_item_service = EligibleItemService.new(item_ids: [])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
@@ -321,7 +321,7 @@ describe CDL::ChargeManager do
     context "when there are no items" do
       it "returns false" do
         eligible_item_service = EligibleItemService.new(item_ids: [])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
@@ -334,7 +334,7 @@ describe CDL::ChargeManager do
     context "when there are items and nothing has ever been charged" do
       it "returns true" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         charge_manager = described_class.new(resource_id: resource.id, eligible_item_service: eligible_item_service, change_set_persister: change_set_persister)
@@ -350,7 +350,7 @@ describe CDL::ChargeManager do
           CDL::ChargedItem.new(item_id: "1234", netid: "skye", expiration_time: Time.current + 3.hours)
         ]
         eligible_item_service = EligibleItemService.new(item_ids: ["1234", "5678"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
@@ -368,7 +368,7 @@ describe CDL::ChargeManager do
           CDL::ChargedItem.new(item_id: "5678", netid: "zelda", expiration_time: Time.current + 3.hours)
         ]
         eligible_item_service = EligibleItemService.new(item_ids: ["1234", "5678"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, charged_items: charged_items)
@@ -381,7 +381,7 @@ describe CDL::ChargeManager do
     context "when an item isn't charged but there's a hold queue" do
       it "returns false" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, inactive_hold_netids: ["tiberius"])
@@ -394,7 +394,7 @@ describe CDL::ChargeManager do
     context "when an item isn't charged and there's an active hold for that user" do
       it "returns true" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, active_hold_netids: ["miku"])
@@ -410,7 +410,7 @@ describe CDL::ChargeManager do
     context "when an item isn't charged and there's an inactive hold for that user" do
       it "returns false" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id, inactive_hold_netids: ["miku"])
@@ -423,7 +423,7 @@ describe CDL::ChargeManager do
     context "when an item isn't charged and there's an expired hold for that user" do
       it "returns false" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
 
         FactoryBot.create_for_repository(
@@ -444,7 +444,7 @@ describe CDL::ChargeManager do
     context "it is not charged to the user" do
       it "raises CDL::NotCharged" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
         User.create!(uid: "zelda", email: "zelda@princeton.edu")
 
@@ -456,7 +456,7 @@ describe CDL::ChargeManager do
     context "it is charged to the user" do
       it "removes the charge" do
         eligible_item_service = EligibleItemService.new(item_ids: ["1234"])
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
         charged_items = [
           CDL::ChargedItem.new(item_id: "1234", netid: "zelda", expiration_time: Time.current + 3.hours)

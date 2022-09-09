@@ -8,8 +8,8 @@ describe VoyagerUpdateJob do
   let(:ids) { resources.map(&:id) }
 
   before do
-    stub_bibdata(bib_id: "123456")
-    stub_bibdata(bib_id: "4609321")
+    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "4609321")
   end
   let(:resources) do
     [
@@ -29,8 +29,8 @@ describe VoyagerUpdateJob do
     it "queries for all resources and updates them asynchronously" do
       resource1 = find_resource(resources.first.id)
       resource2 = find_resource(resources.last.id)
-      expect(resource1.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain")
-      expect(resource2.title.first.to_s).to eq("Bible, Latin")
+      expect(resource1.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.")
+      expect(resource2.title.first.to_s).to eq("Bible, Latin.")
     end
   end
 

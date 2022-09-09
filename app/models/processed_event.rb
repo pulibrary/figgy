@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-# This resource represents a single bibdata dump and tracks whether it has been
+# This resource represents a single catalog dump and tracks whether it has been
 #   processed to refresh metadata from voyager
-# We need to do this because bibdata provides an ongoing list of dump events,
+# We need to do this because catalog provides an ongoing list of dump events,
 #   without any filtering and with occasional changes in frequency.
 #   Each time we update from voyager we sift through the
 #   dumps to process the ones that haven't been done yet.

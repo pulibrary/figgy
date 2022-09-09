@@ -23,7 +23,7 @@ RSpec.describe Types::ScannedMapType do
   let(:ability) { instance_double(Ability, can?: true) }
 
   before do
-    stub_bibdata(bib_id: bibid)
+    stub_catalog(bib_id: bibid)
   end
 
   describe "class methods" do

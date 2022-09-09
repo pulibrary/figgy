@@ -1,0 +1,54 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9946125963506421",
+  "title": [
+    {
+      "@value": "Ars minor.",
+      "@language": "lat"
+    }
+  ],
+  "language": "lat",
+  "creator": "Donatus, Aelius",
+  "call_number": "114.14",
+  "extent": "2 vellum leaves ; 20 x 14.8 cm.",
+  "format": "Book",
+  "description": "WHS fragment is an incomplete bifolium, ff. 2.7 (Schwenke 6,1-9,6; 10,2-12,5; 22,1-23,21; 24,2-36) of a 27-line edition; Type 5.",
+  "publisher": "[Netherlands : Prototypography, about 1465-1480].",
+  "subject": [
+    "Latin language—Grammar—Early works to 1500",
+    "Type and type-founding—Specimens"
+  ],
+  "provenance": "Provenance: John Eliot Hodgkin; acquired August, 1938.",
+  "references": [
+    "GW 8749/10.",
+    "Goff D-322a."
+  ],
+  "former_owner": [
+    "Hodgkin, John Eliot"
+  ],
+  "bookseller": [
+    "Maggs Bros"
+  ],
+  "author": "Donatus, Aelius",
+  "created": "1465-01-01T00:00:00Z/1480-12-31T23:59:59Z",
+  "date": "1465-1480",
+  "abstract": "Although printed with the same type as the Scheide fragment Goff D-325a, this fragment clearly belongs to a different edition, for the closing text on fo. 2v of the former fragment does not match up with the beginning text on fo. 3r of the present fragment. In the present fragment, some early bookbinder cut away the first three lines of text.",
+  "identifier": "http://arks.princeton.edu/ark:/88435/5m60qr98h",
+  "location": [
+    "Special Collections 114.14"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://catalog.princeton.edu/catalog/4612596#view",
+      "label": [
+        "Digital content"
+      ]
+    },
+    {
+      "@id": "iiif_manifest_paths",
+      "label": {
+        "http://arks.princeton.edu/ark:/88435/5m60qr98h": "https://figgy.princeton.edu/concern/scanned_resources/441d6471-9c97-4add-aa09-91c056e0fc0b/manifest"
+      }
+    }
+  ]
+}

@@ -134,9 +134,9 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
     context "when asked to save and import" do
       before do
-        stub_bibdata(bib_id: "123456")
-        stub_bibdata(bib_id: "4609321")
-        stub_bibdata(bib_id: "1791261")
+        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "4609321")
+        stub_catalog(bib_id: "1791261")
       end
       it "does not save and ingest if the save button is hit" do
         post :create, params: {

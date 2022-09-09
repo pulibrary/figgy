@@ -89,7 +89,7 @@ RSpec.describe BulkIngestService do
     let(:replaces) { "pudl0001/4609321/331" }
     let(:coll) { FactoryBot.create_for_repository(:collection) }
     before do
-      stub_bibdata(bib_id: "4609321")
+      stub_catalog(bib_id: "4609321")
       stub_ezid(shoulder: "99999/fk4", blade: "4609321")
     end
     context "with a directory of Scanned TIFFs" do
@@ -188,7 +188,7 @@ RSpec.describe BulkIngestService do
       let(:coll) { FactoryBot.create(:collection) }
 
       before do
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "4609321")
         stub_ezid(shoulder: "99999/fk4", blade: "4609321")
       end
 
@@ -230,7 +230,7 @@ RSpec.describe BulkIngestService do
       let(:replaces) { "pudl0001/4609321/331" }
       let(:coll) { FactoryBot.create_for_repository(:collection) }
       before do
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "4609321")
         stub_ezid(shoulder: "99999/fk4", blade: "4609321")
       end
 
@@ -290,8 +290,8 @@ RSpec.describe BulkIngestService do
     context "with a subdirectory named Raster" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: ScannedMap) }
       it "ingests a RasterSet child" do
-        stub_bibdata(bib_id: "123456")
-        stub_bibdata(bib_id: "123456789")
+        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "123456789")
         ingester.attach_dir(
           base_directory: Rails.root.join("spec", "fixtures", "ingest_scanned_raster_map", "123456"),
           source_metadata_identifier: "123456"
@@ -339,7 +339,7 @@ RSpec.describe BulkIngestService do
       before do
         allow(logger).to receive(:warn)
         allow(logger).to receive(:info)
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "4609321")
         stub_ezid(shoulder: "99999/fk4", blade: "4609321")
       end
 

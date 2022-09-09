@@ -16,7 +16,7 @@ RSpec.describe IdentifierService do
     let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: "123456", identifier: ark }
 
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       allow(described_class).to receive(:minter).and_return(minter)
       allow(described_class).to receive(:minter_user).and_return("pudiglib")
       allow(minter).to receive(:modify)
@@ -61,12 +61,18 @@ RSpec.describe IdentifierService do
         storage_adapter: Valkyrie.config.storage_adapter
       )
     end
-    let(:base_metadata) { { dc_publisher: "Princeton University Library", dc_title: "Cameroons under United Kingdom Trusteeship 1949", dc_type: "Text" } }
+    let(:base_metadata) do
+      {
+        dc_publisher: "Princeton University Library",
+        dc_title: "Cameroons under United Kingdom Trusteeship 1949 / drawn & reproduced by Survey Department, Lagos, Nigeria.",
+        dc_type: "Text"
+      }
+    end
     let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/10001789#view") }
     let(:ark) { "ark:/88435/jq085p05h" }
 
     before do
-      stub_bibdata(bib_id: "10001789")
+      stub_catalog(bib_id: "10001789")
       stub_ezid(shoulder: "88435", blade: "jq085p05h")
       allow(described_class).to receive(:minter).and_return(minter)
       allow(described_class).to receive(:minter_user).and_return("pudiglib")
@@ -88,13 +94,13 @@ RSpec.describe IdentifierService do
       allow(identifier).to receive(:id).and_return(ark)
     end
 
-    context "with a bibdata source_metadata_identifier" do
+    context "with a catalog source_metadata_identifier" do
       let(:bib) { "123456" }
       let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/#{bib}#view") }
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: bib }
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
       end
 
       it "links to OrangeLight" do

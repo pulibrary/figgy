@@ -10,7 +10,7 @@ RSpec.describe "Catalog requests", type: :request do
       let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [sample_file]) }
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
       end
 
@@ -56,7 +56,7 @@ RSpec.describe "Catalog requests", type: :request do
       let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [sample_file]) }
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
         # used in pdf generation
         stub_request(:any, "http://www.example.com/image-service/#{scanned_resource.member_ids.first}/full/200,/0/gray.jpg")

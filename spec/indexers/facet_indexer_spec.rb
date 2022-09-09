@@ -3,9 +3,9 @@ require "rails_helper"
 
 RSpec.describe FacetIndexer do
   describe ".to_solr" do
-    context "when the resource has imported bibdata metadata" do
+    context "when the resource has imported catalog metadata" do
       it "indexes relevant facets" do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
         solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "*:*" })["response"]["docs"][0]
 
@@ -15,7 +15,7 @@ RSpec.describe FacetIndexer do
       end
 
       it "reindexes relevant facets" do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         scanned_resource = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
         output = described_class.new(resource: scanned_resource).to_solr
 
@@ -27,7 +27,7 @@ RSpec.describe FacetIndexer do
       it "parses the first year from a date range" do
         # 1699-01-01T00:00:00Z/1700-12-31T23:59:59Z
         bib_id = "3013481"
-        stub_bibdata(bib_id: bib_id)
+        stub_catalog(bib_id: bib_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
 
         output = described_class.new(resource: scanned_resource).to_solr
@@ -36,7 +36,7 @@ RSpec.describe FacetIndexer do
 
       it "handles an empty date created" do
         bib_id = "10001790"
-        stub_bibdata(bib_id: bib_id)
+        stub_catalog(bib_id: bib_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
 
         output = described_class.new(resource: scanned_resource).to_solr
@@ -45,7 +45,7 @@ RSpec.describe FacetIndexer do
 
       it "handles a non-date string" do
         bib_id = "10001791"
-        stub_bibdata(bib_id: bib_id)
+        stub_catalog(bib_id: bib_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
 
         output = described_class.new(resource: scanned_resource).to_solr
@@ -55,7 +55,7 @@ RSpec.describe FacetIndexer do
       it "handles a non string" do
         # gives TypeError
         bib_id = "10001792"
-        stub_bibdata(bib_id: bib_id)
+        stub_catalog(bib_id: bib_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
 
         output = described_class.new(resource: scanned_resource).to_solr
@@ -65,7 +65,7 @@ RSpec.describe FacetIndexer do
       it "handles a bad date" do
         # gives ArgumentError
         bib_id = "123456789"
-        stub_bibdata(bib_id: bib_id)
+        stub_catalog(bib_id: bib_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
 
         output = described_class.new(resource: scanned_resource).to_solr

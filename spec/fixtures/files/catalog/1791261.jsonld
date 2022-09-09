@@ -1,0 +1,40 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9917912613506421",
+  "title": [
+    {
+      "@value": "Piano sonatas [sound recording] / Beethoven.",
+      "@language": null
+    }
+  ],
+  "language": null,
+  "creator": "Beethoven, Ludwig van, 1770-1827",
+  "call_number": "CD- 9455",
+  "extent": "10 sound discs (642 min.) : digital, stereo. ; 4 3/4 in.",
+  "format": "Audio",
+  "type": "Sonatas",
+  "description": [
+    "London: 425 590-2 (425 591-2--425 600-2).",
+    "Title from containers.",
+    "Compact discs.",
+    "Three containers in a box.",
+    "Program notes by Philip Radcliffe (14 p.) in container."
+  ],
+  "publisher": "New York, N.Y. : London Records ; London : Decca Record Co., 1989.",
+  "subject": [
+    "Sonatas (Piano)",
+    "Piano music",
+    "Sonatas"
+  ],
+  "contents": "No. 1, op. 2, no. 1 (20:30) -- no. 2, op. 2, no. 2 (23:22) -- no. 3, op. 2, no. 3 (27:03) -- no. 4, op. 7 (28:41) -- no. 5, op. 10, no. 1 (18:04) -- no. 6, op. 10, no. 2 (12:57) -- no. 7, op. 10, no. 3 (23:15) -- no. 8, op. 13 : Pathétique (18:23) -- no. 9, op. 14, no. 1 (11:35) -- no. 10, op. 14, no. 2 (15:10) -- no. 11, op. 22 (24:39) -- no. 12, op. 26 (18:32) -- no. 13, op. 27, no. 1 (15:55) -- no. 14, op. 27, no. 2 : Moonlight (15:56) -- no. 15, op. 28 (26:19) -- no. 16, op. 31, no. 1 (22:20) -- no. 17, op. 31, no. 2 (23:40) -- no. 18, op. 31, no. 3 (22:12) -- no. 19, op. 49, no. 1 (7:25) -- no. 20, op. 49, no. 2 (7:50) -- no. 21, op. 53 : Waldstein (25:23) -- no. 22, op. 54 (11:05) -- no. 23, op. 57 : Appassionata (23:42) -- no. 24, op. 78 (9:56) -- no. 25, op. 79 (9:47) -- no. 26, op. 81a : Les adieux (17:31) -- no. 27, op. 90 (13:34) -- no. 28, op. 101 (20:50) -- Andante favori (9:05) -- no. 29, op. 106 (44:51) -- no. 30, op. 109 (20:25) -- no. 31, op. 110 (20:18) -- no. 32, op. 111 (27:26).",
+  "uniform_title": "Sonatas, piano",
+  "contributor": [
+    "Ashkenazy, Vladimir, 1937-"
+  ],
+  "author": "Beethoven, Ludwig van, 1770-1827",
+  "created": "1989-01-01T00:00:00Z/1971-12-31T23:59:59Z",
+  "date": "1989-1971",
+  "location": [
+    "Mendel Music Library CD- 9455"
+  ]
+}

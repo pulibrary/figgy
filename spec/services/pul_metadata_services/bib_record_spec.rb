@@ -5,13 +5,13 @@ describe PulMetadataServices::BibRecord do
   subject(:record) { described_class.new(source) }
 
   let(:bib_id) { "1160682" }
-  let(:source) { file_fixture("files/bibdata/#{bib_id}.mrx").read }
+  let(:source) { file_fixture("files/catalog/#{bib_id}.mrx").read }
 
   before do
-    stub_bibdata(bib_id: "1160682")
-    stub_bibdata(bib_id: "7214786")
-    stub_bibdata(bib_id: "345682")
-    stub_bibdata(bib_id: "10068705")
+    stub_catalog(bib_id: "1160682")
+    stub_catalog(bib_id: "7214786")
+    stub_catalog(bib_id: "345682")
+    stub_catalog(bib_id: "10068705")
   end
 
   describe "#formatted_fields_as_array" do
@@ -244,7 +244,10 @@ describe PulMetadataServices::BibRecord do
       let(:bib_id) { "7214786" }
 
       it "extracts the values" do
-        expect(record.title).to eq ["Be-darkhe avot", "בדרכי אבות"]
+        expect(record.title).to eq [
+          "Be-darkhe avot : ʻiyun be-darke ha-avot ṿe-hanhagotehem be-ḳiyum ha-Torah ʻod li-fene she-nitnah",
+          "בדרכי אבות : עיון בדרכי האבות והנהגותיהם בקיום התורה עוד לפני שניתנה"
+        ]
       end
     end
 
@@ -253,7 +256,10 @@ describe PulMetadataServices::BibRecord do
       let(:include_initial_article) { false }
 
       it "extracts the values without an initial article" do
-        expect(record.title(include_initial_article)).to eq ["Be-darkhe avot", "בדרכי אבות"]
+        expect(record.title(include_initial_article)).to eq [
+          "Be-darkhe avot : ʻiyun be-darke ha-avot ṿe-hanhagotehem be-ḳiyum ha-Torah ʻod li-fene she-nitnah",
+          "בדרכי אבות : עיון בדרכי האבות והנהגותיהם בקיום התורה עוד לפני שניתנה"
+        ]
       end
     end
 

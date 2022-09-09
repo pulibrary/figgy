@@ -69,10 +69,10 @@ RSpec.describe ReportsController, type: :controller do
     let(:resource) { FactoryBot.build(:complete_scanned_resource, title: []) }
     let(:resource2) { FactoryBot.build(:complete_scanned_resource, title: []) }
     let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
-    let(:data) { "bibid,ark,title\n123456,ark:/99999/fk48675309,Earth rites : fertility rites in pre-industrial Britain\n" }
+    let(:data) { "bibid,ark,title\n123456,ark:/99999/fk48675309,Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.\n" }
     before do
       sign_in user
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       stub_ezid(shoulder: "99999/fk4", blade: "8675309")
       change_set = ScannedResourceChangeSet.new(resource)
       change_set.validate(source_metadata_identifier: "123456", state: ["complete"])
@@ -95,7 +95,7 @@ RSpec.describe ReportsController, type: :controller do
   end
 
   describe "GET #ark_report" do
-    let(:bibdata_resource) do
+    let(:catalog_resource) do
       r = FactoryBot.build(:complete_scanned_resource, title: [])
       change_set = ScannedResourceChangeSet.new(r)
       change_set.validate(source_metadata_identifier: "123456", state: ["complete"])
@@ -131,12 +131,12 @@ RSpec.describe ReportsController, type: :controller do
 
     before do
       sign_in user
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       stub_findingaid(pulfa_id: "MC016_c9616")
       stub_findingaid(pulfa_id: "C0652_c0377")
       stub_findingaid(pulfa_id: "RBD1_c13076")
       stub_ezid(shoulder: "99999/fk4", blade: "8675309")
-      bibdata_resource
+      catalog_resource
       pulfa_resource
       pulfa_resource2
       pulfa_resource3

@@ -59,7 +59,7 @@ RSpec.describe ManifestBuilderV3 do
       end
 
       before do
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         change_set = ScannedMapChangeSet.new(resource, files: [file])
         output = change_set_persister.save(change_set: change_set)
         change_set = ScannedMapChangeSet.new(output)
@@ -187,7 +187,7 @@ RSpec.describe ManifestBuilderV3 do
     before do
       allow(Rails.env).to receive(:development?).and_return(false)
       allow(Rails.env).to receive(:test?).and_return(false)
-      # stub_bibdata(bib_id: "123456")
+      # stub_catalog(bib_id: "123456")
       change_set = ScannedMapChangeSet.new(resource, files: [file])
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first

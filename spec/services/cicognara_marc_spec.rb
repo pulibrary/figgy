@@ -22,8 +22,8 @@ RSpec.describe CicognaraMarc do
       let(:writer) { double }
 
       before do
-        stub_bibdata(bib_id: "8543429")
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "4609321")
         r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         r2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "4609321")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer1)
@@ -44,13 +44,13 @@ RSpec.describe CicognaraMarc do
     context "when one record did not have a source metadata id" do
       let(:writer) { double }
       before do
-        stub_bibdata(bib_id: "8543429")
+        stub_catalog(bib_id: "8543429")
         FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id)
         FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
         allow(writer).to receive(:close)
-        stub_bibdata(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
       end
 
       it "doesn't error and doesn't write that record" do
@@ -65,7 +65,7 @@ RSpec.describe CicognaraMarc do
       let(:writer) { double }
 
       before do
-        stub_bibdata(bib_id: "8543429")
+        stub_catalog(bib_id: "8543429")
         r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         r2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer)
@@ -90,8 +90,8 @@ RSpec.describe CicognaraMarc do
       let(:writer) { double }
 
       before do
-        stub_bibdata(bib_id: "8543429")
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "4609321")
         r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         r2 = FactoryBot.create_for_repository(:complete_private_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "4609321")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer1)
@@ -117,8 +117,8 @@ RSpec.describe CicognaraMarc do
       let(:writer) { double }
 
       before do
-        stub_bibdata(bib_id: "8543429")
-        stub_bibdata(bib_id: "4609321")
+        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "4609321")
         r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
         r2 = FactoryBot.create_for_repository(:pending_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "4609321")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer1)
@@ -200,8 +200,8 @@ RSpec.describe CicognaraMarc do
       let(:blade2) { "kn323t553" }
 
       before do
-        stub_bibdata(bib_id: "8543429")
-        stub_bibdata(bib_id: "8543429", content_type: BibdataStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
         allow(resource2).to receive(:imported_metadata).and_return([metadata_mock])
         allow(metadata_mock).to receive(:references).and_return(["Cicognara, 3724"])
       end

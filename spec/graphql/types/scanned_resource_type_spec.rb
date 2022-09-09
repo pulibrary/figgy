@@ -16,7 +16,7 @@ RSpec.describe Types::ScannedResourceType do
   let(:ability) { Ability.new(FactoryBot.create(:admin)) }
 
   before do
-    stub_bibdata(bib_id: bibid)
+    stub_catalog(bib_id: bibid)
   end
 
   describe "class methods" do

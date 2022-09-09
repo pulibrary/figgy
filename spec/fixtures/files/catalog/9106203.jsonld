@@ -1,0 +1,65 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9991062033506421",
+  "title": [
+    {
+      "@value": "[Concert, 2015, April 24-25] [sound recording]",
+      "@language": "und"
+    }
+  ],
+  "language": "und",
+  "creator": "Princeton University. Glee Club",
+  "call_number": [
+    "CD- 2015-04-25",
+    "CD- 2015-04-24"
+  ],
+  "extent": "2 sound discs : digital ; 4 3/4 in.",
+  "format": "Audio",
+  "description": "A complete program is available in Mendel Music Library.",
+  "publisher": "Princeton, NJ. : Princeton University, Dept. of Music, 2015",
+  "alternative": "Messa da Requiem",
+  "contents": "Disc 1. Requiem-Kyrie ; Sequence: Dies irae -- Disc 2. Offertory ; Sanctus ; Agnus Dei ; Lux aeterna ; Libera me.",
+  "singer": [
+    "Abban, Tiffany, (Soprano)",
+    "Lerner, Katherine, (Mezzo-soprano)",
+    "Davenport, William, (Tenor)",
+    "Tigges, William, (Bass)"
+  ],
+  "dedicatee": [
+    "Mindlin, Stuart B."
+  ],
+  "conductor": [
+    "Pratt, Michael, 1949-",
+    "Crouch, Gabriel, 1973-"
+  ],
+  "contributor": [
+    "Princeton University. Department of Music"
+  ],
+  "composer": [
+    "Verdi, Giuseppe, 1813-1901"
+  ],
+  "performer": [
+    "Princeton University. Orchestra",
+    "William Trego Singers"
+  ],
+  "author": "Princeton University. Glee Club",
+  "created": "2015-01-01T00:00:00Z",
+  "date": "2015",
+  "identifier": {
+    "https://arks.princeton.edu/ark:/88435/dcww72bn86z": [
+      "Program."
+    ]
+  },
+  "location": [
+    "Mendel Music Library CD- 2015-04-25",
+    "Mendel Music Library CD- 2015-04-24"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://arks.princeton.edu/ark:/88435/dcww72bn86z",
+      "label": [
+        "Program."
+      ]
+    }
+  ]
+}

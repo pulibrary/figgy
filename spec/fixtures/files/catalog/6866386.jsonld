@@ -1,0 +1,65 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9968663863506421",
+  "title": [
+    {
+      "@value": "Eastern Turkey in Asia. Sheet 16 Malatia / compiled at the Intelligence Division, War Office by Major F.R. Maunsell, R.A.., W.J. Anderson",
+      "@language": "eng"
+    }
+  ],
+  "language": "eng",
+  "creator": "Great Britain. War Office. Intelligence Division",
+  "call_number": "G7431.C2.s250 .W3O3 sh16",
+  "extent": [
+    "(E 39°0ʹ--E 37°30ʹ/N 39°0ʹ--N 38°0ʹ).",
+    "1 map : color; 69 x 63 cm"
+  ],
+  "format": "Map",
+  "type": "Maps",
+  "description": [
+    "Relief shown by form lines and spot heights.",
+    "Includes an index to adjoining sheets, and a glossary.",
+    "\"Lith. at the Intell. Div. War Office, Sept. 1902.\""
+  ],
+  "publisher": "[London]: War Office. Intelligence Division, 1902.",
+  "subject": [
+    "Topographic maps",
+    "Turkey—Maps",
+    "Maps"
+  ],
+  "coverage": "northlimit=39.000000; eastlimit=39.000000; southlimit=38.000000; westlimit=37.500000; units=degrees; projection=EPSG:4326",
+  "alternative": [
+    "Malatia",
+    "I.D.W.O. 1522"
+  ],
+  "cartographic_scale": "Scale 1:250,000 or 1.014 in. to 4 mi.",
+  "spatial": "Turkey",
+  "cartographer": "Great Britain. War Office. Intelligence Division",
+  "compiler": [
+    "Maunsell, F. R."
+  ],
+  "contributor": [
+    "Great Britain. War Office. General Staff. Geographical Section"
+  ],
+  "created": "1902-01-01T00:00:00Z",
+  "date": "1902",
+  "abstract": "This map is part of a series covering Mesopotamia, eastern Anatolia, and part of the Ottoman Empire.",
+  "identifier": "http://arks.princeton.edu/ark:/88435/g732db62s",
+  "location": [
+    "Lewis Library G7431.C2.s250 .W3O3 sh16"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "https://catalog.princeton.edu/catalog/6866386#view",
+      "label": [
+        "Digital content"
+      ]
+    },
+    {
+      "@id": "iiif_manifest_paths",
+      "label": {
+        "http://arks.princeton.edu/ark:/88435/g732db62s": "https://figgy.princeton.edu/concern/scanned_maps/b0aedcf2-3108-4f57-891b-d12437501bcf/manifest"
+      }
+    }
+  ]
+}

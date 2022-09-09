@@ -34,8 +34,8 @@ describe VoyagerUpdater::Dump do
     let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "4609321") }
 
     before do
-      stub_bibdata(bib_id: "123456")
-      stub_bibdata(bib_id: "4609321")
+      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "4609321")
 
       resource1
       resource2

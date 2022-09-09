@@ -1,0 +1,35 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/9935150723506421",
+  "title": [
+    {
+      "@value": "Rocket to Russia [sound recording] / Ramones.",
+      "@language": "eng"
+    }
+  ],
+  "language": "eng",
+  "creator": "Ramones (Musical group)",
+  "call_number": "CD- 20354",
+  "extent": "1 sound disc (44 min.): digital ; 4 3/4 in.",
+  "format": "Audio",
+  "type": "Rock music",
+  "description": [
+    "All songs composed by The Ramones except as noted.",
+    "Reissue of: Sire: 6042 (1977) (1st-14th songs)",
+    "Compact disc.",
+    "Notes by Legs McNeil, lyrics, and full credits (19 p. : ill.) inserted in container."
+  ],
+  "publisher": "Los Angeles, CA : Warner Archives/Rhino, p2001.",
+  "subject": [
+    "Rock music—1971-1980",
+    "Punk rock music—New York (State)—New York",
+    "Rock music"
+  ],
+  "contents": "Cretin hop -- Rockaway Beach -- Here today, gone tomorrow -- Locket love -- I don't care -- Sheena is a punk rocker -- We're a happy family -- Teenage lobotomy -- Do you wanna dance? / by Bobby Freeman -- I wanna be well -- I can't give you anything -- Ramona -- Surfin' bird / by Al Frazier...[et al] -- Why is it always this way? -- Bonus tracks: Needles & pins : early version / by Sonny Bobo & Jack Nitzsche. Slug : demo. It's a long way back to Germany : U.K. B side. I don't care : single version. Sheena is a punk rocker : single version.",
+  "author": "Ramones (Musical group)",
+  "created": "2001-01-01T00:00:00Z/1977-12-31T23:59:59Z",
+  "date": "2001-1977",
+  "location": [
+    "Mendel Music Library CD- 20354"
+  ]
+}

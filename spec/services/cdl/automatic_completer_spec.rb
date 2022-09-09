@@ -37,7 +37,7 @@ RSpec.describe CDL::AutomaticCompleter do
       with_queue_adapter :inline
       it "completes them" do
         stub_ezid(shoulder: "99999/fk4", blade: "")
-        stub_bibdata(bib_id: "123456")
+        stub_catalog(bib_id: "123456")
         User.create!(uid: "skye", email: "skye@princeton.edu")
         User.create!(uid: "zelda", email: "zelda@princeton.edu")
         collection = FactoryBot.create_for_repository(:collection, slug: "cdl", title: "CDL", owners: ["skye", "zelda"])

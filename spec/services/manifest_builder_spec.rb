@@ -62,7 +62,7 @@ RSpec.describe ManifestBuilder do
     before do
       allow(Rails.env).to receive(:development?).and_return(false)
       allow(Rails.env).to receive(:test?).and_return(false)
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first
       file_set = query_service.find_by(id: file_set_id)
@@ -81,7 +81,7 @@ RSpec.describe ManifestBuilder do
   describe "#build" do
     let(:ocr_language) { "eng" }
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       change_set.validate(ocr_language: ocr_language)
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first
@@ -171,7 +171,7 @@ RSpec.describe ManifestBuilder do
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
       expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png")
       expect(output["seeAlso"].length).to eq 2
-      expect(output["seeAlso"].last).to include "@id" => "https://bibdata.princeton.edu/bibliographic/123456", "format" => "text/xml"
+      expect(output["seeAlso"].last).to include "@id" => "https://catalog.princeton.edu/catalog/123456.marcxml", "format" => "text/xml"
 
       expect(output["service"]["label"]).to eq "Search within this item"
     end
@@ -655,7 +655,7 @@ RSpec.describe ManifestBuilder do
   context "when given a scanned resource with an ingested JSON file" do
     let(:file) { fixture_file_upload("ingest_single_figgy_metadata/figgy_metadata.json", "") }
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
     end
 
     it "builds a IIIF document without the JSON file", run_real_characterization: true do
@@ -666,7 +666,7 @@ RSpec.describe ManifestBuilder do
   context "when given a scanned resource which was ingested with its mets file as an attached member" do
     let(:file) { fixture_file_upload("mets/pudl0001-4612596.mets", "application/xml; schema=mets") }
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       # attach the file set
       output = change_set_persister.save(change_set: change_set)
       # get the correct mime_type onto the file set
@@ -711,7 +711,7 @@ RSpec.describe ManifestBuilder do
     let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
     let(:logical_structure) { nil }
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
     end
     context "when downloading is enabled" do
       let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file], downloadable: "public") }
@@ -954,7 +954,7 @@ RSpec.describe ManifestBuilder do
     let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
     let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
     before do
-      stub_bibdata(bib_id: "123456")
+      stub_catalog(bib_id: "123456")
       scanned_resource
       change_set_persister.save(change_set: change_set)
     end

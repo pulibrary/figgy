@@ -5,15 +5,15 @@ class RemoteRecord
   # @param resource [Resource]
   # @return [RemoteRecord, RemoteRecord::PulfaRecord]
   def self.retrieve(source_metadata_identifier, resource: nil)
-    if bibdata?(source_metadata_identifier)
+    if catalog?(source_metadata_identifier)
       new(source_metadata_identifier)
     elsif pulfa?(source_metadata_identifier)
       PulfaRecord.new(source_metadata_identifier)
     end
   end
 
-  def self.bibdata?(source_metadata_identifier)
-    PulMetadataServices::Client.bibdata?(source_metadata_identifier)
+  def self.catalog?(source_metadata_identifier)
+    PulMetadataServices::Client.catalog?(source_metadata_identifier)
   end
 
   def self.pulfa?(source_metadata_identifier)
@@ -35,17 +35,17 @@ class RemoteRecord
   end
 
   def self.valid?(source_metadata_identifier)
-    bibdata?(source_metadata_identifier) || pulfa?(source_metadata_identifier)
+    catalog?(source_metadata_identifier) || pulfa?(source_metadata_identifier)
   end
 
   def self.source_metadata_url(id)
-    return "#{Figgy.config[:bibdata_url]}#{id}" if bibdata?(id)
+    return "#{Figgy.config[:catalog_url]}#{id}.marcxml" if catalog?(id)
     "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}.xml" if pulfa?(id)
   end
 
   def self.record_url(id)
     return unless id
-    return "https://catalog.princeton.edu/catalog/#{id}" if bibdata?(id)
+    return "https://catalog.princeton.edu/catalog/#{id}" if catalog?(id)
     "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}" if pulfa?(id)
   end
 
@@ -81,17 +81,28 @@ class RemoteRecord
   def attributes
     hash = JSONLDBuilder.for(jsonld).result
     hash[:content_type] = hash[:format] # we can't use format because it's a rails reserved word
+    hash[:identifier] = coerce_identifier(hash[:identifier])
     hash.merge(source_jsonld: jsonld.to_json)
   end
 
   private
 
+    # Catalog returns a hash of identifier to label now - coerce it back to a single
+    # identifier.
+    def coerce_identifier(identifier)
+      if identifier.is_a?(Hash)
+        identifier.keys.map(&:to_s).first
+      else
+        identifier
+      end
+    end
+
     def jsonld_request
       @jsonld_request ||=
         begin
-          request = Faraday.get("#{Figgy.config[:bibdata_url]}#{source_metadata_identifier}/jsonld")
+          request = Faraday.get("#{Figgy.config[:catalog_url]}#{source_metadata_identifier}.jsonld")
           if request.status.to_s == "404"
-            request = Faraday.get("#{Figgy.config[:bibdata_url]}99#{source_metadata_identifier}3506421/jsonld")
+            request = Faraday.get("#{Figgy.config[:catalog_url]}99#{source_metadata_identifier}3506421.jsonld")
           end
           request
         end
@@ -107,11 +118,15 @@ class RemoteRecord
     class TypedLiteral < ::Valkyrie::ValueMapper
       JSONLDBuilder.register(self)
       def self.handles?(value)
-        value.is_a?(Hash) && value[:@value] && value[:@language]
+        value.is_a?(Hash) && value[:@value] && value.key?(:@language)
       end
 
       def result
-        RDF::Literal.new(value[:@value], language: value[:@language])
+        if value[:@language]
+          RDF::Literal.new(value[:@value], language: value[:@language])
+        else
+          value[:@value]
+        end
       end
     end
 

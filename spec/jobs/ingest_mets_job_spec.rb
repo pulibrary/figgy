@@ -32,8 +32,8 @@ RSpec.describe IngestMETSJob do
     #   it looks like this could also be achieved by having :copyable return false
     #   if something more general is needed
     allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
-    stub_bibdata(bib_id: "4612596")
-    stub_bibdata(bib_id: "4609321")
+    stub_catalog(bib_id: "4612596")
+    stub_catalog(bib_id: "4609321")
   end
 
   context "when ingesting to an existing collection" do

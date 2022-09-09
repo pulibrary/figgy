@@ -1,0 +1,14 @@
+{
+  "netid": "abc123",
+  "first_name": "Ch",
+  "last_name": "Cho",
+  "barcode": "21301344469181",
+  "barcode_status": 1,
+  "barcode_status_date": "2020-06-04T10:21:43.000+00:00",
+  "university_id": "110093755",
+  "patron_group": "staff",
+  "purge_date": "2021-10-31T00:00:00.000+00:00",
+  "expire_date": "2022-10-31T00:00:00.000+00:00",
+  "patron_id": 2345,
+  "active_email": "abc123@princeton.edu"
+}

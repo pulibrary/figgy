@@ -1,0 +1,62 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/99125378001906421",
+  "title": [
+    {
+      "@value": "羊村清道夫 / 文 香港言語治療師總工會 ; 圖 熱奶茶.",
+      "@language": "chi"
+    },
+    {
+      "@value": "Yang cun qing dao fu / wen Xianggang yan yu zhi liao shi zong gong hui ; tu Renaicha.",
+      "@language": "chi-Latn"
+    }
+  ],
+  "language": "chi",
+  "extent": "1 online resource (28 pages) : color illustrations",
+  "format": "Book",
+  "type": "Picture books",
+  "description": [
+    "Cover title.",
+    "A picture book inspired by a brief strike by Hong Kong hospital workers calling for the border with mainland China to be completely sealed at the beginning of the coronavirus pandemic in February 2020. Page 2 lists the impact of the COVID-19 upon Hong Kong, based on statistics collected until March 8, 2021."
+  ],
+  "publisher": [
+    "[Xianggang] : [Xianggang yan yu zhi liao shi zong gong hui], [2021]",
+    "[香港] : [香港言語治療師總工會], [2021]",
+    "©2021"
+  ],
+  "subject": [
+    "Sheep—Juvenile fiction",
+    "Wolves—Juvenile fiction",
+    "Sanitation workers—Juvenile fiction",
+    "Strikes and lockouts—China—Hong Kong—Juvenile fiction",
+    "Picture books"
+  ],
+  "text_language": [
+    "Text in Cantonese.",
+    "粵語."
+  ],
+  "illustrator": [
+    "rainection",
+    "熱奶茶"
+  ],
+  "author": [
+    "Xianggang yan yu zhi liao shi zong gong hui",
+    "香港言語治療師總工會"
+  ],
+  "issuing_body": [
+    "Xianggang yan yu zhi liao shi zong gong hui",
+    "香港言語治療師總工會"
+  ],
+  "created": "2021-01-01T00:00:00Z/2021-12-31T23:59:59Z",
+  "date": "2021-2021",
+  "identifier": "http://arks.princeton.edu/ark:/88435/2801pr857",
+  "electronic_locations": [
+    {
+      "@id": "http://arks.princeton.edu/ark:/88435/2801pr857",
+      "label": [
+        "arks.princeton.edu",
+        "Access restricted to PUL patrons"
+      ]
+    }
+  ]
+}

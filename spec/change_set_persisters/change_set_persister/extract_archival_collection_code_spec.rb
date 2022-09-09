@@ -25,9 +25,9 @@ RSpec.describe ChangeSetPersister::ExtractArchivalCollectionCode do
     end
   end
 
-  context "with a bibdata id" do
+  context "with a catalog id" do
     let(:source_metadata_id) { "4609321" }
-    before { stub_bibdata(bib_id: source_metadata_id) }
+    before { stub_catalog(bib_id: source_metadata_id) }
 
     it "does nothing" do
       updated = described_class.new(change_set_persister: nil, change_set: change_set).run
