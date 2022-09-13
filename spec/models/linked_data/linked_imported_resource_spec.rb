@@ -33,7 +33,8 @@ RSpec.describe LinkedData::LinkedImportedResource do
         :scanned_resource,
         source_metadata_identifier: source_id,
         import_metadata: true,
-        member_of_collection_ids: [collection.id]
+        member_of_collection_ids: [collection.id],
+        cached_parent_id: [Valkyrie::ID.new("")]
       )
     end
     it "returns a link to the finding aids site" do
@@ -56,6 +57,7 @@ RSpec.describe LinkedData::LinkedImportedResource do
       expect(jsonld["created_at"]).to be_nil
       expect(jsonld["updated_at"]).to be_nil
       expect(jsonld["member_of_collections"]).to be_nil
+      expect(jsonld["cached_parent_id"]).to be_nil
       collection_json = jsonld["memberOf"].find { |x| x["title"] == collection.title.first }
       expect(collection_json).to eq(
         "@id" => "http://www.example.com/catalog/#{collection.id}",
