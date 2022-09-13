@@ -23,6 +23,7 @@ class BulkUpdateJob < ApplicationJob
   def self.supported_attributes
     [
       :ocr_language,
+      :refresh_remote_metadata,
       :rights_statement,
       :visibility,
       :append_collection_ids
