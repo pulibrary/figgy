@@ -41,6 +41,8 @@ module Schema
       Geo.typed_attributes.each do |name, type|
         attribute name, type
       end
+
+      attribute :cached_parent_id, Valkyrie::Types::ID.optional
     end
   end
 end

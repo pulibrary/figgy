@@ -12,7 +12,6 @@ module Schema
     def self.typed_attributes
       {
         claimed_by: Valkyrie::Types::String,
-        cached_parent_id: Valkyrie::Types::ID.optional,
         embargo_date: Valkyrie::Types::String.optional
       }
     end
@@ -104,6 +103,8 @@ module Schema
       Common.typed_attributes.each do |name, type|
         attribute name, type
       end
+
+      attribute :cached_parent_id, Valkyrie::Types::ID.optional
     end
   end
 end
