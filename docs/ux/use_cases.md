@@ -62,3 +62,19 @@ When viewers support
 ["choice"](https://preview.iiif.io/cookbook/3333-choice/recipe/0033-choice/) such that we can interleave normal
 page scans with multispectral scans we hope to combine these resources for a
 better experience.
+
+## Illiad PDF OCR
+
+The resource sharing department enhances PDF scans with OCR while fulfilling
+patron requests. We do this in Figgy because Figgy does other OCR stuff.
+
+The way this works:
+
+1. Resource sharing department puts a PDF at `/mnt/illiad/ocr_scans` (or the
+   equivalent on their machine)
+1. Figgy has a [FileWatcher](/bin/pdf_watcher) that runs on
+   lib-proc9.princeton.edu and looks for new files on that mount. When a new
+   file is seen, it enqueues a CreateOcrRequestJob.
+   * We use a file watcher instead of a cron job so that it runs immediately.
+   * lib-proc9 is chosen here:
+   https://github.com/pulibrary/princeton_ansible/blob/d5bb4fc6bb44047502062cb65e154b443136cfa8/playbooks/figgy_production.yml#L65
