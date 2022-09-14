@@ -199,10 +199,12 @@ class Ability
     ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter)
   end
 
+  # DISCOVER means "can I get access to this somehow"
   def valkyrie_test_discover(obj)
     return true if valkyrie_test_read(obj)
-    return true if restricted_collections?(obj)
-    return false if obj.read_groups.include?(::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM) && !reading_room_ip?
+    # If it's reading room there's always the possibility they can get access,
+    # they just have to ask.
+    return true if obj.read_groups.include?(::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_READING_ROOM)
     return true if obj.decorate.public_readable_state? && !private?(obj)
     cdl_eligible?(obj) # check this last to minimize hits to alma API
   end
@@ -220,12 +222,6 @@ class Ability
     return false if private?(obj)
     collections = Wayfinder.for(obj).try(:self_or_parent_collections) || []
     collections.flat_map(&:restricted_viewers).include?(current_user.uid)
-  end
-
-  def restricted_collections?(obj)
-    return false if private?(obj)
-    collections = Wayfinder.for(obj).try(:collections) || []
-    collections.flat_map(&:restricted_viewers).present?
   end
 
   def group_readable?(obj)
