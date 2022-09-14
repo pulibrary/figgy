@@ -188,6 +188,9 @@ describe Ability do
     # `restricted_viewers`, so if there's no current_user fill it with "rando"
     FactoryBot.create_for_repository(:collection, restricted_viewers: [current_user&.uid || "rando"])
   end
+  let(:restricted_viewer_collection_no_users) do
+    FactoryBot.create_for_repository(:collection)
+  end
   let(:ineligible_restricted_viewer_collection) do
     FactoryBot.create_for_repository(:collection, restricted_viewers: ["rando"])
   end
@@ -196,6 +199,9 @@ describe Ability do
   end
   let(:reading_room_collection_restricted_viewer_scanned_resource) do
     FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: [restricted_viewer_collection.id])
+  end
+  let(:reading_room_collection_restricted_viewer_scanned_resource_no_users) do
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: [restricted_viewer_collection_no_users.id])
   end
   let(:reading_room_collection_restricted_viewer_zip_file) do
     FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [zip_file], member_of_collection_ids: [restricted_viewer_collection.id])
@@ -581,7 +587,7 @@ describe Ability do
 
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, pending_scanned_resource)
-      is_expected.not_to be_able_to(:discover, reading_room_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
 
       # Ephemera Project Contributors
@@ -805,7 +811,7 @@ describe Ability do
       it {
         is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
         is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
-        is_expected.not_to be_able_to(:discover, reading_room_scanned_resource)
+        is_expected.to be_able_to(:discover, reading_room_scanned_resource)
       }
     end
 
@@ -920,7 +926,7 @@ describe Ability do
       is_expected.to be_able_to(:discover, open_scanned_resource)
       is_expected.not_to be_able_to(:discover, private_scanned_resource)
       is_expected.not_to be_able_to(:discover, pending_scanned_resource)
-      is_expected.not_to be_able_to(:discover, reading_room_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_scanned_resource)
       is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
 
       # Ephemera Project Contributors
@@ -948,6 +954,7 @@ describe Ability do
       is_expected.not_to be_able_to(:read, reading_room_collection_restricted_viewer_scanned_resource)
       is_expected.not_to be_able_to(:manifest, reading_room_collection_restricted_viewer_scanned_resource)
       is_expected.to be_able_to(:discover, reading_room_collection_restricted_viewer_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_collection_restricted_viewer_scanned_resource_no_users)
       is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource)
       is_expected.not_to be_able_to(:download, reading_room_collection_restricted_viewer_scanned_resource.decorate.members.first)
 
