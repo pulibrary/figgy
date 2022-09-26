@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
 
+  root to: "catalog#index"
+
   post "/graphql", to: "graphql#execute", defaults: { format: :json }
   post "/resources/refresh_remote_metadata", to: "resources#refresh_remote_metadata", defaults: { format: :json }
 
@@ -39,39 +41,13 @@ Rails.application.routes.draw do
     get "users/auth/cas", to: "users/omniauth_authorize#passthru", defaults: { provider: :cas }, as: "new_user_session"
   end
   resources :users, only: [:index, :create, :destroy]
+
   mount Hydra::RoleManagement::Engine => "/"
-
-  resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
-    concerns :exportable
-  end
-
-  resources :bookmarks do
-    concerns :exportable
-
-    collection do
-      delete "clear"
-    end
-  end
-
   mount Blacklight::Engine => "/"
-  root to: "catalog#index"
 
   resource :catalog, only: [:index], as: "catalog", path: "/catalog", controller: "catalog" do
     concerns :searchable
     concerns :range_searchable
-  end
-
-
-  resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
-    concerns :exportable
-  end
-
-  resources :bookmarks do
-    concerns :exportable
-
-    collection do
-      delete "clear"
-    end
   end
 
   get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
