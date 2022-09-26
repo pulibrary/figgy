@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  concern :searchable, Blacklight::Routes::Searchable.new
   concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
+  concern :iiif_search, BlacklightIiifSearch::Routes.new
+  concern :exportable, Blacklight::Routes::Exportable.new
+
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
@@ -13,8 +17,6 @@ Rails.application.routes.draw do
 
   resources :auth_tokens
   default_url_options Rails.application.config.action_mailer.default_url_options
-  concern :iiif_search, BlacklightIiifSearch::Routes.new
-  concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
     concerns :exportable
@@ -38,7 +40,6 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index, :create, :destroy]
   mount Hydra::RoleManagement::Engine => "/"
-  concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
     concerns :exportable
@@ -54,14 +55,12 @@ Rails.application.routes.draw do
 
   mount Blacklight::Engine => "/"
   root to: "catalog#index"
-  concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: "catalog", path: "/catalog", controller: "catalog" do
     concerns :searchable
     concerns :range_searchable
   end
 
-  concern :exportable, Blacklight::Routes::Exportable.new
 
   resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
     concerns :exportable
