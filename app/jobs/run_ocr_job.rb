@@ -5,7 +5,7 @@ class RunOCRJob < ApplicationJob
 
   def perform(file_set_id)
     derivative_service_factory.new(id: file_set_id).create_derivatives
-  rescue Valkyrie::Persistence::ObjectNotFoundError => error
+  rescue Valkyrie::Persistence::ObjectNotFoundError, Valkyrie::StorageAdapter::FileNotFound => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   end
 
