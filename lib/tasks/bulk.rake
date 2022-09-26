@@ -8,7 +8,7 @@ namespace :figgy do
       user = User.find_by_user_key(ENV["USER"]) if ENV["USER"]
       user = User.all.find(&:admin?) unless user
 
-      usage = "usage: rake bulk:ingest_mets METADATA=/path/to/mets_records IMPORT_MODS=TRUE USER=user"
+      usage = "usage: rake figgy:bulk:ingest_mets METADATA=/path/to/mets_records IMPORT_MODS=TRUE USER=user"
       abort usage unless md_root && Dir.exist?(md_root)
       logger.info "Ingesting METS records from #{md_root}"
 
@@ -25,7 +25,7 @@ namespace :figgy do
     task reprocess_mets: :environment do
       collection_id = ENV["COLL"]
 
-      abort "usage: rake bulk:reprocess_mets COLL=collid" unless collection_id
+      abort "usage: rake figgy:bulk:reprocess_mets COLL=collid" unless collection_id
       ReprocessMetsJob.set(queue: :low).perform_later(collection_id: collection_id)
     end
 
@@ -54,7 +54,7 @@ namespace :figgy do
       title = ENV["TITLE"]
       note = ENV["NOTE"]
 
-      abort "usage: rake bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
+      abort "usage: rake figgy:bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
 
       @logger = Logger.new(STDOUT)
       @logger.warn "No BIB id specified" unless bib
@@ -118,7 +118,7 @@ namespace :figgy do
       bib = ENV["BIB"]
       background = ENV["BACKGROUND"]
 
-      abort "usage: rake bulk:ingest_scanned_maps BIB=1234567 DIR=/path/to/files" unless dir && Dir.exist?(dir)
+      abort "usage: rake figgy:bulk:ingest_scanned_maps BIB=1234567 DIR=/path/to/files" unless dir && Dir.exist?(dir)
 
       @logger = Logger.new(STDOUT)
       @logger.warn "No BIB id specified" unless bib
@@ -207,7 +207,7 @@ namespace :figgy do
       model = ENV["MODEL"]
       change_set_name = ENV["CHANGE_SET_NAME"]
 
-      abort "usage: rake bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter MODEL=ResourceClass CHANGE_SET_NAME=simple" unless field && dir && Dir.exist?(dir)
+      abort "usage: rake figgy:bulk:attach_each_dir DIR=/path/to/files FIELD=barcode FILTER=filter MODEL=ResourceClass CHANGE_SET_NAME=simple" unless field && dir && Dir.exist?(dir)
 
       @logger = Logger.new(STDOUT)
       @logger.info "attaching files from: #{dir}"
@@ -256,7 +256,7 @@ namespace :figgy do
       rights = ENV["RIGHTS"]
       preservation_policy = ENV["PRESERVATION_POLICY"]
 
-      abort "usage: rake bulk:update_attrs COLL=[collection id] STATE=[state] RIGHTS=[rights] PRESERVATION_POLICY=[cloud]" unless coll
+      abort "usage: rake figgy:bulk:update_attrs COLL=[collection id] STATE=[state] RIGHTS=[rights] PRESERVATION_POLICY=[cloud]" unless coll
       logger = Logger.new(STDOUT)
       attrs = {}
       attrs[:state] = state if state
@@ -275,7 +275,7 @@ namespace :figgy do
         property = ENV["PROPERTY"] ? ENV["PROPERTY"].to_sym : :source_metadata_identifier
         background = ENV["BACKGROUND"].casecmp("true").zero? if ENV["BACKGROUND"]
 
-        abort "usage: rake bulk:ingest_intermediate_files DIR=/path/to/files [PROPERTY=source_metadata_identifier] [BACKGROUND=TRUE]" unless dir && Dir.exist?(dir)
+        abort "usage: rake figgy:bulk:ingest_intermediate_files DIR=/path/to/files [PROPERTY=source_metadata_identifier] [BACKGROUND=TRUE]" unless dir && Dir.exist?(dir)
 
         logger.info "ingesting files from: #{dir}"
 
@@ -293,7 +293,7 @@ namespace :figgy do
 
     desc "Remove all resources in an archival collection"
     task remove: :environment do
-      abort "usage: rake bulk:remove CODE=archival_collection_code" unless ENV["CODE"]
+      abort "usage: rake figgy:bulk:remove CODE=archival_collection_code" unless ENV["CODE"]
 
       archival_collection_code = ENV["CODE"]
       background = ENV["BACKGROUND"]
@@ -317,7 +317,7 @@ namespace :figgy do
       coll = ENV["COLL"]
       append_coll = ENV["APPEND_COLL"]
 
-      abort "usage: rake bulk:append_coll COLL=[collection id] APPEND_COLL=[new collection id]" unless coll && append_coll
+      abort "usage: rake figgy:bulk:append_coll COLL=[collection id] APPEND_COLL=[new collection id]" unless coll && append_coll
       logger = Logger.new(STDOUT)
       attrs = { append_collection_ids: Valkyrie::ID.new(append_coll), skip_validation: true }
       BulkEditService.perform(collection_id: Valkyrie::ID.new(coll), attributes: attrs, metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), logger: logger)
@@ -327,7 +327,7 @@ namespace :figgy do
     task add_ephemera_to_collection: :environment do
       project_id = ENV["PROJECT"]
       collection_id = ENV["COLL"]
-      abort "usage: rake bulk:ephemera_add_to_collection PROJECT=project_id COLL=collection_id" unless project_id && collection_id
+      abort "usage: rake figgy:bulk:ephemera_add_to_collection PROJECT=project_id COLL=collection_id" unless project_id && collection_id
 
       AddEphemeraToCollectionJob.perform_now(project_id, collection_id)
       logger.info "Added ephemera from #{project_id} to collection #{collection_id}"
@@ -336,7 +336,7 @@ namespace :figgy do
     desc "adds blank barcode to everything"
     task add_barcodes: :environment do
       project_id = ENV["PROJECTID"]
-      abort "usage rake bulk:add_barcodes PROJECTID=projectid" unless project_id
+      abort "usage rake figgy:bulk:add_barcodes PROJECTID=projectid" unless project_id
 
       change_set_persister = ChangeSetPersister.new(
         metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -356,7 +356,7 @@ namespace :figgy do
     desc "Delete all members of a collection, keeping the collection"
     task clear: :environment do
       id = ENV["ID"]
-      abort "usage: rake bulk:clear ID=collectionid" unless id
+      abort "usage: rake figgy:bulk:clear ID=collectionid" unless id
 
       metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       qs = metadata_adapter.query_service
