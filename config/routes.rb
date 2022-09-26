@@ -20,11 +20,6 @@ Rails.application.routes.draw do
   resources :auth_tokens
   default_url_options Rails.application.config.action_mailer.default_url_options
 
-  resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
-    concerns :exportable
-    concerns :iiif_search
-  end
-
   get "catalog/:solr_document_id/pdf", to: "catalog#pdf", as: "pdf"
 
   resources :bookmarks do
@@ -48,6 +43,13 @@ Rails.application.routes.draw do
   resource :catalog, only: [:index], as: "catalog", path: "/catalog", controller: "catalog" do
     concerns :searchable
     concerns :range_searchable
+  end
+
+  # Keep this below the concerns :searchable or catalog controller will try to
+  # serve opensearch requests as a solr document id
+  resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
+    concerns :exportable
+    concerns :iiif_search
   end
 
   get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
