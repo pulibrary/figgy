@@ -662,6 +662,7 @@ RSpec.describe CatalogController do
         expect(response).to be_successful
       end
     end
+
     context "when rendered for an admin" do
       before do
         sign_in FactoryBot.create(:admin)
@@ -802,6 +803,7 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link playlist.title.first, href: "/catalog/#{playlist.id}"
       end
     end
+
     context "when rendered for a user" do
       render_views
       it "doesn't render the workflow panel" do
@@ -810,6 +812,12 @@ RSpec.describe CatalogController do
         get :show, params: { id: resource.id.to_s }
 
         expect(response.body).not_to have_content "Review and Approval"
+      end
+    end
+
+    context "when Blacklight does not find the id" do
+      it "redirects" do
+        expect { get :show, params: { id: "notarealid" } }.not_to raise_error
       end
     end
   end

@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  rescue_from Valkyrie::Persistence::ObjectNotFoundError, with: :resource_not_found
+  rescue_from Valkyrie::Persistence::ObjectNotFoundError, Blacklight::Exceptions::RecordNotFound, with: :resource_not_found
   def resource_not_found(_exception)
     respond_to do |format|
       format.json { head :not_found }
