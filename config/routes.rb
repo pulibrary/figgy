@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  concern :searchable, Blacklight::Routes::Searchable.new
   concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
+  concern :iiif_search, BlacklightIiifSearch::Routes.new
+  concern :exportable, Blacklight::Routes::Exportable.new
+
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
+
+  root to: "catalog#index"
 
   post "/graphql", to: "graphql#execute", defaults: { format: :json }
   post "/resources/refresh_remote_metadata", to: "resources#refresh_remote_metadata", defaults: { format: :json }
@@ -13,13 +19,6 @@ Rails.application.routes.draw do
 
   resources :auth_tokens
   default_url_options Rails.application.config.action_mailer.default_url_options
-  concern :iiif_search, BlacklightIiifSearch::Routes.new
-  concern :exportable, Blacklight::Routes::Exportable.new
-
-  resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
-    concerns :exportable
-    concerns :iiif_search
-  end
 
   get "catalog/:solr_document_id/pdf", to: "catalog#pdf", as: "pdf"
 
@@ -37,42 +36,20 @@ Rails.application.routes.draw do
     get "users/auth/cas", to: "users/omniauth_authorize#passthru", defaults: { provider: :cas }, as: "new_user_session"
   end
   resources :users, only: [:index, :create, :destroy]
+
   mount Hydra::RoleManagement::Engine => "/"
-  concern :exportable, Blacklight::Routes::Exportable.new
-
-  resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
-    concerns :exportable
-  end
-
-  resources :bookmarks do
-    concerns :exportable
-
-    collection do
-      delete "clear"
-    end
-  end
-
   mount Blacklight::Engine => "/"
-  root to: "catalog#index"
-  concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: "catalog", path: "/catalog", controller: "catalog" do
     concerns :searchable
     concerns :range_searchable
   end
 
-  concern :exportable, Blacklight::Routes::Exportable.new
-
+  # Keep this below the concerns :searchable or catalog controller will try to
+  # serve opensearch requests as a solr document id
   resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
     concerns :exportable
-  end
-
-  resources :bookmarks do
-    concerns :exportable
-
-    collection do
-      delete "clear"
-    end
+    concerns :iiif_search
   end
 
   get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download

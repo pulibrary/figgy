@@ -7,4 +7,10 @@ RSpec.describe "Routing", type: :routing do
       expect(post("/resources/refresh_remote_metadata")).to route_to("resources#refresh_remote_metadata", format: :json)
     end
   end
+
+  describe "opensearch.xml" do
+    it "routes to the opensearch action" do
+      expect(get("/catalog/opensearch.xml")).to route_to("catalog#opensearch", format: "xml")
+    end
+  end
 end
