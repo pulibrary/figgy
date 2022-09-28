@@ -30,6 +30,15 @@ RSpec.describe OCRRequestsController, type: :controller do
         expect(flash[:alert]).to have_content "You are not authorized to access this page"
       end
     end
+
+    context "with records that are three months or older" do
+      it "filters them out" do
+        OcrRequest.create! valid_params
+        OcrRequest.create! valid_params.merge({ created_at: 4.months.ago })
+        get :index
+        expect(assigns(:ocr_requests).count).to eq 1
+      end
+    end
   end
 
   describe "GET #show" do

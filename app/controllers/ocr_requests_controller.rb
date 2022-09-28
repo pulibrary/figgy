@@ -5,7 +5,7 @@ class OCRRequestsController < ApplicationController
 
   def index
     authorize! :update, OcrRequest.new
-    @ocr_requests = OcrRequest.all
+    @ocr_requests = OcrRequest.where("created_at > ?", 3.months.ago)
   end
 
   def destroy
