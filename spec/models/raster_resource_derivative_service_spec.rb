@@ -74,7 +74,7 @@ RSpec.describe RasterResourceDerivativeService do
       change_set = ChangeSet.for(child)
       change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
       change_set_persister.save(change_set: change_set)
-      expect(MosaicJob).to have_received(:perform_later)
+      expect(MosaicJob).to have_received(:perform_later).once
     end
   end
 
@@ -113,5 +113,20 @@ RSpec.describe RasterResourceDerivativeService do
     file_set_id = child.member_ids.first
     derivative_service.new(id: file_set_id).cleanup_derivatives
     expect(MosaicJob).to have_received(:perform_later)
+  end
+
+  # In production, the cloud derivative generation sometimes fails with a
+  # network error, the job re-runs, and the display and thumbnail derivatives are
+  # duplicated.
+  context "when the service runs twice" do
+    it "doesn't duplicate derivatives" do
+      raster_resource
+      derivative_service.new(id: Wayfinder.for(raster_resource).members.first.id).create_derivatives
+      file_set = Wayfinder.for(raster_resource).members.first
+      display_rasters = file_set.file_metadata.find_all { |f| f.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] }
+      thumbnails = file_set.file_metadata.find_all { |f| f.use == [Valkyrie::Vocab::PCDMUse.ThumbnailImage] }
+      expect(display_rasters.count).to eq 1
+      expect(thumbnails.count).to eq 1
+    end
   end
 end

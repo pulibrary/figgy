@@ -53,15 +53,12 @@ class RasterResourceDerivativeService
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
-    generate_mosaic
+    generate_mosaic unless deleted_files.empty?
   end
 
   def create_derivatives
     run_derivatives
-    change_set.files = [build_display_file, build_thumbnail_file]
-    change_set_persister.buffer_into_index do |buffered_persister|
-      @resource = buffered_persister.save(change_set: change_set)
-    end
+    create_local_derivatives
     # Persist a second copy of the display file to the cloud.
     create_cloud_derivatives
     generate_mosaic
@@ -69,16 +66,6 @@ class RasterResourceDerivativeService
   rescue StandardError => error
     update_error_message(message: error.message)
     raise error
-  end
-
-  def create_cloud_derivatives
-    @change_set = ChangeSet.for(resource)
-    change_set.files = [build_cloud_file]
-    change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
-      cloud_persister.buffer_into_index do |buffered_persister|
-        @resource = buffered_persister.save(change_set: change_set)
-      end
-    end
   end
 
   def cloud_storage_adapter
@@ -126,6 +113,7 @@ class RasterResourceDerivativeService
     "p-#{resource.id}"
   end
 
+  # generates the derivatives used for local/cloud display and thumbnail files
   def run_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
       filename, outputs: [instructions_for_display, instructions_for_thumbnail]
@@ -177,6 +165,8 @@ class RasterResourceDerivativeService
 
     # Updates error message property on the original file.
     def update_error_message(message:)
+      # refresh the resource to avoid stale object error
+      @resource = query_service.find_by(id: id)
       original_file.error_message = [message]
       updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
@@ -190,5 +180,33 @@ class RasterResourceDerivativeService
       return unless grandparent.is_a? RasterResource
       return unless grandparent.decorate.public_readable_state?
       MosaicJob.perform_later(grandparent.id)
+    end
+
+    def create_local_derivatives
+      return unless missing_local_display? && missing_thumbnail?
+      @resource = query_service.find_by(id: id)
+      @change_set = ChangeSet.for(resource)
+      change_set.files = [build_display_file, build_thumbnail_file]
+      change_set_persister.buffer_into_index do |buffered_persister|
+        @resource = buffered_persister.save(change_set: change_set)
+      end
+    end
+
+    def create_cloud_derivatives
+      @change_set = ChangeSet.for(resource)
+      change_set.files = [build_cloud_file]
+      change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
+        cloud_persister.buffer_into_index do |buffered_persister|
+          @resource = buffered_persister.save(change_set: change_set)
+        end
+      end
+    end
+
+    def missing_local_display?
+      resource.file_metadata.find_all { |fm| fm.use == use_display }.empty?
+    end
+
+    def missing_thumbnail?
+      resource.file_metadata.find_all { |fm| fm.use == use_thumbnail }.empty?
     end
 end
