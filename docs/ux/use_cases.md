@@ -62,3 +62,11 @@ When viewers support
 ["choice"](https://preview.iiif.io/cookbook/3333-choice/recipe/0033-choice/) such that we can interleave normal
 page scans with multispectral scans we hope to combine these resources for a
 better experience.
+
+## Supplemental content PDFs
+Recordings of local concerts have associated scanned concert programs. Users
+prefer a link to a pdf to display in the record, rather than modeling the items
+so that they both appear in a viewer. The recording and PDF are ingested
+separately, and a link to the PDF is entered into the catalog record 856 field
+as `https://arks.princeton.edu/<arkhere>/pdf`. This means that our system needs
+to support that route moving forward, or we would lose access to these pdfs.
