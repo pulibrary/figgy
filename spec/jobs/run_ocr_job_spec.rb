@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe RunOCRJob do
   context "when the file no longer exists" do
-    it "fails silently" do 
+    it "fails silently" do
       allow(HocrDerivativeService::Factory).to receive(:new).and_raise(Valkyrie::StorageAdapter::FileNotFound)
       expect { described_class.perform_now("bla") }.not_to raise_error
     end
