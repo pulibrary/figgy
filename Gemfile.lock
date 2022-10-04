@@ -6,8 +6,9 @@ GIT
       devise
 
 GIT
-  remote: https://github.com/pulibrary/ruby_tika_app.git
+  remote: https://github.com/pulibrary/ruby_tika_app
   revision: a69d46ad16966205d6159e275cb8ac5136bce662
+  branch: main
   specs:
     ruby_tika_app (1.6.0)
       open4
