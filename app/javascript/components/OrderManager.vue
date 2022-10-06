@@ -21,7 +21,6 @@
       v-if="saveError"
       status="error"
       type="alert"
-      autoclear
       dismissible
     >
       Sorry, there was a problem saving your work!
