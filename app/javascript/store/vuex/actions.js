@@ -86,7 +86,7 @@ const actions = {
       context.commit('SET_RESOURCE', response.data.resource)
     } catch (err) {
       context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
-      console.error(err)
+      alert.error(err)
     }
 
     console.timeEnd(`getResourceById ${resource.id}`)
@@ -107,7 +107,7 @@ const actions = {
         context.commit('APPLY_STATE')
       })
       .catch((err) => {
-        console.error(err)
+        alert.error(err)
         context.commit('SAVED_STATE', 'ERROR')
       })
   }
