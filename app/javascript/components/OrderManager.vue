@@ -23,7 +23,9 @@
       type="alert"
       dismissible
     >
-      Sorry, there was a problem saving your work!
+      <h1>Sorry, there was a problem saving your work!</h1>
+      <p>The following error message may help IT staff debug the problem:</p>
+      <p><em>{{ errMsg }}</em></p>
     </alert>
     <wrapper
       :full-width="false"
@@ -114,7 +116,8 @@ export default {
   data: function () {
     return {
       cardPixelWidth: 300,
-      captionPixelPadding: 9
+      captionPixelPadding: 9,
+      errMsg: ''
     }
   },
   computed: {
@@ -150,6 +153,9 @@ export default {
       return this.resource.saveState === 'SAVED'
     },
     saveError () {
+      if (this.resource.saveState === 'ERROR') {
+        this.errMsg = this.resource.errMsg
+      }
       return this.resource.saveState === 'ERROR'
     },
     isLoading () {
