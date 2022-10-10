@@ -456,7 +456,7 @@ GEM
       railties
       sprockets-rails
     graphql (1.8.2)
-    grpc (1.48.0)
+    grpc (1.47.0)
       google-protobuf (~> 3.19)
       googleapis-common-protos-types (~> 1.0)
     grpc-google-iam-v1 (0.6.11)
@@ -838,7 +838,7 @@ GEM
       websocket (~> 1.0)
     semantic_range (3.0.0)
     sequel (5.58.0)
-    sequel_pg (1.15.0)
+    sequel_pg (1.17.0)
       pg (>= 0.18.0, != 1.2.0)
       sequel (>= 4.38.0)
     set (1.0.2)
