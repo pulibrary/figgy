@@ -168,6 +168,13 @@ RSpec.describe ScannedResourceChangeSet do
     end
   end
 
+  describe "#notice_type" do
+    let(:form_resource) { scanned_resource.new(notice_type: "harmful_content") }
+    it "has a notice_type property" do
+      expect(change_set.notice_type).to eq "harmful_content"
+    end
+  end
+
   describe "#downloadable" do
     it "has a downloadable property" do
       expect(change_set.downloadable).to eq "public"
