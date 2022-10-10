@@ -1,5 +1,11 @@
 <h2><%= link_to "Roles", role_management.roles_path %>: <%= @role.name %></h2>
 <h3>Accounts:</h3>
+<h3>Add a new account:</h3>
+<%= bootstrap_form_tag :url=> role_management.role_users_path(@role) do |f| %>
+  <%= f.select 'user_key', User.all.order(:uid), :label=>'User' %>
+  <%= f.submit "Add", class: "btn btn-primary" %>
+  <%= link_to "Cancel", role_management.roles_path, :class => 'btn btn-secondary' %>
+<% end %>
 <ul>
   <% @role.users.sort_by(&:uid).each do |user| %>
     <li><%= user.user_key %>
@@ -9,9 +15,3 @@
     </li>
   <% end %>
 </ul>
-<h3>Add a new account:</h3>
-<%= bootstrap_form_tag :url=> role_management.role_users_path(@role) do |f| %>
-  <%= f.select 'user_key', User.all.order(:uid), :label=>'User' %>
-  <%= f.submit "Add", class: "btn btn-primary" %>
-  <%= link_to "Cancel", role_management.roles_path, :class => 'btn btn-secondary' %>
-<% end %>
