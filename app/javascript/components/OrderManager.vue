@@ -152,11 +152,8 @@ export default {
     saved () {
       return this.resource.saveState === 'SAVED'
     },
-    saveError () {
-      if (this.resource.saveState === 'ERROR') {
-        this.errMsg = this.resource.errMsg
-      }
-      return this.resource.saveState === 'ERROR'
+    saveError: function () {
+      return this.saveErrorMsg(this.resource.saveState)
     },
     isLoading () {
       return this.resource.saveState === 'SAVING'
@@ -180,7 +177,13 @@ export default {
       } else {
         this.captionPixelPadding = 9
       }
-    }
+    },
+    saveErrorMsg: function (err) {
+      if (err === 'ERROR') {
+        this.errMsg = this.resource.errMsg
+      }
+      return this.resource.saveState === 'ERROR'
+    },
   }
 }
 </script>
