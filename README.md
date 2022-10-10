@@ -75,8 +75,8 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
 
 ### Setup Notes for Mac M1 Processors
 
-Mapnik currently isn't supported by M1 processors. To get this working, do the
-following:
+Mapnik currently isn't supported by M1 processors, so `yarn install` above will
+fail. To get this working, do the following:
 
 1. Install Rosetta: `/usr/sbin/softwareupdate --install-rosetta --agree-to-license`
 1. Right click the "Terminal" app in Finder, go to "Get Info", and check "Open
