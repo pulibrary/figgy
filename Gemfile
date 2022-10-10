@@ -101,7 +101,6 @@ group :development do
   gem "foreman"
   gem "listen"
   gem "ruby-prof"
-  gem "solargraph", "~> 0.44.0"
   gem "spring"
   gem "web-console"
 end

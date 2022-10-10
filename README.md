@@ -73,6 +73,21 @@ yarn install
 
 Remember you'll need to run `bundle install` and `yarn install` on an ongoing basis as dependencies are updated.
 
+### Setup Notes for Mac M1 Processors
+
+Mapnik currently isn't supported by M1 processors, so `yarn install` above will
+fail. To get this working, do the following:
+
+1. Install Rosetta: `/usr/sbin/softwareupdate --install-rosetta --agree-to-license`
+1. Right click the "Terminal" app in Finder, go to "Get Info", and check "Open
+   using Rosetta"
+1. Open Terminal, go to this directory
+1. `asdf uninstall nodejs`
+1. `asdf install nodejs`
+1. `yarn install`
+1. Close Terminal, right click "Terminal" app in Finder, go to "Get Info", and
+   uncheck "Open using Rosetta"
+
 ## Setup server
 
 You can either run Solr/Postgres locally or spin them up in Docker containers

@@ -10,10 +10,10 @@ asdf plugin-add ruby || true
 asdf plugin-add java || true
 asdf plugin-add nodejs || true
 asdf install
-pip install cogeo-mosaic
-asdf reshim python
 gem install bundler:2.2.16
 brew install imagemagick gdal tesseract-lang mediainfo ffmpeg vips ocrmypdf lastpass-cli
+pip install cogeo-mosaic
+asdf reshim python
 brew install --cask lando
 
 echo "Enter lastpass username:" 
