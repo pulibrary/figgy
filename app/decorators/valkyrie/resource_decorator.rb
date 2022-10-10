@@ -187,6 +187,11 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     workflow_class.public_read_states.include? Array.wrap(state).first.underscore
   end
 
+  def notice_type
+    nts = ControlledVocabulary.for(:notice_type).all
+    nts.find { |nt| nt.value == model.notice_type&.first }&.label
+  end
+
   # Is the resource embargoed?
   # @return [TrueClass, FalseClass]
   def embargoed?

@@ -310,7 +310,21 @@ class ControlledVocabulary
     end
   end
 
-  # Controlled vocabularies for PDF types
+  # Controlled vocabularies for notice types
+  # Unlike with other authorities, no YAML file is used for these values
+  class NoticeType < ControlledVocabulary
+    ControlledVocabulary.register(:notice_type, self)
+
+    def all(_scope = nil)
+      [
+        Term.new(label: "Harmful Content", value: "harmful_content"),
+        Term.new(label: "Explicit Content", value: "explicit_content"),
+        Term.new(label: "Senior Thesis", value: "senior_thesis")
+      ]
+    end
+  end
+
+  # Controlled vocabularies for Downloadable permissions
   # Unlike with other authorities, no YAML file is used for these values
   class DownloadableState < ControlledVocabulary
     ControlledVocabulary.register(:downloadable, self)

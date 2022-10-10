@@ -19,6 +19,18 @@ RSpec.describe ControlledVocabulary do
     end
   end
 
+  describe "notice_type" do
+    let(:vocabulary) { described_class.for(:notice_type) }
+    describe "#all" do
+      it "returns all possible notice types" do
+        types = vocabulary.all
+        expect(types).to include ControlledVocabulary::Term.new(label: "Harmful Content", value: "harmful_content")
+        expect(types).to include ControlledVocabulary::Term.new(label: "Explicit Content", value: "explicit_content")
+        expect(types).to include ControlledVocabulary::Term.new(label: "Senior Thesis", value: "senior_thesis")
+      end
+    end
+  end
+
   describe "owners" do
     let(:vocabulary) { described_class.for(:owners) }
     describe "#all" do

@@ -22,6 +22,7 @@ class VectorResourceChangeSet < ChangeSet
   property :portion_note, multiple: false, required: false
   property :downloadable, multiple: false, require: true, default: "public"
   property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :notice_type, multiple: false, required: false
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -45,6 +46,7 @@ class VectorResourceChangeSet < ChangeSet
         :downloadable,
         :rights_statement,
         :rights_note,
+        :notice_type,
         :thumbnail_id,
         :portion_note,
         :local_identifier,

@@ -19,6 +19,7 @@ RSpec.shared_examples "a Valkyrie::ResourceDecorator" do
       expect(decorator.rendered_rights_statement.first).to include "<a href=\"#{RightsStatements.no_known_copyright}\">No Known Copyright</a>"
     end
   end
+
   describe "#created" do
     let(:resource) do
       FactoryBot.build(factory_name,
@@ -29,6 +30,7 @@ RSpec.shared_examples "a Valkyrie::ResourceDecorator" do
       expect(decorator.created).to eq ["January 1, 1970"]
     end
   end
+
   context "within a collection" do
     let(:collection) do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

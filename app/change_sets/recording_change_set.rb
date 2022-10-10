@@ -20,6 +20,7 @@ class RecordingChangeSet < ChangeSet
   property :part_of, require: false, default: []
   property :upload_set_id, multiple: false, require: false, type: Valkyrie::Types::ID
   property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :notice_type, multiple: false, required: false
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -38,6 +39,7 @@ class RecordingChangeSet < ChangeSet
       :title,
       :downloadable,
       :rights_statement,
+      :notice_type,
       :member_of_collection_ids,
       :local_identifier,
       :part_of,

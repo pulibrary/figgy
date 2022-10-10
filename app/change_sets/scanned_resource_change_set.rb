@@ -33,6 +33,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :notice_type, multiple: false, required: false
 
   # MARCRelator attributes
   Schema::MARCRelators.attributes.each { |field| property field }
@@ -67,6 +68,7 @@ class ScannedResourceChangeSet < ChangeSet
       :member_of_collection_ids,
       :rights_statement,
       :rights_note,
+      :notice_type,
       :local_identifier,
       :holding_location,
       :pdf_type,

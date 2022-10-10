@@ -91,7 +91,8 @@ module Schema
           :rendered_rights_statement, # Local
           :coverage_point, # local, used for latitude / longitude
           :downloadable, # Determines whether or not users can download a resource
-          :electronic_locations
+          :electronic_locations,
+          :notice_type # local; click-through agreement
         ]
     end
 

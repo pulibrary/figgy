@@ -68,6 +68,7 @@ class SimpleChangeSet < ChangeSet
   property :resource_type, multiple: false, required: false, default: []
   property :change_set, require: true, default: "simple"
   property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :notice_type, multiple: false, required: false
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
@@ -87,6 +88,7 @@ class SimpleChangeSet < ChangeSet
       :title,
       :rights_statement,
       :rights_note,
+      :notice_type,
       :local_identifier,
       :pdf_type,
       :downloadable,
