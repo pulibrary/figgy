@@ -25,12 +25,14 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.imported_created).to eq ["January 1, 1970"]
       end
     end
+
     context "with a date range" do
       let(:imported_metadata) { [{ created: "1941-01-01T00:00:00Z/1985-12-31T23:59:59Z" }] }
       it "maps date to readable string" do
         expect(decorator.imported_created).to eq ["1941-1985"]
       end
     end
+
     context "with just a year" do
       let(:imported_metadata) { [{ created: "1970" }] }
       it "exposes the year" do
@@ -52,6 +54,7 @@ RSpec.describe ScannedResourceDecorator do
         expect(decorator.human_readable_type).to eq "Recording"
       end
     end
+
     context "with a Recording descriptive proxy" do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, change_set: "recording", member_ids: [child.id]) }
       let(:child) { FactoryBot.create_for_repository(:scanned_resource, change_set: "recording") }
@@ -66,6 +69,7 @@ RSpec.describe ScannedResourceDecorator do
       FactoryBot.build(:scanned_resource,
                        holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15")
     end
+
     describe "Voyager downtime" do
       it "handles error caused by Voyager downtime" do
         stub_request(:get, "https://bibdata.princeton.edu/locations/digital_locations.json")
@@ -292,6 +296,15 @@ RSpec.describe ScannedResourceDecorator do
 
         expect(decorator.fixity_map).to eq(1 => 1)
       end
+    end
+  end
+
+  describe "#notice_type" do
+    let(:resource) do
+      FactoryBot.build(:scanned_resource, notice_type: "senior_thesis")
+    end
+    it "displays the label" do
+      expect(described_class.new(resource).notice_type).to eq "Senior Thesis"
     end
   end
 
