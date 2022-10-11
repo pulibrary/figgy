@@ -7,32 +7,43 @@ various locations.
 ```mermaid
 sequenceDiagram
   participant User
-  participant iFrame
   participant Orangelight
+  participant iFrame
   participant GraphQL
   participant Figgy
   User->>Orangelight: View Page
   Orangelight->>GraphQL: Request Resource
-  alt READ true
-    GraphQL->>Orangelight: Return ID
-    Orangelight->>iFrame: Render viewer iFrame
-    iFrame->>User: UV Appears
-  else READ false DISCOVER true
-    GraphQL->>Orangelight: Return ID
-    Orangelight->>iFrame: Render viewer iFrame
+  alt DISCOVER true
+    GraphQL-->>Orangelight: Return ID
+    Orangelight-->>iFrame: Render viewer iFrame
     iFrame->>Figgy: Check Manifest Status
-    alt Logged In
-      Figgy->>iFrame: HTTP 401
-      iFrame->>User: Buncha CDL stuff or nothing
+    Note over iFrame,Figgy: Javascript Call within iFrame
+    alt READ true
+      Figgy-->>iFrame: HTTP 200
+      iFrame-->>User: Render Universal Viewer
+    else Logged In
+      Figgy-->>iFrame: HTTP 401
+      Note over iFrame,Figgy: JS redirects to /viewer/auth
+      alt CDL Eligible
+        iFrame-->>User: CDL Checkout Screen
+      end
     else Not Logged In
-      Figgy->>iFrame: HTTP 401
-      iFrame->>User: Big Login Button
+      Figgy-->>iFrame: HTTP 401
+      Note over iFrame,Figgy: JS redirects to /viewer/auth
+      %% We could put click-throughs here...?
+      alt CDL Eligible
+        iFrame-->>User: "Login to Digitally Check Out"
+      else OARSC
+        iFrame-->>User: "Please Contact Special Collections, Login"
+      else
+        iFrame-->>User: Big Login Button
+      end
     end
-  else READ false DISCOVER false
-    GraphQL->>Orangelight: Return empty response
-    Orangelight->>User: Nothing.
+  else DISCOVER false
+    GraphQL-->>Orangelight: Return empty response
+    Orangelight-->>User: Nothing.
   end
-    
+
 ```
 
 ## GraphQL Version
@@ -45,19 +56,21 @@ sequenceDiagram
   User->>Pulfalight: View Page
   Pulfalight->>GraphQL: Request Resource
   alt READ true
-    GraphQL->>Pulfalight: status authorized, HTML
-    Pulfalight->>User: Render HTML (UV in iFrame) or Link (Download Content)
+    GraphQL-->>Pulfalight: status authorized, HTML
+    Pulfalight-->>User: Render HTML (UV in iFrame) or Link (Download Content)
   else READ false DISCOVER true
     alt Logged In
-      GraphQL->>Pulfalight: status unauthorized, no HTML
-      Pulfalight->>User: Nothing
+      GraphQL-->>Pulfalight: status unauthorized, no HTML
+      %% This is where we'd have to handle CDL or click-through
+      Pulfalight-->>User: Nothing
     else Not Logged in
-      GraphQL->>Pulfalight: status unauthenticated, no HTML
-      Pulfalight->>User: Yellow login box
+      GraphQL-->>Pulfalight: status unauthenticated, no HTML
+      Pulfalight-->>User: Yellow login box
+      Note over Pulfalight,User: Login box text is in Pulfalight
     end
   else READ false DISCOVER false
-    GraphQL->>Pulfalight: empty response
-    Pulfalight->>User: Nothing
+    GraphQL-->>Pulfalight: empty response
+    Pulfalight-->>User: Nothing
   end
     
 ```
