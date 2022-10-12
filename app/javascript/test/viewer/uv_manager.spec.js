@@ -42,17 +42,22 @@ describe('UVManager', () => {
       delete global.createUV
     }
   })
-  function buildMocks (status, externalManifest = false) {
+  function mockJquery () {
     // Mock jQuery
     const clickable = { click: () => clickable, on: () => clickable, is: () => clickable, outerHeight: () => clickable, width: () => clickable, height: () => clickable, hide: () => clickable, show: () => clickable, children: () => clickable }
     global.$ = jest.fn().mockImplementation(() => clickable)
+  }
 
+  function mockManifests (status) {
     // Mock $.ajax
     const data = { status: status }
     const jqxhr = { getResponseHeader: () => null }
     global.$.ajax = jest.fn().mockImplementation(() => {
       if (status !== 200) { return jQ.Deferred().reject(data, status, jqxhr) } else { return jQ.Deferred().resolve(data, status, jqxhr) }
     })
+  }
+
+  function mockUvProvider (externalManifest = false) {
     const getResult = jest.fn().mockImplementation(function (k) {
       if (k === 'manifest') {
         if (externalManifest === true) {
@@ -64,7 +69,7 @@ describe('UVManager', () => {
         return 'https://figgy.princeton.edu/uv/uv_config.json'
       } else { return null }
     })
-    // Mock UV Provider
+
     const provider = jest.fn().mockImplementation(() => {
       return { get: getResult }
     })
@@ -74,10 +79,36 @@ describe('UVManager', () => {
     jest.spyOn(window.location, 'assign').mockImplementation(() => true)
   }
 
+  function stubQuery(embedHash) {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(
+          {
+            "data": {
+              "resourcesByFiggyIds": [
+                {
+                  "id": component_id,
+                  "embed": embedHash
+                }
+              ]
+            }
+          }
+        )
+      })
+    )
+  }
+
   describe('initialize', () => {
-    it('redirects to viewer auth if the manifest 401s', async () => {
+    it('redirects to viewer auth if graph says unauthenticated', async () => {
       document.body.innerHTML = initialHTML
-      buildMocks(401)
+      mockJquery()
+      mockUvProvider()
+      stubQuery({
+        "type": null,
+        "content": null,
+        "status": "unauthenticated"
+      })
 
       // Initialize
       const uvManager = new UVManager()
@@ -85,9 +116,25 @@ describe('UVManager', () => {
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
       expect(LeafletViewer).not.toHaveBeenCalled()
     })
+
+    it('redirects to viewer auth if the manifest 401s', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockManifests(401)
+      mockUvProvider()
+
+      // Initialize
+      const uvManager = new UVManager()
+      await uvManager.initialize()
+      expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
+      expect(LeafletViewer).not.toHaveBeenCalled()
+    })
+
     it('falls back to a default viewer URI if not using a figgy manifest', async () => {
       document.body.innerHTML = initialHTML
-      buildMocks(401, true)
+      mockJquery()
+      mockManifests(401)
+      mockUvProvider(true)
 
       // Initialize
       const uvManager = new UVManager()
