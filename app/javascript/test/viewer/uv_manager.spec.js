@@ -70,6 +70,7 @@ describe('UVManager', () => {
       } else { return null }
     })
 
+    // This makes it so global.UV.URLDataProvider.get returns our mock data
     const provider = jest.fn().mockImplementation(() => {
       return { get: getResult }
     })
@@ -79,6 +80,7 @@ describe('UVManager', () => {
     jest.spyOn(window.location, 'assign').mockImplementation(() => true)
   }
 
+  let figgy_id = "12345"
   function stubQuery(embedHash) {
     global.fetch = jest.fn(() =>
       Promise.resolve({
@@ -86,12 +88,11 @@ describe('UVManager', () => {
         json: () => Promise.resolve(
           {
             "data": {
-              "resourcesByFiggyIds": [
+              "resource":
                 {
-                  "id": component_id,
+                  "id": figgy_id,
                   "embed": embedHash
                 }
-              ]
             }
           }
         )
@@ -117,23 +118,9 @@ describe('UVManager', () => {
       expect(LeafletViewer).not.toHaveBeenCalled()
     })
 
-    it('redirects to viewer auth if the manifest 401s', async () => {
-      document.body.innerHTML = initialHTML
-      mockJquery()
-      mockManifests(401)
-      mockUvProvider()
-
-      // Initialize
-      const uvManager = new UVManager()
-      await uvManager.initialize()
-      expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
-      expect(LeafletViewer).not.toHaveBeenCalled()
-    })
-
     it('falls back to a default viewer URI if not using a figgy manifest', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
-      mockManifests(401)
       mockUvProvider(true)
 
       // Initialize
