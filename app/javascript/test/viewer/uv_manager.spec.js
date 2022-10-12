@@ -91,7 +91,9 @@ describe('UVManager', () => {
               "resource":
                 {
                   "id": figgy_id,
-                  "embed": embedHash
+                  "__typename": "ScannedResource",
+                  "embed": embedHash,
+                  "label": "Test"
                 }
             }
           }
