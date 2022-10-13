@@ -42,17 +42,22 @@ describe('UVManager', () => {
       delete global.createUV
     }
   })
-  function buildMocks (status, externalManifest = false) {
+  function mockJquery () {
     // Mock jQuery
     const clickable = { click: () => clickable, on: () => clickable, is: () => clickable, outerHeight: () => clickable, width: () => clickable, height: () => clickable, hide: () => clickable, show: () => clickable, children: () => clickable }
     global.$ = jest.fn().mockImplementation(() => clickable)
+  }
 
+  function mockManifests (status) {
     // Mock $.ajax
     const data = { status: status }
     const jqxhr = { getResponseHeader: () => null }
     global.$.ajax = jest.fn().mockImplementation(() => {
       if (status !== 200) { return jQ.Deferred().reject(data, status, jqxhr) } else { return jQ.Deferred().resolve(data, status, jqxhr) }
     })
+  }
+
+  function mockUvProvider (externalManifest = false) {
     const getResult = jest.fn().mockImplementation(function (k) {
       if (k === 'manifest') {
         if (externalManifest === true) {
@@ -64,7 +69,8 @@ describe('UVManager', () => {
         return 'https://figgy.princeton.edu/uv/uv_config.json'
       } else { return null }
     })
-    // Mock UV Provider
+
+    // This makes it so global.UV.URLDataProvider.get returns our mock data
     const provider = jest.fn().mockImplementation(() => {
       return { get: getResult }
     })
@@ -74,10 +80,61 @@ describe('UVManager', () => {
     jest.spyOn(window.location, 'assign').mockImplementation(() => true)
   }
 
+  let figgy_id = "12345"
+  function stubQuery(embedHash, label='Test', type='ScannedResource') {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(
+          {
+            "data": {
+              "resource":
+                {
+                  "id": figgy_id,
+                  "__typename": type,
+                  "embed": embedHash,
+                  "label": label
+                }
+            }
+          }
+        )
+      })
+    )
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('initialize', () => {
-    it('redirects to viewer auth if the manifest 401s', async () => {
+    it('loads a viewer and title for a playlist', async () => {
       document.body.innerHTML = initialHTML
-      buildMocks(401)
+      mockJquery()
+      mockUvProvider()
+      stubQuery({
+        "type": "html",
+        "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        "status": "authorized"
+      },
+        "Test Playlist",
+        "Playlist"
+      )
+
+      // Initialize
+      const uvManager = new UVManager()
+      await uvManager.initialize()
+      expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
+    })
+
+    it('redirects to viewer auth if graph says unauthenticated', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      stubQuery({
+        "type": null,
+        "content": null,
+        "status": "unauthenticated"
+      })
 
       // Initialize
       const uvManager = new UVManager()
@@ -85,9 +142,11 @@ describe('UVManager', () => {
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
       expect(LeafletViewer).not.toHaveBeenCalled()
     })
+
     it('falls back to a default viewer URI if not using a figgy manifest', async () => {
       document.body.innerHTML = initialHTML
-      buildMocks(401, true)
+      mockJquery()
+      mockUvProvider(true)
 
       // Initialize
       const uvManager = new UVManager()
