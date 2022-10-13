@@ -12,7 +12,14 @@ describe BulkUpdateJob do
   let(:ids) { [resource1.id, resource2.id] }
   let(:args) { { mark_complete: true } }
   let(:more_args) { { mark_complete: true, ocr_language: "eng" } }
-  let(:all_args) { { mark_complete: true, ocr_language: "eng", rights_statement: "http://rightsstatements.org/vocab/NoC-OKLR/1.0/", visibility: "reading_room" } }
+  let(:all_args) do
+    { mark_complete: true,
+      ocr_language: "eng",
+      rights_statement: "http://rightsstatements.org/vocab/NoC-OKLR/1.0/",
+      visibility: "reading_room",
+      holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/1" }
+  end
+
   describe "#perform" do
     before do
       resource1
@@ -45,8 +52,10 @@ describe BulkUpdateJob do
       r2 = query_service.find_by(id: resource2.id)
       expect(r1.visibility).to eq ["open"]
       expect(r1.rights_statement).to eq ["http://rightsstatements.org/vocab/NKC/1.0/"]
+      expect(r1.holding_location).to eq nil
       expect(r2.visibility).to eq ["open"]
       expect(r2.rights_statement).to eq ["http://rightsstatements.org/vocab/NKC/1.0/"]
+      expect(r2.holding_location).to eq nil
     end
 
     context "updating all of the available attributes" do
@@ -58,10 +67,12 @@ describe BulkUpdateJob do
         expect(r1.ocr_language).to eq ["eng"]
         expect(r1.rights_statement).to eq ["http://rightsstatements.org/vocab/NoC-OKLR/1.0/"]
         expect(r1.visibility).to eq ["reading_room"]
+        expect(r1.holding_location.map(&:to_s)).to eq ["https://bibdata.princeton.edu/locations/delivery_locations/1"]
         expect(r2.state).to eq ["complete"]
         expect(r2.ocr_language).to eq ["eng"]
         expect(r2.rights_statement).to eq ["http://rightsstatements.org/vocab/NoC-OKLR/1.0/"]
         expect(r2.visibility).to eq ["reading_room"]
+        expect(r2.holding_location.map(&:to_s)).to eq ["https://bibdata.princeton.edu/locations/delivery_locations/1"]
       end
     end
 

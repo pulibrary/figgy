@@ -22,11 +22,12 @@ class BulkUpdateJob < ApplicationJob
   # Fields that can be bulk-edited
   def self.supported_attributes
     [
+      :append_collection_ids,
+      :holding_location,
       :ocr_language,
       :refresh_remote_metadata,
       :rights_statement,
-      :visibility,
-      :append_collection_ids
+      :visibility
     ]
   end
 
