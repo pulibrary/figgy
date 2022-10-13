@@ -81,7 +81,7 @@ describe('UVManager', () => {
   }
 
   let figgy_id = "12345"
-  function stubQuery(embedHash) {
+  function stubQuery(embedHash, label='Test', type='ScannedResource') {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         status: 200,
@@ -91,9 +91,9 @@ describe('UVManager', () => {
               "resource":
                 {
                   "id": figgy_id,
-                  "__typename": "ScannedResource",
+                  "__typename": type,
                   "embed": embedHash,
-                  "label": "Test"
+                  "label": label
                 }
             }
           }
@@ -103,6 +103,25 @@ describe('UVManager', () => {
   }
 
   describe('initialize', () => {
+    it('loads a viewer and title for a playlist', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      stubQuery({
+        "type": "html",
+        "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        "status": "authorized"
+      },
+        "Test Playlist",
+        "Playlist"
+      )
+
+      // Initialize
+      const uvManager = new UVManager()
+      await uvManager.initialize()
+      expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
+    })
+
     it('redirects to viewer auth if graph says unauthenticated', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
