@@ -118,5 +118,18 @@ RSpec.describe BulkEditService do
         expect(reloaded.title.first.to_s).to eq("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.")
       end
     end
+
+    context "when updating holding location" do
+      it "updates the holding_location" do
+        obj1 = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection.id])
+
+        new_holding_location = "https://bibdata.princeton.edu/locations/delivery_locations/1"
+        attrs = { holding_location: new_holding_location }
+        described_class.perform(collection_id: collection.id, attributes: attrs, logger: logger)
+
+        after = query_service.find_by(id: obj1.id)
+        expect(after.holding_location.map(&:to_s)).to eq([new_holding_location])
+      end
+    end
   end
 end
