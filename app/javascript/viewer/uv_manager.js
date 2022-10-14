@@ -68,8 +68,6 @@ export default class UVManager {
 
   createUV (data, status, graphql_data) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
-    // TODO: There's no link headers to get a hold of anymore, we'll have to update
-    // title from GraphQL instead.
     this.processTitle(graphql_data)
     this.uvElement.show()
     this.uv = createUV('#uv', {
