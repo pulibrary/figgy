@@ -23,6 +23,7 @@ export default class UVManager {
       if (result.embed.status === 'unauthenticated') {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
       } else if (result.embed.status === 'authorized') {
+        this.displayNotice(result)
         this.createUV(null, null, result)
         this.buildLeafletViewer()
       }
@@ -45,6 +46,10 @@ export default class UVManager {
             type,
             content,
             status
+          },
+          notice {
+            heading,
+            textHtml
           }
         }
        }`
@@ -63,15 +68,29 @@ export default class UVManager {
       .then((response) => response.data.resource)
   }
 
+  displayNotice (graphqlData) {
+    if (graphqlData.notice === null) { return }
+    document.getElementById('notice-modal').classList.remove('d-none')
+    const headingElement = document.getElementById('notice-heading')
+    headingElement.innerHTML = graphqlData.notice.heading
+    const textElement = document.getElementById('notice-text')
+    textElement.innerHTML = graphqlData.notice.textHtml
+    const acceptButton = document.getElementById('notice-accept')
+    acceptButton.addEventListener('click', (e) => {
+      e.preventDefault()
+      document.getElementById('notice-modal').classList.add('d-none')
+    })
+  }
+
   // Adds a tabbed viewer for Leaflet to show rasters, especially for mosaics.
   buildLeafletViewer () {
     this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
     return this.leafletViewer.loadLeaflet()
   }
 
-  createUV (data, status, graphql_data) {
+  createUV (data, status, graphqlData) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
-    this.processTitle(graphql_data)
+    this.processTitle(graphqlData)
     this.uvElement.show()
     this.uv = createUV('#uv', {
       root: 'uv',
@@ -169,11 +188,11 @@ export default class UVManager {
     }
   }
 
-  processTitle (graphql_data) {
-    if (graphql_data === undefined || graphql_data.__typename !== 'Playlist') {
+  processTitle (graphqlData) {
+    if (graphqlData === undefined || graphqlData.__typename !== 'Playlist') {
       return
     }
-    var title = graphql_data.label
+    var title = graphqlData.label
     var titleElement = document.getElementById('title')
     titleElement.textContent = title
     titleElement.style.display = 'block'

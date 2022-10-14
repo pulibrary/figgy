@@ -4,6 +4,11 @@
 <%= form_with id: "return-early-form", action: "/cdl/:id/return" do |f| %>
 <%= hidden_field_tag(:id) %>
 <% end %>
+<div id="notice-modal" class="d-none">
+  <h2 id="notice-heading"></h2>
+  <div id="notice-text"></div>
+  <input id="notice-accept" value="Accept" type="submit"></input>
+</div>
 <div class="container--tabs">
   <section class="row">
     <ul class="nav nav-tabs" id="tab-container">
