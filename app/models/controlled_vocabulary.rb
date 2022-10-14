@@ -320,7 +320,7 @@ class ControlledVocabulary
   class NoticeType < ControlledVocabulary
     ControlledVocabulary.register(:notice_type, self)
     def self.authority_config
-      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "notices.yml")), [Symbol])
+      @notice_authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "notices.yml")), [Symbol])
     end
 
     def all(_scope = nil)
