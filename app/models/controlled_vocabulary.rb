@@ -54,6 +54,7 @@ class ControlledVocabulary
     attribute :label, Valkyrie::Types::String
     attribute :value, Valkyrie::Types::Any
     attribute :notable, Valkyrie::Types::Bool
+    attribute :heading, Valkyrie::Types::String
     attribute :definition, Valkyrie::Types::String
     attribute :label_class, Valkyrie::Types::String
 
@@ -63,6 +64,10 @@ class ControlledVocabulary
     # @return [Boolean] whether or not this Term is notable
     def notable?
       notable == true
+    end
+
+    def to_graphql
+      attributes.except(:id, :created_at, :updated_at, :new_record)
     end
   end
 
@@ -314,13 +319,15 @@ class ControlledVocabulary
   # Unlike with other authorities, no YAML file is used for these values
   class NoticeType < ControlledVocabulary
     ControlledVocabulary.register(:notice_type, self)
+    def self.authority_config
+      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "notices.yml")), [Symbol])
+    end
 
     def all(_scope = nil)
-      [
-        Term.new(label: "Harmful Content", value: "harmful_content"),
-        Term.new(label: "Explicit Content", value: "explicit_content"),
-        Term.new(label: "Senior Thesis", value: "senior_thesis")
-      ]
+      @all ||=
+        self.class.authority_config[:terms].map do |term|
+          Term.new(term)
+        end
     end
   end
 

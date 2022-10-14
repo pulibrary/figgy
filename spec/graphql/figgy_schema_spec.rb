@@ -46,15 +46,14 @@ RSpec.describe FiggySchema do
     end
 
     context "when requesting a notice" do
-      let(:query_string) { %|{ resource(id: "#{id}") { notice { heading, text_html } } }| }
+      let(:query_string) { %|{ resource(id: "#{id}") { notice { heading, textHtml } } }| }
       it "returns a notice heading and text" do
         expect(result["errors"]).to be_blank
-        expect(result["data"]["resource"]["notice"]).to eq(
-          {
-            "heading" => "Terms and Conditions for Using Princeton University Senior Theses",
-            "text_html" => "The Princeton University Senior Theses"
-          }
-        )
+        notice = result["data"]["resource"]["notice"]
+
+        expect(notice.keys).to contain_exactly "heading", "textHtml"
+        expect(notice["heading"]).to eq "Terms and Conditions for Using Princeton University Senior Theses"
+        expect(notice["textHtml"]).to start_with "The Princeton University Senior Theses"
       end
     end
 

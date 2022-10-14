@@ -24,6 +24,7 @@ module Types::Resource
   field :thumbnail, Types::Thumbnail, null: true
   field :ocr_content, [String], null: true
   field :embed, Types::EmbedType, null: true
+  field :notice, Types::NoticeType, null: true
 
   definition_methods do
     def resolve_type(object, _context)
@@ -105,6 +106,13 @@ module Types::Resource
 
   def embed
     Embed.for(resource: object, ability: ability).to_graphql
+  end
+
+  def notice
+    return if object.try(:notice_type).blank?
+    ControlledVocabulary.for(:notice_type).find(object.notice_type.first).to_graphql.tap do |notice_graphql|
+      notice_graphql[:text_html] = notice_graphql[:definition]
+    end
   end
 
   def query_service
