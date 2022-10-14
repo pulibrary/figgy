@@ -53,7 +53,7 @@ RSpec.describe FiggySchema do
 
         expect(notice.keys).to contain_exactly "heading", "textHtml"
         expect(notice["heading"]).to eq "Terms and Conditions for Using Princeton University Senior Theses"
-        expect(notice["textHtml"]).to start_with "The Princeton University Senior Theses"
+        expect(notice["textHtml"]).to start_with "<p>The Princeton University Senior Theses"
       end
     end
 
