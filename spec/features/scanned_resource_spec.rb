@@ -26,15 +26,4 @@ RSpec.feature "Scanned Resource" do
     expect(page).to have_content "Embargo Date"
     expect(page).to have_content "Senior Thesis"
   end
-
-  scenario "show page has a viewer", js: true do
-    file = fixture_file_upload("files/example.tif", "image/tiff")
-    resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
-
-    visit solr_document_path(id: resource.id)
-
-    within_frame(find(".uv-container > iframe")) do
-      expect(page).to have_selector(".uv.en-gb")
-    end
-  end
 end
