@@ -60,10 +60,13 @@ export default class UVManager {
       .then((response) => response.data.resource)
   }
 
-  // Adds a tabbed viewer for Leaflet to show rasters, especially for mosaics.
   buildLeafletViewer () {
     this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
     return this.leafletViewer.loadLeaflet()
+  }
+
+  checkManifest () {
+    return $.ajax(this.manifest, { type: 'HEAD' })
   }
 
   createUV (data, status, graphql_data) {
@@ -143,6 +146,15 @@ export default class UVManager {
       setTimeout(function () {
         this.waitForElementToDisplay(selector, time, callback)
       }.bind(this), time)
+    }
+  }
+
+  requestAuth (data, status) {
+    // needs authorizaton
+    if (data.status === 401) {
+      if (this.manifest.includes(window.location.host)) {
+        window.location.assign('/viewer/' + this.figgyId + '/auth')
+      }
     }
   }
 
