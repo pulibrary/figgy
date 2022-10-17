@@ -18,18 +18,6 @@ export default class UVManager {
   }
 
   async loadUV () {
-    if this.isFiggyManifest() {
-      const result = await this.checkFiggyStatus()
-      if
-        .then(this.createUV.bind(this))
-        // If creating the UV fails, don't build leaflet.
-        .then(() => { return this.buildLeafletViewer() })
-        .catch(this.requestAuth.bind(this))
-        .promise()
-    } else {
-      return this.createUV()
-    }
-
     return this.checkManifest()
       .then(this.createUV.bind(this))
       // If creating the UV fails, don't build leaflet.
@@ -37,33 +25,6 @@ export default class UVManager {
       .catch(this.requestAuth.bind(this))
       .promise()
   }
-
-    async checkFiggy() {
-      var url = "https://figgy.princeton.edu/graphql";
-      var data = JSON.stringify({ query:`{
-        resourcesByFiggyIds(id: "` + this.figgyId + `"){
-          id,
-          embed {
-            type,
-            content,
-            status
-          }
-        }
-       }`
-      })
-      return fetch(url,
-        {
-          method: "POST",
-          credentials: 'include',
-          body: data,
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }
-      )
-        .then((response) => response.json())
-        .then((response) => response.data.resourcesByFiggyIds[0])
-    },
 
   buildLeafletViewer () {
     this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
@@ -153,7 +114,6 @@ export default class UVManager {
   }
 
   requestAuth (data, status) {
-    // needs authorizaton
     if (data.status === 401) {
       if (this.manifest.includes(window.location.host)) {
         window.location.assign('/viewer/' + this.figgyId + '/auth')
