@@ -102,10 +102,6 @@ describe('UVManager', () => {
     )
   }
 
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
   describe('initialize', () => {
     it('loads a viewer and title for a playlist', async () => {
       document.body.innerHTML = initialHTML
