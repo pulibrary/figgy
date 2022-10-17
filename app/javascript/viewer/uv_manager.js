@@ -23,7 +23,7 @@ export default class UVManager {
       if (result.embed.status === 'unauthenticated') {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
       } else if (result.embed.status === 'authorized') {
-        this.createUV(null, null, result)
+        this.createUV()
         this.buildLeafletViewer()
       }
     } else {
@@ -36,8 +36,6 @@ export default class UVManager {
     var data = JSON.stringify({ query:`{
         resource(id: "` + this.figgyId + `"){
           id,
-          __typename,
-          label,
           embed {
             type,
             content,
@@ -69,11 +67,11 @@ export default class UVManager {
     return $.ajax(this.manifest, { type: 'HEAD' })
   }
 
-  createUV (data, status, graphql_data) {
+  createUV (data, status, jqXHR) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     // TODO: There's no link headers to get a hold of anymore, we'll have to update
     // title from GraphQL instead.
-    this.processTitle(graphql_data)
+    // this.processTitle(jqXHR)
     this.uvElement.show()
     this.uv = createUV('#uv', {
       root: 'uv',
@@ -174,15 +172,18 @@ export default class UVManager {
     }
   }
 
-  processTitle (graphql_data) {
-    if (graphql_data === undefined || graphql_data.__typename !== 'Playlist') {
-      return
+  processTitle (jqXHR) {
+    var linkHeader = jqXHR.getResponseHeader('Link')
+    if (linkHeader) {
+      var titleMatch = /title="(.+?)"/.exec(linkHeader)
+      if (titleMatch[1]) {
+        var title = titleMatch[1]
+        var titleElement = document.getElementById('title')
+        titleElement.textContent = title
+        titleElement.style.display = 'block'
+        this.resize()
+      }
     }
-    var title = graphql_data.label
-    var titleElement = document.getElementById('title')
-    titleElement.textContent = title
-    titleElement.style.display = 'block'
-    this.resize()
   }
 
   resize () {
