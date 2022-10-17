@@ -18,23 +18,30 @@ export default class UVManager {
   }
 
   async loadUV () {
-    if (this.isFiggyManifest) {
+    if this.isFiggyManifest() {
       const result = await this.checkFiggyStatus()
-      if (result.embed.status === 'unauthenticated') {
-        return window.location.assign('/viewer/' + this.figgyId + '/auth')
-      } else if (result.embed.status === 'authorized') {
-        this.createUV()
-        this.buildLeafletViewer()
-      }
+      if
+        .then(this.createUV.bind(this))
+        // If creating the UV fails, don't build leaflet.
+        .then(() => { return this.buildLeafletViewer() })
+        .catch(this.requestAuth.bind(this))
+        .promise()
     } else {
       return this.createUV()
     }
+
+    return this.checkManifest()
+      .then(this.createUV.bind(this))
+      // If creating the UV fails, don't build leaflet.
+      .then(() => { return this.buildLeafletViewer() })
+      .catch(this.requestAuth.bind(this))
+      .promise()
   }
 
-  async checkFiggyStatus() {
-    var url = "/graphql";
-    var data = JSON.stringify({ query:`{
-        resource(id: "` + this.figgyId + `"){
+    async checkFiggy() {
+      var url = "https://figgy.princeton.edu/graphql";
+      var data = JSON.stringify({ query:`{
+        resourcesByFiggyIds(id: "` + this.figgyId + `"){
           id,
           embed {
             type,
@@ -43,20 +50,20 @@ export default class UVManager {
           }
         }
        }`
-    })
-    return fetch(url,
-      {
-        method: "POST",
-        credentials: 'include',
-        body: data,
-        headers: {
-          'Content-Type': 'application/json',
+      })
+      return fetch(url,
+        {
+          method: "POST",
+          credentials: 'include',
+          body: data,
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }
-      }
-    )
-      .then((response) => response.json())
-      .then((response) => response.data.resource)
-  }
+      )
+        .then((response) => response.json())
+        .then((response) => response.data.resourcesByFiggyIds[0])
+    },
 
   buildLeafletViewer () {
     this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
@@ -69,9 +76,7 @@ export default class UVManager {
 
   createUV (data, status, jqXHR) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
-    // TODO: There's no link headers to get a hold of anymore, we'll have to update
-    // title from GraphQL instead.
-    // this.processTitle(jqXHR)
+    this.processTitle(jqXHR)
     this.uvElement.show()
     this.uv = createUV('#uv', {
       root: 'uv',
