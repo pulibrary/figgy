@@ -67,7 +67,7 @@ class ExportService
     if r.respond_to?(:source_metadata_identifier) && !r.source_metadata_identifier.nil? && r.source_metadata_identifier.first.present?
       r.source_metadata_identifier.first
     else
-      r.title.first
+      r.title.first.tr("():;.", "").strip
     end
   end
 end
