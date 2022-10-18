@@ -26,6 +26,23 @@ RSpec.describe ExportService do
       end
     end
 
+    context "with an ephemera folder with a long name" do
+      let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+      let(:title) do
+        "Contra el PRO: el kirchnerismo y Lousteau no son opción. Cambia por la izquierda. José Castillo (vice jefe de gobierno). Laura Morrone (legisladora). "
+      end
+      let(:clean_title) do
+        "Contra el PRO el kirchnerismo y Lousteau no son opción Cambia por la izquierda José Castillo vice jefe de gobierno Laura Morrone legisladora"
+      end
+      let(:folder) { FactoryBot.create_for_repository(:ephemera_folder, title: title, files: [file1]) }
+
+      it "exports files in a directory" do
+        described_class.export(folder)
+
+        expect(File.exist?("#{export_path}/#{clean_title}/abstract.tiff")).to be true
+      end
+    end
+
     context "with a multi-volume work" do
       let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
       let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
