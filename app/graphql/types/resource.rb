@@ -103,9 +103,7 @@ module Types::Resource
     nil
   end
 
-  def embed
-    Embed.for(resource: object, ability: ability).to_graphql
-  end
+  def embed; end
 
   def query_service
     Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
