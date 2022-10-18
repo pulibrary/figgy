@@ -7,7 +7,6 @@
           <div class="row">
             <% types.each do |klass| %>
               <%= render partial: "catalog/work_card", locals: { klass: klass, bulk: bulk } %>
-              <%= render partial: 'catalog/work_types_archival_media_collections', locals: { type: klass } %>
             <% end %>
           </div>
         </div>
