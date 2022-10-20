@@ -179,7 +179,7 @@ class RasterResourceDerivativeService
       grandparent = parent.parents.first
       return unless grandparent.is_a? RasterResource
       return unless grandparent.decorate.public_readable_state?
-      MosaicJob.perform_later(grandparent.id)
+      MosaicJob.perform_later(grandparent.id.to_s)
     end
 
     def create_local_derivatives
