@@ -47,7 +47,7 @@ class RasterResourceDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    raster_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? }
+    raster_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? || file.cloud_derivative? }
     raster_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
@@ -179,7 +179,7 @@ class RasterResourceDerivativeService
       grandparent = parent.parents.first
       return unless grandparent.is_a? RasterResource
       return unless grandparent.decorate.public_readable_state?
-      MosaicJob.perform_later(grandparent.id)
+      MosaicJob.perform_later(grandparent.id.to_s)
     end
 
     def create_local_derivatives

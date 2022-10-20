@@ -2,6 +2,11 @@
 require "find"
 namespace :figgy do
   namespace :migrate do
+    desc "regenerate derivatives for resources with extras"
+    task remove_extra_derivatives: :environment do
+      Migrations::RemoveExtraDerivatives.call
+    end
+
     desc "Migrate users in group image_editor to group staff"
     task image_editor: :environment do
       staff = Role.where(name: "staff").first_or_create
