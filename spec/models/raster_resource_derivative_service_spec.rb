@@ -94,6 +94,8 @@ RSpec.describe RasterResourceDerivativeService do
       derivative_service.new(id: valid_change_set.id).cleanup_derivatives
       reloaded = query_service.find_by(id: valid_resource.id)
       expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
+      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
+      expect(reloaded.file_metadata.select(&:cloud_derivative?)).to be_empty
     end
 
     it "deletes the error_message" do
