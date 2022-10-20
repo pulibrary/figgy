@@ -25,6 +25,7 @@
     <%= stylesheet_pack_tag 'application' %>
     <%= javascript_pack_tag "application" %>
     <%= content_for(:head) %>
+    <%= render 'shared/analytics' if Rails.env.production? %>
   </head>
   <body class="<%= render_body_class %>">
     <div class="lux">
