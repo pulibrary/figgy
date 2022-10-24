@@ -148,7 +148,7 @@ export default class UVManager {
   }
 
   get figgyId () {
-    return this.manifest.replace('/manifest', '').replace(/.*\//, '')
+    return this.manifest.replace('/manifest', '').replace(/.*\//, '').replace(/\?.*/, '')
   }
 
   get authToken () {

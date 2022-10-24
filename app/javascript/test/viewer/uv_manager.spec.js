@@ -148,6 +148,7 @@ describe('UVManager', () => {
       await uvManager.initialize()
       expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
       expect(global.fetch.mock.calls[0][0]).toBe('/graphql?auth_token=12')
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body).query).toMatch('resource(id: "12345")')
     })
 
     it('redirects to viewer auth if graph says unauthenticated', async () => {
