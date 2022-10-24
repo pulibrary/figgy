@@ -11,8 +11,11 @@ class MosaicGenerator
   end
 
   def run
-    _stdout_str, error_str, status = Open3.capture3(mosaic_command)
-    raise StandardError, error_str unless status.success?
+    mosaic_command do |command|
+      _stdout_str, error_str, status = Open3.capture3(command)
+      raise StandardError, error_str unless status.success?
+    end
+
     true
   end
 
@@ -20,7 +23,11 @@ class MosaicGenerator
 
     # need the key to read the images
     def mosaic_command
-      "echo \"#{raster_paths}\" | #{access_key} #{secret_access_key} LC_ALL=C.UTF-8 LANG=C.UTF-8 cogeo-mosaic create - -o #{output_path}"
+      temp_file = Tempfile.new
+      temp_file.write(raster_paths.join("\n"))
+      temp_file.rewind
+      yield "#{access_key} #{secret_access_key} LC_ALL=C.UTF-8 LANG=C.UTF-8 cogeo-mosaic create #{temp_file.path} -o #{output_path}"
+      temp_file.close
     end
 
     def access_key

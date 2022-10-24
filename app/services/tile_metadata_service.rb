@@ -31,7 +31,7 @@ class TileMetadataService
     document_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
     return document_path if storage_adapter.find_by(id: mosaic_file_id)
   rescue Valkyrie::StorageAdapter::FileNotFound
-    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths.join("\n")).run
+    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
 
     # build default mosaic file
     build_node(default_filename)

@@ -43,7 +43,7 @@ RSpec.describe TileMetadataService do
         generator = described_class.new(resource: map_set)
 
         generator.path
-        expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: file_set.file_metadata.first.cloud_uri)
+        expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: [file_set.file_metadata.first.cloud_uri])
       end
     end
 
