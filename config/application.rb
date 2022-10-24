@@ -23,7 +23,6 @@ module Figgy
   class Application < Rails::Application
     config.load_defaults "6.0"
     config.action_controller.forgery_protection_origin_check = false
-    config.action_dispatch.cookies_same_site_protection = :none
     config.assets.quiet = true
     config.generators do |generate|
       generate.helper false

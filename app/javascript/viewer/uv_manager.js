@@ -18,26 +18,57 @@ export default class UVManager {
   }
 
   async loadUV () {
-    return this.checkManifest()
-      .then(this.createUV.bind(this))
-      // If creating the UV fails, don't build leaflet.
-      .then(() => { return this.buildLeafletViewer() })
-      .catch(this.requestAuth.bind(this))
-      .promise()
+    if (this.isFiggyManifest) {
+      const result = await this.checkFiggyStatus()
+      if (result.embed.status === 'unauthenticated') {
+        return window.location.assign('/viewer/' + this.figgyId + '/auth')
+      } else if (result.embed.status === 'authorized') {
+        this.createUV(null, null, result)
+        this.buildLeafletViewer()
+      }
+    } else {
+      return this.createUV()
+    }
   }
 
+  async checkFiggyStatus() {
+    var url = "/graphql";
+    var data = JSON.stringify({ query:`{
+        resource(id: "` + this.figgyId + `"){
+          id,
+          __typename,
+          label,
+          embed {
+            type,
+            content,
+            status
+          }
+        }
+       }`
+    })
+    return fetch(url,
+      {
+        method: "POST",
+        credentials: 'include',
+        body: data,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    )
+      .then((response) => response.json())
+      .then((response) => response.data.resource)
+  }
+
+  // Adds a tabbed viewer for Leaflet to show rasters, especially for mosaics.
   buildLeafletViewer () {
     this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
     return this.leafletViewer.loadLeaflet()
   }
 
-  checkManifest () {
-    return $.ajax(this.manifest, { type: 'HEAD' })
-  }
-
-  createUV (data, status, jqXHR) {
+  createUV (data, status, graphql_data) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
-    this.processTitle(jqXHR)
+    this.processTitle(graphql_data)
     this.uvElement.show()
     this.uv = createUV('#uv', {
       root: 'uv',
@@ -113,14 +144,6 @@ export default class UVManager {
     }
   }
 
-  requestAuth (data, status) {
-    if (data.status === 401) {
-      if (this.manifest.includes(window.location.host)) {
-        window.location.assign('/viewer/' + this.figgyId + '/auth')
-      }
-    }
-  }
-
   get figgyId () {
     return this.manifest.replace('/manifest', '').replace(/.*\//, '')
   }
@@ -137,18 +160,15 @@ export default class UVManager {
     }
   }
 
-  processTitle (jqXHR) {
-    var linkHeader = jqXHR.getResponseHeader('Link')
-    if (linkHeader) {
-      var titleMatch = /title="(.+?)"/.exec(linkHeader)
-      if (titleMatch[1]) {
-        var title = titleMatch[1]
-        var titleElement = document.getElementById('title')
-        titleElement.textContent = title
-        titleElement.style.display = 'block'
-        this.resize()
-      }
+  processTitle (graphql_data) {
+    if (graphql_data === undefined || graphql_data.__typename !== 'Playlist') {
+      return
     }
+    var title = graphql_data.label
+    var titleElement = document.getElementById('title')
+    titleElement.textContent = title
+    titleElement.style.display = 'block'
+    this.resize()
   }
 
   resize () {

@@ -26,8 +26,4 @@ class Types::ScannedResourceType < Types::BaseObject
   def source_metadata_identifier
     Array.wrap(object.source_metadata_identifier).first
   end
-
-  def embed
-    Embed.for(resource: object, ability: ability).to_graphql
-  end
 end
