@@ -32,7 +32,10 @@ export default class UVManager {
   }
 
   async checkFiggyStatus() {
-    var url = "/graphql";
+    let url = "/graphql";
+    if (this.authToken) {
+      url = `${url}?auth_token=${this.authToken}`
+    }
     var data = JSON.stringify({ query:`{
         resource(id: "` + this.figgyId + `"){
           id,
@@ -146,6 +149,12 @@ export default class UVManager {
 
   get figgyId () {
     return this.manifest.replace('/manifest', '').replace(/.*\//, '')
+  }
+
+  get authToken () {
+    const url = new URL(this.manifest)
+    const authToken = url.searchParams.get('auth_token')
+    return authToken
   }
 
   get isFiggyManifest () {

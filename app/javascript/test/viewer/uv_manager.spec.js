@@ -57,13 +57,17 @@ describe('UVManager', () => {
     })
   }
 
-  function mockUvProvider (externalManifest = false) {
+  function mockUvProvider (externalManifest = false, authToken = null) {
     const getResult = jest.fn().mockImplementation(function (k) {
       if (k === 'manifest') {
         if (externalManifest === true) {
           return 'https://example.org/other/iiif/manifest'
         } else {
-          return 'https://localhost/concern/scanned_resources/12345/manifest'
+          if (authToken === null) {
+            return 'https://localhost/concern/scanned_resources/12345/manifest'
+          } else {
+            return `https://localhost/concern/scanned_resources/12345/manifest?auth_token=${authToken}`
+          }
         }
       } else if (k === 'config') {
         return 'https://figgy.princeton.edu/uv/uv_config.json'
@@ -124,6 +128,26 @@ describe('UVManager', () => {
       const uvManager = new UVManager()
       await uvManager.initialize()
       expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
+    })
+
+    it('passes on an auth token to graphql', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider(false, '12')
+      stubQuery({
+        'type': 'html',
+        'content': '<iframe src="https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest"></iframe>',
+        'status': 'authorized'
+      },
+        'Test Playlist',
+        'Playlist'
+      )
+
+      // Initialize
+      const uvManager = new UVManager()
+      await uvManager.initialize()
+      expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
+      expect(global.fetch.mock.calls[0][0]).toBe('/graphql?auth_token=12')
     })
 
     it('redirects to viewer auth if graph says unauthenticated', async () => {
