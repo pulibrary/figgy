@@ -84,7 +84,7 @@ RSpec.describe BulkIngestIntermediateService do
       before do
         allow(ingest_intermediate_file_job).to receive(:perform_now)
         allow(Dir).to receive(:[]).with("#{base_directory}/*").and_call_original
-        allow(Dir).to receive(:[]).with("#{directory}/*tif*").and_return(["#{directory}/invalid.tif"])
+        allow(Dir).to receive(:[]).with("#{directory}/*{tif,jpg}*").and_return(["#{directory}/invalid.tif"])
         allow(logger).to receive(:warn)
       end
 
@@ -103,7 +103,7 @@ RSpec.describe BulkIngestIntermediateService do
       before do
         allow(ingest_intermediate_file_job).to receive(:perform_now)
         allow(Dir).to receive(:[]).with("#{base_directory}/*").and_call_original
-        allow(Dir).to receive(:[]).with("#{directory}/*tif*").and_return(["#{directory}/00000009.tif"])
+        allow(Dir).to receive(:[]).with("#{directory}/*{tif,jpg}*").and_return(["#{directory}/00000009.tif"])
         allow(logger).to receive(:warn)
       end
 
