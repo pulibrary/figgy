@@ -10,6 +10,21 @@ RSpec.describe GraphqlController do
     before do
       sign_in user if user
     end
+    context "when logged in via an auth token" do
+      let(:user) { nil }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:complete_private_scanned_resource, viewing_hint: "individuals") }
+      it "can run a graphql query" do
+        token = AuthToken.create(label: "Test", group: ["admin"]).token
+
+        post :execute, params: { query: query_string, auth_token: token, format: :json }
+
+        expect(response).to be_successful
+        json_response = JSON.parse(response.body)
+        expect(json_response["data"]).to eq(
+          "resource" => { "viewingHint" => "individuals" }
+        )
+      end
+    end
     context "when logged in as a staff user" do
       let(:user) { FactoryBot.create(:staff) }
       it "can run a graphql query" do
