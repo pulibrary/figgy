@@ -6,6 +6,13 @@ GIT
       devise
 
 GIT
+  remote: https://github.com/pulibrary/mediainfo.git
+  revision: 58f3e304f01009b459954b82d0675562106b1ac8
+  branch: further_sanitize_track_names
+  specs:
+    mediainfo (1.5.0)
+
+GIT
   remote: https://github.com/pulibrary/ruby_tika_app
   revision: a69d46ad16966205d6159e275cb8ac5136bce662
   branch: main
@@ -589,7 +596,6 @@ GEM
       unf
     marcel (1.0.2)
     matrix (0.4.2)
-    mediainfo (1.5.0)
     memoist (0.16.2)
     method_source (1.0.0)
     mime-types (3.4.1)
@@ -1025,7 +1031,7 @@ DEPENDENCIES
   loofah
   m3u8
   marc
-  mediainfo (~> 1.0)
+  mediainfo (~> 1.0)!
   mini_magick
   modernizr-rails
   normalize-rails
