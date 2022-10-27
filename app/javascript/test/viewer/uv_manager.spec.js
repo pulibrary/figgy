@@ -6,6 +6,7 @@ jest.mock('viewer/leaflet_viewer')
 describe('UVManager', () => {
   const initialHTML =
     '<h1 id="title" class="lux-heading h1" style="display: none;"></h1>' +
+    '<div id="notice-modal" class="d-none"><h2 id="notice-heading"></h2><div id="notice-text"></div><input id="notice-accept" value="View Content" type="submit"></input></div>' +
     '<div class="container--tabs">' +
         '<section class="row">' +
         '<ul class="nav nav-tabs" id="tab-container">' +
@@ -85,7 +86,7 @@ describe('UVManager', () => {
   }
 
   let figgy_id = "12345"
-  function stubQuery(embedHash, label='Test', type='ScannedResource') {
+  function stubQuery(embedHash, noticeHash=null,label='Test', type='ScannedResource') {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         status: 200,
@@ -97,7 +98,8 @@ describe('UVManager', () => {
                   "id": figgy_id,
                   "__typename": type,
                   "embed": embedHash,
-                  "label": label
+                  "label": label,
+                  "notice": noticeHash
                 }
             }
           }
@@ -120,6 +122,7 @@ describe('UVManager', () => {
         "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
         "status": "authorized"
       },
+        null,
         "Test Playlist",
         "Playlist"
       )
@@ -139,6 +142,7 @@ describe('UVManager', () => {
         'content': '<iframe src="https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest"></iframe>',
         'status': 'authorized'
       },
+        null,
         'Test Playlist',
         'Playlist'
       )
@@ -149,6 +153,28 @@ describe('UVManager', () => {
       expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
       expect(global.fetch.mock.calls[0][0]).toBe('/graphql?auth_token=12')
       expect(JSON.parse(global.fetch.mock.calls[0][1].body).query).toMatch('resource(id: "12345")')
+    })
+
+    it('presents a click through for a senior thesis', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      stubQuery({
+        "type": "html",
+        "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        "status": "authorized",
+      },
+        { "heading": "Terms and Conditions for Using Princeton University Senior Theses", "textHtml": "<p>The Princeton University Senior Theses" }
+      )
+
+      // Initialize
+      const uvManager = new UVManager()
+      await uvManager.initialize()
+      expect(document.getElementById('notice-heading').innerHTML).toBe('Terms and Conditions for Using Princeton University Senior Theses')
+      expect(document.getElementById('notice-text').innerHTML).toMatch('<p>The Princeton University Senior Theses')
+      expect(document.getElementById('notice-modal').classList.contains('d-none')).toBe(false)
+      document.getElementById('notice-accept').click()
+      expect(document.getElementById('notice-modal').classList.contains('d-none')).toBe(true)
     })
 
     it('redirects to viewer auth if graph says unauthenticated', async () => {

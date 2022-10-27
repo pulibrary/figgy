@@ -20,7 +20,7 @@ RSpec.describe FiggySchema do
 
   describe "resource query" do
     # provide a query string for `result`
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals") }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals", notice_type: "senior_thesis") }
     let(:id) { resource.id }
     let(:query_string) { %|{ resource(id: "#{id}") { viewingHint } }| }
 
@@ -42,6 +42,18 @@ RSpec.describe FiggySchema do
             "status" => "authorized"
           }
         )
+      end
+    end
+
+    context "when requesting a notice" do
+      let(:query_string) { %|{ resource(id: "#{id}") { notice { heading, textHtml } } }| }
+      it "returns a notice heading and text" do
+        expect(result["errors"]).to be_blank
+        notice = result["data"]["resource"]["notice"]
+
+        expect(notice.keys).to contain_exactly "heading", "textHtml"
+        expect(notice["heading"]).to eq "Terms and Conditions for Using Princeton University Senior Theses"
+        expect(notice["textHtml"]).to start_with "<p>The Princeton University Senior Theses"
       end
     end
 

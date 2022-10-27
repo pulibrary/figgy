@@ -24,9 +24,10 @@ RSpec.describe ControlledVocabulary do
     describe "#all" do
       it "returns all possible notice types" do
         types = vocabulary.all
-        expect(types).to include ControlledVocabulary::Term.new(label: "Harmful Content", value: "harmful_content")
-        expect(types).to include ControlledVocabulary::Term.new(label: "Explicit Content", value: "explicit_content")
-        expect(types).to include ControlledVocabulary::Term.new(label: "Senior Thesis", value: "senior_thesis")
+        expect(types.length).to eq 3
+        expect(types[0].label).to eq "Harmful Content"
+        expect(types[1].label).to eq "Explicit Content"
+        expect(types[2].label).to eq "Senior Thesis"
       end
     end
   end
