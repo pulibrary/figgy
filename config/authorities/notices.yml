@@ -1,15 +1,20 @@
 :terms:
   - :value: "harmful_content"
     :label: "Harmful Content"
-    :heading: "stuff"
-    :definition: "stuff"
+    :heading: "Content Warning"
+    :accept_label: "View Content"
+    :definition: >-
+      <p>This collection includes materials and images that are harmful (in that they are racist, transphobic, or otherwise demeaning). For more information on harmful content please see the PUL statement on Harmful Content: <a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>
   - :value: "explicit_content"
     :label: "Explicit Content"
-    :heading: "stuff"
-    :definition: "stuff"
+    :heading: "Content Warning"
+    :accept_label: "View Content"
+    :definition: >-
+      <p>This collection includes materials and images that are explicit (in that they contain nudity and graphic content).</p>
   - :value: "senior_thesis"
     :label: "Senior Thesis"
     :heading: "Terms and Conditions for Using Princeton University Senior Theses"
+    :accept_label: "Accept"
     :definition: >-
       <p>The Princeton University Senior Theses DataSpace community is a catalog of theses written by seniors at Princeton University from 1926 to the present. Senior theses submitted from 2014 forward contain a full-text PDF that is accessible only on the Princeton University network. Theses written prior to 2014 are available by visiting the Princeton University Archives at the Mudd Manuscript Library. Email <a href="mailto:mudd@princeton.edu">mudd@princeton.edu</a> with any questions.</p>
       <p>Most theses are protected by copyright. The copyright law of the United States governs the making of photocopies or other reproductions of material under copyright. Under certain conditions specified in the law, libraries and archives are authorized to furnish a photocopy or other reproduction. These reproductions of copyrighted material must be for educational and/or research purposes consistent with “fair use” as defined by 17 U.S.C. 107. A photocopy or other reproduction provided by a library is not to be “used for any purpose other than private study, scholarship or research.” If a user makes a request for, or later uses, a photocopy or other reproduction for purposes in excess of “fair use,” that individual may be liable for copyright infringement.</p>
