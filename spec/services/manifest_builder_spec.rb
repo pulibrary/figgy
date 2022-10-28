@@ -432,7 +432,7 @@ RSpec.describe ManifestBuilder do
     end
 
     context "when in staging" do
-      it "generates pyramidal cantaloupe links" do
+      it "generates pyramidal links" do
         allow(Rails.env).to receive(:development?).and_return(false)
         allow(Rails.env).to receive(:test?).and_return(false)
 
