@@ -49,6 +49,7 @@ export default class UVManager {
           },
           notice {
             heading,
+            acceptLabel,
             textHtml
           }
         }
@@ -76,6 +77,7 @@ export default class UVManager {
     const textElement = document.getElementById('notice-text')
     textElement.innerHTML = graphqlData.notice.textHtml
     const acceptButton = document.getElementById('notice-accept')
+    acceptButton.value = graphqlData.notice.acceptLabel
     acceptButton.addEventListener('click', (e) => {
       e.preventDefault()
       document.getElementById('notice-modal').classList.add('d-none')

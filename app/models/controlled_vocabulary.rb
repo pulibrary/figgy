@@ -56,6 +56,7 @@ class ControlledVocabulary
     attribute :notable, Valkyrie::Types::Bool
     attribute :heading, Valkyrie::Types::String
     attribute :definition, Valkyrie::Types::String
+    attribute :accept_label, Valkyrie::Types::String
     attribute :label_class, Valkyrie::Types::String
 
     # Whether or not this Term has been marked as notable

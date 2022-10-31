@@ -164,7 +164,7 @@ describe('UVManager', () => {
         "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
         "status": "authorized",
       },
-        { "heading": "Terms and Conditions for Using Princeton University Senior Theses", "textHtml": "<p>The Princeton University Senior Theses" }
+        { "heading": "Terms and Conditions for Using Princeton University Senior Theses", "acceptLabel": "Accept", "textHtml": "<p>The Princeton University Senior Theses" }
       )
 
       // Initialize
@@ -173,6 +173,7 @@ describe('UVManager', () => {
       expect(document.getElementById('notice-heading').innerHTML).toBe('Terms and Conditions for Using Princeton University Senior Theses')
       expect(document.getElementById('notice-text').innerHTML).toMatch('<p>The Princeton University Senior Theses')
       expect(document.getElementById('notice-modal').classList.contains('d-none')).toBe(false)
+      expect(document.getElementById('notice-accept').value).toBe("Accept")
       document.getElementById('notice-accept').click()
       expect(document.getElementById('notice-modal').classList.contains('d-none')).toBe(true)
     })

@@ -26,8 +26,11 @@ RSpec.describe ControlledVocabulary do
         types = vocabulary.all
         expect(types.length).to eq 3
         expect(types[0].label).to eq "Harmful Content"
+        expect(types[0].accept_label).to eq "View Content"
         expect(types[1].label).to eq "Explicit Content"
+        expect(types[1].accept_label).to eq "View Content"
         expect(types[2].label).to eq "Senior Thesis"
+        expect(types[2].accept_label).to eq "Accept"
       end
     end
   end
