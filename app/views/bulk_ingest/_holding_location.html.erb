@@ -1,0 +1,6 @@
+      <legend class="bulk-ingest-legend">Holding Location (4)</legend>
+          <%= select_tag :holding_location,
+              options_from_collection_for_select(ControlledVocabulary.for(:holding_location).all, "value", "label"),
+              include_blank: "[Do not update]",
+              input_html: { class: 'form-control holding-location' },
+              required: false %>

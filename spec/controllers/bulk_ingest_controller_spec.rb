@@ -279,6 +279,30 @@ RSpec.describe BulkIngestController do
           expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
         end
       end
+
+      context "and a holding location is selected" do
+        let(:attributes) do
+          {
+            workflow: { state: "pending" },
+            collections: ["1234567"],
+            visibility: "open",
+            browse_everything: browse_everything,
+            holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15"
+          }
+        end
+        it "adds the holding location" do
+          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+          expected_attributes = {
+            directory: "/base/4609321",
+            state: "pending",
+            visibility: "open",
+            member_of_collection_ids: ["1234567"],
+            source_metadata_identifier: "4609321",
+            holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15"
+          }
+          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+        end
+      end
     end
 
     context "when the directory looks like a bibid, but isn't valid" do
