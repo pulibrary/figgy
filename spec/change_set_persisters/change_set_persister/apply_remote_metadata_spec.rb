@@ -189,6 +189,16 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
       # populates an archival_collection_code field
       expect(output.archival_collection_code).to eq "MC001.01"
     end
+    it "applies content_warning" do
+      stub_findingaid(pulfa_id: "C1372_c47202-68234")
+
+      resource = FactoryBot.build(:scanned_resource, title: [])
+      change_set = change_set_class.new(resource)
+      change_set.validate(source_metadata_identifier: "C1372_c47202-68234")
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.primary_imported_metadata.content_warning).to eq ['The "Revolution in China" album contains photographs of dead bodies.']
+    end
   end
 
   context "when a source_metadata_identifier is set for a collection from PULFA" do
