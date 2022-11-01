@@ -23,9 +23,13 @@
         <%= render "collections" %>
       </div>
     </div>
+
     <div class="row">
       <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Options (4)</legend>
+        <%= render "holding_location" %>
+      </div>
+      <div class="col-md-3">
+        <legend class="bulk-ingest-legend">Options (5)</legend>
         <div class="checkbox">
           <label>
             <%= check_box_tag 'preserve_file_names' %>
@@ -34,13 +38,12 @@
         </div>
       </div>
       <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Files (5)</legend>
+        <legend class="bulk-ingest-legend">Files (6)</legend>
         <div class="well well-sm">
           <button id="browse_everything" type="button" class="btn btn-primary browse-everything" data-toggle="modal" data-target="#browse-everything-modal">
             Select Folder on Server
           </button>
           <%= render 'browse_everything/modal' %>
-
         </div>
       </div>
     </div>
