@@ -171,7 +171,7 @@ RSpec.describe ManifestBuilderV3 do
 
   context "when in staging" do
     let(:resource) { FactoryBot.create_for_repository(:scanned_map, files: [file]) }
-    it "generates pyramidal cantaloupe links" do
+    it "generates pyramidal links" do
       allow(Rails.env).to receive(:development?).and_return(false)
       allow(Rails.env).to receive(:test?).and_return(false)
 

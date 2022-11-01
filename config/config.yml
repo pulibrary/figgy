@@ -24,7 +24,6 @@ defaults: &defaults
   geo_derivative_path: <%= Rails.root.join("tmp", "geo_derivatives") %>
   stream_derivatives_path: <%= Rails.root.join("tmp", "stream_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
-  cantaloupe_url: <%= ENV.fetch('CANTALOUPE_URL', 'http://localhost:8182/iiif/2/') %>
   pyramidal_url: <%= ENV.fetch('PYRAMIDAL_URL', 'http://localhost:8182/iiif/2/') %>
   bag_path: <%= Rails.root.join("tmp", "bags") %>
   pudl_root: <%= Rails.root.join("tmp", "pudl_root") %>
@@ -257,7 +256,6 @@ test:
   pudl_root: <%= Rails.root.join("spec", "fixtures", "test_pudl_root") %>
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup_test#{ENV["TEST_ENV_NUMBER"]}") %>
   test_cloud_geo_derivative_path: <%= Rails.root.join("tmp", "cloud_geo_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
-  cantaloupe_url: 'http://localhost:8182/iiif/2/'
   pyramidal_url: 'http://localhost:8182/pyramidals/iiif/2/'
   events:
     log_file: '/dev/null'

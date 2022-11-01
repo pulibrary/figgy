@@ -1,6 +1,7 @@
 # 7. Pyramidal Tiffs & AWS Serverless Delivery
 
 Date: 2020-03-27
+Updated: 2022-10-31
 
 ## Status
 
@@ -31,8 +32,6 @@ request) will use to respond to IIIF image server requests, using Northwestern's
    Image API requests using those pyramidal tiffs.
 3. Configure an Amazon CloudFront cache in front of the lambda to automatically 
    cache tiles and info.jsons for one year.
-4. Continue to simultaneously generate JP2s for Cantaloupe, in case we find we
-   want to revert to our previous strategy.
 
 ## Consequences
 
