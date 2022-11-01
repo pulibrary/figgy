@@ -92,7 +92,8 @@ module Schema
           :coverage_point, # local, used for latitude / longitude
           :downloadable, # Determines whether or not users can download a resource
           :electronic_locations,
-          :notice_type # local; click-through agreement
+          :notice_type, # local; click-through agreement
+          :content_warning # local; content warning to display
         ]
     end
 
