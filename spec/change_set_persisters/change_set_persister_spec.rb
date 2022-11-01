@@ -156,7 +156,6 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
-
   describe "running ocr after changing ocr_language" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:change_set_persister) do
