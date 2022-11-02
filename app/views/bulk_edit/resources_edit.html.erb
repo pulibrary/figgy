@@ -62,6 +62,14 @@
               input_html: { class: 'form-control holding-location' },
               required: false %>
         </div>
+        <div class="row">
+          <div class="col-sm-2"><%= label_tag "remove_collection_ids", "Remove from Collection" %></div>
+          <%= select_tag :remove_collection_ids,
+              options_from_collection_for_select(@collections, "id", "title"),
+              input_html: { class: 'form-control remove-collection-ids' },
+              multiple: true,
+              required: false %>
+        </div>
         <div class="card-footer card-save-controls pull-right">
           <%= submit_tag "Apply Edits",
             id: 'bulk-edit-submit',

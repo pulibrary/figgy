@@ -108,6 +108,7 @@ class CatalogController < ApplicationController
       :ocr_language,
       :parent_id,
       :prefix,
+      :remove_collection_ids,
       :rights_statement,
       :save_and_ingest_path,
       :scanned_resource,

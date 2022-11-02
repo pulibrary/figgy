@@ -119,5 +119,18 @@ RSpec.feature "Bulk edit", js: true do
       expect(updated.state).to eq ["complete"]
       expect(updated.member_of_collection_ids).to eq [collection.id]
     end
+    it "can remove a collection" do
+      visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
+      expect(page).to have_content "You searched for"
+      page.check("mark_complete")
+      page.select collection.title.first, from: "remove_collection_ids", visible: false
+      accept_alert do
+        click_button("Apply Edits")
+      end
+      expect(current_path).to eq root_path
+      expect(page).to have_content "1 resources were queued for bulk update."
+      updated = adapter.query_service.find_by(id: member_scanned_resource.id)
+      expect(updated.member_of_collection_ids).to be_empty
+    end
   end
 end

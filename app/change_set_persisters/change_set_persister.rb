@@ -21,6 +21,7 @@ class ChangeSetPersister
     {
       before_save: [
         AppendToCollection,
+        RemoveFromCollection,
         SyncResource,
         MintIdentifier,
         ApplyRemoteMetadata,
