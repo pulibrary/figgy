@@ -13,6 +13,16 @@ RSpec.describe IngestFolderJob do
       end
     end
 
+    context "when given a single folder with TIFFs and a JPEG to ingest into" do
+      it "ingests" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_single"), property: :id, id: resource.id.to_s)
+
+        resource = ChangeSetPersister.default.query_service.find_by(id: resource.id)
+        expect(resource.member_ids.length).to eq 3
+      end
+    end
+
     context "when using an unsupported class for ingesting files" do
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
       let(:bib) { "4609321" }
@@ -72,7 +82,7 @@ RSpec.describe IngestFolderJob do
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
           property: nil,
-          file_filters: [".tif", ".wav", ".pdf", ".zip"],
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id],
@@ -113,7 +123,7 @@ RSpec.describe IngestFolderJob do
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
           property: nil,
-          file_filters: [".tif", ".wav", ".pdf", ".zip"],
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id]

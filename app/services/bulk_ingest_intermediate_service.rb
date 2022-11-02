@@ -51,13 +51,13 @@ class BulkIngestIntermediateService
     end
 
     # Parse and extract a numeric index from a file path
-    # @param [String] tiff_entry the file path
+    # @param [String] image_entry the file path
     # @return [String]
-    def extract_index(tiff_entry)
-      index_m = /\/(\d+)\./.match(tiff_entry)
+    def extract_index(image_entry)
+      index_m = /\/(\d+)\./.match(image_entry)
 
       unless index_m
-        @logger.warn "Failed to parse the index integer from #{tiff_entry}"
+        @logger.warn "Failed to parse the index integer from #{image_entry}"
         return
       end
 
@@ -72,8 +72,8 @@ class BulkIngestIntermediateService
     # @param [String] property_value metadata property value linking the files to existing resources
     # @raise [Valkyrie::Persistence::ObjectNotFoundError]
     def ingest_directory(directory:, property_value:)
-      tiff_entries = Dir["#{directory}/*tif*"].sort
-      return if tiff_entries.empty?
+      image_entries = Dir["#{directory}/*{tif,jpg}*"].sort
+      return if image_entries.empty?
 
       begin
         resource = find_resource(property_value)
@@ -84,22 +84,22 @@ class BulkIngestIntermediateService
 
       decorated = resource.decorate
 
-      tiff_entries.each do |tiff_entry|
-        tiff_path = File.expand_path(tiff_entry)
-        tiff_index = extract_index(tiff_path)
-        next if tiff_index.nil?
+      image_entries.each do |image_entry|
+        image_path = File.expand_path(image_entry)
+        image_index = extract_index(image_path)
+        next if image_index.nil?
 
-        file_set = decorated.decorated_file_sets[tiff_index]
+        file_set = decorated.decorated_file_sets[image_index]
 
         if file_set.nil?
-          @logger.warn "Failed to map #{tiff_path} to a FileSet for the Resource #{resource.id}"
+          @logger.warn "Failed to map #{image_path} to a FileSet for the Resource #{resource.id}"
           next
         end
 
         if background?
-          IngestIntermediateFileJob.set(queue: :low).perform_later(file_path: tiff_path, file_set_id: file_set.id.to_s)
+          IngestIntermediateFileJob.set(queue: :low).perform_later(file_path: image_path, file_set_id: file_set.id.to_s)
         else
-          IngestIntermediateFileJob.perform_now(file_path: tiff_path, file_set_id: file_set.id.to_s)
+          IngestIntermediateFileJob.perform_now(file_path: image_path, file_set_id: file_set.id.to_s)
         end
       end
     end
