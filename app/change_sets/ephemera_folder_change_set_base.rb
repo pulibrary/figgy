@@ -48,6 +48,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :start_canvas, required: false
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
+  property :notice_type, multiple: false, required: false
 
   # pdf properties
   property :file_metadata, multiple: true, required: false, default: []
@@ -94,6 +95,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :pdf_type,
       :holding_location,
       :rights_statement,
+      :notice_type,
       :member_of_collection_ids,
       :embargo_date
     ]
