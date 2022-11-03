@@ -141,4 +141,13 @@ RSpec.describe EphemeraFolderChangeSet do
       expect(change_set.preserve_children?).to eq true
     end
   end
+
+  describe "#notice_type" do
+    let(:form_resource) do
+      FactoryBot.create_for_repository(:ephemera_folder, notice_type: "harmful_content")
+    end
+    it "has a notice_type property" do
+      expect(change_set.notice_type).to eq "harmful_content"
+    end
+  end
 end
