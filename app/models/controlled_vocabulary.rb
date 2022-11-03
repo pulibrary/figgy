@@ -346,7 +346,7 @@ class ControlledVocabulary
         super.tap do |notice_graphql|
           notice_graphql[:heading] = I18n.t("notices.#{value}.heading")
           notice_graphql[:accept_label] = I18n.t("notices.#{value}.accept_label")
-          notice_graphql[:text_html] = I18n.t("notices.#{value}.definition", message: message)
+          notice_graphql[:text_html] = I18n.t("notices.#{value}.message", message: message)
         end
       end
 
