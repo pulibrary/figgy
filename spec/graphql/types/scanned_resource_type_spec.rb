@@ -210,6 +210,19 @@ RSpec.describe Types::ScannedResourceType do
       end
     end
 
+    context "when resource is a VPN-only resource" do
+      let(:scanned_resource) do
+        FactoryBot.create_for_repository(
+          :complete_campus_ip_scanned_resource
+        )
+      end
+      context "and they're not on campus" do
+        it "returns an embed as unauthorized" do
+          expect(type.embed[:status]).to eq "unauthorized"
+        end
+      end
+    end
+
     # download permission
     context "when resource is a reading room zip file" do
       let(:collection) { FactoryBot.create_for_repository(:collection, restricted_viewers: [FactoryBot.create(:user).uid, user&.uid]) }

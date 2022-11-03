@@ -91,10 +91,23 @@ class Embed
 
     def unauthorized_status
       if ability.current_user.anonymous?
-        "unauthenticated"
+        # They don't have permission to see it, but could anonymously if they
+        # did something - probably go on VPN.
+        if anonymously_authorizable?
+          "unauthorized"
+        else
+          "unauthenticated"
+        end
       else
         "unauthorized"
       end
+    end
+
+    # Returns true if a resource can be viewed anonymously, but the person is
+    # not in a circumstance where they're authorized to - e.g. it's a campus
+    # only resource, and they're not on campus or VPN.
+    def anonymously_authorizable?
+      resource.visibility.include?(::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
     end
 
     def viewer_enabled?
