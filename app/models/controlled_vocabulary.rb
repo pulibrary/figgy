@@ -350,6 +350,9 @@ class ControlledVocabulary
         end
       end
 
+      # For specific content warnings the definition field is used to store the
+      # content warning from the imported metadata. This will be blank for all
+      # of the boilerplate warnings.
       def message
         Array.wrap(definition).join(" ")
       end
