@@ -56,6 +56,21 @@ RSpec.describe FiggySchema do
         expect(notice["acceptLabel"]).to eq "Accept"
         expect(notice["textHtml"]).to start_with "<p>The Princeton University Senior Theses"
       end
+      context "for a content_warning resource" do
+        let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "C1372_c47202-68234", import_metadata: true) }
+        it "creates a specific notice" do
+          stub_findingaid(pulfa_id: "C1372_c47202-68234")
+
+          expect(result["errors"]).to be_blank
+          notice = result["data"]["resource"]["notice"]
+
+          expect(notice["heading"]).to eq "Content Warning"
+          expect(notice["acceptLabel"]).to eq "View Content"
+          expect(notice["textHtml"]).to eq "<p>The \"Revolution in China\" album contains photographs of dead bodies.</p> " \
+            "<p>For more information on harmful content please see the PUL statement on Harmful Content: " \
+            '<a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>'
+        end
+      end
     end
 
     context "when given a file set" do

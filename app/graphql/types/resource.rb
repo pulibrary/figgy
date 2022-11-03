@@ -109,10 +109,7 @@ module Types::Resource
   end
 
   def notice
-    return if object.try(:notice_type).blank?
-    ControlledVocabulary.for(:notice_type).find(object.notice_type.first).to_graphql.tap do |notice_graphql|
-      notice_graphql[:text_html] = notice_graphql[:definition]
-    end
+    ControlledVocabulary.for(:notice_type).for(object)&.to_graphql
   end
 
   def query_service

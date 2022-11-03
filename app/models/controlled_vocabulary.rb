@@ -324,11 +324,35 @@ class ControlledVocabulary
       @notice_authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "notices.yml")), [Symbol])
     end
 
+    # Return the notice for a given resource.
+    # @return [Term]
+    def for(resource)
+      if resource.try(:primary_imported_metadata)&.content_warning.present?
+        NoticeTerm.new(value: "specific_harmful_content", definition: resource.primary_imported_metadata.content_warning)
+      elsif resource.try(:notice_type).present?
+        find(resource.notice_type.first)
+      end
+    end
+
     def all(_scope = nil)
       @all ||=
         self.class.authority_config[:terms].map do |term|
-          Term.new(term)
+          NoticeTerm.new(term)
         end
+    end
+
+    class NoticeTerm < Term
+      def to_graphql
+        super.tap do |notice_graphql|
+          notice_graphql[:heading] = I18n.t("notices.#{value}.heading")
+          notice_graphql[:accept_label] = I18n.t("notices.#{value}.accept_label")
+          notice_graphql[:text_html] = I18n.t("notices.#{value}.definition", message: message)
+        end
+      end
+
+      def message
+        Array.wrap(definition).join(" ")
+      end
     end
   end
 
