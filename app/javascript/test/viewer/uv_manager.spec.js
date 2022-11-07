@@ -10,7 +10,7 @@ describe('UVManager', () => {
     '<div class="container--tabs">' +
         '<section class="row">' +
         '<ul class="nav nav-tabs" id="tab-container">' +
-        '<li class="active"><a href="#tab-1">Default</a></li>' +
+        '<li class="active"><a href="#tab-1">Sheets</a></li>' +
         '<li id="map-tab" class=""><a href="#map-tab-content">Map</a></li>' +
         '</ul>' +
         '<div class="tab-content">' +
