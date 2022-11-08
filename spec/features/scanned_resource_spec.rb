@@ -37,4 +37,26 @@ RSpec.feature "Scanned Resource" do
       expect(page).to have_selector(".uv.en-gb")
     end
   end
+
+  describe "raster_set" do
+    with_queue_adapter :inline
+
+    scenario "show page for raster set has a viewer with multiple tabs", js: true do
+      scanned_map1 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+      scanned_map2 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+      map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map1.id, scanned_map2.id])
+      change_set = ChangeSet.for(map_set)
+      change_set.validate(state: "complete")
+      ChangeSetPersister.default.save(change_set: change_set)
+
+      # resource = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+
+      visit solr_document_path(id: map_set.id)
+
+      within_frame(find(".uv-container > iframe")) do
+        expect(page).to have_selector(".uv.en-gb")
+        # expect page to have tab
+      end
+    end
+  end
 end
