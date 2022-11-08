@@ -792,7 +792,7 @@ RSpec.describe CatalogController do
         expect(response.body).to have_link "Create New Folder Template"
       end
 
-      it "renders for a Recording" do
+      it "renders a Recording" do
         file_set = FactoryBot.create_for_repository(:file_set)
         resource = persister.save(resource: FactoryBot.create_for_repository(:recording, member_ids: file_set.id))
         playlist = FactoryBot.create_for_repository(:playlist, member_ids: FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id).id)
@@ -838,6 +838,14 @@ RSpec.describe CatalogController do
         get :index, params: { q: "" }
 
         expect(assigns(:response).documents).to be_empty
+      end
+
+      it "allows access to jsonld for a campus-only resource" do
+        resource = persister.save(resource: FactoryBot.create_for_repository(:complete_campus_only_scanned_resource))
+
+        get :show, params: { id: resource.id.to_s, format: :jsonld }
+
+        expect(response).to be_successful
       end
     end
 
