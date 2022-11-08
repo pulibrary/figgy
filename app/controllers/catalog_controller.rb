@@ -4,21 +4,41 @@ class CatalogController < ApplicationController
   # @note If you're looking for the JSON-LD generation code, please see the
   #   LinkedData module in `app/models/concerns/linked_data.rb`. It gets
   #   registered here through `SolrDocument.use_extension`.
-  include ::Hydra::Catalog
+  # include ::Hydra::Catalog
+
+  include Blacklight::Catalog
+
   include TokenAuth
   layout "application"
 
   before_action :notify_read_only, :notify_index_read_only
 
+
+  self.search_service_class = Hydra::SearchService if respond_to?(:search_service_class)
+
+  # @return [Hash] a hash of context information to pass through to the search service
+  def search_service_context
+    ((super if defined?(super)) || {}).merge(hydra_search_service_context)
+  end
+
+  def hydra_search_service_context
+    { current_ability: current_ability }
+  end
+
+
+
+
   # Overriding to allow access to jsonld:
   # https://github.com/projectblacklight/blacklight-access_controls/blob/089cb43377086adba46e4cde272c2ccb19fef5ad/lib/blacklight/access_controls/catalog.rb#L11
   # https://github.com/samvera/hydra-head/blob/6fc0e369a3f652cf06656a20354c4c4b972f9b09/hydra-core/app/controllers/concerns/hydra/catalog.rb#L13
   def enforce_show_permissions(opts = {})
-    if params[:format] == "jsonld"
-      current_ability.permissions_doc(params[:id])
-    else
-      super
+    permissions = current_ability.permissions_doc(params[:id])
+    unless params[:format] == "jsonld"
+      unless can? :read, permissions
+        raise Blacklight::AccessControls::AccessDenied.new('You do not have sufficient access privileges to read this document, which has been marked private.', :read, params[:id])
+      end
     end
+    permissions
   end
 
   def notify_index_read_only
