@@ -23,6 +23,7 @@ class BulkUpdateJob < ApplicationJob
   def self.supported_attributes
     [
       :append_collection_ids,
+      :remove_collection_ids,
       :holding_location,
       :ocr_language,
       :refresh_remote_metadata,

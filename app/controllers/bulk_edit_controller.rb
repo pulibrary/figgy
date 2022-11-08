@@ -2,7 +2,7 @@
 class BulkEditController < ApplicationController
   include Blacklight::Searchable
   include ::Hydra::Catalog
-  before_action :load_collections, only: [:resources_edit]
+  before_action :load_collections, :load_removable_collections, only: [:resources_edit]
   delegate :search_builder, :repository, to: :search_service
 
   def resources_edit
@@ -44,6 +44,10 @@ class BulkEditController < ApplicationController
 
     def load_collections
       @collections = Valkyrie.config.metadata_adapter.query_service.find_all_of_model(model: Collection).map(&:decorate) || []
+    end
+
+    def load_removable_collections
+      @removable_collections = @collections.reject { |c| c.title == edit_params["f"]["member_of_collection_titles_ssim"][0] }
     end
 
     # Prepare / execute the search and process into id arrays

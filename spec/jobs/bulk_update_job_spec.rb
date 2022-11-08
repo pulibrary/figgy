@@ -37,13 +37,19 @@ describe BulkUpdateJob do
       expect(r2.ocr_language).to eq ["eng"]
     end
 
-    it "appends to collections" do
+    it "appends to and removes from collections" do
       collection = FactoryBot.create_for_repository(:collection)
       described_class.perform_now(ids: ids, email: user.email, args: { append_collection_ids: [collection.id.to_s] }, time: Time.current, search_params: {})
       r1 = query_service.find_by(id: resource1.id)
       r2 = query_service.find_by(id: resource2.id)
       expect(r1.member_of_collection_ids).to eq [collection.id]
       expect(r2.member_of_collection_ids).to eq [collection.id]
+
+      described_class.perform_now(ids: ids, email: user.email, args: { remove_collection_ids: [collection.id.to_s] }, time: Time.current, search_params: {})
+      r1 = query_service.find_by(id: resource1.id)
+      r2 = query_service.find_by(id: resource2.id)
+      expect(r1.member_of_collection_ids).to be_empty
+      expect(r2.member_of_collection_ids).to be_empty
     end
 
     it "doesn't change values not specified" do
