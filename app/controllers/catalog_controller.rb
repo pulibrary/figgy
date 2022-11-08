@@ -10,6 +10,17 @@ class CatalogController < ApplicationController
 
   before_action :notify_read_only, :notify_index_read_only
 
+  # Overriding to allow access to jsonld:
+  # https://github.com/projectblacklight/blacklight-access_controls/blob/089cb43377086adba46e4cde272c2ccb19fef5ad/lib/blacklight/access_controls/catalog.rb#L11
+  # https://github.com/samvera/hydra-head/blob/6fc0e369a3f652cf06656a20354c4c4b972f9b09/hydra-core/app/controllers/concerns/hydra/catalog.rb#L13
+  def enforce_show_permissions(opts = {})
+    if params[:format] == "jsonld"
+      current_ability.permissions_doc(params[:id])
+    else
+      super
+    end
+  end
+
   def notify_index_read_only
     return unless Figgy.index_read_only?
     message = ["Figgy is currently undergoing maintenance and resource ingest and editing is disabled."]
@@ -231,7 +242,12 @@ class CatalogController < ApplicationController
 
   def show
     super
-    authorize! :show, resource
+
+    if params[:format] == "jsonld"
+      authorize! :discover, resource
+    else
+      authorize! :show, resource
+    end
 
     set_parent_document
     @change_set = ChangeSet.for(resource)
