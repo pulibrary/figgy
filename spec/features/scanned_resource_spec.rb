@@ -39,23 +39,61 @@ RSpec.feature "Scanned Resource" do
   end
 
   describe "raster_set" do
-    with_queue_adapter :inline
+      with_queue_adapter :inline
 
     scenario "show page for raster set has a viewer with multiple tabs", js: true do
-      scanned_map1 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
-      scanned_map2 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
-      map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map1.id, scanned_map2.id])
-      change_set = ChangeSet.for(map_set)
+      # scanned_map1 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+      # scanned_map2 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+      # map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map1.id, scanned_map2.id])
+      # change_set = ChangeSet.for(map_set)
+      # change_set.validate(state: "complete")
+      # ChangeSetPersister.default.save(change_set: change_set)
+
+      # resource = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+
+      file = IngestableFile.new(
+        file_path: Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"),
+        mime_type: "image/tif",
+        original_filename: "geotiff.tif",
+        container_attributes: { service_targets: "tiles" }
+      )
+      file2 = file.new({}) # Duplicates file.
+      raster = FactoryBot.create_for_repository(:raster_resource, state: "complete", files: [file])
+      raster2 = FactoryBot.create_for_repository(:raster_resource, state: "complete", files: [file2])
+
+      # raster = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+      # raster2 = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+
+      change_set = ChangeSet.for(raster)
+      ChangeSetPersister.default.save(change_set: change_set)
+
+      change_set = ChangeSet.for(raster2)
+      ChangeSetPersister.default.save(change_set: change_set)
+
+
+      file = fixture_file_upload("files/abstract.tiff", "image/tiff")
+      scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster.id], files: [file])
+      change_set = ChangeSet.for(scanned_map)
       change_set.validate(state: "complete")
       ChangeSetPersister.default.save(change_set: change_set)
 
-      # resource = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+      file2 = fixture_file_upload("files/abstract.tiff", "image/tiff")
+      scanned_map2 = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster2.id], files: [file2])
+      change_set = ChangeSet.for(scanned_map2)
+      change_set.validate(state: "complete")
+      ChangeSetPersister.default.save(change_set: change_set)
+
+      map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id, scanned_map2.id])
+      change_set = ChangeSet.for(map_set)
+      change_set.validate(state: "complete")
+      ChangeSetPersister.default.save(change_set: change_set)
 
       visit solr_document_path(id: map_set.id)
 
       within_frame(find(".uv-container > iframe")) do
         expect(page).to have_selector(".uv.en-gb")
         # expect page to have tab
+        binding.pry
       end
     end
   end
