@@ -48,6 +48,17 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
         expect(wxs_builder.identifier).to eq layer_name
       end
     end
+
+    context "when the layer_name property is set to an empty array" do
+      before do
+        allow(decorator).to receive(:layer_name).and_return([""])
+      end
+
+      it "returns a public identifier if layer_name is set to empty array" do
+        file_set_id = geo_work.member_ids[0]
+        expect(wxs_builder.identifier).to eq "public-figgy:p-#{file_set_id}"
+      end
+    end
   end
 
   describe "#wms_path" do

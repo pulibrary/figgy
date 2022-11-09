@@ -11,7 +11,7 @@ module GeoDiscovery
       # Returns the identifier to use with WMS/WFS/WCS services.
       # @return [String] wxs indentifier
       def identifier
-        return resource_decorator.layer_name if resource_decorator.layer_name.present?
+        return resource_decorator.layer_name if resource_decorator.layer_name&.first&.present?
         return unless file_set
         return file_set.id.to_s unless @config && visibility
         "#{@config[visibility][:workspace]}:p-#{file_set.id}" if @config[visibility][:workspace]
