@@ -344,8 +344,9 @@ class Ability
     # @param id [String] the ID for the Solr Document
     # @return [Boolean]
     def test_read(id)
-      return super if auth_token.nil?
       obj = find_by(id: id)
+      return true if ip_readable?(obj)
+      return super if auth_token.nil?
       token_readable?(obj) || super
     end
 
