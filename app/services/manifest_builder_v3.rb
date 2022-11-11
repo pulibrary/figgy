@@ -153,9 +153,9 @@ class ManifestBuilderV3
     def members
       @members ||= begin
         manifestable_members.map do |member|
-          decorator = member.decorate
-          if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
-            decorator.geo_members.first
+          wayfinder = Wayfinder.for(member)
+          if wayfinder.respond_to?(:decorated_scanned_maps) && wayfinder.decorated_scanned_maps.empty?
+            wayfinder.geo_members.first
           else
             member
           end
