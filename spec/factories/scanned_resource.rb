@@ -89,6 +89,9 @@ FactoryBot.define do
     factory :pending_scanned_resource do
       state { "pending" }
     end
+    factory :needs_qa_scanned_resource do
+      state { "needs_qa" }
+    end
     factory :draft_cdl_resource do
       state { "draft" }
       change_set { "CDL::Resource" }

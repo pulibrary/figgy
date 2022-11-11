@@ -234,6 +234,14 @@ RSpec.describe Valkyrie::ResourceDecorator do
         expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
       end
     end
+    
+    context "needs_qa open resource" do
+      let(:resource) { FactoryBot.build(:needs_qa_ephemera_folder) }
+
+      it "has a warning about the workflow" do
+        expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites due to the workflow status.")
+      end
+    end
 
     context "complete netid resource" do
       let(:resource) { FactoryBot.build(:complete_campus_only_scanned_resource) }
