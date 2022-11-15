@@ -21,8 +21,8 @@ class TileMetadataService
   end
 
   def mosaic?
-    return true unless resource.is_a?(RasterResource)
-    return true if resource.decorate.raster_resources_count.positive?
+    return true if resource.is_a?(RasterResource) && resource.decorate.raster_resources_count.positive?
+    return true if raster_file_sets.count > 1
     false
   end
 

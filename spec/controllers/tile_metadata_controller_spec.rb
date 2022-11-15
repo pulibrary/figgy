@@ -91,7 +91,7 @@ RSpec.describe TileMetadataController, type: :controller do
 
     context "with a MapSet that has Raster grandchildren" do
       it "returns json with the fingerprinted mosaic uri" do
-        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_multiple_clipped_raster_children)
         map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id], id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         mosaic_generator = instance_double(MosaicGenerator)
         allow(mosaic_generator).to receive(:run).and_return(true)
@@ -119,6 +119,17 @@ RSpec.describe TileMetadataController, type: :controller do
         get :metadata, params: { id: scanned_resource.id, format: :json }
 
         expect(response.status).to eq 404
+      end
+    end
+
+    context "with a ScannedResource with a single RasterResource child" do
+      it "returns json with a path to the cloud derivative file" do
+        file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster.id])
+        get :metadata, params: { id: scanned_map.id, format: :json }
+
+        expect(JSON.parse(response.body)["uri"]).to end_with("s3://test-geo/test-geo/example.tif")
       end
     end
   end
