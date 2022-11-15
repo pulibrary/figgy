@@ -57,7 +57,7 @@ class ChangeSetPersister
 
       def valid?
         return false unless post_save_resource.is_a?(VectorResource)
-        post_save_resource.decorate.geo_members.present?
+        Wayfinder.for(post_save_resource).geo_members.present?
       end
   end
 
