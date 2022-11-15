@@ -48,7 +48,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
   end
 
-  describe "new" do
+  describe "manifest" do
     context "when not logged in but an auth token is given" do
       it "renders the full manifest" do
         resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource)
