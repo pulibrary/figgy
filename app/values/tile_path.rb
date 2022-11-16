@@ -52,7 +52,8 @@ class TilePath
     end
 
     def mosaic?
-      return true if resource.is_a?(RasterResource) && resource.decorate.raster_resources_count > 1
+      # A mosaic is single service comprised of multiple raster datasets.
+      # This tests if there are multiple child raster FileSets.
       return true if raster_file_sets.count > 1
       false
     end

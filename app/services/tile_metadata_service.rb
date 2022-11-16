@@ -11,6 +11,7 @@ class TileMetadataService
   end
 
   def path
+    raise Error if raster_file_sets.empty?
     if mosaic?
       # Path to mosaic.json file
       mosaic_path
@@ -21,13 +22,13 @@ class TileMetadataService
   end
 
   def mosaic?
-    return true if resource.is_a?(RasterResource) && resource.decorate.raster_resources_count.positive?
+    # A mosaic is single service comprised of multiple raster datasets.
+    # This tests if there are multiple child raster FileSets.
     return true if raster_file_sets.count > 1
     false
   end
 
   def mosaic_path
-    raise Error if raster_file_sets.empty?
     document_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
     return document_path if storage_adapter.find_by(id: mosaic_file_id)
   rescue Valkyrie::StorageAdapter::FileNotFound

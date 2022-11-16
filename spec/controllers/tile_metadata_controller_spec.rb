@@ -57,7 +57,7 @@ RSpec.describe TileMetadataController, type: :controller do
         mosaic_generator = instance_double(MosaicGenerator)
         allow(mosaic_generator).to receive(:run).and_return(true)
         allow(MosaicGenerator).to receive(:new).and_return(mosaic_generator)
-        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+        raster_set = FactoryBot.create_for_repository(:raster_set_with_three_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         first_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
 
         # Delete file from of raster_set member
