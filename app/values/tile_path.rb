@@ -48,13 +48,21 @@ class TilePath
     def valid?
       file_count = resource.decorate.try(:mosaic_file_count)
       return false unless file_count&.positive?
-      return false if resource.is_a?(ScannedMap) && resource.decorate.scanned_maps_count <= 1
       true
     end
 
     def mosaic?
-      return true unless resource.is_a?(RasterResource)
-      return true if resource.decorate.decorated_raster_resources.count.positive?
+      # A mosaic is single service comprised of multiple raster datasets.
+      # This tests if there are multiple child raster FileSets.
+      return true if raster_file_sets.count > 1
       false
+    end
+
+    def query_service
+      ChangeSetPersister.default.query_service
+    end
+
+    def raster_file_sets
+      @raster_file_sets ||= query_service.custom_queries.mosaic_file_sets_for(id: resource.id)
     end
 end

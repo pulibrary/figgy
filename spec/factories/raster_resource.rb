@@ -96,5 +96,20 @@ FactoryBot.define do
         ]
       end
     end
+
+    factory :raster_set_with_three_files do
+      state { "complete" }
+      after(:build) do |resource, _evaluator|
+        file1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        file2 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        file3 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:raster_resource, member_ids: [file1.id]).id,
+          FactoryBot.create_for_repository(:raster_resource, member_ids: [file2.id]).id,
+          FactoryBot.create_for_repository(:raster_resource, member_ids: [file3.id]).id
+        ]
+      end
+    end
   end
 end

@@ -32,10 +32,12 @@ RSpec.describe TileMetadataService do
 
     context "when given a ScannedMap with RasterResources" do
       it "generates a mosaic with the nested raster resource file sets marked as service_targets: tiles" do
-        file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        file_set1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        file_set2 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
         image_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
-        raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])
-        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [image_file_set.id, raster.id])
+        raster1 = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set1.id])
+        raster2 = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set2.id])
+        scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [image_file_set.id, raster1.id, raster2.id])
         map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
         generator = instance_double(MosaicGenerator, run: "fingerprint")
         allow(MosaicGenerator).to receive(:new).and_return(generator)
@@ -43,7 +45,7 @@ RSpec.describe TileMetadataService do
         generator = described_class.new(resource: map_set)
 
         generator.path
-        expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: [file_set.file_metadata.first.cloud_uri])
+        expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: [file_set1.file_metadata.first.cloud_uri, file_set2.file_metadata.first.cloud_uri])
       end
     end
 
