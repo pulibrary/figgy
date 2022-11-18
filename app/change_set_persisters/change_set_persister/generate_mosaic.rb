@@ -23,11 +23,12 @@ class ChangeSetPersister
       end
 
       def mosaic?(resource)
-        file_count = resource.decorate.try(:mosaic_file_count)
+        wayfinder = Wayfinder.for(resource)
+        file_count = wayfinder.try(:mosaic_file_count)
         return false unless file_count&.positive?
-        if resource.is_a?(ScannedMap) && resource.decorate.scanned_maps_count > 1
+        if resource.is_a?(ScannedMap) && wayfinder.scanned_maps_count > 1
           true
-        elsif resource.is_a?(RasterResource) && resource.decorate.raster_resources_count > 1
+        elsif resource.is_a?(RasterResource) && wayfinder.raster_resources_count > 1
           true
         else
           false
