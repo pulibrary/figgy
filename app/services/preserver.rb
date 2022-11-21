@@ -34,6 +34,7 @@ class Preserver
   private
 
     def preserve_binary_content(force: false)
+      # These are PreservationIntermediaryNodes
       resource_binary_nodes.each do |resource_binary_node|
         file_metadata = resource_binary_node.preservation_node
         next unless resource_binary_node.uploaded_content?
