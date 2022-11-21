@@ -34,7 +34,7 @@
       "items": [
         {
           "id": 1666779,
-          "patron_group_charged":"CDL",
+          "cdl": true,
           "on_reserve": "N",
           "copy_number": 1,
           "item_sequence_number": 1,
@@ -62,7 +62,7 @@
       "items": [
         {
           "id": 1666780,
-          "patron_group_charged":"CDL",
+          "cdl": true,
           "on_reserve": "N",
           "copy_number": 1,
           "item_sequence_number": 1,
@@ -90,7 +90,7 @@
       "items": [
         {
           "id": 1666781,
-          "patron_group_charged":"CDL",
+          "cdl": true,
           "on_reserve": "N",
           "copy_number": 1,
           "item_sequence_number": 1,
@@ -118,7 +118,6 @@
       "items": [
         {
           "id": 1666782,
-          "patron_group_charged":"GRAD",
           "on_reserve": "N",
           "copy_number": 2,
           "item_sequence_number": 1,
