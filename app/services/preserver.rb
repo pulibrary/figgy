@@ -99,6 +99,7 @@ class Preserver
       )
       temp_metadata_file.io.close
       metadata_node.file_identifiers = uploaded_file.id
+      # TODO: Why do we need to represerve the children?
       if preservation_object.metadata_node&.file_identifiers.present? && preservation_object.metadata_node.file_identifiers[0] != uploaded_file.id
         # Parent structure has changed, re-preserve children.
         preserve_children

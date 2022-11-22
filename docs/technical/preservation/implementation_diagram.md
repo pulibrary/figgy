@@ -3,7 +3,7 @@
 ## Preservation
 
 ### Scanned resource walkthrough
-Scenario: The SR is compeleted.
+Scenario: The ScannedResource is completed.
 * the ChangeSetPersister::PreserveResource is run as an after_save_commit callback.
   * calls `preserve?` on the change set.
   * https://github.com/pulibrary/figgy/blob/5526-preservation/app/change_set_persisters/change_set_persister/preserve_resource.rb
@@ -22,14 +22,20 @@ Scenario: The SR is compeleted.
   * `for` factory checks `change_set.preserve?` (again) so it doesn't do
     anything if that's false.
     * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/services/preserver.rb#L6
-  * `preserve!` creates a PreservationIntermediaryNode for each file metadata on
-    the resource. (not relevant to a scanned resource). gives an option to force
-    the preservation, otherwise only preserves if it hasn't been preserved
-    before.
-
+  * `preserve!` will not do anything with binaries at this time since they are not attached to a scanned resource. The first time preserved, it will preserve both the metadata and members. Subsequent times preserved, it will only preserve metadata.
+  * Uploads the serialized json metadata to Google Cloud (via Valkyrie::Shrine gem)
+  * Members are preserved asynchronously via a PreserveChildrenJob via SideKiq through the preserve_children method.
 
 ### FileSet walkthrough
-
+Scenario: The ScannedResource with one FileSet is completed.
+* PreserveChildrenJob queues a PreserveResourceJob for each of the members.
+* PreserveResourceJob is just a wrapper for the Preserver class.
+* Preserver
+  * `for` factory checks `change_set.preserve?` (again) so it doesn't do
+    anything if that's false.
+    * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/services/preserver.rb#L6
+* `preserve!` creates a PreservationIntermediaryNode for each file metadata on the FileSet. Gives an option to force the preservation, otherwise only preserves if it hasn't been preserved before.
+* After it preserves the binary nodes,
 
 ```mermaid
 sequenceDiagram
