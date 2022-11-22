@@ -22,21 +22,7 @@ RSpec.describe CDL::EligibleItemService do
       end
     end
 
-    context "patron_group_charged is null" do
-      before do
-        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
-          .to_return(status: 200,
-                     body: file_fixture("files/catalog/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
-        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
-      end
-      let(:bib_id) { "7214786" }
-
-      it "will return an empty array if the patron_group_charged is null" do
-        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
-      end
-    end
-
-    context "patron_group_charged is missing" do
+    context "no item is on CDL" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 200,
@@ -45,7 +31,7 @@ RSpec.describe CDL::EligibleItemService do
       end
       let(:bib_id) { "7214787" }
 
-      it "will return an empty array if the patron_group_charged is missing" do
+      it "will return an empty array" do
         expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
       end
     end
@@ -101,7 +87,7 @@ RSpec.describe CDL::EligibleItemService do
       end
     end
 
-    context "patron_group_charged is missing and cdl is true" do
+    context "cdl is true" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 200,
@@ -128,7 +114,7 @@ RSpec.describe CDL::EligibleItemService do
       end
     end
 
-    context "patron_group_charged is missing and cdl is false" do
+    context "cdl is false" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 200,
