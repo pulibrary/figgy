@@ -59,11 +59,14 @@ class Preserver
       )
       f.close
       file_metadata.checksum = resource_binary_node.calculate_checksum
-      unless file_metadata.file_identifiers.empty? || file_metadata.file_identifiers.include?(uploaded_file.id)
+      # The FileSet or its parent resource has moved and is now under a different resource hierarchy
+      if file_metadata.file_identifiers.present? && !file_metadata.file_identifiers.include?(uploaded_file.id)
         CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))
       end
       file_metadata.file_identifiers = uploaded_file.id
+      # the preservation object is saved after the metdata_node is added
       preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
+      # mark it as persisted for future checks
       file_metadata.new_record = false
     end
 
@@ -99,11 +102,20 @@ class Preserver
       )
       temp_metadata_file.io.close
       metadata_node.file_identifiers = uploaded_file.id
-      # TODO: Why do we need to represerve the children?
+      # if metadata file has been saved to google cloud and that location is not
+      # (location is the filename / path)
+      # the location of the file that we just uploaded
+      # The name of the metadata file does not change, so if it wasn't in this
+      # location before, that indicates that resources have been reorganized.
+
+      # If I move a resource to be the child of another resource, all of its
+      # nested resources also need to be moved.
+      # e.g. I moved /1/a/metadata.json to /2/a/metadata.json
       if preservation_object.metadata_node&.file_identifiers.present? && preservation_object.metadata_node.file_identifiers[0] != uploaded_file.id
         # Parent structure has changed, re-preserve children.
         preserve_children
         preserve_binary_content(force: true)
+        # clean up the old files, e.g. /1/a/metadata.json from example above
         CleanupFilesJob.perform_later(file_identifiers: preservation_object.metadata_node.file_identifiers.map(&:to_s))
       end
       preservation_object.metadata_node = metadata_node

@@ -24,7 +24,10 @@ Scenario: The ScannedResource is completed.
     * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/services/preserver.rb#L6
   * `preserve!` will not do anything with binaries at this time since they are not attached to a scanned resource. The first time preserved, it will preserve both the metadata and members. Subsequent times preserved, it will only preserve metadata.
   * Uploads the serialized json metadata to Google Cloud (via Valkyrie::Shrine gem)
+    * If the resource has changed its parent then it will re-preserve its
+      children and clean up the old metadata file. In our scenario, that's hasn't happened.
   * Members are preserved asynchronously via a PreserveChildrenJob via SideKiq through the preserve_children method.
+  * We use PreservationObject to save the cloud / preserved locations of these files, so that we don't add new metadata values to the objects that we are preserving, thus necessitating another preservation action.
 
 ### FileSet walkthrough
 Scenario: The ScannedResource with one FileSet is completed.
@@ -35,11 +38,12 @@ Scenario: The ScannedResource with one FileSet is completed.
     anything if that's false.
     * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/services/preserver.rb#L6
 * `preserve!` creates a PreservationIntermediaryNode for each file metadata on the FileSet. Gives an option to force the preservation, otherwise only preserves if it hasn't been preserved before.
-* After it preserves the binary nodes,
+* After it preserves the binary nodes, it preserves the metadata, as outlined above. It doesn't have any children to preserve.
+
 
 ```mermaid
 sequenceDiagram
-  actor User
+  participant User
   participant Figgy as Figgy
   participant GCS as Google Cloud
   User->>Figgy: mark resource complete
