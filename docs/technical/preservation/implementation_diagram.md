@@ -50,6 +50,16 @@ sequenceDiagram
   Figgy->>GCS: store the files and metadata
 ```
 
-## Cloud Fixity Check
+### Cloud Fixity Check
+Scenario: A preserved object exists in Google Cloud
+* The `request_daily_cloud_fixity` task is run 9PM everyday.
+  * https://github.com/pulibrary/figgy/blob/150e9def951fd0b1ea8f948069f5a0225fff4f4f/config/schedule.rb#L19
+* The task runs the `CloudFixity::FixityRequestor.queue_daily_check!` method with an 10% annual ratio.
+  * https://github.com/pulibrary/figgy/blob/3276f1923c80b3b26929228b7b2fecebf9a90ef8/lib/tasks/fixity_worker.rake#L13
+  * The method computes the number of the resources that need to be check to satisfy the annual ratio, and publishes file information to a fixity request Google PubSub topic.
+* In Google Cloud, we have a [Cloud Function](https://github.com/pulibrary/figgy/blob/150e9def951fd0b1ea8f948069f5a0225fff4f4f/cloud_fixity/index.js) that listens to the fixity request topic.
+  * A compute promise is constructed that pipes the file into an md5 hash.
+  * If the calculated md5 value equals the md5 value passed in the request data, then a 'success' message is published. If not, a 'failure' message is published.
+  * If there is an error when streaming the file, a retry_count attribute is added to the request data and it is re-queued. After 5 attempts, a 'failure' message is published.
 
-## Local Fixity Check
+### Local Fixity Check
