@@ -64,8 +64,6 @@ Note: Some of this process is documented in [ADR #4, Preservation Fixity](https:
   * If there is an error when streaming the file, a retry_count attribute is added to the request data and it is re-queued. After 5 attempts, a 'failure' message is published.
   * A message gets published to the fixity status topic queue.
   * Cloud Fixity Worker kicks off a UpdateFixityJob which results in an Event getting saved, and notifies Honeybadger if there's a failed fixity check.
-  
-
 
 ### Local Fixity Check
 Scenario: A new file is ingested.
@@ -92,4 +90,17 @@ fixity is correct.
     re-enqueuing, then it stops running and we'd have to notice via the sidekiq
     dashboard.
 
-### 
+### Fixity status show page display
+Scenario: Looking at a Scanned Resource
+* We display fixity summary thingies:
+  https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/views/catalog/_resource_attributes_default.html.erb#L30-L39
+* It uses a decorator which uses a helper. The helper makes queries about failed
+  and succeeded fixity checks.
+  * https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/decorators/valkyrie/resource_decorator.rb#L89-L99
+  * https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/helpers/fixity_dashboard_helper.rb#L40-L42
+* there's also fixity_badges, which is used in the member_resources list. Look at this next time.
+
+### Fixity Dashboard
+Also for next time
+Note that it's slow. maybe because of the query.
+
