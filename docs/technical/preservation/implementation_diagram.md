@@ -52,6 +52,7 @@ sequenceDiagram
 
 ### Cloud Fixity Check
 Scenario: A preserved object exists in Google Cloud
+Note: Some of this process is documented in [ADR #4, Preservation Fixity](https://github.com/pulibrary/figgy/blob/main/architecture-decisions/0004-preservation-fixity.md).
 * The `request_daily_cloud_fixity` task is run 9PM everyday.
   * https://github.com/pulibrary/figgy/blob/150e9def951fd0b1ea8f948069f5a0225fff4f4f/config/schedule.rb#L19
 * The task runs the `CloudFixity::FixityRequestor.queue_daily_check!` method with an 10% annual ratio.
@@ -61,5 +62,9 @@ Scenario: A preserved object exists in Google Cloud
   * A compute promise is constructed that pipes the file into an md5 hash.
   * If the calculated md5 value equals the md5 value passed in the request data, then a 'success' message is published. If not, a 'failure' message is published.
   * If there is an error when streaming the file, a retry_count attribute is added to the request data and it is re-queued. After 5 attempts, a 'failure' message is published.
+  * A message gets published to the fixity status topic queue.
+  * Cloud Fixity Worker kicks off a UpdateFixityJob which results in an Event getting saved, and notifies Honeybadger if there's a failed fixity check.
+  
+
 
 ### Local Fixity Check
