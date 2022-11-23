@@ -4,33 +4,37 @@ The logic for determining which viewer screen to display to a user for a given
 resource is complex. The workflow below attempts to summarize code split out in
 various locations.
 
+## Orangelight
+
+Orangelight renders the viewer iFrame as long as the GraphQL returns a manifest
+to render. Logic from that point forward is up to Figgy.
+
 ```mermaid
 sequenceDiagram
   participant User
   participant Orangelight
   participant iFrame
   participant GraphQL
-  participant Figgy
   User->>Orangelight: View Page
-  Orangelight->>GraphQL: Request Resource
+  Orangelight->>GraphQL: resources_by_orangelight_id
   alt DISCOVER true
-    GraphQL-->>Orangelight: Return ID
+    GraphQL-->>Orangelight: Return manifest URLs
     Orangelight-->>iFrame: Render viewer iFrame
-    iFrame->>Figgy: Check Manifest Status
-    Note over iFrame,Figgy: Javascript Call within iFrame
+    iFrame->>GraphQL: Get resource, embed status, notice
     alt READ true
-      Figgy-->>iFrame: HTTP 200
+      GraphQL-->>iFrame: status authorized
       iFrame-->>User: Render Universal Viewer
     else Logged In
-      Figgy-->>iFrame: HTTP 401
-      Note over iFrame,Figgy: JS redirects to /viewer/auth
+      GraphQL-->>iFrame: status unauthorized
+      Note over iFrame,GraphQL: JS redirects to /viewer/auth
       alt CDL Eligible
         iFrame-->>User: CDL Checkout Screen
+      else still no access
+        iFrame-->>User: Blank screen :(
       end
     else Not Logged In
-      Figgy-->>iFrame: HTTP 401
-      Note over iFrame,Figgy: JS redirects to /viewer/auth
-      %% We could put click-throughs here...?
+      GraphQL-->>iFrame: status unauthenticated
+      Note over iFrame,GraphQL: JS redirects to /viewer/auth
       alt CDL Eligible
         iFrame-->>User: "Login to Digitally Check Out"
       else OARSC
@@ -46,7 +50,15 @@ sequenceDiagram
 
 ```
 
-## GraphQL Version
+## Finding Aids
+
+Finding Aids uses the GraphQL endpoint locally to see if it should render
+anything, so that a blank screen or large login button never appears. Instead it
+renders a little yellow login box informing users how to get access.
+
+Finding Aids also needs support for rendering a button to download links for
+content (zip files) - so instead of creating its own iFrame, it just renders
+whatever Figgy asks it to render (either a link or an iFrame.)
 
 ```mermaid
 sequenceDiagram
@@ -61,7 +73,6 @@ sequenceDiagram
   else READ false DISCOVER true
     alt Logged In
       GraphQL-->>Pulfalight: status unauthorized, no HTML
-      %% This is where we'd have to handle CDL or click-through
       Pulfalight-->>User: Nothing
     else Not Logged in
       GraphQL-->>Pulfalight: status unauthenticated, no HTML
