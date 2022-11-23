@@ -68,3 +68,28 @@ Note: Some of this process is documented in [ADR #4, Preservation Fixity](https:
 
 
 ### Local Fixity Check
+Scenario: A new file is ingested.
+* After ingesting, CharacterizationJob runs (creates checksums), then runs
+    CreateDerivativesJob
+* After derivatives are created in CreateDerivativesJob, it calls
+    CheckFixityJob via perform_later.
+  * Calls `run_fixity` on the file set, which delegates to the primary_file
+      * Runs checksums on the file on disk and compares it to the previously
+          stored checksum. If it matches, sets fixity_success to 1, otherwise 0.
+  * Sets the output of `run_fixity` to the FileSet, then saves it without
+      calling the ChangeSetPersister, bypassing all callbacks. We don't know why
+      we do this, but it means the FileSet won't be re-preserved. NOTE: This
+      would cause the local FileSet metadata to be different than what's in the
+      cloud, if local fixity checks happened after complete. We do see failed
+      fixity checks on metadata occasionally.
+
+Scenario: A FileSet exists in Figgy, it should be occasionally confirmed its
+fixity is correct.
+* `rake figgy:fixity:run` is run manually once by someone, which queues up
+    CheckFixityRecursiveJob.
+* CheckFixityRecursiveJob runs CheckFixityJob.perform_now on the least recently
+    updated FileSet, and then re-enqueues itself. If anything errors, preventing
+    re-enqueuing, then it stops running and we'd have to notice via the sidekiq
+    dashboard.
+
+### 
