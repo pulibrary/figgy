@@ -27,5 +27,15 @@ namespace :figgy do
       abort "usage: PROJECT=projectlabel rake lae:ingest_posters /path/to/lae.json" unless File.exist?(file) && project_label.present?
       PosterIngesterJob.perform_later(file, project_label)
     end
+
+    desc "Move boxless folders to box"
+    task box_boxless_folders: :environment do
+      project_id = ENV["PROJECT_ID"]
+      box_id = ENV["BOX_ID"]
+
+      abort "usage: PROJECT_ID=[uuid] BOX_ID=[uuid] rake lae:box_boxless_folders" unless project_id && box_id
+
+      BoxBoxlessFoldersJob.perform_later(project: project_id, box: box_id)
+    end
   end
 end
