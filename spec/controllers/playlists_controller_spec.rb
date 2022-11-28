@@ -313,7 +313,7 @@ RSpec.describe PlaylistsController, type: :controller do
     context "when a playlist doesn't exist" do
       it "raises an error" do
         get :structure, params: { id: "banana" }
-        expect(response).to redirect_to_not_found
+        expect(response).to have_http_status(404)
       end
     end
 

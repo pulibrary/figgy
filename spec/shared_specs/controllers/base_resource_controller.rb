@@ -177,8 +177,7 @@ RSpec.shared_examples "a ResourcesController" do |*flags|
     end
     it "returns a 404 when given a bad resource ID" do
       delete :destroy, params: { id: SecureRandom.uuid }
-
-      expect(response).to redirect_to_not_found
+      expect(response).to have_http_status(404)
     end
   end
 
@@ -193,7 +192,7 @@ RSpec.shared_examples "a ResourcesController" do |*flags|
     context "when a resource doesn't exist" do
       it "redirects" do
         get :edit, params: { id: "test" }
-        expect(response).to redirect_to_not_found
+        expect(response).to have_http_status(404)
       end
     end
     context "when it does exist" do
@@ -219,7 +218,7 @@ RSpec.shared_examples "a ResourcesController" do |*flags|
       context "when a resource doesn't exist" do
         it "raises an error" do
           patch :update, params: { id: "test" }
-          expect(response).to redirect_to_not_found
+          expect(response).to have_http_status(404)
         end
       end
       context "when it does exist" do

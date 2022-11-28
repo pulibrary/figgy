@@ -153,9 +153,10 @@ RSpec.describe EphemeraBoxesController, type: :controller do
       it_behaves_like "an access controlled edit request"
     end
     context "when a ephemera box doesn't exist" do
+      render_views
       it "raises an error" do
         get :edit, params: { id: "test" }
-        expect(response).to redirect_to_not_found
+        expect(response).to have_http_status(404)
       end
     end
     context "when it does exist" do
@@ -193,9 +194,10 @@ RSpec.describe EphemeraBoxesController, type: :controller do
       it_behaves_like "an access controlled update request"
     end
     context "when a ephemera box doesn't exist" do
+      render_views
       it "raises an error" do
         patch :update, params: { id: "test" }
-        expect(response).to redirect_to_not_found
+        expect(response).to have_http_status(404)
       end
     end
     it_behaves_like "a workflow controller", :ephemera_box

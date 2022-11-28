@@ -7,7 +7,7 @@ class DownloadsController < ApplicationController
     if resource && load_file
       send_content
     else
-      render_404
+      render_figgy_404
     end
   end
 
