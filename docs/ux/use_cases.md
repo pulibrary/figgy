@@ -90,3 +90,8 @@ into CollectorSystems. APIs it requires are:
 1. Provide the "Original Filename" of each FileSet in the IIIF Manifest.
    * Preservation & Conservation stores information in that filename.
    * Not implemented yet - see #5286
+
+CollectorSystems also integrates with Pulfalight & Bibdata to pull metadata.
+
+1. Bibdata: https://bibdata.princeton.edu/bibliographic/<id>.xml
+2. Finding Aids: https://findingaids.princeton.edu/<id>.jsonld
