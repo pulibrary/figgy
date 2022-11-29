@@ -16,8 +16,6 @@
 #   ExampleWayfinder.new(resource).file_sets # => [#<FileSet>]
 #   ExampleWayfinder.new(resource).decorated_file_sets # => [#<FileSetDecorator>]
 #
-# @example Get a wayfinder through a decorator
-#   ScannedResourceDecorator.new(ScannedResource.new).wayfinder # => #<ScannedResourceWayfinder>
 #
 # @see Wayfinder
 class BaseWayfinder
