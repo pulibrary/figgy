@@ -35,7 +35,7 @@ namespace :figgy do
 
       abort "usage: PROJECT_ID=[uuid] BOX_ID=[uuid] rake lae:box_boxless_folders" unless project_id && box_id
 
-      BoxBoxlessFoldersJob.perform_later(project: project_id, box: box_id)
+      BoxBoxlessFoldersJob.perform_later(project_id: project_id, box_id: box_id)
     end
   end
 end
