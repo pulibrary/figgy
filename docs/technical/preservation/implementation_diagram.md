@@ -92,13 +92,41 @@ fixity is correct.
 
 ### Fixity status show page display
 Scenario: Looking at a Scanned Resource
-* We display fixity summary thingies:
-  https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/views/catalog/_resource_attributes_default.html.erb#L30-L39
-* It uses a decorator which uses a helper. The helper makes queries about failed
+
+We display fixity summary in three places:
+
+#### Resource Show Page
+
+https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/views/catalog/_resource_attributes_default.html.erb#L30-L39
+
+
+It uses a decorator which uses a helper. The helper makes queries about failed
   and succeeded fixity checks.
   * https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/decorators/valkyrie/resource_decorator.rb#L89-L99
   * https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/helpers/fixity_dashboard_helper.rb#L40-L42
-* there's also fixity_badges, which is used in the member_resources list. Look at this next time.
+
+#### Member Resource List on Show Page (for MVW)
+
+There's also fixity_badges, which is used in the member_resources list. Look at this next time.
+
+We call fixity_badges from here:
+
+https://github.com/pulibrary/figgy/blob/030a01df143cebe3c3c8a8a09d7ccb4be1170a7f/app/views/catalog/_member_resources.html.erb#L50
+
+This displays the local fixity count, but with no status. The status helper
+calls the count method.
+
+#### File Set Show Page
+
+https://github.com/pulibrary/figgy/blob/030a01df143cebe3c3c8a8a09d7ccb4be1170a7f/app/views/catalog/_members_file_set.html.erb
+
+This has a column for local fixity and cloud fixity for every FileMetadata, but
+only the primary file will ever have a populated success/failure.
+
+https://github.com/pulibrary/figgy/blob/030a01df143cebe3c3c8a8a09d7ccb4be1170a7f/app/views/catalog/_file_detail.html.erb
+
+This uses the same helpers, `format_fixity_success` and
+`format_cloud_fixity_success`, but also displays the last success date for each.
 
 ### Fixity Dashboard
 Also for next time
