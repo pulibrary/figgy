@@ -52,7 +52,8 @@ class ChangeSetPersister
     def run
       messenger.record_updated(post_save_resource)
       # For cases where the resource is a FileSet, propagate for the parent resource
-      messenger.record_member_updated(post_save_resource.decorate.parent) if post_save_resource.is_a? FileSet
+      parent = Wayfinder.for(post_save_resource).parent
+      messenger.record_member_updated(parent) if post_save_resource.is_a? FileSet
     end
 
     delegate :messenger, to: :change_set_persister
