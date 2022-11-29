@@ -129,12 +129,31 @@ This uses the same helpers, `format_fixity_success` and
 `format_cloud_fixity_success`, but also displays the last success date for each.
 
 ### Fixity Dashboard
-Also for next time
-Note that it's slow. maybe because of the query.
 
+Note that it's slow. Takes a minute to load due to
+https://github.com/pulibrary/figgy/issues/5545
 
-### Tombstones
+The code here is very straightforward. See FixityDashboardController and
+accompanying template / partials.
+
+### Creation of Tombstones
+
+There's a CreateTombstone before delete hook in the change set persister.
+
+It saves some identifiers and embeds the preservation object.
+
+The Tombstone model: https://github.com/pulibrary/figgy/blob/main/app/models/tombstone.rb
 
 ### Restore Tombstones
+
+When a fileset has been deleted there's a "Deleted Files" section in the File
+Manager. Each deleted file is listed by title with a "Reinstate" button.
+
+There's a `child_tombstones` method on the wayfinder to power this list. Uses
+the parent_id stored on the tombstone.
+
+uses tombstone_restore_ids to pass the value to a change_set_persister callback.
+
+
 
 ### Blind Importer
