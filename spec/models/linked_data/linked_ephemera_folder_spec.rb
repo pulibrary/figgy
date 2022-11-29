@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe LinkedData::LinkedEphemeraFolder do
-  subject(:linked_ephemera_folder) { described_class.new(resource: resource) }
+  let(:linked_ephemera_folder) { described_class.new(resource: resource) }
   let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
   let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term, label: "test term") }
 
@@ -234,11 +234,6 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
   describe "date_created and date_range" do
     let(:resource_factory) { :ephemera_folder }
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, date_created: "2012", date_range: [DateRange.new(start: "2013", end: "2017")]) }
-    let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id) }
-
-    before do
-      box
-    end
 
     it_behaves_like "LinkedData::Resource::WithDateRange"
 
