@@ -359,96 +359,6 @@ RSpec.describe BulkIngestController do
     end
   end
 
-  context "Individual resources with files hosted on a cloud-storage provider" do
-    with_queue_adapter :inline
-    let(:upload) do
-      create_cloud_upload_for_container_ids(
-        "https://www.example.com/root" => {
-          files: [],
-          children:
-          {
-            "https://www.example.com/root/4609321" => {
-              files: ["https://www.example.com/root/4609321/1.tif"],
-              children: {}
-            },
-            "https://www.example.com/root/resource2" => {
-              files: ["https://www.example.com/root/resource2/1.tif"],
-              children: {}
-            }
-          }
-        }
-      )
-    end
-
-    let(:attributes) do
-      {
-        workflow: { state: "pending" },
-        visibility: "open",
-        browse_everything: { "uploads" => [upload.id] }
-      }
-    end
-
-    it "ingests two resources" do
-      FileUtils.rm_rf(Rails.root.join("tmp", "storage#{ENV['TEST_ENV_NUMBER']}"))
-      stub_catalog(bib_id: "4609321")
-      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-
-      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
-      expect(resources.length).to eq 2
-      expect(adapter.query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: "4609321").length).to eq 1
-      files = Dir[Rails.root.join("tmp", "storage#{ENV['TEST_ENV_NUMBER']}", "**", "*")].select { |x| File.file?(x) }
-      expect(files).to eq []
-    end
-  end
-  context "bulk ingesting multi-volume works from the cloud" do
-    with_queue_adapter :inline
-    let(:upload) do
-      create_cloud_upload_for_container_ids(
-        "https://www.example.com/root" => {
-          files: [],
-          children:
-          {
-            "https://www.example.com/root/AC044_c0003" => {
-              files: [],
-              children: {
-                "https://www.example.com/root/AC044_c0003/resource1" => {
-                  files: ["https://www.example.com/root/AC044_c0003/resource1/1.tif"],
-                  children: {}
-                },
-                "https://www.example.com/root/AC044_c0003/resource2" => {
-                  files: ["https://www.example.com/root/AC044_c0003/resource2/1.tif"],
-                  children: {}
-                }
-              }
-            }
-          }
-        }
-      )
-    end
-
-    let(:attributes) do
-      {
-        workflow: { state: "pending" },
-        visibility: "open",
-        browse_everything: { "uploads" => [upload.id] }
-      }
-    end
-
-    it "Creates a multi-volume work" do
-      stub_findingaid(pulfa_id: "AC044_c0003")
-      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
-
-      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
-      resource = resources.find { |res| res.member_ids.length == 2 }
-      expect(resource.source_metadata_identifier).to eq ["AC044_c0003"]
-      expect(resource.member_ids.length).to eq(2)
-      expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
-      expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
-      expect(resources.length).to eq 3
-    end
-  end
-  # rubocop:enable Metrics/MethodLength
-
   # Because we're overriding the browse everything upload job, we want to do an
   # integration test here
   describe "full unstubbed ingest of a MVW" do
@@ -499,19 +409,5 @@ RSpec.describe BulkIngestController do
       expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
       expect(resource.decorate.collections.first.id).to eq collection.id
     end
-  end
-
-  def create_cloud_upload_for_container_ids(container_hash)
-    file_content = File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")).read
-    provider = HashProvider.new(container_hash, file: file_content)
-    allow(BrowseEverything::Provider::GoogleDrive).to receive(:new).and_return(provider)
-    be_session = BrowseEverything::Session.build(
-      provider_id: "google_drive"
-    ).tap(&:save)
-    upload = BrowseEverything::Upload.build(
-      session_id: be_session.id,
-      container_ids: container_hash.keys
-    ).tap(&:save)
-    upload
   end
 end
