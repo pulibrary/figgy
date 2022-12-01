@@ -74,25 +74,12 @@ class BulkIngestController < ApplicationController
       flash[:alert] = "Please select some files to ingest."
       return redirect_to bulk_ingest_show_path
     end
-    if cloud_ingester.valid?
-      browse_everything_uploads.each do |upload_id|
-        BrowseEverything::UploadJob.perform_now(upload_id: upload_id)
-      end
-    end
-    cloud_ingester.queue_ingest || local_ingester.ingest
+    local_ingester.ingest
 
     redirect_to root_url, notice: "Batch Ingest of #{resource_class.human_readable_type.pluralize} started"
   end
 
   private
-
-    def cloud_ingester
-      BulkCloudIngester.new(
-        change_set_persister: self.class.change_set_persister,
-        upload_sets: upload_sets,
-        resource_class: resource_class
-      )
-    end
 
     def local_ingester
       BrowseEverythingLocalIngester.new(
