@@ -150,10 +150,13 @@ When a fileset has been deleted there's a "Deleted Files" section in the File
 Manager. Each deleted file is listed by title with a "Reinstate" button.
 
 There's a `child_tombstones` method on the wayfinder to power this list. Uses
-the parent_id stored on the tombstone.
+the parent_id stored on the tombstone. Currently only implemented for
+ScannedResources.
 
-uses tombstone_restore_ids to pass the value to a change_set_persister callback.
-
-
+Uses tombstone_restore_ids to pass the value to the restore_tombstones.rb change_set_persister callback.
+- The importer pulls the metadata and binary down from the cloud.
+- The metadata is converted back into a FileSet object using the Valkyrie Sequel ORM converter. This restores id, created date, updated date, and internal resource.
+- Currently intermediate files are not preserved/restorable.
+- The PCDM use is not restored.
 
 ### Blind Importer
