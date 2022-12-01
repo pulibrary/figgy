@@ -160,3 +160,16 @@ Uses tombstone_restore_ids to pass the value to the restore_tombstones.rb change
 - The PCDM use is not restored.
 
 ### Blind Importer
+
+You have to call BlindImporter from the rails console.
+
+- BlindImporter uses FileMetadataAdapter's query_service which navigates Google
+Cloud.
+- This retains the PCDM use for FileSets by keeping the preserved FileMetadata
+    and pointing them to newly uploaded copies of the files.
+  * Instead of using FileAppender via `files: ` in the ChangeSet, it sets the
+      `created_file_sets` property to trigger characterization/derivatives.
+- It recurses through resource membership and imports every member.
+- FileMetadataAdapter::ConvertLocalStorageIDs converts preserved file
+    identifiers to their GCS counterparts, and makes sure they all exist, and
+    returns the ones that exist.
