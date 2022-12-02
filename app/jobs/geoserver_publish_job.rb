@@ -22,7 +22,7 @@ class GeoserverPublishJob < ApplicationJob
   end
 
   def geo_members
-    @resource.decorate.geo_members.select do |member|
+    Wayfinder.for(@resource).geo_members.select do |member|
       member.derivative_file.present?
     end
   end

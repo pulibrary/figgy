@@ -77,7 +77,7 @@ class ImagemagickCharacterizationService
   # Retrieve the Resource to which the FileSet is attached
   # @return [Resource]
   def parent
-    @file_set.decorate.parent
+    Wayfinder.for(@file_set).parent
   end
 
   # Determine whether or not this FileSet belongs to an image resource

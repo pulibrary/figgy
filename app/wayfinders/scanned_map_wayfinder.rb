@@ -59,9 +59,9 @@ class ScannedMapWayfinder < BaseWayfinder
     # to a single map. ScannedMap members with ScannedMap children are analogous to a volume in a multi-volume work.
     def generate_logical_structure_members
       members_with_parents.map do |member|
-        decorator = member.decorate
-        if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
-          member.decorate.geo_members.first
+        wayfinder = Wayfinder.for(member)
+        if wayfinder.respond_to?(:decorated_scanned_maps) && wayfinder.decorated_scanned_maps.empty?
+          wayfinder.geo_members.first
         else
           member
         end

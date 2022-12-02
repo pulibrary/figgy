@@ -44,8 +44,8 @@ class GeoResourceReindexer
   def reindex_geoserver
     all_geo_resources.each do |resources|
       resources.each do |resource|
-        decorator = resource.decorate
-        file_set = decorator.geo_members.try(:first)
+        wayfinder = Wayfinder.for(resource)
+        file_set = wayfinder.geo_members.try(:first)
         next unless file_set
         messenger.derivatives_created(file_set)
         logger.info("Indexed into GeoServer: #{file_set.id}")
