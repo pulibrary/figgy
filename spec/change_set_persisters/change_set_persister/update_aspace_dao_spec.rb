@@ -29,6 +29,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     # Ensure the archival object was linked to the digital object.
     expect(mocked_archival_object_update).to have_been_made
   end
+
   it "updates ASpace even if a digital object already exists" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")
@@ -50,6 +51,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     # Ensure the archival object was linked to the digital object.
     expect(mocked_archival_object_update).to have_been_made
   end
+
   it "adds a download link as the DAO if it's a zip file" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")
@@ -77,6 +79,7 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     # Ensure the archival object was linked to the digital object.
     expect(mocked_archival_object_update).to have_been_made
   end
+
   it "overrides previous Figgy DAO" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC230_c117")
