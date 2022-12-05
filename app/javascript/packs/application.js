@@ -12,6 +12,7 @@ import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
 import AjaxSelect from '../components/ajax-select'
 import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select.js'
 import FileUploader from '../components/file-uploader'
+import FileFinder from '../components/file-finder'
 import Initializer from '../figgy/figgy_boot'
 
 Vue.use(system)
@@ -31,7 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'order-manager': OrderManager,
         'issue-monograms': IssueMonograms,
         'ajax-select': AjaxSelect,
-        'file-uploader': FileUploader
+        'file-uploader': FileUploader,
+        'file-finder': FileFinder
       },
       data: {
         options: []

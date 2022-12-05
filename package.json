@@ -9,6 +9,7 @@
     "@babel/preset-react": "^7.8.3",
     "@google-cloud/pubsub": "^0.31.0",
     "@google-cloud/storage": "^5.8.4",
+    "@jledentu/vue-finder": "^2.0.1",
     "@rails/webpacker": "https://github.com/rails/webpacker#v5.4.3",
     "ajv": "^6.12.3",
     "apollo-boost": "^0.1.10",
