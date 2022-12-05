@@ -40,6 +40,18 @@ class CollectionsController < ResourcesController
     end
   end
 
+  def around_delete_action
+    # Only allow deleting empty collections. Avoids difficulty of restoring a
+    # full collection from preservation and supporting restoring accidentally
+    # deleted collections.
+    if Wayfinder.for(@change_set.resource).members_count.positive?
+      flash[:alert] = "Unable to delete a collection with members. Please transfer membership to another collection before deleting this collection."
+      redirect_to collection_path(@change_set.resource)
+    else
+      yield
+    end
+  end
+
   private
 
     def ark_report_records(collection)

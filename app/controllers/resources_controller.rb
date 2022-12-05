@@ -74,11 +74,19 @@ class ResourcesController < ApplicationController
   def destroy
     @change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :destroy, @change_set.resource
-    change_set_persister.buffer_into_index do |persist|
-      persist.delete(change_set: @change_set)
+    around_delete_action do
+      change_set_persister.buffer_into_index do |persist|
+        persist.delete(change_set: @change_set)
+      end
+      flash[:alert] = "Deleted #{@change_set.resource}"
+      after_delete_success
     end
-    flash[:alert] = "Deleted #{@change_set.resource}"
-    after_delete_success
+  end
+
+  # Overridable method to enable controlling delete behavior in inherited
+  # controllers. @change_set is accessible here.
+  def around_delete_action
+    yield
   end
 
   def after_delete_success
