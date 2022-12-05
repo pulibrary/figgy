@@ -11,6 +11,27 @@ RSpec.describe CollectionsController, type: :controller do
   end
   context "when an admin" do
     let(:user) { FactoryBot.create(:admin) }
+    describe "DELETE /collection/:id" do
+      it "doesn't let you delete a collection with members" do
+        collection = FactoryBot.create_for_repository(:collection)
+        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+
+        delete :destroy, params: { id: collection.id.to_s }
+
+        collection = query_service.find_by(id: collection.id)
+        expect(collection).to be_present
+        expect(flash["alert"]).to eq "Unable to delete a collection with members. Please transfer membership to another collection before deleting this collection."
+        expect(response).to redirect_to "/collections/#{collection.id}"
+      end
+      it "can delete an empty collection" do
+        collection = FactoryBot.create_for_repository(:collection)
+
+        delete :destroy, params: { id: collection.id.to_s }
+
+        expect { query_service.find_by(id: collection.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+        expect(flash["alert"]).to eq "Deleted Collection: #{collection.id}"
+      end
+    end
     describe "POST /collections" do
       it "creates a collection" do
         post :create, params: { collection: { title: "test", slug: "slug", visibility: "open", description: "" } }
