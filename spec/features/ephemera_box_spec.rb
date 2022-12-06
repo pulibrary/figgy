@@ -45,6 +45,7 @@ RSpec.feature "Ephemera Boxes" do
         page.fill_in "ephemera_box_box_number", with: "1"
         expect(page).to have_content "This barcode is already in use"
 
+        visit ephemera_project_add_box_path(parent_id: ephemera_project.id)
         page.fill_in "ephemera_box_barcode", with: "11111111111111"
         page.fill_in "ephemera_box_box_number", with: "2"
         expect(page).not_to have_content "This barcode is already in use"
