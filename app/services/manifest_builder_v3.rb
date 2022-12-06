@@ -147,7 +147,7 @@ class ManifestBuilderV3
 
   class ScannedMapNode < RootNode
     def manifestable_members
-      @manifestable ||= decorate.members.reject { |x| x.is_a?(RasterResource) }
+      @manifestable ||= Wayfinder.for(resource).members.reject { |x| x.is_a?(RasterResource) }
     end
 
     def members
