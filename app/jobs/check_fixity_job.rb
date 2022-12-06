@@ -14,7 +14,7 @@ class CheckFixityJob < ApplicationJob
   rescue Valkyrie::StorageAdapter::FileNotFound
     # If there's no parent, and the file is gone, this is an orphan row in the
     # database, just delete it.
-    raise if file_set.decorate.parent
+    raise if Wayfinder.for(file_set).parent
     metadata_adapter.persister.delete(resource: file_set)
   end
 
