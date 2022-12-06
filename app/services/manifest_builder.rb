@@ -246,7 +246,7 @@ class ManifestBuilder
     def members
       @members ||=
         begin
-          decorate.members.to_a.select do |member|
+          Wayfinder.for(@resource).members.to_a.select do |member|
             !current_ability || current_ability.can?(:read, member)
           end
         end
