@@ -25,7 +25,7 @@ class ManifestBuilder
       manifest["rendering"] << download_hash
       return unless geotiff_child
       # When given a MapSet with both ScannedMap tiffs and attached Raster
-      # Resources we attach a link to the Raster's original file so users can
+      # Resources we attach a link to the Raster's primary file so users can
       # download the GeoTiff from the viewer embedded in the catalog.
       manifest["rendering"] << geotiff_download
     end
@@ -80,6 +80,8 @@ class ManifestBuilder
         original_file_hash || mp3_file_hash || {}
       end
 
+      # It's important to use original_file over primary_file here so that it
+      # knows to use the MP3 access download if there's no original_file.
       def original_file_hash
         return unless original_file
         original_file_id = original_file.id.to_s
@@ -107,7 +109,7 @@ class ManifestBuilder
       end
 
       def geotiff_file
-        geotiff_child&.original_file
+        geotiff_child&.primary_file
       end
 
       def geotiff_child
@@ -131,7 +133,7 @@ class ManifestBuilder
       end
 
       def original_file
-        @original_file ||= resource.original_file
+        @primary_file ||= resource.original_file
       end
 
       def mp3_file

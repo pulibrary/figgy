@@ -29,7 +29,7 @@ class ManifestBuilder
       end
 
       def pdf_element
-        id = helper.download_url(pdf_node.id.to_s, pdf_node.original_file.id.to_s)
+        id = helper.download_url(pdf_node.id.to_s, pdf_node.primary_file.id.to_s)
         {
           "@id": id,
           "@type": "foaf:Document",

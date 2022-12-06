@@ -37,7 +37,7 @@ class ImagemagickCharacterizationService
       checksum: MultiChecksum.for(file_object),
       size: image.size
     }
-    new_file = original_file.new(@file_characterization_attributes.to_h)
+    new_file = primary_file.new(@file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @file_set = @persister.save(resource: @file_set) if save
     @file_set
@@ -65,12 +65,12 @@ class ImagemagickCharacterizationService
   # Provides the file attached to the file_set
   # @return Valkyrie::StorageAdapter::File
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
   end
 
   # Retrieve the master file from the FileSet
   # @return [FileMetadata]
-  def original_file
+  def primary_file
     @file_set.primary_file
   end
 

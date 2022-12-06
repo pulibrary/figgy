@@ -57,12 +57,12 @@ class TikaFileCharacterizationService
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
   end
 
-  def original_file
-    @file_set.original_file
+  def primary_file
+    @file_set.primary_file
   end
 
   def target_file
-    original_file
+    primary_file
   end
 
   def tika_config

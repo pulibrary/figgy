@@ -73,8 +73,8 @@ RSpec.describe ExportService do
         stub_catalog(bib_id: "123456")
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
-        file_set.original_file.width = 287
-        file_set.original_file.height = 200
+        file_set.primary_file.width = 287
+        file_set.primary_file.height = 200
         Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: file_set)
       end
 

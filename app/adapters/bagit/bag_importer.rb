@@ -46,9 +46,9 @@ module Bagit
       def import!
         file_identifiers.each do |file_identifier|
           file = IngestableFile.new(bag_storage_adapter.find_by(id: file_identifier))
-          migrated_file = storage_adapter.upload(file: file, original_filename: bag_original_file.original_filename.first, resource: bag_resource)
+          migrated_file = storage_adapter.upload(file: file, original_filename: bag_primary_file.original_filename.first, resource: bag_resource)
           file.close
-          bag_resource.original_file.file_identifiers = [migrated_file.id]
+          bag_resource.primary_file.file_identifiers = [migrated_file.id]
         end
         resource = metadata_adapter.persister.save(resource: bag_resource, external_resource: true)
         import_members!
@@ -96,12 +96,12 @@ module Bagit
         bag_resource.try(:member_ids) || []
       end
 
-      def bag_original_file
-        bag_resource.try(:original_file)
+      def bag_primary_file
+        bag_resource.try(:primary_file)
       end
 
       def file_identifiers
-        bag_original_file.try(:file_identifiers) || []
+        bag_primary_file.try(:file_identifiers) || []
       end
 
       def member_bag_metadata_adapter

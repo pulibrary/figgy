@@ -13,12 +13,12 @@ module GeoDiscovery
         "https://catalog.princeton.edu/catalog/#{bib_id}"
       end
 
-      # Returns url for downloading the original file.
-      # @return [String] original file download url
+      # Returns url for downloading the primary file.
+      # @return [String] primary file download url
       def file_download
         file_set = geo_file_set
         return unless file_set
-        id = file_set.original_file.id.to_s
+        id = file_set.primary_file.id.to_s
         path = url_helpers.download_path(resource_id: file_set.id.to_s, id: id)
         "#{protocol}://#{host}#{path}"
       end
@@ -29,7 +29,7 @@ module GeoDiscovery
       def metadata_download(format)
         file_set = metadata_file_set(format)
         return unless file_set
-        id = file_set.original_file.id.to_s
+        id = file_set.primary_file.id.to_s
         path = url_helpers.download_path(resource_id: file_set.id.to_s, id: id)
         "#{protocol}://#{host}#{path}"
       end

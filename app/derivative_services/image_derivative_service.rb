@@ -64,7 +64,7 @@ class ImageDerivativeService
   end
 
   def target_file
-    @target_file ||= intermediate_target_files || resource.original_file
+    @target_file ||= intermediate_target_files || resource.primary_file
   end
 
   def create_derivatives

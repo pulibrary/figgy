@@ -54,13 +54,13 @@ class ExportService
   end
 
   def self.export_file(fileset, prefix)
-    file = Valkyrie.config.storage_adapter.find_by(id: fileset.original_file.file_identifiers.first.id)
+    file = Valkyrie.config.storage_adapter.find_by(id: fileset.primary_file.file_identifiers.first.id)
     FileUtils.mkdir_p("#{export_base}/#{prefix}")
     File.open(file_path(fileset, prefix), "w") { |dest| IO.copy_stream(file, dest) }
   end
 
   def self.file_path(fileset, prefix)
-    "#{export_base}/#{prefix}/#{fileset.original_file.original_filename.first}"
+    "#{export_base}/#{prefix}/#{fileset.primary_file.original_filename.first}"
   end
 
   def self.member_label(r)

@@ -149,7 +149,7 @@ class FileAppender
       parent.respond_to?(:member_ids) && parent.respond_to?(:thumbnail_id)
     end
 
-    # Extensions for original_files that shouldn't be used as thumbnails.
+    # Extensions for primary_files that shouldn't be used as thumbnails.
     # @return [Array<String>] the file extensions
     def no_thumbnail_extensions
       [".xml", ".pdf"]

@@ -23,8 +23,8 @@ describe GeoDiscovery::DocumentBuilder::LayerInfoBuilder do
     output = change_set_persister.save(change_set: change_set)
     file_set_id = output.member_ids[0]
     file_set = query_service.find_by(id: file_set_id)
-    file_set.original_file.mime_type = 'application/zip; ogr-format="ESRI Shapefile"'
-    file_set.original_file.geometry = geometry
+    file_set.primary_file.mime_type = 'application/zip; ogr-format="ESRI Shapefile"'
+    file_set.primary_file.geometry = geometry
     metadata_adapter.persister.save(resource: file_set)
   end
 

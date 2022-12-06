@@ -21,15 +21,15 @@ class ManifestBuilderV3
 
     private
 
-      def original_file_hash
-        return unless original_file
-        original_file_id = original_file.id.to_s
-        download_url_args = { resource_id: resource.id.to_s, id: original_file_id, protocol: protocol, host: host }
+      def primary_file_hash
+        return unless primary_file
+        primary_file_id = primary_file.id.to_s
+        download_url_args = { resource_id: resource.id.to_s, id: primary_file_id, protocol: protocol, host: host }
         download_url = url_helpers.download_url(download_url_args)
 
         {
           "id" => download_url,
-          "format" => original_file.mime_type.first,
+          "format" => primary_file.mime_type.first,
           "type" => "Dataset",
           "label" => { "en": ["Download the original file"] }
         }

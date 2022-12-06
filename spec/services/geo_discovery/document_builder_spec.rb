@@ -35,11 +35,11 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids[0]
       file_set = query_service.find_by(id: file_set_id)
-      file_set.original_file.mime_type = 'application/zip; ogr-format="ESRI Shapefile"'
+      file_set.primary_file.mime_type = 'application/zip; ogr-format="ESRI Shapefile"'
       metadata_adapter.persister.save(resource: file_set)
       metadata_file_set_id = output.member_ids[1]
       metadata_file_set = query_service.find_by(id: metadata_file_set_id)
-      metadata_file_set.original_file.mime_type = "application/xml; schema=iso19139"
+      metadata_file_set.primary_file.mime_type = "application/xml; schema=iso19139"
       metadata_adapter.persister.save(resource: metadata_file_set)
     end
 
@@ -370,7 +370,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       before do
         file_set_id = child.member_ids[0]
         file_set = query_service.find_by(id: file_set_id)
-        file_set.original_file.mime_type = "image/tiff; gdal-format=GTiff"
+        file_set.primary_file.mime_type = "image/tiff; gdal-format=GTiff"
         file_set.service_targets = ["tiles"]
         metadata_adapter.persister.save(resource: file_set)
       end
@@ -398,7 +398,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids[0]
       file_set = query_service.find_by(id: file_set_id)
-      file_set.original_file.mime_type = "image/tiff; gdal-format=GTiff"
+      file_set.primary_file.mime_type = "image/tiff; gdal-format=GTiff"
       file_set.service_targets = ["tiles"]
       metadata_adapter.persister.save(resource: file_set)
     end
