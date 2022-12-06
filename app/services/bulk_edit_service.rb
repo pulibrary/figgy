@@ -5,7 +5,7 @@ class BulkEditService
     change_set_persister = ChangeSetPersister.new(metadata_adapter: metadata_adapter,
                                                   storage_adapter: Valkyrie.config.storage_adapter)
     c = metadata_adapter.query_service.find_by(id: collection_id)
-    c.decorate.members.each do |member|
+    Wayfinder.for(c).members.each do |member|
       logger.info "Updating attributes for #{member}"
       change_set = ChangeSet.for(member)
       if change_set.validate(append_or_replace_attributes(member.attributes, attributes))
