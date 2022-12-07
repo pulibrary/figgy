@@ -1777,7 +1777,8 @@ RSpec.describe ChangeSetPersister do
       it "does not trigger a geoserver publish job" do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
-        vector_change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        vector_change_set = ChangeSet.for(reloaded_resource)
         vector_change_set.validate(publisher: ["ESRI"])
         change_set_persister.save(change_set: vector_change_set)
 

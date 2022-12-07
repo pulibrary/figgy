@@ -4,8 +4,12 @@ class PreserveResourceJob < ApplicationJob
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
 
-  def perform(id:)
+  # @param id [String] resource id
+  # @param lock_tokens [Array<String>] serialized lock tokens
+  def perform(id:, lock_tokens: nil)
     resource = query_service.find_by(id: id)
+    return unless token_valid?(resource: resource, lock_tokens: lock_tokens)
+
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       change_set = ChangeSet.for(resource)
       Preserver.for(change_set: change_set, change_set_persister: buffered_change_set_persister).preserve!

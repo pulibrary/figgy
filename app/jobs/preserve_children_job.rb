@@ -6,7 +6,10 @@ class PreserveChildrenJob < ApplicationJob
   def perform(id:)
     resource = query_service.find_by(id: id)
     (resource.try(:member_ids) || []).each do |member_id|
-      PreserveResourceJob.perform_later(id: member_id.to_s)
+      member = query_service.find_by(id: member_id)
+      lock_tokens = member[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK] || []
+      lock_tokens = lock_tokens.map(&:serialize)
+      PreserveResourceJob.perform_later(id: member_id.to_s, lock_tokens: lock_tokens)
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError
     Rails.logger.info "Object not found: #{id}"
