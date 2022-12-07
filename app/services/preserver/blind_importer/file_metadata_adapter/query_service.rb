@@ -18,6 +18,10 @@ class Preserver::BlindImporter::FileMetadataAdapter
       raise Valkyrie::Persistence::ObjectNotFoundError
     end
 
+    # This returns members whose parent is cached so that when that child
+    # resource asks for members, it knows its ancestors, and can find the root
+    # path to start its search. E.g mvw/vol1 knows to start looking in
+    # gcs://mvw/vol1/
     def find_members(resource:)
       member_ids = resource.try(:member_ids) || []
       member_ids.lazy.map do |id|
@@ -55,6 +59,7 @@ class Preserver::BlindImporter::FileMetadataAdapter
 
     # Cloud Storage has file identifiers which are for our local repository.
     # This converts them to be their preservation counterparts.
+    # It also removes any FileIdentifiers which are not found in the cloud.
     class ConvertLocalStorageIDs
       def self.call(resource:, adapter:)
         new(resource: resource, adapter: adapter).convert!

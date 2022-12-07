@@ -1,5 +1,18 @@
 # frozen_string_literal: true
+
+# The BlindImporter is used to recover a resource from a given preservation storage path without the use of a tombstone or PreservationObject.
 class Preserver::BlindImporter
+  # @param change_set_persister [ChangeSetPersister] Where you want to save the
+  #   recovered resource.
+  # @param id [Valkyrie::ID] ID of the resource you want to recover. You need
+  #   this.
+  # @param source_resource [Valkyrie::Resource] Resource to recover, this is
+  #   used internally via recursion.
+  # @example
+  #   Preserver::BlindImporter.import(
+  #     id: "yadayada",
+  #     change_set_persister: Valkyrie::ChangeSetPersister.default
+  #   )
   def self.import(id: nil, source_resource: nil, change_set_persister:, source_metadata_adapter: default_source_metadata_adapter)
     new(id: id, source_resource: source_resource, change_set_persister: change_set_persister, source_metadata_adapter: source_metadata_adapter).import!
   end
@@ -9,7 +22,7 @@ class Preserver::BlindImporter
   end
 
   def self.source_storage_adapter
-    Valkyrie::StorageAdapter.find(:google_cloud_storage)
+    Valkyrie::StorageAdapter.find(:versioned_google_cloud_storage)
   end
 
   attr_reader :id, :source_metadata_adapter, :change_set_persister
@@ -28,10 +41,12 @@ class Preserver::BlindImporter
     member_ids = []
     source_metadata_adapter.query_service.find_members(resource: source_resource).each do |member|
       member = self.class.import(source_resource: member, source_metadata_adapter: source_metadata_adapter, change_set_persister: change_set_persister)
+      # Set this property so derivatives will run, acts like a FileAppender.
       source_change_set.created_file_sets += [member] if member.is_a?(FileSet)
       member_ids << member.id
     end
-    # Get rid of non-preserved members.
+    # Get rid of non-preserved members. If they're not preserved, it was
+    # probably a bug - e.g. page 3 didn't make it into preservation.
     source_change_set.try(:member_ids=, member_ids)
     output = change_set_persister.save(change_set: source_change_set, external_resource: true)
     output
@@ -55,6 +70,7 @@ class Preserver::BlindImporter
     end
   end
 
+  # @return Valkyrie::Resource
   def source_resource
     @source_resource ||= source_metadata_adapter.query_service.find_by(id: id)
   end

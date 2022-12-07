@@ -8,6 +8,7 @@ class Preserver
       Valkyrie::StorageAdapter.find(:versioned_google_cloud_storage)
     end
 
+    # @param resource [PreservationObject]
     def self.from_preservation_object(resource:, change_set_persister:, storage_adapter: nil)
       file_metadata = resource.metadata_node
       metadata_file_identifier = if file_metadata.nil?
@@ -78,6 +79,8 @@ class Preserver
 
         metadata_file_contents = metadata_file.read
         metadata_json = JSON.parse(metadata_file_contents)
+        # Delete historic metadata because we are about to add new ones for the
+        # restored file(s)
         metadata_json.delete("file_metadata")
         resource_object = { metadata: metadata_json }
         file_set = Valkyrie.config.metadata_adapter.resource_factory.to_resource(object: resource_object)
