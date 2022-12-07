@@ -133,7 +133,7 @@ class ManifestBuilder
       end
 
       def original_file
-        @primary_file ||= resource.original_file
+        @original_file ||= resource.original_file
       end
 
       def mp3_file
