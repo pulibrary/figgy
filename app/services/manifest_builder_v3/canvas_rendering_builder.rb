@@ -21,7 +21,7 @@ class ManifestBuilderV3
 
     private
 
-      def primary_file_hash
+      def original_file_hash
         return unless primary_file
         primary_file_id = primary_file.id.to_s
         download_url_args = { resource_id: resource.id.to_s, id: primary_file_id, protocol: protocol, host: host }
