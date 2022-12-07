@@ -40,7 +40,7 @@ class VIPSDerivativeService
   end
 
   def target_file
-    @target_file ||= intermediate_target_files(resource) || resource.original_file
+    @target_file ||= intermediate_target_files(resource) || resource.primary_file
   end
 
   # If there are intermediate files with the supported format attached to the

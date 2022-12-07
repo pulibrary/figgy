@@ -24,9 +24,9 @@ class VectorResourceDerivativeService
   end
 
   attr_reader :id, :change_set_persister
-  delegate :mime_type, to: :original_file
+  delegate :mime_type, to: :primary_file
   delegate :query_service, to: :change_set_persister
-  delegate :original_file, to: :resource
+  delegate :primary_file, to: :resource
   def initialize(id:, change_set_persister:)
     @id = id
     @change_set_persister = change_set_persister
@@ -70,14 +70,14 @@ class VectorResourceDerivativeService
       @resource = buffered_persister.save(change_set: change_set)
     end
     unzip_display
-    update_error_message(message: nil) if original_file.error_message.present?
+    update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
     update_error_message(message: error.message)
     raise error
   end
 
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
   end
 
   def filename
@@ -86,7 +86,7 @@ class VectorResourceDerivativeService
 
   def instructions_for_display
     {
-      input_format: original_file.mime_type.first,
+      input_format: primary_file.mime_type.first,
       label: :display_vector,
       id: prefixed_id,
       format: "zip",
@@ -97,7 +97,7 @@ class VectorResourceDerivativeService
 
   def instructions_for_thumbnail
     {
-      input_format: original_file.mime_type.first,
+      input_format: primary_file.mime_type.first,
       label: :thumbnail,
       id: resource.id,
       format: "png",
@@ -172,7 +172,7 @@ class VectorResourceDerivativeService
 
     # Updates error message property on the original file.
     def update_error_message(message:)
-      original_file.error_message = [message]
+      primary_file.error_message = [message]
       updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)

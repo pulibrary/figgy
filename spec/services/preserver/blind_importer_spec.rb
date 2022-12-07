@@ -37,9 +37,9 @@ RSpec.describe Preserver::BlindImporter do
       expect(file_sets.length).to eq 2
       # Binary Files Exist
       file_set1 = file_sets.first
-      expect { Valkyrie::StorageAdapter.find_by(id: file_set1.original_file.file_identifiers.first) }.not_to raise_error
+      expect { Valkyrie::StorageAdapter.find_by(id: file_set1.primary_file.file_identifiers.first) }.not_to raise_error
       file_set2 = file_sets.last
-      expect { Valkyrie::StorageAdapter.find_by(id: file_set2.original_file.file_identifiers.first) }.not_to raise_error
+      expect { Valkyrie::StorageAdapter.find_by(id: file_set2.primary_file.file_identifiers.first) }.not_to raise_error
     end
     it "imports a preserved resource given an ID" do
       resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
@@ -65,7 +65,7 @@ RSpec.describe Preserver::BlindImporter do
       expect(file_sets[0].id).to eq children.first.id
       file_set = file_sets[0]
       # Ensure the file actually got moved over.
-      Valkyrie::StorageAdapter.find_by(id: file_set.original_file.file_identifiers.first)
+      Valkyrie::StorageAdapter.find_by(id: file_set.primary_file.file_identifiers.first)
       expect(file_set.derivative_files.length).to eq 1
     end
     it "imports everything it can, even if a member didn't get preserved for some reason" do

@@ -3,7 +3,7 @@
 # Class for characterizing exeternal geo metadata files
 class ExternalMetadataCharacterizationService
   attr_reader :file_set, :persister
-  delegate :mime_type, to: :original_file
+  delegate :mime_type, to: :primary_file
   def initialize(file_set:, persister:)
     @file_set = file_set
     @persister = persister
@@ -19,7 +19,7 @@ class ExternalMetadataCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    original_file.mime_type = geo_mime_type
+    primary_file.mime_type = geo_mime_type
     @file_set = @persister.save(resource: @file_set) if save
     @file_set
   end
@@ -48,11 +48,11 @@ class ExternalMetadataCharacterizationService
   end
 
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
   end
 
-  def original_file
-    @file_set.original_file
+  def primary_file
+    @file_set.primary_file
   end
 
   def valid?

@@ -19,7 +19,7 @@ class GdalCharacterizationService
   #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
     unzip_original_file if zip_file?
-    new_file = original_file.new(file_characterization_attributes.to_h)
+    new_file = primary_file.new(file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @file_set = @persister.save(resource: @file_set) if save
     clean_up_zip_directory if zip_file?
@@ -47,18 +47,18 @@ class GdalCharacterizationService
   # Provides the file attached to the file_set
   # @return [Valkyrie::StorageAdapter::File]
   def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
   end
 
   # Gets a file's 'geo mime type' by looking up the format's driver in a controlled vocabulary.
   # If the driver is not found, the original mime_type is returned.
   def mime_type
     term = format_controlled_vocabulary.all.find { |x| x.definition == info_service.driver }
-    term ? term.value : original_file.mime_type
+    term ? term.value : primary_file.mime_type
   end
 
-  def original_file
-    @file_set.original_file
+  def primary_file
+    @file_set.primary_file
   end
 
   def parent
@@ -71,10 +71,10 @@ class GdalCharacterizationService
     @dataset_path = zip_file_directory
   end
 
-  # Tests if original file is a zip file
+  # Tests if primary file is a zip file
   # @return [Boolean]
   def zip_file?
-    @zip_file ||= original_file.mime_type == ["application/zip"]
+    @zip_file ||= primary_file.mime_type == ["application/zip"]
   end
 
   # Path to directory in which to extract zip file
@@ -108,7 +108,7 @@ class GdalCharacterizationService
     end
 
     def valid?
-      parent.is_a?(RasterResource) && original_file.mime_type != ["application/xml"]
+      parent.is_a?(RasterResource) && primary_file.mime_type != ["application/xml"]
     end
   end
 
@@ -135,7 +135,7 @@ class GdalCharacterizationService
     end
 
     def valid?
-      parent.is_a?(VectorResource) && original_file.mime_type != ["application/xml"]
+      parent.is_a?(VectorResource) && primary_file.mime_type != ["application/xml"]
     end
   end
 end

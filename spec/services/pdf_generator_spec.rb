@@ -184,8 +184,8 @@ RSpec.describe PDFGenerator do
           status: 200
         )
 
-        file_set.original_file.width = 287
-        file_set.original_file.height = 200
+        file_set.primary_file.width = 287
+        file_set.primary_file.height = 200
 
         persister.save(resource: file_set)
 
@@ -206,8 +206,8 @@ RSpec.describe PDFGenerator do
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
         stub_request(:any, "http://www.example.com/concern/file_sets/#{file_set.id}/text")
           .to_return(body: "Test Text", status: 200)
-        file_set.original_file.width = 287
-        file_set.original_file.height = 200
+        file_set.primary_file.width = 287
+        file_set.primary_file.height = 200
         file_set.ocr_content = "Test Text"
         persister.save(resource: file_set)
       end

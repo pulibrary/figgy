@@ -9,7 +9,7 @@ class ReprocessMetsJob < ApplicationJob
         member_wayfinder = Wayfinder.for(member)
         mets_fileset = member_wayfinder.file_sets.find { |x| x.mime_type.include?(mets_mime_type) }
         next unless mets_fileset
-        mets_file = Valkyrie::StorageAdapter.find_by(id: mets_fileset.original_file.file_identifiers.first)
+        mets_file = Valkyrie::StorageAdapter.find_by(id: mets_fileset.primary_file.file_identifiers.first)
         mets_document = METSDocument::Factory.new(mets_file.disk_path).new
         change_set = ChangeSet.for(member)
         change_set.validate(mets_document.attributes)
