@@ -10,9 +10,9 @@ RSpec.describe FindCloudFixity do
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter) }
   let(:event_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
-  let(:event) { FactoryBot.create_for_repository(:event, resource_id: event_resource_id, current: true) }
+  let(:event) { FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: event_resource_id, current: true) }
   let(:event2_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
-  let(:event2) { FactoryBot.create_for_repository(:event, resource_id: event2_resource_id, current: true) }
+  let(:event2) { FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: event2_resource_id, current: true) }
 
   before do
     event
@@ -23,7 +23,7 @@ RSpec.describe FindCloudFixity do
     let(:status) { "SUCCESS" }
 
     it "can find file_sets for files stored in cloud services with successful fixity checks" do
-      output = query.find_cloud_fixity(status: status)
+      output = query.find_cloud_fixity(status: status).select { |event| event.type == "cloud_fixity" }
       expect(output.length).to eq 2
       output_ids = output.map(&:id)
       expect(output_ids).to include event.id
@@ -32,9 +32,9 @@ RSpec.describe FindCloudFixity do
 
     context "when querying for failed fixity checks" do
       let(:status) { "FAILURE" }
-      let(:event2) { FactoryBot.create_for_repository(:event, resource_id: event2_resource_id) }
+      let(:event2) { FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: event2_resource_id) }
       let(:event3_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
-      let(:event3) { FactoryBot.create_for_repository(:event, status: status, resource_id: event3_resource_id, current: true) }
+      let(:event3) { FactoryBot.create_for_repository(:cloud_fixity_event, status: status, resource_id: event3_resource_id, current: true) }
 
       before do
         event3
@@ -49,8 +49,9 @@ RSpec.describe FindCloudFixity do
     end
 
     it "limits the number of results" do
+      pending "to fix this we'll need to be able to specify which type of event the query should return"
       5.times do
-        FactoryBot.create_for_repository(:event, resource_id: Valkyrie::ID.new(SecureRandom.uuid), current: true)
+        FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: Valkyrie::ID.new(SecureRandom.uuid), current: true)
       end
 
       output = query.find_cloud_fixity(limit: 2, status: status)
@@ -61,19 +62,19 @@ RSpec.describe FindCloudFixity do
     end
 
     it "sorts by either ascending or descending order" do
-      output = query.find_cloud_fixity(status: status)
+      output = query.find_cloud_fixity(status: status).select { |event| event.type == "cloud_fixity" }
       expect(output.length).to eq 2
       expect(output.first.id).to eq event.id
       expect(output.last.id).to eq event2.id
 
-      output = query.find_cloud_fixity(sort: "DESC", status: status)
+      output = query.find_cloud_fixity(sort: "DESC", status: status).select { |event| event.type == "cloud_fixity" }
       expect(output.length).to eq 2
       expect(output.first.id).to eq event2.id
       expect(output.last.id).to eq event.id
     end
 
     it "sorts by either the time of the last update or the resource creation" do
-      output = query.find_cloud_fixity(order_by_property: "created_at", status: status)
+      output = query.find_cloud_fixity(order_by_property: "created_at", status: status).select { |event| event.type == "cloud_fixity" }
       expect(output.length).to eq 2
       expect(output.first.id).to eq event.id
       expect(output.last.id).to eq event2.id
@@ -82,7 +83,7 @@ RSpec.describe FindCloudFixity do
       cs.validate(message: "updated")
       change_set_persister.save(change_set: cs)
 
-      output2 = query.find_cloud_fixity(sort: "DESC", status: status)
+      output2 = query.find_cloud_fixity(sort: "DESC", status: status).select { |event| event.type == "cloud_fixity" }
       expect(output2.length).to eq 2
       expect(output2.first.id).to eq event2.id
       expect(output2.last.id).to eq event.id

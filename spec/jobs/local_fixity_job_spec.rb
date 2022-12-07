@@ -26,26 +26,51 @@ RSpec.describe LocalFixityJob do
   end
 
   describe "#perform" do
-    # Note on spec setup. I tried to mock this without saving / checksuming actual
-    # files. However, passing the id and the running fine on the id means you have
-    # two different object instances and you cannot stub, e.g. :run_fixity
-    it "saves the file_set" do
-      fs = query_service.find_by(id: file_set_id)
-      expect(fs.primary_file.fixity_success).not_to eq 1
-
+    it "creates a local_fixity Event" do
       described_class.perform_now(file_set_id)
       fs = query_service.find_by(id: file_set_id)
-      expect(fs.primary_file.fixity_success).to eq 1
+
+      events = query_service.find_all_of_model(model: Event)
+      expect(events.to_a.length).to eq 1
+      event = events.first
+      expect(event.type).to eq "local_fixity"
+      expect(event.resource_id).to eq fs.id
+      expect(event.status).to eq "SUCCESS"
+    end
+
+    context "when the new checksum doesn't match" do
+      before do
+        fs = query_service.find_by(id: file_set_id)
+        filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
+        new_file = File.join(fixture_path, "files/color-landscape.tif")
+        FileUtils.cp(new_file, filename)
+        allow(Honeybadger).to receive(:notify)
+      end
+
+      it "creates a failed event and notifies Honeybadger" do
+        described_class.perform_now(file_set_id)
+        fs = query_service.find_by(id: file_set_id)
+
+        events = query_service.find_all_of_model(model: Event)
+        expect(events.to_a.length).to eq 1
+        event = events.first
+        expect(event.type).to eq "local_fixity"
+        expect(event.resource_id).to eq fs.id
+        expect(event.status).to eq "FAILURE"
+        expect(JSON.parse(event.message).keys).to eq [
+          "id", "internal_resource", "created_at", "updated_at",
+          "new_record", "sha256", "md5", "sha1"
+        ]
+        expect(Honeybadger).to have_received(:notify)
+      end
     end
 
     context "when the file set does not exist" do
       let(:file_set_id) { "5f4235a3-53c0-42cc-9ada-564ea554264e" }
-      before do
+      it "logs a warning" do
         allow(Valkyrie.logger).to receive(:warn)
         described_class.perform_now file_set_id
-      end
 
-      it "logs a warning" do
         expect(Valkyrie.logger).to have_received(:warn).with "#{described_class}: Valkyrie::Persistence::ObjectNotFoundError: Failed to find the resource #{file_set_id}"
       end
     end

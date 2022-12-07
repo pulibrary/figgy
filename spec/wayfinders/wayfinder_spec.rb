@@ -955,7 +955,7 @@ RSpec.describe Wayfinder do
       it "returns the resource which resolves to the child_id attribute" do
         file_metadata = FileMetadata.new(id: SecureRandom.uuid)
         preservation_object = FactoryBot.create_for_repository(:preservation_object, metadata_node: file_metadata)
-        event = FactoryBot.create_for_repository(:event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node, current: true)
+        event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node, current: true)
         wayfinder = described_class.for(event)
 
         expect(wayfinder.affected_child).to be_a FileMetadata
@@ -966,7 +966,7 @@ RSpec.describe Wayfinder do
     context "without specifying a resource ID in the Preservation Object" do
       it "returns the resource which resolves to the child_id attribute" do
         file_metadata = FileMetadata.new(id: SecureRandom.uuid)
-        event = FactoryBot.create_for_repository(:event, child_id: file_metadata.id, child_property: :metadata_node, current: true)
+        event = FactoryBot.create_for_repository(:cloud_fixity_event, child_id: file_metadata.id, child_property: :metadata_node, current: true)
         wayfinder = described_class.for(event)
 
         expect(wayfinder.affected_child).to be nil

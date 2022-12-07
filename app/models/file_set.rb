@@ -26,7 +26,6 @@ class FileSet < Resource
            :software,
            :geometry,
            :bounds,
-           :run_fixity,
            :processing_note,
            :error_message,
            :mime_type,
