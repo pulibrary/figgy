@@ -59,12 +59,14 @@ RSpec.describe IndexingAdapter do
 
   it "doesn't index certain models" do
     resource = FactoryBot.create_for_repository(:event)
+    reloaded_resource = query_service.find_by(id: resource.id)
     allow(adapter.index_adapter.persister).to receive(:save_all)
     allow(adapter.index_adapter.persister).to receive(:save)
     persister.buffer_into_index do |buffered_adapter|
-      buffered_adapter.persister.save(resource: resource)
+      buffered_adapter.persister.save(resource: reloaded_resource)
     end
-    persister.save(resource: resource)
+    reloaded_resource = query_service.find_by(id: resource.id)
+    persister.save(resource: reloaded_resource)
 
     expect(adapter.index_adapter.persister).not_to have_received(:save_all)
     expect(adapter.index_adapter.persister).not_to have_received(:save)

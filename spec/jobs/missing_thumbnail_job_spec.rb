@@ -6,7 +6,8 @@ RSpec.describe MissingThumbnailJob do
     let(:file) { fixture_file_upload("files/color-landscape.tif", "image/tiff") }
     let(:resource) do
       sr = FactoryBot.create_for_repository(:scanned_resource, files: [file])
-      change_set = ScannedResourceChangeSet.new(sr)
+      reloaded_resource = query_service.find_by(id: sr.id)
+      change_set = ScannedResourceChangeSet.new(reloaded_resource)
       change_set.thumbnail_id = nil
       change_set_persister.save(change_set: change_set)
     end

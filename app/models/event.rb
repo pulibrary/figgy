@@ -2,6 +2,8 @@
 # Models events which modify resources
 
 class Event < Valkyrie::Resource
+  enable_optimistic_locking
+
   attribute :type, Valkyrie::Types::String
   attribute :status, Valkyrie::Types::String
 

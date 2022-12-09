@@ -92,6 +92,12 @@ class ChangeSet < Valkyrie::ChangeSet
   # around with the change_set in ChangeSetPersister instead, at some point.
   property :created_file_sets, virtual: true, multiple: true, required: false, default: []
 
+  # Add optimistic lock token property
+  property :optimistic_lock_token,
+           multiple: true,
+           required: true,
+           type: Valkyrie::Types::Set.of(Valkyrie::Types::OptimisticLockToken)
+
   def initialize(*args)
     super.tap do
       fix_multivalued_keys
