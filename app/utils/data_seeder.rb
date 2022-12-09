@@ -188,7 +188,8 @@ class DataSeeder
   private
 
     def add_child_resource(child:, parent_id:)
-      change_set = ChangeSet.for(child)
+      reloaded_child = query_service.find_by(id: child.id)
+      change_set = ChangeSet.for(reloaded_child)
       change_set.append_id = parent_id
       change_set_persister.save(change_set: change_set)
     end
@@ -243,13 +244,15 @@ class DataSeeder
 
     def add_file(resource:, file: nil)
       ingestable_file = file || IngestableFile.new(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), mime_type: "image/tiff", original_filename: "example.tif")
-      change_set = ChangeSet.for(resource)
+      reloaded_resource = query_service.find_by(id: resource.id)
+      change_set = ChangeSet.for(reloaded_resource)
       change_set.files = [ingestable_file]
       change_set_persister.save(change_set: change_set)
     end
 
     def add_member(parent:, member:)
-      member_change_set = ChangeSet.for(member)
+      reloaded_member = query_service.find_by(id: member.id)
+      member_change_set = ChangeSet.for(reloaded_member)
       member_change_set.append_id = parent.id
       change_set_persister.save(change_set: member_change_set)
       logger.info "Added #{member.class} #{member.id} to #{parent.class} #{parent.title || parent.box_number}"

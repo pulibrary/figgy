@@ -19,8 +19,8 @@ class ParentIssueIndexer
 
   def parent_keys_suppress
     [:id, :internal_resource, :created_at, :updated_at, :new_record, :read_groups, :read_users, :edit_users,
-     :edit_groups, :member_ids, :member_of_collection_ids, :state, :thumbnail_id, :visibility, :workflow_note,
-     :pending_uploads, :start_canvas, :viewing_direction, :viewing_hint]
+     :edit_groups, :member_ids, :member_of_collection_ids, :optimistic_lock_token, :state, :thumbnail_id,
+     :visibility, :workflow_note, :pending_uploads, :start_canvas, :viewing_direction, :viewing_hint]
   end
 
   def parents

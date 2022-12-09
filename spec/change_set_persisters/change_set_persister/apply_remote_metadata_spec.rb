@@ -4,6 +4,7 @@ require "rails_helper"
 RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   let(:change_set_persister) { ChangeSetPersister.default }
   let(:change_set_class) { ScannedResourceChangeSet }
+  let(:query_service) { ChangeSetPersister.default.query_service }
   let(:blade) { "123456" }
   before do
     stub_ezid(shoulder: "99999/fk4", blade: blade)
@@ -105,7 +106,8 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
       stub_catalog(bib_id: "123456")
       resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
       expect(resource.title.first.to_s).to eq "Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord."
-      change_set = ChangeSet.for(resource)
+      reloaded = query_service.find_by(id: resource.id)
+      change_set = ChangeSet.for(reloaded)
       change_set.validate(source_metadata_identifier: "", title: "Test")
       output = change_set_persister.save(change_set: change_set)
 

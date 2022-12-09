@@ -1374,7 +1374,8 @@ RSpec.describe ChangeSetPersister do
         resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).members.first
         file_set.read_groups = []
-        resource = change_set_persister.metadata_adapter.persister.save(resource: resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        resource = change_set_persister.metadata_adapter.persister.save(resource: reloaded_resource)
         change_set_persister.metadata_adapter.persister.save(resource: file_set)
         change_set = ChangeSet.for(resource)
 
@@ -1388,7 +1389,8 @@ RSpec.describe ChangeSetPersister do
       it "saves to a backup location" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1414,7 +1416,8 @@ RSpec.describe ChangeSetPersister do
       it "preserves it inline" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1429,7 +1432,8 @@ RSpec.describe ChangeSetPersister do
       it "refreshes the preserved metadata" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
-        change_set_persister.save(change_set: ChangeSet.for(resource))
+        reloaded_resource = query_service.find_by(id: resource.id)
+        change_set_persister.save(change_set: ChangeSet.for(reloaded_resource))
         file_set = Wayfinder.for(resource).members.first
 
         modified = File.mtime(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))
@@ -1468,7 +1472,8 @@ RSpec.describe ChangeSetPersister do
       it "Deletes FileSet PreservationObjects, moves file set PreservationObjects into tombstones" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1495,7 +1500,8 @@ RSpec.describe ChangeSetPersister do
       it "deletes all previously created FileSet tombstones for that parent, related PreservationObjects, and cleans up the Preservation file store" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1529,7 +1535,8 @@ RSpec.describe ChangeSetPersister do
       it "re-adds the FileSet" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
-        change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
@@ -1564,8 +1571,9 @@ RSpec.describe ChangeSetPersister do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         xml = fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml; schema=fgdc")
         vector_resource = FactoryBot.create_for_repository(:complete_vector_resource, files: [file, xml])
+        reloaded_resource = query_service.find_by(id: vector_resource.id)
 
-        output = change_set_persister.save(change_set: ChangeSet.for(vector_resource))
+        output = change_set_persister.save(change_set: ChangeSet.for(reloaded_resource))
         preservation_object = Wayfinder.for(output).preservation_objects.first
         expect(preservation_object).not_to eq nil
 
@@ -1584,6 +1592,7 @@ RSpec.describe ChangeSetPersister do
         change_set = ChangeSet.for(parent)
         change_set.validate(state: "complete")
         other_parent = FactoryBot.create_for_repository(:complete_scanned_resource)
+
         # Save in nested structure.
         change_set_persister.save(change_set: change_set)
         # Preserve `other_parent`
@@ -1725,7 +1734,8 @@ RSpec.describe ChangeSetPersister do
       it "triggers a geoserver publish job with a delete operation" do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
-        vector_change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        vector_change_set = ChangeSet.for(reloaded_resource)
         vector_change_set.validate(state: "takedown")
         change_set_persister.save(change_set: vector_change_set)
 
@@ -1737,7 +1747,8 @@ RSpec.describe ChangeSetPersister do
       it "triggers a geoserver publish job with an update operation" do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         resource = FactoryBot.create_for_repository(:complete_open_vector_resource, title: "Vector", files: [file])
-        vector_change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        vector_change_set = ChangeSet.for(reloaded_resource)
         vector_change_set.validate(title: "New Vector Title")
         change_set_persister.save(change_set: vector_change_set)
 
@@ -1749,7 +1760,8 @@ RSpec.describe ChangeSetPersister do
       it "triggers a geoserver publish job with an update operation" do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         resource = FactoryBot.create_for_repository(:complete_open_vector_resource, files: [file])
-        vector_change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        vector_change_set = ChangeSet.for(reloaded_resource)
         vector_change_set.validate(visibility: "restricted")
         change_set_persister.save(change_set: vector_change_set)
 
@@ -1765,7 +1777,8 @@ RSpec.describe ChangeSetPersister do
       it "triggers a geoserver publish job with a delete operation" do
         file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
         resource = FactoryBot.create_for_repository(:takedown_vector_resource, files: [file])
-        vector_change_set = ChangeSet.for(resource)
+        reloaded_resource = query_service.find_by(id: resource.id)
+        vector_change_set = ChangeSet.for(reloaded_resource)
         vector_change_set.validate(state: "complete")
         change_set_persister.save(change_set: vector_change_set)
 

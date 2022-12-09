@@ -10,9 +10,11 @@ describe Preserver::Importer do
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
   let(:change_set_persister) { ChangeSetPersister.default }
+  let(:query_service) { change_set_persister.query_service }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
   let(:persisted_resource) do
-    change_set_persister.metadata_adapter.persister.save(resource: resource)
+    reloaded_resource = query_service.find_by(id: resource.id)
+    change_set_persister.metadata_adapter.persister.save(resource: reloaded_resource)
   end
   let(:persisted_file_set) do
     file_set.read_groups = []

@@ -560,7 +560,8 @@ RSpec.describe ManifestBuilder do
     let(:child) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
 
     before do
-      change_set = ScannedResourceChangeSet.new(scanned_resource)
+      reloaded_resource = query_service.find_by(id: scanned_resource.id)
+      change_set = ScannedResourceChangeSet.new(reloaded_resource)
       change_set.member_ids << child.id
       change_set_persister.save(change_set: change_set)
     end
