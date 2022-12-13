@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class FindCloudFixity
+class FindFixityEvents
   def self.queries
-    [:find_cloud_fixity]
+    [:find_fixity_events]
   end
 
   attr_reader :query_service
@@ -19,8 +19,10 @@ class FindCloudFixity
     SQL
   end
 
-  def find_cloud_fixity(sort: "ASC", limit: 50, order_by_property: "updated_at", status:, model: Event)
-    internal_array = { "status" => [status], current: [true] }
+  # rubocop:disable Metrics/ParameterLists
+  def find_fixity_events(sort: "ASC", limit: 50, order_by_property: "updated_at", status:, model: Event, type:)
+    internal_array = { "status" => [status], "type" => [type], current: [true] }
     run_query(query(order_by_property: order_by_property, order_by: sort), internal_array.to_json, model.to_s, limit)
   end
+  # rubocop:enable Metrics/ParameterLists
 end
