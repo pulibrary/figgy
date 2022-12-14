@@ -17,6 +17,8 @@ class ChangeSetPersister
       cs = change_set.class.new(reload(post_save_resource))
       return unless cs.try(:preserve?)
 
+      # Pass the current lock tokens to the job so we can ensure we only
+      # preserve the resource in that job if it hasn't changed since then.
       lock_tokens = cs[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK] || []
       lock_tokens = lock_tokens.map(&:serialize)
 

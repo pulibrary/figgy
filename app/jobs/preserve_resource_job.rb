@@ -8,6 +8,10 @@ class PreserveResourceJob < ApplicationJob
   # @param lock_tokens [Array<String>] serialized lock tokens
   def perform(id:, lock_tokens: nil)
     resource = query_service.find_by(id: id)
+    # If two jobs get queued before this job runs once (forcing future
+    # PreserveResourceJobs to run inline), then without this it would create two
+    # PreservationObjects. Return early if the resource has changed since this
+    # job was queued.
     return unless token_valid?(resource: resource, lock_tokens: lock_tokens)
 
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
