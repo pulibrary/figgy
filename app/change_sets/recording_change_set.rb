@@ -49,24 +49,7 @@ class RecordingChangeSet < ChangeSet
     ]
   end
 
-  # Do not preserve Audio Reserves recordings
   def preserve?
-    return false unless persisted?
-    if in_archival_media_collection?
-      true
-    else
-      false
-    end
+    persisted?
   end
-
-  private
-
-    def in_archival_media_collection?
-      collections = Wayfinder.for(resource).collections
-      collections.each do |collection|
-        return true if collection.change_set == "archival_media_collection"
-      end
-
-      false
-    end
 end
