@@ -410,6 +410,7 @@ Rails.application.config.to_prepare do
     UpdatedArchivalResources,
     FindRandomResourcesByModel,
     CountAllOfModel,
+    DeepLocalFixityCount,
     FindDeepChildrenWithProperty,
     FindIdsWithPropertyNotEmpty,
     FindDeepFailedCloudFixityCount,
