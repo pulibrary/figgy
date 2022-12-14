@@ -18,6 +18,11 @@ RSpec.configure do |config|
     ar_cleaner.strategy = :deletion
   end
 
+  config.before(:each, db_cleaner_deletion: true) do
+    pg_db_cleaner.strategy = :deletion
+    ar_cleaner.strategy = :deletion
+  end
+
   config.before(:each) do
     pg_db_cleaner.start
     ar_cleaner.start

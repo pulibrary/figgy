@@ -915,6 +915,13 @@ CREATE INDEX index_orm_resources_on_metadata_jsonb_path_ops ON public.orm_resour
 
 
 --
+-- Name: index_orm_resources_on_metadata_preserved_object_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_orm_resources_on_metadata_preserved_object_id ON public.orm_resources USING btree (((metadata ->> 'preserved_object_id'::text))) WHERE ((internal_resource)::text = 'PreservationObject'::text);
+
+
+--
 -- Name: index_orm_resources_on_updated_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1075,6 +1082,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200608160046'),
 ('20211025213822'),
 ('20220727213332'),
-('20220727213333');
+('20220727213333'),
+('20221214184110');
 
 
