@@ -76,11 +76,8 @@ describe Preserver::Importer do
 
     context "when the preserved resource does not have any metadata" do
       it "creates a FileSet with no imported attributes" do
-        new_preservation_object = PreservationObject.new(
-          preserved_object_id: preservation_object.preserved_object_id,
-          binary_nodes: preservation_object.binary_nodes
-        )
-        persisted = change_set_persister.metadata_adapter.persister.save(resource: new_preservation_object)
+        preservation_object.metadata_node = nil
+        persisted = change_set_persister.metadata_adapter.persister.save(resource: preservation_object)
 
         imported = described_class.from_preservation_object(
           resource: persisted,
