@@ -38,7 +38,7 @@ class Preserver
     end
 
     def import!
-      fs = build_file_set(metadata_file_identifier)
+      fs = build_file_set
       fs_change_set = ChangeSet.for(fs)
 
       files = import_binary_nodes(binary_file_identifiers)
@@ -73,11 +73,8 @@ class Preserver
         )
       end
 
-      def build_file_set(file_identifier)
-        return resource_class.new if file_identifier.nil?
-        metadata_file = storage_adapter.find_by(id: file_identifier)
-
-        metadata_file_contents = metadata_file.read
+      def build_file_set
+        return resource_class.new if metadata_file_identifier.nil?
         metadata_json = JSON.parse(metadata_file_contents)
         # Delete historic metadata because we are about to add new ones for the
         # restored file(s)
@@ -90,8 +87,24 @@ class Preserver
         file_set.optimistic_lock_token = optimistic_lock_token
         file_set
       rescue Valkyrie::StorageAdapter::FileNotFound => not_found_error
-        Rails.logger.error("#{file_identifier} could not be retrieved: #{not_found_error.message}")
+        Rails.logger.error("#{metadata_file_identifier} could not be retrieved: #{not_found_error.message}")
         resource_class.new
+      end
+
+      def metadata_file_contents
+        @metadata_file_contents ||= begin
+          file = storage_adapter.find_by(id: metadata_file_identifier)
+          file.read
+        end
+      end
+
+      def use_from_metadata(file_identifier)
+        metadata_json = JSON.parse(metadata_file_contents)
+        fs = Valkyrie.config.metadata_adapter.resource_factory.to_resource(object: { metadata: metadata_json })
+        file_metadata = fs.file_metadata.find { |fm| file_identifier.id.include? fm.id.id }
+        file_metadata.use
+      rescue Valkyrie::StorageAdapter::FileNotFound
+        Valkyrie::Vocab::PCDMUse.OriginalFile
       end
 
       def import_binary_node(file_identifier)
@@ -99,7 +112,8 @@ class Preserver
         IngestableFile.new(
           file_path: stored_file.disk_path,
           mime_type: "application/octet-stream",
-          original_filename: File.basename(stored_file.disk_path)
+          original_filename: File.basename(stored_file.disk_path),
+          use: use_from_metadata(file_identifier)
         )
       rescue Valkyrie::StorageAdapter::FileNotFound => not_found_error
         Rails.logger.error("#{file_identifier} could not be retrieved: #{not_found_error.message}")
