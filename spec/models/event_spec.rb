@@ -8,7 +8,8 @@ describe Event do
                         resource_id: resource_id,
                         child_property: child_property,
                         child_id: child_id,
-                        message: message)
+                        message: message,
+                        current: current)
   end
   let(:type) { "Test type" }
   let(:status) { "Test status" }
@@ -16,6 +17,7 @@ describe Event do
   let(:child_property) { "binary_node" }
   let(:child_id) { Valkyrie::ID.new("test2") }
   let(:message) { "Test message" }
+  let(:current) { true }
 
   describe "#type" do
     it "access the type attribute" do
@@ -50,6 +52,12 @@ describe Event do
   describe "#message" do
     it "access the message attribute" do
       expect(event.message).to eq message
+    end
+  end
+
+  describe "#current" do
+    it "access the current boolean" do
+      expect(event.current).to eq current
     end
   end
 end

@@ -6,6 +6,7 @@ class Event < Valkyrie::Resource
 
   attribute :type, Valkyrie::Types::String
   attribute :status, Valkyrie::Types::String
+  attribute :current, Valkyrie::Types::Bool
 
   # the PreservationObject this Event is associated with
   attribute :resource_id, Valkyrie::Types::ID
