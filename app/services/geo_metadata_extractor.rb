@@ -27,7 +27,7 @@ class GeoMetadataExtractor
     end
 
     def file_object
-      @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+      @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
     end
 
     def metadata_xml
@@ -38,8 +38,8 @@ class GeoMetadataExtractor
       file_node.mime_type.try(:first)
     end
 
-    def original_file
-      file_node.original_file
+    def primary_file
+      file_node.primary_file
     end
 
     def schema

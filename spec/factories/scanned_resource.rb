@@ -93,6 +93,10 @@ FactoryBot.define do
       state { "draft" }
       change_set { "CDL::Resource" }
     end
+    factory :complete_on_campus_scanned_resource do
+      state { "complete" }
+      visibility { ::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_ON_CAMPUS }
+    end
     factory :complete_campus_only_scanned_resource do
       state { "complete" }
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }

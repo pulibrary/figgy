@@ -12,8 +12,8 @@ class ExternalMetadataDerivativeService
   end
 
   attr_reader :id, :change_set_persister
-  delegate :mime_type, to: :original_file
-  delegate :original_file, to: :resource
+  delegate :mime_type, to: :primary_file
+  delegate :primary_file, to: :resource
   delegate :query_service, to: :change_set_persister
   def initialize(id:, change_set_persister:)
     @id = id
@@ -45,7 +45,7 @@ class ExternalMetadataDerivativeService
   end
 
   def valid_mime_type?
-    return false unless original_file
+    return false unless primary_file
     ["application/xml; schema=fgdc", "application/xml; schema=iso19139"].include? mime_type.first
   end
 

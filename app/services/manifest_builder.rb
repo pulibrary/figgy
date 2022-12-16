@@ -605,9 +605,10 @@ class ManifestBuilder
       @geotiff_child ||=
         begin
           return false unless parent_node.is_a?(ScannedMapNode)
-          parent = resource.decorate.parent
-          if parent.mosaic_file_count == 1
-            parent.wayfinder.uncropped_geotiff_filesets.first
+          wayfinder = Wayfinder.for(resource)
+          parent_wayfinder = Wayfinder.for(wayfinder.parent)
+          if parent_wayfinder.mosaic_file_count == 1
+            parent_wayfinder.uncropped_geotiff_filesets.first
           end
         end
     end

@@ -169,9 +169,9 @@ class MediainfoCharacterizationService
     # @return [FileNode]
     def preservation_file
       if parent.try(:image_resource?)
-        @file_set.original_file
+        @file_set.primary_file
       else
-        @file_set.preservation_file || @file_set.original_file
+        @file_set.preservation_file || @file_set.primary_file
       end
     end
 end

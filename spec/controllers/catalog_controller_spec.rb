@@ -804,7 +804,11 @@ RSpec.describe CatalogController do
       end
     end
 
-    context "when rendered for a user" do
+    context "when logged in as a campus patron" do
+      before do
+        sign_in FactoryBot.create(:campus_patron)
+      end
+
       render_views
       it "doesn't render the workflow panel" do
         resource = persister.save(resource: FactoryBot.build(:complete_open_scanned_resource))
@@ -812,6 +816,30 @@ RSpec.describe CatalogController do
         get :show, params: { id: resource.id.to_s }
 
         expect(response.body).not_to have_content "Review and Approval"
+      end
+    end
+
+    context "when accessing from a campus IP" do
+      before do
+        # rubocop:disable RSpec/AnyInstance
+        allow_any_instance_of(ActionController::TestRequest).to receive(:remote_ip).and_return("128.112.64.224")
+        # rubocop:enable RSpec/AnyInstance
+      end
+
+      it "allows access to jsonld for an on-campus resource" do
+        resource = persister.save(resource: FactoryBot.create_for_repository(:complete_on_campus_scanned_resource))
+
+        get :show, params: { id: resource.id.to_s, format: :jsonld }
+
+        expect(response).to be_successful
+      end
+
+      it "allows show page access for an on-campus resource" do
+        resource = persister.save(resource: FactoryBot.create_for_repository(:complete_on_campus_scanned_resource))
+
+        get :show, params: { id: resource.id.to_s }
+
+        expect(response.status).to eq 200
       end
     end
 

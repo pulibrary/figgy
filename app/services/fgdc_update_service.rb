@@ -19,7 +19,7 @@ class FgdcUpdateService
 
     def download_url
       return unless parent_resource && geo_member_file_set
-      path = url_helpers.download_path(resource_id: geo_member_file_set.id, id: geo_member_file_set.original_file.id)
+      path = url_helpers.download_path(resource_id: geo_member_file_set.id, id: geo_member_file_set.primary_file.id)
       "#{protocol}://#{host}#{path}"
     end
 
@@ -28,7 +28,7 @@ class FgdcUpdateService
     end
 
     def file_object
-      @file_object ||= Valkyrie::StorageAdapter.find_by(id: original_file.file_identifiers[0])
+      @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
     end
 
     # Finds or recursively creates node from xpath string
@@ -55,8 +55,8 @@ class FgdcUpdateService
       Figgy.default_url_options[:host]
     end
 
-    def original_file
-      @file_set.original_file
+    def primary_file
+      @file_set.primary_file
     end
 
     def protocol

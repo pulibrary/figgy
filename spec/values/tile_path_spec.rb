@@ -24,9 +24,9 @@ describe TilePath do
     end
 
     context "with a ScannedMap that has a child RasterResource" do
-      it "returns nil" do
-        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
-        expect(described_class.new(scanned_map).tilejson).to be_nil
+      it "returns a cog tilejson path" do
+        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+        expect(described_class.new(scanned_map).tilejson).to eq "https://map-tiles-test.example.com/cog/tilejson.json?id=331d70a54bd94a6580e4763c8f6b34fd"
       end
     end
 

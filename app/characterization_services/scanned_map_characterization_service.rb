@@ -21,14 +21,14 @@ class ScannedMapCharacterizationService
     @file_characterization_attributes = {
       processing_note: processing_note
     }
-    new_file = original_file.new(@file_characterization_attributes.to_h)
+    new_file = primary_file.new(@file_characterization_attributes.to_h)
     @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
     @file_set = @persister.save(resource: @file_set) if save
     @file_set
   end
 
-  def original_file
-    @file_set.original_file
+  def primary_file
+    @file_set.primary_file
   end
 
   def parent

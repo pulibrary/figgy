@@ -99,8 +99,8 @@ RSpec.feature "Bulk edit", js: true do
       accept_alert do
         click_button("Apply Edits")
       end
-      expect(current_path).to eq root_path
       expect(page).to have_content "1 resources were queued for bulk update."
+      expect(current_path).to eq root_path
       updated = adapter.query_service.find_by(id: member_scanned_resource.id)
       expect(updated.state).to eq ["complete"]
       expect(updated.member_of_collection_ids).to eq [collection.id, collection2.id]
@@ -118,6 +118,32 @@ RSpec.feature "Bulk edit", js: true do
       updated = adapter.query_service.find_by(id: member_scanned_resource.id)
       expect(updated.state).to eq ["complete"]
       expect(updated.member_of_collection_ids).to eq [collection.id]
+    end
+
+    context "with linked collections" do
+      let(:collection2) { FactoryBot.create_for_repository(:collection, title: "Collection 2") }
+      let(:member_scanned_resource) do
+        FactoryBot.create_for_repository(:scanned_resource, title: ["Member Resource"], member_of_collection_ids: [collection.id, collection2.id])
+      end
+
+      before do
+        change_set = ChangeSet.for(collection2)
+        change_set_persister.save(change_set: change_set)
+      end
+
+      it "can only remove the collection that was not used to generate the bulk edit query" do
+        visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
+        page.check("mark_complete")
+        expect(page).not_to have_xpath("//select[@id='remove_collection_ids']/option[text() = 'My Collection']")
+        page.select collection2.title.first, from: "remove_collection_ids", visible: false
+        accept_alert do
+          click_button("Apply Edits")
+        end
+        expect(current_path).to eq root_path
+        expect(page).to have_content "1 resources were queued for bulk update."
+        updated = adapter.query_service.find_by(id: member_scanned_resource.id)
+        expect(updated.member_of_collection_ids).to eq [collection.id]
+      end
     end
   end
 end

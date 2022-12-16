@@ -30,10 +30,6 @@ class PendingUpload < Valkyrie::Resource
     "application/octet-stream"
   end
 
-  def in_container?
-    upload_file.container_id.present?
-  end
-
   delegate :container_id, to: :upload_file
 
   private

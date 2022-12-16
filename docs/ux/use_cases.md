@@ -71,6 +71,7 @@ separately, and a link to the PDF is entered into the catalog record 856 field
 as `https://arks.princeton.edu/<arkhere>/pdf`. This means that our system needs
 to support that route moving forward, or we would lose access to these pdfs.
 
+
 ## Bulk Ingest ETDs from RDSS
 
 Every year RDSS bulk ingests senior theses and dissertations into Figgy, with
@@ -119,3 +120,29 @@ interface in Figgy to select `thesis_ingest_2022`, select a collection to put
 them into if appropriate, and then submits. The visibility chosen in the
 interface will be the default for any resource which doesn't have visibility set
 in `figgy_metadata.json`.
+
+
+## CollectorSystems
+
+PUL Preservation & Conservation uses
+[CollectorSystems](https://www.collectorsystems.com/index.htm) to manage their
+workflows. They've worked with a developer there to add custom import processes
+into CollectorSystems. APIs it requires are:
+
+1. Fetch all Figgy objects linked to a source metadata identifier which are
+   restricted
+   * https://figgy.princeton.edu/catalog?q=source_metadata_identifier_ssim:9934953393506421&format=json&f[visibility_ssim][]=restricted
+   * An `auth_token=` parameter is appended to this to make it work. They've
+   been provided an auth token which is in Figgy as "Collector Systems"
+1. Get a Manifest from a Figgy ID
+   * https://figgy.princeton.edu/concern/scanned_resources/8fda0322-a636-47ca-8fc8-b297605ef9c3/manifest
+   * An `auth_token=` parameter is appended to this to make it work. They've
+   been provided an auth token which is in Figgy as "Collector Systems"
+1. Provide the "Original Filename" of each FileSet in the IIIF Manifest.
+   * Preservation & Conservation stores information in that filename.
+   * Not implemented yet - see #5286
+
+CollectorSystems also integrates with Pulfalight & Bibdata to pull metadata.
+
+1. Bibdata: https://bibdata.princeton.edu/bibliographic/<id>.xml
+2. Finding Aids: https://findingaids.princeton.edu/<id>.jsonld

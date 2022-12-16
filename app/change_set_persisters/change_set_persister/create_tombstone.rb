@@ -8,7 +8,7 @@ class ChangeSetPersister
     end
 
     def run
-      return unless resource.is_a?(FileSet) && resource.try(:original_file) && parent
+      return unless resource.is_a?(FileSet) && resource.try(:primary_file) && parent
       tombstone = Tombstone.new
       tombstone_change_set = ChangeSet.for(tombstone)
       tombstone_change_set.validate(attributes)
@@ -21,7 +21,7 @@ class ChangeSetPersister
         {
           file_set_id: resource.id,
           file_set_title: resource.title,
-          file_set_original_filename: resource.original_file.original_filename,
+          file_set_original_filename: resource.primary_file.original_filename,
           preservation_object: preservation_object,
           parent_id: parent.id
         }

@@ -14,8 +14,8 @@ class ScannedMapDerivativeService
   end
 
   attr_reader :id, :change_set_persister
-  delegate :original_file, to: :resource
-  delegate :mime_type, to: :original_file
+  delegate :primary_file, to: :resource
+  delegate :mime_type, to: :primary_file
   delegate :query_service, to: :change_set_persister
   def initialize(id:, change_set_persister:)
     @id = id
@@ -31,7 +31,7 @@ class ScannedMapDerivativeService
   end
 
   def valid?
-    return false unless original_file
+    return false unless primary_file
     valid_mime_types.include?(mime_type.first) && parent.is_a?(ScannedMap)
   end
 

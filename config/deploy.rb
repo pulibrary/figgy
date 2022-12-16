@@ -47,10 +47,11 @@ desc "Write the current version to public/version.txt"
 task :write_version do
   on roles(:app), in: :sequence do
     within repo_path do
-      execute :echo, "figgy `git describe --all --always --long --abbrev=40 HEAD` `date +\"%F %T %Z\"` > #{release_path}/public/version.txt"
+      execute :tail, "-n1 ../revisions.log > #{release_path}/public/version.txt"
     end
   end
 end
+after 'deploy:log_revision', 'write_version'
 namespace :sidekiq do
   task :quiet do
     # Horrible hack to get PID without having to use terrible PID files
@@ -74,7 +75,6 @@ end
 after "deploy:starting", "sidekiq:quiet"
 after "deploy:reverted", "sidekiq:restart"
 after "deploy:published", "sidekiq:restart"
-after "deploy:published", "write_version"
 after "sidekiq:restart", "pubsub:restart"
 before "deploy:assets:precompile", "deploy:yarn_install"
 before "deploy:assets:precompile", "deploy:whenever"
@@ -102,7 +102,7 @@ namespace :deploy do
   task :google_cloud_function do
     on roles(:db) do
       run_locally do
-        execute "cd cloud_fixity && gcloud beta functions deploy checkFixity#{fetch(:stage, 'production')} --runtime nodejs14 --set-env-vars BUCKET=#{fetch(:google_fixity_bucket)},FIXITY_STATUS_TOPIC=#{fetch(:google_fixity_status_topic)},FIXITY_REQUEST_TOPIC=#{fetch(:google_fixity_request_topic)} --trigger-topic #{fetch(:google_fixity_request_topic)} --service-account #{fetch(:google_service_account)} --entry-point checkFixity --max-instances 100"
+        execute "cd cloud_fixity && gcloud beta functions deploy checkFixity#{fetch(:stage, 'production')} --runtime nodejs16 --set-env-vars BUCKET=#{fetch(:google_fixity_bucket)},FIXITY_STATUS_TOPIC=#{fetch(:google_fixity_status_topic)},FIXITY_REQUEST_TOPIC=#{fetch(:google_fixity_request_topic)} --trigger-topic #{fetch(:google_fixity_request_topic)} --service-account #{fetch(:google_service_account)} --entry-point checkFixity --max-instances 100"
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ChangeSetPersister
-  class UpdateAspaceDao
+  class RemoveFromCollection
     attr_reader :change_set_persister, :change_set
     def initialize(change_set_persister:, change_set:, post_save_resource: nil)
       @change_set = change_set
@@ -8,13 +8,8 @@ class ChangeSetPersister
     end
 
     def run
-      return unless pulfa_record?
-      return unless change_set.resource.decorate.public_readable_state?
-      UpdateDaoJob.perform_later(change_set.id.to_s)
-    end
-
-    def pulfa_record?
-      RemoteRecord.pulfa?(change_set.try(:source_metadata_identifier).to_s)
+      return if change_set.try(:remove_collection_ids).blank?
+      change_set.member_of_collection_ids = (change_set.member_of_collection_ids || []) - change_set.remove_collection_ids
     end
   end
 end

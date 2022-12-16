@@ -109,17 +109,16 @@ RSpec.describe RecordingChangeSet do
   end
 
   describe "#preserve?" do
-    context "when not a member of an archival media collection" do
-      let(:formresource) { FactoryBot.create_for_repository(:complete_recording) }
+    context "when not persisted" do
+      let(:formresource) { FactoryBot.create_for_repository(:recording) }
 
       it "is not preserved" do
         expect(change_set.preserve?).to be false
       end
     end
 
-    context "when a member of an archival media collection" do
-      let(:collection) { FactoryBot.create_for_repository(:archival_media_collection) }
-      let(:form_resource) { FactoryBot.create_for_repository(:complete_recording, member_of_collection_ids: [collection.id]) }
+    context "when persisted" do
+      let(:form_resource) { FactoryBot.create_for_repository(:complete_recording) }
 
       it "is preserved" do
         expect(change_set.preserve?).to be true

@@ -31,11 +31,11 @@ RSpec.describe CheckFixityJob do
     # two different object instances and you cannot stub, e.g. :run_fixity
     it "saves the file_set" do
       fs = query_service.find_by(id: file_set_id)
-      expect(fs.original_file.fixity_success).not_to eq 1
+      expect(fs.primary_file.fixity_success).not_to eq 1
 
       described_class.perform_now(file_set_id)
       fs = query_service.find_by(id: file_set_id)
-      expect(fs.original_file.fixity_success).to eq 1
+      expect(fs.primary_file.fixity_success).to eq 1
     end
 
     context "when the file set does not exist" do

@@ -19,7 +19,7 @@ describe GeoDiscovery::DocumentBuilder::IIIFBuilder do
     output = change_set_persister.save(change_set: change_set)
     file_set_id = output.member_ids[0]
     file_set = query_service.find_by(id: file_set_id)
-    file_set.original_file.mime_type = "image/tiff"
+    file_set.primary_file.mime_type = "image/tiff"
     metadata_adapter.persister.save(resource: file_set)
   end
 
