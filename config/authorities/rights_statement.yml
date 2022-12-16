@@ -159,6 +159,11 @@
       the Vatican Library’s Photographic Reproductions web page at
       https://www.vatlib.it/home.php?pag=riproduzioni_fotografiche.
       High-resolution photography is available only through the Vatican Library.
+  - :value: https://www.mfa.org/collections/mfa-images/licensing/frequently-asked-questions
+    :label: Coomaraswamy Photo Albums (MFA Boston)
+    :notable: true
+    :scopeNote: This Rights Statement should be used for items digitized by MFA Boston
+    :definition: Photographs © 1903 Museum of Fine Arts, Boston.
   - :value: https://creativecommons.org/licenses/by/4.0/
     :label: CC-BY 4.0
     :notable: true
