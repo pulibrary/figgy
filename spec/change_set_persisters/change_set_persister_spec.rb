@@ -1497,32 +1497,25 @@ RSpec.describe ChangeSetPersister do
       end
     end
     context "when deleting preserved resource" do
-      it "deletes all previously created FileSet tombstones for that parent, related PreservationObjects, and cleans up the Preservation file store" do
+      it "creates tombstones for the resource and all of the related members" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+        child_resource = FactoryBot.create_for_repository(:complete_raster_resource)
+        resource = FactoryBot.create_for_repository(:pending_scanned_map, title: "title", member_ids: [child_resource.id], files: [file])
         reloaded_resource = query_service.find_by(id: resource.id)
         change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
-
         output = change_set_persister.save(change_set: change_set)
-        file_set = Wayfinder.for(output).members.first
-        change_set = ChangeSet.for(file_set)
+        change_set = ChangeSet.for(output)
         change_set_persister.delete(change_set: change_set)
 
         tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
-        expect(tombstones.to_a.length).to eq 1
+        expect(tombstones.to_a.length).to eq 3
 
-        reloaded = change_set_persister.query_service.find_by(id: output.id)
-        change_set_persister.delete(change_set: ChangeSet.for(reloaded))
-
-        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
-        expect(tombstones.to_a.length).to eq 0
-        # Ensure PreservationObject is deleted and preservation is cleaned up.
+        # Ensure PreservationObjects are deleted.
         expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq false
       end
     end
-
     context "when reinstating a FileSet tombstone" do
       before do
         # Make preservation deletes not actually happen to simulate a versioned
