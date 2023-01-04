@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+# A single PreservationObject is used per preserved resource. The
+# PreservationObject links to the metadata and binary files.
 class PreservationObject < Resource
   enable_optimistic_locking
   # the object we track preservation of
