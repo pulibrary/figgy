@@ -13,18 +13,18 @@ module Migrations
 
     def update_current_query
       <<-SQL
-        WITH top_events AS (
-          SELECT *
-          FROM(
-            SELECT res.*, ROW_NUMBER() OVER(PARTITION BY res.metadata->>'child_id' ORDER BY res.updated_at DESC) AS rank
-            FROM orm_resources res
-            WHERE res.internal_resource = 'Event'
-          ) as ranked_events
-          WHERE ranked_events.rank = 1
+        WITH ranked_events AS (
+          SELECT res.*, ROW_NUMBER() OVER(PARTITION BY res.metadata->>'child_id' ORDER BY res.updated_at DESC) AS rank
+          FROM orm_resources res
+          WHERE res.internal_resource = 'Event'
         )
         UPDATE orm_resources event
         SET metadata = event.metadata || '{"current": true}'
-        FROM top_events
+        FROM (
+          SELECT *
+          FROM ranked_events
+          WHERE ranked_events.rank = 1
+        ) as top_events
         WHERE top_events.id = event.id
       SQL
     end
