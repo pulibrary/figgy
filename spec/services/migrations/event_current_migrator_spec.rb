@@ -28,11 +28,20 @@ RSpec.describe Migrations::EventCurrentMigrator do
       query_service = Valkyrie.config.metadata_adapter.query_service
       described_class.call
 
-      expect(query_service.find_by(id: fs_event2.id).current).to eq true
+      fs_event2 = query_service.find_by(id: fs_event2.id)
+      expect(fs_event2.current).to eq true
+      # other fields are the same
+      expect(fs_event2.child_id).to eq fs_pres_obj.metadata_node.id
+      expect(fs_event2.resource_id).to eq fs_pres_obj.id
+      expect(fs_event2.child_property).to eq "metadata_node"
       expect(query_service.find_by(id: file_event2.id).current).to eq true
       expect(query_service.find_by(id: resource_event2.id).current).to eq true
 
       expect(query_service.find_by(id: fs_event1.id).current).to be_falsey
+      # other fields are the same
+      expect(fs_event1.child_id).to eq fs_pres_obj.metadata_node.id
+      expect(fs_event1.resource_id).to eq fs_pres_obj.id
+      expect(fs_event1.child_property).to eq "metadata_node"
       expect(query_service.find_by(id: file_event1.id).current).to be_falsey
       expect(query_service.find_by(id: resource_event1.id).current).to be_falsey
     end
