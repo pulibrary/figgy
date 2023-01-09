@@ -6,7 +6,7 @@ class ScannedResourceWayfinder < BaseWayfinder
   relationship_by_property :scanned_resources, property: :member_ids, model: ScannedResource
   relationship_by_property :collections, property: :member_of_collection_ids
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
-  inverse_relationship_by_property :child_tombstones, property: :parent_id, model: Tombstone
+  inverse_relationship_by_property :child_deletion_markers, property: :parent_id, model: DeletionMarker
 
   def scanned_resources_count
     @scanned_resources_count ||= query_service.custom_queries.count_members(resource: resource, model: ScannedResource)

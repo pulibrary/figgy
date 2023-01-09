@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe TombstoneService do
+describe DeletionMarkerService do
   with_queue_adapter :inline
 
   let(:change_set_persister) { ChangeSetPersister.default }
@@ -30,14 +30,14 @@ describe TombstoneService do
       change_set = ChangeSet.for(output)
       change_set_persister.delete(change_set: change_set)
 
-      resource_tombstone = query_service.custom_queries.find_by_property(property: :file_set_id, value: Valkyrie::ID.new(resource.id)).first
+      resource_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(resource.id)).first
 
-      described_class.restore(resource_tombstone.id)
+      described_class.restore(resource_deletion_marker.id)
 
       sm = query_service.find_all_of_model(model: ScannedMap)
       rr = query_service.find_all_of_model(model: RasterResource)
       fs = query_service.find_all_of_model(model: FileSet)
-      ts = query_service.find_all_of_model(model: Tombstone)
+      ts = query_service.find_all_of_model(model: DeletionMarker)
 
       expect(sm.count).to eq 1
       expect(rr.count).to eq 1
@@ -56,12 +56,12 @@ describe TombstoneService do
       file_set = Wayfinder.for(output).members.first
       change_set = ChangeSet.for(file_set)
       change_set_persister.delete(change_set: change_set)
-      file_set_tombstone = query_service.custom_queries.find_by_property(property: :file_set_id, value: Valkyrie::ID.new(file_set.id)).first
+      file_set_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(file_set.id)).first
       reloaded_resource = query_service.find_by(id: resource.id)
 
       expect(reloaded_resource.member_ids).to be_empty
 
-      described_class.restore(file_set_tombstone.id)
+      described_class.restore(file_set_deletion_marker.id)
 
       reloaded_resource = query_service.find_by(id: resource.id)
       fs = query_service.find_all_of_model(model: FileSet)
