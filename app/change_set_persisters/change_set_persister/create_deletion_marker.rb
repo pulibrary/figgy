@@ -8,7 +8,8 @@ class ChangeSetPersister
     end
 
     def run
-      return if resource.is_a?(PreservationObject) || resource.is_a?(DeletionMarker)
+      return if resource.is_a?(PreservationObject) || resource.is_a?(DeletionMarker) || resource.is_a?(Tombstone)
+
       deletion_marker = DeletionMarker.new
       deletion_marker_change_set = ChangeSet.for(deletion_marker)
       if parent_id
