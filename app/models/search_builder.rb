@@ -58,7 +58,6 @@ class SearchBuilder < Blacklight::SearchBuilder
       ProxyFileSet,
       Template,
       PreservationObject,
-      Tombstone,
       DeletionMarker,
       CDL::ResourceChargeList
     ].join(",")
