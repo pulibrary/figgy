@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ChangeSetPersister
-  class RestoreTombstones
+  class RestoreDeletionMarkers
     attr_reader :change_set_persister, :change_set
 
     def initialize(change_set_persister:, change_set:)
@@ -9,22 +9,22 @@ class ChangeSetPersister
     end
 
     def run
-      return if change_set.try(:tombstone_restore_ids).blank?
-      tombstones.each do |tombstone|
-        next if tombstone.preservation_object.blank?
+      return if change_set.try(:deletion_marker_restore_ids).blank?
+      deletion_markers.each do |deletion_marker|
+        next if deletion_marker.preservation_object.blank?
         file_set = Preserver::Importer.from_preservation_object(
-          resource: tombstone.preservation_object,
+          resource: deletion_marker.preservation_object,
           change_set_persister: change_set_persister
         )
         change_set.member_ids += [file_set.id]
         change_set.sync
         change_set.created_file_sets += [file_set]
-        change_set_persister.delete(change_set: ChangeSet.for(tombstone))
+        change_set_persister.delete(change_set: ChangeSet.for(deletion_marker))
       end
     end
 
-    def tombstones
-      @tombstones ||= query_service.find_many_by_ids(ids: change_set.tombstone_restore_ids)
+    def deletion_markers
+      @deletion_markers ||= query_service.find_many_by_ids(ids: change_set.deletion_marker_restore_ids)
     end
 
     def query_service

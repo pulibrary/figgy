@@ -42,7 +42,7 @@ class ScannedResourceChangeSet < ChangeSet
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
   property :pending_uploads, multiple: true, required: false
-  property :tombstone_restore_ids, virtual: true, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID), default: []
+  property :deletion_marker_restore_ids, virtual: true, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID), default: []
 
   validates_with StateValidator
   validates_with ViewingDirectionValidator

@@ -59,6 +59,7 @@ class SearchBuilder < Blacklight::SearchBuilder
       Template,
       PreservationObject,
       Tombstone,
+      DeletionMarker,
       CDL::ResourceChargeList
     ].join(",")
   end
