@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe RestoreDeletionMarkerJob do
+describe RestoreFromDeletionMarkerJob do
   describe "#perform" do
     before do
       allow(DeletionMarkerService).to receive(:restore)
