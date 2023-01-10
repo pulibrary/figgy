@@ -12,7 +12,8 @@ class IndexingAdapter
       Event,
       ProcessedEvent,
       PreservationObject,
-      Tombstone
+      Tombstone,
+      DeletionMarker
     ]
   end
   attr_reader :metadata_adapter, :index_adapter

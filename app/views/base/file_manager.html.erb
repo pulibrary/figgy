@@ -25,7 +25,7 @@
     </div>
   </div>
 <% end %>
-<% if decorated_change_set_resource.try(:wayfinder).try(:child_tombstones).to_a.present? %>
+<% if decorated_change_set_resource.try(:wayfinder).try(:child_deletion_markers).to_a.present? %>
   <h2>Deleted Files</h2>
   <table class="table">
     <thead>
@@ -35,13 +35,13 @@
       </tr>
     </thead>
     <tbody>
-      <% decorated_change_set_resource.wayfinder.child_tombstones.each do |tombstone| %>
+      <% decorated_change_set_resource.wayfinder.child_deletion_markers.each do |deletion_marker| %>
         <tr>
-          <td><%= tombstone.file_set_title&.first %> (<%= tombstone.file_set_original_filename&.first %>)</td>
+          <td><%= deletion_marker.resource_title&.first %> (<%= deletion_marker.original_filename&.first %>)</td>
           <td>
-            <% if tombstone.preservation_object.present? && @change_set.respond_to?(:tombstone_restore_ids) %>
+            <% if deletion_marker.preservation_object.present? && @change_set.respond_to?(:deletion_marker_restore_ids) %>
               <%= simple_form_for(@change_set) do |f| %>
-                <%= f.hidden_field :tombstone_restore_ids, multiple: true, value: [tombstone.id.to_s] %>
+                <%= f.hidden_field :deletion_marker_restore_ids, multiple: true, value: [deletion_marker.id.to_s] %>
                 <%= f.submit "Reinstate" %>
               <% end %>
             <% end %>

@@ -15,8 +15,8 @@ RSpec.describe Wayfinder do
       end
     end
 
-    describe "#child_tombstones" do
-      it "returns all tombstones with the given parent_id" do
+    describe "#child_deletion_markers" do
+      it "returns all deletion_markers with the given parent_id" do
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
         query_service = ChangeSetPersister.default.query_service
         file = fixture_file_upload("files/example.tif", "image/tiff")
@@ -31,8 +31,8 @@ RSpec.describe Wayfinder do
         change_set = ChangeSet.for(file_set)
         change_set_persister.delete(change_set: change_set)
 
-        tombstone = change_set_persister.query_service.find_all_of_model(model: Tombstone).first
-        expect(described_class.for(resource).child_tombstones.to_a).to eq [tombstone]
+        deletion_marker = change_set_persister.query_service.find_all_of_model(model: DeletionMarker).first
+        expect(described_class.for(resource).child_deletion_markers.to_a).to eq [deletion_marker]
       end
     end
 

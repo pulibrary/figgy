@@ -1469,7 +1469,7 @@ RSpec.describe ChangeSetPersister do
     end
 
     context "when deleting a preserved FileSet" do
-      it "Deletes FileSet PreservationObjects, moves file set PreservationObjects into tombstones" do
+      it "Deletes FileSet PreservationObjects, moves file set PreservationObjects into deletion_markers" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
         reloaded_resource = query_service.find_by(id: resource.id)
@@ -1485,45 +1485,38 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq true
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq false
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq false
-        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
-        expect(tombstones.to_a.length).to eq 1
-        tombstone = tombstones.first
-        expect(tombstone.file_set_id).to eq file_set.id
-        expect(tombstone.file_set_title).to eq file_set.title
-        expect(tombstone.file_set_original_filename).to eq file_set.original_file.original_filename
-        expect(tombstone.deleted_at).to eq tombstones.first.created_at
-        expect(tombstone.preservation_object.preserved_object_id).to eq file_set.id
-        expect(tombstone.parent_id).to eq resource.id
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        expect(deletion_markers.to_a.length).to eq 1
+        deletion_marker = deletion_markers.first
+        expect(deletion_marker.resource_id).to eq file_set.id
+        expect(deletion_marker.resource_title).to eq file_set.title
+        expect(deletion_marker.original_filename).to eq file_set.original_file.original_filename
+        expect(deletion_marker.deleted_at).to eq deletion_markers.first.created_at
+        expect(deletion_marker.preservation_object.preserved_object_id).to eq file_set.id
+        expect(deletion_marker.parent_id).to eq resource.id
       end
     end
     context "when deleting preserved resource" do
-      it "deletes all previously created FileSet tombstones for that parent, related PreservationObjects, and cleans up the Preservation file store" do
+      it "creates deletion_markers for the resource and all of the related members" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
-        resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+        child_resource = FactoryBot.create_for_repository(:complete_raster_resource)
+        resource = FactoryBot.create_for_repository(:pending_scanned_map, title: "title", member_ids: [child_resource.id], files: [file])
         reloaded_resource = query_service.find_by(id: resource.id)
         change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
-
         output = change_set_persister.save(change_set: change_set)
-        file_set = Wayfinder.for(output).members.first
-        change_set = ChangeSet.for(file_set)
+        change_set = ChangeSet.for(output)
         change_set_persister.delete(change_set: change_set)
 
-        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
-        expect(tombstones.to_a.length).to eq 1
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        expect(deletion_markers.to_a.length).to eq 3
 
-        reloaded = change_set_persister.query_service.find_by(id: output.id)
-        change_set_persister.delete(change_set: ChangeSet.for(reloaded))
-
-        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
-        expect(tombstones.to_a.length).to eq 0
-        # Ensure PreservationObject is deleted and preservation is cleaned up.
+        # Ensure PreservationObjects are deleted.
         expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq false
       end
     end
-
-    context "when reinstating a FileSet tombstone" do
+    context "when reinstating a FileSet from its deletion_marker" do
       before do
         # Make preservation deletes not actually happen to simulate a versioned
         # file store.
@@ -1545,18 +1538,18 @@ RSpec.describe ChangeSetPersister do
         change_set_persister.delete(change_set: change_set)
 
         resource = change_set_persister.query_service.find_by(id: resource.id)
-        tombstone = change_set_persister.query_service.find_all_of_model(model: Tombstone).first
+        deletion_marker = change_set_persister.query_service.find_all_of_model(model: DeletionMarker).first
         change_set = ChangeSet.for(resource)
-        change_set.tombstone_restore_ids = [tombstone.id]
+        change_set.deletion_marker_restore_ids = [deletion_marker.id]
         output = change_set_persister.save(change_set: change_set)
 
         expect(output.member_ids.length).to eq 1
         file_set = change_set_persister.query_service.find_members(resource: output).first
         expect(file_set.file_metadata.length).to eq 2
 
-        # Expect tombstone to be gone
-        tombstones = change_set_persister.query_service.find_all_of_model(model: Tombstone)
-        expect(tombstones.length).to eq 0
+        # Expect deletion_marker to be gone
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        expect(deletion_markers.length).to eq 0
       end
     end
 
