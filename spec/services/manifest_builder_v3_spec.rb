@@ -187,8 +187,8 @@ RSpec.describe ManifestBuilderV3 do
     before do
       allow(Rails.env).to receive(:development?).and_return(false)
       allow(Rails.env).to receive(:test?).and_return(false)
-      # stub_catalog(bib_id: "123456")
-      change_set = ScannedMapChangeSet.new(resource, files: [file])
+      reloaded_resource = query_service.find_by(id: resource.id)
+      change_set = ScannedMapChangeSet.new(reloaded_resource, files: [file])
       output = change_set_persister.save(change_set: change_set)
       file_set_id = output.member_ids.first
       file_set = query_service.find_by(id: file_set_id)

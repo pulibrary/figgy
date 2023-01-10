@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 class FileSetChangeSet < ChangeSet
   self.fields = [:title]
-  property :optimistic_lock_token,
-           multiple: true,
-           required: true,
-           type: Valkyrie::Types::Set.of(Valkyrie::Types::OptimisticLockToken)
   property :files, virtual: true, multiple: true, required: false
   property :viewing_hint, multiple: false, required: false
   property :hocr_content, multiple: false, required: false

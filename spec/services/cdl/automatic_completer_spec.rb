@@ -21,8 +21,10 @@ RSpec.describe CDL::AutomaticCompleter do
       with_queue_adapter :inline
       it "doesn't complete them" do
         resource = FactoryBot.create_for_repository(:draft_cdl_resource, files: [file])
+        reloaded_resource = query_service.find_by(id: resource.id)
         cs = ChangeSet.for(resource)
         cs.validate(files: [file])
+        cs.optimistic_lock_token = reloaded_resource.optimistic_lock_token
         change_set_persister.save(change_set: cs)
 
         described_class.run

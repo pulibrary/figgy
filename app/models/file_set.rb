@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class FileSet < Resource
-  enable_optimistic_locking
   include Valkyrie::Resource::AccessControls
   attribute :title, Valkyrie::Types::Set
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)

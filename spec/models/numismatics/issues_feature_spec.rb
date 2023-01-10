@@ -5,6 +5,7 @@ RSpec.feature "Numismatics::Issues" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
+  let(:query_service) { ChangeSetPersister.default.query_service }
   let(:numismatic_issue) do
     res = FactoryBot.create_for_repository(:numismatic_issue)
     persister.save(resource: res)
@@ -405,7 +406,8 @@ RSpec.feature "Numismatics::Issues" do
 
     context "when Issues have been saved" do
       let(:persisted) do
-        change_set = Numismatics::IssueChangeSet.new(numismatic_issue)
+        reloaded_resource = query_service.find_by(id: numismatic_issue.id)
+        change_set = Numismatics::IssueChangeSet.new(reloaded_resource)
         change_set_persister.save(change_set: change_set)
       end
 

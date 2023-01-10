@@ -311,7 +311,8 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
 
       before do
-        change_set = ScannedMapChangeSet.new(geo_work)
+        reloaded_resource = query_service.find_by(id: geo_work.id)
+        change_set = ScannedMapChangeSet.new(reloaded_resource)
         change_set.validate(thumbnail_id: child.id)
         change_set_persister.save(change_set: change_set)
       end
@@ -364,7 +365,11 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
           files: [file]
         )
       end
-      let(:child_change_set) { ChangeSet.for(child) }
+      let(:child_change_set) do
+        reloaded_resource = query_service.find_by(id: child.id)
+        ChangeSet.for(reloaded_resource)
+      end
+
       let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
 
       before do
