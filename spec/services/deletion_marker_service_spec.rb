@@ -24,7 +24,8 @@ describe DeletionMarkerService do
       file = fixture_file_upload("files/example.tif", "image/tiff")
       child_resource = FactoryBot.create_for_repository(:complete_raster_resource)
       resource = FactoryBot.create_for_repository(:pending_scanned_map, title: "title", member_ids: [child_resource.id], files: [file])
-      change_set = ChangeSet.for(resource)
+      reloaded_resource = query_service.find_by(id: resource.id)
+      change_set = ChangeSet.for(reloaded_resource)
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
       change_set = ChangeSet.for(output)
@@ -50,7 +51,8 @@ describe DeletionMarkerService do
     it "restores the FileSet and re-attaches it to it's parent" do
       file = fixture_file_upload("files/example.tif", "image/tiff")
       resource = FactoryBot.create_for_repository(:pending_scanned_map, title: "title", files: [file])
-      change_set = ChangeSet.for(resource)
+      reloaded_resource = query_service.find_by(id: resource.id)
+      change_set = ChangeSet.for(reloaded_resource)
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
       file_set = Wayfinder.for(output).members.first
