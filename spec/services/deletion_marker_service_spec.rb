@@ -38,12 +38,13 @@ describe DeletionMarkerService do
       sm = query_service.find_all_of_model(model: ScannedMap)
       rr = query_service.find_all_of_model(model: RasterResource)
       fs = query_service.find_all_of_model(model: FileSet)
-      ts = query_service.find_all_of_model(model: DeletionMarker)
+      dm = query_service.find_all_of_model(model: DeletionMarker)
 
       expect(sm.count).to eq 1
       expect(rr.count).to eq 1
       expect(fs.count).to eq 1
-      expect(ts.count).to eq 0
+      expect(dm.count).to eq 0
+      expect(fs.first.mime_type).to eq ["image/tiff"]
     end
   end
 
@@ -70,6 +71,7 @@ describe DeletionMarkerService do
 
       expect(reloaded_resource.member_ids).not_to be_empty
       expect(fs.count).to eq 1
+      expect(fs.first.mime_type).to eq ["image/tiff"]
     end
   end
 end
