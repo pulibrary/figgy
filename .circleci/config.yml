@@ -22,6 +22,9 @@ jobs:
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
+      - run:
+          name: remove errant LICENSE file
+          command: rm LICENSE.chromedriver
       - checkout
       - node/install:
           install-yarn: true
