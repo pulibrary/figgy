@@ -9,8 +9,7 @@ class TombstoneMigrator
       counter += 1
       logger.info("#{counter} / #{total} resources")
       deletion_marker = DeletionMarker.new(
-        create_at: resource.created_at,
-        updated_at: resource.updated_at,
+        created_at: resource.created_at,
         resource_id: resource.file_set_id,
         resource_title: resource.file_set_title,
         original_filename: resource.file_set_original_filename,

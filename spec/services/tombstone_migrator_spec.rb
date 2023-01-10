@@ -10,7 +10,7 @@ RSpec.describe TombstoneMigrator do
       original_filename = "Original File"
       parent_id = "332ff873-e67e-4334-b843-47a1435d382d"
       preservation_object = FactoryBot.create_for_repository(:preservation_object)
-      FactoryBot.create_for_repository(:tombstone,
+      tombstone = FactoryBot.create_for_repository(:tombstone,
                                         file_set_id: resource_id,
                                         file_set_title: resource_title,
                                         file_set_original_filename: original_filename,
@@ -29,6 +29,7 @@ RSpec.describe TombstoneMigrator do
       expect(deletion_marker.original_filename).to eq [original_filename]
       expect(deletion_marker.parent_id).to eq parent_id
       expect(deletion_marker.preservation_object.id).to eq preservation_object.id
+      expect(deletion_marker.created_at).to eq tombstone.created_at
     end
   end
 end
