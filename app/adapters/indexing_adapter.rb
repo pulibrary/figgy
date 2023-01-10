@@ -12,7 +12,6 @@ class IndexingAdapter
       Event,
       ProcessedEvent,
       PreservationObject,
-      Tombstone,
       DeletionMarker
     ]
   end
