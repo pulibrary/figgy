@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ChangeSetPersister
-  class RestoreDeletionMarkers
+  class RestoreFromDeletionMarkers
     attr_reader :change_set_persister, :change_set
 
     def initialize(change_set_persister:, change_set:)

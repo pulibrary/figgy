@@ -28,7 +28,7 @@ class ChangeSetPersister
         ClearRemoteMetadata,
         ExtractArchivalCollectionCode,
         ApplyVisibilityByDate,
-        RestoreDeletionMarkers,
+        RestoreFromDeletionMarkers,
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
         CleanupPdfs,
