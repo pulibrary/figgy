@@ -395,7 +395,7 @@ RSpec.describe ChangeSetPersister do
         change_set = change_set_class.new(resource, characterize: true)
         change_set.files = [file]
 
-        attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile] }
+        attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationFile] }
         file_metadata_node = FileMetadata.for(file: file).new(attributes)
         allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 

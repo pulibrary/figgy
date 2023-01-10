@@ -67,7 +67,8 @@ class FileMetadata < Valkyrie::Resource
   end
 
   def preservation_file?
-    use.include?(Valkyrie::Vocab::PCDMUse.PreservationMasterFile)
+    use.include?(Valkyrie::Vocab::PCDMUse.PreservationFile) ||
+      use.include?(Valkyrie::Vocab::PCDMUse.PreservationMasterFile)
   end
 
   def preserved_metadata?

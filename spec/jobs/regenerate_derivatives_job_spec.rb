@@ -36,7 +36,7 @@ RSpec.describe RegenerateDerivativesJob do
       end
     end
 
-    context "with a pdf preservation master", run_real_characterization: true, run_real_derivatives: true do
+    context "with a pdf preservation file", run_real_characterization: true, run_real_derivatives: true do
       with_queue_adapter :inline
       let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
       let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }

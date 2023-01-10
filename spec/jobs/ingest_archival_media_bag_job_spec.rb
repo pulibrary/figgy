@@ -32,7 +32,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       file_set = query_service.find_all_of_model(model: FileSet).select { |fs| fs.title.include? "32101047382401_1" }.sort_by(&:created_at).last
       expect(file_set.file_metadata.count).to eq 5
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
-        "http://pcdm.org/use#PreservationMasterFile", # Master
+        "http://pcdm.org/use#PreservationFile", # Preservation copy
         "http://pcdm.org/use#ServiceFile", # MP3
         "http://pcdm.org/use#IntermediateFile", # Intermediate
         "http://pcdm.org/use#ServiceFile", # HLS Derivative
@@ -162,7 +162,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p1" }.sort_by(&:created_at).last
       expect(file_set.file_metadata.count).to eq 5
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
-        "http://pcdm.org/use#PreservationMasterFile", # Master
+        "http://pcdm.org/use#PreservationFile", # Preservation copy
         "http://pcdm.org/use#ServiceFile", # MP3
         "http://pcdm.org/use#IntermediateFile", # Intermediate
         "http://pcdm.org/use#ServiceFile", # HLS Derivative
@@ -172,7 +172,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       file_set = file_sets.select { |fs| fs.title.include? "32101047382492_1_p2" }.sort_by(&:created_at).last
       expect(file_set.file_metadata.count).to eq 5
       expect(file_set.file_metadata.map { |file| file.use.first.to_s }).to contain_exactly(
-        "http://pcdm.org/use#PreservationMasterFile", # Master
+        "http://pcdm.org/use#PreservationFile", # Preservation copy
         "http://pcdm.org/use#ServiceFile", # MP3
         "http://pcdm.org/use#IntermediateFile", # Intermediate
         "http://pcdm.org/use#ServiceFile", # HLS Derivative

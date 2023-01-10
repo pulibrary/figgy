@@ -133,7 +133,7 @@ class PDFDerivativeService
     pdf_file_metadata = resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.find(&:pdf?)
     return unless pdf_file_metadata
 
-    pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
+    pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationFile]
     resource.file_metadata = resource.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
     persister.save(resource: resource)
   end

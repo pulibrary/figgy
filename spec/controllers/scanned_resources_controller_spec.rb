@@ -455,7 +455,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
 
     # This block tests functionality defined in `app/controllers/concerns/browse_everythingable.rb`
-    #   Acts as a 'master spec' in this regard
+    #   Acts as a global spec in this regard
     describe "POST /concern/scanned_resources/:id/browse_everything_files" do
       def params_for_paths(paths, resource)
         session = BrowseEverything::Session.build(

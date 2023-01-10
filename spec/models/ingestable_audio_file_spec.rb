@@ -5,7 +5,7 @@ RSpec.describe IngestableAudioFile do
   let(:file_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401_1_pm.wav") }
   let(:audio_file) { described_class.new(path: file_path) }
 
-  context "with a preservation master file" do
+  context "with a preservation file" do
     let(:file_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401_1_pm.wav") }
 
     describe "#original_filename" do
@@ -21,11 +21,11 @@ RSpec.describe IngestableAudioFile do
     end
 
     describe "#use" do
-      it { expect(audio_file.use).to eq Valkyrie::Vocab::PCDMUse.PreservationMasterFile }
+      it { expect(audio_file.use).to eq Valkyrie::Vocab::PCDMUse.PreservationFile }
     end
 
-    describe "#master?" do
-      it { expect(audio_file.master?).to eq true }
+    describe "#preservation_file?" do
+      it { expect(audio_file.preservation_file?).to eq true }
     end
 
     describe "#intermediate?" do
@@ -80,8 +80,8 @@ RSpec.describe IngestableAudioFile do
       it { expect(audio_file.use).to eq Valkyrie::Vocab::PCDMUse.IntermediateFile }
     end
 
-    describe "#master?" do
-      it { expect(audio_file.master?).to eq false }
+    describe "#preservation_file?" do
+      it { expect(audio_file.preservation_file?).to eq false }
     end
 
     describe "#intermediate?" do
@@ -115,8 +115,8 @@ RSpec.describe IngestableAudioFile do
       it { expect(audio_file.use).to eq Valkyrie::Vocab::PCDMUse.ServiceFile }
     end
 
-    describe "#master?" do
-      it { expect(audio_file.master?).to eq false }
+    describe "#preservation_file?" do
+      it { expect(audio_file.preservation_file?).to eq false }
     end
 
     describe "#intermediate?" do
@@ -132,7 +132,7 @@ RSpec.describe IngestableAudioFile do
     end
   end
 
-  context "when preservation master files have separate parts" do
+  context "when preservation files have separate parts" do
     let(:file_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag4", "data", "32101047382492_1_p1_pm.wav") }
 
     describe "#barcode_with_side" do

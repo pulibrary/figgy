@@ -68,7 +68,7 @@ class ImagemagickCharacterizationService
     @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
   end
 
-  # Retrieve the master file from the FileSet
+  # Retrieve the primary file from the FileSet
   # @return [FileMetadata]
   def primary_file
     @file_set.primary_file

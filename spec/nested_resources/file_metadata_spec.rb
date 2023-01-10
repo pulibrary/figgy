@@ -61,10 +61,26 @@ describe FileMetadata do
   end
 
   describe "preservation_file?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.PreservationMasterFile }
+    context "when it has the deprecated use value" do
+      let(:use) { Valkyrie::Vocab::PCDMUse.PreservationMasterFile }
 
-    it "determines if the FileMetadata is for a preservation (BagIt) binary file" do
-      expect(file_metadata.preservation_file?).to be true
+      it "returns true" do
+        expect(file_metadata.preservation_file?).to be true
+      end
+    end
+
+    context "when it has the new preservation use value" do
+      let(:use) { Valkyrie::Vocab::PCDMUse.PreservationFile }
+
+      it "returns true" do
+        expect(file_metadata.preservation_file?).to be true
+      end
+    end
+
+    context "when it has the original file use value" do
+      it "returns false" do
+        expect(file_metadata.preservation_file?).to be false
+      end
     end
   end
 

@@ -11,7 +11,7 @@ class MediainfoCharacterizationService
   attr_reader :file_set, :persister
 
   # Constructor
-  # @param file_set [FileSet] FileSet in which the master binary file is stored
+  # @param file_set [FileSet] FileSet in which the primary binary file is stored
   # @param persister [ChangeSetPersister] ChangeSet persister for the FileSet and parent resource
   def initialize(file_set:, persister:)
     @file_set = file_set
@@ -165,7 +165,7 @@ class MediainfoCharacterizationService
       @file_object ||= Valkyrie::StorageAdapter.find_by(id: preservation_file.file_identifiers[0])
     end
 
-    # Retrieves the master binary file in this FileSet
+    # Retrieves the primary binary file in this FileSet
     # @return [FileNode]
     def preservation_file
       if parent.try(:image_resource?)
