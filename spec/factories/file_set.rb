@@ -55,7 +55,7 @@ FactoryBot.define do
     factory :audio_file_set do
       file_metadata do
         [
-          FileMetadata.new(mime_type: "audio/x-wav", use: Valkyrie::Vocab::PCDMUse.PreservationMasterFile, id: "original"),
+          FileMetadata.new(mime_type: "audio/x-wav", use: Valkyrie::Vocab::PCDMUse.PreservationFile, id: "original"),
           FileMetadata.new(mime_type: "audio/mp3", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
           FileMetadata.new(mime_type: "audio/x-wav", use: Valkyrie::Vocab::PCDMUse.IntermediateFile, id: "intermediate")
         ]

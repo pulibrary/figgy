@@ -13,7 +13,7 @@ class IngestableAudioFile
   end
 
   def mime_type
-    if master? || intermediate?
+    if preservation_file? || intermediate?
       "audio/x-wav"
     else
       "audio/mpeg"
@@ -22,8 +22,8 @@ class IngestableAudioFile
   alias content_type mime_type
 
   def use
-    if master?
-      Valkyrie::Vocab::PCDMUse.PreservationMasterFile
+    if preservation_file?
+      Valkyrie::Vocab::PCDMUse.PreservationFile
     elsif intermediate?
       Valkyrie::Vocab::PCDMUse.IntermediateFile
     elsif access?
@@ -31,7 +31,7 @@ class IngestableAudioFile
     end
   end
 
-  def master?
+  def preservation_file?
     path.to_s.end_with?("_pm.wav")
   end
 

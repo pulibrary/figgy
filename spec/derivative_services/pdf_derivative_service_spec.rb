@@ -36,10 +36,10 @@ RSpec.describe PDFDerivativeService do
       end
     end
 
-    context "when given a pdf preservation master" do
+    context "when given a pdf preservation file" do
       it "is valid" do
         pdf_file_metadata = valid_resource.file_metadata.find { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
-        pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationMasterFile]
+        pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationFile]
         valid_resource.file_metadata = [pdf_file_metadata]
         adapter.persister.save(resource: valid_resource)
 
@@ -51,7 +51,7 @@ RSpec.describe PDFDerivativeService do
   describe "#create_derivatives" do
     context "when there are no errors", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
-      it "creates an intermediate tiff for each page and marks the pdf as preservation master" do
+      it "creates an intermediate tiff for each page and marks the pdf as preservation file" do
         valid_resource
 
         reloaded_members = query_service.find_members(resource: scanned_resource)

@@ -11,7 +11,7 @@ RSpec.describe MediainfoCharacterizationService do
   let(:query_service) { adapter.query_service }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:resource) do
-    attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationMasterFile] }
+    attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationFile] }
     file_metadata_node = FileMetadata.for(file: file).new(attributes)
     allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 

@@ -40,7 +40,7 @@
   <% end %>
   <% resource.preservation_files.each do |file| %>
     <tr>
-      <td><span class="badge badge-info">Preservation Master</span>&nbsp;<%= file.label.first %></td>
+      <td><span class="badge badge-info">Preservation File</span>&nbsp;<%= file.label.first %></td>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
