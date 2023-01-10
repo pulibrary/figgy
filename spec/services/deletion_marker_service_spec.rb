@@ -49,7 +49,7 @@ describe DeletionMarkerService do
   end
 
   context "when restoring a FileSet only" do
-    it "restores the FileSet and re-attaches it to it's parent" do
+    it "restores the FileSet and re-attaches it to its parent" do
       file = fixture_file_upload("files/example.tif", "image/tiff")
       resource = FactoryBot.create_for_repository(:pending_scanned_map, title: "title", files: [file])
       reloaded_resource = query_service.find_by(id: resource.id)

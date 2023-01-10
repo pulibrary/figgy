@@ -1516,7 +1516,7 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq false
       end
     end
-    context "when reinstating a FileSet deletion_marker" do
+    context "when reinstating a FileSet from its deletion_marker" do
       before do
         # Make preservation deletes not actually happen to simulate a versioned
         # file store.
