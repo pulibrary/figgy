@@ -169,7 +169,9 @@ system, then it is an original file.
 Sometimes there's two files that are important to preserve - the source file and
 a hand-crafted derivative of that file, which can't be automatically recreated.
 Derivatives should be created from that hand-crafted file, but the source file
-should be preserved and downloadable by staff. Some examples of this use case
+should be preserved and downloadable by staff. Both the
+PreservationFile/IntermediateFile should be preserved, as they can't be created
+from one another programmatically. Some examples of this use case
 are below:
 
 #### Watermarks
@@ -181,7 +183,8 @@ distribute the watermark, but it's important to preserve the original photo.
 
 The file without the watermark is ingested as a PreservationFile, and the one
 with is ingested as an IntermediateFile. Derivatives are generated from the
-IntermediateFile.
+IntermediateFile. FileSet#primary_file returns the PreservationFile, and both
+are preserved.
 
 #### Audio Files
 
@@ -191,4 +194,5 @@ version of that file from which access copies can be created. We want the large
 file, but don't need to create derivatives from it.
 
 So, the gigantic file is ingested as a PreservationFile, and the compressed file
-is ingested as an IntermediateFile.
+is ingested as an IntermediateFile. FileSet#primary_file returns the
+PreservationFile, and both are preserved.
