@@ -146,3 +146,49 @@ CollectorSystems also integrates with Pulfalight & Bibdata to pull metadata.
 
 1. Bibdata: https://bibdata.princeton.edu/bibliographic/<id>.xml
 2. Finding Aids: https://findingaids.princeton.edu/<id>.jsonld
+
+## Original/PreservationFile/IntermediateFile
+
+When going through Figgy you'll find three types of file Uses that are
+associated with a "primary file" - Original, PreservationFile, and
+IntermediateFile.
+
+OriginalFile expands to the URI http://pcdm.org/use#OriginalFile
+
+PreservationFile expands to the URI http://pcdm.org/use#PreservationFile
+
+IntermediateFile expands to the URI http://pcdm.org/use#IntermediateFile
+
+### Original Files
+
+When a FileSet has only one file from which derivatives should be created by the
+system, then it is an original file.
+
+### PreservationFile / IntermediateFile
+
+Sometimes there's two files that are important to preserve - the source file and
+a hand-crafted derivative of that file, which can't be automatically recreated.
+Derivatives should be created from that hand-crafted file, but the source file
+should be preserved and downloadable by staff. Some examples of this use case
+are below:
+
+#### Watermarks
+
+We have a couple instances in Figgy where there's a file without a watermark,
+and then a modification of that file with a watermark hand-placed via image
+editing software. Derivatives should include the watermark because we have to
+distribute the watermark, but it's important to preserve the original photo.
+
+The file without the watermark is ingested as a PreservationFile, and the one
+with is ingested as an IntermediateFile. Derivatives are generated from the
+IntermediateFile.
+
+#### Audio Files
+
+We have some content which has been returned to us from vendors in a bag format
+and includes a gigantic audio file, and a hand-crafted slightly compressed
+version of that file from which access copies can be created. We want the large
+file, but don't need to create derivatives from it.
+
+So, the gigantic file is ingested as a PreservationFile, and the compressed file
+is ingested as an IntermediateFile.
