@@ -35,13 +35,13 @@ jobs:
       # Restore Cached Dependencies
       - restore_cache:
           keys:
-            - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}
+            - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230112
       # Install Bundler
       - run: gem install bundler -v '2.2.14'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - save_cache:
-          key: figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}
+          key: figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230112
           paths:
             - ./vendor/bundle
       - run:
