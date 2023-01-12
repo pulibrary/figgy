@@ -24,16 +24,24 @@ class Preserver
   # to preserve themselves, because their parent is set up to be.
   def preserve!
     preserve_binary_content
-    if preservation_object.persisted?
-      preserve_metadata
-    else
+    if preserve_children?
       preserve_metadata && preserve_children
+    else
+      preserve_metadata
     end
   end
 
   private
 
+    def preserve_children?
+      @created_preservation_object == true
+    end
+
     def preserve_binary_content(force: false)
+      # Initialize so it saves early - if two Preservers are running at the
+      # same time somehow, this will make one of them error with a database
+      # constraint error before uploading anything.
+      preservation_object
       # These are PreservationIntermediaryNodes
       resource_binary_nodes.each do |resource_binary_node|
         file_metadata = resource_binary_node.preservation_node
@@ -79,8 +87,13 @@ class Preserver
     def preservation_object
       @preservation_object ||=
         begin
-          Wayfinder.for(resource).try(:preservation_object) || PreservationObject.new(preserved_object_id: resource.id)
+          Wayfinder.for(resource).try(:preservation_object) || create_preservation_object
         end
+    end
+
+    def create_preservation_object
+      @created_preservation_object = true
+      change_set_persister.persister.save(resource: PreservationObject.new(preserved_object_id: resource.id))
     end
 
     def preserve_children

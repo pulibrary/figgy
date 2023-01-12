@@ -36,6 +36,28 @@ describe Preserver do
       stub_catalog(bib_id: "123456")
     end
 
+    context "when a race condition forces new PreservationObjects" do
+      # There's a small window where two Preservers can run and both create a
+      # new PreservationObject linked to the same object. This makes finding a
+      # preservation object return nil to simulate that case.
+      it "prevents creating the new PreservationObject by the database", db_cleaner_deletion: true do
+        allow_any_instance_of(ScannedResourceWayfinder).to receive(:preservation_object).and_return(nil)
+        allow(storage_adapter).to receive(:upload).and_return(valkyrie_file)
+
+        # This should raise an error - running Preserver again is creating a new
+        # PreservationObject because it can't find one (due to our stub), and
+        # there's already one from this preserving as a result of being a
+        # complete object.
+        expect { preserver.preserve! }.to raise_error Sequel::UniqueConstraintViolation
+
+        preservation_objects = Wayfinder.for(unpreserved_resource).preservation_objects
+        expect(preservation_objects.length).to eq 1
+        # Ensure storage_adapter didn't try to upload files, otherwise two
+        # preservers will fight each other for uploads.
+        expect(storage_adapter).not_to have_received(:upload)
+      end
+    end
+
     it "preserves the metadata node" do
       expect(preservation_object.metadata_node).not_to be nil
       expect(preservation_object.metadata_node).to be_a FileMetadata
