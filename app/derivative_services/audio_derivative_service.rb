@@ -28,8 +28,10 @@ class AudioDerivativeService
     @resource ||= query_service.find_by(id: id)
   end
 
-  # Only ever checks primary_file, if this were to check preservation_file
-  # it would override derivatives for MediaResources. Take care!
+  # Don't use primary_file here - use original_file if there is one, otherwise
+  # intermediate_file. Derivatives should come from the smaller crafted
+  # intermediate file, not the huge preservation file, which is what
+  # primary_file would point to.
   def target_file
     resource.original_file || resource.intermediate_files.first
   end
