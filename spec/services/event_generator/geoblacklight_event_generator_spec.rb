@@ -156,5 +156,17 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         expect(event_generator.valid?(record)).to be false
       end
     end
+
+    context "when a record generates an invalid geoblacklight document" do
+      let(:document_builder) { instance_double(GeoDiscovery::DocumentBuilder) }
+      before do
+        allow(GeoDiscovery::DocumentBuilder).to receive(:new).and_return(document_builder)
+        allow(document_builder).to receive(:to_hash).and_raise(StandardError)
+      end
+
+      it "still emits a valid event" do
+        expect(event_generator.valid?(record)).to be true
+      end
+    end
   end
 end
