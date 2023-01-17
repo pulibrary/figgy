@@ -11,7 +11,7 @@ class AddEphemeraToCollection
 
   def add_box(box)
     logger.info("Processing a box: #{box.decorate.title}")
-    box.decorate.members.each do |folder|
+    Wayfinder.for(box).members.each do |folder|
       add_folder(folder)
     end
   end

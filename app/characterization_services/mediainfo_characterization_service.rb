@@ -125,7 +125,7 @@ class MediainfoCharacterizationService
     # Retrieve the parent resource of the FileSet
     # @return [Resource]
     def parent
-      @parent ||= file_set.decorate.parent
+      @parent ||= Wayfinder.for(file_set).parent
     end
 
     # Determines the location of the file on disk for the file_set

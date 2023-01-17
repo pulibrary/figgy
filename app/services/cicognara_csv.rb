@@ -9,7 +9,7 @@ class CicognaraCSV
 
   def self.values(col_id)
     col = Valkyrie.config.metadata_adapter.query_service.find_by(id: Valkyrie::ID.new(col_id))
-    col.decorate.members.select { |r| extract_dclnum(r) && first(r.state) == "complete" }.map do |r|
+    Wayfinder.for(col).members.select { |r| extract_dclnum(r) && first(r.state) == "complete" }.map do |r|
       value(r.decorate)
     end
   end

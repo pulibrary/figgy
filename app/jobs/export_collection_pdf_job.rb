@@ -4,7 +4,7 @@ class ExportCollectionPDFJob < ApplicationJob
     collection = query_service.find_by(id: resource_id)
     logger.info "Exporting #{collection.title.first} to disk as PDFs"
 
-    collection.decorate.members.each do |member|
+    Wayfinder.for(collection).members.each do |member|
       unless member.source_metadata_identifier&.first
         logger.info "Skipping #{member.id} (no source_metadata_identifier)"
         next
