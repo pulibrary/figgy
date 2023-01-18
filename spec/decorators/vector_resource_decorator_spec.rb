@@ -101,6 +101,18 @@ RSpec.describe VectorResourceDecorator do
     end
   end
 
+  describe "#file_sets" do
+    let(:file_set) do
+      adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+      res = FactoryBot.build(:file_set)
+      adapter.persister.save(resource: res)
+    end
+    let(:resource) { FactoryBot.create_for_repository(:vector_resource, member_ids: [file_set.id]) }
+    it "returns attached file sets" do
+      expect(resource.decorate.file_sets.first).to eq file_set
+    end
+  end
+
   describe "#decorated_vector_resources" do
     let(:child) { FactoryBot.create_for_repository(:vector_resource) }
     let(:resource) { FactoryBot.create_for_repository(:vector_resource, member_ids: [child.id]) }

@@ -63,6 +63,17 @@ RSpec.describe ScannedMapDecorator do
   it "can manage structure" do
     expect(decorator.manageable_structure?).to be true
   end
+  describe "#file_sets" do
+    let(:file_set) do
+      adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+      res = FactoryBot.build(:file_set)
+      adapter.persister.save(resource: res)
+    end
+    let(:resource) { FactoryBot.create_for_repository(:scanned_map, member_ids: [file_set.id]) }
+    it "returns attached file sets" do
+      expect(resource.decorate.file_sets.first).to eq file_set
+    end
+  end
   describe "#decorated_raster_resources" do
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
     let(:resource) { FactoryBot.create_for_repository(:scanned_map, member_ids: [raster_resource.id]) }
