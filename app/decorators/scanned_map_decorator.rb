@@ -42,6 +42,7 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   delegate :collections,
+           :file_sets,
            :decorated_file_sets,
            :decorated_raster_resources,
            :decorated_scanned_maps,

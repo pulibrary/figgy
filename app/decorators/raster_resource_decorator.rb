@@ -8,7 +8,8 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
     [RasterResource, VectorResource]
   end
 
-  delegate :decorated_file_sets,
+  delegate :file_sets,
+           :decorated_file_sets,
            :decorated_raster_resources,
            :decorated_raster_resource_parents,
            :decorated_scanned_map_parents,

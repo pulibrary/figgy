@@ -9,7 +9,8 @@ class VectorResourceDecorator < Valkyrie::ResourceDecorator
     [VectorResource]
   end
 
-  delegate :decorated_file_sets,
+  delegate :file_sets,
+           :decorated_file_sets,
            :decorated_raster_resource_parents,
            :decorated_vector_resources,
            :decorated_vector_resource_parents,

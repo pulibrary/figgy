@@ -41,6 +41,17 @@ RSpec.describe RasterResourceDecorator do
   it "cannot manage structure" do
     expect(decorator.manageable_structure?).to be false
   end
+  describe "#file_sets" do
+    let(:file_set) do
+      adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
+      res = FactoryBot.build(:file_set)
+      adapter.persister.save(resource: res)
+    end
+    let(:resource) { FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id]) }
+    it "returns attached file sets" do
+      expect(resource.decorate.file_sets.first).to eq file_set
+    end
+  end
   describe "#decorated_vector_resources" do
     let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
     let(:resource) { FactoryBot.create_for_repository(:raster_resource, member_ids: [vector_resource.id]) }
