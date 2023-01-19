@@ -25,9 +25,9 @@ RSpec.describe FindCloudFixityFailures do
   let(:child_id) { preservation_object.metadata_node.id }
   let(:child_id2) { preservation_object2.metadata_node.id }
   let(:child_property) { "metadata_node" }
-  let(:event) { FactoryBot.create_for_repository(:event, resource_id: preservation_object.id, child_id: child_id, child_property: child_property) }
-  let(:event2) { FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object2.id, child_id: child_id2, child_property: child_property) }
-  let(:event3) { FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object.id, child_id: child_id, child_property: child_property) }
+  let(:event) { FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object.id, child_id: child_id, child_property: child_property) }
+  let(:event2) { FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object2.id, child_id: child_id2, child_property: child_property, current: true) }
+  let(:event3) { FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object.id, child_id: child_id, child_property: child_property, current: true) }
 
   before do
     stub_ezid(shoulder: shoulder, blade: blade)
@@ -46,7 +46,8 @@ RSpec.describe FindCloudFixityFailures do
     end
 
     context "when a fixity check which has failed later succeeds" do
-      let(:event4) { FactoryBot.create_for_repository(:event, status: "SUCCESS", resource_id: preservation_object.id, child_id: child_id, child_property: child_property) }
+      let(:event3) { FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object.id, child_id: child_id, child_property: child_property) }
+      let(:event4) { FactoryBot.create_for_repository(:event, status: "SUCCESS", resource_id: preservation_object.id, child_id: child_id, child_property: child_property, current: true) }
 
       it "does not retrieve the Event for the failure" do
         event4
