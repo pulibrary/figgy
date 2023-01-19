@@ -4,7 +4,7 @@ class CheckFixityRecursiveJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   def perform
-    CheckFixityJob.perform_now(next_file_set.id)
+    LocalFixityJob.perform_now(next_file_set.id)
     CheckFixityRecursiveJob.perform_later
   end
 

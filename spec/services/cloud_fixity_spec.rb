@@ -73,7 +73,7 @@ RSpec.describe CloudFixity do
       end
     end
     it "handles a SignalException" do
-      allow(UpdateFixityJob).to receive(:perform_later).with(anything).and_raise(SignalException, "TERM")
+      allow(CloudFixityJob).to receive(:perform_later).with(anything).and_raise(SignalException, "TERM")
       expect { CloudFixity::Worker.run! }.not_to raise_exception
     end
   end

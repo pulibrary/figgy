@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe CheckFixityJob do
+RSpec.describe LocalFixityJob do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:query_service) { adapter.query_service }
