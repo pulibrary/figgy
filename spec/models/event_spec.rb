@@ -60,4 +60,16 @@ describe Event do
       expect(event.current).to eq current
     end
   end
+
+  context "when creating two current events with the same resource_id and child_id" do
+    it "raises an error" do
+      change_set_persister = ChangeSetPersister.default
+      id1 = Valkyrie::ID.new(SecureRandom.uuid)
+      id2 = Valkyrie::ID.new(SecureRandom.uuid)
+      event = change_set_persister.save(change_set: ChangeSet.for(described_class.new(resource_id: id1, child_id: id2, current: [true])))
+      expect do
+        change_set_persister.save(change_set: ChangeSet.for(described_class.new(resource_id: event.resource_id, child_id: event.child_id, current: [true])))
+      end.to raise_error(Sequel::UniqueConstraintViolation)
+    end
+  end
 end
