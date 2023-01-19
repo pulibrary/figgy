@@ -160,8 +160,7 @@ By default, in development, preserved objects will be stored in the directory
 "tmp/cloud_backup." If you'd like to configure and test Google Cloud storage
 instead, do the following:
 
-1. Download and save gcs_pulibrary-staging-credentials.json from LastPass into
-   the `tmp` directory.
+1. Download, ansible-vault decrypt, and save gcs_pulibrary-staging-credentials.json from https://github.com/pulibrary/princeton_ansible/blob/main/roles/figgy/files/staging-google_cloud_credentials.json (rename to gcs_pulibrary-staging-credentials.json)
 2. Create a `.env` file in the root with the following settings:
    ```
    STORAGE_PROJECT=pulibrary-figgy-storage-1
