@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+33_333_333 # frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe Wayfinder do
@@ -96,6 +97,7 @@ RSpec.describe Wayfinder do
         expect(described_class.for(mvw).deep_succeeded_cloud_fixity_count).to eq 1
       end
 
+      # rubocop:disable Metrics/MethodLength
       def create_file_set(cloud_fixity_success: true)
         file_set = FactoryBot.create_for_repository(:file_set)
         metadata_node = FileMetadata.new(id: SecureRandom.uuid)
@@ -104,18 +106,31 @@ RSpec.describe Wayfinder do
           # Create an old failure, to guard for the case where it failed and we
           # fixed it.
           FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+          FactoryBot.create_for_repository(
+            :event, type: :cloud_fixity, status: "SUCCESS",
+                    resource_id: preservation_object.id, child_id: metadata_node.id,
+                    child_property: :metadata_node, current: true
+          )
         else
           # Create an old success, to guard for the case where it once succeeded
           # and now it failed.
           FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+          FactoryBot.create_for_repository(
+            :event, type: :cloud_fixity, status: "FAILURE",
+                    resource_id: preservation_object.id, child_id: metadata_node.id,
+                    child_property: :metadata_node, current: true
+          )
           # Create a success on a different child property, to guard for a
           # different node succeeding.
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :binary_nodes)
+          FactoryBot.create_for_repository(
+            :event, type: :cloud_fixity, status: "SUCCESS",
+                    resource_id: preservation_object.id, child_id: metadata_node.id,
+                    child_property: :binary_nodes, current: true
+          )
         end
         file_set
       end
+      # rubocop:enable Metrics/MethodLength
     end
 
     describe "#members_with_parents" do
