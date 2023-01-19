@@ -20,7 +20,7 @@ RSpec.describe CreateDerivativesJob do
     end
 
     it "enqueues a fixity job", rabbit_stubbed: true do
-      expect { described_class.perform_now(file_set.id.to_s) }.to have_enqueued_job(CheckFixityJob)
+      expect { described_class.perform_now(file_set.id.to_s) }.to have_enqueued_job(LocalFixityJob)
     end
 
     it "does not error with a non-existent file_set_id" do

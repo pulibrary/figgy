@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe UpdateFixityJob do
+RSpec.describe CloudFixityJob do
   describe ".perform" do
     let(:file_set) { FactoryBot.create_for_repository(:file_set) }
     let(:resource) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid)) }

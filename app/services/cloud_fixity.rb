@@ -23,7 +23,7 @@ module CloudFixity
       subscriber = subscription.listen do |message|
         message.acknowledge!
         data = JSON.parse(message.data.to_s, symbolize_names: true)
-        UpdateFixityJob.perform_later(data)
+        CloudFixityJob.perform_later(data)
       end
 
       # Start background threads that will call block passed to listen.

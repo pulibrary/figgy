@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class UpdateFixityJob < ApplicationJob
+class CloudFixityJob < ApplicationJob
   queue_as :super_low
   delegate :query_service, to: :change_set_persister
 

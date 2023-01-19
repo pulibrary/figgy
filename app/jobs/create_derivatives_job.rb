@@ -10,7 +10,7 @@ class CreateDerivativesJob < ApplicationJob
     metadata_adapter.persister.save(resource: file_set)
     messenger.derivatives_created(file_set)
     publish_to_geoserver(file_set)
-    CheckFixityJob.perform_later(file_set_id)
+    LocalFixityJob.perform_later(file_set_id)
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   rescue Valkyrie::StorageAdapter::FileNotFound => error
