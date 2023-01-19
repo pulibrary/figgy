@@ -887,6 +887,13 @@ CREATE INDEX index_ocr_requests_on_user_id ON public.ocr_requests USING btree (u
 
 
 --
+-- Name: index_orm_resources_on_current_event; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_orm_resources_on_current_event ON public.orm_resources USING btree (((metadata ->> 'resource_id'::text)), ((metadata ->> 'child_id'::text))) WHERE (((internal_resource)::text = 'Event'::text) AND (metadata @> '{"current": [true]}'::jsonb));
+
+
+--
 -- Name: index_orm_resources_on_id_varchar; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1083,6 +1090,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211025213822'),
 ('20220727213332'),
 ('20220727213333'),
-('20221214184110');
+('20221214184110'),
+('20230119155402');
 
 
