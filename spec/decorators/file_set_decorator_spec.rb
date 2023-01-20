@@ -53,8 +53,8 @@ RSpec.describe FileSetDecorator do
     let(:bad_file) { FileMetadata.new(label: "bad.tif", id: SecureRandom.uuid) }
     let(:good_file_pres) { FileMetadata.new(preservation_copy_of_id: good_file.id, id: SecureRandom.uuid) }
     let(:bad_file_pres) { FileMetadata.new(preservation_copy_of_id: bad_file.id, id: SecureRandom.uuid) }
-    let(:good_event) { FactoryBot.create_for_repository(:event, child_id: good_file_pres.id, status: "SUCCESS") }
-    let(:bad_event) { FactoryBot.create_for_repository(:event, child_id: bad_file_pres.id, status: "FAILURE") }
+    let(:good_event) { FactoryBot.create_for_repository(:event, child_id: good_file_pres.id, status: "SUCCESS", current: true) }
+    let(:bad_event) { FactoryBot.create_for_repository(:event, child_id: bad_file_pres.id, status: "FAILURE", current: true) }
     let(:pres_obj) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, binary_nodes: [good_file_pres, bad_file_pres]) }
     let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [good_file, bad_file]) }
 

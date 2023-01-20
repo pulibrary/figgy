@@ -96,26 +96,35 @@ RSpec.describe Wayfinder do
         expect(described_class.for(mvw).deep_succeeded_cloud_fixity_count).to eq 1
       end
 
+      # rubocop:disable Metrics/MethodLength
       def create_file_set(cloud_fixity_success: true)
         file_set = FactoryBot.create_for_repository(:file_set)
         metadata_node = FileMetadata.new(id: SecureRandom.uuid)
+        metadata_node2 = FileMetadata.new(id: SecureRandom.uuid)
         preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
         if cloud_fixity_success
           # Create an old failure, to guard for the case where it failed and we
           # fixed it.
           FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS",
+                                                   resource_id: preservation_object.id, child_id: metadata_node.id,
+                                                   child_property: :metadata_node, current: true)
         else
           # Create an old success, to guard for the case where it once succeeded
           # and now it failed.
           FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
+          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE",
+                                                   resource_id: preservation_object.id, child_id: metadata_node.id,
+                                                   child_property: :metadata_node, current: true)
           # Create a success on a different child property, to guard for a
           # different node succeeding.
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :binary_nodes)
+          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS",
+                                                   resource_id: preservation_object.id, child_id: metadata_node2.id,
+                                                   child_property: :binary_nodes, current: true)
         end
         file_set
       end
+      # rubocop:enable Metrics/MethodLength
     end
 
     describe "#members_with_parents" do
@@ -946,7 +955,7 @@ RSpec.describe Wayfinder do
       it "returns the resource which resolves to the child_id attribute" do
         file_metadata = FileMetadata.new(id: SecureRandom.uuid)
         preservation_object = FactoryBot.create_for_repository(:preservation_object, metadata_node: file_metadata)
-        event = FactoryBot.create_for_repository(:event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node)
+        event = FactoryBot.create_for_repository(:event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node, current: true)
         wayfinder = described_class.for(event)
 
         expect(wayfinder.affected_child).to be_a FileMetadata
@@ -957,7 +966,7 @@ RSpec.describe Wayfinder do
     context "without specifying a resource ID in the Preservation Object" do
       it "returns the resource which resolves to the child_id attribute" do
         file_metadata = FileMetadata.new(id: SecureRandom.uuid)
-        event = FactoryBot.create_for_repository(:event, child_id: file_metadata.id, child_property: :metadata_node)
+        event = FactoryBot.create_for_repository(:event, child_id: file_metadata.id, child_property: :metadata_node, current: true)
         wayfinder = described_class.for(event)
 
         expect(wayfinder.affected_child).to be nil
