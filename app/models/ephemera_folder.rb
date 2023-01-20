@@ -53,6 +53,7 @@ class EphemeraFolder < Resource
   attribute :cached_parent_id, Valkyrie::Types::ID.optional
   attribute :embargo_date, Valkyrie::Types::String.optional
   attribute :notice_type
+  attribute :content_warning, Valkyrie::Types::String
 
   def self.can_have_manifests?
     true
