@@ -403,7 +403,7 @@ GEM
       i18n
     geoserver-publish (0.5.0)
       faraday
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     google-api-client (0.32.1)
       addressable (~> 2.5, >= 2.5.1)
@@ -604,7 +604,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.2)
+    minitest (5.17.0)
     modernizr-rails (2.7.1)
     msgpack (1.5.4)
     multi_json (1.15.0)
@@ -959,7 +959,7 @@ GEM
       chronic (>= 0.6.3)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby
