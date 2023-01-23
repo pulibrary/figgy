@@ -327,8 +327,8 @@ class ControlledVocabulary
     # Return the notice for a given resource.
     # @return [Term]
     def for(resource)
-      if resource.try(:primary_imported_metadata)&.content_warning.present?
-        NoticeTerm.new(value: "specific_harmful_content", definition: resource.primary_imported_metadata.content_warning)
+      if resource.try(:primary_or_local_content_warning).present?
+        NoticeTerm.new(value: "specific_harmful_content", definition: resource.primary_or_local_content_warning)
       elsif resource.try(:notice_type).present?
         find(resource.notice_type.first)
       end
