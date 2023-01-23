@@ -9,16 +9,12 @@ RSpec.describe FindCloudFixity do
   let(:query_service) { metadata_adapter.query_service }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter) }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
-  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [file]) }
-  let(:file_set) { resource.decorate.file_sets.first }
-  let(:event) { FactoryBot.create_for_repository(:event, resource_id: file_set.id) }
-  let(:event2) { FactoryBot.create_for_repository(:event, resource_id: file_set.id, current: true) }
+  let(:event_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
+  let(:event) { FactoryBot.create_for_repository(:event, resource_id: event_resource_id, current: true) }
+  let(:event2_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
+  let(:event2) { FactoryBot.create_for_repository(:event, resource_id: event2_resource_id, current: true) }
 
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
     event
     event2
   end
@@ -36,8 +32,9 @@ RSpec.describe FindCloudFixity do
 
     context "when querying for failed fixity checks" do
       let(:status) { "FAILURE" }
-      let(:event2) { FactoryBot.create_for_repository(:event, resource_id: file_set.id) }
-      let(:event3) { FactoryBot.create_for_repository(:event, status: status, resource_id: file_set.id, current: true) }
+      let(:event2) { FactoryBot.create_for_repository(:event, resource_id: event2_resource_id) }
+      let(:event3_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
+      let(:event3) { FactoryBot.create_for_repository(:event, status: status, resource_id: event3_resource_id, current: true) }
 
       before do
         event3
@@ -89,6 +86,18 @@ RSpec.describe FindCloudFixity do
       expect(output2.length).to eq 2
       expect(output2.first.id).to eq event2.id
       expect(output2.last.id).to eq event.id
+    end
+
+    context "when resource_id has more than one event" do
+      let(:event) { FactoryBot.create_for_repository(:event, resource_id: event_resource_id) }
+      let(:event2) { FactoryBot.create_for_repository(:event, resource_id: event_resource_id, current: true) }
+
+      it "returns only the current event" do
+        output = query.find_cloud_fixity(status: status)
+        expect(output.length).to eq 1
+        output_id = output.map(&:id).first
+        expect(output_id).to eq event2.id
+      end
     end
   end
 end
