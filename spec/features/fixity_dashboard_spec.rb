@@ -11,8 +11,12 @@ RSpec.feature "Fixity dashboard" do
   let(:file_set) { metadata_adapter.query_service.find_by(id: preservation_object.preserved_object_id) }
   let(:metadata_node) { preservation_object.metadata_node }
   let(:binary_nodes) { preservation_object.binary_nodes }
-  let(:cloud_fixity_event) { FactoryBot.create_for_repository(:event, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node) }
-  let(:failed_cloud_fixity_event) { FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node) }
+  let(:cloud_fixity_event) do
+    FactoryBot.create_for_repository(:event, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node, current: true)
+  end
+  let(:failed_cloud_fixity_event) do
+    FactoryBot.create_for_repository(:event, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node, current: true)
+  end
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
 

@@ -6,7 +6,7 @@ RSpec.describe EventDecorator do
 
   let(:file_metadata) { FileMetadata.new(id: SecureRandom.uuid) }
   let(:preservation_object) { FactoryBot.create_for_repository(:preservation_object, metadata_node: file_metadata) }
-  let(:resource) { FactoryBot.create_for_repository(:event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node) }
+  let(:resource) { FactoryBot.create_for_repository(:event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node, current: true) }
   let(:resource_klass) { Event }
 
   describe "#affected_resource" do
