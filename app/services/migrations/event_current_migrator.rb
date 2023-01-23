@@ -11,7 +11,21 @@ module Migrations
       update_query.update
     end
 
+    def run_old
+      update_query = pg_adapter.connection[old_update_current_query]
+      update_query.update
+    end
+
     def update_current_query
+      <<-SQL
+        UPDATE orm_resources
+        SET metadata = orm_resources.metadata || '{"current": [true]}'
+        WHERE internal_resource = 'Event' AND
+        metadata @> '{"current": true}'
+      SQL
+    end
+
+    def old_update_current_query
       <<-SQL
         WITH ranked_events AS (
           SELECT res.*, ROW_NUMBER() OVER(PARTITION BY res.metadata->>'child_id' ORDER BY res.updated_at DESC) AS rank
