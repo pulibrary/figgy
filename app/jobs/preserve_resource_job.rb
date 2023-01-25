@@ -6,7 +6,8 @@ class PreserveResourceJob < ApplicationJob
 
   # @param id [String] resource id
   # @param lock_tokens [Array<String>] serialized lock tokens
-  def perform(id:, lock_tokens: nil)
+  # @param force_preservation [Boolean] force binary node preservation
+  def perform(id:, lock_tokens: nil, force_preservation: false)
     resource = query_service.find_by(id: id)
     # If two jobs get queued before this job runs once (forcing future
     # PreserveResourceJobs to run inline), then without this it would create two
@@ -16,7 +17,7 @@ class PreserveResourceJob < ApplicationJob
 
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       change_set = ChangeSet.for(resource)
-      Preserver.for(change_set: change_set, change_set_persister: buffered_change_set_persister).preserve!
+      Preserver.for(change_set: change_set, change_set_persister: buffered_change_set_persister, force_preservation: force_preservation).preserve!
     end
   rescue Valkyrie::Persistence::ObjectNotFoundError
     Rails.logger.info "Object not found: #{id}"

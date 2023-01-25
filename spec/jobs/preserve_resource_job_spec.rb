@@ -32,5 +32,16 @@ RSpec.describe PreserveResourceJob do
         expect(Preserver).not_to have_received(:for)
       end
     end
+
+    context "when the force preservation parameter is set to true" do
+      it "calls the preserver with the force_preservation parameter" do
+        fs = FactoryBot.create_for_repository(:file_set)
+        valid_tokens = fs[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK]
+        valid_tokens.map!(&:serialize)
+
+        described_class.perform_now(id: fs.id, lock_tokens: valid_tokens, force_preservation: true)
+        expect(Preserver).to have_received(:for).with(hash_including(force_preservation: true))
+      end
+    end
   end
 end
