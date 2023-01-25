@@ -2,28 +2,29 @@
 class Preserver
   # Provided as a mechanism for switching preservation strategies depending on
   # the profile. For now, there's only one, so fall down to new.
-  def self.for(change_set:, change_set_persister:, storage_adapter: nil)
+  def self.for(change_set:, change_set_persister:, storage_adapter: nil, force_preservation: nil)
     return NullPreserver unless change_set.try(:preserve?)
-    new(change_set: change_set, change_set_persister: change_set_persister, storage_adapter: storage_adapter)
+    new(change_set: change_set, change_set_persister: change_set_persister, storage_adapter: storage_adapter, force_preservation: force_preservation)
   end
 
   class NullPreserver
     def self.preserve!; end
   end
 
-  attr_reader :change_set, :storage_adapter, :change_set_persister
+  attr_reader :change_set, :storage_adapter, :change_set_persister, :force_preservation
   delegate :resource, to: :change_set
-  def initialize(change_set:, storage_adapter: nil, change_set_persister:)
+  def initialize(change_set:, storage_adapter: nil, change_set_persister:, force_preservation: nil)
     @change_set = change_set
     @storage_adapter = storage_adapter || default_storage_adapter
     @change_set_persister = change_set_persister
+    @force_preservation = force_preservation || false
   end
 
   # Don't preserve children unless this is the first time it's being
   # preserved. After that point any updates to the children will trigger them
   # to preserve themselves, because their parent is set up to be.
   def preserve!
-    preserve_binary_content
+    preserve_binary_content(force: force_preservation)
     if preserve_children?
       preserve_metadata && preserve_children
     else
