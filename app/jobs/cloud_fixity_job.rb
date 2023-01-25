@@ -9,6 +9,10 @@ class CloudFixityJob < ApplicationJob
     @resource_id = resource_id
     @child_property = child_property
     @child_id = child_id
+
+    # Do not create an event and honeybadger notification if the resource that
+    # was being checked no longer exists. This happens on occasion.
+    return unless resource_exist?
     event_change_set = EventChangeSet.new(Event.new)
     event_change_set.validate(type: :cloud_fixity, status: status, resource_id: resource_id, child_property: child_property.to_sym, child_id: child_id, current: true)
     raise "Unable to update fixity. Invalid event: #{event_change_set.errors.full_messages.to_sentence}" unless event_change_set.valid?
@@ -24,6 +28,13 @@ class CloudFixityJob < ApplicationJob
   # rubocop:enable Metrics/MethodLength
 
   private
+
+    def resource_exist?
+      query_service.find_by(id: resource_id)
+      true
+    rescue Valkyrie::Persistence::ObjectNotFoundError
+      false
+    end
 
     def previous_event_change_set
       return unless previous_event
@@ -48,5 +59,9 @@ class CloudFixityJob < ApplicationJob
 
     def change_set_persister
       @change_set_persister ||= ChangeSetPersister.default
+    end
+
+    def query_service
+      change_set_persister.query_service
     end
 end
