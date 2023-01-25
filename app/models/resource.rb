@@ -67,4 +67,8 @@ class Resource < Valkyrie::Resource
   def linked_resource
     LinkedData::LinkedResource.new(resource: self)
   end
+
+  def primary_or_local_content_warning
+    try(:primary_imported_metadata)&.content_warning.presence || try(:content_warning)
+  end
 end

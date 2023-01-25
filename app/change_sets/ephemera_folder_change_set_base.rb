@@ -49,6 +49,8 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :viewing_direction, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
   property :notice_type, multiple: false, required: false
+  # Harmful content note
+  property :content_warning, multiple: false, required: false
 
   # pdf properties
   property :file_metadata, multiple: true, required: false, default: []
@@ -96,6 +98,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
       :holding_location,
       :rights_statement,
       :notice_type,
+      :content_warning,
       :member_of_collection_ids,
       :embargo_date
     ]

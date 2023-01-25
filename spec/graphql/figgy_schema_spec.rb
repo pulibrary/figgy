@@ -71,6 +71,19 @@ RSpec.describe FiggySchema do
             '<a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>'
         end
       end
+      context "for an ephemera_folder with a content_warning" do
+        let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, content_warning: "There's harmful content here.") }
+        it "creates a specific notice" do
+          expect(result["errors"]).to be_blank
+          notice = result["data"]["resource"]["notice"]
+
+          expect(notice["heading"]).to eq "Content Warning"
+          expect(notice["acceptLabel"]).to eq "View Content"
+          expect(notice["textHtml"]).to eq "<p>There's harmful content here.</p> " \
+            "<p>For more information on harmful content please see the PUL statement on Harmful Content: " \
+            '<a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>'
+        end
+      end
     end
 
     context "when given a file set" do

@@ -54,6 +54,8 @@ RSpec.describe EphemeraFoldersController, type: :controller do
         get :new, params: { parent_id: box.id.to_s }
 
         expect(response.body).to have_field "Folder number"
+        expect(response.body).to have_field "Content warning"
+        expect(response.body).to have_content "Displays a Harmful Content Warning in the viewer with the given text if filled."
       end
     end
 
