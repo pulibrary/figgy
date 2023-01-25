@@ -29,24 +29,16 @@ class FindDeepFailedCloudFixityCount
           JOIN orm_resources mem ON (g.member->>'id')::UUID = mem.id
           WHERE f.metadata @> '{"member_ids": [{}]}'
         ), deep_events AS (
-          select member.id AS file_set_id, event.metadata->'resource_id'->0->>'id' AS id, event.metadata->'child_id'->0->>'id' AS child_id, event.metadata->'status'->>0 AS status, event.metadata->'child_property'->>0 AS child_property, event.updated_at
+          select member.id AS file_set_id
           from deep_members member
           JOIN orm_resources po ON member.id = (po.metadata->'preserved_object_id'->0->>'id')::UUID
           JOIN orm_resources event ON po.id = (event.metadata->'resource_id'->0->>'id')::UUID
           WHERE member.internal_resource = 'FileSet'
           AND po.internal_resource = 'PreservationObject'
           AND event.internal_resource = 'Event'
+          AND event.metadata @> '{"current": [true], "status": ["FAILURE"]}'
         )
-        select COUNT(DISTINCT deep_events.file_set_id) FROM (
-          select file_set_id, id, child_id, child_property, MAX(event.updated_at) AS updated_at FROM deep_events event
-          GROUP BY file_set_id, id, child_id, child_property
-        ) AS latest_events
-        INNER JOIN deep_events
-        ON deep_events.id = latest_events.id
-        AND deep_events.updated_at = latest_events.updated_at
-        AND deep_events.child_id = latest_events.child_id
-        AND deep_events.child_property = latest_events.child_property
-        AND deep_events.status = 'FAILURE'
+        select COUNT(DISTINCT deep_events.file_set_id) from deep_events
     SQL
   end
 end
