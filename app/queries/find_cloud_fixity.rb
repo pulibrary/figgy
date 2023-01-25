@@ -20,7 +20,7 @@ class FindCloudFixity
   end
 
   def find_cloud_fixity(sort: "ASC", limit: 50, order_by_property: "updated_at", status:, model: Event)
-    internal_array = { "status" => [status] }
+    internal_array = { "status" => [status], current: [true] }
     run_query(query(order_by_property: order_by_property, order_by: sort), internal_array.to_json, model.to_s, limit)
   end
 end
