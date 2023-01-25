@@ -27,6 +27,7 @@ describe Preserver do
       storage_adapter: storage_adapter
     )
   end
+  let(:query_service) { change_set_persister.query_service }
   let(:digest_md5) { instance_double(Digest::MD5) }
   let(:digest_md5_2) { instance_double(Digest::MD5) }
 
@@ -122,6 +123,15 @@ describe Preserver do
         expect(storage_adapter).to have_received(:upload).with(
           hash_including(md5: "Kij7cCKGeCssvy7ZpQQasQ==")
         )
+      end
+
+      it "can force presevation of binary node" do
+        allow(storage_adapter).to receive(:upload).and_return(valkyrie_file)
+        preservation_object
+        # Re-preserve with force_preservation parameter set to true
+        described_class.new(change_set: change_set, change_set_persister: change_set_persister, storage_adapter: storage_adapter, force_preservation: true).preserve!
+
+        expect(storage_adapter).to have_received(:upload).exactly(3).times
       end
     end
 
