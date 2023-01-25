@@ -31,6 +31,16 @@ RSpec.describe CloudFixityJob do
         expect(Honeybadger).to have_received(:notify)
       end
     end
+
+    context "when resource does not exist" do
+      before do
+        allow(Honeybadger).to receive(:notify)
+      end
+      it "exits quietly" do
+        described_class.perform_now(status: "FAILURE", resource_id: "oldresourceid", child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+        expect(Honeybadger).not_to have_received(:notify)
+      end
+    end
   end
 
   def query_service
