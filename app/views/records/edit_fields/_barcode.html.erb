@@ -1,2 +1,1 @@
-<% current_barcode = @change_set.barcode if @change_set %>
-<%= f.input :barcode, label: 'Barcode', required: f.object.required?(:barcode), input_html: { class: 'detect-duplicates', data: { value: current_barcode, field: 'barcode_ssim', model: f.object.model.class.to_s } } %>
+<%= f.input :barcode, label: 'Barcode', required: f.object.required?(:barcode), input_html: { class: 'detect-duplicates', data: { value: @change_set&.id&.to_s, field: 'barcode_ssim', model: f.object.model.class.to_s } } %>

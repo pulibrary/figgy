@@ -17,7 +17,7 @@ class DuplicateResourceDetector {
     this.value = this.$element.val()
     this.queryUrl = `/catalog?q=${this.field}:${this.value}`
     if(this.existing)
-      this.queryUrl += `&q=NOT+id:${this.existing}`
+      this.queryUrl += `+NOT+id:${this.existing}`
   }
 
   appendWarning() {
