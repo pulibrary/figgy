@@ -25,11 +25,7 @@ class Preserver
   # to preserve themselves, because their parent is set up to be.
   def preserve!
     preserve_binary_content(force: force_preservation)
-    if preserve_children?
-      preserve_metadata && preserve_children
-    else
-      preserve_metadata
-    end
+    preserve_metadata && preserve_children
   end
 
   private
@@ -99,6 +95,7 @@ class Preserver
 
     def preserve_children
       return unless resource.try(:member_ids).present? && change_set.try(:preserve_children?)
+      return if change_set_persister.query_service.custom_queries.find_never_preserved_child_ids(resource: resource).blank?
       PreserveChildrenJob.perform_later(id: resource.id.to_s)
     end
 

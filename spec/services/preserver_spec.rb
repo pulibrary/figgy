@@ -20,7 +20,7 @@ describe Preserver do
   let(:blade) { "123456" }
   let(:change_set) { ScannedResourceChangeSet.new(unpreserved_resource) }
   let(:storage_adapter) { instance_double(Valkyrie::Storage::Disk) }
-  let(:valkyrie_file) { FileMetadata.new(id: SecureRandom.uuid) }
+  let(:valkyrie_file) { FileMetadata.new(id: "disk://" + Rails.root.join("tmp", "cloud_backup_test", resource.id, "#{resource.id}.json").to_s) }
   let(:change_set_persister) do
     ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -63,6 +63,20 @@ describe Preserver do
       expect(preservation_object.metadata_node).not_to be nil
       expect(preservation_object.metadata_node).to be_a FileMetadata
       expect(preservation_object.metadata_node).to be_preserved_metadata
+    end
+
+    it "preserves children if asked to re-preserve and one doesn't have a PreservationObject" do
+      allow(storage_adapter).to receive(:upload).and_return(valkyrie_file)
+      preservation_object
+      file_set = Wayfinder.for(resource).members.first
+      file_set_po = Wayfinder.for(file_set).preservation_object
+      # Delete one of the member's PreservationObjects
+      change_set_persister.delete(change_set: ChangeSet.for(file_set_po))
+
+      described_class.new(change_set: ChangeSet.for(resource), change_set_persister: change_set_persister, storage_adapter: storage_adapter).preserve!
+      file_set_po = Wayfinder.for(file_set).preservation_object
+
+      expect(file_set_po).not_to be_blank
     end
 
     it "calculates the MD5 checksum" do

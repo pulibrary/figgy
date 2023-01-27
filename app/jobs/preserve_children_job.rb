@@ -5,7 +5,8 @@ class PreserveChildrenJob < ApplicationJob
 
   def perform(id:)
     resource = query_service.find_by(id: id)
-    (resource.try(:member_ids) || []).each do |member_id|
+    unpreserved_ids = query_service.custom_queries.find_never_preserved_child_ids(resource: resource)
+    unpreserved_ids.each do |member_id|
       member = query_service.find_by(id: member_id)
       lock_tokens = member[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK] || []
       lock_tokens = lock_tokens.map(&:serialize)
