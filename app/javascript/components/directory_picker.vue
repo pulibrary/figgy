@@ -68,7 +68,7 @@ export default {
                   'expanded': false,
                   'selected': false,
                   'selectable': false,
-                  'loaded': false,
+                  'loaded': true,
                   'children': []
                 },
                 {
@@ -77,7 +77,7 @@ export default {
                   'expanded': false,
                   'selected': false,
                   'selectable': false,
-                  'loaded': false,
+                  'loaded': true,
                   'children': []
                 }
               ]
@@ -98,7 +98,7 @@ export default {
               'expanded': false,
               'selected': false,
               'selectable': false,
-              'loaded': false,
+              'loaded': true,
               'children': []
             },
             {
@@ -107,7 +107,7 @@ export default {
               'expanded': false,
               'selected': false,
               'selectable': false,
-              'loaded': false,
+              'loaded': true,
               'children': []
             }
           ]
@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     renderChildren (child) {
-      return child.loaded && child.children.length > 0
+      return child.children.length > 0
     }
   }
 }

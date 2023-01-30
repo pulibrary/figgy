@@ -24,7 +24,7 @@ const startChildren = [
             'expanded': false,
             'selected': false,
             'selectable': false,
-            'loaded': false,
+            'loaded': true,
             'children': []
           },
           {
@@ -33,7 +33,7 @@ const startChildren = [
             'expanded': false,
             'selected': false,
             'selectable': false,
-            'loaded': false,
+            'loaded': true,
             'children': []
           }
         ]
@@ -54,7 +54,7 @@ const startChildren = [
         'expanded': false,
         'selected': false,
         'selectable': false,
-        'loaded': false,
+        'loaded': true,
         'children': []
       },
       {
@@ -63,7 +63,7 @@ const startChildren = [
         'expanded': false,
         'selected': false,
         'selectable': false,
-        'loaded': false,
+        'loaded': true,
         'children': []
       }
     ]
