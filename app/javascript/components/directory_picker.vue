@@ -14,6 +14,9 @@
               <input type="checkbox">
               {{ child.label }}
             </label>
+            <span v-else>
+              {{ child.label }}
+            </span>
           </summary>
           <DirectoryPicker
             :start-children="child.children"
@@ -48,7 +51,7 @@ export default {
           'path': '/Dir1',
           'expanded': true,
           'selected': false,
-          'selectable': true,
+          'selectable': false,
           'loaded': true,
           'children': [
             {
@@ -56,9 +59,28 @@ export default {
               'path': '/Dir1/Subdir1',
               'expanded': false,
               'selected': false,
-              'selectable': false,
-              'loaded': false,
-              'children': []
+              'selectable': true,
+              'loaded': true,
+              'children': [
+                {
+                  'label': 'SubSubdir1',
+                  'path': '/Dir1/Subdir1/SubSubdir1',
+                  'expanded': false,
+                  'selected': false,
+                  'selectable': false,
+                  'loaded': false,
+                  'children': []
+                },
+                {
+                  'label': 'SubSubdir2',
+                  'path': '/Dir1/Subdir1/SubSubdir2',
+                  'expanded': false,
+                  'selected': false,
+                  'selectable': false,
+                  'loaded': false,
+                  'children': []
+                }
+              ]
             }
           ]
         },
@@ -67,9 +89,28 @@ export default {
           'path': '/Dir2',
           'expanded': false,
           'selected': false,
-          'selectable': false,
-          'loaded': false,
-          'children': []
+          'selectable': true,
+          'loaded': true,
+          'children': [
+            {
+              'label': 'Subdir1',
+              'path': '/Dir2/Subdir1',
+              'expanded': false,
+              'selected': false,
+              'selectable': false,
+              'loaded': false,
+              'children': []
+            },
+            {
+              'label': 'Subdir2',
+              'path': '/Dir2/Subdir2',
+              'expanded': false,
+              'selected': false,
+              'selectable': false,
+              'loaded': false,
+              'children': []
+            }
+          ]
         }
       ]
     }

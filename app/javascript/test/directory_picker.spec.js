@@ -23,7 +23,7 @@ const startChildren = [
             'path': '/Dir1/Subdir1/SubSubdir1',
             'expanded': false,
             'selected': false,
-            'selectable': true,
+            'selectable': false,
             'loaded': false,
             'children': []
           },
@@ -32,7 +32,7 @@ const startChildren = [
             'path': '/Dir1/Subdir1/SubSubdir2',
             'expanded': false,
             'selected': false,
-            'selectable': true,
+            'selectable': false,
             'loaded': false,
             'children': []
           }
@@ -45,9 +45,28 @@ const startChildren = [
     'path': '/Dir2',
     'expanded': false,
     'selected': false,
-    'selectable': false,
-    'loaded': false,
-    'children': []
+    'selectable': true,
+    'loaded': true,
+    'children': [
+      {
+        'label': 'Subdir1',
+        'path': '/Dir2/Subdir1',
+        'expanded': false,
+        'selected': false,
+        'selectable': false,
+        'loaded': false,
+        'children': []
+      },
+      {
+        'label': 'Subdir2',
+        'path': '/Dir2/Subdir2',
+        'expanded': false,
+        'selected': false,
+        'selectable': false,
+        'loaded': false,
+        'children': []
+      }
+    ]
   }
 ]
 test('renders with a root that has the tree class', () => {
@@ -60,5 +79,11 @@ test('renders with a root that has the tree class', () => {
 test('renders a collapsible detail for every child hierarchy', () => {
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren } })
 
-  expect(wrapper.findAll('details').length).toEqual(2)
+  expect(wrapper.findAll('details').length).toEqual(3)
+})
+
+test('renders a checkbox for selectable paths', () => {
+  const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren } })
+
+  expect(wrapper.findAll('input[type="checkbox"]').length).toEqual(2)
 })
