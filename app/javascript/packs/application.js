@@ -4,6 +4,7 @@ import 'lux-design-system/dist/system/system.css'
 import 'lux-design-system/dist/system/tokens/tokens.scss'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
+import DirectoryPicker from '../components/directory_picker'
 import PlaylistMembers from '../components/playlist_members'
 import IssueMonograms from '../components/issue_monograms'
 import axios from 'axios'
@@ -31,7 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'order-manager': OrderManager,
         'issue-monograms': IssueMonograms,
         'ajax-select': AjaxSelect,
-        'file-uploader': FileUploader
+        'file-uploader': FileUploader,
+        'directory-picker': DirectoryPicker
       },
       data: {
         options: []
