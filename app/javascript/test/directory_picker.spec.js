@@ -1,5 +1,8 @@
 import { mount } from '@vue/test-utils'
+import Vue from 'vue'
 import DirectoryPicker from '../components/directory_picker.vue'
+import flushPromises from 'flush-promises'
+import VueDetails from 'vue-details'
 
 const startChildren = [
   {
@@ -125,9 +128,9 @@ test('checking one checkbox unchecks the other ones', async () => {
 })
 
 test('can dynamically load child nodes via loadChildrenPath', async () => {
+  stubChildLoad()
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren } })
-  console.log(wrapper.vm.children[0].children[0].children[0].path)
-  wrapper.vm.children[0].children[0].children[0].expanded = true
-
+  await wrapper.findAll('details').at(2).trigger('toggle')
+  await flushPromises()
   expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(1)
 })

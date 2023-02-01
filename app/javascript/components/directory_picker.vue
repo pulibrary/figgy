@@ -162,7 +162,19 @@ export default {
       this.$emit('selected', selectedChild)
     },
     expanding (child) {
+      if (child.loaded === false && child.loadChildrenPath) {
+        this.loadChildren(child)
+      }
       console.log(`Expanding ${child.path}`)
+    },
+    async loadChildren (child) {
+      const children = await fetch(
+        child.loadChildrenPath,
+        { credentials: 'include' }
+      )
+        .then((response) => response.json())
+      child.children = children
+      child.loaded = true
     }
   }
 }
