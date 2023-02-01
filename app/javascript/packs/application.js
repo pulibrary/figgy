@@ -14,8 +14,10 @@ import AjaxSelect from '../components/ajax-select'
 import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select.js'
 import FileUploader from '../components/file-uploader'
 import Initializer from '../figgy/figgy_boot'
+import VueDetails from 'vue-details'
 
 Vue.use(system)
+Vue.component('v-details', VueDetails)
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {

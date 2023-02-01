@@ -31,6 +31,7 @@
     "redux-logger": "^3.0.6",
     "unfetch": "^4.0.1",
     "vue": "^2.5.17",
+    "vue-details": "^1.1.0",
     "vue-loader": "^15.4.2",
     "vue-select": "^3.4.0",
     "vue-template-compiler": "^2.5.17",

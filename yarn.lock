@@ -15656,6 +15656,11 @@ vue-cookies@^1.7.4:
   resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.8.1.tgz#8aeadd7ff9933b820de8c3f121c2be27c5ead7b5"
   integrity sha512-PDq1EaiRRyau5PBQVscXboHW+iWtcG4wRY2UKIz1j0nrjb3KESRU1PUyNUDdOajAwy4RH1IfiNR0suhWRXQdrA==
 
+vue-details@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-details/-/vue-details-1.1.0.tgz#b176bdc3c3637c905aa3993ee905e51d356d29d8"
+  integrity sha512-QkoDgfMlzdH21NXc8fyawh3bNn9bclYt5cbCaWZjTkJfhUXK2Hx1ElTXQnSGO5dz/pUrMlxDOBREq1bjuTT0KA==
+
 vue-eslint-parser@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-5.0.0.tgz#00f4e4da94ec974b821a26ff0ed0f7a78402b8a1"

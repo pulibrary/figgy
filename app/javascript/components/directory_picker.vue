@@ -5,9 +5,10 @@
         v-for="child in children"
         :key="child.path"
       >
-        <details
+        <v-details
           v-if="renderChildren(child)"
-          :open="child.expanded"
+          v-model="child.expanded"
+          @change="expanding(child)"
         >
           <summary>
             <label v-if="child.selectable">
@@ -28,7 +29,7 @@
             :selected="root ? selectedChild : selected"
             @selected="requestChildSelect"
           />
-        </details>
+        </v-details>
         <span v-else>
           {{ child.label }}
         </span>
@@ -157,6 +158,9 @@ export default {
       }
       // If it's not the root, propagate the event upwards.
       this.$emit('selected', selectedChild)
+    },
+    expanding (child) {
+      console.log(`Expanding ${child.path}`)
     }
   }
 }
