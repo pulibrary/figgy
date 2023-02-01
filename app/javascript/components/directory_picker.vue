@@ -8,13 +8,14 @@
         <details
           v-if="renderChildren(child)"
           :open="child.expanded"
+          @click="expand(child, $event)"
         >
           <summary>
             <label v-if="child.selectable">
               <input
-                v-model="selected"
+                :checked="childSelected(child)"
                 type="checkbox"
-                @change="selectChild(child)"
+                @change="requestChildSelect(child, $event)"
               >
               {{ child.label }}
             </label>
@@ -25,6 +26,8 @@
           <DirectoryPicker
             :start-children="child.children"
             :root="false"
+            :selected="root ? selectedChild : selected"
+            @selected="requestChildSelect"
           />
         </details>
         <span v-else>
@@ -45,11 +48,15 @@ export default {
     root: {
       type: Boolean,
       default: true
+    },
+    selected: {
+      type: Object,
+      default: null
     }
   },
   data () {
     return {
-      'selected': null,
+      'selectedChild': this.selected,
       'children': this.startChildren || [
         {
           'label': 'Dir1',
@@ -120,12 +127,42 @@ export default {
       ]
     }
   },
+  computed: {
+    // Root has a data property for selected child because it has to change, but
+    // nested components use the `selected` prop so the root's selection will
+    // change the child boxes.
+    singleSelectedChild () {
+      if (this.root) {
+        return this.selectedChild
+      } else {
+        return this.selected
+      }
+    }
+  },
   methods: {
     renderChildren (child) {
       return child.children.length > 0
     },
-    selectChild (child) {
-      this.selected = child
+    childSelected (child) {
+      return child === this.singleSelectedChild
+    },
+    // If this is the root, then set the selected node. If it's a child
+    // directory, tell the parent that a new item was selected.
+    requestChildSelect (selectedChild, event) {
+      // Handle unselect
+      if (event && !event.target.checked) {
+        selectedChild = null
+      }
+      if (this.root) {
+        this.selectedChild = selectedChild
+      }
+      // If it's not the root, propagate the event upwards.
+      this.$emit('selected', selectedChild)
+    },
+    expand (child, event) {
+      event.preventDefault()
+      event.stopPropagation()
+      child.expanded = !child.expanded
     }
   }
 }

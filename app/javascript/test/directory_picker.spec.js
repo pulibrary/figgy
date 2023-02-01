@@ -92,6 +92,11 @@ test('checking one checkbox unchecks the other ones', async () => {
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren } })
 
   await wrapper.findAll('input[type="checkbox"]').at(0).trigger('click')
-  console.log(wrapper.vm.selected)
-  expect(wrapper.vm.selected.path).toEqual('/Dir1/Subdir1')
+  expect(wrapper.vm.selectedChild.path).toEqual('/Dir1/Subdir1')
+  await wrapper.findAll('input[type="checkbox"]').at(1).trigger('click')
+  expect(wrapper.vm.selectedChild.path).toEqual('/Dir2')
+  expect(wrapper.findAll('input:checked').length).toEqual(1)
+  await wrapper.findAll('input[type="checkbox"]').at(0).trigger('click')
+  expect(wrapper.vm.selectedChild.path).toEqual('/Dir1/Subdir1')
+  expect(wrapper.findAll('input:checked').length).toEqual(1)
 })
