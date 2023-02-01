@@ -1,8 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Vue from 'vue'
 import DirectoryPicker from '../components/directory_picker.vue'
 import flushPromises from 'flush-promises'
-import VueDetails from 'vue-details'
 
 const startChildren = [
   {
@@ -105,7 +103,7 @@ test('renders with a root that has the tree class', () => {
 test('renders a collapsible detail for every child hierarchy', () => {
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren } })
 
-  expect(wrapper.findAll('details').length).toEqual(3)
+  expect(wrapper.findAll('details').length).toEqual(4)
 })
 
 test('renders a checkbox for selectable paths', () => {
