@@ -11,7 +11,11 @@
         >
           <summary>
             <label v-if="child.selectable">
-              <input type="checkbox">
+              <input
+                v-model="selected"
+                type="checkbox"
+                @change="selectChild(child)"
+              >
               {{ child.label }}
             </label>
             <span v-else>
@@ -45,6 +49,7 @@ export default {
   },
   data () {
     return {
+      'selected': null,
       'children': this.startChildren || [
         {
           'label': 'Dir1',
@@ -118,6 +123,9 @@ export default {
   methods: {
     renderChildren (child) {
       return child.children.length > 0
+    },
+    selectChild (child) {
+      this.selected = child
     }
   }
 }
