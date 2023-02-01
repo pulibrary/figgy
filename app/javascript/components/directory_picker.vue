@@ -77,10 +77,11 @@ export default {
                 {
                   'label': 'SubSubdir1',
                   'path': '/Dir1/Subdir1/SubSubdir1',
+                  'loadChildrenPath': '/test',
                   'expanded': false,
                   'selected': false,
                   'selectable': false,
-                  'loaded': true,
+                  'loaded': false,
                   'children': []
                 },
                 {
@@ -141,7 +142,8 @@ export default {
   },
   methods: {
     renderChildren (child) {
-      return child.children.length > 0
+      return child.children.length > 0 || (child.loaded === false &&
+        child.loadChildrenPath)
     },
     childSelected (child) {
       return child === this.singleSelectedChild
