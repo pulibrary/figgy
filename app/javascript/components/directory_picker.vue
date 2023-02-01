@@ -8,7 +8,6 @@
         <details
           v-if="renderChildren(child)"
           :open="child.expanded"
-          @click="expand(child, $event)"
         >
           <summary>
             <label v-if="child.selectable">
@@ -158,11 +157,6 @@ export default {
       }
       // If it's not the root, propagate the event upwards.
       this.$emit('selected', selectedChild)
-    },
-    expand (child, event) {
-      event.preventDefault()
-      event.stopPropagation()
-      child.expanded = !child.expanded
     }
   }
 }
