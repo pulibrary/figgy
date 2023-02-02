@@ -19,6 +19,14 @@ RSpec.feature "Scanned Resources" do
     sign_in user
   end
 
+  context "when a user requests a nonexistent resource" do
+    it "renders 404 page" do
+      visit "/catalog/nonsense"
+      expect(status_code).to eq 404
+      expect(page).to have_content("The requested resource does not exist. You may have mistyped the address or the page may have moved.")
+    end
+  end
+
   context "when a user creates a new scanned resource" do
     scenario "users can perform case-insensitive searches for local identifiers" do
       visit root_path

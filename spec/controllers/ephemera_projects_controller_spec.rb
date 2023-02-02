@@ -149,7 +149,7 @@ RSpec.describe EphemeraProjectsController, type: :controller do
     context "when a ephemera project doesn't exist" do
       it "raises an error" do
         get :edit, params: { id: "test" }
-        expect(response).to redirect_to_not_found
+        expect(response).to have_http_status(404)
       end
     end
     context "when it does exist" do
@@ -186,7 +186,7 @@ RSpec.describe EphemeraProjectsController, type: :controller do
     context "when a ephemera project doesn't exist" do
       it "raises an error" do
         patch :update, params: { id: "test" }
-        expect(response).to redirect_to_not_found
+        expect(response).to have_http_status(404)
       end
     end
     context "when it does exist" do

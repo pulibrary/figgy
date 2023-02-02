@@ -57,14 +57,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  rescue_from Valkyrie::Persistence::ObjectNotFoundError, Blacklight::Exceptions::RecordNotFound, with: :resource_not_found
-  def resource_not_found(_exception)
+  # Named as such due to namespace conflict with Hydra::Controller::DownloadBehavior
+  def render_figgy_404
     respond_to do |format|
       format.json { head :not_found }
-      format.html do
-        redirect_to root_url, alert: "The requested resource does not exist."
-      end
+      format.html { render "errors/not_found", status: :not_found }
     end
+  end
+
+  rescue_from Valkyrie::Persistence::ObjectNotFoundError, Blacklight::Exceptions::RecordNotFound, with: :resource_not_found
+  def resource_not_found(_exception)
+    render_figgy_404
   end
 
   # Figgy has no use cases for having unique shared searches, and this prevents
