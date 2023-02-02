@@ -2,7 +2,7 @@
 <%= f.input :source_metadata_identifier, label: 'Source Metadata ID', required: f.object.respond_to?(:title) ? false : f.object.required?(key), input_html: { class: 'mutex detect-duplicates', data: { value: current_id, field: 'source_metadata_identifier_ssim', model: f.object.model.class.to_s } } %>
 <div class="row">
   <div class="col-4">
-    <%= f.input :refresh_remote_metadata, label: 'Refresh metadata from PULFA/Voyager', as: :boolean %>
+    <%= f.input :refresh_remote_metadata, label: 'Refresh metadata from PULFA/Catalog', as: :boolean %>
   </div>
   <% if f.object.respond_to? :set_visibility_by_date %>
     <div class="col-4">
