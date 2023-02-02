@@ -13,7 +13,7 @@ RSpec.describe BulkEditController, type: :controller do
   let(:state) { ["pending"] }
   let(:params) { { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "significant" } }
   before do
-    sign_in user
+    sign_in user if user
     change_set_persister.save(change_set: ChangeSet.for(collection))
     change_set_persister.save(change_set: ChangeSet.for(resource1))
     change_set_persister.save(change_set: ChangeSet.for(resource2))
@@ -25,12 +25,28 @@ RSpec.describe BulkEditController, type: :controller do
       expect(response.body).to have_content("Bulk edit 2 resources")
       expect(response.body).to have_field("mark_complete")
     end
+    context "when not logged in" do
+      let(:user) { nil }
+      it "returns unauthorized" do
+        post :resources_update, params: params
+
+        expect(response).to redirect_to("/users/auth/cas")
+      end
+    end
   end
 
   describe "POST /bulk_edit" do
     let(:params) { { mark_complete: "1", search_params: { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "significant" } } }
     before do
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    end
+    context "when not logged in" do
+      let(:user) { nil }
+      it "returns unauthorized" do
+        post :resources_update, params: params
+
+        expect(response).to redirect_to("/users/auth/cas")
+      end
     end
     it "updates the resources" do
       Timecop.freeze(Time.current) do

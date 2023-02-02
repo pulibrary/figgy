@@ -6,6 +6,7 @@ class BulkEditController < ApplicationController
   delegate :search_builder, :repository, to: :search_service
 
   def resources_edit
+    authorize! :create, ScannedResource
     (solr_response, _document_list) = search_service.search_results do |builder|
       builder.with(edit_params)
     end
@@ -13,6 +14,7 @@ class BulkEditController < ApplicationController
   end
 
   def resources_update
+    authorize! :create, ScannedResource
     args = {}.tap do |hash|
       hash[:mark_complete] = (params["mark_complete"] == "1")
       BulkUpdateJob.supported_attributes.each do |key|
