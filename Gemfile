@@ -7,7 +7,7 @@ gem "archivesspace-client"
 gem "autoprefixer-rails"
 gem "aws-sdk-s3"
 gem "bagit", "~> 0.4"
-gem "blacklight", "7.29.0"
+gem "blacklight", "7.33.0"
 gem "blacklight_iiif_search"
 gem "blacklight_range_limit"
 gem "bootsnap", require: false
