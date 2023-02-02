@@ -72,6 +72,14 @@ const startChildren = [
   }
 ]
 
+function stubFailedChildLoad () {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status: 404,
+      json: () => { throw Error('broken') }
+    })
+  )
+}
 function stubChildLoad () {
   global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -131,4 +139,12 @@ test('can dynamically load child nodes via loadChildrenPath', async () => {
   await wrapper.findAll('details').at(2).trigger('toggle')
   await flushPromises()
   expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(1)
+})
+
+test('handles bad data', async () => {
+  stubFailedChildLoad()
+  const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren } })
+  await wrapper.findAll('details').at(2).trigger('toggle')
+  await flushPromises()
+  expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(0)
 })

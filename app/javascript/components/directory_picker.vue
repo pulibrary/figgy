@@ -166,14 +166,17 @@ export default {
         this.loadChildren(child)
       }
     },
-    async loadChildren (child) {
-      const children = await fetch(
+    loadChildren (child) {
+      return fetch(
         child.loadChildrenPath,
         { credentials: 'include' }
       )
         .then((response) => response.json())
-      child.children = children
-      child.loaded = true
+        .then((response) => {
+          child.children = response
+          child.loaded = true
+        })
+        .catch(_ => { child.expanded = false })
     }
   }
 }
