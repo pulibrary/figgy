@@ -10,13 +10,13 @@ RSpec.describe ReprocessMetsJob do
         file_path: mets_file,
         mime_type: "application/xml; schema=mets",
         original_filename: File.basename(mets_file),
-        copyable: false
+        copy_before_ingest: false
       )
       image_file = IngestableFile.new(
         file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"),
         mime_type: "image/tiff",
         original_filename: "example.tif",
-        copyable: false
+        copy_before_ingest: false
       )
       collection = FactoryBot.create_for_repository(:collection)
       resource = FactoryBot.create_for_repository(:simple_resource, member_of_collection_ids: collection.id, files: [file, image_file])

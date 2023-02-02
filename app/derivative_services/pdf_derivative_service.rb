@@ -101,7 +101,7 @@ class PDFDerivativeService
       container_attributes: {
         title: pad_with_zeroes(page)
       },
-      copyable: true
+      copy_before_ingest: true
     )
   end
 

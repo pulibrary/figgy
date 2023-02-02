@@ -22,14 +22,14 @@ class IngestableFile < Valkyrie::Resource
   #   we're importing files from disk and the import task is using the
   #   `lae_storage` or `disk_via_copy` storage adapter, which is the case for the
   #   various bulk ingest jobs.
-  attribute :copyable, Valkyrie::Types::Bool
+  attribute :copy_before_ingest, Valkyrie::Types::Bool
 
   def content_type
     mime_type
   end
 
   def path
-    return file_path if copyable
+    return file_path if copy_before_ingest
     copied_file_name
   end
 

@@ -166,7 +166,7 @@ class IngestMETSJob < ApplicationJob
           file_path: mets.source_file,
           mime_type: "application/xml; schema=mets",
           original_filename: File.basename(mets.source_file),
-          copyable: true
+          copy_before_ingest: true
         )
       end
   end

@@ -226,7 +226,7 @@ class IngestEphemeraMODS
           file_path: file,
           mime_type: "image/tiff",
           original_filename: File.basename(file),
-          copyable: true
+          copy_before_ingest: true
         )
       end
     end
@@ -236,7 +236,7 @@ class IngestEphemeraMODS
         file_path: mods,
         mime_type: "application/xml; schema=mods",
         original_filename: File.basename(mods),
-        copyable: true
+        copy_before_ingest: true
       )
     end
 end

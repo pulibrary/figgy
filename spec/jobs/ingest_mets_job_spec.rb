@@ -29,7 +29,7 @@ RSpec.describe IngestMETSJob do
     allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000658.tif").and_return(File.open(tiff_file))
     allow(File).to receive(:open).with("/users/escowles/downloads/tmp/00000659.tif").and_return(File.open(tiff_file))
     # this is doing something in a characterization / derivative job
-    #   it looks like this could also be achieved by having :copyable return false
+    #   it looks like this could also be achieved by having :copy_before_ingest return false
     #   if something more general is needed
     allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
     stub_catalog(bib_id: "4612596")
