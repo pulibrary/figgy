@@ -1,6 +1,12 @@
 <template>
   <div>
     <ul :class="root ? 'tree' : ''">
+      <input
+        v-if="root"
+        name="selected-path[]"
+        type="hidden"
+        :value="selectedChild ? selectedChild.path : null"
+      >
       <li
         v-for="child in children"
         :key="child.path"
@@ -39,7 +45,6 @@
 </template>
 <script>
 // Support choosing a single directory for use in Bulk Ingest.
-// TODO: Add an input that stores the selected folder.
 // TODO: Add multi-select functionality for file select.
 export default {
   name: 'DirectoryPicker',

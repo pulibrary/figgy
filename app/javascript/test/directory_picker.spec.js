@@ -131,6 +131,7 @@ test('checking one checkbox unchecks the other ones', async () => {
   await wrapper.findAll('input[type="checkbox"]').at(0).trigger('click')
   expect(wrapper.vm.selectedChild.path).toEqual('/Dir1/Subdir1')
   expect(wrapper.findAll('input:checked').length).toEqual(1)
+  expect(wrapper.find('input[name="selected-path[]"]').element.value).toEqual('/Dir1/Subdir1')
 })
 
 test('can dynamically load child nodes via loadChildrenPath', async () => {
