@@ -32,6 +32,11 @@ class Types::QueryType < Types::BaseObject
     argument :ids, [String], required: true
   end
 
+  field :directory_info, [Types::DirectoryInfo], null: false do
+    description "Return child info for a given directory"
+    argument :directory, String, required: true
+  end
+
   def resource(id:)
     resource = query_service.find_by(id: id)
     return unless ability.can? :discover, resource
@@ -39,6 +44,10 @@ class Types::QueryType < Types::BaseObject
   rescue Valkyrie::Persistence::ObjectNotFoundError
     Valkyrie.logger.error("Failed to retrieve the resource #{id} for a GraphQL query")
     nil
+  end
+
+  def directory_info(directory:)
+    Types::DirectoryInfo.from(directory: directory)
   end
 
   def resources_by_figgy_ids(ids:)
