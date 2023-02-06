@@ -12,5 +12,11 @@ RSpec.describe UpdateDaoJob do
       described_class.perform_now(resource.id)
       expect(updater).to have_received(:update!)
     end
+
+    it "rescues and does not re-raise the ObjectNotFoundError for deleted objects" do
+      expect do
+        described_class.perform_now("deletedid")
+      end.not_to raise_error
+    end
   end
 end
