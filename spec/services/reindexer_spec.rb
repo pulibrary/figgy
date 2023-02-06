@@ -34,25 +34,6 @@ RSpec.describe Reindexer do
       expect(solr_adapter.query_service.find_all.to_a.length).to eq 5
     end
 
-    context "when given ProcessedEvents" do
-      it "doesn't index them" do
-        resource = FactoryBot.build(:processed_event)
-        output = postgres_adapter.persister.save(resource: resource)
-
-        described_class.reindex_all(logger: logger, wipe: true)
-
-        expect { solr_adapter.query_service.find_by(id: output.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
-      end
-      it "sets up ProgressBar to not include those resources" do
-        FactoryBot.create_for_repository(:processed_event)
-        allow(ProgressBar).to receive(:create).and_call_original
-
-        described_class.reindex_all(logger: logger, wipe: true)
-
-        expect(ProgressBar).to have_received(:create).with(hash_including(total: 0))
-      end
-    end
-
     context "when there are records in solr which are no longer in postgres" do
       it "gets rid of them" do
         resource = FactoryBot.build(:scanned_resource)

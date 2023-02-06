@@ -10,7 +10,6 @@ class IndexingAdapter
   def self.no_index_models
     [
       Event,
-      ProcessedEvent,
       PreservationObject,
       DeletionMarker
     ]
