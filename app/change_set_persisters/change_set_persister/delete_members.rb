@@ -24,7 +24,7 @@ class ChangeSetPersister
     def run
       return unless change_set.resource.respond_to?(property)
       ids.map do |id|
-        DeleteMemberJob.perform_later(id.to_s)
+        DeleteMemberJob.perform_later(id.to_s, change_set.resource.id.to_s)
       end
     end
 

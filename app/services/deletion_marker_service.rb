@@ -42,6 +42,7 @@ class DeletionMarkerService
     def attach_to_parent(parent_id:, resource:)
       return if parent_id.blank?
       parent = query_service.find_by(id: Valkyrie::ID.new(parent_id))
+      return if parent.member_ids.include?(resource.id)
       change_set = ChangeSet.for(parent)
       change_set.member_ids += [resource.id]
       change_set.sync

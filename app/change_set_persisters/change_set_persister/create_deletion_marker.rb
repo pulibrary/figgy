@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class ChangeSetPersister
   class CreateDeletionMarker
-    attr_reader :resource, :change_set_persister
+    attr_reader :resource, :change_set, :change_set_persister
     def initialize(change_set_persister: nil, change_set:, post_save_resource: nil)
+      @change_set = change_set
       @resource = change_set.resource
       @change_set_persister = change_set_persister
     end
@@ -17,7 +18,6 @@ class ChangeSetPersister
       else
         deletion_marker_change_set.validate(attributes)
       end
-
       change_set_persister.save(change_set: deletion_marker_change_set)
     end
 
@@ -33,7 +33,7 @@ class ChangeSetPersister
       end
 
       def parent_id
-        parent.try(:id)
+        parent.try(:id) || change_set.append_id
       end
 
       def preservation_object
