@@ -6,6 +6,16 @@ GIT
       devise
 
 GIT
+  remote: https://github.com/eliotjordan/blacklight_iiif_search.git
+  revision: b171b51fac967b6bca92fe85771d91c519cd920c
+  branch: master
+  specs:
+    blacklight_iiif_search (2.0.0)
+      blacklight (>= 7.0, < 9)
+      iiif-presentation
+      rails (>= 5.1, < 7)
+
+GIT
   remote: https://github.com/pulibrary/mediainfo.git
   revision: 58f3e304f01009b459954b82d0675562106b1ac8
   branch: further_sanitize_track_names
@@ -207,24 +217,18 @@ GEM
       rubocop-performance
       rubocop-rails
       rubocop-rspec
-    blacklight (7.33.0)
-      deprecation
+    blacklight (8.0.0.beta5)
       globalid
-      hashdiff
       i18n (>= 1.7.0)
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
-      rails (>= 5.1, < 7.1)
-      view_component (~> 2.66)
+      rails (>= 6.1, < 8)
+      view_component (>= 2.66, < 3.1)
     blacklight-access_controls (6.0.1)
       blacklight (> 6.0, < 8)
       cancancan (>= 1.8)
       deprecation (~> 1.0)
-    blacklight_iiif_search (2.0.0)
-      blacklight (~> 7.0)
-      iiif-presentation
-      rails (>= 5.1, < 7)
     blacklight_range_limit (8.2.3)
       blacklight (>= 7.25.2, < 9)
     bootsnap (1.13.0)
@@ -590,7 +594,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     m3u8 (0.8.2)
-    mail (2.8.0.1)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
@@ -990,8 +994,8 @@ DEPENDENCIES
   bagit (~> 0.4)
   benchmark-ips
   bixby (~> 3.0.0)
-  blacklight (= 7.33.0)
-  blacklight_iiif_search
+  blacklight (= 8.0.0.beta5)
+  blacklight_iiif_search!
   blacklight_range_limit
   bootsnap
   bootstrap (~> 4.0)

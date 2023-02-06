@@ -82,7 +82,7 @@ class CatalogController < ApplicationController
 
     # Turn off search session tracking
     # Interferes with thumbnail display in FileSet manager
-    config.track_search_session = false
+    # config.track_search_session = false
 
     # Allow all params
     config.filter_search_state_fields = false
