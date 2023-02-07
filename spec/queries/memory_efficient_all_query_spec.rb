@@ -23,10 +23,10 @@ describe MemoryEfficientAllQuery do
     context "when given except_models argument" do
       it "finds everything that isn't one of those models" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
-        FactoryBot.create_for_repository(:processed_event)
+        FactoryBot.create_for_repository(:raster_resource)
         FactoryBot.create_for_repository(:file_set)
 
-        expect(query.memory_efficient_all(except_models: [ProcessedEvent, FileSet]).map(&:id).to_a).to eq [resource.id]
+        expect(query.memory_efficient_all(except_models: [RasterResource, FileSet]).map(&:id).to_a).to eq [resource.id]
       end
     end
   end
