@@ -8,7 +8,6 @@ class FixityDashboardController < ApplicationController
 
     @failures = query_service.custom_queries.find_fixity_failures.map(&:decorate)
     @recents = query_service.custom_queries.file_sets_sorted_by_updated(sort: "desc", limit: 10).map(&:decorate)
-    @upcoming = query_service.custom_queries.file_sets_sorted_by_updated(limit: 20).map(&:decorate)
     authorize! :read, :fixity
   end
 
