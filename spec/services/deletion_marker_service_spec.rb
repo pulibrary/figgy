@@ -59,7 +59,7 @@ describe DeletionMarkerService do
       file_set = Wayfinder.for(output).members.first
       change_set = ChangeSet.for(file_set)
       change_set_persister.delete(change_set: change_set)
-      file_set_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(file_set.id)).first
+      file_set_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(file_set.id), model: DeletionMarker).first
       reloaded_resource = query_service.find_by(id: resource.id)
 
       expect(reloaded_resource.member_ids).to be_empty
