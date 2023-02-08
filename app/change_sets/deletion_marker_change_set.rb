@@ -3,9 +3,11 @@
 class DeletionMarkerChangeSet < ChangeSet
   property :resource_id
   property :resource_title
+  property :resource_type
   property :original_filename
   property :preservation_object
   property :parent_id
+  property :depositor, multiple: false, require: false
   property :optimistic_lock_token,
             multiple: true,
             required: true,

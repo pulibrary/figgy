@@ -27,8 +27,10 @@ class ChangeSetPersister
         {
           resource_id: resource.id,
           resource_title: resource.try(:title),
+          resource_type: resource.class.to_s,
           original_filename: resource.try(:primary_file)&.original_filename,
-          preservation_object: preservation_object
+          preservation_object: preservation_object,
+          depositor: resource.try(:depositor)
         }
       end
 

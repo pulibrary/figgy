@@ -1494,13 +1494,14 @@ RSpec.describe ChangeSetPersister do
         expect(deletion_marker.deleted_at).to eq deletion_markers.first.created_at
         expect(deletion_marker.preservation_object.preserved_object_id).to eq file_set.id
         expect(deletion_marker.parent_id).to eq resource.id
+        expect(deletion_marker.resource_type).to eq ["FileSet"]
       end
     end
     context "when deleting preserved resource" do
       it "creates deletion_markers for the resource and all of the related members" do
         file = fixture_file_upload("files/example.tif", "image/tiff")
         child_resource = FactoryBot.create_for_repository(:complete_raster_resource)
-        resource = FactoryBot.create_for_repository(:pending_scanned_map, title: "title", member_ids: [child_resource.id], files: [file])
+        resource = FactoryBot.create_for_repository(:pending_scanned_map, title: "title", member_ids: [child_resource.id], files: [file], depositor: "new_user")
         reloaded_resource = query_service.find_by(id: resource.id)
         change_set = ChangeSet.for(reloaded_resource)
         change_set.validate(state: "complete")
@@ -1510,6 +1511,9 @@ RSpec.describe ChangeSetPersister do
 
         deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
         expect(deletion_markers.to_a.length).to eq 3
+        deletion_marker = deletion_markers.first
+        expect(deletion_marker.resource_type).to eq ["ScannedMap"]
+        expect(deletion_marker.depositor).to eq ["new_user"]
 
         # Ensure PreservationObjects are deleted.
         expect(change_set_persister.query_service.find_all_of_model(model: PreservationObject).to_a.length).to eq 0
