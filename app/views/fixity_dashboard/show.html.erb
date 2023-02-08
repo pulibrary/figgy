@@ -1,18 +1,16 @@
 <h2>Fixity Dashboard</h2>
 
 <section id="fixity-checks">
-  <h3>Failed Fixity Checks</h3>
+  <h3>Failed Local Fixity Checks</h3>
   <%= render partial: "fixity_table", locals: {resources: @failures} %>
 
-  <h3>Recent Fixity Checks</h3>
+  <h3>Recent Local Fixity Checks</h3>
   <%= render partial: "fixity_table", locals: {resources: @recents} %>
 
 <section id="cloud-fixity-checks">
-  <h3>Cloud Fixity</h3>
-
-  <h4>Failed Fixity Checks</h4>
+  <h3>Failed Cloud Fixity Checks</h3>
   <%= render partial: "cloud_fixity_table", locals: { resources: @cloud_failures } %>
 
-  <h4>Recent Fixity Checks</h4>
+  <h3>Recent Cloud Fixity Checks</h3>
   <%= render partial: "cloud_fixity_table", locals: { resources: @cloud_recent_checks } %>
 </section>

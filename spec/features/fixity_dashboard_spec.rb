@@ -17,6 +17,12 @@ RSpec.feature "Fixity dashboard" do
   let(:failed_cloud_fixity_event) do
     FactoryBot.create_for_repository(:cloud_fixity_event, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node, current: true)
   end
+  let(:local_fixity_event) do
+    FactoryBot.create_for_repository(:local_fixity_success, resource_id: Wayfinder.for(scanned_resource).file_sets.first.id, current: true)
+  end
+  let(:failed_local_fixity_event) do
+    FactoryBot.create_for_repository(:local_fixity_failure, resource_id: Wayfinder.for(scanned_resource).file_sets.first.id, current: true)
+  end
   let(:shoulder) { "99999/fk4" }
   let(:blade) { "123456" }
 
@@ -60,6 +66,28 @@ RSpec.feature "Fixity dashboard" do
       expect(page).to have_css "#cloud-fixity-checks table tr td a[href='#{solr_document_path(id: file_set.id)}']", text: file_set.title.first
       expect(page).to have_css "#cloud-fixity-checks table tr td a[href='#{solr_document_path(id: file_set.id)}']", text: metadata_node.label.first
       expect(page).to have_css "#cloud-fixity-checks table tr td", text: "FAILURE"
+    end
+  end
+
+  context "a resource has had a local fixity check" do
+    context "the check failed" do
+      scenario "it displays that the event was a failure and links to the resource" do
+        failed_local_fixity_event
+        visit fixity_dashboard_path
+
+        expect(page).to have_css "#fixity-checks table tr td a[href='#{solr_document_path(id: file_set.id)}']", text: file_set.title.first
+        expect(page).to have_css "#fixity-checks table tr td", text: "FAILURE"
+      end
+    end
+
+    context "the check succeeded" do
+      scenario "it displays that the event was successful and links to the resource" do
+        local_fixity_event
+        visit fixity_dashboard_path
+
+        expect(page).to have_css "#fixity-checks table tr td a[href='#{solr_document_path(id: file_set.id)}']", text: file_set.title.first
+        expect(page).to have_css "#fixity-checks table tr td", text: "SUCCESS"
+      end
     end
   end
 end

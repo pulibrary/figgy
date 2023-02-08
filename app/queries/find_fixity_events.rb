@@ -13,16 +13,17 @@ class FindFixityEvents
 
   def query(order_by_property: "updated_at", order_by: "ASC")
     <<-SQL
-      select * FROM orm_resources WHERE
-      metadata @> ? AND internal_resource = ?
-      ORDER BY #{order_by_property} #{order_by} LIMIT ?
+      SELECT * FROM orm_resources WHERE
+      metadata @> ? AND
+      metadata @> '{"current": [true]}' AND
+      internal_resource = 'Event'
+      ORDER BY #{order_by_property} #{order_by}
+      LIMIT ?
     SQL
   end
 
-  # rubocop:disable Metrics/ParameterLists
-  def find_fixity_events(sort: "ASC", limit: 50, order_by_property: "updated_at", status:, model: Event, type:)
-    internal_array = { "status" => [status], "type" => [type], current: [true] }
-    run_query(query(order_by_property: order_by_property, order_by: sort), internal_array.to_json, model.to_s, limit)
+  def find_fixity_events(sort: "ASC", limit: 50, order_by_property: "updated_at", status:, type:)
+    internal_array = { "status" => [status], "type" => [type] }
+    run_query(query(order_by_property: order_by_property, order_by: sort), internal_array.to_json, limit)
   end
-  # rubocop:enable Metrics/ParameterLists
 end
