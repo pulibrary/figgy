@@ -15,21 +15,6 @@ class BulkEditController < ApplicationController
 
   def resources_update
     authorize! :create, ScannedResource
-    args = {}.tap do |hash|
-      hash[:mark_complete] = (params["mark_complete"] == "1")
-      BulkUpdateJob.supported_attributes.each do |key|
-        unless key == :embargo_date
-          hash[key] = params[key.to_s] if params[key.to_s].present?
-        end
-      end
-
-      case params["embargo_date_action"]
-      when "date"
-        hash[:embargo_date] = params["embargo_date_value"]
-      when "clear"
-        hash[:embargo_date] = ""
-      end
-    end
     batches.each do |ids|
       BulkUpdateJob.perform_later(ids: ids, email: current_user.email, args: args, time: Time.current.to_s, search_params: search_params)
     end
@@ -84,5 +69,22 @@ class BulkEditController < ApplicationController
       builder = search_builder.with(search_params)
       builder.rows = params["batch_size"] || 50
       builder
+    end
+
+    def args
+      {}.tap do |hash|
+        hash[:mark_complete] = (params["mark_complete"] == "1")
+
+        BulkUpdateJob.supported_attributes.each do |key|
+          hash[key] = params[key.to_s] if params[key.to_s].present?
+        end
+
+        case params["embargo_date_action"]
+        when "date"
+          hash[:embargo_date] = params["embargo_date_value"]
+        when "clear"
+          hash[:embargo_date] = ""
+        end
+      end
     end
 end

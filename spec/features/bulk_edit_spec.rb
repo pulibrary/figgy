@@ -96,9 +96,9 @@ RSpec.feature "Bulk edit", js: true do
       it "is updateable" do
         visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
 
-        expect(page).to have_selector('#embargo-date-picker', visible: false)
+        expect(page).to have_selector("#embargo-date-picker", visible: false)
         page.select "Input a date", from: "embargo_date_action", visible: false
-        expect(page).to have_selector('#embargo-date-picker', visible: true)
+        expect(page).to have_selector("#embargo-date-picker", visible: true)
 
         page.fill_in "embargo_date_value", with: new_date.strftime("%-m/%-d/%Y")
         accept_alert do
@@ -113,7 +113,7 @@ RSpec.feature "Bulk edit", js: true do
         # day before. this doesn't happen when using the calendar UI and
         # recently when using capybara
         # see https://github.com/pulibrary/lux/issues/407 for details
-        expect(updated.embargo_date).to eq (new_date).strftime("%-m/%-d/%Y")
+        expect(updated.embargo_date).to eq new_date.strftime("%-m/%-d/%Y")
         expect(updated.member_of_collection_ids).to eq [collection.id]
       end
     end
@@ -126,7 +126,7 @@ RSpec.feature "Bulk edit", js: true do
         visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
 
         page.select "Clear all values", from: "embargo_date_action", visible: false
-        expect(page).to have_selector('#embargo-date-picker', visible: false)
+        expect(page).to have_selector("#embargo-date-picker", visible: false)
         accept_alert do
           click_button("Apply Edits")
         end
