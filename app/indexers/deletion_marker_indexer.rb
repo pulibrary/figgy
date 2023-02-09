@@ -7,13 +7,22 @@ class DeletionMarkerIndexer
   end
 
   def to_solr
-    return {} unless resource.is_a?(::DeletionMarker) && suppress?
-    {
-      suppressed_bsi: "true"
-    }
+    return {} unless resource.is_a?(::DeletionMarker)
+    if suppress?
+      attributes.merge({ suppressed_bsi: "true" })
+    else
+      attributes
+    end
   end
 
   private
+
+    def attributes
+      {
+        deleted_resource_id_ssi: resource.resource_id.to_s,
+        deleted_resource_depositor_ssi: resource.depositor
+      }
+    end
 
     # Suppress marker from search results if it has a parent that does not exist
     # in the database. This means that the marker is child of another marker

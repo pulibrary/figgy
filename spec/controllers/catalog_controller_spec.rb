@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe CatalogController do
+RSpec.describe CatalogController, type: :controller do
   let(:persister) { Valkyrie::MetadataAdapter.find(:indexing_persister).persister }
   let(:query_service) { ChangeSetPersister.default.query_service }
   describe "#index" do

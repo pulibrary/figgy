@@ -14,6 +14,6 @@ class DeletionMarker < Resource
   def thumbnail_id; end
 
   def title
-    resource_title
+    ["#{resource_title.try(:first)} (Deletion Marker)"]
   end
 end

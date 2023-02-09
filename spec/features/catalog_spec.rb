@@ -52,4 +52,28 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_content "New test work"
     end
   end
+
+  describe "deletion marker search results behavior" do
+    let(:change_set_persister) { ChangeSetPersister.default }
+    let(:query_service) { change_set_persister.query_service }
+    let(:resource) { FactoryBot.create_for_repository(:pending_scanned_map, title: "title", depositor: "new_user") }
+
+    before do
+      stub_ezid(shoulder: "99999/fk4", blade: "")
+      reloaded_resource = query_service.find_by(id: resource.id)
+      change_set = ChangeSet.for(reloaded_resource)
+      change_set.validate(state: "complete")
+      output = change_set_persister.save(change_set: change_set)
+      change_set = ChangeSet.for(output)
+      change_set_persister.delete(change_set: change_set)
+    end
+
+    it "returns results with deletion marker specific index fields" do
+      visit "/catalog/?f[human_readable_type_ssim][]=Deletion+Marker"
+      expect(page).to have_content "title (Deletion Marker)"
+      expect(page).to have_css ".blacklight-resource_type_ssim", text: "ScannedMap"
+      expect(page).to have_css ".blacklight-deleted_resource_id_ssi", text: resource.id.to_s
+      expect(page).to have_css ".blacklight-deleted_resource_depositor_ssi", text: "new_user"
+    end
+  end
 end
