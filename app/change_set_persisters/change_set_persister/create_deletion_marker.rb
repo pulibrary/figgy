@@ -28,6 +28,10 @@ class ChangeSetPersister
           resource_id: resource.id,
           resource_title: resource.try(:title),
           resource_type: resource.class.to_s,
+          resource_identifier: resource.try(:identifier),
+          resource_source_metadata_identifier: resource.try(:source_metadata_identifier),
+          resource_local_identifier: resource.try(:local_identifier),
+          resource_archival_collection_code: resource.try(:archival_collection_code),
           original_filename: resource.try(:primary_file)&.original_filename,
           preservation_object: preservation_object,
           depositor: resource.try(:depositor)

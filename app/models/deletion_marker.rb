@@ -5,6 +5,9 @@ class DeletionMarker < Resource
   attribute :resource_id, Valkyrie::Types::ID
   attribute :resource_title
   attribute :resource_type
+  attribute :resource_identifier
+  attribute :resource_source_metadata_identifier
+  attribute :resource_local_identifier
   attribute :original_filename
   attribute :preservation_object, PreservationObject.optional
   attribute :parent_id, Valkyrie::Types::ID
