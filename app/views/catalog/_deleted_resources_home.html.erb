@@ -1,0 +1,14 @@
+<% if can?(:read, :fixity) %>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-classify-work">
+        <div class="card-header">Deleted Resources</div>
+        <div class="card-body">
+          <ul>
+            <li><%= link_to 'Search Deletion Markers', "/catalog/?f[human_readable_type_ssim][]=Deletion+Marker"  %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

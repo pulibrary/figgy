@@ -18,6 +18,10 @@ RSpec.describe "catalog/_home_text.html.erb" do
       expect(rendered).to have_link "Bulk Ingest"
     end
 
+    it "has a link to the deletion marker search" do
+      expect(rendered).to have_link "Search Deletion Markers"
+    end
+
     it "has cards" do
       expect(rendered).to have_css("div.card-header", text: "Numismatics")
       expect(rendered).to have_link "Manage Numismatics", href: numismatics_dashboard_path
