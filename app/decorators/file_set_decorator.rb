@@ -39,11 +39,47 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   delegate :downloadable?, to: :parent
 
   def cloud_fixity_success_of(file_id)
-    cloud_fixity_events_for(file_id).max_by(&:created_at)&.status
+    cloud_fixity_events_for(file_id).find { |e| e.current == true }&.status
   end
 
   def cloud_fixity_last_success_date_of(file_id)
     cloud_fixity_events_for(file_id).select { |e| e.status == "SUCCESS" }.map(&:created_at).max || "n/a"
+  end
+
+  def local_fixity_success_of(file_id)
+    return "n/a" unless file_id == primary_file.id
+    event_status = custom_queries.find_by_property(
+      model: Event,
+      property: :metadata,
+      value: { current: true, resource_id: id }
+    ).first&.status
+    event_status || deprecated_fixity_success
+  end
+
+  def local_fixity_last_success_date_of(file_id)
+    return "n/a" unless file_id == primary_file.id
+    event_date = custom_queries.find_by_property(
+      model: Event,
+      property: :metadata,
+      value: { status: "SUCCESS", resource_id: id }
+    ).map(&:created_at).max
+    event_date || deprecated_fixity_last_success_date
+  end
+
+  def deprecated_fixity_success
+    case primary_file.fixity_success
+    when 1
+      "SUCCESS"
+    when 0
+      "FAILURE"
+    else
+      "n/a"
+    end
+  end
+
+  def deprecated_fixity_last_success_date
+    return "n/a" unless primary_file.fixity_last_success_date
+    primary_file.fixity_last_success_date.iso8601
   end
 
   def custom_queries
@@ -53,7 +89,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   def cloud_fixity_events_for(file_id)
     preservation_id = preservation_id_of(file_id)
     return [] if preservation_id.blank?
-    custom_queries.find_by_property(property: :child_id, value: preservation_id)
+    custom_queries.find_by_property(property: :child_id, value: preservation_id, model: Event)
   end
 
   def preservation_id_of(file_id)
