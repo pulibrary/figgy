@@ -4,5 +4,5 @@
               collection: ControlledVocabulary.for(:ephemera_field).all,
               label_method: :label,
               value_method: :value,
-              input_html: { class: 'form-control rights-statement', data: { notable: ControlledVocabulary.for(:ephemera_field).all.select(&:notable?).map(&:value) }},
+              input_html: { class: 'form-control', data: { notable: ControlledVocabulary.for(:ephemera_field).all.select(&:notable?).map(&:value) }},
               required: f.object.required?(key) %>
