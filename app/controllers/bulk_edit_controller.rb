@@ -18,7 +18,16 @@ class BulkEditController < ApplicationController
     args = {}.tap do |hash|
       hash[:mark_complete] = (params["mark_complete"] == "1")
       BulkUpdateJob.supported_attributes.each do |key|
-        hash[key] = params[key.to_s] if params[key.to_s].present?
+        unless key == :embargo_date
+          hash[key] = params[key.to_s] if params[key.to_s].present?
+        end
+      end
+
+      case params["embargo_date_action"]
+      when "date"
+        hash[:embargo_date] = params["embargo_date_value"]
+      when "clear"
+        hash[:embargo_date] = ""
       end
     end
     batches.each do |ids|

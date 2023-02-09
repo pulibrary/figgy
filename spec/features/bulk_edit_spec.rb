@@ -17,6 +17,8 @@ RSpec.feature "Bulk edit", js: true do
   end
 
   before do
+    stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+
     [collection, member_scanned_resource, nonmember_scanned_resource].each do |resource|
       change_set = ChangeSet.for(resource)
       change_set_persister.save(change_set: change_set)
@@ -87,9 +89,57 @@ RSpec.feature "Bulk edit", js: true do
 
   context "submit form" do
     with_queue_adapter :inline
-    before do
-      stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+
+    context "adding new embargo date" do
+      let(:new_date) { (Time.zone.today + 12) }
+
+      it "is updateable" do
+        visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
+
+        expect(page).to have_selector('#embargo-date-picker', visible: false)
+        page.select "Input a date", from: "embargo_date_action", visible: false
+        expect(page).to have_selector('#embargo-date-picker', visible: true)
+
+        page.fill_in "embargo_date_value", with: new_date.strftime("%-m/%-d/%Y")
+        accept_alert do
+          click_button("Apply Edits")
+        end
+
+        expect(current_path).to eq root_path
+        expect(page).to have_content "1 resources were queued for bulk update."
+        updated = adapter.query_service.find_by(id: member_scanned_resource.id)
+
+        # when entering a date via text into LuxDatePicker, the date will be one
+        # day before. this doesn't happen when using the calendar UI and
+        # recently when using capybara
+        # see https://github.com/pulibrary/lux/issues/407 for details
+        expect(updated.embargo_date).to eq (new_date).strftime("%-m/%-d/%Y")
+        expect(updated.member_of_collection_ids).to eq [collection.id]
+      end
     end
+
+    context "clearing an embargo date" do
+      let(:resource_date) { (Time.zone.today + 2).strftime("%-m/%-d/%Y") }
+      let(:member_scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, embargo_date: resource_date, member_of_collection_ids: [collection.id]) }
+
+      it "is clearable" do
+        visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
+
+        page.select "Clear all values", from: "embargo_date_action", visible: false
+        expect(page).to have_selector('#embargo-date-picker', visible: false)
+        accept_alert do
+          click_button("Apply Edits")
+        end
+
+        expect(current_path).to eq root_path
+        expect(page).to have_content "1 resources were queued for bulk update."
+        updated = adapter.query_service.find_by(id: member_scanned_resource.id)
+
+        expect(updated.embargo_date).to eq ""
+        expect(updated.member_of_collection_ids).to eq [collection.id]
+      end
+    end
+
     it "updates the object" do
       collection2 = FactoryBot.create_for_repository(:collection)
       visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
@@ -105,6 +155,7 @@ RSpec.feature "Bulk edit", js: true do
       expect(updated.state).to eq ["complete"]
       expect(updated.member_of_collection_ids).to eq [collection.id, collection2.id]
     end
+
     it "doesn't add a collection if one isn't picked" do
       FactoryBot.create_for_repository(:collection)
       visit bulk_edit_resources_edit_path("q" => "", "f[member_of_collection_titles_ssim][]" => "My Collection")
