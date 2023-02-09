@@ -42,7 +42,7 @@
           <%= select_tag :visibility,
               options_from_collection_for_select(ControlledVocabulary.for(:visibility).all, "value", "label"),
               include_blank: "[Do not update]",
-              input_html: { class: 'form-control rights-statement' },
+              input_html: { class: 'form-control' },
               required: false %>
         </div>
         <div class="row">

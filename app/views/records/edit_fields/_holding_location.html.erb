@@ -3,5 +3,5 @@
               collection: ControlledVocabulary.for(key).all.sort_by(&:label),
               label_method: :label,
               value_method: :value,
-              input_html: { class: 'form-control rights-statement' },
+              input_html: { class: 'form-control' },
               required: f.object.required?(key) %>
