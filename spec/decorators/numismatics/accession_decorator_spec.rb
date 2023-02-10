@@ -26,6 +26,11 @@ RSpec.describe Numismatics::AccessionDecorator do
       accession.date = "2007"
       expect { decorator.formatted_date }.not_to raise_error
     end
+
+    it "throws an error when date is not an accepted format" do
+      accession.date = "Today"
+      expect { decorator.formatted_date }.to raise_error
+    end
   end
 
   describe "#label" do
