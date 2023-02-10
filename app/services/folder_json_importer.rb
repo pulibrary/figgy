@@ -55,7 +55,7 @@ class FolderJSONImporter
           file_path: path,
           mime_type: "image/tiff",
           original_filename: path.basename,
-          copyable: true
+          copy_before_ingest: true
         )
       end
     end

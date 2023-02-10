@@ -129,7 +129,7 @@ class FolderData
                    when ".png" then "image/png"
                    end,
         original_filename: File.basename(file),
-        copyable: true
+        copy_before_ingest: true
       )
     end
   end

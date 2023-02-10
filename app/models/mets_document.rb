@@ -166,7 +166,7 @@ class METSDocument
       original_filename: File.basename(f[:path]),
       container_attributes: container_attributes(f),
       id: f[:id],
-      copyable: true
+      copy_before_ingest: true
     )
   end
 

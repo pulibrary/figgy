@@ -15,7 +15,7 @@ class BulkIngestService::BulkFilePathConverter
         file_path: file_path,
         mime_type: mime_type.content_type,
         original_filename: basename,
-        copyable: true,
+        copy_before_ingest: true,
         container_attributes: {
           title: file_title,
           service_targets: service_targets

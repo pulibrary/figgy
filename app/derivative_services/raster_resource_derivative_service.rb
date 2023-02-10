@@ -31,15 +31,16 @@ class RasterResourceDerivativeService
   end
 
   def build_display_file
-    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_display, copyable: false)
+    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_display, copy_before_ingest: false)
   end
 
   def build_cloud_file
-    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_cloud_derivative, copyable: false)
+    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_cloud_derivative,
+                       copy_before_ingest: false)
   end
 
   def build_thumbnail_file
-    IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copyable: true)
+    IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copy_before_ingest: true)
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
