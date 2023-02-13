@@ -12,4 +12,11 @@ RSpec.describe Numismatics::AccessionChangeSet do
       expect(change_set.primary_terms[""]).not_to include(:accession_number)
     end
   end
+
+  describe "#primary_terms" do
+    it "expects dates to be DateTime objects" do
+      accession.date = "Today"
+      expect { decorator.formatted_date }.to raise_error
+    end
+  end
 end
