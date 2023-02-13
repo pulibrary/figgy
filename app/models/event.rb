@@ -9,7 +9,8 @@ class Event < Valkyrie::Resource
   attribute :status, Valkyrie::Types::String
   attribute :current, Valkyrie::Types::Bool
 
-  # the PreservationObject this Event is associated with
+  # for cloud_fixity events, the PreservationObject this Event is associated with
+  # for local_fixity events, the FileSet this Event is associated with
   attribute :resource_id, Valkyrie::Types::ID
 
   # the property within the PreservationObject that contains the file we are related to

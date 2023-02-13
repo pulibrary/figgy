@@ -118,11 +118,11 @@ class BaseWayfinder
   end
 
   def deep_failed_local_fixity_count
-    @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_success: 0)
+    @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_status: "FAILURE")
   end
 
   def deep_succeeded_local_fixity_count
-    @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_success: 1)
+    @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_status: "SUCCESS")
   end
 
   def deep_failed_cloud_fixity_count
@@ -173,16 +173,10 @@ class BaseWayfinder
 
   private
 
-    def deep_fixity_count(fixity_success:)
-      query_service.custom_queries.find_deep_children_with_property(
+    def deep_fixity_count(fixity_status:)
+      query_service.custom_queries.deep_local_fixity_count(
         resource: resource,
-        model: FileSet,
-        property: :file_metadata,
-        value: {
-          use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
-          fixity_success: fixity_success
-        },
-        count: true
+        status: fixity_status
       )
     end
 end

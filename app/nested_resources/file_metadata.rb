@@ -25,7 +25,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :source_media_type, Valkyrie::Types::Set # OriginalSourceForm
   attribute :duration, Valkyrie::Types::Set # Duration
 
-  # fixity attributes
+  # DEPRECATED fixity attributes -- Events are used now for local fixity
   attribute :fixity_actual_checksum, Valkyrie::Types::Set
   attribute :fixity_success, Valkyrie::Types::Integer
   attribute :fixity_last_success_date, Valkyrie::Types::DateTime.optional
@@ -103,26 +103,5 @@ class FileMetadata < Valkyrie::Resource
     else
       file_id.gsub("disk:/", "")
     end
-  end
-
-  # Populates FileMetadata with fixity check results
-  # @return [FileMetadata] you'll need to save this node after running the fixity
-  def run_fixity
-    # don't run if there has been a failure.
-    # probably best to create a new FileSet at that point.
-    # also don't run if there's no existing checksum; characterization hasn't finished
-    return self if fixity_success&.zero? || checksum.empty?
-    actual_file = Valkyrie::StorageAdapter.find_by(id: file_identifiers.first)
-    new_checksum = MultiChecksum.for(actual_file)
-    if checksum.include? new_checksum
-      self.fixity_success = 1
-      self.fixity_actual_checksum = [new_checksum]
-      self.fixity_last_success_date = Time.now.utc
-    else
-      self.fixity_success = 0
-      self.fixity_actual_checksum = [new_checksum]
-      Honeybadger.notify("Local fixity failure on file #{actual_file.id}")
-    end
-    self
   end
 end

@@ -34,7 +34,7 @@ class DeletionMarkerService
 
     def restore_members(resource)
       resource.try(:member_ids)&.each do |member_id|
-        member_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(member_id))&.first
+        member_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(member_id), model: DeletionMarker)&.first
         restore_from_deletion_marker(member_deletion_marker) if member_deletion_marker
       end
     end

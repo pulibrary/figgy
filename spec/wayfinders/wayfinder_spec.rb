@@ -53,20 +53,46 @@ RSpec.describe Wayfinder do
       end
     end
 
-    describe "#deep_failed_local_fixity_count" do
-      it "returns a count of all failed local fixity file sets, deep" do
-        fs1 = create_file_set(fixity_success: 0)
-        fs2 = create_file_set(fixity_success: 0)
-        fs3 = create_file_set(fixity_success: 0)
-        ok_fs = create_file_set(fixity_success: 1)
-        # Unrelated FS
-        create_file_set(fixity_success: 0)
-        volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
-        volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
-        mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
+    describe "#deep_failed_local_fixity_count", db_cleaner_deletion: true do
+      context "when there are no local_fixity Events" do
+        it "uses the file set properties to return a count of all failed local fixity file sets, deep" do
+          fs1 = create_file_set(fixity_success: 0)
+          fs2 = create_file_set(fixity_success: 0)
+          fs3 = create_file_set(fixity_success: 0)
+          ok_fs = create_file_set(fixity_success: 1)
+          # Unrelated FS
+          create_file_set(fixity_success: 0)
+          volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+          volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
+          mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
 
-        expect(described_class.for(mvw).deep_failed_local_fixity_count).to eq 3
-        expect(described_class.for(mvw).deep_succeeded_local_fixity_count).to eq 1
+          expect(described_class.for(mvw).deep_failed_local_fixity_count).to eq 3
+          expect(described_class.for(mvw).deep_succeeded_local_fixity_count).to eq 1
+        end
+      end
+
+      context "when there are local_fixity Events" do
+        it "uses the Events to return a count of all failed local fixity file sets, deep" do
+          # failing file sets
+          fs1 = FactoryBot.create_for_repository(:original_file_file_set)
+          FactoryBot.create(:local_fixity_failure, resource_id: fs1.id)
+          fs2 = FactoryBot.create_for_repository(:original_file_file_set)
+          FactoryBot.create(:local_fixity_failure, resource_id: fs2.id)
+          fs3 = FactoryBot.create_for_repository(:original_file_file_set)
+          FactoryBot.create(:local_fixity_failure, resource_id: fs3.id)
+          # succeeding file set
+          ok_fs = FactoryBot.create_for_repository(:original_file_file_set)
+          FactoryBot.create(:local_fixity_success, resource_id: ok_fs.id)
+          # Unrelated, failing FS
+          other_fs = FactoryBot.create_for_repository(:original_file_file_set)
+          FactoryBot.create(:local_fixity_failure, resource_id: other_fs.id)
+          volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+          volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
+          mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
+
+          expect(described_class.for(mvw).deep_failed_local_fixity_count).to eq 3
+          expect(described_class.for(mvw).deep_succeeded_local_fixity_count).to eq 1
+        end
       end
 
       def create_file_set(fixity_success:)
@@ -955,7 +981,7 @@ RSpec.describe Wayfinder do
       it "returns the resource which resolves to the child_id attribute" do
         file_metadata = FileMetadata.new(id: SecureRandom.uuid)
         preservation_object = FactoryBot.create_for_repository(:preservation_object, metadata_node: file_metadata)
-        event = FactoryBot.create_for_repository(:event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node, current: true)
+        event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: preservation_object.id, child_id: file_metadata.id, child_property: :metadata_node, current: true)
         wayfinder = described_class.for(event)
 
         expect(wayfinder.affected_child).to be_a FileMetadata
@@ -966,7 +992,7 @@ RSpec.describe Wayfinder do
     context "without specifying a resource ID in the Preservation Object" do
       it "returns the resource which resolves to the child_id attribute" do
         file_metadata = FileMetadata.new(id: SecureRandom.uuid)
-        event = FactoryBot.create_for_repository(:event, child_id: file_metadata.id, child_property: :metadata_node, current: true)
+        event = FactoryBot.create_for_repository(:cloud_fixity_event, child_id: file_metadata.id, child_property: :metadata_node, current: true)
         wayfinder = described_class.for(event)
 
         expect(wayfinder.affected_child).to be nil

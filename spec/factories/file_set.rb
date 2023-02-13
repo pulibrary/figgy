@@ -12,6 +12,10 @@ FactoryBot.define do
       resource.depositor = evaluator.user.uid if evaluator.user.present?
     end
 
+    factory :original_file_file_set do
+      file_metadata { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+    end
+
     factory :geo_metadata_file_set do
       file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_metadata_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
     end

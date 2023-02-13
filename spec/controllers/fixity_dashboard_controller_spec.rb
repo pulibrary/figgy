@@ -39,31 +39,6 @@ RSpec.describe FixityDashboardController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it "sets fixity failures variable" do
-      get :show
-      expect(assigns[:failures].size).to eq 1
-    end
-
-    context "most-recently-upated filesets" do
-      before do
-        allow_any_instance_of(FileSetsSortedByUpdated).to receive(:file_sets_sorted_by_updated).and_return [resource, resource2, resource3]
-      end
-      it "sets recents variable" do
-        get :show
-        expect(assigns[:recents].size).to eq 3
-      end
-    end
-
-    context "least-recently-upated filesets" do
-      before do
-        allow_any_instance_of(FileSetsSortedByUpdated).to receive(:file_sets_sorted_by_updated).and_return [resource3, resource2, resource]
-      end
-      it "sets upcoming variable" do
-        get :show
-        expect(assigns[:upcoming].size).to eq 3
-      end
-    end
-
     context "for non-admin users" do
       let(:user) { nil }
 

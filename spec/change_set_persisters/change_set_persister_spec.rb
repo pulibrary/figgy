@@ -338,7 +338,7 @@ RSpec.describe ChangeSetPersister do
       pyramidal_derivative = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] && x.mime_type == ["image/tiff"] }
       expect(pyramidal_derivative).not_to be_blank
 
-      expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet
+      expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet, Event
 
       expect(members.first.hocr_content).not_to be_blank
       expect(members.first.processing_status).to eq "processed"

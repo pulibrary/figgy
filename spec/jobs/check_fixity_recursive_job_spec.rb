@@ -36,6 +36,7 @@ RSpec.describe CheckFixityRecursiveJob do
     let(:job_instance) { described_class.new }
 
     it "updates only the least-recently-updated file_set" do
+      pending "This job currently is not running, and is going to be rewritten. See https://github.com/pulibrary/figgy/issues/5554"
       file_set2 = query_service.find_members(resource: output2).first
       expect(file_set2.original_file.fixity_success).to be nil
 
