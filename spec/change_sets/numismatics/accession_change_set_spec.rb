@@ -13,10 +13,22 @@ RSpec.describe Numismatics::AccessionChangeSet do
     end
   end
 
-  describe "#primary_terms" do
-    it "expects dates to be DateTime objects" do
-      accession.date = "Today"
-      expect { decorator.formatted_date }.to raise_error
+  describe "date validation" do
+    context "when an invalid date is set" do
+      let(:change_set) { described_class.new(accession, date: "Today") }
+
+      it "is invalid" do
+        expect(change_set).not_to be_valid
+      end
+    end
+
+    context "when a valid date is set" do
+      valid_date = DateTime.new(2000, 1, 1)
+      let(:change_set) { described_class.new(accession, date: valid_date) }
+
+      it "is valid" do
+        expect(change_set).to be_valid
+      end
     end
   end
 end
