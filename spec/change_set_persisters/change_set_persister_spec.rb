@@ -1511,7 +1511,7 @@ RSpec.describe ChangeSetPersister do
 
         deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
         expect(deletion_markers.to_a.length).to eq 3
-        deletion_marker = deletion_markers.first
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
         expect(deletion_marker.resource_type).to eq ["ScannedMap"]
         expect(deletion_marker.depositor).to eq ["new_user"]
 
