@@ -33,6 +33,7 @@ class ChangeSetPersister
           resource_local_identifier: resource.try(:local_identifier),
           resource_archival_collection_code: resource.try(:archival_collection_code),
           original_filename: resource.try(:primary_file)&.original_filename,
+          deleted_object: resource,
           preservation_object: preservation_object,
           depositor: resource.try(:depositor)
         }

@@ -1492,6 +1492,7 @@ RSpec.describe ChangeSetPersister do
         expect(deletion_marker.resource_title).to eq file_set.title
         expect(deletion_marker.original_filename).to eq file_set.original_file.original_filename
         expect(deletion_marker.deleted_at).to eq deletion_markers.first.created_at
+        expect(deletion_marker.deleted_object.id).to eq file_set.id
         expect(deletion_marker.preservation_object.preserved_object_id).to eq file_set.id
         expect(deletion_marker.parent_id).to eq resource.id
         expect(deletion_marker.resource_type).to eq ["FileSet"]

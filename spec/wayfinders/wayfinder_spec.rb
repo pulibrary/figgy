@@ -32,7 +32,7 @@ RSpec.describe Wayfinder do
         change_set_persister.delete(change_set: change_set)
 
         deletion_marker = change_set_persister.query_service.find_all_of_model(model: DeletionMarker).first
-        expect(described_class.for(resource).child_deletion_markers.to_a).to eq [deletion_marker]
+        expect(described_class.for(resource).child_deletion_markers[0].id).to eq deletion_marker.id
       end
     end
 
