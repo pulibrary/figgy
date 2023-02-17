@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe CatalogController do
+RSpec.describe CatalogController, type: :controller do
   let(:persister) { Valkyrie::MetadataAdapter.find(:indexing_persister).persister }
   let(:query_service) { ChangeSetPersister.default.query_service }
   describe "#index" do
@@ -557,6 +557,44 @@ RSpec.describe CatalogController do
 
         expect(assigns(:response).documents.length).to eq 2
         expect(assigns(:response).documents.map(&:id)).to contain_exactly(parent.id.to_s, child.id.to_s)
+      end
+    end
+
+    describe "deletion marker behavior" do
+      let(:change_set_persister) { ChangeSetPersister.default }
+      let(:resource) { FactoryBot.create_for_repository(:pending_scanned_map, title: "title") }
+
+      before do
+        stub_ezid(shoulder: "99999/fk4", blade: "")
+        reloaded_resource = query_service.find_by(id: resource.id)
+        change_set = ChangeSet.for(reloaded_resource)
+        change_set.validate(state: "complete")
+        output = change_set_persister.save(change_set: change_set)
+        change_set = ChangeSet.for(output)
+        change_set_persister.delete(change_set: change_set)
+      end
+
+      it "only returns deletion markers with a Deletion Marker facet param" do
+        get :index, params: { q: "" }
+        expect(assigns(:response).documents.length).to eq 0
+      end
+
+      context "with a resource that has a FileSet" do
+        let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+        let(:resource) { FactoryBot.create_for_repository(:pending_scanned_map, title: "title", files: [file]) }
+        it "only returns the parent resource" do
+          get :index, params: { q: "", f: { human_readable_type_ssim: ["Deletion Marker"] } }
+          expect(assigns(:response).documents.length).to eq 1
+        end
+      end
+
+      context "with a MVW" do
+        let(:child_resource) { FactoryBot.create_for_repository(:complete_raster_resource) }
+        let(:resource) { FactoryBot.create_for_repository(:pending_scanned_map, title: "title", member_ids: [child_resource.id]) }
+        it "only returns the parent resource" do
+          get :index, params: { q: "", f: { human_readable_type_ssim: ["Deletion Marker"] } }
+          expect(assigns(:response).documents.length).to eq 1
+        end
       end
     end
   end

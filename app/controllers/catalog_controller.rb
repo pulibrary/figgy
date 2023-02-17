@@ -212,6 +212,12 @@ class CatalogController < ApplicationController
     config.add_index_field "part_of_ssim", label: "Part Of"
     config.add_index_field "imported_date_created_tesim", label: "Date"
     config.add_index_field "figgy_title_ssi"
+    config.add_index_field "resource_source_metadata_identifier_ssim", label: "Source Identifier"
+    config.add_index_field "deleted_resource_id_ssi", label: "Resource ID"
+    config.add_index_field "resource_identifier_ssi", label: "ARK"
+    config.add_index_field "resource_local_identifier_ssim", label: "Local Identifier"
+    config.add_index_field "resource_type_ssim", label: "Type"
+    config.add_index_field "deleted_resource_depositor_ssi", label: "Depositor"
   end
 
   # Determine whether or not a user can edit the resource in the current context

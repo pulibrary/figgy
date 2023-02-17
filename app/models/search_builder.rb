@@ -6,7 +6,7 @@ class SearchBuilder < Blacklight::SearchBuilder
   # Add a filter query to restrict the search to documents the current user has access to
   include Hydra::AccessControlsEnforcement
   delegate :unreadable_states, to: :current_ability
-  self.default_processor_chain += [:filter_models, :filter_parented, :hide_incomplete]
+  self.default_processor_chain += [:filter_models, :filter_parented, :hide_incomplete, :hide_suppressed]
 
   # Add queries that excludes everything except for works and collections
   def filter_models(solr_parameters)
@@ -32,12 +32,18 @@ class SearchBuilder < Blacklight::SearchBuilder
     solr_params[:fq] << state_string
   end
 
+  # Hide resources marked as suppressed in the search results. For now, these
+  # are DeletionMarkers that have a parent DeletionMarker
+  def hide_suppressed(solr_params)
+    solr_params[:fq] << "-suppressed_bsi: true"
+  end
+
   def readable_states
     WorkflowRegistry.all_states - unreadable_states
   end
 
   # This is a list of models that should not be presented in search results
-  def models_to_solr_clause
+  def models_list
     [
       FileMetadata,
       FileSet,
@@ -58,13 +64,28 @@ class SearchBuilder < Blacklight::SearchBuilder
       ProxyFileSet,
       Template,
       PreservationObject,
-      DeletionMarker,
       CDL::ResourceChargeList
-    ].join(",")
+    ]
+  end
+
+  def models_to_solr_clause
+    if display_deletion_markers?
+      models_list.join(",")
+    else
+      # Hide DeletionMarker resources unless it's type facet is selected
+      models_list.push(DeletionMarker).join(",")
+    end
   end
 
   def add_access_controls_to_solr_params(*args)
     return if current_ability.universal_reader?
     apply_gated_discovery(*args)
   end
+
+  private
+
+    # Determine if the DeletionMarkers type facet is selected
+    def display_deletion_markers?
+      blacklight_params.dig(:f, :human_readable_type_ssim) == ["Deletion Marker"]
+    end
 end

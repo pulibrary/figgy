@@ -247,6 +247,7 @@ Rails.application.config.to_prepare do
     CollectionIndexer,
     EphemeraBoxIndexer,
     EphemeraFolderIndexer,
+    DeletionMarkerIndexer,
     FacetIndexer,
     ProjectIndexer,
     HumanReadableTypeIndexer,

@@ -286,4 +286,10 @@ Rails.application.routes.draw do
       post :return
     end
   end
+
+  resources :deletion_markers, only: [:show, :destroy] do
+    member do
+      get :restore
+    end
+  end
 end

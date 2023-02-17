@@ -1,0 +1,7 @@
+  <div class="admin-controls">
+    <%= link_to "Restore Resource", main_app.polymorphic_path([:restore, resource]), class: 'btn btn-primary' %>
+
+    <% unless Rails.env == 'production' %>
+      <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+    <% end %>
+  </div>
