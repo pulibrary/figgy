@@ -17,8 +17,8 @@ class FindNeverPreservedChildIds
     # Get IDs of resources that have preservation objects.
     file_set_ids = adapter.connection[preservation_object_query, id: resource.id.to_s].to_a.map { |x| x[:file_set_id] }
     # Subtract those from member_ids
-    resource.member_ids.select do |member_id|
-      !file_set_ids.include?(member_id)
+    resource.member_ids.reject do |member_id|
+      file_set_ids.include?(member_id)
     end
   end
 
