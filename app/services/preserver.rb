@@ -25,18 +25,11 @@ class Preserver
   # to preserve themselves, because their parent is set up to be.
   def preserve!
     preserve_binary_content(force: force_preservation)
-    if preserve_children?
-      preserve_metadata && preserve_children
-    else
-      preserve_metadata
-    end
+    preserve_metadata
+    preserve_children
   end
 
   private
-
-    def preserve_children?
-      @created_preservation_object == true
-    end
 
     def preserve_binary_content(force: false)
       # Initialize so it saves early - if two Preservers are running at the
@@ -97,9 +90,16 @@ class Preserver
       change_set_persister.persister.save(resource: PreservationObject.new(preserved_object_id: resource.id))
     end
 
+    # Always check for unpreserved members, but preserve all members if the
+    # parent structure has changed or the parent's newly preserved.
+    def only_preserve_unpreserved_members?
+      @membership_changed != true && @created_preservation_object != true
+    end
+
     def preserve_children
       return unless resource.try(:member_ids).present? && change_set.try(:preserve_children?)
-      PreserveChildrenJob.perform_later(id: resource.id.to_s)
+      return if change_set_persister.query_service.custom_queries.find_never_preserved_child_ids(resource: resource).blank? && only_preserve_unpreserved_members?
+      PreserveChildrenJob.perform_later(id: resource.id.to_s, unpreserved_only: only_preserve_unpreserved_members?)
     end
 
     def preserve_metadata
@@ -127,7 +127,7 @@ class Preserver
       # e.g. I moved /1/a/metadata.json to /2/a/metadata.json
       if preservation_object.metadata_node&.file_identifiers.present? && preservation_object.metadata_node.file_identifiers[0] != uploaded_file.id
         # Parent structure has changed, re-preserve children.
-        preserve_children
+        @membership_changed = true
         preserve_binary_content(force: true)
         # clean up the old files, e.g. /1/a/metadata.json from example above
         CleanupFilesJob.perform_later(file_identifiers: preservation_object.metadata_node.file_identifiers.map(&:to_s))
