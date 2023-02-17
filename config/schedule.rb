@@ -20,6 +20,10 @@ every :day, at: "9:00 PM", roles: [:db] do
   rake "figgy:fixity:request_daily_cloud_fixity"
 end
 
+every :day, at: "10:00 PM", roles: [:db] do
+  rake "figgy:fixity:request_daily_local_fixity "
+end
+
 every 10.minutes, roles: [:db] do
   rake "figgy:cdl:bulk_hold_process"
 end
