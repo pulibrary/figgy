@@ -1,6 +1,13 @@
 # frozen_string_literal: true
+# Convert an enumerable of resources into a CSV by converting it to a hash,
+# merging in imported properties, and selecting each property as a field. Right
+# now useful for ad-hoc reports, but could be used as a tool for generic report
+# generation.
 class CSVReport
   attr_reader :resources, :fields
+  # @param resources [Enumerable<Valkyrie::Resource>] resources to convert to a
+  #   CSV
+  # @param fields [Array<Symbol>] fields which act as the header of the CSV
   def initialize(resources, fields: [:title])
     @resources = resources
     @fields = fields
