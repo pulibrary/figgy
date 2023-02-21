@@ -14,6 +14,7 @@ class Playlist < Resource
   attribute :local_identifier
   attribute :logical_structure, Valkyrie::Types::Array.of(Structure.optional).optional
   attribute :downloadable
+  attribute :depositor
 
   def self.can_have_manifests?
     true

@@ -707,6 +707,23 @@ RSpec.describe CatalogController, type: :controller do
   end
 
   describe "#show" do
+    context "when rendered for a staff user" do
+      render_views
+      let(:user) { FactoryBot.create(:staff) }
+      before do
+        sign_in user
+      end
+
+      it "renders for a Playlist" do
+        playlist = FactoryBot.build(:playlist, depositor: user.uid)
+        playlist = persister.save(resource: playlist)
+
+        get :show, params: { id: playlist.id.to_s }
+
+        expect(response).to be_successful
+        expect(response.body).to have_link "Delete This Playlist"
+      end
+    end
     context "when rendered for an admin auth token" do
       render_views
       it "renders" do
