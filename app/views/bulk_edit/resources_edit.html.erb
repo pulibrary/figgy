@@ -70,6 +70,20 @@
               input_html: { class: 'form-control holding-location' },
               required: false %>
         </div>
+        <div class="row">
+          <div class="col-sm-2"><%= label_tag "embargo_date", "Embargo Date" %></div>
+          <%= select_tag :embargo_date_action,
+              options_for_select({ "Input a date" => "date", "Clear all values" => "clear" }),
+              include_blank: "[Do not update]",
+              input_html: { class: 'form-control holding-location' },
+              required: false %>
+          <lux-date-picker
+              id="embargo-date-picker"
+              name="embargo_date_value"
+              mode="single"
+              display="hidden"
+              <%= raw default_embargo_date(:embargo_date) %> />
+        </div>
         <div class="card-footer card-save-controls pull-right">
           <%= submit_tag "Apply Edits",
             id: 'bulk-edit-submit',

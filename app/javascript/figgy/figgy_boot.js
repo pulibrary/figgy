@@ -33,6 +33,7 @@ export default class Initializer {
     this.bulk_labeler = new BulkLabeler
     this.sortable_placeholder()
     this.initialize_multi_fields()
+    this.initialize_embargo_date_select()
 
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
     // causing this to not run. Manually calling it so facet more links work.
@@ -187,14 +188,27 @@ export default class Initializer {
     }
 
     $.fn.manage_fields = function(option) {
-        return this.each(function() {
-            var $this = $(this);
-            var data  = $this.data('manage_fields');
-            var options = $.extend({}, DEFAULTS, $this.data(), typeof option == 'object' && option);
+      return this.each(function() {
+        var $this = $(this);
+        var data  = $this.data('manage_fields');
+        var options = $.extend({}, DEFAULTS, $this.data(), typeof option == 'object' && option);
 
-            if (!data) $this.data('manage_fields', (data = new FieldManager(this, options)));
-        })
+        if (!data) $this.data('manage_fields', (data = new FieldManager(this, options)));
+      })
     }
     $('.multi_value.form-group').manage_fields();
+  }
+
+  initialize_embargo_date_select() {
+    $('#embargo-date-picker').attr('placeholder', 'e.g. ' + new Date().toLocaleDateString());
+
+    $('#embargo_date_action').change(function() {
+      const selection = $(this).val();
+      if (selection === 'date') {
+        $('#embargo-date-picker').show();
+      } else {
+        $('#embargo-date-picker').hide();
+      }
+    });
   }
 }

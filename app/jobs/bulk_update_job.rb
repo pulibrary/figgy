@@ -24,6 +24,7 @@ class BulkUpdateJob < ApplicationJob
     [
       :append_collection_ids,
       :remove_collection_ids,
+      :embargo_date,
       :holding_location,
       :ocr_language,
       :refresh_remote_metadata,
