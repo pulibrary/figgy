@@ -58,6 +58,7 @@ class ChangeSetPersister
         GeoserverPublish::Factory.new(operation: :delete),
         GeoserverPublish::Factory.new(operation: :derivatives_delete),
         CreateDeletionMarker,
+        CleanupPDFDerivatives,
         CleanupFiles,
         CleanupStructure,
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),
