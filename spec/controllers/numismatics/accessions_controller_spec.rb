@@ -16,7 +16,7 @@ RSpec.describe Numismatics::AccessionsController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
     let(:valid_params) do
       {
-        date: ["01/02/2003"],
+        date: "2001-01-01",
         cost: "$123.00"
       }
     end

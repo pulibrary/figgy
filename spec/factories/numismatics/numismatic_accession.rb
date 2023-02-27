@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :numismatic_accession, class: Numismatics::Accession do
     accession_number { 1 }
-    date { "01/01/2001" }
+    date { "2001-01-01" }
     items_number { 102 }
     type { "gift" }
     cost { "$99.00" }

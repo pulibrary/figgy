@@ -2,8 +2,8 @@
 class AccessionDateValidator < ::ActiveModel::Validator
   def validate(record)
     return if record.date.blank?
-    DateTime.strptime(record.date, "%m/%d/%Y")
+    DateTime.strptime(record.date, "%Y-%m-%d")
   rescue Date::Error
-    record.errors.add(:date, "Please enter dates as MM/DD/YYYY")
+    record.errors.add(:date, "Please enter dates as YYYY-MM-DD")
   end
 end

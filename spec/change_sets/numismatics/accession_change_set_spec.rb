@@ -23,7 +23,7 @@ RSpec.describe Numismatics::AccessionChangeSet do
     end
 
     context "when a valid date is set" do
-      valid_date = DateTime.new(2000, 1, 1)
+      valid_date = "2001-01-01"
       let(:change_set) { described_class.new(accession, date: valid_date) }
 
       it "is valid" do

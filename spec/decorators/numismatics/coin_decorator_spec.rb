@@ -43,7 +43,7 @@ RSpec.describe Numismatics::CoinDecorator do
 
   describe "#rendered_accession" do
     it "generates a label based on the accession's properties" do
-      expect(decorator.rendered_accession).to eq("234: 01/01/2001 gift name1 name2 ($99.00)")
+      expect(decorator.rendered_accession).to eq("234: 2001-01-01 gift name1 name2 ($99.00)")
     end
   end
 

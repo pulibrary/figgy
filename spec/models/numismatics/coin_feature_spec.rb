@@ -139,7 +139,7 @@ RSpec.feature "Numismatics::Coins" do
       expect(page).to have_css ".attribute.private_note", text: "test value"
       expect(page).to have_css ".attribute.provenance", text: "provenance date; provenance note"
       expect(page).to have_css ".attribute.replaces", text: "test value"
-      expect(page).to have_css ".attribute.rendered_accession", text: "1: 01/01/2001 gift ($99.00)"
+      expect(page).to have_css ".attribute.rendered_accession", text: "1: 2001-01-01 gift ($99.00)"
       expect(page).to have_css ".attribute.size", text: "test value"
       expect(page).to have_css ".attribute.technique", text: "test value"
       expect(page).to have_css ".attribute.weight", text: "test value"
