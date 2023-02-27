@@ -167,7 +167,7 @@ en:
       heading: "Content Warning"
       accept_label: "View Content"
       message: >-
-        <p>This collection includes materials and images that are harmful (in that they are racist, transphobic, or otherwise demeaning). For more information on harmful content please see the PUL statement on Harmful Content: <a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>
+        <p>This collection includes materials and images that are harmful (in that they are racist, transphobic, or otherwise demeaning). For more information on harmful content please see the PUL statement on Harmful Content: <a href="https://library.princeton.edu/statement-harmful-content" target="_blank">https://library.princeton.edu/statement-harmful-content</a></p>
     explicit_content:
       heading: "Content Warning"
       accept_label: "View Content"
@@ -184,5 +184,5 @@ en:
       accept_label: "View Content"
       message: >-
         <p>%{message}</p>
-        <p>For more information on harmful content please see the PUL statement on Harmful Content: <a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>
+        <p>For more information on harmful content please see the PUL statement on Harmful Content: <a href="https://library.princeton.edu/statement-harmful-content" target="_blank">https://library.princeton.edu/statement-harmful-content</a></p>
 
