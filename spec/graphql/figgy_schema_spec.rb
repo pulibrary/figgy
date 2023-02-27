@@ -68,7 +68,7 @@ RSpec.describe FiggySchema do
           expect(notice["acceptLabel"]).to eq "View Content"
           expect(notice["textHtml"]).to eq "<p>The \"Revolution in China\" album contains photographs of dead bodies.</p> " \
             "<p>For more information on harmful content please see the PUL statement on Harmful Content: " \
-            '<a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>'
+            '<a href="https://library.princeton.edu/statement-harmful-content" target="_blank">https://library.princeton.edu/statement-harmful-content</a></p>'
         end
       end
       context "for an ephemera_folder with a content_warning" do
@@ -81,7 +81,7 @@ RSpec.describe FiggySchema do
           expect(notice["acceptLabel"]).to eq "View Content"
           expect(notice["textHtml"]).to eq "<p>There's harmful content here.</p> " \
             "<p>For more information on harmful content please see the PUL statement on Harmful Content: " \
-            '<a href="https://library.princeton.edu/statement-harmful-content">https://library.princeton.edu/statement-harmful-content</a></p>'
+            '<a href="https://library.princeton.edu/statement-harmful-content" target="_blank">https://library.princeton.edu/statement-harmful-content</a></p>'
         end
       end
     end
