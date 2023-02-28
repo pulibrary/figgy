@@ -37,9 +37,11 @@ class ChangeSetPersister
         CacheParentId
       ],
       after_save: [
-        AppendToParent,
         UpdateAuthToken,
         GenerateMosaic
+      ],
+      around_save: [
+        AppendToParent
       ],
       after_save_commit: [
         PublishMessage::Factory.new(operation: :update),
@@ -195,6 +197,9 @@ class ChangeSetPersister
     private
 
       def before_save(change_set:)
+        registered_handlers.fetch(:around_save, []).each do |handler|
+          handler.new(change_set_persister: self, change_set: change_set, post_save_resource: nil).run_before_save
+        end
         registered_handlers.fetch(:before_save, []).each do |handler|
           handler.new(change_set_persister: self, change_set: change_set).run
         end
@@ -203,6 +208,9 @@ class ChangeSetPersister
       def after_save(change_set:, updated_resource:)
         registered_handlers.fetch(:after_save, []).each do |handler|
           handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource).run
+        end
+        registered_handlers.fetch(:around_save, []).each do |handler|
+          handler.new(change_set_persister: self, change_set: change_set, post_save_resource: updated_resource).run_after_save
         end
       end
 
