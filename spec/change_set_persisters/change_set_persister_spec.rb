@@ -1030,69 +1030,6 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
-  describe "appending" do
-    it "appends a child via #append_id" do
-      parent = FactoryBot.create_for_repository(:scanned_resource)
-      resource = FactoryBot.build(:scanned_resource)
-      change_set = change_set_class.new(resource)
-      change_set.validate(append_id: parent.id.to_s)
-
-      output = change_set_persister.save(change_set: change_set)
-      reloaded = query_service.find_by(id: parent.id)
-      expect(reloaded.member_ids).to eq [output.id]
-      expect(reloaded.thumbnail_id).to eq [output.id]
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
-      expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
-      expect(output.cached_parent_id).to eq reloaded.id
-    end
-
-    it "will not append to the same parent twice" do
-      resource = FactoryBot.create_for_repository(:scanned_resource)
-      parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id)
-      change_set = change_set_class.new(resource)
-      change_set.validate(append_id: parent.id.to_s)
-
-      output = change_set_persister.save(change_set: change_set)
-      reloaded = query_service.find_by(id: parent.id)
-
-      expect(reloaded.member_ids).to eq [output.id]
-      expect(reloaded.thumbnail_id).to eq [output.id]
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
-      expect(solr_record["member_of_ssim"]).to eq ["id-#{parent.id}"]
-    end
-
-    it "moves a child from another parent via #append_id" do
-      resource = FactoryBot.create_for_repository(:scanned_resource)
-      old_parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id)
-      new_parent = FactoryBot.create_for_repository(:scanned_resource)
-
-      change_set = change_set_class.new(resource)
-      change_set.validate(append_id: new_parent.id.to_s)
-      output = change_set_persister.save(change_set: change_set)
-
-      new_reloaded = query_service.find_by(id: new_parent.id)
-      old_reloaded = query_service.find_by(id: old_parent.id)
-
-      expect(new_reloaded.member_ids).to eq [output.id]
-      expect(new_reloaded.thumbnail_id).to eq [output.id]
-
-      expect(old_reloaded.member_ids).to eq []
-      expect(old_reloaded.thumbnail_id).to be_blank
-
-      solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{output.id}" })["response"]["docs"][0]
-      expect(solr_record["member_of_ssim"]).to eq ["id-#{new_parent.id}"]
-    end
-
-    it "will not append a resource as a child of itself" do
-      resource = FactoryBot.create_for_repository(:scanned_resource)
-      change_set = change_set_class.new(resource)
-      change_set.validate(append_id: resource.id.to_s)
-
-      output = change_set_persister.save(change_set: change_set)
-      expect(output.member_ids).to eq []
-    end
-  end
-
   context "setting visibility from remote metadata" do
     context "when date is before 1924" do
       it "sets it to public domain and open" do

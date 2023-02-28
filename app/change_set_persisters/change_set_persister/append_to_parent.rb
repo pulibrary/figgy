@@ -9,7 +9,16 @@ class ChangeSetPersister
       @post_save_resource = post_save_resource
     end
 
-    def run
+    # clear out collections the child scanned resource was a part of
+    def run_before_save
+      return if append_id.blank?
+      return if change_set.id == append_id
+      return unless change_set.resource.is_a? ScannedResource
+      change_set.validate(member_of_collection_ids: [])
+    end
+
+    # add to the parent
+    def run_after_save
       return if append_id.blank?
       return if post_save_resource.id == append_id
       remove_from_old_parent
