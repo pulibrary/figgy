@@ -16,7 +16,7 @@
           v-model="child.expanded"
           @change="expanding(child)"
         >
-          <summary>
+          <summary class="item-label">
             <label v-if="child.selectable">
               <input
                 :checked="childSelected(child)"
@@ -36,7 +36,7 @@
             @selected="requestChildSelect"
           />
         </v-details>
-        <span v-else>
+        <span class="item-label" v-else>
           {{ child.label }}
         </span>
       </li>
@@ -206,11 +206,13 @@ export default {
   padding-left : 0;
 }
 .tree ul li{
+  /*
   border-left : 2px solid #ddd;
+  */
 }
 
 .tree ul li:last-child{
-  border-color : transparent;
+  /* border-color : transparent; */
 }
 .tree ul li::before{
   content      : '';
@@ -220,12 +222,21 @@ export default {
   left         : -2px;
   width        : calc(var(--spacing) + 2px);
   height       : calc(var(--spacing) + 1px);
+  /*
   border       : solid #ddd;
   border-width : 0 0 2px 2px;
+  */
 }
 .tree summary{
   display : inline-block;
   cursor  : pointer;
+}
+
+.item-label {
+  width: 100%;
+  background-color: lightgray;
+  display: block;
+  margin: 1px;
 }
 
 .tree summary::marker,
@@ -249,8 +260,10 @@ export default {
   left          : calc(var(--spacing) - var(--radius) - 1px);
   width         : calc(2 * var(--radius));
   height        : calc(2 * var(--radius));
+  /*
   border-radius : 50%;
   background    : #ddd;
+  */
 }
 .tree summary::before{
   content     : '+';
