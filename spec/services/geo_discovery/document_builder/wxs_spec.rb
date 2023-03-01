@@ -83,11 +83,20 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
     end
 
     context "when the wms_url property is set on the resource" do
-      let(:wms_url) { "https://geoserver.princeton.edu/geoserver/mosaics/wms" }
+      let(:wms_url) { ["https://geoserver.princeton.edu/geoserver/mosaics/wms"] }
       let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility, wms_url: wms_url) }
 
       it "returns a the overriden wms value" do
-        expect(wxs_builder.wms_path).to eq wms_url
+        expect(wxs_builder.wms_path).to eq wms_url.first
+      end
+    end
+
+    context "when the wms_url property is set to an empty string" do
+      let(:wms_url) { [""] }
+      let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility, wms_url: wms_url) }
+
+      it "does not return the overriden wms value" do
+        expect(wxs_builder.wms_path).not_to eq wms_url
       end
     end
   end
@@ -113,6 +122,15 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
 
       it "returns a the overriden wfs value" do
         expect(wxs_builder.wfs_path).to eq wfs_url
+      end
+    end
+
+    context "when the wfs_url property is set to an empty string" do
+      let(:wfs_url) { [""] }
+      let(:geo_work) { FactoryBot.create_for_repository(:vector_resource, visibility: visibility, wfs_url: wfs_url) }
+
+      it "does not return the overriden wfs value" do
+        expect(wxs_builder.wfs_path).not_to eq wfs_url
       end
     end
   end
