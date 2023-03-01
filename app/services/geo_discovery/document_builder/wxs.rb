@@ -20,7 +20,8 @@ module GeoDiscovery
       # Returns the wms server url.
       # @return [String] wms server url
       def wms_path
-        return resource_decorator.wms_url if resource_decorator.wms_url.present?
+        url = Array.wrap(resource_decorator.wms_url)
+        return url.first if url.try(:first).present?
         return unless generate_wms_path?
         "#{path}/#{@config[visibility][:workspace]}/wms"
       end
@@ -28,7 +29,8 @@ module GeoDiscovery
       # Returns the wfs server url.
       # @return [String] wfs server url
       def wfs_path
-        return resource_decorator.wfs_url if resource_decorator.wfs_url.present?
+        url = Array.wrap(resource_decorator.wfs_url)
+        return url.first if url.try(:first).present?
         return unless @config && visibility && file_set && vector_file_set?
         "#{path}/#{@config[visibility][:workspace]}/wfs"
       end
