@@ -49,14 +49,17 @@
 export default {
   name: 'DirectoryPicker',
   props: {
+    // What the tree is initialized with.
     startChildren: {
       type: Array,
       default: null
     },
+    // Whether this is the root node
     root: {
       type: Boolean,
       default: true
     },
+    // Which child is selected
     selected: {
       type: Object,
       default: null
