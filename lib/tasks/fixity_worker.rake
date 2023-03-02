@@ -8,7 +8,7 @@ namespace :figgy do
 
     # This task only outputs to logs and isn't expected to be run manually. It's
     # designed to be run by Whenever/Cron.
-    desc "Queues daily fixity"
+    desc "Queues daily cloud fixity"
     task request_daily_cloud_fixity: :environment do
       CloudFixity::FixityRequestor.queue_daily_check!(annual_percent: 10)
     end
@@ -19,6 +19,13 @@ namespace :figgy do
       abort "usage: rake fixity:request_cloud_fixity ID=resourceid" unless id
       Rails.logger = Logger.new(STDOUT)
       CloudFixity::FixityRequestor.queue_resource_check!(id: id)
+    end
+
+    # This task only outputs to logs and isn't expected to be run manually. It's
+    # designed to be run by Whenever/Cron.
+    desc "Queues daily local fixity"
+    task request_daily_local_fixity: :environment do
+      LocalFixity::FixityRequestor.queue_daily_check!(annual_percent: 100)
     end
   end
 end
