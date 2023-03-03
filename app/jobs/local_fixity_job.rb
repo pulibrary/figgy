@@ -11,7 +11,11 @@ class LocalFixityJob < ApplicationJob
     new_checksum = MultiChecksum.for(file)
 
     event_change_set = build_event_change_set(new_checksum)
-    ChangeSetPersister.default.save(change_set: event_change_set)
+
+    ChangeSetPersister.default.buffer_into_index do |buffered_change_set_persister|
+      buffered_change_set_persister.save(change_set: previous_event_change_set) if previous_event
+      buffered_change_set_persister.save(change_set: event_change_set)
+    end
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   rescue Valkyrie::StorageAdapter::FileNotFound
@@ -37,7 +41,8 @@ class LocalFixityJob < ApplicationJob
       change_set.validate(
         type: :local_fixity,
         status: "SUCCESS",
-        resource_id: file_set_id
+        resource_id: Valkyrie::ID.new(file_set_id),
+        current: true
       )
       change_set
     end
@@ -47,10 +52,30 @@ class LocalFixityJob < ApplicationJob
       change_set.validate(
         type: :local_fixity,
         status: "FAILURE",
-        resource_id: file_set_id,
-        message: new_checksum.to_h.to_json
+        resource_id: Valkyrie::ID.new(file_set_id),
+        message: new_checksum.to_h.to_json,
+        current: true
       )
       change_set
+    end
+
+    def previous_event_change_set
+      return unless previous_event
+      ChangeSet.for(previous_event).tap do |cs|
+        cs.validate(current: false)
+      end
+    end
+
+    def previous_event
+      @previous_event ||= query_service.custom_queries.find_by_property(
+        property: :metadata,
+        value: {
+          type: :local_fixity,
+          resource_id: { id: file_set_id.to_s },
+          current: true
+        },
+        model: Event
+      ).first
     end
 
     def metadata_adapter

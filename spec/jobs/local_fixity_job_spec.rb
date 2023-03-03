@@ -94,5 +94,20 @@ RSpec.describe LocalFixityJob do
         expect { query_service.find_by(id: file_set_id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
       end
     end
+
+    context "when an current Event already exists" do
+      it "sets that Event current property to false" do
+        described_class.perform_now(file_set_id)
+        first_event = query_service.find_all_of_model(model: Event).first
+        expect(first_event.current).to eq true
+
+        described_class.perform_now(file_set_id)
+        events = query_service.find_all_of_model(model: Event)
+        event1 = events.find { |e| e.id == first_event.id }
+        event2 = events.find { |e| e.id != first_event.id }
+        expect(event1.current).to eq false
+        expect(event2.current).to eq true
+      end
+    end
   end
 end
