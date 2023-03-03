@@ -77,7 +77,7 @@ module Numismatics
     def parsed_date
       if date.to_s.include?("-")
         # It's an american hand-entered date, parse it as such
-        Time.zone.strptime(date, "%Y-%m-%d")
+        Time.zone.strptime(date.to_s, "%Y-%m-%d")
       else
         Time.zone.parse(date.to_s)
       end
