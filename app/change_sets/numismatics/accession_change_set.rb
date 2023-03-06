@@ -7,7 +7,7 @@ module Numismatics
     property :accession_number, multiple: false, required: false
     property :account, multiple: false, required: false
     property :cost, multiple: false, required: false
-    property :date, multiple: false, required: false
+    property :date, multiple: false, required: false, type: Valkyrie::Types::DateTime
     property :firm_id, multiple: false, required: false, type: Valkyrie::Types::ID
     property :items_number, multiple: false, required: false
     property :note, multiple: false, required: false
@@ -18,6 +18,7 @@ module Numismatics
     property :depositor, multiple: false, required: false
 
     validates_with AutoIncrementValidator, property: :accession_number
+    validates_with AccessionDateValidator
 
     # rubocop:disable Metrics/MethodLength
     def primary_terms
