@@ -14,6 +14,10 @@
             class="item-label"
             :class="{ 'list-focus': isFocused(child) }"
           >
+            <div class="expander">
+              <svg v-if="child.expanded"><polygon points="5,8 10,13 15,8" /></svg>
+              <svg v-else><polygon points="8,5 13,10 8,15" /></svg>
+            </div>
             <span
               @click="listFocused(child, $event)"
             >
@@ -98,55 +102,61 @@ export default {
 <style scope>
 .tree {
   --spacing: 1.5rem;
-  --radius: 10px;
+  --radius: 8px;
+  /* I don't know how to use Lux's color tokens.. */
+  /* color-grayscale-warm-lighter */
+  --directory-background: rgb(250, 249, 245);
+  /* color-grayscale-warm-light */
+  --directory-background-hover: rgb(210, 202, 173);
+  /* color-grayscale-warm */
+  --directory-selected: rgb(186, 175, 130);
   padding-left: 0;
 }
 .tree li{
   display      : block;
   position     : relative;
-  padding-left : calc(2 * var(--spacing) - var(--radius) - 2px);
 }
 
 .tree ul{
   margin-left  : calc(var(--radius) - var(--spacing));
-  padding-left : 0;
-}
-.tree ul li{
-  /*
-  border-left : 2px solid #ddd;
-  */
 }
 
-.tree ul li:last-child{
-  /* border-color : transparent; */
-}
-.tree ul li::before{
-  content      : '';
-  display      : block;
-  position     : absolute;
-  top          : calc(var(--spacing) / -2);
-  left         : -2px;
-  width        : calc(var(--spacing) + 2px);
-  height       : calc(var(--spacing) + 1px);
-  /*
-  border       : solid #ddd;
-  border-width : 0 0 2px 2px;
-  */
-}
 .tree summary{
-  display : inline-block;
   cursor  : pointer;
 }
 
 .item-label {
-  width: 100%;
-  background-color: lightgray;
-  display: block;
+  display: flex;
+  align-items: center;
   margin: 1px;
+}
+
+.expander {
+  width: 20px;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  margin-right: 2px;
+  pointer-events: none;
+}
+.expander > svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  pointer-events: none;
 }
 
 .item-label > span {
   display: block;
+  flex-grow: 1;
+  background-color: var(--directory-background);
+  padding-left: 5px;
+}
+.item-label > span:hover {
+  background-color: var(--directory-background-hover);
+}
+.item-label.list-focus > span {
+  background-color: var(--directory-selected);
 }
 
 .tree summary::marker,
@@ -160,32 +170,6 @@ export default {
 
 .tree summary:focus-visible{
   outline : 1px dotted #000;
-}
-.tree li::after,
-.tree summary::before{
-  content       : '';
-  display       : block;
-  position      : absolute;
-  top           : calc(var(--spacing) / 2 - var(--radius));
-  left          : calc(var(--spacing) - var(--radius) - 1px);
-  width         : calc(2 * var(--radius));
-  height        : calc(2 * var(--radius));
-  /*
-  border-radius : 50%;
-  background    : #ddd;
-  */
-}
-.tree summary::before{
-  content     : '+';
-  z-index     : 1;
-  background  : #696;
-  color       : #fff;
-  line-height : calc(2 * var(--radius) - 2px);
-  text-align  : center;
-}
-
-.tree details[open] > summary::before{
-  content : '−';
 }
 label {
   display: inline-block;
