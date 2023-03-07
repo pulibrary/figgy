@@ -80,6 +80,10 @@ module Numismatics
       [decorated_parent.rulers&.first, decorated_parent.denomination&.first, decorated_parent.decorated_numismatic_place&.city].compact.join(", ") if decorated_parent
     end
 
+    def references
+      numismatic_citation.map { |c| c.decorate.numismatic_reference }
+    end
+
     def rendered_accession
       decorated_numismatic_accession&.label
     end

@@ -175,15 +175,19 @@ describe OrangelightDocument do
         expect(output[:issue_reverse_figure_relationship_s]).to eq ["corn-ear behind head"]
         expect(output[:issue_reverse_legend_s]).to eq ["•HIBERNIA•1723•"]
         expect(output[:issue_reverse_attributes_s]).to eq ["attribute name, attribute description"]
-        expect(output[:issue_references_s]).to eq ["short-title citation part citation number"]
-        expect(output[:issue_references_sort]).to eq "short-title citation part citation number"
+        expect(output[:issue_citations_s]).to eq ["short-title citation part citation number"]
+        expect(output[:issue_citations_sort]).to eq "short-title citation part citation number"
+        expect(output[:issue_references_s]).to eq ["short-title"]
+        expect(output[:issue_references_sort]).to eq "short-title"
         expect(output[:issue_artists_s]).to eq ["name1 name2, artist signature"]
         expect(output[:issue_subjects_s]).to eq ["Other Person, Athena"]
         expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
         expect(output[:issue_monogram_title_s]).to contain_exactly("Alexander", "Zeus")
         expect(output[:issue_date_s]).to eq ["-91 to -41"]
-        expect(output[:coin_references_s]).to eq ["short-title citation part citation number"]
-        expect(output[:coin_references_sort]).to eq "short-title citation part citation number"
+        expect(output[:coin_citations_s]).to eq ["short-title citation part citation number"]
+        expect(output[:coin_citations_sort]).to eq "short-title citation part citation number"
+        expect(output[:coin_references_s]).to eq ["short-title"]
+        expect(output[:coin_references_sort]).to eq "short-title"
       end
     end
 
