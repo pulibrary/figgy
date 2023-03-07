@@ -124,6 +124,10 @@ module Numismatics
       decorated_numismatic_place&.region
     end
 
+    def references
+      numismatic_citation.map { |c| c.decorate.numismatic_reference }
+    end
+
     def rendered_place
       decorated_numismatic_place&.title
     end
