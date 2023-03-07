@@ -1,42 +1,36 @@
 <template>
   <div>
     <ul :class="root ? 'tree' : ''">
-      <input
-        v-if="root"
-        name="selected-path[]"
-        type="hidden"
-        :value="selectedChild ? selectedChild.path : null"
-      >
       <li
         v-for="child in children"
         :key="child.path"
       >
         <v-details
-          v-if="renderChildren(child)"
+          v-if="child.expandable"
           v-model="child.expanded"
           @change="expanding(child)"
         >
-          <summary class="item-label">
-            <label v-if="child.selectable">
-              <input
-                :checked="childSelected(child)"
-                type="checkbox"
-                @change="requestChildSelect(child, $event)"
-              >
-              {{ child.label }}
-            </label>
-            <span v-else>
+          <summary
+            class="item-label"
+            :class="{ 'list-focus': isFocused(child) }"
+          >
+            <span
+              @click="listFocused(child, $event)"
+            >
               {{ child.label }}
             </span>
           </summary>
           <DirectoryPicker
             :start-children="child.children"
             :root="false"
-            :selected="root ? selectedChild : selected"
-            @selected="requestChildSelect"
+            :list-focus="listFocus"
+            @listFocus="listFocused"
           />
         </v-details>
-        <span class="item-label" v-else>
+        <span
+          v-else
+          class="item-label"
+        >
           {{ child.label }}
         </span>
       </li>
@@ -59,123 +53,32 @@ export default {
       type: Boolean,
       default: true
     },
-    // Which child is selected
-    selected: {
+    listFocus: {
       type: Object,
       default: null
     }
   },
   data () {
     return {
-      'selectedChild': this.selected,
-      'children': this.startChildren || [
-        {
-          'label': 'Dir1',
-          'path': '/Dir1',
-          'expanded': true,
-          'selected': false,
-          'selectable': false,
-          'loaded': true,
-          'children': [
-            {
-              'label': 'Subdir1',
-              'path': '/Dir1/Subdir1',
-              'expanded': false,
-              'selected': false,
-              'selectable': true,
-              'loaded': true,
-              'children': [
-                {
-                  'label': 'SubSubdir1',
-                  'path': '/Dir1/Subdir1/SubSubdir1',
-                  'loadChildrenPath': '/test',
-                  'expanded': false,
-                  'selected': false,
-                  'selectable': false,
-                  'loaded': false,
-                  'children': []
-                },
-                {
-                  'label': 'SubSubdir2',
-                  'path': '/Dir1/Subdir1/SubSubdir2',
-                  'expanded': false,
-                  'selected': false,
-                  'selectable': false,
-                  'loaded': true,
-                  'children': []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          'label': 'Dir2',
-          'path': '/Dir2',
-          'expanded': false,
-          'selected': false,
-          'selectable': true,
-          'loaded': true,
-          'children': [
-            {
-              'label': 'Subdir1',
-              'path': '/Dir2/Subdir1',
-              'expanded': false,
-              'selected': false,
-              'selectable': false,
-              'loaded': true,
-              'children': []
-            },
-            {
-              'label': 'Subdir2',
-              'path': '/Dir2/Subdir2',
-              'expanded': false,
-              'selected': false,
-              'selectable': false,
-              'loaded': true,
-              'children': []
-            }
-          ]
-        }
-      ]
-    }
-  },
-  computed: {
-    // Root has a data property for selected child because it has to change, but
-    // nested components use the `selected` prop so the root's selection will
-    // change the child boxes.
-    singleSelectedChild () {
-      if (this.root) {
-        return this.selectedChild
-      } else {
-        return this.selected
-      }
+      'children': this.startChildren
     }
   },
   methods: {
-    renderChildren (child) {
-      return child.children.length > 0 || (child.loaded === false &&
-        child.loadChildrenPath)
-    },
-    childSelected (child) {
-      return child === this.singleSelectedChild
-    },
-    // If this is the root, then set the selected node. If it's a child
-    // directory, tell the parent that a new item was selected.
-    requestChildSelect (selectedChild, event) {
-      // Handle unselect
-      if (event && !event.target.checked) {
-        selectedChild = null
-      }
-      if (this.root) {
-        this.selectedChild = selectedChild
-      }
-      // If it's not the root, propagate the event upwards.
-      this.$emit('selected', selectedChild)
-    },
     expanding (child) {
       if (child.loaded === false && child.loadChildrenPath) {
         this.loadChildren(child)
       }
+    },
+    listFocused (child, event) {
+      // Tell the file browser which thing got focused.
+      this.$emit('listFocus', child)
+      // Clicking the label (span) shouldn't cause collapse.
+      if (event) {
+        event.preventDefault()
+      }
+    },
+    isFocused (child) {
+      return this.listFocus && child.path === this.listFocus.path
     },
     loadChildren (child) {
       return fetch(
@@ -240,6 +143,10 @@ export default {
   background-color: lightgray;
   display: block;
   margin: 1px;
+}
+
+.item-label > span {
+  display: block;
 }
 
 .tree summary::marker,
