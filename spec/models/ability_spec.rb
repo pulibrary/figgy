@@ -46,8 +46,8 @@ describe Ability do
   end
 
   let(:private_cdl_scanned_resource) do
-    stub_catalog(bib_id: "123456")
-    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "123456", user: creating_user, files: [page_file_2])
+    stub_catalog(bib_id: "991234563506421")
+    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "991234563506421", user: creating_user, files: [page_file_2])
     FactoryBot.create_for_repository(
       :resource_charge_list,
       resource_id: resource.id,
@@ -55,16 +55,16 @@ describe Ability do
         CDL::ChargedItem.new(item_id: "1234", netid: current_user&.uid || "rando", expiration_time: Time.current + 3.hours)
       ]
     )
-    allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "123456").and_return(["1"])
+    allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "991234563506421").and_return(["1"])
     resource
   end
 
   let(:private_cdl_mvw_scanned_resource) do
-    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "991234563506421")
     volume = FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2])
     mvw_resource = FactoryBot.create_for_repository(:complete_private_scanned_resource,
                                                     title: "Private",
-                                                    source_metadata_identifier: "123456",
+                                                    source_metadata_identifier: "991234563506421",
                                                     user: creating_user,
                                                     member_ids: [volume.id],
                                                     run_callbacks: true)
@@ -75,13 +75,13 @@ describe Ability do
         CDL::ChargedItem.new(item_id: "1234", netid: current_user&.uid || "rando", expiration_time: Time.current + 3.hours)
       ]
     )
-    allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "123456").and_return(["1"])
+    allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "991234563506421").and_return(["1"])
     mvw_resource
   end
 
   let(:expired_private_cdl_scanned_resource) do
-    stub_catalog(bib_id: "123456")
-    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "123456", user: creating_user, files: [page_file_2])
+    stub_catalog(bib_id: "991234563506421")
+    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "991234563506421", user: creating_user, files: [page_file_2])
     FactoryBot.create_for_repository(
       :resource_charge_list,
       resource_id: resource.id,
@@ -89,7 +89,7 @@ describe Ability do
         CDL::ChargedItem.new(item_id: "1234", netid: current_user&.uid || "rando", expiration_time: Time.current - 3.hours)
       ]
     )
-    allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "123456").and_return(["1"])
+    allow(CDL::EligibleItemService).to receive(:item_ids).with(source_metadata_identifier: "991234563506421").and_return(["1"])
     resource
   end
 

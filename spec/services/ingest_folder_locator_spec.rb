@@ -3,7 +3,7 @@ require "rails_helper"
 
 describe IngestFolderLocator do
   subject(:locator) { described_class.new(id: id) }
-  let(:id) { "123456" }
+  let(:id) { "991234563506421" }
   let(:upload_path_value) { Rails.root.join("spec", "fixtures", "staged_files").to_s }
 
   describe "#upload_path_value" do
@@ -28,7 +28,7 @@ describe IngestFolderLocator do
   describe "#location" do
     it "retrieves relative root" do
       expect(locator.location).to be_a Pathname
-      expect(locator.location.to_s).to eq "Santa/ready/123456"
+      expect(locator.location.to_s).to eq "Santa/ready/991234563506421"
     end
   end
 
@@ -39,14 +39,14 @@ describe IngestFolderLocator do
   end
 
   describe "#volume_count" do
-    let(:id) { "4609321" }
+    let(:id) { "9946093213506421" }
     it "counts the directories" do
       expect(locator.volume_count).to eq 2
     end
   end
 
   describe "#folder_pathname" do
-    let(:folder_pathname) { Pathname.new(File.join(upload_path_value, "studio_new", "DPUL", "Santa", "ready", "123456")) }
+    let(:folder_pathname) { Pathname.new(File.join(upload_path_value, "studio_new", "DPUL", "Santa", "ready", "991234563506421")) }
 
     it "constructs a Pathname for the folder" do
       expect(locator.folder_pathname).to eq folder_pathname
@@ -65,7 +65,7 @@ describe IngestFolderLocator do
     subject(:hsh) { locator.to_h }
     it "generates a hash with the relevant values" do
       expect(hsh[:exists]).to be true
-      expect(hsh[:location].to_s).to eq("Santa/ready/123456")
+      expect(hsh[:location].to_s).to eq("Santa/ready/991234563506421")
       expect(hsh[:file_count]).to eq(2)
       expect(hsh[:volume_count]).to eq(0)
     end

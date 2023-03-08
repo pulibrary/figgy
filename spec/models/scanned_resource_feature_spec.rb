@@ -17,7 +17,7 @@ RSpec.feature "Scanned Resources" do
 
   before do
     stub_catalog(bib_id: "4612596")
-    stub_catalog(bib_id: "8543429")
+    stub_catalog(bib_id: "9985434293506421")
     change_set.source_metadata_identifier = "4612596"
     change_set_persister.save(change_set: change_set)
     sign_in user
@@ -31,7 +31,7 @@ RSpec.feature "Scanned Resources" do
         find("#scanned_resource_portion_note").click
         expect(page).to have_content "This ID is already in use"
 
-        page.fill_in "scanned_resource_source_metadata_identifier", with: "8543429"
+        page.fill_in "scanned_resource_source_metadata_identifier", with: "9985434293506421"
         page.fill_in "scanned_resource_portion_note", with: "Test another note"
         expect(page).not_to have_content "This ID is already in use"
       end

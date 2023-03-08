@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe CSVReport do
   describe "#write" do
     it "converts an array of resources to a CSV and writes it to a path" do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
       stub_ezid(shoulder: "99999/fk4", blade: "")
       file_set = FactoryBot.create_for_repository(:file_set)
       collection = FactoryBot.create_for_repository(:collection, title: "Test Collection")
@@ -12,7 +12,7 @@ RSpec.describe CSVReport do
         :complete_scanned_resource,
         member_ids: [file_set.id],
         member_of_collection_ids: [collection.id],
-        source_metadata_identifier: "123456",
+        source_metadata_identifier: "991234563506421",
         import_metadata: true,
         series: ["First", "Second"]
       )]
@@ -32,7 +32,7 @@ RSpec.describe CSVReport do
         {
           title:
           "Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.",
-          source_metadata_identifier: "123456",
+          source_metadata_identifier: "991234563506421",
           identifier: "ark:/99999/fk4",
           visibility: "open",
           state: "complete",

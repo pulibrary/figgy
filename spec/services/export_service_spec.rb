@@ -14,15 +14,15 @@ RSpec.describe ExportService do
   describe "#export" do
     context "with a scanned resource" do
       let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
-      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", files: [file1]) }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421", files: [file1]) }
 
       before do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
         described_class.export(scanned_resource)
       end
 
       it "exports files in a directory" do
-        expect(File.exist?("#{export_path}/123456/abstract.tiff")).to be true
+        expect(File.exist?("#{export_path}/991234563506421/abstract.tiff")).to be true
       end
     end
 
@@ -48,16 +48,16 @@ RSpec.describe ExportService do
       let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:vol1) { FactoryBot.create_for_repository(:scanned_resource, title: "first volume", files: [file1]) }
       let(:vol2) { FactoryBot.create_for_repository(:scanned_resource, title: "second volume", files: [file2]) }
-      let(:multi_volume_work) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "4609321", member_ids: [vol1.id, vol2.id]) }
+      let(:multi_volume_work) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9946093213506421", member_ids: [vol1.id, vol2.id]) }
 
       before do
-        stub_catalog(bib_id: "4609321")
+        stub_catalog(bib_id: "9946093213506421")
         described_class.export(multi_volume_work)
       end
 
       it "exports each volume in a subdirectory" do
-        expect(File.exist?("#{export_path}/4609321/first volume/abstract.tiff")).to be true
-        expect(File.exist?("#{export_path}/4609321/second volume/example.tif")).to be true
+        expect(File.exist?("#{export_path}/9946093213506421/first volume/abstract.tiff")).to be true
+        expect(File.exist?("#{export_path}/9946093213506421/second volume/example.tif")).to be true
       end
     end
   end
@@ -67,10 +67,10 @@ RSpec.describe ExportService do
     context "with a scanned resource" do
       let(:file1) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
       let(:file_set) { query_service.find_members(resource: scanned_resource).to_a.first }
-      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", files: [file1], pdf_type: ["gray"]) }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421", files: [file1], pdf_type: ["gray"]) }
 
       before do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
         file_set.primary_file.width = 287

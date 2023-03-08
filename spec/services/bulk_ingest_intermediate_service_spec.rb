@@ -7,7 +7,7 @@ RSpec.describe BulkIngestIntermediateService do
   let(:background) { false }
   let(:logger) { Logger.new(nil) }
   let(:property) { :source_metadata_identifier }
-  let(:bib_id) { "123456" }
+  let(:bib_id) { "991234563506421" }
   let(:query_service) { metadata_adapter.query_service }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:ingest_intermediate_file_job) do
@@ -39,7 +39,7 @@ RSpec.describe BulkIngestIntermediateService do
     let(:file_set) { resource.decorate.decorated_file_sets.first }
 
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
       resource
     end
 

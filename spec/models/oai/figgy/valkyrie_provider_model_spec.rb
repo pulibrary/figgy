@@ -11,10 +11,10 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
   describe "#find_all" do
     context "when requesting all items" do
       it "returns all complete public resources" do
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil)
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "pending", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "complete", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: nil, state: "complete", rights_statement: RightsStatements.no_copyright_contractual_restrictions)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: nil)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: nil, state: "pending", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: nil, state: "complete", visibility: ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: nil, state: "complete", rights_statement: RightsStatements.no_copyright_contractual_restrictions)
 
         output = described_class.new.find_all(metadata_prefix: "marc21")
 
@@ -25,7 +25,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
     context "when requesting the cico set" do
       it "returns only items that are a member of that set" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id)
         create_scanned_resource(source_metadata_identifier: "123456", collection_id: nil)
 
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
@@ -37,7 +37,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
       it "doesn't return volumes" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         parent = create_scanned_resource(source_metadata_identifier: "123456", collection_id: collection.id)
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id, append_id: parent.id)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id, append_id: parent.id)
 
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
 
@@ -48,11 +48,11 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
       it "can find items within a specific date range" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         Timecop.freeze(Time.zone.local(2008, 9, 1, 12, 0, 0))
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id)
         Timecop.freeze(Time.zone.local(2009, 9, 1, 12, 0, 0))
-        new_resource = create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
+        new_resource = create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id)
         Timecop.freeze(Time.zone.local(2010, 9, 1, 12, 0, 0))
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id)
         Timecop.return
 
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21", from: "2009-09-01T12:00:00Z", until: "2009-12-01T12:00:00Z")
@@ -64,7 +64,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         stub_findingaid(pulfa_id: "AC044_c0003")
         # Return MARC items
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id)
         # Don't return items without a metadata identifier
         FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
         # Don't return PULFA items - they don't have MARC.
@@ -83,7 +83,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
       allow(described_class).to receive(:limit).and_return(2)
       collection = FactoryBot.create_for_repository(:collection, slug: "cico")
       3.times do
-        create_scanned_resource(source_metadata_identifier: "8543429", collection_id: collection.id)
+        create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id)
       end
 
       output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")

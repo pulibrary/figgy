@@ -50,7 +50,7 @@ RSpec.describe ManifestBuilderV3 do
                                          edition: "test edition",
                                          nav_date: "test date",
                                          identifier: "ark:/88435/abc1234de",
-                                         source_metadata_identifier: "123456",
+                                         source_metadata_identifier: "991234563506421",
                                          imported_metadata: [{
                                            description: "Test Description",
                                            location: ["RCPPA BL980.G7 B66 1982"]
@@ -59,7 +59,7 @@ RSpec.describe ManifestBuilderV3 do
       end
 
       before do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
         change_set = ScannedMapChangeSet.new(resource, files: [file])
         output = change_set_persister.save(change_set: change_set)
         change_set = ScannedMapChangeSet.new(output)

@@ -26,11 +26,11 @@ RSpec.describe ChangeSetPersister do
 
   context "when a scanned resource is completed" do
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
     end
 
     it "mints an ARK" do
-      resource = FactoryBot.create(:scanned_resource, title: [], source_metadata_identifier: "123456", state: "final_review")
+      resource = FactoryBot.create(:scanned_resource, title: [], source_metadata_identifier: "991234563506421", state: "final_review")
       change_set = change_set_class.new(resource)
       change_set.validate(state: "complete")
       output = change_set_persister.save(change_set: change_set)
@@ -83,7 +83,7 @@ RSpec.describe ChangeSetPersister do
 
   context "when a playlist is taken down" do
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
     end
 
     context "with an authorization token" do
@@ -114,7 +114,7 @@ RSpec.describe ChangeSetPersister do
   context "when a simple resource is completed" do
     let(:change_set_class) { SimpleChangeSet }
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
     end
 
     it "mints an ARK" do
@@ -1033,10 +1033,10 @@ RSpec.describe ChangeSetPersister do
   context "setting visibility from remote metadata" do
     context "when date is before 1924" do
       it "sets it to public domain and open" do
-        stub_catalog(bib_id: "4609321")
+        stub_catalog(bib_id: "9946093213506421")
         resource = FactoryBot.build(:pending_private_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.validate(source_metadata_identifier: "4609321", set_visibility_by_date: "1")
+        change_set.validate(source_metadata_identifier: "9946093213506421", set_visibility_by_date: "1")
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
@@ -1047,10 +1047,10 @@ RSpec.describe ChangeSetPersister do
     end
     context "when date is after 1924" do
       it "sets it to in copyright and private" do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
         resource = FactoryBot.build(:pending_private_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.validate(source_metadata_identifier: "123456", set_visibility_by_date: "1")
+        change_set.validate(source_metadata_identifier: "991234563506421", set_visibility_by_date: "1")
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
@@ -1061,10 +1061,10 @@ RSpec.describe ChangeSetPersister do
     end
     context "when given a bad date" do
       it "does nothing" do
-        stub_catalog(bib_id: "123456789")
+        stub_catalog(bib_id: "991234567893506421")
         resource = FactoryBot.build(:pending_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.validate(source_metadata_identifier: "123456789", set_visibility_by_date: "1")
+        change_set.validate(source_metadata_identifier: "991234567893506421", set_visibility_by_date: "1")
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)
@@ -1075,10 +1075,10 @@ RSpec.describe ChangeSetPersister do
     end
     context "when not told to set visibility by date" do
       it "does nothing" do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
         resource = FactoryBot.build(:pending_scanned_resource)
         change_set = change_set_class.new(resource)
-        change_set.validate(source_metadata_identifier: "123456")
+        change_set.validate(source_metadata_identifier: "991234563506421")
 
         output = change_set_persister.save(change_set: change_set)
         reloaded = query_service.find_by(id: output.id)

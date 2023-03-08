@@ -5,14 +5,14 @@ RSpec.feature "Vector Resource" do
   let(:user) { FactoryBot.create(:admin) }
 
   before do
-    stub_catalog(bib_id: "10001789")
+    stub_catalog(bib_id: "99100017893506421")
     sign_in user
   end
 
   scenario "creating a new resource and viewing geoblacklight document", js: true do
     visit new_vector_resource_path
 
-    fill_in "vector_resource_source_metadata_identifier", with: "10001789"
+    fill_in "vector_resource_source_metadata_identifier", with: "99100017893506421"
     fill_in "Local identifier", with: "local_id"
     click_button "Save"
 

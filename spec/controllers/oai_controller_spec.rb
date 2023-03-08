@@ -34,9 +34,9 @@ RSpec.describe OaiController do
       it "returns all the Cicognara item MarcXML" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "8543429", content_type: "application/marcxml+xml")
-        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9985434293506421", content_type: "application/marcxml+xml")
+        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
 
@@ -49,9 +49,9 @@ RSpec.describe OaiController do
       it "works" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "8543429", content_type: "application/marcxml+xml")
-        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9985434293506421", content_type: "application/marcxml+xml")
+        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "nonexistent", "metadataPrefix" => "marc21" }
 
@@ -80,9 +80,9 @@ RSpec.describe OaiController do
   describe "GetRecord" do
     it "returns a specific item" do
       stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-      stub_catalog(bib_id: "8543429")
-      stub_catalog(bib_id: "8543429", content_type: "application/marcxml+xml")
-      resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429")
+      stub_catalog(bib_id: "9985434293506421")
+      stub_catalog(bib_id: "9985434293506421", content_type: "application/marcxml+xml")
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "9985434293506421")
 
       get :index, params: { "verb" => "GetRecord", "metadataPrefix" => "marc21", identifier: "oai:figgy:#{resource.id}" }
 
@@ -127,7 +127,7 @@ RSpec.describe OaiController do
 
       context "for a map bibliographic record" do
         it "returns the record with desired fields populated" do
-          bib_id = "6866386"
+          bib_id = "9968663863506421"
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           stub_ezid(shoulder: "99999/fk4", blade: "123456")
           stub_catalog(bib_id: bib_id)
@@ -216,9 +216,9 @@ RSpec.describe OaiController do
       it "returns all the Cicognara item MarcXML" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "8543429", content_type: "application/marcxml+xml")
-        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429", import_metadata: true)
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9985434293506421", content_type: "application/marcxml+xml")
+        FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421", import_metadata: true)
 
         get :index, params: { "verb" => "ListRecords", "set" => "cico", "metadataPrefix" => "marc21" }
 
@@ -230,7 +230,7 @@ RSpec.describe OaiController do
       it "can page" do
         allow(OAI::Figgy::ValkyrieProviderModel).to receive(:limit).and_return(2)
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
-        source_metadata_identifier = "8543429"
+        source_metadata_identifier = "9985434293506421"
         stub_ezid(shoulder: "99999/fk4", blade: source_metadata_identifier)
         stub_catalog(bib_id: source_metadata_identifier)
         stub_catalog(bib_id: source_metadata_identifier, content_type: "application/marcxml+xml")

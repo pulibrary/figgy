@@ -9,7 +9,7 @@ RSpec.describe ScannedResourceChangeSet do
   let(:form_resource) { scanned_resource }
 
   before do
-    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "991234563506421")
   end
 
   it_behaves_like "a ChangeSet"
@@ -23,7 +23,7 @@ RSpec.describe ScannedResourceChangeSet do
       end
     end
     context "when only metadata_identifier is set" do
-      let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "123456") }
+      let(:form_resource) { scanned_resource.new(title: "", source_metadata_identifier: "991234563506421") }
       it "is valid" do
         expect(change_set).to be_valid
       end

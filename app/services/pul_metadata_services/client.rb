@@ -30,14 +30,15 @@ module PulMetadataServices
         response.body.dup.force_encoding("UTF-8")
       end
 
-      # Determines whether or not a remote metadata identifier is an identifier for Voyager records
+      # Determines whether or not a remote metadata identifier is an identifier for catalog records
       # @param source_metadata_id [String] the remote metadata identifier
       # @return [Boolean]
+      # @see # https://lib-confluence.princeton.edu/display/ALMA/Alma+System+Numbers
       def catalog?(source_metadata_id)
         # 99*6421 will be in all alma IDs, and old Voyager records are
-        # converted. We keep ID at 4 because the test suite has some low-number
-        # IDs.
-        # TODO: Increase length check after test suite is converted to Alma.
+        # converted as 99[voyager_id]3506421. smallest voyager id was 1 digit.
+        # TODO: Increase length check to > 9 after test suite is converted to
+        # use alma IDs.
         return unless source_metadata_id.to_s.length > 4
         source_metadata_id =~ /\A\d+\z/
       end

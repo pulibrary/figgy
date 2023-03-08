@@ -134,18 +134,18 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
     context "when asked to save and import" do
       before do
-        stub_catalog(bib_id: "123456")
-        stub_catalog(bib_id: "4609321")
-        stub_catalog(bib_id: "1791261")
+        stub_catalog(bib_id: "991234563506421")
+        stub_catalog(bib_id: "9946093213506421")
+        stub_catalog(bib_id: "9917912613506421")
       end
       it "does not save and ingest if the save button is hit" do
         post :create, params: {
           scanned_resource: {
-            source_metadata_identifier: "123456",
+            source_metadata_identifier: "991234563506421",
             rights_statement: RightsStatements.copyright_not_evaluated.to_s,
             visibility: "restricted"
           },
-          save_and_ingest_path: "Santa/ready/123456",
+          save_and_ingest_path: "Santa/ready/991234563506421",
           commit: "Save"
         }
 
@@ -159,11 +159,11 @@ RSpec.describe ScannedResourcesController, type: :controller do
       it "can create and import at once" do
         post :create, params: {
           scanned_resource: {
-            source_metadata_identifier: "123456",
+            source_metadata_identifier: "991234563506421",
             rights_statement: RightsStatements.copyright_not_evaluated.to_s,
             visibility: "restricted"
           },
-          save_and_ingest_path: "Santa/ready/123456",
+          save_and_ingest_path: "Santa/ready/991234563506421",
           commit: "Save and Ingest"
         }
 
@@ -180,11 +180,11 @@ RSpec.describe ScannedResourcesController, type: :controller do
       it "can create and import a MVW" do
         post :create, params: {
           scanned_resource: {
-            source_metadata_identifier: "4609321",
+            source_metadata_identifier: "9946093213506421",
             rights_statement: RightsStatements.copyright_not_evaluated.to_s,
             visibility: "restricted"
           },
-          save_and_ingest_path: "Santa/ready/4609321",
+          save_and_ingest_path: "Santa/ready/9946093213506421",
           commit: "Save and Ingest"
         }
 
@@ -203,11 +203,11 @@ RSpec.describe ScannedResourcesController, type: :controller do
         it "can create and import audio reserves" do
           post :create, params: {
             scanned_resource: {
-              source_metadata_identifier: "1791261",
+              source_metadata_identifier: "9917912613506421",
               rights_statement: RightsStatements.copyright_not_evaluated.to_s,
               visibility: "restricted"
             },
-            save_and_ingest_path: "Santa/ready/1791261",
+            save_and_ingest_path: "Santa/ready/9917912613506421",
             commit: "Save and Ingest"
           }
 
@@ -530,21 +530,21 @@ RSpec.describe ScannedResourcesController, type: :controller do
   describe "GET /concern/scanned_resources/save_and_ingest/:id" do
     let(:user) { FactoryBot.create(:admin) }
     it "returns JSON for whether a directory exists" do
-      get :save_and_ingest, params: { format: :json, id: "123456" }
+      get :save_and_ingest, params: { format: :json, id: "991234563506421" }
 
       output = JSON.parse(response.body, symbolize_keys: true)
 
       expect(output["exists"]).to eq true
-      expect(output["location"]).to eq "Santa/ready/123456"
+      expect(output["location"]).to eq "Santa/ready/991234563506421"
       expect(output["file_count"]).to eq 2
     end
     it "returns JSON for when it's a MVW" do
-      get :save_and_ingest, params: { format: :json, id: "4609321" }
+      get :save_and_ingest, params: { format: :json, id: "9946093213506421" }
 
       output = JSON.parse(response.body, symbolize_keys: true)
 
       expect(output["exists"]).to eq true
-      expect(output["location"]).to eq "Santa/ready/4609321"
+      expect(output["location"]).to eq "Santa/ready/9946093213506421"
       expect(output["file_count"]).to eq 0
       expect(output["volume_count"]).to eq 2
     end
