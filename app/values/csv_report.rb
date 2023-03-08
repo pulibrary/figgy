@@ -15,7 +15,7 @@ class CSVReport
 
   def csv_rows
     @csv_rows ||= resources.lazy.map do |resource|
-      Row.new(resource)
+      Row.new(resource, fields: fields)
     end
   end
 
@@ -33,9 +33,10 @@ class CSVReport
   end
 
   class Row
-    attr_reader :resource
-    def initialize(resource)
+    attr_reader :resource, :fields
+    def initialize(resource, fields: [])
       @resource = resource
+      @fields = fields
     end
 
     def to_h
@@ -45,7 +46,18 @@ class CSVReport
           values = Array.wrap(values).map(&:to_s).join(", ")
           [key, values]
         end
-      ]
+      ].merge(special_fields)
+    end
+
+    def special_fields
+      {}.tap do |hsh|
+        if fields.include?(:collections)
+          hsh[:collections] = Wayfinder.for(resource).try(:collections)&.map(&:decorate)&.map(&:title)&.join(", ")
+        end
+        if fields.include?(:file_count)
+          hsh[:file_count] = Wayfinder.for(resource).try(:file_sets_count)
+        end
+      end
     end
 
     # Only get the non-reserved attributes - gets rid of things like
