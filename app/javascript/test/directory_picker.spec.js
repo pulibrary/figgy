@@ -145,6 +145,15 @@ test('can dynamically load child nodes via loadChildrenPath', async () => {
   expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(1)
 })
 
+test('dynamically loads child nodes when list-focused', async () => {
+  stubChildLoad()
+  const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
+  await wrapper.findAll('summary span').at(2).trigger('click')
+  console.log(wrapper.findAll('summary span').at(2).text())
+  await flushPromises()
+  expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(1)
+})
+
 test('handles bad data', async () => {
   stubFailedChildLoad()
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })

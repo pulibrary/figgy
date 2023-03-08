@@ -8,7 +8,7 @@
         <v-details
           v-if="child.expandable"
           v-model="child.expanded"
-          @change="expanding(child)"
+          @change="tryLoading(child)"
         >
           <summary
             class="item-label"
@@ -68,7 +68,7 @@ export default {
     }
   },
   methods: {
-    expanding (child) {
+    tryLoading (child) {
       if (child.loaded === false && child.loadChildrenPath) {
         this.loadChildren(child)
       }
@@ -76,6 +76,8 @@ export default {
     listFocused (child, event) {
       // Tell the file browser which thing got focused.
       this.$emit('listFocus', child)
+      // Try loading if necessary.
+      this.tryLoading(child)
       // Clicking the label (span) shouldn't cause collapse.
       if (event) {
         event.preventDefault()
