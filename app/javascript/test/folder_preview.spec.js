@@ -36,3 +36,6 @@ test('renders a list view of all children', () => {
 
   expect(wrapper.findAll('li').length).toEqual(2)
 })
+
+// Missing tests: Ingest directory button exists, is disabled for non-selectable
+// directories, and when clicked fires an event.
