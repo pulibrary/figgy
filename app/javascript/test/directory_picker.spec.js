@@ -163,5 +163,7 @@ test('handles bad data', async () => {
 })
 
 test('only displays expandable nodes', async () => {
+  const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
 
+  expect(wrapper.findAll('li .item-label').length).toEqual(7)
 })

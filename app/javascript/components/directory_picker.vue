@@ -31,12 +31,6 @@
             @listFocus="listFocused"
           />
         </v-details>
-        <span
-          v-else
-          class="item-label"
-        >
-          {{ child.label }}
-        </span>
       </li>
     </ul>
   </div>
