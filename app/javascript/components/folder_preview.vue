@@ -28,14 +28,16 @@ export default {
 <style scope>
   #folder-preview {
     width: 100%;
+    height: 100%;
   }
-  #folder-preview < .info-pane {
+  #folder-preview > .info-pane {
     height: 30px;
   }
-  #folder-preview < .details {
-    height: calc(100%-60px);
+  #folder-preview > .details {
+    height: calc(100% - 60px);
+    overflow-y: scroll;
   }
-  #folder-preview < .actions {
+  #folder-preview > .actions {
     height: 30px;
   }
 </style>
