@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe VoyagerUpdateJob do
+describe CatalogUpdateJob do
   with_queue_adapter :inline
 
   let(:ids) { resources.map(&:id) }
@@ -47,7 +47,7 @@ describe VoyagerUpdateJob do
     end
 
     it "logs a warning" do
-      expect { described_class.perform_now(["3"]) }.to output("VoyagerUpdateJob: Unable to process the changed Voyager record 3: Valkyrie::Persistence::ObjectNotFoundError\n").to_stderr
+      expect { described_class.perform_now(["3"]) }.to output("CatalogUpdateJob: Unable to process the changed Catalog record 3: Valkyrie::Persistence::ObjectNotFoundError\n").to_stderr
     end
   end
 

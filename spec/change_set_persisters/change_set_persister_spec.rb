@@ -1375,7 +1375,7 @@ RSpec.describe ChangeSetPersister do
 
         modified = File.mtime(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))
         modified_file = File.mtime(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))
-        VoyagerUpdateJob.perform_now([resource.id.to_s])
+        CatalogUpdateJob.perform_now([resource.id.to_s])
         new_modified = File.mtime(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))
         new_modified_file = File.mtime(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))
 
