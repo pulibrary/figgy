@@ -15,9 +15,9 @@ describe OrangelightDocument do
     context "with an issue and a child coin" do
       subject(:builder) { described_class.new(coin) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-      let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
-      let(:reference_coin) { FactoryBot.create_for_repository(:numismatic_reference, title: "Coin Test Reference", short_title: "Coin short-title") }
       let(:person) { FactoryBot.create_for_repository(:numismatic_person) }
+      let(:reference) { FactoryBot.create_for_repository(:numismatic_reference, author_id: person.id) }
+      let(:reference_coin) { FactoryBot.create_for_repository(:numismatic_reference, title: "Coin Test Reference", short_title: "Coin short-title") }
       let(:numismatic_artist) { Numismatics::Artist.new(person_id: person.id, signature: "artist signature", role: "artist role", side: "artist side") }
       let(:numismatic_subject) { Numismatics::Subject.new(type: "Other Person", subject: "Athena") }
       let(:numismatic_attribute) { Numismatics::Attribute.new(description: "attribute description", name: "attribute name") }
@@ -175,8 +175,8 @@ describe OrangelightDocument do
         expect(output[:issue_reverse_figure_relationship_s]).to eq ["corn-ear behind head"]
         expect(output[:issue_reverse_legend_s]).to eq ["•HIBERNIA•1723•"]
         expect(output[:issue_reverse_attributes_s]).to eq ["attribute name, attribute description"]
-        expect(output[:issue_citations_s]).to eq ["short-title citation part citation number"]
-        expect(output[:issue_citations_sort]).to eq "short-title citation part citation number"
+        expect(output[:issue_citations_s]).to eq ["short-title, name1 name2, Test Reference, 2001 citation part citation number"]
+        expect(output[:issue_citations_sort]).to eq "short-title, name1 name2, Test Reference, 2001 citation part citation number"
         expect(output[:issue_references_s]).to eq ["short-title"]
         expect(output[:issue_references_sort]).to eq "short-title"
         expect(output[:issue_artists_s]).to eq ["name1 name2, artist signature"]
@@ -184,8 +184,8 @@ describe OrangelightDocument do
         expect(output[:issue_artists_sort]).to eq "name1 name2, artist signature"
         expect(output[:issue_monogram_title_s]).to contain_exactly("Alexander", "Zeus")
         expect(output[:issue_date_s]).to eq ["-91 to -41"]
-        expect(output[:coin_citations_s]).to eq ["short-title citation part citation number"]
-        expect(output[:coin_citations_sort]).to eq "short-title citation part citation number"
+        expect(output[:coin_citations_s]).to eq ["short-title, name1 name2, Test Reference, 2001 citation part citation number"]
+        expect(output[:coin_citations_sort]).to eq "short-title, name1 name2, Test Reference, 2001 citation part citation number"
         expect(output[:coin_references_s]).to eq ["short-title"]
         expect(output[:coin_references_sort]).to eq "short-title"
       end

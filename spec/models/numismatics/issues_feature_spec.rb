@@ -242,7 +242,7 @@ RSpec.feature "Numismatics::Issues" do
       expect(page).to have_css ".attribute.artists", text: "name1 name2, artist signature"
       expect(page).to have_css ".attribute.earliest_date", text: "2017"
       expect(page).to have_css ".attribute.latest_date", text: "2018"
-      expect(page).to have_css ".attribute.citations", text: "short-title part number"
+      expect(page).to have_css ".attribute.citations", text: "short-title, Test Reference, 2001 part number"
       expect(page).to have_css ".attribute.color", text: "test value"
       expect(page).to have_css ".attribute.denomination", text: "test value"
       expect(page).to have_css ".attribute.edge", text: "test value"
