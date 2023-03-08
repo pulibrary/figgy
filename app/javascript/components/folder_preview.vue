@@ -28,7 +28,14 @@
         </li>
       </ul>
     </div>
-    <div class="actions" />
+    <div class="actions">
+      <hyperlink
+        href="#"
+        variation="button solid"
+      >
+        Ingest {{ folder.label }} directory
+      </hyperlink>
+    </div>
   </div>
 </template>
 <script>
@@ -57,14 +64,19 @@ export default {
     height: 100%;
   }
   #folder-preview > .info-pane {
-    height: 30px;
+    height: 60px;
+    padding: 10px;
   }
   #folder-preview > .details {
-    height: calc(100% - 60px);
+    height: calc(100% - 120px);
     overflow-y: scroll;
+    padding: 10px;
   }
   #folder-preview > .actions {
-    height: 30px;
+    height: 60px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
   }
   #folder-preview .icon {
     display: inline-block;
@@ -88,5 +100,7 @@ export default {
 
   #folder-preview ul {
     list-style-type: none;
+    padding: 0;
+    padding-left: 0px;
   }
 </style>
