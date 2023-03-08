@@ -10,7 +10,7 @@ RSpec.describe FindIdentifiersToReconcile do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie.config.metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
 
   before do
-    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "991234563506421")
     stub_ezid(shoulder: "99999/fk4", blade: "8675309")
   end
 
@@ -19,13 +19,13 @@ RSpec.describe FindIdentifiersToReconcile do
       # add remote metadata to a complete resource, which should be retrieved because its ARK won't be
       # present in the remote metadata
       change_set = ScannedResourceChangeSet.new(complete_resource)
-      change_set.validate(source_metadata_identifier: "123456")
+      change_set.validate(source_metadata_identifier: "991234563506421")
       saved_resource = change_set_persister.save(change_set: change_set)
 
       # add remote metadata to an incomplete resource, which should not be retrieved because it won't have
       # an ARK minted yet
       change_set = ScannedResourceChangeSet.new(incomplete_resource)
-      change_set.validate(source_metadata_identifier: "123456")
+      change_set.validate(source_metadata_identifier: "991234563506421")
       change_set_persister.save(change_set: change_set)
 
       output = query.find_identifiers_to_reconcile

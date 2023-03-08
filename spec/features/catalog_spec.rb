@@ -60,12 +60,12 @@ RSpec.feature "Scanned Resources" do
       FactoryBot.create_for_repository(:pending_scanned_map,
                                                       title: "title",
                                                       depositor: "new_user",
-                                                      source_metadata_identifier: "123456",
+                                                      source_metadata_identifier: "991234563506421",
                                                       local_identifier: "local-id-123")
     end
 
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
       stub_ezid(shoulder: "99999/fk4", blade: "")
       reloaded_resource = query_service.find_by(id: resource.id)
       change_set = ChangeSet.for(reloaded_resource)
@@ -81,7 +81,7 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_css ".blacklight-resource_type_ssim", text: "ScannedMap"
       expect(page).to have_css ".blacklight-deleted_resource_id_ssi", text: resource.id.to_s
       expect(page).to have_css ".blacklight-deleted_resource_depositor_ssi", text: "new_user"
-      expect(page).to have_css ".blacklight-resource_source_metadata_identifier_ssim", text: "123456"
+      expect(page).to have_css ".blacklight-resource_source_metadata_identifier_ssim", text: "991234563506421"
       expect(page).to have_css ".blacklight-resource_local_identifier_ssim", text: "local-id-123"
       expect(page).to have_css ".blacklight-resource_identifier_ssi", text: resource.identifier
     end

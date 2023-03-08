@@ -12,11 +12,11 @@ RSpec.describe IdentifierService do
   end
 
   context "when there is an existing identifier" do
-    let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/123456#{obj.id}#view") }
-    let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: "123456", identifier: ark }
+    let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/991234563506421#{obj.id}#view") }
+    let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: "991234563506421", identifier: ark }
 
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
       allow(described_class).to receive(:minter).and_return(minter)
       allow(described_class).to receive(:minter_user).and_return("pudiglib")
       allow(minter).to receive(:modify)
@@ -50,9 +50,9 @@ RSpec.describe IdentifierService do
 
   context "when there is an imported identifier" do
     let(:obj) do
-      resource = FactoryBot.build :scanned_resource, source_metadata_identifier: "10001789"
+      resource = FactoryBot.build :scanned_resource, source_metadata_identifier: "99100017893506421"
       change_set = ChangeSet.for(resource)
-      change_set.validate(source_metadata_identifier: "10001789")
+      change_set.validate(source_metadata_identifier: "99100017893506421")
       change_set_persister.save(change_set: change_set)
     end
     let(:change_set_persister) do
@@ -68,11 +68,11 @@ RSpec.describe IdentifierService do
         dc_type: "Text"
       }
     end
-    let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/10001789#view") }
+    let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/99100017893506421#view") }
     let(:ark) { "ark:/88435/jq085p05h" }
 
     before do
-      stub_catalog(bib_id: "10001789")
+      stub_catalog(bib_id: "99100017893506421")
       stub_ezid(shoulder: "88435", blade: "jq085p05h")
       allow(described_class).to receive(:minter).and_return(minter)
       allow(described_class).to receive(:minter_user).and_return("pudiglib")
@@ -95,12 +95,12 @@ RSpec.describe IdentifierService do
     end
 
     context "with a catalog source_metadata_identifier" do
-      let(:bib) { "123456" }
+      let(:bib) { "991234563506421" }
       let(:metadata) { base_metadata.merge(target: "https://catalog.princeton.edu/catalog/#{bib}#view") }
       let(:obj) { FactoryBot.build :scanned_resource, source_metadata_identifier: bib }
 
       before do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
       end
 
       it "links to OrangeLight" do
@@ -170,7 +170,7 @@ RSpec.describe IdentifierService do
     let(:metadata) { base_metadata.merge(target: "http://example.com/catalog/#{obj.id}") }
     let(:obj) { FactoryBot.create :scanned_resource, source_metadata_identifier: nil }
     let(:shoulder) { "99999/fk4" }
-    let(:blade) { "123456" }
+    let(:blade) { "991234563506421" }
 
     before do
       stub_ezid(shoulder: shoulder, blade: blade)

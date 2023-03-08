@@ -3,10 +3,10 @@ require "rails_helper"
 
 RSpec.describe FindIdsWithPropertyNotEmpty do
   it "returns all resource ids where the given property has a value" do
-    stub_catalog(bib_id: "123456")
-    resource1 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456")
+    stub_catalog(bib_id: "991234563506421")
+    resource1 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421")
     FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: nil)
-    resource3 = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: "123456")
+    resource3 = FactoryBot.create_for_repository(:scanned_map, source_metadata_identifier: "991234563506421")
     FactoryBot.create_for_repository(:file_set)
 
     query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service

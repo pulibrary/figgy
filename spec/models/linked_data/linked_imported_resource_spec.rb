@@ -15,7 +15,7 @@ RSpec.describe LinkedData::LinkedImportedResource do
   end
 
   context "when it has a bib id" do
-    let(:source_id) { "4609321" }
+    let(:source_id) { "9946093213506421" }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: source_id, member_of_collection_ids: [collection.id]) }
     it "returns a link to the catalog" do

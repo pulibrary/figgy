@@ -6,13 +6,13 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
   context "when given a PDF path" do
     it "creates a new resource from it and adds it as a file, adds it to the CDL collection" do
       collection = FactoryBot.create_for_repository(:collection, slug: "cdl", title: "CDL")
-      stub_catalog(bib_id: "123456")
-      pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "123456.pdf")
+      stub_catalog(bib_id: "991234563506421")
+      pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "991234563506421.pdf")
       FileUtils.mkdir_p(pdf_path.parent) unless File.exist?(pdf_path.parent)
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), pdf_path)
       query_service = ChangeSetPersister.default.query_service
 
-      described_class.perform_now(file_name: "123456.pdf")
+      described_class.perform_now(file_name: "991234563506421.pdf")
 
       resource = query_service.find_all_of_model(model: ScannedResource).first
       expect(resource.change_set).to eq "CDL::Resource"
@@ -26,13 +26,13 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
     it "doesn't create a resource, and raises an error" do
       allow_any_instance_of(IngestableFile).to receive(:path).and_return(Rails.root.join("tmp", "notafile.pdf").to_s)
       FactoryBot.create_for_repository(:collection, slug: "cdl", title: "CDL")
-      stub_catalog(bib_id: "123456")
-      pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "123456.pdf")
+      stub_catalog(bib_id: "991234563506421")
+      pdf_path = Rails.root.join("tmp", "test_cdl_in", "ingesting", "991234563506421.pdf")
       FileUtils.mkdir_p(pdf_path.parent) unless File.exist?(pdf_path.parent)
       FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "sample.pdf"), pdf_path)
       query_service = ChangeSetPersister.default.query_service
 
-      expect { described_class.perform_now(file_name: "123456.pdf") }.to raise_error "No PDF Found: 123456.pdf"
+      expect { described_class.perform_now(file_name: "991234563506421.pdf") }.to raise_error "No PDF Found: 991234563506421.pdf"
 
       resources = query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 0

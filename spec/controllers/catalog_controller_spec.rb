@@ -78,19 +78,19 @@ RSpec.describe CatalogController, type: :controller do
 
   describe "#index" do
     it "can search by source metadata identifier" do
-      stub_catalog(bib_id: "123456")
-      persister.save(resource: FactoryBot.build(:complete_scanned_resource, source_metadata_identifier: "123456"))
+      stub_catalog(bib_id: "991234563506421")
+      persister.save(resource: FactoryBot.build(:complete_scanned_resource, source_metadata_identifier: "991234563506421"))
 
-      get :index, params: { q: "123456" }
+      get :index, params: { q: "991234563506421" }
 
       expect(assigns(:response).documents.length).to eq 1
     end
     context "with imported metadata" do
       render_views
       it "can search by imported metadata title" do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "991234563506421", import_metadata: true)
         reloaded_resource = query_service.find_by(id: resource.id)
         output = persister.save(resource: reloaded_resource)
 
@@ -112,28 +112,28 @@ RSpec.describe CatalogController, type: :controller do
     end
     context "with metadata imported from voyager" do
       it "can search by imported local identifiers" do
-        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "8543429", import_metadata: true)
+        resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "9985434293506421", import_metadata: true)
         reloaded_resource = query_service.find_by(id: resource.id)
         persister.save(resource: reloaded_resource)
         get :index, params: { q: "dcl:xjt" }
         expect(assigns(:response).documents.length).to eq 1
       end
       it "can search by call number" do
-        stub_catalog(bib_id: "10001789")
+        stub_catalog(bib_id: "99100017893506421")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
 
-        resource = FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true)
+        resource = FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "99100017893506421", import_metadata: true)
         reloaded_resource = query_service.find_by(id: resource.id)
         persister.save(resource: reloaded_resource)
         get :index, params: { q: "g8731" }
         expect(assigns(:response).documents.length).to eq 1
       end
       it "can search by various imported fields" do
-        stub_catalog(bib_id: "10001789")
+        stub_catalog(bib_id: "99100017893506421")
         stub_ezid(shoulder: "99999/fk4", blade: "8543429")
-        resource = FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "10001789", import_metadata: true)
+        resource = FactoryBot.create_for_repository(:scanned_map, state: "complete", title: [], source_metadata_identifier: "99100017893506421", import_metadata: true)
         reloaded_resource = query_service.find_by(id: resource.id)
         persister.save(resource: reloaded_resource)
         get :index, params: { q: "Stationery" }
@@ -156,13 +156,13 @@ RSpec.describe CatalogController, type: :controller do
       end
     end
     context "recordings with imported metadata" do
-      let(:recording_properties) { { member_ids: track.id, state: "complete", source_metadata_identifier: "3515072", import_metadata: true } }
+      let(:recording_properties) { { member_ids: track.id, state: "complete", source_metadata_identifier: "9935150723506421", import_metadata: true } }
       let(:resource) { FactoryBot.create_for_repository(:recording, **recording_properties) }
       let(:reloaded_resource) { query_service.find_by(id: resource.id) }
       let(:recording) { persister.save(resource: reloaded_resource) }
       let(:track) { FactoryBot.create_for_repository(:file_set, title: "Title not in imported metadata") }
       before do
-        stub_catalog(bib_id: "3515072")
+        stub_catalog(bib_id: "9935150723506421")
         stub_ezid(shoulder: "99999/fk4", blade: "1234567")
         recording
       end
@@ -178,9 +178,9 @@ RSpec.describe CatalogController, type: :controller do
       end
     end
     it "can search by ARK" do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
       stub_ezid(shoulder: "99999/fk4", blade: "123456")
-      resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "991234563506421", import_metadata: true)
       reloaded_resource = query_service.find_by(id: resource.id)
       persister.save(resource: reloaded_resource)
 
@@ -757,13 +757,13 @@ RSpec.describe CatalogController, type: :controller do
       end
 
       it "renders RDF views" do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
         stub_catalog_context
         stub_ezid(shoulder: "99999/fk4", blade: "123456")
         collection = FactoryBot.create_for_repository(:collection)
         resource = FactoryBot.create_for_repository(
           :complete_scanned_resource,
-          source_metadata_identifier: "123456",
+          source_metadata_identifier: "991234563506421",
           import_metadata: true,
           portion_note: "Test",
           nav_date: "Test",

@@ -15,9 +15,9 @@ RSpec.describe ScannedResource do
   end
 
   context "with imported metadata" do
-    let(:scanned_resource) { FactoryBot.create_for_repository(:pending_scanned_resource, source_metadata_identifier: "123456", import_metadata: true) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:pending_scanned_resource, source_metadata_identifier: "991234563506421", import_metadata: true) }
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
     end
 
     it "indexes subject" do

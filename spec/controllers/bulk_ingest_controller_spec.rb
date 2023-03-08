@@ -98,46 +98,46 @@ RSpec.describe BulkIngestController do
         upload = create_upload_for_container_ids(
           [
             storage_root.join("multi_volume"),
-            storage_root.join("multi_volume", "123456"),
-            storage_root.join("multi_volume", "4609321"),
-            storage_root.join("multi_volume", "4609321", "vol1"),
-            storage_root.join("multi_volume", "123456", "vol1"),
-            storage_root.join("multi_volume", "4609321", "vol2"),
-            storage_root.join("multi_volume", "123456", "vol2")
+            storage_root.join("multi_volume", "991234563506421"),
+            storage_root.join("multi_volume", "9946093213506421"),
+            storage_root.join("multi_volume", "9946093213506421", "vol1"),
+            storage_root.join("multi_volume", "991234563506421", "vol1"),
+            storage_root.join("multi_volume", "9946093213506421", "vol2"),
+            storage_root.join("multi_volume", "991234563506421", "vol2")
           ]
         )
         attributes =
           {
             workflow: { state: "pending" },
-            collections: ["4609321"],
+            collections: ["9946093213506421"],
             visibility: "open",
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
-        stub_catalog(bib_id: "123456")
-        stub_catalog(bib_id: "4609321")
+        stub_catalog(bib_id: "991234563506421")
+        stub_catalog(bib_id: "9946093213506421")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob)
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("multi_volume", "4609321").to_s,
+              directory: storage_root.join("multi_volume", "9946093213506421").to_s,
               state: "pending",
               visibility: "open",
-              member_of_collection_ids: ["4609321"],
-              source_metadata_identifier: "4609321"
+              member_of_collection_ids: ["9946093213506421"],
+              source_metadata_identifier: "9946093213506421"
             )
           )
         expect(IngestFolderJob)
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("multi_volume", "123456").to_s,
+              directory: storage_root.join("multi_volume", "991234563506421").to_s,
               state: "pending",
               visibility: "open",
-              member_of_collection_ids: ["4609321"],
-              source_metadata_identifier: "123456",
+              member_of_collection_ids: ["9946093213506421"],
+              source_metadata_identifier: "991234563506421",
               depositor: user.uid
             )
           )
@@ -151,30 +151,30 @@ RSpec.describe BulkIngestController do
           [
             storage_root.join("lapidus"),
             storage_root.join("lapidus", "AC044_c0003"),
-            storage_root.join("lapidus", "4609321")
+            storage_root.join("lapidus", "9946093213506421")
           ]
         )
         attributes =
           {
             workflow: { state: "pending" },
-            collections: ["4609321"],
+            collections: ["9946093213506421"],
             visibility: "open",
             browse_everything: { "uploads" => [upload.uuid] }
           }
         allow(IngestFolderJob).to receive(:perform_later)
         stub_findingaid(pulfa_id: "AC044_c0003")
-        stub_catalog(bib_id: "4609321")
+        stub_catalog(bib_id: "9946093213506421")
 
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob)
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("lapidus", "4609321").to_s,
+              directory: storage_root.join("lapidus", "9946093213506421").to_s,
               state: "pending",
               visibility: "open",
-              member_of_collection_ids: ["4609321"],
-              source_metadata_identifier: "4609321"
+              member_of_collection_ids: ["9946093213506421"],
+              source_metadata_identifier: "9946093213506421"
             )
           )
         expect(IngestFolderJob)
@@ -184,7 +184,7 @@ RSpec.describe BulkIngestController do
               directory: storage_root.join("lapidus", "AC044_c0003").to_s,
               state: "pending",
               visibility: "open",
-              member_of_collection_ids: ["4609321"],
+              member_of_collection_ids: ["9946093213506421"],
               source_metadata_identifier: "AC044_c0003"
             )
           )
@@ -202,7 +202,7 @@ RSpec.describe BulkIngestController do
     let(:upload_id) { "test-upload-id" }
     let(:provider) { BrowseEverything::Provider::FileSystem.new }
     let(:container) { instance_double(BrowseEverything::Container) }
-    let(:container_id) { "file:///base/4609321" }
+    let(:container_id) { "file:///base/9946093213506421" }
     let(:browse_everything) do
       {
         "uploads" => uploads
@@ -241,17 +241,17 @@ RSpec.describe BulkIngestController do
     # We do need coverage of the bibid extraction
     context "with one single-volume resource where the directory is the bibid" do
       before do
-        stub_catalog(bib_id: "4609321")
+        stub_catalog(bib_id: "9946093213506421")
       end
 
       it "ingests the directory as a single resource" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expected_attributes = {
-          directory: "/base/4609321",
+          directory: "/base/9946093213506421",
           state: "pending",
           visibility: "open",
           member_of_collection_ids: ["1234567"],
-          source_metadata_identifier: "4609321"
+          source_metadata_identifier: "9946093213506421"
         }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
       end
@@ -269,11 +269,11 @@ RSpec.describe BulkIngestController do
         it "keeps file names" do
           post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
           expected_attributes = {
-            directory: "/base/4609321",
+            directory: "/base/9946093213506421",
             state: "pending",
             visibility: "open",
             member_of_collection_ids: ["1234567"],
-            source_metadata_identifier: "4609321",
+            source_metadata_identifier: "9946093213506421",
             preserve_file_names: true
           }
           expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
@@ -293,11 +293,11 @@ RSpec.describe BulkIngestController do
         it "adds the holding location" do
           post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
           expected_attributes = {
-            directory: "/base/4609321",
+            directory: "/base/9946093213506421",
             state: "pending",
             visibility: "open",
             member_of_collection_ids: ["1234567"],
-            source_metadata_identifier: "4609321",
+            source_metadata_identifier: "9946093213506421",
             holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15"
           }
           expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
@@ -313,7 +313,7 @@ RSpec.describe BulkIngestController do
       it "ingests the directory as a single resource" do
         post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
         expected_attributes = {
-          directory: "/base/4609321",
+          directory: "/base/9946093213506421",
           state: "pending",
           visibility: "open",
           member_of_collection_ids: ["1234567"]
@@ -396,14 +396,14 @@ RSpec.describe BulkIngestController do
           resource_type: "scanned_resource",
           browse_everything: { "uploads" => [upload.uuid] }
         }
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
 
       post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 3
       resource = resources.find { |res| res.member_ids.length == 2 }
-      expect(resource.source_metadata_identifier).to eq ["123456"]
+      expect(resource.source_metadata_identifier).to eq ["991234563506421"]
       expect(resource.member_ids.length).to eq(2)
       expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
       expect(resource.decorate.volumes.last.file_sets.length).to eq(1)

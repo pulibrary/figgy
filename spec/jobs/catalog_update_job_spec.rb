@@ -2,19 +2,19 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe VoyagerUpdateJob do
+describe CatalogUpdateJob do
   with_queue_adapter :inline
 
   let(:ids) { resources.map(&:id) }
 
   before do
-    stub_catalog(bib_id: "123456")
-    stub_catalog(bib_id: "4609321")
+    stub_catalog(bib_id: "991234563506421")
+    stub_catalog(bib_id: "9946093213506421")
   end
   let(:resources) do
     [
-      FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456"),
-      FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "4609321")
+      FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421"),
+      FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9946093213506421")
     ]
   end
 
@@ -47,7 +47,7 @@ describe VoyagerUpdateJob do
     end
 
     it "logs a warning" do
-      expect { described_class.perform_now(["3"]) }.to output("VoyagerUpdateJob: Unable to process the changed Voyager record 3: Valkyrie::Persistence::ObjectNotFoundError\n").to_stderr
+      expect { described_class.perform_now(["3"]) }.to output("CatalogUpdateJob: Unable to process the changed Catalog record 3: Valkyrie::Persistence::ObjectNotFoundError\n").to_stderr
     end
   end
 

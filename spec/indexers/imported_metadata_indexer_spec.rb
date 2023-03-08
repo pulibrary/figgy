@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe ImportedMetadataIndexer do
   describe ".to_solr" do
-    let(:source_id) { "10001789" }
+    let(:source_id) { "99100017893506421" }
     let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
     let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
     let(:change_set_persister) do
@@ -16,7 +16,7 @@ RSpec.describe ImportedMetadataIndexer do
     it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = ScannedMapChangeSet.new(resource)
-      change_set.validate(source_metadata_identifier: "10001789")
+      change_set.validate(source_metadata_identifier: "99100017893506421")
       resource = change_set_persister.save(change_set: change_set)
       output = described_class.new(resource: resource).to_solr
 

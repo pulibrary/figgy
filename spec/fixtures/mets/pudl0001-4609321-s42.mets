@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/7d278t10z" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
   <mets:metsHdr CREATEDATE="2016-03-14T15:21:33.372-04:00" LASTMODDATE="2016-03-14T15:21:33.372-04:00">
-    <mets:metsDocumentID TYPE="PUDL">pudl0001/4609321/s42.mets</mets:metsDocumentID>
+    <mets:metsDocumentID TYPE="PUDL">pudl0001/9946093213506421/s42.mets</mets:metsDocumentID>
   </mets:metsHdr>
   <mets:dmdSec ID="x6kkx">
-    <mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/4609321"/>
+    <mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/9946093213506421"/>
   </mets:dmdSec>
   <mets:dmdSec ID="p0ov5">
     <mets:mdWrap MDTYPE="MODS">
@@ -90,7 +90,7 @@
       reproduction</accessCondition>
           <accessCondition type="restrictionOnAccess" xlink:href="http://www.princeton.edu/~rbsc/research/rules.html">Restrictions on
       access</accessCondition>
-          <identifier type="local">4609321</identifier>
+          <identifier type="local">9946093213506421</identifier>
           <location>
             <physicalLocation type="text">Princeton University. Scheide Library.</physicalLocation>
             <physicalLocation authority="marcorg" type="code">NjP</physicalLocation>
@@ -103,8 +103,8 @@
           </location>
           <recordInfo>
             <recordContentSource authority="marcorg">NjP</recordContentSource>
-            <recordOrigin>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=4609321</recordOrigin>
-            <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0001/4609321/s42.mods</recordIdentifier>
+            <recordOrigin>http://catalog.princeton.edu/cgi-bin/Pwebrecon.cgi?BBID=9946093213506421</recordOrigin>
+            <recordIdentifier>http://diglib.princeton.edu/mdata/pudl0001/9946093213506421/s42.mods</recordIdentifier>
           </recordInfo>
         </mods>
       </mets:xmlData>

@@ -32,8 +32,8 @@ RSpec.describe JsonIngester do
   # Creates fixture JSON and puts it in a file.
   def generate_fixture_json(collection:)
     json = JSON.parse(File.read(Rails.root.join("spec", "fixtures", "json_ingest.json")), symbolize_names: true)
-    json[:records][0][:path] = Rails.root.join("spec", "fixtures", "bulk_ingest", "123456", "vol1").to_s
-    json[:records][1][:path] = Rails.root.join("spec", "fixtures", "bulk_ingest", "123456", "vol2").to_s
+    json[:records][0][:path] = Rails.root.join("spec", "fixtures", "bulk_ingest", "991234563506421", "vol1").to_s
+    json[:records][1][:path] = Rails.root.join("spec", "fixtures", "bulk_ingest", "991234563506421", "vol2").to_s
     json[:records][0][:member_of_collection_ids] = [collection.id.to_s]
     json[:records][1][:member_of_collection_ids] = [collection.id.to_s]
     file = Tempfile.new(["ingest_test", ".json"])

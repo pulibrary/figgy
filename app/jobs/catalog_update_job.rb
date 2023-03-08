@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class VoyagerUpdateJob < ApplicationJob
-  # Update all resources with Voyager metadata
+class CatalogUpdateJob < ApplicationJob
+  # Update all resources with Catalog metadata
   # @param ids [Array<String>]
   def perform(ids)
     logger.info "Processing updates for IDs: #{ids.join(', ')}" unless ids.empty?
@@ -16,10 +16,10 @@ class VoyagerUpdateJob < ApplicationJob
 
         change_set.validate(refresh_remote_metadata: "1")
 
-        logger.info "Processing updates for Voyager record #{id} imported into resource #{resource.id}..."
+        logger.info "Processing updates for Catalog record #{id} imported into resource #{resource.id}..."
         buffered_change_set_persister.save(change_set: change_set)
       rescue StandardError => error
-        warn "#{self.class}: Unable to process the changed Voyager record #{id}: #{error}"
+        warn "#{self.class}: Unable to process the changed Catalog record #{id}: #{error}"
       end
     end
   end

@@ -26,7 +26,7 @@ RSpec.describe ChangeSetPersister::ExtractArchivalCollectionCode do
   end
 
   context "with a catalog id" do
-    let(:source_metadata_id) { "4609321" }
+    let(:source_metadata_id) { "9946093213506421" }
     before { stub_catalog(bib_id: source_metadata_id) }
 
     it "does nothing" do

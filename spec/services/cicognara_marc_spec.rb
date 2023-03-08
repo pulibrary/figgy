@@ -17,15 +17,15 @@ RSpec.describe CicognaraMarc do
     context "when both records have different source metadata ids" do
       let(:enhancer1) { instance_double MarcRecordEnhancer }
       let(:enhancer2) { instance_double MarcRecordEnhancer }
-      let(:minimal_record1) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "8543429")) } }
-      let(:minimal_record2) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "4609321")) } }
+      let(:minimal_record1) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "9985434293506421")) } }
+      let(:minimal_record2) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "9946093213506421")) } }
       let(:writer) { double }
 
       before do
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "4609321")
-        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
-        r2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "4609321")
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9946093213506421")
+        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421")
+        r2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9946093213506421")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer1)
         allow(MarcRecordEnhancer).to receive(:for).with(r2).and_return(enhancer2)
         allow(enhancer1).to receive(:enhance_cicognara).and_return(minimal_record1)
@@ -44,13 +44,13 @@ RSpec.describe CicognaraMarc do
     context "when one record did not have a source metadata id" do
       let(:writer) { double }
       before do
-        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
         FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id)
-        FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
+        FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421")
         allow(MARC::XMLWriter).to receive(:new).and_return(writer)
         allow(writer).to receive(:write)
         allow(writer).to receive(:close)
-        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "9985434293506421", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
       end
 
       it "doesn't error and doesn't write that record" do
@@ -61,13 +61,13 @@ RSpec.describe CicognaraMarc do
 
     context "when two records have the same source metadata id" do
       let(:enhancer) { instance_double MarcRecordEnhancer }
-      let(:minimal_record) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "8543429")) } }
+      let(:minimal_record) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "9985434293506421")) } }
       let(:writer) { double }
 
       before do
-        stub_catalog(bib_id: "8543429")
-        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
-        r2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
+        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421")
+        r2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer)
         allow(MarcRecordEnhancer).to receive(:for).with(r2).and_return(enhancer)
         allow(enhancer).to receive(:enhance_cicognara).and_return(minimal_record)
@@ -85,15 +85,15 @@ RSpec.describe CicognaraMarc do
     context "when one of the records is not public-visible" do
       let(:enhancer1) { instance_double MarcRecordEnhancer }
       let(:enhancer2) { instance_double MarcRecordEnhancer }
-      let(:minimal_record1) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "8543429")) } }
-      let(:minimal_record2) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "4609321")) } }
+      let(:minimal_record1) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "9985434293506421")) } }
+      let(:minimal_record2) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "9946093213506421")) } }
       let(:writer) { double }
 
       before do
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "4609321")
-        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
-        r2 = FactoryBot.create_for_repository(:complete_private_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "4609321")
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9946093213506421")
+        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421")
+        r2 = FactoryBot.create_for_repository(:complete_private_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9946093213506421")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer1)
         allow(MarcRecordEnhancer).to receive(:for).with(r2).and_return(enhancer2)
         allow(enhancer1).to receive(:enhance_cicognara).and_return(minimal_record1)
@@ -112,15 +112,15 @@ RSpec.describe CicognaraMarc do
     context "when one of the records is not in a complete state" do
       let(:enhancer1) { instance_double MarcRecordEnhancer }
       let(:enhancer2) { instance_double MarcRecordEnhancer }
-      let(:minimal_record1) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "8543429")) } }
-      let(:minimal_record2) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "4609321")) } }
+      let(:minimal_record1) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "9985434293506421")) } }
+      let(:minimal_record2) { MARC::Record.new.tap { |record| record.append(MARC::ControlField.new("001", "9946093213506421")) } }
       let(:writer) { double }
 
       before do
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "4609321")
-        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "8543429")
-        r2 = FactoryBot.create_for_repository(:pending_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "4609321")
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9946093213506421")
+        r1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9985434293506421")
+        r2 = FactoryBot.create_for_repository(:pending_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "9946093213506421")
         allow(MarcRecordEnhancer).to receive(:for).with(r1).and_return(enhancer1)
         allow(MarcRecordEnhancer).to receive(:for).with(r2).and_return(enhancer2)
         allow(enhancer1).to receive(:enhance_cicognara).and_return(minimal_record1)
@@ -159,7 +159,7 @@ RSpec.describe CicognaraMarc do
       let(:resource1) do
         FactoryBot.create_for_repository(
           :scanned_resource,
-          source_metadata_identifier: "8543429",
+          source_metadata_identifier: "9985434293506421",
           identifier: "ark:/88435/#{blade1}",
           local_identifier: li1
         )
@@ -167,7 +167,7 @@ RSpec.describe CicognaraMarc do
       let(:resource2) do
         FactoryBot.create_for_repository(
           :scanned_resource,
-          source_metadata_identifier: "8543429",
+          source_metadata_identifier: "9985434293506421",
           identifier: "ark:/88435/#{blade2}",
           local_identifier: li2
         )
@@ -200,8 +200,8 @@ RSpec.describe CicognaraMarc do
       let(:blade2) { "kn323t553" }
 
       before do
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9985434293506421", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
         allow(resource2).to receive(:imported_metadata).and_return([metadata_mock])
         allow(metadata_mock).to receive(:references).and_return(["Cicognara, 3724"])
       end

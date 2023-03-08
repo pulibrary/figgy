@@ -99,11 +99,11 @@ RSpec.describe BulkEditService do
 
     context "when refreshing metadata" do
       before do
-        stub_catalog(bib_id: "123456")
+        stub_catalog(bib_id: "991234563506421")
       end
 
       it "updates the remote metadata" do
-        obj = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", member_of_collection_ids: [collection.id])
+        obj = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421", member_of_collection_ids: [collection.id])
         change_set = ChangeSet.for(obj)
         change_set.validate(imported_metadata: nil, title: "test title")
         ChangeSetPersister.default.save(change_set: change_set)

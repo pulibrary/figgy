@@ -33,7 +33,7 @@ RSpec.describe IngestMETSJob do
     #   if something more general is needed
     allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
     stub_catalog(bib_id: "4612596")
-    stub_catalog(bib_id: "4609321")
+    stub_catalog(bib_id: "9946093213506421")
   end
 
   context "when ingesting to an existing collection" do

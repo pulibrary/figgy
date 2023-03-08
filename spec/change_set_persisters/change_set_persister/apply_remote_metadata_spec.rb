@@ -8,13 +8,13 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   let(:blade) { "123456" }
   before do
     stub_ezid(shoulder: "99999/fk4", blade: blade)
-    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "991234563506421")
   end
   context "when a bibid source_metadata_identifier is set for the first time on a scanned resource" do
     it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "123456")
+      change_set.validate(source_metadata_identifier: "991234563506421")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.", language: :fr)]
@@ -26,10 +26,10 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
     end
 
     it "applies electronic locations" do
-      stub_catalog(bib_id: "9106203")
+      stub_catalog(bib_id: "9991062033506421")
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "9106203")
+      change_set.validate(source_metadata_identifier: "9991062033506421")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.electronic_locations).to eq [
@@ -55,12 +55,12 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
     let(:change_set_class) { ScannedMapChangeSet }
     before do
-      stub_catalog(bib_id: "10001789")
+      stub_catalog(bib_id: "99100017893506421")
     end
     it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "10001789")
+      change_set.validate(source_metadata_identifier: "99100017893506421")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [
@@ -78,7 +78,7 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
     it "doesn't override an existing identifier" do
       resource = FactoryBot.build(:scanned_map, title: [], identifier: ["something"])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "10001789")
+      change_set.validate(source_metadata_identifier: "99100017893506421")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.identifier).to eq ["something"]
@@ -88,12 +88,12 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   context "when a source_metadata_identifier is set for the first time on a vector resource" do
     let(:change_set_class) { VectorResourceChangeSet }
     before do
-      stub_catalog(bib_id: "9649080")
+      stub_catalog(bib_id: "9996490803506421")
     end
     it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:vector_resource, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "9649080")
+      change_set.validate(source_metadata_identifier: "9996490803506421")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ["Syria 100K Vector Dataset"]
@@ -103,8 +103,8 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
 
   context "when a source metadata identifier is set and then replaced with a title" do
     it "uses the given title" do
-      stub_catalog(bib_id: "123456")
-      resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "123456", import_metadata: true)
+      stub_catalog(bib_id: "991234563506421")
+      resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421", import_metadata: true)
       expect(resource.title.first.to_s).to eq "Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord."
       reloaded = query_service.find_by(id: resource.id)
       change_set = ChangeSet.for(reloaded)
@@ -118,12 +118,12 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   context "when a source_metadata_identifier is set for the first time on a raster resource" do
     let(:change_set_class) { RasterResourceChangeSet }
     before do
-      stub_catalog(bib_id: "9637153")
+      stub_catalog(bib_id: "9996371533506421")
     end
     it "applies remote metadata from catalog to an imported metadata resource" do
       resource = FactoryBot.build(:raster_resource, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "9637153")
+      change_set.validate(source_metadata_identifier: "9996371533506421")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq ["Laos : 1:50,000 scale : Digital Raster graphics (DRGs) of topographic maps : complete coverage of the country (Full GeoTiff); 403 maps."]
@@ -167,12 +167,12 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
 
   context "when requesting from Alma" do
     it "converts the old ID syntax and tries that too" do
-      stub_catalog(bib_id: "123456", status: 404)
+      stub_catalog(bib_id: "991234563506421", status: 404)
       stub_catalog(bib_id: "991234563506421")
 
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
-      expect(change_set.validate(source_metadata_identifier: "123456")).to eq true
+      expect(change_set.validate(source_metadata_identifier: "991234563506421")).to eq true
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.", language: :fr)]
@@ -221,20 +221,20 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   end
   context "when a source_metadata_identifier is set afterwards" do
     it "does not change anything" do
-      stub_catalog(bib_id: "123456")
-      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: "123456")
+      stub_catalog(bib_id: "991234563506421")
+      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: "991234563506421")
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "0")
+      change_set.validate(source_metadata_identifier: "991234563506421", title: [], refresh_remote_metadata: "0")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to be_blank
     end
     it "refreshes the metadata if it's a different value" do
-      stub_catalog(bib_id: "123456")
-      stub_catalog(bib_id: "123456789")
-      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: "123456")
+      stub_catalog(bib_id: "991234563506421")
+      stub_catalog(bib_id: "991234567893506421")
+      resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", source_metadata_identifier: "991234563506421")
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "123456789", title: [], refresh_remote_metadata: "0")
+      change_set.validate(source_metadata_identifier: "991234567893506421", title: [], refresh_remote_metadata: "0")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).not_to be_blank
@@ -242,13 +242,13 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   end
   context "when a source_metadata_identifier is set for the first time, and it doesn't exist" do
     before do
-      stub_catalog(bib_id: "123456", status: 404)
+      stub_catalog(bib_id: "991234563506421", status: 404)
     end
     it "is marked as invalid" do
       resource = FactoryBot.build(:scanned_resource, title: [])
       change_set = change_set_class.new(resource)
 
-      expect(change_set.validate(source_metadata_identifier: "123456")).to eq false
+      expect(change_set.validate(source_metadata_identifier: "991234563506421")).to eq false
     end
   end
   context "when a source_metadata_identifier is set for the first time, and it doesn't exist from PULFA" do
@@ -265,17 +265,17 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
 
   context "when a source_metadata_identifier is set afterwards and refresh_remote_metadata is set" do
     before do
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
     end
     it "applies remote metadata from catalog" do
       resource = FactoryBot.create_for_repository(:scanned_resource, title: "Title", imported_metadata: [{ applicant: "Test" }], source_metadata_identifier: nil)
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "123456", title: [], refresh_remote_metadata: "1")
+      change_set.validate(source_metadata_identifier: "991234563506421", title: [], refresh_remote_metadata: "1")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [RDF::Literal.new("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord.", language: :fr)]
       expect(output.primary_imported_metadata.applicant).to be_blank
-      expect(output.source_metadata_identifier).to eq ["123456"]
+      expect(output.source_metadata_identifier).to eq ["991234563506421"]
     end
   end
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
@@ -283,12 +283,12 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
     let(:blade) { "6866386" }
 
     before do
-      stub_catalog(bib_id: "6866386")
+      stub_catalog(bib_id: "9968663863506421")
     end
     it "applies remote metadata from catalog" do
       resource = FactoryBot.build(:scanned_map, title: [])
       change_set = change_set_class.new(resource)
-      change_set.validate(source_metadata_identifier: "6866386")
+      change_set.validate(source_metadata_identifier: "9968663863506421")
       output = change_set_persister.save(change_set: change_set)
 
       expect(output.primary_imported_metadata.title).to eq [
@@ -297,7 +297,7 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
           language: :eng
         )
       ]
-      expect(output.source_metadata_identifier).to eq ["6866386"]
+      expect(output.source_metadata_identifier).to eq ["9968663863506421"]
     end
   end
 end

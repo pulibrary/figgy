@@ -13,7 +13,7 @@ RSpec.describe ExportHathiSipJob do
     file1 = fixture_file_upload("files/example.tif", "image/tiff")
     file2 = fixture_file_upload("files/example.tif", "image/tiff")
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
-                                                        source_metadata_identifier: "123456",
+                                                        source_metadata_identifier: "991234563506421",
                                                         ocr_language: "eng",
                                                         files: [file1, file2])
     scanned_resource
@@ -21,7 +21,7 @@ RSpec.describe ExportHathiSipJob do
 
   before do
     FileUtils.mkdir_p deposit_path
-    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "991234563506421")
   end
 
   after do

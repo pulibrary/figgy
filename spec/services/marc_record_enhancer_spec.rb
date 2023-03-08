@@ -7,13 +7,13 @@ RSpec.describe MarcRecordEnhancer do
       let(:resource) do
         FactoryBot.create_for_repository(
           :scanned_resource,
-          source_metadata_identifier: "8543429",
+          source_metadata_identifier: "9985434293506421",
           rights_statement: RDF::URI("http://cicognara.org/microfiche_copyright")
         )
       end
       before do
-        stub_catalog(bib_id: "8543429")
-        stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
+        stub_catalog(bib_id: "9985434293506421")
+        stub_catalog(bib_id: "9985434293506421", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
       end
       it "returns a MarcRecordEnhancer with a marc record" do
         service = described_class.for(resource)
@@ -69,7 +69,7 @@ RSpec.describe MarcRecordEnhancer do
     let(:resource) do
       FactoryBot.create_for_repository(
         :scanned_resource,
-        source_metadata_identifier: "8543429",
+        source_metadata_identifier: "9985434293506421",
         identifier: "ark:/88435/jm214s442",
         local_identifier: "dcl:xjt"
       )
@@ -77,8 +77,8 @@ RSpec.describe MarcRecordEnhancer do
     let(:manifest_url) { Rails.application.routes.url_helpers.polymorphic_url([:manifest, resource]) }
     let(:metadata_mock) { double }
     before do
-      stub_catalog(bib_id: "8543429")
-      stub_catalog(bib_id: "8543429", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
+      stub_catalog(bib_id: "9985434293506421")
+      stub_catalog(bib_id: "9985434293506421", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
       allow(resource).to receive(:imported_metadata).and_return([metadata_mock])
       allow(metadata_mock).to receive(:references).and_return(["Cicognara, 3723"])
     end

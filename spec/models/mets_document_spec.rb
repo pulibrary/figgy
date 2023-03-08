@@ -179,7 +179,7 @@ RSpec.describe METSDocument do
       end
 
       it "includes volume labels in replaces string" do
-        expect(mets_document.files_for_volume("phys1").first[:replaces]).to eq "pudl0001/4609321/s42/phys1/00000001"
+        expect(mets_document.files_for_volume("phys1").first[:replaces]).to eq "pudl0001/9946093213506421/s42/phys1/00000001"
       end
     end
 

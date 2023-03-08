@@ -8,11 +8,11 @@ describe Preserver do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource,
-                                     source_metadata_identifier: "123456",
+                                     source_metadata_identifier: "991234563506421",
                                      files: [file])
   end
   let(:unpreserved_resource) do
-    FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "123456", files: [file])
+    FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "991234563506421", files: [file])
   end
   let(:preservation_objects) { Wayfinder.for(resource).preservation_objects }
   let(:preservation_object) { preservation_objects.first }
@@ -34,7 +34,7 @@ describe Preserver do
   describe "#preserve!" do
     before do
       stub_ezid(shoulder: shoulder, blade: blade)
-      stub_catalog(bib_id: "123456")
+      stub_catalog(bib_id: "991234563506421")
     end
 
     context "when a race condition forces new PreservationObjects" do
@@ -152,7 +152,7 @@ describe Preserver do
     context "when retrieving Preservation from a ScannedMap" do
       let(:resource) do
         FactoryBot.create_for_repository(:complete_scanned_map,
-                                         source_metadata_identifier: "123456",
+                                         source_metadata_identifier: "991234563506421",
                                          files: [file])
       end
       let(:file_set) do

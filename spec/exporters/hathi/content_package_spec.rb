@@ -9,7 +9,7 @@ RSpec.describe Hathi::ContentPackage do
     file1 = fixture_file_upload("files/example.tif", "image/tiff")
     file2 = fixture_file_upload("files/example.tif", "image/tiff")
     scanned_resource = FactoryBot.create_for_repository(:scanned_resource,
-                                                        source_metadata_identifier: "123456",
+                                                        source_metadata_identifier: "991234563506421",
                                                         ocr_language: "eng",
                                                         viewing_direction: ["right-to-left"],
                                                         files: [file1, file2])
@@ -17,12 +17,12 @@ RSpec.describe Hathi::ContentPackage do
   end
 
   before do
-    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "991234563506421")
   end
 
   describe ".id" do
     it "has the right identifier" do
-      expect(package.id).to eq("123456")
+      expect(package.id).to eq("991234563506421")
     end
   end
 

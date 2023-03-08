@@ -84,13 +84,13 @@ RSpec.describe BulkIngestService do
   describe "#attach_dir" do
     let(:logger) { Logger.new(nil) }
     let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-    let(:bib) { "4609321" }
+    let(:bib) { "9946093213506421" }
     let(:local_id) { "cico:xyz" }
-    let(:replaces) { "pudl0001/4609321/331" }
+    let(:replaces) { "pudl0001/9946093213506421/331" }
     let(:coll) { FactoryBot.create_for_repository(:collection) }
     before do
-      stub_catalog(bib_id: "4609321")
-      stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+      stub_catalog(bib_id: "9946093213506421")
+      stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
     end
     context "with a directory of Scanned TIFFs" do
       it "ingests the resources, skipping dotfiles and ignored files" do
@@ -182,14 +182,14 @@ RSpec.describe BulkIngestService do
     context "with a directory of subdirectories of TIFFs" do
       let(:logger) { Logger.new(nil) }
       let(:multi_dir) { Rails.root.join("spec", "fixtures", "ingest_multi") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:local_id) { "cico:xyz" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:coll) { FactoryBot.create(:collection) }
 
       before do
-        stub_catalog(bib_id: "4609321")
-        stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+        stub_catalog(bib_id: "9946093213506421")
+        stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
       end
 
       it "ingests the resources", bulk: true do
@@ -225,13 +225,13 @@ RSpec.describe BulkIngestService do
     context "when subdirectories have a figgy_metadata.json" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single_figgy_metadata") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:local_id) { "cico:xyz" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:coll) { FactoryBot.create_for_repository(:collection) }
       before do
-        stub_catalog(bib_id: "4609321")
-        stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+        stub_catalog(bib_id: "9946093213506421")
+        stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
       end
 
       it "applies that metadata" do
@@ -267,10 +267,10 @@ RSpec.describe BulkIngestService do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: RasterResource) }
       it "ingests a RasterSet with file_sets marked as mosaic service targets" do
         ingester.attach_dir(
-          base_directory: Rails.root.join("spec", "fixtures", "ingest_raster_set", "123456")
+          base_directory: Rails.root.join("spec", "fixtures", "ingest_raster_set", "991234563506421")
         )
         raster_resource = ChangeSetPersister.default.query_service.find_all_of_model(model: RasterResource).find do |m|
-          m.title == ["123456"]
+          m.title == ["991234563506421"]
         end
         child_rasters = Wayfinder.for(raster_resource).members
 
@@ -290,19 +290,19 @@ RSpec.describe BulkIngestService do
     context "with a subdirectory named Raster" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: ScannedMap) }
       it "ingests a RasterSet child" do
-        stub_catalog(bib_id: "123456")
-        stub_catalog(bib_id: "123456789")
+        stub_catalog(bib_id: "991234563506421")
+        stub_catalog(bib_id: "991234567893506421")
         ingester.attach_dir(
-          base_directory: Rails.root.join("spec", "fixtures", "ingest_scanned_raster_map", "123456"),
-          source_metadata_identifier: "123456"
+          base_directory: Rails.root.join("spec", "fixtures", "ingest_scanned_raster_map", "991234563506421"),
+          source_metadata_identifier: "991234563506421"
         )
         map = ChangeSetPersister.default.query_service.find_all_of_model(model: ScannedMap).find do |m|
-          m.source_metadata_identifier == ["123456"]
+          m.source_metadata_identifier == ["991234563506421"]
         end
         child_maps = Wayfinder.for(map).members
 
         expect(child_maps.map(&:class)).to eq [ScannedMap, ScannedMap]
-        expect(child_maps.first.source_metadata_identifier).to eq ["123456789"]
+        expect(child_maps.first.source_metadata_identifier).to eq ["991234567893506421"]
         expect(child_maps.first.title.first.to_s).to start_with "Earth rites"
         sheet1_children = Wayfinder.for(child_maps.first).members
         sheet2_children = Wayfinder.for(child_maps.last).members
@@ -332,15 +332,15 @@ RSpec.describe BulkIngestService do
     context "with invalid property arguments" do
       let(:logger) { instance_double(Logger) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:local_id) { "cico:xyz" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
 
       before do
         allow(logger).to receive(:warn)
         allow(logger).to receive(:info)
-        stub_catalog(bib_id: "4609321")
-        stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+        stub_catalog(bib_id: "9946093213506421")
+        stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
       end
 
       it "does not ingest the resources and logs a warning" do

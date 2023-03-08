@@ -33,21 +33,20 @@ RSpec.describe CDL::BulkHoldProcessor do
     allow(CDL::EligibleItemService).to receive(:item_ids).and_return(["1"])
     User.create!(uid: "one", email: "one@princeton.edu")
     User.create!(uid: "two", email: "two@princeton.edu")
-    stub_catalog(bib_id: "123456")
-    stub_catalog(bib_id: "8543429")
-    stub_catalog(bib_id: "4609321")
+    stub_catalog(bib_id: "991234563506421")
+    stub_catalog(bib_id: "9946093213506421")
     resource_charge_list1 = FactoryBot.create_for_repository(
       :resource_charge_list,
-      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456").id,
+      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421").id,
       inactive_hold_netids: ["one", "two"]
     )
     resource_charge_list2 = FactoryBot.create_for_repository(
       :resource_charge_list,
-      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456").id
+      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421").id
     )
     resource_charge_list3 = FactoryBot.create_for_repository(
       :resource_charge_list,
-      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "123456").id,
+      resource_id: FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421").id,
       inactive_hold_netids: ["one"]
     )
 

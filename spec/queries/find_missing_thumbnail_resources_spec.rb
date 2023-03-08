@@ -16,7 +16,7 @@ RSpec.describe FindMissingThumbnailResources do
   let(:change_set_persister) { ChangeSetPersister.default }
 
   before do
-    stub_catalog(bib_id: "123456")
+    stub_catalog(bib_id: "991234563506421")
     stub_ezid(shoulder: "99999/fk4", blade: "8675309")
   end
 

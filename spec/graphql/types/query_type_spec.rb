@@ -94,11 +94,11 @@ RSpec.describe Types::QueryType do
 
       it "can return resources by its bibid" do
         stub_catalog(bib_id: "7214786")
-        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
-        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = described_class.new(nil, context)
-        expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
+        expect(type.resources_by_bibids(bib_ids: ["7214786", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
       end
     end
 
@@ -109,11 +109,11 @@ RSpec.describe Types::QueryType do
 
       it "returns nothing" do
         stub_catalog(bib_id: "7214786")
-        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
-        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = described_class.new(nil, context)
-        expect(type.resources_by_bibids(bib_ids: ["7214786", "8543429"])).to eq []
+        expect(type.resources_by_bibids(bib_ids: ["7214786", "9985434293506421"])).to eq []
       end
     end
   end
@@ -189,6 +189,8 @@ RSpec.describe Types::QueryType do
         expect(type.resources_by_orangelight_id(id: "7214786").map(&:id)).to eq [scanned_resource.id]
       end
 
+      # See the other alma spec in this file to convert this example to
+      # using alma-style IDs but maintain the utility of the spec
       it "can return a resource by its alma ID" do
         stub_catalog(bib_id: "7214786")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
@@ -244,18 +246,22 @@ RSpec.describe Types::QueryType do
 
       it "can return resources by bibids" do
         stub_catalog(bib_id: "7214786")
-        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
-        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = described_class.new(nil, context)
-        expect(type.resources_by_orangelight_ids(ids: ["7214786", "8543429"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
+        expect(type.resources_by_orangelight_ids(ids: ["7214786", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
       end
 
       it "can return resources by BibIDs even if some are ingested without alma IDs" do
         stub_catalog(bib_id: "991234563506421")
-        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421")
-        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
+        # since the shorter bibid is no longer valid, we have to create the object
+        # with the longer bibid and then force the short id back in.
+        scanned_resource2.source_metadata_identifier = ["8543429"]
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: scanned_resource2)
 
         type = described_class.new(nil, context)
 
@@ -285,11 +291,11 @@ RSpec.describe Types::QueryType do
 
       it "returns nothing" do
         stub_catalog(bib_id: "7214786")
-        stub_catalog(bib_id: "8543429")
+        stub_catalog(bib_id: "9985434293506421")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
-        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "8543429")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = described_class.new(nil, context)
-        expect(type.resources_by_orangelight_ids(ids: ["7214786", "8543429"])).to eq []
+        expect(type.resources_by_orangelight_ids(ids: ["7214786", "9985434293506421"])).to eq []
       end
     end
   end
