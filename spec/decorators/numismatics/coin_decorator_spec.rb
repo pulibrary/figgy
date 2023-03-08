@@ -13,7 +13,7 @@ RSpec.describe Numismatics::CoinDecorator do
 
   describe "#citations" do
     it "renders the linked citations" do
-      expect(decorator.citations).to eq(["short-title citation part citation number"])
+      expect(decorator.citations).to eq(["short-title, Test Reference, 2001 citation part citation number"])
     end
   end
 

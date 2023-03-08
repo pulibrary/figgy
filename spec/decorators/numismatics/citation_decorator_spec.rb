@@ -40,7 +40,7 @@ RSpec.describe Numismatics::CitationDecorator do
 
   describe "#title" do
     it "renders the numismatic_citation title" do
-      expect(decorator.title).to eq("short-title citation part citation number")
+      expect(decorator.title).to eq("short-title, Test Reference, 2001 citation part citation number")
     end
   end
 end
