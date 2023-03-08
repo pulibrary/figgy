@@ -43,11 +43,14 @@
           <button id="browse_everything" type="button" class="btn btn-primary browse-everything" data-toggle="modal" data-target="#browse-everything-modal">
             Select Folder on Server
           </button>
-          <file-browser :start-tree='[{"label":"Dir1","path":"/Dir1","expanded":true,"expandable":true,"selected":false,"selectable":false,"loaded":true,"children":[{"label":"Subdir1","path":"/Dir1/Subdir1","expanded":false,"expandable":true,"selected":false,"selectable":true,"loaded":true,"children":[{"label":"SubSubdir1","path":"/Dir1/Subdir1/SubSubdir1","loadChildrenPath":"/loaders/test","expanded":false,"expandable":true,"selected":false,"selectable":false,"loaded":false,"children":[]},{"label":"SubSubdir2","path":"/Dir1/Subdir1/SubSubdir2","expanded":false,"expandable":true,"selected":false,"selectable":false,"loaded":true,"children":[]}]}]},{"label":"Dir2","path":"/Dir2","expanded":false,"expandable":true,"selected":false,"selectable":true,"loaded":true,"children":[{"label":"Subdir1","path":"/Dir2/Subdir1","expandable":true,"expanded":false,"selected":false,"selectable":false,"loaded":true,"children":[]},{"label":"Subdir2","path":"/Dir2/Subdir2","expandable":true,"expanded":false,"selected":false,"selectable":false,"loaded":true,"children":[{"label":"File1.jpg","path":"/Dir2/Subdir2/File1.jpg","expandable":false,"selectable":true}]}]}]'/>
         </div>
       </div>
     </div>
   <% end %>
+</div>
+
+<div style="display: flex; max-height: 500px; min-height: 500px;">
+<file-browser :start-tree='[{"label":"Dir1","path":"/Dir1","expanded":true,"expandable":true,"selected":false,"selectable":false,"loaded":true,"children":[{"label":"Subdir1","path":"/Dir1/Subdir1","expanded":false,"expandable":true,"selected":false,"selectable":true,"loaded":true,"children":[{"label":"SubSubdir1","path":"/Dir1/Subdir1/SubSubdir1","loadChildrenPath":"/loaders/test","expanded":false,"expandable":true,"selected":false,"selectable":false,"loaded":false,"children":[]},{"label":"SubSubdir2","path":"/Dir1/Subdir1/SubSubdir2","expanded":false,"expandable":true,"selected":false,"selectable":false,"loaded":true,"children":[]}]}]},{"label":"Dir2","path":"/Dir2","expanded":false,"expandable":true,"selected":false,"selectable":true,"loaded":true,"children":[{"label":"Subdir1","path":"/Dir2/Subdir1","expandable":true,"expanded":false,"selected":false,"selectable":false,"loaded":true,"children":[]},{"label":"Subdir2","path":"/Dir2/Subdir2","expandable":true,"expanded":false,"selected":false,"selectable":false,"loaded":true,"children":[{"label":"File1.jpg","path":"/Dir2/Subdir2/File1.jpg","expandable":false,"selectable":true}]}]}]'/>
 </div>
 
 <div class="modal fade" id="bulk-structure-example-modal" tabindex="-1" role="dialog" aria-labelledby="bulk structure example">
