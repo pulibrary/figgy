@@ -69,5 +69,3 @@ test('the ingest directory button fires an event', async () => {
   expect(wrapper.emitted()).toHaveProperty('folderSelect')
   expect(wrapper.emitted().folderSelect[0]).toEqual([wrapper.vm.folder])
 })
-
-// When clicked, fires an event.
