@@ -62,5 +62,12 @@ test('disables an ingest directory button', () => {
   expect(wrapper.get('.actions a').classes()).toContain('disabled')
 })
 
-// Missing tests: Ingest directory button is disabled for non-selectable
-// directories, and when clicked fires an event.
+test('the ingest directory button fires an event', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: disabledFolder() } })
+
+  await wrapper.get('.actions a').trigger('click')
+  expect(wrapper.emitted()).toHaveProperty('folderSelect')
+  expect(wrapper.emitted().folderSelect[0]).toEqual([wrapper.vm.folder])
+})
+
+// When clicked, fires an event.

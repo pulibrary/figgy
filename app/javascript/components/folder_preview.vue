@@ -33,6 +33,7 @@
         href="#"
         class="button"
         :class="{ 'disabled': !folder.selectable }"
+        @click="folderSelect"
       >
         Ingest {{ folder.label }} directory
       </a>
@@ -56,6 +57,9 @@ export default {
   computed: {
   },
   methods: {
+    folderSelect () {
+      this.$emit('folderSelect', this.folder)
+    }
   }
 }
 </script>
