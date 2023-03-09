@@ -30,12 +30,20 @@
     </div>
     <div class="actions">
       <a
+        v-if="mode === 'directoryIngest'"
         href="#"
         class="button"
         :class="{ 'disabled': !folder.selectable }"
         @click="folderSelect"
       >
         Ingest {{ folder.label }} directory
+      </a>
+      <a
+        v-if="mode === 'fileIngest'"
+        href="#"
+        class="button"
+      >
+        Ingest selected files
       </a>
     </div>
   </div>
@@ -49,6 +57,13 @@ export default {
     folder: {
       type: Object,
       default: null
+    },
+    mode: {
+      type: String,
+      required: true,
+      validator (value) {
+        return ['directoryIngest', 'fileIngest'].includes(value)
+      }
     }
   },
   data () {
