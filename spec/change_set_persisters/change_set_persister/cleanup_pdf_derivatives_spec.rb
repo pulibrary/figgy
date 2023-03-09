@@ -21,6 +21,7 @@ RSpec.describe ChangeSetPersister::CleanupPDFDerivatives do
         allow(change_set_persister).to receive(:save).and_call_original
         scanned_resource
         hook.run
+        expect(Wayfinder.for(scanned_resource).members.count).to eq(1)
         expect(change_set_persister).to have_received(:save).at_least(:once)
       end
     end
@@ -33,9 +34,10 @@ RSpec.describe ChangeSetPersister::CleanupPDFDerivatives do
       end
 
       it "doesn't run" do
-        allow(change_set_persister).to receive(:save).and_call_original
+        allow(change_set_persister).to receive(:save)
         scanned_resource
         hook.run
+        expect(Wayfinder.for(scanned_resource).members.count).to eq(2)
         expect(change_set_persister).not_to have_received(:save)
       end
     end
@@ -43,9 +45,10 @@ RSpec.describe ChangeSetPersister::CleanupPDFDerivatives do
     context "with a ScannedResource" do
       let(:change_set) { ChangeSet.for(scanned_resource) }
       it "doesn't run" do
-        allow(change_set_persister).to receive(:save).and_call_original
+        allow(change_set_persister).to receive(:save)
         scanned_resource
         hook.run
+        expect(Wayfinder.for(scanned_resource).members.count).to eq(3)
         expect(change_set_persister).not_to have_received(:save)
       end
     end
