@@ -6,6 +6,7 @@
         <li
           v-for="child in folder.children"
           :key="child.path"
+          :class="{ 'file': !child.expandable, 'directory': child.expandable }"
         >
           <div
             v-if="child.expandable"

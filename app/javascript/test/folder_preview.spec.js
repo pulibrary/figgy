@@ -25,7 +25,7 @@ const folder = () => {
         'label': 'File1.jpg',
         'path': '/Dir2/Subdir2/File1.jpg',
         'expandable': false,
-        'selectable': false
+        'selectable': true
       }
     ]
   }
@@ -80,4 +80,21 @@ test('does not render an ingest directory button', () => {
   expect(wrapper.findAll('.actions a').length).toEqual(1)
 })
 
+test('when i click a file, it gets added to the files array', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  await wrapper.get('li.file').trigger('click')
+  expect(wrapper.vm.selectedFiles).toEqual([wrapper.vm.folder.children[1]])
+})
+
+// directories are greyed out and not selectable in fileIngest mode
 // TODO: select files, if none are selected ingest button is disabled
+// when i click a file it marks it in the tree as selected.
+// when i list focus a different folder, you have to clear them.
+// when i click a file it puts it in my selected files array
+// I add the class based on whether the file's in the array
+// when i list focus a different directory, the selected files get wiped from
+// the folder preview component.
+// when I click the fileIngest button, it passes the array in the event
+// features to add:
+// shift-click and control-click and select all
