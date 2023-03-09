@@ -29,12 +29,12 @@
       </ul>
     </div>
     <div class="actions">
-      <hyperlink
+      <a
         href="#"
-        variation="button solid"
+        class="button"
       >
         Ingest {{ folder.label }} directory
-      </hyperlink>
+      </a>
     </div>
   </div>
 </template>
@@ -58,10 +58,12 @@ export default {
   }
 }
 </script>
-<style scope>
+<style lang="scss" scope>
   #folder-preview {
     width: 100%;
     height: 100%;
+    --color-bleu-de-france: rgb(44, 110, 175);
+    --color-bleu-de-france-darker: rgb(35, 87, 139)
   }
   #folder-preview > .info-pane {
     height: 60px;
@@ -102,5 +104,25 @@ export default {
     list-style-type: none;
     padding: 0;
     padding-left: 0px;
+  }
+
+  #folder-preview .button {
+    background: var(--color-bleu-de-france);
+    color: white;
+    text-decoration: none;
+    line-height: 1.6;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    text-align: center;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    margin: 0 0.25rem;
+    &:hover,
+    &:focus {
+      background: var(--color-bleu-de-france-darker);
+      box-shadow: none;
+    }
   }
 </style>
