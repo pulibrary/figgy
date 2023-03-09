@@ -32,6 +32,7 @@
       <a
         href="#"
         class="button"
+        :class="{ 'disabled': !folder.selectable }"
       >
         Ingest {{ folder.label }} directory
       </a>
@@ -63,7 +64,8 @@ export default {
     width: 100%;
     height: 100%;
     --color-bleu-de-france: rgb(44, 110, 175);
-    --color-bleu-de-france-darker: rgb(35, 87, 139)
+    --color-bleu-de-france-darker: rgb(35, 87, 139);
+    --color-bleu-de-france-lighter: rgb(149, 189, 228);
   }
   #folder-preview > .info-pane {
     height: 60px;
@@ -123,6 +125,11 @@ export default {
     &:focus {
       background: var(--color-bleu-de-france-darker);
       box-shadow: none;
+    }
+    &.disabled {
+      background: var(--color-bleu-de-france-lighter);
+      pointer-events: none;
+      cursor: default;
     }
   }
 </style>
