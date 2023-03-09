@@ -29,7 +29,7 @@ RSpec.describe ChangeSetPersister::CleanupPDFDerivatives do
       let(:file1) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:scanned_resource) do
-        change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file1, file2]))
+        ChangeSetPersister.default.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file1, file2]))
       end
 
       it "doesn't run" do
