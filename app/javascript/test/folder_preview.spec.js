@@ -31,11 +31,36 @@ const folder = () => {
   }
 }
 
+const disabledFolder = () => {
+  return {
+    'label': 'Subdir2',
+    'path': '/Dir2/Subdir2',
+    'expandable': true,
+    'expanded': false,
+    'selected': false,
+    'selectable': false,
+    'loaded': true,
+    'children': []
+  }
+}
+
 test('renders a list view of all children', () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder() } })
 
   expect(wrapper.findAll('li').length).toEqual(2)
 })
 
-// Missing tests: Ingest directory button exists, is disabled for non-selectable
+test('renders an ingest directory button', () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder() } })
+
+  expect(wrapper.get('.actions a').text()).toEqual('Ingest Subdir2 directory')
+})
+
+test('disables an ingest directory button', () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: disabledFolder() } })
+
+  expect(wrapper.get('.actions a').classes()).toContain('disabled')
+})
+
+// Missing tests: Ingest directory button is disabled for non-selectable
 // directories, and when clicked fires an event.
