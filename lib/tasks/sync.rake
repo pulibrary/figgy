@@ -2,7 +2,7 @@
 namespace :pulfalight do
   desc "Sync all pulfalight resources"
   task sync_resources: :environment do
-    require 'set'
+    require "set"
 
     @logger = Logger.new(STDOUT)
     @logger.info "Finding resources with archival collection codes"
@@ -16,5 +16,6 @@ namespace :pulfalight do
         refreshed_resouces.add(resource.archival_collection_code)
       end
     end
+    @logger.info "Size of the set: #{refreshed_resources.size}"
   end
 end
