@@ -92,7 +92,7 @@ test('in fileIngest mode, when i click a file again, it is removed from the file
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
   await wrapper.get('li.file').trigger('click')
-  await wrapper.get('li.file').trigger('click')
+  await wrapper.get('li.file.selected').trigger('click')
   expect(wrapper.vm.selectedFiles.length).toEqual(0)
 })
 

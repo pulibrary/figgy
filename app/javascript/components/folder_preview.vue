@@ -20,6 +20,7 @@
         <li
           v-for="child in childFiles"
           :key="child.path"
+          :class="{ selected: isSelected(child) }"
           class="file"
           @click="fileSelect($event, child)"
         >
@@ -93,11 +94,14 @@ export default {
       this.$emit('folderSelect', this.folder)
     },
     fileSelect (event, child) {
-      if (this.selectedFiles.includes(child)) {
+      if (this.isSelected(child)) {
         this.selectedFiles.pop(child)
       } else {
         this.selectedFiles.push(child)
       }
+    },
+    isSelected (child) {
+      return this.selectedFiles.includes(child)
     }
   }
 }
