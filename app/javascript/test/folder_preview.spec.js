@@ -73,12 +73,17 @@ test('the ingest directory button fires an event', async () => {
 })
 
 // fileIngest mode
-test('in fileIngest mode it renders an Ingest selected files button', () => {
+test('in fileIngest mode it renders an Ingest selected files button', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
   expect(wrapper.get('.actions a').text()).toEqual('Ingest selected files')
   // no ingest directory button
   expect(wrapper.findAll('.actions a').length).toEqual(1)
+  // button disabled
+  expect(wrapper.get('.actions a').classes()).toContain('disabled')
+  await wrapper.get('li.file').trigger('click')
+  // button enabled
+  expect(wrapper.get('.actions a').classes()).not.toContain('disabled')
 })
 
 test('in fileIngest mode, when i click a file, it gets added to the files array', async () => {
@@ -104,16 +109,14 @@ test('in fileIngest mode, when i click a directory, it is not added to the files
 })
 
 
-// directories are greyed out and not selectable in fileIngest mode
-// TODO: select files, if none are selected ingest button is disabled
-// when i click a file it marks it in the tree as selected.
-// when i list focus a different folder, you have to clear them.
-// when i click a file it puts it in my selected files array
-// I add the class based on whether the file's in the array
+// TODO:
 // when i list focus a different directory, the selected files get wiped from
 // the folder preview component.
 // when I click the fileIngest button, it passes the array in the event and the
 // elements are in the same order they're in in the children array, regardless
 // of what order they were selected in.
 // features to add:
-// shift-click and control-click and select all
+//  - shift-click and control-click and select all
+// Styling TODO:
+//  - directories are greyed out and not selectable in fileIngest mode
+//  - highlight selected rows

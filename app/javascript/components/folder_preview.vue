@@ -43,7 +43,7 @@
         v-if="mode === 'directoryIngest'"
         href="#"
         class="button"
-        :class="{ 'disabled': !folder.selectable }"
+        :class="{ disabled: !folder.selectable }"
         @click="folderSelect"
       >
         Ingest {{ folder.label }} directory
@@ -52,6 +52,7 @@
         v-if="mode === 'fileIngest'"
         href="#"
         class="button"
+        :class="{ disabled: selectedFiles.length === 0 }"
       >
         Ingest selected files
       </a>
