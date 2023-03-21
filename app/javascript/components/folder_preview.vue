@@ -4,18 +4,26 @@
     <div class="details">
       <ul>
         <li
-          v-for="child in folder.children"
+          v-for="child in childDirectories"
           :key="child.path"
-          :class="{ 'file': !child.expandable, 'directory': child.expandable }"
+          class="directory"
         >
           <div
-            v-if="child.expandable"
             class="icon"
           >
             <svg><path d="M11 5h13v17h-24v-20h8l3 3zm-10-2v18h22v-15h-12.414l-3-3h-6.586z" /></svg>
           </div>
+          <span class="label">
+            {{ child.label }}
+          </span>
+        </li>
+        <li
+          v-for="child in childFiles"
+          :key="child.path"
+          class="file"
+          @click="fileSelect($event, child)"
+        >
           <lux-icon-base
-            v-else
             class="icon"
             width="25"
             height="25"
@@ -68,13 +76,24 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      selectedFiles: []
+    }
   },
   computed: {
+    childDirectories () {
+      return this.folder.children.filter(child => child.expandable === true)
+    },
+    childFiles () {
+      return this.folder.children.filter(child => child.expandable === false)
+    }
   },
   methods: {
     folderSelect () {
       this.$emit('folderSelect', this.folder)
+    },
+    fileSelect (event, child) {
+      this.selectedFiles.push(child)
     }
   }
 }

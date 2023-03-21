@@ -73,19 +73,28 @@ test('the ingest directory button fires an event', async () => {
 })
 
 // fileIngest mode
-test('does not render an ingest directory button', () => {
+test('in fileIngest mode it renders an Ingest selected files button', () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
   expect(wrapper.get('.actions a').text()).toEqual('Ingest selected files')
+  // no ingest directory button
   expect(wrapper.findAll('.actions a').length).toEqual(1)
 })
 
-test('when i click a file, it gets added to the files array', async () => {
+test('in fileIngest mode, when i click a file, it gets added to the files array', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
   await wrapper.get('li.file').trigger('click')
   expect(wrapper.vm.selectedFiles).toEqual([wrapper.vm.folder.children[1]])
 })
+
+test('in fileIngest mode, when i click a directory, it is not added to the files array', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  await wrapper.get('li.directory').trigger('click')
+  expect(wrapper.vm.selectedFiles.length).toEqual(0)
+})
+
 
 // directories are greyed out and not selectable in fileIngest mode
 // TODO: select files, if none are selected ingest button is disabled
