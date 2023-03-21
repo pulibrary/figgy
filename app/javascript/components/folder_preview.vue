@@ -93,7 +93,11 @@ export default {
       this.$emit('folderSelect', this.folder)
     },
     fileSelect (event, child) {
-      this.selectedFiles.push(child)
+      if (this.selectedFiles.includes(child)) {
+        this.selectedFiles.pop(child)
+      } else {
+        this.selectedFiles.push(child)
+      }
     }
   }
 }
