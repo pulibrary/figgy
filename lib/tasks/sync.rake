@@ -13,7 +13,7 @@ namespace :pulfalight do
     resources.each do |resource|
       unless refreshed_resources.include?(resource.archival_collection_code)
         RefreshArchivalCollectionJob.perform_later(collection_code: resource.archival_collection_code)
-        refreshed_resouces.add(resource.archival_collection_code)
+        refreshed_resources.add(resource.archival_collection_code)
       end
     end
     @logger.info "Size of the set: #{refreshed_resources.size}"
