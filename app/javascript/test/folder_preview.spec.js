@@ -45,26 +45,26 @@ const disabledFolder = () => {
 }
 
 // directoryIngest mode
-test('renders a list view of all children', () => {
+test('it renders a list view of all children', () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'directoryIngest' } })
 
   expect(wrapper.findAll('li').length).toEqual(2)
 })
 
-test('renders an ingest directory button', () => {
+test('in directoryIngest mode it renders an ingest directory button', () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'directoryIngest' } })
 
   expect(wrapper.get('.actions a').text()).toEqual('Ingest Subdir2 directory')
   expect(wrapper.findAll('.actions a').length).toEqual(1)
 })
 
-test('disables an ingest directory button', () => {
+test('in directoryIngest mode, when selectable is false, it disables the ingest directory button', () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: disabledFolder(), mode: 'directoryIngest' } })
 
   expect(wrapper.get('.actions a').classes()).toContain('disabled')
 })
 
-test('the ingest directory button fires an event', async () => {
+test('in directoryIngest mode clicking the ingest directory button fires an event', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: disabledFolder(), mode: 'directoryIngest' } })
 
   await wrapper.get('.actions a').trigger('click')
@@ -107,7 +107,6 @@ test('in fileIngest mode, when i click a directory, it is not added to the files
   await wrapper.get('li.directory').trigger('click')
   expect(wrapper.vm.selectedFiles.length).toEqual(0)
 })
-
 
 // TODO:
 // when i list focus a different directory, the selected files get wiped from
