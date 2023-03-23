@@ -25,7 +25,7 @@ module Numismatics
     end
 
     def numismatic_reference
-      decorated_numismatic_reference.short_title
+      decorated_numismatic_reference&.short_title
     end
 
     def title

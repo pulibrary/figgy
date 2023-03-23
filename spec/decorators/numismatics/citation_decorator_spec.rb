@@ -30,6 +30,13 @@ RSpec.describe Numismatics::CitationDecorator do
     it "renders the linked numismatic reference as it's short-title" do
       expect(decorator.numismatic_reference).to eq("short-title")
     end
+
+    context "without a linked reference" do
+      let(:numismatic_citation) { Numismatics::Citation.new(part: "citation part", number: "citation number") }
+      it "returns nil" do
+        expect(decorator.numismatic_reference).to be_nil
+      end
+    end
   end
 
   describe "#part" do
