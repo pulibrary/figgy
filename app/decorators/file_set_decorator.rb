@@ -63,12 +63,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
       property: :metadata,
       value: { status: "SUCCESS", resource_id: id, child_id: file_id }
     ).map(&:created_at).max
-    event_date || deprecated_fixity_last_success_date
-  end
-
-  def deprecated_fixity_last_success_date
-    return "n/a" unless primary_file.fixity_last_success_date
-    primary_file.fixity_last_success_date.iso8601
+    event_date || "n/a"
   end
 
   def custom_queries
