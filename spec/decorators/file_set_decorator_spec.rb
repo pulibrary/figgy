@@ -104,35 +104,12 @@ RSpec.describe FileSetDecorator do
       end
     end
 
-    context "when local fixtiy has not been run" do
+    context "when local fixity has not been run" do
       it "reports failure for the primary file, and nothing for other files" do
         expect(decorator.local_fixity_success_of(good_file.id)).to eq("n/a")
         expect(decorator.local_fixity_last_success_date_of(good_file.id)).to eq("n/a")
         expect(decorator.local_fixity_success_of(bad_file.id)).to eq("n/a")
         expect(decorator.local_fixity_last_success_date_of(bad_file.id)).to eq("n/a")
-      end
-    end
-
-    context "when local fixity success is recorded on the file metadata, not on an Event" do
-      let(:now_time) { Time.now.utc }
-      let(:good_file) { FileMetadata.new(label: "good.jp2", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.PreservationFile, fixity_success: 1, fixity_last_success_date: now_time) }
-      it "reports success for the primary file, and nothing for other files" do
-        expect(decorator.local_fixity_success_of(good_file.id)).to eq("SUCCESS")
-        # is8601 gives inconsistent results for utc time zone (sometimes it's
-        # '00:00', sometimes 'Z') so it's manual here
-        expect(decorator.local_fixity_last_success_date_of(good_file.id)).to eq(now_time.strftime("%Y-%m-%dT%H:%M:%S%:z"))
-        expect(decorator.local_fixity_success_of(derivative_file.id)).to eq("n/a")
-        expect(decorator.local_fixity_last_success_date_of(derivative_file.id)).to eq("n/a")
-      end
-    end
-
-    context "when local fixity failure is recorded on the file metadata, not on an Event" do
-      let(:good_file) { FileMetadata.new(label: "good.jp2", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.PreservationFile, fixity_success: 0) }
-      it "reports success for the primary file, and nothing for other files" do
-        expect(decorator.local_fixity_success_of(good_file.id)).to eq("FAILURE")
-        expect(decorator.local_fixity_last_success_date_of(good_file.id)).to eq("n/a")
-        expect(decorator.local_fixity_success_of(derivative_file.id)).to eq("n/a")
-        expect(decorator.local_fixity_last_success_date_of(derivative_file.id)).to eq("n/a")
       end
     end
   end

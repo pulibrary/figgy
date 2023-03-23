@@ -12,6 +12,8 @@ RSpec.describe "catalog/_members_multi_volume_work" do
     let(:solr_document) { SolrDocument.new(document) }
     let(:change_set) { ChangeSet.for(solr_document.resource) }
     before do
+      FactoryBot.create(:local_fixity_success, resource_id: file_set1.id)
+      FactoryBot.create(:local_fixity_failure, resource_id: file_set2.id)
       assign :document, solr_document
       assign :change_set, change_set
       render

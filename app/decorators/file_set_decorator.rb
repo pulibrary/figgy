@@ -53,7 +53,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
       property: :metadata,
       value: { current: true, resource_id: id, child_id: file_id }
     ).first&.status
-    event_status || deprecated_fixity_success
+    event_status || "n/a"
   end
 
   def local_fixity_last_success_date_of(file_id)
@@ -64,17 +64,6 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
       value: { status: "SUCCESS", resource_id: id, child_id: file_id }
     ).map(&:created_at).max
     event_date || deprecated_fixity_last_success_date
-  end
-
-  def deprecated_fixity_success
-    case primary_file.fixity_success
-    when 1
-      "SUCCESS"
-    when 0
-      "FAILURE"
-    else
-      "n/a"
-    end
   end
 
   def deprecated_fixity_last_success_date
