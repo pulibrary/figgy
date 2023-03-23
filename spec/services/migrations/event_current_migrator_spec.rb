@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Migrations::EventCurrentMigrator do
   describe ".run" do
     it "populates the `current` attribute of each Event" do
-      # note at the time of this migration all Events have type: cloud_fixity
+
       file_set = FactoryBot.create_for_repository(:file_set)
       resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id])
 
@@ -28,11 +28,11 @@ RSpec.describe Migrations::EventCurrentMigrator do
       query_service = Valkyrie.config.metadata_adapter.query_service
       described_class.new.run_old
 
-      expect(query_service.custom_queries.find_cloud_fixity_failures).to be_empty
+      expect(query_service.custom_queries.find_fixity_events(status: "FAILURE", type: :cloud_fixity)).to be_empty
 
       described_class.call
 
-      expect(query_service.custom_queries.find_cloud_fixity_failures).not_to be_empty
+      expect(query_service.custom_queries.find_fixity_events(status: "FAILURE", type: :cloud_fixity)).not_to be_empty
     end
   end
 end
