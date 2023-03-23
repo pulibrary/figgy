@@ -26,6 +26,18 @@ const folder = () => {
         'path': '/Dir2/Subdir2/File1.jpg',
         'expandable': false,
         'selectable': true
+      },
+      {
+        'label': 'File2.jpg',
+        'path': '/Dir2/Subdir2/File2.jpg',
+        'expandable': false,
+        'selectable': true
+      },
+      {
+        'label': 'File3.jpg',
+        'path': '/Dir2/Subdir2/File3.jpg',
+        'expandable': false,
+        'selectable': true
       }
     ]
   }
@@ -48,7 +60,7 @@ const disabledFolder = () => {
 test('it renders a list view of all children', () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'directoryIngest' } })
 
-  expect(wrapper.findAll('li').length).toEqual(2)
+  expect(wrapper.findAll('li').length).toEqual(4)
 })
 
 test('in directoryIngest mode it renders an ingest directory button', () => {
@@ -99,6 +111,14 @@ test('in fileIngest mode, when i click a file again, it is removed from the file
   await wrapper.get('li.file').trigger('click')
   await wrapper.get('li.file.selected').trigger('click')
   expect(wrapper.vm.selectedFiles.length).toEqual(0)
+})
+
+test('in fileIngest mode, when i shift-click, all files in the list area are selected', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  await wrapper.get('li.file').trigger('click')
+  await wrapper.findAll('li.file').at(2).trigger('click', { shiftKey: true })
+  expect(wrapper.vm.selectedFiles.length).toEqual(3)
 })
 
 test('in fileIngest mode, when i click a directory, it is not added to the files array', async () => {
