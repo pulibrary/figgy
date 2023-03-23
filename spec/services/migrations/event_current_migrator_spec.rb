@@ -5,7 +5,6 @@ require "rails_helper"
 RSpec.describe Migrations::EventCurrentMigrator do
   describe ".run" do
     it "populates the `current` attribute of each Event" do
-
       file_set = FactoryBot.create_for_repository(:file_set)
       resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id])
 

@@ -61,11 +61,10 @@ RSpec.describe FindFixityEvents do
     end
 
     context "when a fixity check which has failed later succeeds" do
-      # Old one uses preservation objects and real resources, this one doesn't; not sure if necessary
-      let(:event) { FactoryBot.create_for_repository(:cloud_fixity_event, status:  "FAILURE", resource_id: event_resource_id, current: true) }
-      let(:event2) { FactoryBot.create_for_repository(:cloud_fixity_event, status: "FAILURE", resource_id: event2_resource_id) }
+      let(:event) { FactoryBot.create_for_repository(:cloud_fixity_event, status:  "FAILURE", resource_id: event_resource_id) }
+      let(:event2) { FactoryBot.create_for_repository(:cloud_fixity_event, status: "SUCCESS", resource_id: event_resource_id, current: true) }
       let(:event3_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
-      let(:event3) { FactoryBot.create_for_repository(:cloud_fixity_event, status: "SUCCESS", resource_id: event3_resource_id, current: true) }
+      let(:event3) { FactoryBot.create_for_repository(:cloud_fixity_event, status: "FAILURE", resource_id: event3_resource_id, current: true) }
 
       before do
         event3
@@ -75,7 +74,7 @@ RSpec.describe FindFixityEvents do
         output = query.find_fixity_events(status: "FAILURE", type: :cloud_fixity)
         expect(output.length).to eq 1
         output_ids = output.map(&:id)
-        expect(output_ids).to include event.id
+        expect(output_ids).to include event3.id
       end
     end
 
