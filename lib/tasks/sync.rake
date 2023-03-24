@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 namespace :figgy do
   namespace :pulfalight do
+    # Time output from running the task on 3/23/23
+    # real    2m33.982s
+    # user    1m21.634s
+    # sys     0m2.178s
+
     desc "Sync all pulfalight resources"
     task sync_resources: :environment do
       require "set"
