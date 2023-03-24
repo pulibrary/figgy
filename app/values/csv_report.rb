@@ -32,6 +32,20 @@ class CSVReport
     fields.map(&:to_s).map(&:humanize)
   end
 
+  def to_csv
+    CSV.generate(headers: true) do |csv|
+      csv << fields.map { |_k, v| v }
+      resources.each do |record|
+        csv << fields.map { |k, _v| values_or_labels(record, k) }
+      end
+    end
+  end
+
+  def values_or_labels(record, field)
+    val = record.send(field)
+    Array.wrap(val).map { |v| v.respond_to?(:label) ? v.label : v }.join(";")
+  end
+
   class Row
     attr_reader :resource, :fields
     def initialize(resource, fields: [])
