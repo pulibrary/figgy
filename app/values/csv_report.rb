@@ -41,6 +41,15 @@ class CSVReport
     end
   end
 
+  def hashes_to_csv
+    CSV.generate(headers: true) do |csv|
+      csv << fields
+      resources.each do |h|
+        csv << fields.map { |field| h[field.to_sym] }
+      end
+    end
+  end
+
   class Row
     attr_reader :resource, :fields
     def initialize(resource, fields: [])

@@ -43,8 +43,9 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data hashes_to_csv(["id", "component_id", "ark", "url"], @resources.map { |r| resource_hash(r) }),
-                  filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
+        hashes = @resources.map { |r| resource_hash(r) }
+        csv_report = CSVReport.new(hashes, fields: ["id", "component_id", "ark", "url"])
+        send_data csv_report.hashes_to_csv, filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
       end
     end
   end
@@ -58,15 +59,6 @@ class ReportsController < ApplicationController
         ark: resource.identifier&.first,
         url: helpers.manifest_url(resource)
       }
-    end
-
-    def hashes_to_csv(fields, resources)
-      CSV.generate(headers: true) do |csv|
-        csv << fields
-        resources.each do |h|
-          csv << fields.map { |field| h[field.to_sym] }
-        end
-      end
     end
 
     def find_identifiers_to_reconcile
