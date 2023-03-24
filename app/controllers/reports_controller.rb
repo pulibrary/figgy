@@ -16,8 +16,8 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data to_csv(@resources, fields: fields.index_by(&:to_sym)),
-                  filename: "#{@ephemera_project.title.parameterize}-data-#{Time.zone.today}.csv"
+        csv_report = CSVReport.new(@resources, fields: fields.index_by(&:to_sym))
+        send_data csv_report.to_csv, filename: "#{@ephemera_project.title.parameterize}-data-#{Time.zone.today}.csv"
       end
     end
   end
@@ -28,8 +28,8 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data to_csv(@resources, fields: { source_metadata_identifier: "bibid", identifier: "ark", title: "title" }),
-                  filename: "identifiers-to-reconcile-#{Time.zone.today}.csv"
+        csv_report = CSVReport.new(@resources, fields: { source_metadata_identifier: "bibid", identifier: "ark", title: "title" })
+        send_data csv_report.to_csv, filename: "identifiers-to-reconcile-#{Time.zone.today}.csv"
       end
     end
   end
@@ -43,8 +43,9 @@ class ReportsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data hashes_to_csv(["id", "component_id", "ark", "url"], @resources.map { |r| resource_hash(r) }),
-                  filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
+        hashes = @resources.map { |r| resource_hash(r) }
+        csv_report = CSVReport.new(hashes, fields: ["id", "component_id", "ark", "url"])
+        send_data csv_report.hashes_to_csv, filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
       end
     end
   end
@@ -60,33 +61,10 @@ class ReportsController < ApplicationController
       }
     end
 
-    def hashes_to_csv(fields, resources)
-      CSV.generate(headers: true) do |csv|
-        csv << fields
-        resources.each do |h|
-          csv << fields.map { |field| h[field.to_sym] }
-        end
-      end
-    end
-
     def find_identifiers_to_reconcile
       @identifiers_to_reconcile ||= query_service.custom_queries.find_identifiers_to_reconcile.select do |r|
         PulMetadataServices::Client.catalog?(r.source_metadata_identifier.first)
       end
-    end
-
-    def to_csv(records, fields:)
-      CSV.generate(headers: true) do |csv|
-        csv << fields.map { |_k, v| v }
-        records.each do |record|
-          csv << fields.map { |k, _v| values_or_labels(record, k) }
-        end
-      end
-    end
-
-    def values_or_labels(record, field)
-      val = record.send(field)
-      Array.wrap(val).map { |v| v.respond_to?(:label) ? v.label : v }.join(";")
     end
 
     def find_resource(id)
