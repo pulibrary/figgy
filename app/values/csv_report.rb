@@ -41,11 +41,6 @@ class CSVReport
     end
   end
 
-  def values_or_labels(record, field)
-    val = record.send(field)
-    Array.wrap(val).map { |v| v.respond_to?(:label) ? v.label : v }.join(";")
-  end
-
   class Row
     attr_reader :resource, :fields
     def initialize(resource, fields: [])
@@ -88,4 +83,11 @@ class CSVReport
       Array.wrap(resource.try(:imported_metadata))[0] || ImportedMetadata.new
     end
   end
+
+  private
+
+    def values_or_labels(record, field)
+      val = record.send(field)
+      Array.wrap(val).map { |v| v.respond_to?(:label) ? v.label : v }.join(";")
+    end
 end
