@@ -22,7 +22,8 @@
           :key="child.path"
           :class="{ selected: isSelected(child) }"
           class="file"
-          @click="fileSelect($event, child)"
+          @click.exact="fileSelect($event, child)"
+          @click.shift="fileRangeSelect($event, child)"
         >
           <lux-icon-base
             class="icon"
@@ -79,7 +80,8 @@ export default {
   },
   data () {
     return {
-      selectedFiles: []
+      selectedFiles: [],
+      lastSelected: null
     }
   },
   computed: {
@@ -97,8 +99,20 @@ export default {
     fileSelect (event, child) {
       if (this.isSelected(child)) {
         this.selectedFiles.pop(child)
+        // Set last selected to null so shift+click won't work.
+        this.lastSelected = null
       } else {
-        this.selectedFiles.push(child)
+        // Set last selected to this one so shift+click can work.
+        this.lastSelected = child
+        this.selectedFiles = [child]
+      }
+    },
+    fileRangeSelect (event, endChild) {
+      if (this.lastSelected !== null) {
+        const startIndex = this.folder.children.indexOf(this.lastSelected)
+        const endIndex = this.folder.children.indexOf(endChild)
+        const newSelections = this.folder.children.slice(startIndex + 1, endIndex + 1)
+        this.selectedFiles.push(...newSelections)
       }
     },
     isSelected (child) {

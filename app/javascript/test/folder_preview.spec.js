@@ -113,6 +113,14 @@ test('in fileIngest mode, when i click a file again, it is removed from the file
   expect(wrapper.vm.selectedFiles.length).toEqual(0)
 })
 
+test('in fileIngest mode, when I click a different file, it switches the selection to that file', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  await wrapper.get('li.file').trigger('click')
+  await wrapper.findAll('li.file').at(2).trigger('click')
+  expect(wrapper.vm.selectedFiles.length).toEqual(1)
+})
+
 test('in fileIngest mode, when i shift-click, all files in the list area are selected', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
