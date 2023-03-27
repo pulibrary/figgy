@@ -92,7 +92,7 @@ test('in directoryIngest mode clicking the ingest directory button fires an even
 test('in fileIngest mode it renders an Ingest selected files button', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
-  expect(wrapper.get('.actions a').text()).toEqual('Ingest selected files')
+  expect(wrapper.get('.actions a').text()).toEqual('Ingest 0 selected file(s)')
   // no ingest directory button
   expect(wrapper.findAll('.actions a').length).toEqual(1)
   // button disabled
@@ -100,6 +100,7 @@ test('in fileIngest mode it renders an Ingest selected files button', async () =
   await wrapper.get('li.file').trigger('click')
   // button enabled
   expect(wrapper.get('.actions a').classes()).not.toContain('disabled')
+  expect(wrapper.get('.actions a').text()).toEqual('Ingest 1 selected file(s)')
 })
 
 test('in fileIngest mode, when i click a file, it gets added to the files array', async () => {

@@ -60,7 +60,7 @@
         class="button"
         :class="{ disabled: selectedFiles.length === 0 }"
       >
-        Ingest selected files
+        Ingest {{ selectedFiles.length }} selected file(s)
       </a>
     </div>
   </div>
