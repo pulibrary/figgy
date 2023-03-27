@@ -110,6 +110,11 @@ export default {
     },
     childFiles () {
       return this.folder.children.filter(child => child.expandable === false)
+    },
+    orderedSelectedFiles () {
+      let copiedFiles = Object.assign([], this.selectedFiles)
+      return copiedFiles.sort((a, b) => this.folder.children.indexOf(a) -
+        this.folder.children.indexOf(b))
     }
   },
   watch: {
@@ -123,7 +128,7 @@ export default {
       this.$emit('folderSelect', this.folder)
     },
     submitFileSelect () {
-      this.$emit('filesSelect', this.selectedFiles)
+      this.$emit('filesSelect', this.orderedSelectedFiles)
     },
     fileSelect (event, child) {
       if (this.isSelected(child) && this.selectedFiles.length === 1) {

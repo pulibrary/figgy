@@ -106,10 +106,11 @@ test('in fileIngest mode it renders an Ingest selected files button', async () =
 test('in fileIngest mode clicking the ingest files button fires an event', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
-  await wrapper.get('li.file').trigger('click')
+  await wrapper.findAll('li.file').at(1).trigger('click', { ctrlKey: true })
+  await wrapper.findAll('li.file').at(0).trigger('click', { ctrlKey: true })
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.emitted()).toHaveProperty('filesSelect')
-  expect(wrapper.emitted().filesSelect[0]).toEqual([[wrapper.vm.folder.children[1]]])
+  expect(wrapper.emitted().filesSelect[0]).toEqual([[wrapper.vm.folder.children[1], wrapper.vm.folder.children[2]]])
 })
 
 test('in fileIngest mode, when i click a file, it gets added to the files array', async () => {
@@ -195,11 +196,6 @@ test('when folder prop changes, wipes selectedFiles', async () => {
 })
 
 // TODO:
-// when I click the fileIngest button, it passes the array in the event and the
-// elements are in the same order they're in in the children array, regardless
-// of what order they were selected in.
-// features to add:
-//  - control-click
 // Styling TODO:
 //  - directories are greyed out and not selectable in fileIngest mode
 //  - highlight selected rows
