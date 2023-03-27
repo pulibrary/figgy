@@ -141,6 +141,9 @@ test('in fileIngest mode, when i shift-click, all files in the list area are sel
   // Clicking an earlier item should do a reverse range select
   await wrapper.findAll('li.file').at(0).trigger('click', { shiftKey: true })
   expect(wrapper.vm.selectedFiles.length).toEqual(2)
+  // Clicking outside the files should reset selection.
+  await wrapper.get('.details').trigger('click')
+  expect(wrapper.vm.selectedFiles.length).toEqual(0)
 })
 
 test('in fileIngest mode, when i click a directory, it is not added to the files array', async () => {

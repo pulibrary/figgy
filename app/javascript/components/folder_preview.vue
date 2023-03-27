@@ -1,7 +1,10 @@
 <template>
   <div id="folder-preview">
     <div class="info-pane" />
-    <div class="details">
+    <div
+      class="details"
+      @click.self.exact="clearSelection"
+    >
       <ul
         v-if="folder !== null"
       >
@@ -123,6 +126,9 @@ export default {
         )
         this.selectedFiles = newSelections
       }
+    },
+    clearSelection () {
+      this.selectedFiles = []
     },
     isSelected (child) {
       return this.selectedFiles.includes(child)
