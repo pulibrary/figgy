@@ -38,6 +38,8 @@
           class="file"
           @click.exact="fileSelect($event, child)"
           @click.shift="fileRangeSelect($event, child)"
+          @click.ctrl.prevent="fileToggleSelect($event, child)"
+          @contextmenu.prevent="fileToggleSelect($event, child)"
         >
           <lux-icon-base
             class="icon"
@@ -132,6 +134,13 @@ export default {
         // Set last selected to this one so shift+click can work.
         this.lastSelected = child
         this.selectedFiles = [child]
+      }
+    },
+    fileToggleSelect (event, child) {
+      if (this.isSelected(child)) {
+        this.selectedFiles = this.selectedFiles.filter(item => item !== child)
+      } else {
+        this.selectedFiles.push(child)
       }
     },
     fileRangeSelect (event, endChild) {

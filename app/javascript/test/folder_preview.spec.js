@@ -155,6 +155,21 @@ test('in fileIngest mode, when i shift-click, all files in the list area are sel
   expect(wrapper.vm.selectedFiles.length).toEqual(0)
 })
 
+test('in fileIngest mode, when I ctrl-click, it toggles that file', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  // Shift select all three files
+  await wrapper.get('li.file').trigger('click')
+  await wrapper.findAll('li.file').at(2).trigger('click', { shiftKey: true })
+  expect(wrapper.vm.selectedFiles.length).toEqual(3)
+  // Unselect via ctrl
+  await wrapper.findAll('li.file').at(1).trigger('click', { ctrlKey: true })
+  expect(wrapper.vm.selectedFiles.length).toEqual(2)
+  // Select via ctrl
+  await wrapper.findAll('li.file').at(1).trigger('click', { ctrlKey: true })
+  expect(wrapper.vm.selectedFiles.length).toEqual(3)
+})
+
 test('in fileIngest mode, when i click a directory, it is not added to the files array', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
