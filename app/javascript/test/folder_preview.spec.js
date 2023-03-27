@@ -103,6 +103,15 @@ test('in fileIngest mode it renders an Ingest selected files button', async () =
   expect(wrapper.get('.actions a').text()).toEqual('Ingest 1 selected file(s)')
 })
 
+test('in fileIngest mode clicking the ingest files button fires an event', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  await wrapper.get('li.file').trigger('click')
+  await wrapper.get('.actions a').trigger('click')
+  expect(wrapper.emitted()).toHaveProperty('filesSelect')
+  expect(wrapper.emitted().filesSelect[0]).toEqual([[wrapper.vm.folder.children[1]]])
+})
+
 test('in fileIngest mode, when i click a file, it gets added to the files array', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 

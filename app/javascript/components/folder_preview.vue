@@ -71,6 +71,7 @@
         href="#"
         class="button"
         :class="{ disabled: selectedFiles.length === 0 }"
+        @click="submitFileSelect"
       >
         Ingest {{ selectedFiles.length }} selected file(s)
       </a>
@@ -118,6 +119,9 @@ export default {
   methods: {
     folderSelect () {
       this.$emit('folderSelect', this.folder)
+    },
+    submitFileSelect () {
+      this.$emit('filesSelect', this.selectedFiles)
     },
     fileSelect (event, child) {
       if (this.isSelected(child) && this.selectedFiles.length === 1) {
