@@ -64,7 +64,7 @@
         href="#"
         class="button"
         :class="{ disabled: !folder.selectable }"
-        @click="folderSelect"
+        @click.prevent="folderSelect"
       >
         Ingest {{ folder.label }} directory
       </a>
@@ -73,7 +73,7 @@
         href="#"
         class="button"
         :class="{ disabled: selectedFiles.length === 0 }"
-        @click="submitFileSelect"
+        @click.prevent="submitFileSelect"
       >
         Ingest {{ selectedFiles.length }} selected file(s)
       </a>
