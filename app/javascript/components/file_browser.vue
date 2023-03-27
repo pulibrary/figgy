@@ -12,6 +12,8 @@
       <FolderPreview
         :folder="listFocus"
         :mode="mode"
+        @folderSelect="folderSelect"
+        @filesSelect="filesSelect"
       />
     </div>
   </div>
@@ -51,6 +53,12 @@ export default {
   methods: {
     listFocused (child) {
       this.listFocus = child
+    },
+    folderSelect (folder) {
+      this.$emit('folderSelect', folder)
+    },
+    filesSelect (files) {
+      this.$emit('filesSelect', files)
     }
   }
 }

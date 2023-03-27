@@ -49,7 +49,7 @@ const startChildren = () => {
     {
       'label': 'Dir2',
       'path': '/Dir2',
-      'expanded': false,
+      'expanded': true,
       'expandable': true,
       'selected': false,
       'selectable': true,
@@ -92,6 +92,25 @@ test('renders a directory picker pane', () => {
 
   expect(wrapper.find('ul').classes()).toEqual(['tree'])
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
+})
+
+test('propagates folderSelect event up', async () => {
+  const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
+
+  await wrapper.findAll('summary span').at(1).trigger('click')
+  await wrapper.get('.actions a').trigger('click')
+  expect(wrapper.emitted()).toHaveProperty('folderSelect')
+  expect(wrapper.emitted().folderSelect[0]).toEqual([wrapper.vm.tree[0].children[0]])
+})
+
+test('propagates filesSelect event up', async () => {
+  const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'fileIngest' } })
+
+  await wrapper.findAll('summary span').at(6).trigger('click')
+  await wrapper.get('li.file').trigger('click')
+  await wrapper.get('.actions a').trigger('click')
+  expect(wrapper.emitted()).toHaveProperty('filesSelect')
+  expect(wrapper.emitted().filesSelect[0]).toEqual([[wrapper.vm.tree[1].children[1].children[0]]])
 })
 
 test('highlights a list-focused pane', async () => {
