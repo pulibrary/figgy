@@ -167,6 +167,10 @@ export default {
     width: 100%;
     padding-bottom: 5px;
     border-bottom: 1px solid gray;
+    user-select: none;
+    &.selected {
+      border: 2px solid var(--color-bleu-de-france-darker);
+    }
   }
 
   #folder-preview ul {
