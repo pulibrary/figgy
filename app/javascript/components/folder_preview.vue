@@ -2,7 +2,9 @@
   <div id="folder-preview">
     <div class="info-pane" />
     <div class="details">
-      <ul>
+      <ul
+        v-if="folder !== null"
+      >
         <li
           v-for="child in childDirectories"
           :key="child.path"
@@ -39,7 +41,10 @@
         </li>
       </ul>
     </div>
-    <div class="actions">
+    <div
+      v-if="folder !== null"
+      class="actions"
+    >
       <a
         v-if="mode === 'directoryIngest'"
         href="#"

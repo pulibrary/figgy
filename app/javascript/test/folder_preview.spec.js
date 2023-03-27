@@ -63,6 +63,10 @@ test('it renders a list view of all children', () => {
   expect(wrapper.findAll('li').length).toEqual(4)
 })
 
+test("doesn't break when there's no folder selected", () => {
+  mount(FolderPreview, { propsData: { folder: null, mode: 'directoryIngest' } })
+})
+
 test('in directoryIngest mode it renders an ingest directory button', () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'directoryIngest' } })
 

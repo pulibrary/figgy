@@ -11,6 +11,7 @@
     <div id="file-browser-preview">
       <FolderPreview
         :folder="listFocus"
+        :mode="mode"
       />
     </div>
   </div>
@@ -30,6 +31,13 @@ export default {
     startTree: {
       type: Array,
       default: null
+    },
+    mode: {
+      type: String,
+      required: true,
+      validator (value) {
+        return ['directoryIngest', 'fileIngest'].includes(value)
+      }
     }
   },
   data () {
