@@ -1,6 +1,15 @@
 <template>
   <div id="folder-preview">
-    <div class="info-pane" />
+    <div class="info-pane">
+      <a
+        v-if="mode === 'fileIngest'"
+        href="#"
+        class="button"
+        @click.prevent="selectAll"
+      >
+        Select All
+      </a>
+    </div>
     <div
       class="details"
       @click.self.exact="clearSelection"
@@ -126,6 +135,9 @@ export default {
         )
         this.selectedFiles = newSelections
       }
+    },
+    selectAll () {
+      this.selectedFiles = this.childFiles
     },
     clearSelection () {
       this.selectedFiles = []

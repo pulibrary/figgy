@@ -153,6 +153,14 @@ test('in fileIngest mode, when i click a directory, it is not added to the files
   expect(wrapper.vm.selectedFiles.length).toEqual(0)
 })
 
+test("in fileIngest mode there's a selectAll button", async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  expect(wrapper.get('.info-pane a').text()).toEqual('Select All')
+  await wrapper.get('.info-pane a').trigger('click')
+  expect(wrapper.vm.selectedFiles.length).toEqual(3)
+})
+
 // TODO:
 // when i list focus a different directory, the selected files get wiped from
 // the folder preview component.
