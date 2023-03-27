@@ -131,6 +131,15 @@ test('in fileIngest mode, when i shift-click, all files in the list area are sel
   await wrapper.get('li.file').trigger('click')
   await wrapper.findAll('li.file').at(2).trigger('click', { shiftKey: true })
   expect(wrapper.vm.selectedFiles.length).toEqual(3)
+  // Shrink shift+click selection range by clicking an earlier element.
+  await wrapper.findAll('li.file').at(1).trigger('click', { shiftKey: true })
+  expect(wrapper.vm.selectedFiles.length).toEqual(2)
+  // Clicking a single item should always reset out of multi-select.
+  await wrapper.findAll('li.file').at(1).trigger('click')
+  expect(wrapper.vm.selectedFiles.length).toEqual(1)
+  // Clicking an earlier item should do a reverse range select
+  await wrapper.findAll('li.file').at(0).trigger('click', { shiftKey: true })
+  expect(wrapper.vm.selectedFiles.length).toEqual(2)
 })
 
 test('in fileIngest mode, when i click a directory, it is not added to the files array', async () => {

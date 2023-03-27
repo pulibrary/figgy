@@ -102,7 +102,7 @@ export default {
       this.$emit('folderSelect', this.folder)
     },
     fileSelect (event, child) {
-      if (this.isSelected(child)) {
+      if (this.isSelected(child) && this.selectedFiles.length === 1) {
         this.selectedFiles.pop(child)
         // Set last selected to null so shift+click won't work.
         this.lastSelected = null
@@ -116,8 +116,12 @@ export default {
       if (this.lastSelected !== null) {
         const startIndex = this.folder.children.indexOf(this.lastSelected)
         const endIndex = this.folder.children.indexOf(endChild)
-        const newSelections = this.folder.children.slice(startIndex + 1, endIndex + 1)
-        this.selectedFiles.push(...newSelections)
+        // Do min/max to support shift+clicking an earlier item in the array.
+        const newSelections = this.folder.children.slice(
+          Math.min(startIndex, endIndex),
+          Math.max(startIndex, endIndex) + 1
+        )
+        this.selectedFiles = newSelections
       }
     },
     isSelected (child) {
