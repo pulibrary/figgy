@@ -109,6 +109,12 @@ export default {
       return this.folder.children.filter(child => child.expandable === false)
     }
   },
+  watch: {
+    // When folder changes the context has changed, unselect everything.
+    folder () {
+      this.selectedFiles = []
+    }
+  },
   methods: {
     folderSelect () {
       this.$emit('folderSelect', this.folder)

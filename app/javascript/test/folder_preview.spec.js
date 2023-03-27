@@ -161,14 +161,21 @@ test("in fileIngest mode there's a selectAll button", async () => {
   expect(wrapper.vm.selectedFiles.length).toEqual(3)
 })
 
+test('when folder prop changes, wipes selectedFiles', async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
+
+  await wrapper.get('li.file').trigger('click')
+  expect(wrapper.vm.selectedFiles.length).toEqual(1)
+  await wrapper.setProps({ folder: { children: [] } })
+  expect(wrapper.vm.selectedFiles.length).toEqual(0)
+})
+
 // TODO:
-// when i list focus a different directory, the selected files get wiped from
-// the folder preview component.
 // when I click the fileIngest button, it passes the array in the event and the
 // elements are in the same order they're in in the children array, regardless
 // of what order they were selected in.
 // features to add:
-//  - shift-click and control-click and select all
+//  - control-click
 // Styling TODO:
 //  - directories are greyed out and not selectable in fileIngest mode
 //  - highlight selected rows
