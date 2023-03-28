@@ -79,6 +79,12 @@ const startChildren = () => {
               'path': '/Dir2/Subdir2/File1.jpg',
               'expandable': false,
               'selectable': true
+            },
+            {
+              'label': 'File2.jpg',
+              'path': '/Dir2/Subdir2/File2.jpg',
+              'expandable': false,
+              'selectable': true
             }
           ]
         }
@@ -114,6 +120,21 @@ test('populates a hidden input in directoryIngest mode', async () => {
   expect(wrapper.findAll('ul.tree').length).toEqual(0)
   expect(wrapper.find('input[name="ingest_directory"]').element.value).toEqual('/Dir1/Subdir1')
   expect(wrapper.get('#file-browser-launcher .summary').text()).toEqual('Selected Directory: Subdir1 (/Dir1/Subdir1)')
+})
+
+test('populates a hidden input in fileIngest mode', async () => {
+  const wrapper = mount(FileBrowserLauncher, { propsData: { startTree: startChildren(), mode: 'fileIngest' } })
+
+  expect(wrapper.find('a.button').text()).toEqual('Choose Files')
+  await wrapper.get('a.button').trigger('click')
+  await wrapper.findAll('summary span').at(6).trigger('click')
+  await wrapper.get('li.file').trigger('click')
+  await wrapper.findAll('li.file').at(1).trigger('click', { ctrlKey: true })
+  await wrapper.get('.actions a').trigger('click')
+  expect(wrapper.findAll('ul.tree').length).toEqual(0)
+  expect(wrapper.find('input[name="ingest_files[0]"]').element.value).toEqual('/Dir2/Subdir2/File1.jpg')
+  expect(wrapper.find('input[name="ingest_files[1]"]').element.value).toEqual('/Dir2/Subdir2/File2.jpg')
+  expect(wrapper.find('.summary ul li').text()).toEqual('File1.jpg (/Dir2/Subdir2/File1.jpg)')
 })
 
 // TODO:

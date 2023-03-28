@@ -10,6 +10,7 @@
     <div
       v-if="mode === 'directoryIngest'"
       id="directory-ingest-pane"
+      class="ingest-pane"
     >
       <input
         v-if="selectedFolder"
@@ -19,6 +20,31 @@
       >
       <div class="summary">
         Selected Directory: {{ selectedFolderLabel }}
+      </div>
+    </div>
+    <div
+      v-if="mode === 'fileIngest'"
+      id="file-ingest-pane"
+      class="ingest-pane"
+    >
+      <template v-for="(file, idx) in selectedFiles">
+        <input
+          :key="file.path"
+          type="hidden"
+          :name="`ingest_files[${idx}]`"
+          :value="file.path"
+        >
+      </template>
+      <div class="summary">
+        Selected Files ({{ selectedFiles.length }}):
+        <ul>
+          <li
+            v-for="file in selectedFiles"
+            :key="file.path"
+          >
+            {{ file.label }} ({{ file.path }})
+          </li>
+        </ul>
       </div>
     </div>
     <div
@@ -35,6 +61,7 @@
           :start-tree="startTree"
           :mode="mode"
           @folderSelect="folderSelect"
+          @filesSelect="filesSelect"
         />
       </div>
     </div>
@@ -63,7 +90,8 @@ export default {
   data () {
     return {
       browserLaunched: false,
-      selectedFolder: null
+      selectedFolder: null,
+      selectedFiles: []
     }
   },
   computed: {
@@ -85,6 +113,10 @@ export default {
     folderSelect (folder) {
       this.selectedFolder = folder
       this.browserLaunched = false
+    },
+    filesSelect (files) {
+      this.browserLaunched = false
+      this.selectedFiles = files
     }
   }
 }
@@ -155,7 +187,7 @@ export default {
     }
   }
 
-  #directory-ingest-pane {
+  .ingest-pane {
     margin-left: 5px;
     margin-top: 8px;
   }
