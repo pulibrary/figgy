@@ -136,7 +136,3 @@ test('populates a hidden input in fileIngest mode', async () => {
   expect(wrapper.find('input[name="ingest_files[1]"]').element.value).toEqual('/Dir2/Subdir2/File2.jpg')
   expect(wrapper.find('.summary ul li').text()).toEqual('File1.jpg (/Dir2/Subdir2/File1.jpg)')
 })
-
-// TODO:
-// * Add a box to display result of selections
-// * Add hidden inputs that store the result of selections.
