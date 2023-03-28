@@ -8,6 +8,20 @@
       Choose Files
     </a>
     <div
+      v-if="mode === 'directoryIngest'"
+      id="directory-ingest-pane"
+    >
+      <input
+        v-if="selectedFolder"
+        type="hidden"
+        name="ingest_directory"
+        :value="selectedFolder.path"
+      >
+      <div class="summary">
+        Selected Directory: {{ selectedFolderLabel }}
+      </div>
+    </div>
+    <div
       v-if="browserLaunched"
       id="file-browser-modal"
       @click.self="closeBrowser"
@@ -20,6 +34,7 @@
         <file-browser
           :start-tree="startTree"
           :mode="mode"
+          @folderSelect="folderSelect"
         />
       </div>
     </div>
@@ -47,16 +62,28 @@ export default {
   },
   data () {
     return {
-      browserLaunched: false
+      browserLaunched: false,
+      selectedFolder: null
     }
   },
   computed: {
+    selectedFolderLabel () {
+      if (this.selectedFolder) {
+        return `${this.selectedFolder.label} (${this.selectedFolder.path})`
+      } else {
+        return ''
+      }
+    }
   },
   methods: {
     launchBrowser () {
       this.browserLaunched = true
     },
     closeBrowser () {
+      this.browserLaunched = false
+    },
+    folderSelect (folder) {
+      this.selectedFolder = folder
       this.browserLaunched = false
     }
   }
@@ -126,5 +153,10 @@ export default {
       pointer-events: none;
       cursor: default;
     }
+  }
+
+  #directory-ingest-pane {
+    margin-left: 5px;
+    margin-top: 8px;
   }
 </style>

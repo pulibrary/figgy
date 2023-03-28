@@ -103,6 +103,19 @@ test('renders a button to launch a file browser', async () => {
   expect(wrapper.findAll('ul.tree').length).toEqual(0)
 })
 
+test('populates a hidden input in directoryIngest mode', async () => {
+  const wrapper = mount(FileBrowserLauncher, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
+
+  expect(wrapper.find('a.button').text()).toEqual('Choose Files')
+  await wrapper.get('a.button').trigger('click')
+  expect(wrapper.findAll('ul.tree').length).toEqual(1)
+  await wrapper.findAll('summary span').at(1).trigger('click')
+  await wrapper.get('.actions a').trigger('click')
+  expect(wrapper.findAll('ul.tree').length).toEqual(0)
+  expect(wrapper.find('input[name="ingest_directory"]').element.value).toEqual('/Dir1/Subdir1')
+  expect(wrapper.get('#file-browser-launcher .summary').text()).toEqual('Selected Directory: Subdir1 (/Dir1/Subdir1)')
+})
+
 // TODO:
 // * Add a box to display result of selections
 // * Add hidden inputs that store the result of selections.
