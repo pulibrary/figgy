@@ -21,15 +21,7 @@ class ChangeSetPersister
       # preserve the resource in that job if it hasn't changed since then.
       lock_tokens = cs[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK] || []
       lock_tokens = lock_tokens.map(&:serialize)
-
-      # It's important that we inline this for parents, to ensure that a race
-      # condition doesn't happen which makes it so that two jobs get queued up
-      # that each call PreserveChildrenJob, resulting in multiple file uploads
-      if cs.try(:member_ids).present?
-        PreserveResourceJob.perform_now(id: cs.id.to_s, lock_tokens: lock_tokens)
-      else
-        PreserveResourceJob.perform_later(id: cs.id.to_s, lock_tokens: lock_tokens)
-      end
+      PreserveResourceJob.perform_later(id: cs.id.to_s, lock_tokens: lock_tokens)
     end
 
     def reload(resource)
