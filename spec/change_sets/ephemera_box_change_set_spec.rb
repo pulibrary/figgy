@@ -40,6 +40,7 @@ RSpec.describe EphemeraBoxChangeSet do
     end
 
     context "when an EphemeraBox has EphemeraFolder members" do
+      with_queue_adapter :inline
       subject(:change_set) { described_class.new(ephemera_box) }
       let(:ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
       let(:ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: [ephemera_folder.id]) }
@@ -47,12 +48,14 @@ RSpec.describe EphemeraBoxChangeSet do
       let(:storage_adapter) { Valkyrie.config.storage_adapter }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
-      it "propagates the state to member resources" do
+      it "propagates the state to member resources and preserves itself; children preserve themselves" do
         change_set.state = "all_in_production"
         persisted = change_set_persister.save(change_set: change_set)
+        expect(Wayfinder.for(persisted).preservation_object).not_to be_nil
         folders = persisted.decorate.folders
         expect(folders).not_to be_empty
         expect(folders.first.state).to eq "complete"
+        expect(Wayfinder.for(folders.first).preservation_object).not_to be_nil
       end
     end
   end
