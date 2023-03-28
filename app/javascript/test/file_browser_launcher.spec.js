@@ -96,7 +96,7 @@ const startChildren = () => {
 test('renders a button to launch a file browser', async () => {
   const wrapper = mount(FileBrowserLauncher, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
 
-  expect(wrapper.find('a.button').text()).toEqual('Choose Files')
+  expect(wrapper.find('a.button').text()).toEqual('Choose Folder')
   await wrapper.get('a.button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
   // Close button works.
@@ -112,7 +112,7 @@ test('renders a button to launch a file browser', async () => {
 test('populates a hidden input in directoryIngest mode', async () => {
   const wrapper = mount(FileBrowserLauncher, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
 
-  expect(wrapper.find('a.button').text()).toEqual('Choose Files')
+  expect(wrapper.find('a.button').text()).toEqual('Choose Folder')
   await wrapper.get('a.button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
   await wrapper.findAll('summary span').at(1).trigger('click')

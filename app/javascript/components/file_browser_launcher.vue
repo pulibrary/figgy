@@ -5,7 +5,7 @@
       href="#"
       @click="launchBrowser"
     >
-      Choose Files
+      Choose {{ launchButtonText }}
     </a>
     <div
       v-if="mode === 'directoryIngest'"
@@ -100,6 +100,13 @@ export default {
         return `${this.selectedFolder.label} (${this.selectedFolder.path})`
       } else {
         return ''
+      }
+    },
+    launchButtonText () {
+      if (this.mode === 'directoryIngest') {
+        return 'Folder'
+      } else {
+        return 'Files'
       }
     }
   },
