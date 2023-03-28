@@ -58,6 +58,23 @@ RSpec.describe EphemeraBoxChangeSet do
         expect(Wayfinder.for(folders.first).preservation_object).not_to be_nil
       end
     end
+
+    context "when adding an EphemeraFolder to a all_in_production state EphemeraBox" do
+      with_queue_adapter :inline
+      let(:ephemera_folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+      let(:ephemera_box) { FactoryBot.create_for_repository(:ephemera_box, state: :all_in_production) }
+      let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+      let(:storage_adapter) { Valkyrie.config.storage_adapter }
+      let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+
+      it "preserves the folder" do
+        change_set = ChangeSet.for(ephemera_folder)
+        change_set.append_id = ephemera_box.id
+        persisted = change_set_persister.save(change_set: change_set)
+        expect(persisted.state).not_to eq "complete"
+        expect(Wayfinder.for(persisted).preservation_object).not_to be_nil
+      end
+    end
   end
 
   describe "validations" do

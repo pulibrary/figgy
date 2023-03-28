@@ -141,7 +141,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   end
 
   def preserve?
-    state == "complete"
+    resource.decorate.public_readable_state?
   end
 
   private
