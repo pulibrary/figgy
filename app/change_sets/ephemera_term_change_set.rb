@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class EphemeraTermChangeSet < Valkyrie::ChangeSet
+class EphemeraTermChangeSet < ChangeSet
   validates :label, :member_of_vocabulary_id, presence: true
   property :label, multiple: false, required: true, type: Valkyrie::Types::String
   property :uri, multiple: false, required: false, type: ::Types::URI
