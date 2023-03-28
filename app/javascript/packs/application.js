@@ -6,6 +6,7 @@ import store from '../store'
 import DocumentAdder from '../components/document_adder'
 import DirectoryPicker from '../components/directory_picker'
 import FileBrowser from '../components/file_browser'
+import FileBrowserLauncher from '../components/file_browser_launcher'
 import PlaylistMembers from '../components/playlist_members'
 import IssueMonograms from '../components/issue_monograms'
 import axios from 'axios'
@@ -37,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'ajax-select': AjaxSelect,
         'file-uploader': FileUploader,
         'directory-picker': DirectoryPicker,
-        'file-browser': FileBrowser
+        'file-browser': FileBrowser,
+        'file-browser-launcher': FileBrowserLauncher
       },
       data: {
         options: []
