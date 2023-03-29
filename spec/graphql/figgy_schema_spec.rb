@@ -45,25 +45,6 @@ RSpec.describe FiggySchema do
       end
     end
 
-    context "when requesting directory info" do
-      let(:query_string) { %|{ directoryInfo(directory: "/directory_info") { children { label, path, expanded, selected, selectable, loaded }} }| }
-      it "returns all of the children" do
-        expect(result["errors"]).to be_blank
-        children = result["data"]["children"]
-        expect(children.length).to eq 3
-        expect(children[0]).to eq(
-          {
-            label: "1",
-            path: "/directory_info/1",
-            expanded: false,
-            selected: false,
-            selectable: false,
-            loaded: false
-          }
-        )
-      end
-    end
-
     context "when requesting a notice" do
       let(:query_string) { %|{ resource(id: "#{id}") { notice { heading, acceptLabel, textHtml } } }| }
       it "returns a notice heading and text" do
