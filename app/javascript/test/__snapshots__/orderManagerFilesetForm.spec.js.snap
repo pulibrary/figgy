@@ -4,6 +4,7 @@ exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
 <div>
   <heading-stub
     level="h2"
+    size="h1"
   >
     
     Edit 
@@ -19,25 +20,47 @@ exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
     novalidate="novalidate"
   >
     <input-text-stub
+      errormessage=""
+      helper=""
+      icon=""
       id="itemLabel"
       label="Label"
+      maxlength="256"
+      name=""
       placeholder="e.g., example.tif"
+      rows="5"
+      size="medium"
+      type="text"
+      value=""
+      width="auto"
+      wrapper="div"
     />
      
     <input-select-stub
+      errormessage=""
       id="pageType"
       label="Page Type"
+      name=""
       options="[object Object],[object Object],[object Object]"
+      size="medium"
       value="single"
+      width="auto"
+      wrapper="div"
     />
      
     <input-checkbox-stub
+      errormessage=""
+      grouplabel=""
       id="startCanvasCheckbox"
+      label=""
       options="[object Object]"
     />
      
     <input-checkbox-stub
+      errormessage=""
+      grouplabel=""
       id="thumbnailCheckbox"
+      label=""
       options="[object Object]"
     />
   </form>

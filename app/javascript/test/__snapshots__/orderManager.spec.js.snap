@@ -16,6 +16,8 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
    
   <wrapper-stub
     class="lux-galleryPanel"
+    horizontal=""
+    maxwidth="1170"
     type="div"
   >
     <toolbar-stub
@@ -25,14 +27,16 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
     <!---->
      
     <gallery-stub
-      card-pixel-width="300"
+      cardpixelwidth="300"
       class="lux-galleryWrapper"
-      gallery-items="[object Object],[object Object],[object Object]"
+      galleryitems="[object Object],[object Object],[object Object]"
     />
   </wrapper-stub>
    
   <wrapper-stub
     class="lux-sidePanel"
+    horizontal=""
+    maxwidth="1170"
     type="div"
   >
     <!---->

@@ -4,6 +4,7 @@ exports[`OrderManagerResourceForm.vue has the expected html structure 1`] = `
 <div>
   <heading-stub
     level="h2"
+    size="h1"
   >
     
       Set Properties 
@@ -22,6 +23,7 @@ exports[`OrderManagerResourceForm.vue has the expected html structure 1`] = `
     class="lux-file_count"
   >
     <text-style-stub
+      type="p"
       variation="emphasis"
     >
       
@@ -45,17 +47,19 @@ exports[`OrderManagerResourceForm.vue has the expected html structure 1`] = `
     novalidate="novalidate"
   >
     <input-radio-stub
-      group-label="Viewing Direction"
+      errormessage=""
+      grouplabel="Viewing Direction"
       id="viewDir"
       options="[object Object],[object Object],[object Object],[object Object]"
-      vertical=""
+      vertical="true"
     />
      
     <input-radio-stub
-      group-label="Viewing Hint"
+      errormessage=""
+      grouplabel="Viewing Hint"
       id="viewHint"
       options="[object Object],[object Object],[object Object]"
-      vertical=""
+      vertical="true"
     />
   </form>
 </div>

@@ -4,6 +4,7 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
 <div>
   <heading-stub
     level="h2"
+    size="h1"
   >
     
     Generate Labels 
@@ -19,36 +20,69 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
     novalidate="novalidate"
   >
     <input-text-stub
+      errormessage=""
+      helper=""
+      icon=""
       id="unitLabel"
       label="Label"
+      maxlength="256"
+      name=""
       placeholder="e.g., p."
+      rows="5"
+      size="medium"
+      type="text"
       value="p. "
+      width="auto"
+      wrapper="div"
     />
      
     <input-text-stub
+      errormessage=""
+      helper=""
+      icon=""
       id="startNum"
       label="Starting Numeral"
+      maxlength="256"
+      name=""
       placeholder="e.g., 10"
+      rows="5"
+      size="medium"
+      type="text"
       value="1"
+      width="auto"
+      wrapper="div"
     />
      
     <input-checkbox-stub
+      errormessage=""
+      grouplabel=""
+      label=""
       options="[object Object]"
     />
      
     <!---->
      
     <input-select-stub
+      errormessage=""
       id="labelMethod"
       label="Labeling Method"
+      name=""
       options="[object Object],[object Object]"
+      size="medium"
       value="paginate"
+      width="auto"
+      wrapper="div"
     />
      
     <input-select-stub
+      errormessage=""
       id="twoUp"
       label="Two Up"
+      name=""
       options="[object Object],[object Object]"
+      size="medium"
+      width="auto"
+      wrapper="div"
     />
      
     <!---->
