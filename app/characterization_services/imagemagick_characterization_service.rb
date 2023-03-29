@@ -29,30 +29,38 @@ class ImagemagickCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    return unless image_valid?
-    @file_characterization_attributes = {
-      width: image.width.to_s,
-      height: image.height.to_s,
-      mime_type: image.mime_type,
-      checksum: MultiChecksum.for(file_object),
-      size: image.size
-    }
-    new_file = primary_file.new(@file_characterization_attributes.to_h)
-    @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @file_set = @persister.save(resource: @file_set) if save
+    [:original_file, :intermediate_file, :preservation_file].each do |type|
+      target_file = @file_set.try(type)
+      next unless target_file
+      @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+      next unless image_valid?
+      new_file = target_file.new(file_characterization_attributes.to_h)
+      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+    end
+    @file_set = persister.save(resource: @file_set) if save
     @file_set
   end
 
   # Determines the location of the file on disk for the file_set
   # @return Pathname
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+    return Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
+  end
+
+  def file_characterization_attributes
+    {
+      width: image.width.to_s,
+      height: image.height.to_s,
+      mime_type: image.mime_type,
+      checksum: MultiChecksum.for(@file_object),
+      size: image.size
+    }
   end
 
   # Retrieve the image handler from MiniMagick
   # @return [MiniMagick::Image]
   def image
-    @image ||= MiniMagick::Image.open(filename)
+    MiniMagick::Image.open(filename)
   rescue MiniMagick::Invalid
     # Proceed as if this is not an image
     nil
@@ -60,18 +68,6 @@ class ImagemagickCharacterizationService
 
   def image_valid?
     File.size(filename).positive? && image.present?
-  end
-
-  # Provides the file attached to the file_set
-  # @return Valkyrie::StorageAdapter::File
-  def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
-  end
-
-  # Retrieve the primary file from the FileSet
-  # @return [FileMetadata]
-  def primary_file
-    @file_set.primary_file
   end
 
   # Retrieve the Resource to which the FileSet is attached

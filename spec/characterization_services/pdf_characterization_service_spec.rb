@@ -9,7 +9,9 @@ RSpec.describe PDFCharacterizationService do
   let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
   let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
   let(:valid_file_set) { Wayfinder.for(resource).file_sets.first }
-  let(:persister) { ChangeSetPersister.default.metadata_adapter.persister }
+  let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:persister) { adapter.persister }
+  let(:query_service) { adapter.query_service }
   let(:file_characterization_service) { described_class }
 
   before do
@@ -26,5 +28,17 @@ RSpec.describe PDFCharacterizationService do
     expect(checksum.count).to eq 1
     expect(checksum.first).to be_a MultiChecksum
     expect(file_set.primary_file.page_count).to eq 2
+  end
+
+  context "when a file set contains a preservation file and an intermediate file" do
+    it "characterizes both files" do
+      preservation = fixture_file_upload("files/sample.pdf", "application/pdf", Valkyrie::Vocab::PCDMUse.PreservationFile)
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [preservation])
+      file_set = query_service.find_members(resource: resource).first
+      IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "sample.pdf"), file_set_id: file_set.id)
+      file_set = query_service.find_members(resource: resource).first
+      expect(file_set.file_metadata[0].checksum).not_to be_empty
+      expect(file_set.file_metadata[1].checksum).not_to be_empty
+    end
   end
 end

@@ -22,17 +22,19 @@ class PDFCharacterizationService
 
   # @return [FileSet]
   def characterize(save: true)
-    primary_file.checksum = MultiChecksum.for(file_object)
-    primary_file.page_count = pdf_page_count
-    @file_set = persister.save(resource: file_set) if save
-    file_set
+    [:original_file, :intermediate_file, :preservation_file].each do |type|
+      target_file = @file_set.try(type)
+      next unless target_file
+      @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+      target_file.checksum = MultiChecksum.for(@file_object)
+      target_file.page_count = pdf_page_count
+      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != target_file.id } + [target_file]
+    end
+    @file_set = persister.save(resource: @file_set) if save
+    @file_set
   end
 
   def pdf_page_count
-    @pdf_page_count ||= Vips::Image.pdfload(file_object.disk_path.to_s, access: :sequential, memory: true).get_value("pdf-n_pages")
-  end
-
-  def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
+    @pdf_page_count ||= Vips::Image.pdfload(@file_object.disk_path.to_s, access: :sequential, memory: true).get_value("pdf-n_pages")
   end
 end

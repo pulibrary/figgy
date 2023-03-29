@@ -118,6 +118,19 @@ RSpec.describe TikaFileCharacterizationService do
     expect(new_file_set.original_file.software).not_to be_empty
   end
 
+  context "when a file set contains a preservation file and an intermediate file" do
+    let(:tika_output) { tika_shapefile_output }
+    it "characterizes both files" do
+      preservation = fixture_file_upload("files/vector/shapefile.zip", "application/zip", Valkyrie::Vocab::PCDMUse.PreservationFile)
+      resource = FactoryBot.create_for_repository(:simple_resource, files: [preservation])
+      file_set = query_service.find_members(resource: resource).first
+      IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "vector", "shapefile.zip"), file_set_id: file_set.id)
+      file_set = query_service.find_members(resource: resource).first
+      expect(file_set.file_metadata[0].checksum).not_to be_empty
+      expect(file_set.file_metadata[1].checksum).not_to be_empty
+    end
+  end
+
   describe "#valid?" do
     it "returns true" do
       expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true

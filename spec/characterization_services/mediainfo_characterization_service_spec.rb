@@ -105,6 +105,18 @@ RSpec.describe MediainfoCharacterizationService do
       expect(new_file_set.original_file.source_media_type).to eq ["cassette"]
       expect(new_file_set.original_file.duration).to eq ["0.261"]
     end
+
+    context "when a file set contains a preservation audio file and an intermediate audio file" do
+      it "characterizes both files" do
+        preservation = fixture_file_upload("files/audio_file.wav", "audio/x-wav", Valkyrie::Vocab::PCDMUse.PreservationFile)
+        recording = FactoryBot.create_for_repository(:recording, files: [preservation])
+        file_set = query_service.find_members(resource: recording).first
+        IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "audio_file.wav"), file_set_id: file_set.id)
+        file_set = query_service.find_members(resource: recording).first
+        expect(file_set.file_metadata[0].checksum).not_to be_empty
+        expect(file_set.file_metadata[1].checksum).not_to be_empty
+      end
+    end
   end
 
   context "with a video file" do
