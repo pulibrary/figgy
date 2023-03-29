@@ -2,7 +2,7 @@
   <div>
     <ul :class="root ? 'tree' : ''">
       <li
-        v-for="child in children"
+        v-for="child in startChildren"
         :key="child.path"
       >
         <v-details
@@ -29,6 +29,7 @@
             :root="false"
             :list-focus="listFocus"
             @listFocus="listFocused"
+            @loadChild="tryLoading"
           />
         </v-details>
       </li>
@@ -58,14 +59,11 @@ export default {
   },
   data () {
     return {
-      'children': this.startChildren
     }
   },
   methods: {
     tryLoading (child) {
-      if (child.loaded === false && child.loadChildrenPath) {
-        this.loadChildren(child)
-      }
+      this.$emit('loadChild', child)
     },
     listFocused (child, event) {
       // Tell the file browser which thing got focused.
@@ -79,18 +77,6 @@ export default {
     },
     isFocused (child) {
       return this.listFocus && child.path === this.listFocus.path
-    },
-    loadChildren (child) {
-      return fetch(
-        child.loadChildrenPath,
-        { credentials: 'include' }
-      )
-        .then((response) => response.json())
-        .then((response) => {
-          child.children = response
-          child.loaded = true
-        })
-        .catch(_ => { child.expanded = false })
     }
   }
 }

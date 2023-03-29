@@ -71,6 +71,10 @@ RSpec.describe "FileBrowser/Disk" do
     end
     context "when logged in as staff" do
       let(:user) { FactoryBot.create(:staff) }
+      it "can return directories with spaces in it" do
+        get "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/4609321/Vol 2')}.json"
+        expect(response).to be_successful
+      end
       it "returns" do
         get "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready')}.json"
 

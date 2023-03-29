@@ -15,8 +15,14 @@ class FileBrowserDiskProvider
   private
 
     def files
-      @files ||= root.join(base).children.sort_by(&:basename).map do |file|
+      @files ||= valid_children.sort_by(&:basename).map do |file|
         Entry.new(file_path: file, root: root)
+      end
+    end
+
+    def valid_children
+      root.join(base).children.select do |child|
+        !child.basename.to_s.start_with?(".")
       end
     end
 end
@@ -31,25 +37,33 @@ class Entry
 
   def as_json
     if file_path.directory?
-      {
-        label: basename.to_s,
-        path: relative_path,
-        loadChildrenPath: load_path,
-        expanded: false,
-        expandable: true,
-        selected: false,
-        selectable: selectable?,
-        loaded: false,
-        children: []
-      }
+      directory_json
     else
-      {
-        label: basename.to_s,
-        path: valkyrie_id,
-        expandable: false,
-        selectable: true
-      }
+      file_json
     end
+  end
+
+  def directory_json
+    {
+      label: basename.to_s,
+      path: relative_path,
+      loadChildrenPath: load_path,
+      expanded: false,
+      expandable: true,
+      selected: false,
+      selectable: selectable?,
+      loaded: false,
+      children: []
+    }
+  end
+
+  def file_json
+    {
+      label: basename.to_s,
+      path: valkyrie_id,
+      expandable: false,
+      selectable: true
+    }
   end
 
   def load_path

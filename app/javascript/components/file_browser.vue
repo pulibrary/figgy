@@ -6,6 +6,7 @@
         :root="true"
         :list-focus="listFocus"
         @listFocus="listFocused"
+        @loadChild="loadChild"
       />
     </div>
     <div id="file-browser-preview">
@@ -59,6 +60,23 @@ export default {
     },
     filesSelect (files) {
       this.$emit('filesSelect', files)
+    },
+    loadChild (child) {
+      if (child.loaded === false && child.loadChildrenPath) {
+        this.loadChildren(child)
+      }
+    },
+    loadChildren (child) {
+      return fetch(
+        child.loadChildrenPath,
+        { credentials: 'include' }
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          child.children = response
+          child.loaded = true
+        })
+        .catch(_ => { child.expanded = false })
     }
   }
 }

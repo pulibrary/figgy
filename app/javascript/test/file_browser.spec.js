@@ -1,5 +1,36 @@
 import { mount } from '@vue/test-utils'
 import FileBrowser from '../components/file_browser.vue'
+import flushPromises from 'flush-promises'
+
+function stubFailedChildLoad () {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status: 404,
+      json: () => { throw Error('broken') }
+    })
+  )
+}
+
+function stubChildLoad () {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(
+        [
+          {
+            'label': 'SubSubSubdir1',
+            'path': '/Dir1/Subdir1/SubSubdir1/SubSubSubdir1',
+            'expanded': false,
+            'selected': false,
+            'selectable': false,
+            'loaded': true,
+            'children': []
+          }
+        ]
+      )
+    })
+  )
+}
 
 const startChildren = () => {
   return [
@@ -124,4 +155,32 @@ test('highlights a list-focused pane', async () => {
   await wrapper.findAll('summary span').at(1).trigger('click')
   expect(wrapper.vm.listFocus.path).toEqual('/Dir1/Subdir1')
   expect(wrapper.findAll('summary.list-focus').length).toEqual(1)
+})
+
+test('can dynamically load child nodes via loadChildrenPath', async () => {
+  stubChildLoad()
+  const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
+
+  await wrapper.findAll('details').at(1).trigger('toggle')
+  await wrapper.findAll('details').at(2).trigger('toggle')
+  await flushPromises()
+  expect(wrapper.vm.tree[0].children[0].children[0].children.length).toEqual(1)
+})
+
+test('dynamically loads child nodes when list-focused', async () => {
+  stubChildLoad()
+  const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
+  await wrapper.findAll('details').at(1).trigger('toggle')
+  await wrapper.findAll('summary span').at(2).trigger('click')
+  await flushPromises()
+  expect(wrapper.vm.tree[0].children[0].children[0].children.length).toEqual(1)
+})
+
+test('handles bad data when loading', async () => {
+  stubFailedChildLoad()
+  const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
+  await wrapper.findAll('details').at(1).trigger('toggle')
+  await wrapper.findAll('details').at(2).trigger('toggle')
+  await flushPromises()
+  expect(wrapper.vm.tree[0].children[0].children[0].children.length).toEqual(0)
 })

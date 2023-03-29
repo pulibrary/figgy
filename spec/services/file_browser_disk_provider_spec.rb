@@ -111,6 +111,12 @@ RSpec.describe FileBrowserDiskProvider do
           ]
         )
       end
+
+      it "doesn't return hidden files" do
+        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/A123456")
+
+        expect(provider.as_json).to eq([])
+      end
     end
   end
 end

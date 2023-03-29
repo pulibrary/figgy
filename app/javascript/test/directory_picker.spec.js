@@ -137,31 +137,6 @@ test('clicking a label emits a list-focus event', async () => {
   expect(wrapper.emitted()).toHaveProperty('listFocus')
 })
 
-test('can dynamically load child nodes via loadChildrenPath', async () => {
-  stubChildLoad()
-  const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
-  await wrapper.findAll('details').at(2).trigger('toggle')
-  await flushPromises()
-  expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(1)
-})
-
-test('dynamically loads child nodes when list-focused', async () => {
-  stubChildLoad()
-  const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
-  await wrapper.findAll('summary span').at(2).trigger('click')
-  console.log(wrapper.findAll('summary span').at(2).text())
-  await flushPromises()
-  expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(1)
-})
-
-test('handles bad data', async () => {
-  stubFailedChildLoad()
-  const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
-  await wrapper.findAll('details').at(2).trigger('toggle')
-  await flushPromises()
-  expect(wrapper.vm.children[0].children[0].children[0].children.length).toEqual(0)
-})
-
 test('only displays expandable nodes', async () => {
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
 
