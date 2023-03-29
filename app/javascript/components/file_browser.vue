@@ -85,6 +85,8 @@ export default {
 #file-browser-container {
   display: flex;
   flex-grow: 1;
+  width: 100%;
+  height: 100%;
 }
 #file-browser-directory-tree {
   flex-grow: 1;
