@@ -10,6 +10,10 @@ module Bagit
       Instance.new(base_path: base_path, bag_id: bag_id.to_s)
     end
 
+    def handles?(*_args)
+      false
+    end
+
     class Instance
       attr_reader :base_path, :bag_id
       def initialize(base_path:, bag_id:)
