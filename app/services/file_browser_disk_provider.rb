@@ -8,7 +8,7 @@ class FileBrowserDiskProvider
     @base = base.to_s
   end
 
-  def as_json
+  def as_json(*_args)
     files.map(&:as_json)
   end
 
@@ -53,7 +53,7 @@ class Entry
   end
 
   def load_path
-    "/file_browser/disk/#{relative_path}.json"
+    "/file_browser/disk/#{CGI.escape(relative_path)}.json"
   end
 
   # Might want to extract this to the disk adapter somehow.

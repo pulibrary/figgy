@@ -49,6 +49,48 @@ RSpec.describe FileBrowserDiskProvider do
       end
     end
     context "when given a root and base" do
+      it "escapes the load paths" do
+        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/Santa/ready")
+
+        expect(provider.as_json).to eq(
+          [
+            {
+              label: "123456",
+              path: "studio_new/DPUL/Santa/ready/123456",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/123456')}.json",
+              expanded: false,
+              expandable: true,
+              selected: false,
+              selectable: false,
+              loaded: false,
+              children: []
+            },
+            {
+              label: "1791261",
+              path: "studio_new/DPUL/Santa/ready/1791261",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/1791261')}.json",
+              expanded: false,
+              expandable: true,
+              selected: false,
+              selectable: false,
+              loaded: false,
+              children: []
+            },
+            {
+              label: "4609321",
+              path: "studio_new/DPUL/Santa/ready/4609321",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/4609321')}.json",
+              expanded: false,
+              expandable: true,
+              selected: false,
+              selectable: true,
+              loaded: false,
+              children: []
+            }
+          ]
+        )
+      end
+
       it "returns the subfolder's entries as JSON" do
         provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/Santa/ready/123456")
 
