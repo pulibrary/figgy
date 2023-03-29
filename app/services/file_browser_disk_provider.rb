@@ -82,6 +82,12 @@ class Entry
   # A directory is selectable (valid for bulk ingest) if it contains only
   # directories as children
   def selectable?
-    file_path.children.any?(&:file?) == false
+    valid_children.any?(&:file?) == false
+  end
+
+  def valid_children
+    file_path.children.select do |child|
+      !child.basename.to_s.start_with?(".")
+    end
   end
 end
