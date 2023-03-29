@@ -39,4 +39,13 @@ RSpec.describe EphemeraTermChangeSet do
       expect(change_set.primary_terms).to include :member_of_vocabulary_id
     end
   end
+
+  context "when an ephemera term resource is saved" do
+    with_queue_adapter :inline
+
+    it "is preserved" do
+      persisted = ChangeSetPersister.default.save(change_set: change_set)
+      expect(Wayfinder.for(persisted).preservation_object).not_to be_nil
+    end
+  end
 end

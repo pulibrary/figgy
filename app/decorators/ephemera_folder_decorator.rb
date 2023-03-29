@@ -212,11 +212,11 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
   # Is this folder publicly viewable?
   # @return [TrueClass, FalseClass]
   def public_readable_state?
-    if ephemera_box.nil? || !ephemera_box.grant_access_state?
-      super
-    else
-      # box is in production; it's public
+    if ephemera_box&.grant_access_state?
+      # box is in all_in_production state; it's public
       true
+    else
+      super
     end
   end
 

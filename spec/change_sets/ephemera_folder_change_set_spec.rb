@@ -125,9 +125,9 @@ RSpec.describe EphemeraFolderChangeSet do
       before do
         box
       end
-      it "is false when needs_qa" do
+      it "is true when needs_qa" do
         change_set.state = "needs_qa"
-        expect(change_set.preserve?).to eq false
+        expect(change_set.preserve?).to eq true
       end
       it "is true when complete" do
         change_set.state = "complete"
