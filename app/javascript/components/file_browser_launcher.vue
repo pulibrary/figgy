@@ -12,15 +12,21 @@
       id="directory-ingest-pane"
       class="ingest-pane"
     >
-      <input
-        v-if="selectedFolder"
-        type="hidden"
-        name="ingest_directory"
-        :value="selectedFolder.path"
-      >
-      <div class="summary">
-        Selected Directory: {{ selectedFolderLabel }}
-      </div>
+      <template v-if="selectedFolder">
+        <input
+          type="hidden"
+          name="ingest_directory"
+          :value="selectedFolder.path"
+        >
+        <div class="summary">
+          <div>
+            Selected Directory: {{ selectedFolderLabel }}
+          </div>
+          <div>
+            Will Create: {{ selectedFolder.children.length }} resource(s)
+          </div>
+        </div>
+      </template>
     </div>
     <div
       v-if="mode === 'fileIngest'"

@@ -119,7 +119,8 @@ test('populates a hidden input in directoryIngest mode', async () => {
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(0)
   expect(wrapper.find('input[name="ingest_directory"]').element.value).toEqual('/Dir1/Subdir1')
-  expect(wrapper.get('#file-browser-launcher .summary').text()).toEqual('Selected Directory: Subdir1 (/Dir1/Subdir1)')
+  expect(wrapper.get('#file-browser-launcher .summary div').text()).toEqual('Selected Directory: Subdir1 (/Dir1/Subdir1)')
+  expect(wrapper.findAll('#file-browser-launcher .summary div').at(1).text()).toEqual('Will Create: 2 resource(s)')
 })
 
 test('populates a hidden input in fileIngest mode', async () => {
