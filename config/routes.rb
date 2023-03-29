@@ -292,4 +292,8 @@ Rails.application.routes.draw do
       get :restore
     end
   end
+
+  namespace :file_browser do
+    resources :disk, only: [:show, :index]
+  end
 end
