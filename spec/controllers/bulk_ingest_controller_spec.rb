@@ -56,73 +56,36 @@ RSpec.describe BulkIngestController do
     end
   end
 
-  describe "POST #browse_everything_files" do
-    def create_session
-      BrowseEverything::SessionModel.create(
-        uuid: SecureRandom.uuid,
-        session: {
-          provider_id: "fast_file_system"
-        }.to_json
-      )
-    end
-
-    def create_upload_for_container_ids(container_ids)
-      container_ids.each do |container|
-        FileUtils.mkdir_p(container) unless File.exist?(container)
-      end
-      BrowseEverything::UploadModel.create(
-        uuid: SecureRandom.uuid,
-        upload: {
-          session_id: create_session.uuid,
-          container_ids: container_ids
-        }.to_json
-      )
-    end
-
-    before do
-      # Cleanup happens in the IngestFolderJob, stubbed out in these tests
-      FileUtils.rm_rf(Rails.root.join("tmp", "storage"))
-    end
-
+  describe "POST #bulk_ingest" do
     context "when not logged in" do
       let(:user) { nil }
       it "requests authorization" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource" }
+        post :bulk_ingest, params: { resource_type: "scanned_resource" }
         expect(response).to redirect_to("/users/auth/cas")
       end
     end
 
     context "Many Multi-volume works with a parent directory" do
       it "ingests 2 multi-volume works" do
-        storage_root = Rails.root.join("tmp", "storage")
-        upload = create_upload_for_container_ids(
-          [
-            storage_root.join("multi_volume"),
-            storage_root.join("multi_volume", "991234563506421"),
-            storage_root.join("multi_volume", "9946093213506421"),
-            storage_root.join("multi_volume", "9946093213506421", "vol1"),
-            storage_root.join("multi_volume", "991234563506421", "vol1"),
-            storage_root.join("multi_volume", "9946093213506421", "vol2"),
-            storage_root.join("multi_volume", "991234563506421", "vol2")
-          ]
-        )
         attributes =
           {
             workflow: { state: "pending" },
             collections: ["9946093213506421"],
             visibility: "open",
-            browse_everything: { "uploads" => [upload.uuid] }
+            ingest_directory: "studio_new/DPUL/Santa/ready"
           }
         allow(IngestFolderJob).to receive(:perform_later)
         stub_catalog(bib_id: "991234563506421")
         stub_catalog(bib_id: "9946093213506421")
+        stub_catalog(bib_id: "9917912613506421")
+        ingest_path = Pathname.new(Figgy.config["ingest_folder_path"]).join("studio_new", "DPUL", "Santa", "ready")
 
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob)
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("multi_volume", "9946093213506421").to_s,
+              directory: ingest_path.join("9946093213506421").to_s,
               state: "pending",
               visibility: "open",
               member_of_collection_ids: ["9946093213506421"],
@@ -133,7 +96,7 @@ RSpec.describe BulkIngestController do
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("multi_volume", "991234563506421").to_s,
+              directory: ingest_path.join("991234563506421").to_s,
               state: "pending",
               visibility: "open",
               member_of_collection_ids: ["9946093213506421"],
@@ -146,31 +109,24 @@ RSpec.describe BulkIngestController do
 
     context "Many Single Volumes with a top level directory" do
       it "ingests 2 unaffiliated volumes" do
-        storage_root = Rails.root.join("tmp", "storage")
-        upload = create_upload_for_container_ids(
-          [
-            storage_root.join("lapidus"),
-            storage_root.join("lapidus", "AC044_c0003"),
-            storage_root.join("lapidus", "9946093213506421")
-          ]
-        )
         attributes =
           {
             workflow: { state: "pending" },
             collections: ["9946093213506421"],
             visibility: "open",
-            browse_everything: { "uploads" => [upload.uuid] }
+            ingest_directory: "examples/lapidus"
           }
         allow(IngestFolderJob).to receive(:perform_later)
         stub_findingaid(pulfa_id: "AC044_c0003")
         stub_catalog(bib_id: "9946093213506421")
+        ingest_path = Pathname.new(Figgy.config["ingest_folder_path"]).join("examples")
 
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
         expect(IngestFolderJob)
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("lapidus", "9946093213506421").to_s,
+              directory: ingest_path.join("lapidus", "9946093213506421").to_s,
               state: "pending",
               visibility: "open",
               member_of_collection_ids: ["9946093213506421"],
@@ -181,7 +137,7 @@ RSpec.describe BulkIngestController do
           .to have_received(:perform_later)
           .with(
             hash_including(
-              directory: storage_root.join("lapidus", "AC044_c0003").to_s,
+              directory: ingest_path.join("lapidus", "AC044_c0003").to_s,
               state: "pending",
               visibility: "open",
               member_of_collection_ids: ["9946093213506421"],
@@ -192,50 +148,23 @@ RSpec.describe BulkIngestController do
     end
   end
 
-  describe "POST #browse_everything_files" do
-    let(:file) { File.open(Rails.root.join("spec", "fixtures", "files", "example.tif")) }
-    let(:bytestream) { instance_double(ActiveStorage::Blob) }
-    let(:upload_file) { double }
-    let(:upload_file_id) { "test-upload-file-id" }
-    let(:upload) { instance_double(BrowseEverything::Upload) }
-    let(:uploads) { [upload.id] }
-    let(:upload_id) { "test-upload-id" }
-    let(:provider) { BrowseEverything::Provider::FileSystem.new }
-    let(:container) { instance_double(BrowseEverything::Container) }
-    let(:container_id) { "file:///base/9946093213506421" }
-    let(:browse_everything) do
-      {
-        "uploads" => uploads
-      }
-    end
+  describe "POST #bulk_ingest" do
     let(:attributes) do
       {
         workflow: { state: "pending" },
-        collections: ["1234567"],
+        collections: ["9912345673506421"],
         visibility: "open",
-        browse_everything: browse_everything
+        ingest_directory: ingest_directory
       }
     end
     let(:user) { FactoryBot.create(:admin) }
 
     before do
       sign_in user if user
-      allow(upload_file).to receive(:purge_bytestream)
-      allow(upload_file).to receive(:download).and_return(file.read)
-      allow(upload_file).to receive(:bytestream).and_return(bytestream)
-      allow(upload_file).to receive(:name).and_return("example.tif")
-      allow(upload_file).to receive(:id).and_return(upload_file_id)
-      allow(BrowseEverything::UploadFile).to receive(:find).and_return([upload_file])
-      allow(upload).to receive(:provider).and_return(provider)
-      allow(upload).to receive(:containers).and_return([container])
-      allow(upload).to receive(:files).and_return([upload_file])
-      allow(upload).to receive(:id).and_return(upload_id)
-      allow(BrowseEverything::Upload).to receive(:find_by).and_return([upload])
-      allow(container).to receive(:name).and_return("example")
-      allow(container).to receive(:id).and_return(container_id)
-
       allow(IngestFolderJob).to receive(:perform_later)
     end
+    let(:ingest_path) { Pathname.new(Figgy.config["ingest_folder_path"]) }
+    let(:ingest_directory) { "examples/single_volume" }
 
     # TODO: rewrite or subsume into other tests
     # We do need coverage of the bibid extraction
@@ -243,14 +172,15 @@ RSpec.describe BulkIngestController do
       before do
         stub_catalog(bib_id: "9946093213506421")
       end
+      let(:ingest_directory) { "examples/single_volume" }
 
       it "ingests the directory as a single resource" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
         expected_attributes = {
-          directory: "/base/9946093213506421",
+          directory: ingest_path.join("examples", "single_volume", "9946093213506421").to_s,
           state: "pending",
           visibility: "open",
-          member_of_collection_ids: ["1234567"],
+          member_of_collection_ids: ["9912345673506421"],
           source_metadata_identifier: "9946093213506421"
         }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
@@ -262,14 +192,14 @@ RSpec.describe BulkIngestController do
             workflow: { state: "pending" },
             collections: ["1234567"],
             visibility: "open",
-            browse_everything: browse_everything,
-            preserve_file_names: "1"
+            preserve_file_names: "1",
+            ingest_directory: ingest_directory
           }
         end
         it "keeps file names" do
-          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+          post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
           expected_attributes = {
-            directory: "/base/9946093213506421",
+            directory: ingest_path.join("examples", "single_volume", "9946093213506421").to_s,
             state: "pending",
             visibility: "open",
             member_of_collection_ids: ["1234567"],
@@ -286,14 +216,14 @@ RSpec.describe BulkIngestController do
             workflow: { state: "pending" },
             collections: ["1234567"],
             visibility: "open",
-            browse_everything: browse_everything,
+            ingest_directory: ingest_directory,
             holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15"
           }
         end
         it "adds the holding location" do
-          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+          post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
           expected_attributes = {
-            directory: "/base/9946093213506421",
+            directory: ingest_path.join("examples", "single_volume", "9946093213506421").to_s,
             state: "pending",
             visibility: "open",
             member_of_collection_ids: ["1234567"],
@@ -311,43 +241,35 @@ RSpec.describe BulkIngestController do
       end
 
       it "ingests the directory as a single resource" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
         expected_attributes = {
-          directory: "/base/9946093213506421",
+          directory: ingest_path.join("examples", "single_volume", "9946093213506421").to_s,
           state: "pending",
           visibility: "open",
-          member_of_collection_ids: ["1234567"]
+          member_of_collection_ids: ["9912345673506421"]
         }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
       end
     end
 
     context "when the directory does not look like a bibid" do
-      let(:container_id) { "file:///base/June 31" }
-      let(:container) { instance_double(BrowseEverything::Container) }
-
-      before do
-        allow(upload).to receive(:containers).and_return([container])
-      end
+      let(:ingest_directory) { "examples/not_an_identifier" }
 
       it "ingests the directory as a single resource" do
-        post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+        post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
         expected_attributes = {
-          directory: "/base/June 31",
+          directory: ingest_path.join("examples", "not_an_identifier", "June 31").to_s,
           state: "pending",
           visibility: "open",
-          member_of_collection_ids: ["1234567"]
+          member_of_collection_ids: ["9912345673506421"]
         }
         expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
       end
 
       context "when no files have been selected" do
-        let(:browse_everything) do
-          {}
-        end
-
+        let(:ingest_directory) { "" }
         before do
-          post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+          post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
         end
 
         it "does not enqueue an ingest folder job and alerts the client" do
@@ -364,41 +286,19 @@ RSpec.describe BulkIngestController do
   describe "full unstubbed ingest of a MVW" do
     with_queue_adapter :inline
 
-    def create_session
-      BrowseEverything::Session.build(
-        provider_id: "fast_file_system"
-      ).tap(&:save)
-    end
-
-    def create_upload_for_container_ids(container_ids)
-      container_ids.each do |container|
-        FileUtils.mkdir_p(container) unless File.exist?(container)
-      end
-      BrowseEverything::Upload.build(
-        container_ids: container_ids,
-        session_id: create_session.id
-      ).tap(&:save)
-    end
-
     it "ingests a MVW" do
       collection = FactoryBot.create_for_repository(:collection)
-      fixture_root = Rails.root.join("spec", "fixtures")
-      upload = create_upload_for_container_ids(
-        [
-          fixture_root.join("bulk_ingest")
-        ]
-      )
       attributes =
         {
           workflow: { state: "pending" },
           collections: [collection.id.to_s],
           visibility: "open",
           resource_type: "scanned_resource",
-          browse_everything: { "uploads" => [upload.uuid] }
+          ingest_directory: "examples/bulk_ingest"
         }
       stub_catalog(bib_id: "991234563506421")
 
-      post :browse_everything_files, params: { resource_type: "scanned_resource", **attributes }
+      post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
 
       resources = adapter.query_service.find_all_of_model(model: ScannedResource)
       expect(resources.length).to eq 3

@@ -68,7 +68,7 @@ class BulkIngestController < ApplicationController
     @visibility = ControlledVocabulary.for(:visibility).all
   end
 
-  def browse_everything_files
+  def bulk_ingest
     authorize! :create, resource_class
     unless files_to_upload?
       flash[:alert] = "Please select some files to ingest."
@@ -82,15 +82,15 @@ class BulkIngestController < ApplicationController
   private
 
     def local_ingester
-      BrowseEverythingLocalIngester.new(
-        upload_sets: upload_sets,
+      LocalIngester.new(
         resource_class_name: resource_class_name,
-        attributes: attributes
+        attributes: attributes,
+        ingest_directory: params[:ingest_directory]
       )
     end
 
     def files_to_upload?
-      upload_sets.any? && upload_sets.first.containers.any?
+      params[:ingest_directory].present?
     end
 
     def attributes
@@ -131,27 +131,5 @@ class BulkIngestController < ApplicationController
 
     def collection_ids
       params[:collections] || []
-    end
-
-    def upload_sets
-      @upload_sets ||= begin
-        browse_everything_uploads.map do |upload_id|
-          find_upload(upload_id)
-        end
-      end
-    end
-
-    def browse_everything_uploads
-      return [] unless browse_everything_params.key?("uploads")
-      browse_everything_params["uploads"]
-    end
-
-    def browse_everything_params
-      return {} unless params.key?("browse_everything")
-      params["browse_everything"]
-    end
-
-    def find_upload(upload_id)
-      BrowseEverything::Upload.find_by(uuid: upload_id).first
     end
 end

@@ -247,7 +247,7 @@ Rails.application.routes.draw do
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
 
   get "bulk_ingest/:resource_type", to: "bulk_ingest#show", as: "bulk_ingest_show"
-  post "bulk_ingest/:resource_type/browse_everything_files", to: "bulk_ingest#browse_everything_files", as: "browse_everything_files_bulk_ingest"
+  post "bulk_ingest/:resource_type/bulk_ingest", to: "bulk_ingest#bulk_ingest", as: "bulk_ingest"
 
   get "bulk_edit", to: "bulk_edit#resources_edit", as: "bulk_edit_resources_edit"
   post "bulk_edit(/:batch_size)", to: "bulk_edit#resources_update", as: "bulk_edit_resources_update"

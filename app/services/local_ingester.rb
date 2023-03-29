@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class BrowseEverythingLocalIngester
-  attr_reader :upload_sets, :resource_class_name, :attributes
-  def initialize(upload_sets:, resource_class_name:, attributes:)
-    @upload_sets = upload_sets
+class LocalIngester
+  attr_reader :resource_class_name, :attributes, :ingest_directory
+  def initialize(resource_class_name:, attributes:, ingest_directory: nil)
     @resource_class_name = resource_class_name
     @attributes = attributes
+    @ingest_directory = ingest_directory
   end
 
   def ingest
@@ -16,8 +16,9 @@ class BrowseEverythingLocalIngester
 
   # Get all paths which aren't a parent of another path.
   def ingest_paths
-    paths = upload_sets.first.containers.map { |container| container.id.gsub("file://", "") }
-    BrowseEverythingDirectoryTree.new(paths).ingest_ids
+    path = Pathname.new(Figgy.config["ingest_folder_path"]).join(ingest_directory)
+    return [] unless path.exist?
+    path.children.select(&:directory?)
   end
 
   def source_metadata_id_from_path(path)
