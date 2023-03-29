@@ -294,6 +294,6 @@ Rails.application.routes.draw do
   end
 
   namespace :file_browser do
-    resources :disk, only: [:show, :index]
+    resources :disk, only: [:index, :show], id: /([^\/])+?/
   end
 end
