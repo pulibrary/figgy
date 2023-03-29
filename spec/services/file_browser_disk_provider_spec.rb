@@ -117,6 +117,23 @@ RSpec.describe FileBrowserDiskProvider do
 
         expect(provider.as_json).to eq([])
       end
+      it "doesn't mark empty directories as selectable" do
+        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL")
+
+        expect(provider.as_json.first).to eq(
+          {
+            label: "A123456",
+            path: "studio_new/DPUL/A123456",
+            loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/A123456')}.json",
+            expanded: false,
+            expandable: true,
+            selected: false,
+            selectable: false,
+            loaded: false,
+            children: []
+          }
+        )
+      end
     end
   end
 end
