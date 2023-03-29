@@ -21,42 +21,40 @@ RSpec.describe "FileBrowser/Disk" do
 
         expect(response).to be_successful
         json = JSON.parse(response.body, symbolize_names: true)
-        expect(json).to eq(
-          [
-            {
-              label: "music",
-              path: "music",
-              loadChildrenPath: "/file_browser/disk/music.json",
-              expanded: false,
-              expandable: true,
-              selected: false,
-              selectable: true,
-              loaded: false,
-              children: []
-            },
-            {
-              label: "numismatics",
-              path: "numismatics",
-              loadChildrenPath: "/file_browser/disk/numismatics.json",
-              expanded: false,
-              expandable: true,
-              selected: false,
-              selectable: true,
-              loaded: false,
-              children: []
-            },
-            {
-              label: "studio_new",
-              path: "studio_new",
-              loadChildrenPath: "/file_browser/disk/studio_new.json",
-              expanded: false,
-              expandable: true,
-              selected: false,
-              selectable: true,
-              loaded: false,
-              children: []
-            }
-          ]
+        expect(json).to include(
+          {
+            label: "music",
+            path: "music",
+            loadChildrenPath: "/file_browser/disk/music.json",
+            expanded: false,
+            expandable: true,
+            selected: false,
+            selectable: true,
+            loaded: false,
+            children: []
+          },
+          {
+            label: "numismatics",
+            path: "numismatics",
+            loadChildrenPath: "/file_browser/disk/numismatics.json",
+            expanded: false,
+            expandable: true,
+            selected: false,
+            selectable: true,
+            loaded: false,
+            children: []
+          },
+          {
+            label: "studio_new",
+            path: "studio_new",
+            loadChildrenPath: "/file_browser/disk/studio_new.json",
+            expanded: false,
+            expandable: true,
+            selected: false,
+            selectable: true,
+            loaded: false,
+            children: []
+          }
         )
       end
     end
@@ -72,7 +70,7 @@ RSpec.describe "FileBrowser/Disk" do
     context "when logged in as staff" do
       let(:user) { FactoryBot.create(:staff) }
       it "can return directories with spaces in it" do
-        get "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/4609321/Vol 2')}.json"
+        get "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421/Vol 2')}.json"
         expect(response).to be_successful
       end
       it "can return directories with periods in it" do
@@ -87,9 +85,9 @@ RSpec.describe "FileBrowser/Disk" do
         expect(json).to eq(
           [
             {
-              label: "123456",
-              path: "studio_new/DPUL/Santa/ready/123456",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/123456')}.json",
+              label: "991234563506421",
+              path: "studio_new/DPUL/Santa/ready/991234563506421",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/991234563506421')}.json",
               expanded: false,
               expandable: true,
               selected: false,
@@ -98,9 +96,9 @@ RSpec.describe "FileBrowser/Disk" do
               children: []
             },
             {
-              label: "1791261",
-              path: "studio_new/DPUL/Santa/ready/1791261",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/1791261')}.json",
+              label: "9917912613506421",
+              path: "studio_new/DPUL/Santa/ready/9917912613506421",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/9917912613506421')}.json",
               expanded: false,
               expandable: true,
               selected: false,
@@ -109,9 +107,9 @@ RSpec.describe "FileBrowser/Disk" do
               children: []
             },
             {
-              label: "4609321",
-              path: "studio_new/DPUL/Santa/ready/4609321",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/4609321')}.json",
+              label: "9946093213506421",
+              path: "studio_new/DPUL/Santa/ready/9946093213506421",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421')}.json",
               expanded: false,
               expandable: true,
               selected: false,

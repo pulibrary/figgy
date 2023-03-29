@@ -10,6 +10,17 @@ RSpec.describe FileBrowserDiskProvider do
         expect(provider.as_json).to eq(
           [
             {
+              label: "examples",
+              path: "examples",
+              loadChildrenPath: "/file_browser/disk/examples.json",
+              expanded: false,
+              expandable: true,
+              selected: false,
+              selectable: true,
+              loaded: false,
+              children: []
+            },
+            {
               label: "music",
               path: "music",
               loadChildrenPath: "/file_browser/disk/music.json",
@@ -55,9 +66,9 @@ RSpec.describe FileBrowserDiskProvider do
         expect(provider.as_json).to eq(
           [
             {
-              label: "123456",
-              path: "studio_new/DPUL/Santa/ready/123456",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/123456')}.json",
+              label: "991234563506421",
+              path: "studio_new/DPUL/Santa/ready/991234563506421",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/991234563506421')}.json",
               expanded: false,
               expandable: true,
               selected: false,
@@ -66,9 +77,9 @@ RSpec.describe FileBrowserDiskProvider do
               children: []
             },
             {
-              label: "1791261",
-              path: "studio_new/DPUL/Santa/ready/1791261",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/1791261')}.json",
+              label: "9917912613506421",
+              path: "studio_new/DPUL/Santa/ready/9917912613506421",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/9917912613506421')}.json",
               expanded: false,
               expandable: true,
               selected: false,
@@ -77,9 +88,9 @@ RSpec.describe FileBrowserDiskProvider do
               children: []
             },
             {
-              label: "4609321",
-              path: "studio_new/DPUL/Santa/ready/4609321",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/4609321')}.json",
+              label: "9946093213506421",
+              path: "studio_new/DPUL/Santa/ready/9946093213506421",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421')}.json",
               expanded: false,
               expandable: true,
               selected: false,
@@ -92,19 +103,19 @@ RSpec.describe FileBrowserDiskProvider do
       end
 
       it "returns the subfolder's entries as JSON" do
-        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/Santa/ready/123456")
+        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/Santa/ready/991234563506421")
 
         expect(provider.as_json).to eq(
           [
             {
               label: "01.tif",
-              path: "disk://#{Figgy.config['ingest_folder_path']}/studio_new/DPUL/Santa/ready/123456/01.tif",
+              path: "disk://#{Figgy.config['ingest_folder_path']}/studio_new/DPUL/Santa/ready/991234563506421/01.tif",
               expandable: false,
               selectable: true
             },
             {
               label: "02.tif",
-              path: "disk://#{Figgy.config['ingest_folder_path']}/studio_new/DPUL/Santa/ready/123456/02.tif",
+              path: "disk://#{Figgy.config['ingest_folder_path']}/studio_new/DPUL/Santa/ready/991234563506421/02.tif",
               expandable: false,
               selectable: true
             }
