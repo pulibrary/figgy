@@ -15,14 +15,17 @@ class PendingUpload < Valkyrie::Resource
   # Currently used for passing height/width to S3.
   attribute :upload_arguments, Valkyrie::Types::Hash
 
-  # This is still needed
-  delegate :original_filename, to: :ingestable_file
-
-  delegate :path, to: :ingestable_file
+  delegate :path, :original_filename, to: :ingestable_file
 
   # This is normally overridden during characterization
   def content_type
     "application/octet-stream"
+  end
+
+  def close
+    # Clean up file handles.
+    storage_adapter_file.close
+    ingestable_file.close
   end
 
   private

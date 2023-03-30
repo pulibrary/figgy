@@ -3,15 +3,18 @@
 # to be uploaded.
 class ServerUploadJob < ApplicationJob
   def perform(resource_id, pending_upload_ids)
-    change_set_persister.buffer_into_index do |buffered_change_set_persister|
-      resource = buffered_change_set_persister.query_service.find_by(id: resource_id)
-      attach_uploads = resource.pending_uploads.select do |upload|
-        pending_upload_ids.include?(upload.id.to_s)
+    pending_upload_ids.each_slice(10) do |pending_upload_slice|
+      change_set_persister.buffer_into_index do |buffered_change_set_persister|
+        resource = buffered_change_set_persister.query_service.find_by(id: resource_id)
+        attach_uploads = resource.pending_uploads.select do |upload|
+          pending_upload_slice.include?(upload.id.to_s)
+        end
+        if attach_uploads.present?
+          change_set = ChangeSet.for(resource)
+          change_set.validate(files: attach_uploads)
+          buffered_change_set_persister.save(change_set: change_set)
+        end
       end
-      return nil if attach_uploads.blank?
-      change_set = ChangeSet.for(resource)
-      change_set.validate(files: attach_uploads)
-      buffered_change_set_persister.save(change_set: change_set)
     end
   end
 
