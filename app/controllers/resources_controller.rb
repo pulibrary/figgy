@@ -255,17 +255,36 @@ class ResourcesController < ApplicationController
     # Construct the pending download objects
     # @return [Array<PendingUpload>]
     def new_pending_uploads
-      @new_pending_uploads ||= begin
-        browse_everything_uploads.map do |upload_id|
-          upload_files(upload_id).map do |upload_file|
-            # create the pending upload
-            PendingUpload.new(
-              id: SecureRandom.uuid,
-              upload_file_id: upload_file.id
-            )
+      @new_pending_uploads ||=
+        begin
+          if params[:ingest_files].present?
+            file_uploader_files
+          else
+            browse_everything_uploads.map do |upload_id|
+              upload_files(upload_id).map do |upload_file|
+                # create the pending upload
+                PendingUpload.new(
+                  id: SecureRandom.uuid,
+                  upload_file_id: upload_file.id
+                )
+              end
+            end.flatten
           end
-        end.flatten
-      end
+        end
+    end
+
+    def file_uploader_files
+      params[:ingest_files].map do |ingest_file|
+        # Skip hidden files.
+        next if ingest_file.split("/").last.start_with?(".")
+        file = Valkyrie::StorageAdapter.find_by(id: ingest_file)
+        PendingUpload.new(
+          id: SecureRandom.uuid,
+          storage_adapter_id: file.id
+        )
+      rescue
+        nil
+      end.compact
     end
 
     # Load upload files, filtering out hidden files

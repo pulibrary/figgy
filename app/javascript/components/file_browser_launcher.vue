@@ -33,11 +33,11 @@
       id="file-ingest-pane"
       class="ingest-pane"
     >
-      <template v-for="(file, idx) in selectedFiles">
+      <template v-for="file in selectedFiles">
         <input
           :key="file.path"
           type="hidden"
-          :name="`ingest_files[${idx}]`"
+          :name="`ingest_files[]`"
           :value="file.path"
         >
       </template>
@@ -48,7 +48,7 @@
             v-for="file in selectedFiles"
             :key="file.path"
           >
-            {{ file.label }} ({{ file.path }})
+            {{ file.label }}
           </li>
         </ul>
       </div>

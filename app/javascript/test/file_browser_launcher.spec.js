@@ -133,9 +133,9 @@ test('populates a hidden input in fileIngest mode', async () => {
   await wrapper.findAll('li.file').at(1).trigger('click', { ctrlKey: true })
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(0)
-  expect(wrapper.find('input[name="ingest_files[0]"]').element.value).toEqual('/Dir2/Subdir2/File1.jpg')
-  expect(wrapper.find('input[name="ingest_files[1]"]').element.value).toEqual('/Dir2/Subdir2/File2.jpg')
-  expect(wrapper.find('.summary ul li').text()).toEqual('File1.jpg (/Dir2/Subdir2/File1.jpg)')
+  expect(wrapper.findAll('input[name="ingest_files[]"]').at(0).element.value).toEqual('/Dir2/Subdir2/File1.jpg')
+  expect(wrapper.findAll('input[name="ingest_files[]"]').at(1).element.value).toEqual('/Dir2/Subdir2/File2.jpg')
+  expect(wrapper.find('.summary ul li').text()).toEqual('File1.jpg')
 })
 
 // TODO: Maybe consider ajax load at the start? Look into created hook.

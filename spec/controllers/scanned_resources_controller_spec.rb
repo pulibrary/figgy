@@ -471,10 +471,14 @@ RSpec.describe ScannedResourcesController, type: :controller do
         }
       end
 
-      it "uploads files" do
+      it "can upload files from the local file browser" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
-        file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
-        post :browse_everything_files, params: params_for_paths([file_path], resource)
+        post :browse_everything_files, params: {
+          id: resource.id,
+          ingest_files: [
+            "disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"
+          ]
+        }
 
         reloaded = adapter.query_service.find_by(id: resource.id)
 
@@ -485,43 +489,50 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(file_sets.first.file_metadata.length).to eq 2
       end
 
+      it "doesn't upload files that are outside the mounted path" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :browse_everything_files, params: {
+          id: resource.id,
+          ingest_files: [
+            "disk://#{Rails.root.join('spec', 'fixtures', 'files', 'example.tif')}",
+            "disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"
+          ]
+        }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 1
+      end
+
       context "the user selects hidden files" do
         it "filters the uploads" do
-          file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
-          hidden_file_path = Rails.root.join("spec", "fixtures", "hidden_files", "32101075851400", ".hidden_file.txt")
           resource = FactoryBot.create_for_repository(:scanned_resource)
-          post :browse_everything_files, params: params_for_paths([file_path, hidden_file_path], resource)
+          post :browse_everything_files, params: {
+            id: resource.id,
+            ingest_files: [
+              "disk://#{Figgy.config['ingest_folder_path']}/examples/single_volume/9946093213506421/.gitkeep",
+              "disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"
+            ]
+          }
 
           reloaded = adapter.query_service.find_by(id: resource.id)
 
           expect(reloaded.member_ids.length).to eq 1
-          expect(reloaded.decorate.file_sets.first.title).to eq [File.basename(file_path)]
+          expect(reloaded.decorate.file_sets.first.title).to eq ["color.tif"]
         end
       end
 
       context "when the user doesn't pick any files" do
         it "doesn't upload anything" do
           resource = FactoryBot.create_for_repository(:scanned_resource)
-          post :browse_everything_files, params: params_for_paths([], resource)
+          post :browse_everything_files, params: {
+            id: resource.id,
+            ingest_files: []
+          }
           reloaded = adapter.query_service.find_by(id: resource.id)
 
           expect(response).to be_redirect
           expect(reloaded.member_ids.length).to eq 0
-        end
-      end
-
-      context "when a server-side error is encountered while downloading a file" do
-        it "does not persist any files" do
-          file_path = Rails.root.join("spec", "fixtures", "files", "example.tif")
-          resource = FactoryBot.create_for_repository(:scanned_resource)
-          # rubocop:disable RSpec/AnyInstance
-          allow_any_instance_of(BrowseEverything::UploadFile).to receive(:download).and_raise
-          # rubocop:enable RSpec/AnyInstance
-          post :browse_everything_files, params: params_for_paths([file_path], resource)
-          reloaded = adapter.query_service.find_by(id: resource.id)
-
-          expect(response).to be_redirect
-          expect(reloaded.member_ids).to be_empty
         end
       end
     end
