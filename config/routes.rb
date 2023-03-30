@@ -253,8 +253,6 @@ Rails.application.routes.draw do
   post "bulk_edit(/:batch_size)", to: "bulk_edit#resources_update", as: "bulk_edit_resources_update"
   get "bulk_edit", to: "bulk_edit#index"
 
-  mount BrowseEverything::Engine => "/browse"
-
   if Rails.env.development? || Rails.env.test?
     mount Riiif::Engine => "/image-service", as: "riiif"
   end

@@ -14,32 +14,16 @@ class PendingUpload < Valkyrie::Resource
   # Store optional extra upload arguments which can be passed to StorageAdapter#upload.
   # Currently used for passing height/width to S3.
   attribute :upload_arguments, Valkyrie::Types::Hash
-  attribute :upload_id
-  attribute :upload_file_id
 
   # This is still needed
-  def original_filename
-    if ingestable_file
-      ingestable_file.original_filename
-    else
-      upload_file.name
-    end
-  end
+  delegate :original_filename, to: :ingestable_file
 
-  def path
-    if ingestable_file
-      ingestable_file.path
-    else
-      downloaded_file
-    end
-  end
+  delegate :path, to: :ingestable_file
 
   # This is normally overridden during characterization
   def content_type
     "application/octet-stream"
   end
-
-  delegate :container_id, to: :upload_file
 
   private
 
@@ -59,25 +43,5 @@ class PendingUpload < Valkyrie::Resource
     def storage_adapter_file
       return unless storage_adapter_id
       @storage_adapter_file ||= Valkyrie::StorageAdapter.find_by(id: storage_adapter_id)
-    end
-
-    def upload_file
-      @upload_file ||= begin
-                         upload_files = BrowseEverything::UploadFile.find(upload_file_id)
-                         upload_files.first
-                       end
-    end
-    delegate :bytestream, to: :upload_file
-
-    def downloaded_file
-      @downloaded_file ||=
-        begin
-          target = Dir::Tmpname.create(original_filename) {}
-          File.open(target, "wb") do |output|
-            output.write(upload_file.download)
-          end
-          upload_file.purge_bytestream
-          target
-        end
     end
 end

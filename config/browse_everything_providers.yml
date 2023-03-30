@@ -1,7 +1,0 @@
-#
-# To make browse-everything aware of a provider, uncomment the info for that provider and add your API key information.
-# The file_system provider can be a path to any directory on the server where your application is running.
-#
----
-fast_file_system:
-  home: <%= Figgy.config["ingest_folder_path"] %>

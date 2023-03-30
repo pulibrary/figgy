@@ -7,7 +7,7 @@ describe IngestFolderLocator do
   let(:upload_path_value) { Rails.root.join("spec", "fixtures", "staged_files").to_s }
 
   describe "#upload_path_value" do
-    it "parses the upload path from the BrowseEverything config." do
+    it "parses the upload path from the Figgy config." do
       expect(locator.upload_path_value).to eq upload_path_value
     end
   end

@@ -39,13 +39,6 @@ module Figgy
       allow do
         origins "http://localhost:3000", /.*\.princeton\.edu$/
         resource "/graphql", headers: :any, methods: [:post], credentials: true
-
-        # The browse everything front-end is a react app which can be run separately
-        #   from the rails server in development on a different port.
-        #   Permit the front-end to access the browse everything controllers.
-        if Rails.env.development?
-          resource "/browse/*", headers: :any, methods: [:options, :get, :post, :patch]
-        end
       end
     end
     config.autoload_paths += Dir[Rails.root.join("app", "resources", "*")]
