@@ -5,7 +5,7 @@
       href="#"
       @click="launchBrowser"
     >
-      Choose {{ launchButtonText }}
+      {{ launchButtonText }}
     </a>
     <div
       v-if="mode === 'directoryIngest'"
@@ -110,9 +110,9 @@ export default {
     },
     launchButtonText () {
       if (this.mode === 'directoryIngest') {
-        return 'Folder'
+        return 'Choose Folder'
       } else {
-        return 'Files'
+        return 'Select Server Files'
       }
     }
   },
@@ -188,6 +188,7 @@ export default {
     text-align: center;
     transition: background 250ms ease-in-out, transform 150ms ease;
     margin: 0 0.25rem;
+    display: inline-block;
     &:hover,
     &:focus {
       background: var(--color-bleu-de-france-darker);

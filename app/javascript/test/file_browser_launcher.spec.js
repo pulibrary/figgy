@@ -126,7 +126,7 @@ test('populates a hidden input in directoryIngest mode', async () => {
 test('populates a hidden input in fileIngest mode', async () => {
   const wrapper = mount(FileBrowserLauncher, { propsData: { startTree: startChildren(), mode: 'fileIngest' } })
 
-  expect(wrapper.find('a.button').text()).toEqual('Choose Files')
+  expect(wrapper.find('a.button').text()).toEqual('Select Server Files')
   await wrapper.get('a.button').trigger('click')
   await wrapper.findAll('summary span').at(6).trigger('click')
   await wrapper.get('li.file').trigger('click')

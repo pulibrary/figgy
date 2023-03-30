@@ -5,6 +5,7 @@
         v-if="mode === 'fileIngest'"
         href="#"
         class="button"
+        :class="{ disabled: !folder || childFiles.length === 0 }"
         @click.prevent="selectAll"
       >
         Select All

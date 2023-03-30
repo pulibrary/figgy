@@ -186,6 +186,12 @@ test("in fileIngest mode there's a selectAll button", async () => {
   expect(wrapper.vm.selectedFiles.length).toEqual(3)
 })
 
+test("in fileIngest selectAll is disabled if there's no files", async () => {
+  const wrapper = mount(FolderPreview, { propsData: { folder: disabledFolder(), mode: 'fileIngest' } })
+
+  expect(wrapper.get('.info-pane a.disabled').text()).toEqual('Select All')
+})
+
 test('when folder prop changes, wipes selectedFiles', async () => {
   const wrapper = mount(FolderPreview, { propsData: { folder: folder(), mode: 'fileIngest' } })
 
