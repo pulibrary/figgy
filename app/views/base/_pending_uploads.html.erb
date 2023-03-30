@@ -10,7 +10,7 @@
           <% uploads.map(&:decorate).each do |pending_upload| %>
             <tr>
               <td>
-                <%= pending_upload.original_filename %>
+                <%= pending_upload.file_name %>
               </td>
               <td>
                 <%= pending_upload.created_at %>

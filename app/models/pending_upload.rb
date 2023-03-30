@@ -3,7 +3,7 @@ require "tempfile"
 
 class PendingUpload < Valkyrie::Resource
   attribute :storage_adapter_id, Valkyrie::Types::ID.optional
-  attribute :file_name
+  attribute :file_name, Valkyrie::Types::String
   attribute :local_id
   attribute :url
   attribute :file_size, Valkyrie::Types::Set.of(Valkyrie::Types::Coercible::Integer)

@@ -172,9 +172,10 @@ class ResourcesController < ApplicationController
   # Resources that allow uploads will use these browse everything methods
   def server_upload
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
-      change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads, files: new_pending_uploads)
+      change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads)
       buffered_changeset_persister.save(change_set: change_set)
     end
+    ServerUploadJob.perform_later(change_set.id.to_s, new_pending_uploads.map(&:id).map(&:to_s))
 
     redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
   end
@@ -253,7 +254,9 @@ class ResourcesController < ApplicationController
             file = Valkyrie::StorageAdapter.find_by(id: ingest_file)
             PendingUpload.new(
               id: SecureRandom.uuid,
-              storage_adapter_id: file.id
+              storage_adapter_id: file.id,
+              created_at: Time.current,
+              file_name: ingest_file.split("/").last
             )
           rescue
             nil
