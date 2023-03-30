@@ -43,9 +43,11 @@
           <file-browser-launcher :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' mode='directoryIngest' />
         </div>
       </div>
-
       <div class="col-md-3">
-        <%= submit_tag "Bulk Ingest", class: 'btn btn-primary' %>
+        <legend class="bulk-ingest-legend">Submit (7)</legend>
+        <div class="well well-sm">
+          <%= submit_tag "Bulk Ingest", class: 'btn btn-primary' %>
+        </div>
       </div>
     </div>
   <% end %>
