@@ -454,26 +454,12 @@ RSpec.describe ScannedResourcesController, type: :controller do
   context "when an admin" do
     let(:user) { FactoryBot.create(:admin) }
 
-    # This block tests functionality defined in `app/controllers/concerns/browse_everythingable.rb`
+    # This block tests server upload functionality in ResourceController.
     #   Acts as a global spec in this regard
-    describe "POST /concern/scanned_resources/:id/browse_everything_files" do
-      def params_for_paths(paths, resource)
-        session = BrowseEverything::Session.build(
-          provider_id: "fast_file_system"
-        ).tap(&:save)
-        upload = BrowseEverything::Upload.build(
-          bytestream_ids: paths,
-          session_id: session.id
-        ).tap(&:save)
-        {
-          "id": resource.id,
-          "browse_everything" => { "uploads" => [upload.id] }
-        }
-      end
-
+    describe "POST /concern/scanned_resources/:id/server_upload" do
       it "can upload files from the local file browser" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
-        post :browse_everything_files, params: {
+        post :server_upload, params: {
           id: resource.id,
           ingest_files: [
             "disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"
@@ -491,7 +477,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
       it "doesn't upload files that are outside the mounted path" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
-        post :browse_everything_files, params: {
+        post :server_upload, params: {
           id: resource.id,
           ingest_files: [
             "disk://#{Rails.root.join('spec', 'fixtures', 'files', 'example.tif')}",
@@ -507,7 +493,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       context "the user selects hidden files" do
         it "filters the uploads" do
           resource = FactoryBot.create_for_repository(:scanned_resource)
-          post :browse_everything_files, params: {
+          post :server_upload, params: {
             id: resource.id,
             ingest_files: [
               "disk://#{Figgy.config['ingest_folder_path']}/examples/single_volume/9946093213506421/.gitkeep",
@@ -525,7 +511,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       context "when the user doesn't pick any files" do
         it "doesn't upload anything" do
           resource = FactoryBot.create_for_repository(:scanned_resource)
-          post :browse_everything_files, params: {
+          post :server_upload, params: {
             id: resource.id,
             ingest_files: []
           }

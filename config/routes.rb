@@ -70,7 +70,7 @@ Rails.application.routes.draw do
         get :order_manager
         get :structure
         get :manifest, defaults: { format: :json }
-        post :browse_everything_files
+        post :server_upload
         get :pdf
       end
       collection do
@@ -116,7 +116,7 @@ Rails.application.routes.draw do
           get :order_manager
           get :manifest, defaults: { format: :json }
           get :orangelight, defaults: { format: :json }
-          post :browse_everything_files
+          post :server_upload
           get :discover_files
           post :auto_ingest
           get :pdf
@@ -126,7 +126,7 @@ Rails.application.routes.draw do
         member do
           get :order_manager
           get :manifest, defaults: { format: :json }
-          post :browse_everything_files
+          post :server_upload
         end
       end
       resources :finds
@@ -138,7 +138,7 @@ Rails.application.routes.draw do
           get :file_manager
           get :order_manager
           get :manifest, defaults: { format: :json }
-          post :browse_everything_files
+          post :server_upload
         end
       end
       resources :references
@@ -176,7 +176,7 @@ Rails.application.routes.draw do
         get :order_manager
         get :structure
         get :manifest, defaults: { format: :json }
-        post :browse_everything_files
+        post :server_upload
         get :pdf
       end
     end
@@ -198,7 +198,7 @@ Rails.application.routes.draw do
         get :order_manager
         get :pdf
         get :structure
-        post :browse_everything_files
+        post :server_upload
       end
     end
     get "/scanned_maps/:parent_id/new", to: "scanned_maps#new", as: :parent_new_scanned_map
@@ -209,7 +209,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
-        post :browse_everything_files
+        post :server_upload
       end
     end
     get "/vector_resources/:parent_id/new", to: "vector_resources#new", as: :parent_new_vector_resource
@@ -220,7 +220,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
-        post :browse_everything_files
+        post :server_upload
       end
     end
     get "/raster_resources/:parent_id/new", to: "raster_resources#new", as: :parent_new_raster_resource

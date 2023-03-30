@@ -1,5 +1,5 @@
 <div class="col-md-12" id="uploading-stuff">
-  <%= render "server_upload" if controller.respond_to?(:browse_everything_files) %>
+  <%= render "server_upload" if controller.respond_to?(:server_upload) %>
 </div>
 <div class="col-md-12" id="local-upload">
   <%= render "local_upload" if @change_set.respond_to?(:files) %>
