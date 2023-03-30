@@ -76,6 +76,28 @@ RSpec.describe ImagemagickCharacterizationService do
     expect(checksum.first).to be_a MultiChecksum
   end
 
+  context "when a file set contains a preservation file and an intermediate file" do
+    it "characterizes both files" do
+      preservation = fixture_file_upload("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile)
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [preservation])
+      file_set = query_service.find_members(resource: resource).first
+      IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
+      file_set = query_service.find_members(resource: resource).first
+      expect(file_set.file_metadata[0].checksum).not_to be_empty
+      expect(file_set.file_metadata[1].checksum).not_to be_empty
+    end
+  end
+
+  context "when provided with a file which is not a valid image file" do
+    let(:file) { fixture_file_upload("files/invalid.tif", "image/tiff") }
+    let(:invalid_file_set) { book_members.first }
+    it "does not characterize the file" do
+      described_class.new(file_set: invalid_file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: invalid_file_set.id)
+      expect(file_set.file_metadata[0].width).to be_empty
+    end
+  end
+
   describe "#valid?" do
     context "when provided with a scanned resource fileset" do
       it "returns true" do
@@ -96,16 +118,6 @@ RSpec.describe ImagemagickCharacterizationService do
       let(:valid_file_set) { folder_members.first }
       it "returns true" do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
-      end
-    end
-  end
-
-  describe "#image_valid?" do
-    context "when provided with a file which is not a valid image file" do
-      let(:file) { fixture_file_upload("files/invalid.tif", "image/tiff") }
-      let(:invalid_file_set) { book_members.first }
-      it "returns false" do
-        expect(described_class.new(file_set: invalid_file_set, persister: persister).image_valid?).to be false
       end
     end
   end

@@ -18,11 +18,17 @@ class GdalCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    unzip_original_file if zip_file?
-    new_file = primary_file.new(file_characterization_attributes.to_h)
-    @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @file_set = @persister.save(resource: @file_set) if save
-    clean_up_zip_directory if zip_file?
+    [:original_file, :intermediate_file, :preservation_file].each do |type|
+      @target_file = @file_set.try(type)
+      next unless @target_file
+      @file_object = Valkyrie::StorageAdapter.find_by(id: @target_file.file_identifiers[0])
+      @dataset_path = filename
+      unzip_original_file if zip_file?
+      new_file = @target_file.new(file_characterization_attributes.to_h)
+      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+      clean_up_zip_directory if zip_file?
+    end
+    @file_set = persister.save(resource: @file_set) if save
     @file_set
   end
 
@@ -31,23 +37,10 @@ class GdalCharacterizationService
     FileUtils.rm_rf(zip_file_directory)
   end
 
-  # Path to the  dataset. The path points to a directory for file formats that are saved as zip files.
-  # The path points to the original file for formats that are not saved as zip files.
-  # @return [String]
-  def dataset_path
-    @dataset_path ||= filename
-  end
-
   # Determines the location of the file on disk for the file_set
   # @return [Pathname]
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
-  end
-
-  # Provides the file attached to the file_set
-  # @return [Valkyrie::StorageAdapter::File]
-  def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
+    return Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
   end
 
   # Gets a file's 'geo mime type' by looking up the format's driver in a controlled vocabulary.
@@ -74,7 +67,7 @@ class GdalCharacterizationService
   # Tests if primary file is a zip file
   # @return [Boolean]
   def zip_file?
-    @zip_file ||= primary_file.mime_type == ["application/zip"]
+    @target_file.mime_type == ["application/zip"]
   end
 
   # Path to directory in which to extract zip file
@@ -104,7 +97,7 @@ class GdalCharacterizationService
     # Service that provides information about a raster dataset
     # @return [GeoDerivatives::Processors::Raster::Info]
     def info_service
-      @info_service ||= GeoDerivatives::Processors::Raster::Info.new(dataset_path)
+      GeoDerivatives::Processors::Raster::Info.new(@dataset_path)
     end
 
     def valid?
@@ -131,7 +124,7 @@ class GdalCharacterizationService
     # Service that provides information about a vector dataset
     # @return [GeoDerivatives::Processors::Vector::Info]
     def info_service
-      @info_service ||= GeoDerivatives::Processors::Vector::Info.new(dataset_path)
+      GeoDerivatives::Processors::Vector::Info.new(@dataset_path)
     end
 
     def valid?

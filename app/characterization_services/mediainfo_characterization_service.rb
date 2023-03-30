@@ -24,18 +24,14 @@ class MediainfoCharacterizationService
   # @param save [Boolean] should the persister save the file_set after Characterization
   # @return [FileNode]
   def characterize(save: true)
-    @file_characterization_attributes = {
-      date_of_digitization: media_encoded_date,
-      producer: media.producer,
-      source_media_type: media.originalsourceform,
-      duration: duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
-      checksum: MultiChecksum.for(file_object),
-      size: media.filesize,
-      mime_type: mime_type
-    }
-    new_file = preservation_file.new(@file_characterization_attributes.to_h)
-    @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @file_set = @persister.save(resource: @file_set) if save
+    [:original_file, :intermediate_file, :preservation_file].each do |type|
+      target_file = @file_set.try(type)
+      next unless target_file
+      @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+      new_file = target_file.new(file_characterization_attributes.to_h)
+      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+    end
+    @file_set = persister.save(resource: @file_set) if save
     @file_set
   end
 
@@ -46,6 +42,18 @@ class MediainfoCharacterizationService
       # MediaInfo returns audio duration in milliseconds
       media.duration.to_f / 1000
     end
+  end
+
+  def file_characterization_attributes
+    {
+      date_of_digitization: media_encoded_date,
+      producer: media.producer,
+      source_media_type: media.originalsourceform,
+      duration: duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
+      checksum: MultiChecksum.for(@file_object),
+      size: media.filesize,
+      mime_type: mime_type
+    }
   end
 
   def mime_type
@@ -131,14 +139,14 @@ class MediainfoCharacterizationService
     # Determines the location of the file on disk for the file_set
     # @return [String]
     def filename
-      return file_object.io.path if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+      return @file_object.io.path if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
     end
 
     # Extract the MediaInfo tracks for the binary file stored on the FileSet
     # If this fails, the error is logged and a Null Object is returned
     # @return [MediaInfo::Tracks, NullTracks]
     def media_info_tracks
-      @media_info ||= MediaInfo.from(filename)
+      MediaInfo.from(filename)
     rescue StandardError => error
       Valkyrie.logger.warn "#{self.class}: Failed to characterize #{filename} using MediaInfo: #{error.message}"
       NullTracks.new
@@ -148,7 +156,7 @@ class MediainfoCharacterizationService
     # (Defaults to the first track of no video or audio metadata is explicitly offered)
     # @return [MediaInfoTracksDecorator]
     def media
-      @media ||= MediaInfoTracksDecorator.new(media_info_tracks)
+      MediaInfoTracksDecorator.new(media_info_tracks)
     end
 
     # Ensures that the Time value extracted using MediaInfo is properly offset
@@ -157,12 +165,6 @@ class MediainfoCharacterizationService
     def media_encoded_date
       return unless media.encoded_date
       media.encoded_date.to_datetime.utc
-    end
-
-    # Provides the file attached to the file_set
-    # @return Valkyrie::StorageAdapter::File
-    def file_object
-      @file_object ||= Valkyrie::StorageAdapter.find_by(id: preservation_file.file_identifiers[0])
     end
 
     # Retrieves the primary binary file in this FileSet

@@ -19,9 +19,14 @@ class TikaFileCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    new_file = target_file.new(file_characterization_attributes.to_h)
-    @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-    @file_set = @persister.save(resource: @file_set) if save
+    [:original_file, :intermediate_file, :preservation_file].each do |type|
+      target_file = @file_set.try(type)
+      next unless target_file
+      @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+      new_file = target_file.new(file_characterization_attributes.to_h)
+      @file_set.file_metadata = file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+    end
+    @file_set = persister.save(resource: @file_set) if save
     @file_set
   end
 
@@ -35,7 +40,7 @@ class TikaFileCharacterizationService
       width: result["tiff:ImageWidth"],
       height: result["tiff:ImageLength"],
       mime_type: result["Content-Type"],
-      checksum: MultiChecksum.for(file_object),
+      checksum: MultiChecksum.for(@file_object),
       size: result["Content-Length"],
       bits_per_sample: result["tiff:BitsPerSample"],
       x_resolution: result["tiff:XResolution"],
@@ -48,21 +53,7 @@ class TikaFileCharacterizationService
   # Determines the location of the file on disk for the file_set
   # @return Pathname
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
-  end
-
-  # Provides the file attached to the file_set
-  # @return Valkyrie::StorageAdapter::File
-  def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
-  end
-
-  def primary_file
-    @file_set.primary_file
-  end
-
-  def target_file
-    primary_file
+    return Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
   end
 
   def tika_config

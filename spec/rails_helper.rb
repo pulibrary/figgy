@@ -20,6 +20,8 @@ end
 
 RSpec.configure do |config|
   config.include Features, type: :feature
+  # Use local fixture_file_upload method
+  config.include FixtureFileUpload
   config.infer_base_class_for_anonymous_controllers = false
   config.infer_spec_type_from_file_location!
   config.use_transactional_fixtures = false

@@ -37,6 +37,8 @@ class IngestIntermediateFileJob < ApplicationJob
     logger.info "Ingested #{@file_path} as an intermediate file for #{file_set.id}"
 
     CleanupFilesJob.set(queue: change_set_persister.queue).perform_now(file_identifiers: derivative_file_ids) unless derivative_file_ids.empty?
+
+    RecharacterizeJob.perform_now(file_set.id.to_s)
     CreateDerivativesJob.set(queue: change_set_persister.queue).perform_now(file_set.id.to_s)
   end
 

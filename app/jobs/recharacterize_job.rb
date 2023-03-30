@@ -5,10 +5,15 @@ class RecharacterizeJob < ApplicationJob
     r = @metadata_adapter.query_service.find_by(id: Valkyrie::ID.new(id)).decorate
 
     logger.info "Recharacterizing #{id}"
-    recharacterize(r.decorated_file_sets)
-    r.volumes.each do |vol|
-      logger.info "Recharacterizing volume #{vol.id}"
-      recharacterize(vol.decorated_file_sets)
+
+    if r.is_a? FileSet
+      recharacterize([r])
+    else
+      recharacterize(r.decorated_file_sets)
+      r.volumes.each do |vol|
+        logger.info "Recharacterizing volume #{vol.id}"
+        recharacterize(vol.decorated_file_sets)
+      end
     end
     logger.info "Recharacterized #{id}"
   end
