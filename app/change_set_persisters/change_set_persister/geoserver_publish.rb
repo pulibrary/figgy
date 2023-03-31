@@ -7,8 +7,8 @@ class ChangeSetPersister
         @operation = operation
       end
 
-      def new(*args)
-        klass.new(*args)
+      def new(**args)
+        klass.new(**args)
       end
 
       private

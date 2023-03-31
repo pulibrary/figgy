@@ -8,7 +8,7 @@ class ChangeSetPersister
       end
 
       def new(**args)
-        CreateFile.new(args.merge(file_appender: file_appender))
+        CreateFile.new(**args.merge(file_appender: file_appender))
       end
     end
   end
