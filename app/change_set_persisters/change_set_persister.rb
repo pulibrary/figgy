@@ -101,6 +101,10 @@ class ChangeSetPersister
       handlers
     end
 
+    def prevent_propagation!
+      @handlers[:before_save] -= [PropagateVisibilityAndState]
+    end
+
     def save(change_set:, external_resource: false)
       before_save(change_set: change_set)
       persister.save(resource: change_set.resource, external_resource: external_resource).tap do |output|
