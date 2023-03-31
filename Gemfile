@@ -13,7 +13,7 @@ gem "blacklight_range_limit"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
-gem "bundler", "2.2.16"
+gem "bundler", "2.3.26"
 gem "bunny"
 gem "capistrano-passenger"
 gem "capistrano-rails"
@@ -26,7 +26,7 @@ gem "devise", ">= 4.6.0"
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "dnsruby"
 gem "draper"
-gem "ezid-client", "1.8.0" # v1.9.0 introduces response errors in our tests/stubbing
+gem "ezid-client", "1.9.4" # v1.9.0 introduces response errors in our tests/stubbing
 gem "faker"
 gem "filewatcher"
 gem "flutie"
@@ -34,7 +34,7 @@ gem "font-awesome-rails"
 gem "geoserver-publish"
 gem "google-cloud-pubsub"
 gem "graphiql-rails", "1.4.10", group: :development
-gem "graphql", "1.8.2"
+gem "graphql", "~> 1.13.19"
 gem "honeybadger"
 gem "hydra-access-controls"
 gem "hydra-head"
@@ -91,6 +91,11 @@ gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
 gem "webpacker", "5.4.3"
 gem "whenever", "~> 0.10"
+
+# Required for deployment under ruby 3.1
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "net-smtp", require: false
 
 source "https://gems.contribsys.com/" do
   gem "sidekiq-pro"
