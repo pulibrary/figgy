@@ -47,21 +47,21 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   end
 
   def local_fixity_success_of(file_id)
-    return "n/a" unless file_id == primary_file.id
+    return "n/a" unless fixity_checked_file_ids.include?(file_id)
     event_status = custom_queries.find_by_property(
       model: Event,
       property: :metadata,
-      value: { current: true, resource_id: id }
+      value: { current: true, resource_id: id, child_id: file_id }
     ).first&.status
     event_status || deprecated_fixity_success
   end
 
   def local_fixity_last_success_date_of(file_id)
-    return "n/a" unless file_id == primary_file.id
+    return "n/a" unless fixity_checked_file_ids.include?(file_id)
     event_date = custom_queries.find_by_property(
       model: Event,
       property: :metadata,
-      value: { status: "SUCCESS", resource_id: id }
+      value: { status: "SUCCESS", resource_id: id, child_id: file_id }
     ).map(&:created_at).max
     event_date || deprecated_fixity_last_success_date
   end
