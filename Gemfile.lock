@@ -1152,7 +1152,7 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 4.0)
   bootstrap_form (~> 4.5.0)
-  bundler (= 2.3.26)
+  bundler (= 2.3.18)
   bundler-audit
   bunny
   capistrano-passenger
