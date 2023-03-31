@@ -187,7 +187,7 @@ GEM
       rubocop-performance
       rubocop-rails
       rubocop-rspec
-    blacklight (7.29.0)
+    blacklight (7.33.1)
       deprecation
       globalid
       hashdiff
@@ -196,7 +196,7 @@ GEM
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7.1)
-      view_component (~> 2.43)
+      view_component (~> 2.66)
     blacklight-access_controls (6.0.1)
       blacklight (> 6.0, < 8)
       cancancan (>= 1.8)
@@ -1141,7 +1141,7 @@ DEPENDENCIES
   bagit (~> 0.4)
   benchmark-ips
   bixby (~> 3.0.0)
-  blacklight (= 7.29.0)
+  blacklight (= 7.33.1)
   blacklight_iiif_search
   blacklight_range_limit
   bootsnap
