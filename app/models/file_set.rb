@@ -100,6 +100,10 @@ class FileSet < Resource
     end
   end
 
+  def fixity_checked_file_ids
+    [original_file&.id, preservation_file&.id, intermediate_file&.id].compact
+  end
+
   def audio?
     Array.wrap(mime_type).first.to_s.include?("audio/")
   end

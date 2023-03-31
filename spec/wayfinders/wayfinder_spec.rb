@@ -78,8 +78,10 @@ RSpec.describe Wayfinder do
           FactoryBot.create(:local_fixity_failure, resource_id: fs1.id)
           fs2 = FactoryBot.create_for_repository(:original_file_file_set)
           FactoryBot.create(:local_fixity_failure, resource_id: fs2.id)
-          fs3 = FactoryBot.create_for_repository(:original_file_file_set)
-          FactoryBot.create(:local_fixity_failure, resource_id: fs3.id)
+          fs3 = FactoryBot.create_for_repository(:audio_file_set)
+          FactoryBot.create(:local_fixity_failure, resource_id: fs3.id, child_id: fs3.primary_file.id)
+          FactoryBot.create(:local_fixity_failure, resource_id: fs3.id, child_id: fs3.intermediate_file.id)
+
           # succeeding file set
           ok_fs = FactoryBot.create_for_repository(:original_file_file_set)
           FactoryBot.create(:local_fixity_success, resource_id: ok_fs.id)

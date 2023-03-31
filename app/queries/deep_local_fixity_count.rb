@@ -49,7 +49,7 @@ class DeepLocalFixityCount
           JOIN orm_resources mem ON (g.member->>'id')::UUID = mem.id
           WHERE f.metadata @> '{"member_ids": [{}]}'
         )
-        SELECT COUNT(*) from deep_members member
+        SELECT COUNT(DISTINCT member.id) from deep_members member
         LEFT JOIN orm_resources event
         ON member.id = (event.metadata->'resource_id'->0->>'id')::UUID
         WHERE member.internal_resource = 'FileSet'

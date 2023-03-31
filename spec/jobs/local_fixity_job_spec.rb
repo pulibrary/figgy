@@ -10,7 +10,8 @@ RSpec.describe LocalFixityJob do
   let(:scanned_resource) do
     change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
   end
-  let(:file_set_id) { scanned_resource.member_ids.first }
+  let(:file_set) { scanned_resource.decorate.file_sets.first }
+  let(:file_set_id) { file_set.id }
 
   let(:file_metadata2) do
     FileMetadata.new(
@@ -36,6 +37,19 @@ RSpec.describe LocalFixityJob do
       expect(event.type).to eq "local_fixity"
       expect(event.resource_id).to eq fs.id
       expect(event.status).to eq "SUCCESS"
+      expect(event.child_id).to eq fs.original_file.id
+      expect(event.child_property).to eq "file_metadata"
+    end
+
+    context "with a preservation file and an intermediate file" do
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
+
+      it "creates a local_fixity Event for both files" do
+        IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
+        described_class.perform_now(file_set_id)
+        events = query_service.find_all_of_model(model: Event)
+        expect(events.to_a.length).to eq 2
+      end
     end
 
     context "when the new checksum doesn't match" do
@@ -57,6 +71,33 @@ RSpec.describe LocalFixityJob do
         expect(event.type).to eq "local_fixity"
         expect(event.resource_id).to eq fs.id
         expect(event.status).to eq "FAILURE"
+        expect(JSON.parse(event.message).keys).to eq [
+          "id", "internal_resource", "created_at", "updated_at",
+          "new_record", "sha256", "md5", "sha1"
+        ]
+        expect(Honeybadger).to have_received(:notify)
+      end
+    end
+
+    context "with a preservation file and an intermediate file and the checksum doesn't match" do
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
+
+      it "creates a local_fixity Event for both files" do
+        allow(Honeybadger).to receive(:notify)
+        IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
+
+        fs = query_service.find_by(id: file_set_id)
+        filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
+        new_file = File.join(fixture_path, "files/color-landscape.tif")
+        FileUtils.cp(new_file, filename)
+        described_class.perform_now(file_set_id)
+
+        events = query_service.find_all_of_model(model: Event)
+        expect(events.to_a.length).to eq 2
+        event = events.find { |e| e.status == "FAILURE" }
+        expect(event.type).to eq "local_fixity"
+        expect(event.resource_id).to eq fs.id
+        expect(event.child_id).to eq fs.primary_file.id
         expect(JSON.parse(event.message).keys).to eq [
           "id", "internal_resource", "created_at", "updated_at",
           "new_record", "sha256", "md5", "sha1"
