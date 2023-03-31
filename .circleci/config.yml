@@ -37,7 +37,7 @@ jobs:
           keys:
             - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230112
       # Install Bundler
-      - run: gem install bundler -v '2.2.14'
+      - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - save_cache:
@@ -97,7 +97,7 @@ jobs:
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       # Install Bundler
-      - run: gem install bundler -v '2.2.14'
+      - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: yarn exec jest --coverage
@@ -172,7 +172,7 @@ jobs:
       - run:
           name: Check current version of node
           command: node -v
-      - run: gem install bundler -v '2.2.14'
+      - run: gem install bundler -v '2.3.18'
       - run: bundle install --path vendor/bundle
       - run: bundle exec spring stop
       - run: bundle exec rake rubocop
