@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::RasterResourceType do
-  subject(:type) { described_class.new(raster_resource, {}) }
+  subject(:type) { make_graphql_object(described_class, raster_resource, {}) }
   let(:bibid) { "123456" }
   let(:raster_resource) do
     FactoryBot.create_for_repository(
@@ -60,7 +60,7 @@ RSpec.describe Types::RasterResourceType do
       raster_file_set = FactoryBot.create_for_repository(:geo_raster_file_set)
       raster_resource = FactoryBot.create_for_repository(:raster_resource, member_ids: [metadata_file_set.id, raster_file_set.id, child_resource.id])
 
-      type = described_class.new(raster_resource, {})
+      type = make_graphql_object(described_class, raster_resource, {})
 
       expect(type.members.map(&:id)).to eq [metadata_file_set.id, raster_file_set.id, child_resource.id]
     end

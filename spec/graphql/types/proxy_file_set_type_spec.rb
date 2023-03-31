@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::ProxyFileSetType do
-  subject(:type) { described_class.new(proxy_file_set, {}) }
+  subject(:type) { make_graphql_object(described_class, proxy_file_set) }
   let(:proxy_file_set) do
     FactoryBot.create_for_repository(
       :proxy_file_set,

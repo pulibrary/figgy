@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::FileSetType do
-  subject(:type) { described_class.new(resource, ability: ability) }
+  subject(:type) { make_graphql_object(described_class, resource, { ability: ability }) }
   let(:resource) { FactoryBot.create_for_repository(:file_set, viewing_hint: "individuals", title: ["I'm a label."], ocr_content: ["My Content"]) }
   let(:parent) { FactoryBot.create_for_repository(:scanned_resource, member_ids: resource.id) }
   describe "class methods" do

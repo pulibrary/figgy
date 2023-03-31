@@ -8,7 +8,7 @@ RSpec.describe Types::Numismatics::IssueType do
     end
   end
 
-  subject(:type) { described_class.new(numismatic_issue, ability: ability) }
+  subject(:type) { make_graphql_object(described_class, numismatic_issue, { ability: ability }) }
   let(:numismatic_issue) do
     FactoryBot.create_for_repository(
       :numismatic_issue,
@@ -101,7 +101,7 @@ RSpec.describe Types::Numismatics::IssueType do
       child_resource2 = FactoryBot.create_for_repository(:coin)
       numismatic_issue = FactoryBot.create_for_repository(:numismatic_issue, member_ids: [child_resource1.id, child_resource2.id])
 
-      type = described_class.new(numismatic_issue, {})
+      type = make_graphql_object(described_class, numismatic_issue)
 
       expect(type.members.map(&:id)).to eq [child_resource1.id, child_resource2.id]
     end

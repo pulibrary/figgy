@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::EphemeraFolderType do
-  subject(:type) { described_class.new(ephemera_folder, ability: ability) }
+  subject(:type) { make_graphql_object(described_class, ephemera_folder, { ability: ability }) }
   let(:ephemera_folder) do
     FactoryBot.create_for_repository(
       :ephemera_folder,
@@ -116,7 +116,7 @@ RSpec.describe Types::EphemeraFolderType do
     it "returns all members" do
       file_set = FactoryBot.create_for_repository(:file_set)
       ephemera_folder = FactoryBot.create_for_repository(:ephemera_folder, member_ids: [file_set.id])
-      type = described_class.new(ephemera_folder, {})
+      type = make_graphql_object(described_class, ephemera_folder)
       expect(type.members.map(&:id)).to eq [file_set.id]
     end
   end

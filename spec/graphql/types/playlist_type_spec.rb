@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::PlaylistType do
-  subject(:type) { described_class.new(playlist, {}) }
+  subject(:type) { make_graphql_object(described_class, playlist, {}) }
   let(:playlist) do
     FactoryBot.create_for_repository(
       :playlist,
@@ -47,7 +47,7 @@ RSpec.describe Types::PlaylistType do
       child_resource = FactoryBot.create_for_repository(:proxy_file_set)
       resource = FactoryBot.create_for_repository(:playlist, member_ids: child_resource.id)
 
-      type = described_class.new(resource, {})
+      type = make_graphql_object(described_class, resource, {})
 
       expect(type.members.map(&:id)).to eq [child_resource.id]
     end

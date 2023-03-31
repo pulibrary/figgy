@@ -11,7 +11,7 @@ RSpec.describe Types::Resource do
     it { is_expected.to have_field(:members) }
     it { is_expected.to have_field(:orangelightId).of_type(String) }
     it { is_expected.to have_field(:sourceMetadataIdentifier) }
-    it { is_expected.to have_field(:thumbnail).of_type("Types::Thumbnail") }
+    it { is_expected.to have_field(:thumbnail).of_type("Thumbnail") }
   end
   describe ".resolve_type" do
     it "returns a ScannedResourceType for a ScannedResource" do
@@ -24,7 +24,7 @@ RSpec.describe Types::Resource do
 
   describe ".helper" do
     it "defines an overridden image_path to just return the given parameter back" do
-      type = Types::ScannedResourceType.new(ScannedResource.new, {})
+      type = make_graphql_object(Types::ScannedResourceType, ScannedResource.new)
 
       expect(type.helper.image_path("test")).to eq "test"
     end

@@ -2,7 +2,7 @@
 class Types::FileSetType < Types::BaseObject
   implements Types::Resource
   def viewing_hint
-    super.try(:first)
+    object.viewing_hint.try(:first)
   end
 
   def label

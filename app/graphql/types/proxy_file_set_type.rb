@@ -12,7 +12,7 @@ class Types::ProxyFileSetType < Types::BaseObject
   # will throw console errors.
   def thumbnail
     {
-      id: id.to_s,
+      id: object.id.to_s,
       thumbnail_url: "",
       iiif_service_url: ""
     }
