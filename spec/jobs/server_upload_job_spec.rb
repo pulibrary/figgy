@@ -21,8 +21,12 @@ RSpec.describe ServerUploadJob do
       described_class.perform_now(resource.id.to_s, [pending_upload.id.to_s])
       reloaded_resource = ChangeSetPersister.default.query_service.find_by(id: resource.id)
 
+      # Make sure a FileSet was created.
       expect(reloaded_resource.member_ids.length).to eq 1
+      # Ensure pending_uploads is cleared from the resource.
       expect(reloaded_resource.pending_uploads).to be_blank
+      # Ensure visibility didn't propagate - it's expensive and unneeded for
+      # FileSets.
       expect(propagated_resources.map(&:id)).not_to include(resource.id)
     end
   end

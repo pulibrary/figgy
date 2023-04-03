@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Used for ingesting a directory which is mounted on the server.
 class LocalIngester
   attr_reader :resource_class_name, :attributes, :ingest_directory
   def initialize(resource_class_name:, attributes:, ingest_directory: nil)

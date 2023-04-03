@@ -81,6 +81,7 @@ class BulkIngestController < ApplicationController
 
   private
 
+    # Ingester used for files mounted on the server.
     def local_ingester
       LocalIngester.new(
         resource_class_name: resource_class_name,

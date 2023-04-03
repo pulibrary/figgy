@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # Allows backgrounding of server uploads, for when a ton of files are selected
-# to be uploaded.
+# to be uploaded. A server upload is from the staged_files directory, which on
+# Production is mapped to the Isilon and various other file staging areas.
 class ServerUploadJob < ApplicationJob
   def perform(resource_id, pending_upload_ids)
     pending_upload_ids.each_slice(10) do |pending_upload_slice|

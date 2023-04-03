@@ -169,7 +169,7 @@ class ResourcesController < ApplicationController
     @change_set ||= ChangeSet.for(resource)
   end
 
-  # Resources that allow uploads will use these browse everything methods
+  # Used for submissions from the FileBrowser in the File Manager interface.
   def server_upload
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads)
