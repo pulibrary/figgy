@@ -100,13 +100,11 @@ class ThumbnailDerivativeService
 
   def vips_image
     @vips_image ||=
-      begin
-        Vips::Image.thumbnail(
+      Vips::Image.thumbnail(
           filename.to_s,
           width,
           height: height
         )
-      end
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)

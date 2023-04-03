@@ -120,9 +120,7 @@ class IngestMETSJob < ApplicationJob
     # @return [ChangeSet]
     def change_set
       @change_set ||=
-        begin
-          ChangeSet.for(ScannedResource.new, change_set_param: change_set_param)
-        end
+        ChangeSet.for(ScannedResource.new, change_set_param: change_set_param)
     end
 
     # METS comes in two forms: with a bib-id and without.

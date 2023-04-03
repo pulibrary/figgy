@@ -16,14 +16,12 @@ class TitleIndexer
   end
 
   def title_strings
-    @title_strings ||= begin
-      # Some resources need a different title to be indexed into Solr.
-      # NumismaticReference is an example. Needed for user requested drop down values.
-      if resource.decorate.respond_to?(:indexed_title) && resource.decorate.indexed_title.present?
-        Array.wrap(resource.decorate.indexed_title).map(&:to_s)
-      else
-        Array.wrap(resource.decorate.title).map(&:to_s)
-      end
-    end
+    # Some resources need a different title to be indexed into Solr.
+    # NumismaticReference is an example. Needed for user requested drop down values.
+    @title_strings ||= if resource.decorate.respond_to?(:indexed_title) && resource.decorate.indexed_title.present?
+                         Array.wrap(resource.decorate.indexed_title).map(&:to_s)
+                       else
+                         Array.wrap(resource.decorate.title).map(&:to_s)
+                       end
   end
 end

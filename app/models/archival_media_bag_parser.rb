@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 # get all the data files, provide lookups based on component and barcode
 class ArchivalMediaBagParser
-  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/.freeze
-  BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/.freeze
+  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
+  BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/
   attr_reader :path, :component_dict
 
   def initialize(path:, component_id:, barcodes: nil)
@@ -104,18 +104,14 @@ class ArchivalMediaBagParser
     # @return [Array] of PbcoreParser objects
     def pbcore_parsers
       @pbcore_parsers ||=
-        begin
-          path.join("data").each_child.select { |file| [".xml"].include? file.extname }.map { |file| PbcoreParser.new(path: file) }
-        end
+        path.join("data").each_child.select { |file| [".xml"].include? file.extname }.map { |file| PbcoreParser.new(path: file) }
     end
 
     # Retrieve the JPEGs for the assets
     # @return [Array<Image>]
     def image_files
       @image_files ||=
-        begin
-          path.join("data").each_child.select { |file| [".jpg"].include? file.extname.downcase }.map { |file| ImageFile.new(path: file) }
-        end
+        path.join("data").each_child.select { |file| [".jpg"].include? file.extname.downcase }.map { |file| ImageFile.new(path: file) }
     end
 end
 

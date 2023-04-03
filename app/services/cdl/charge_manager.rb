@@ -5,6 +5,7 @@ module CDL
   class UnavailableForCharge < StandardError; end
   class HoldExists < StandardError; end
   class NotCharged < StandardError; end
+
   class ChargeManager
     include ActionView::Helpers::DateHelper
     attr_reader :resource_id, :eligible_item_service, :change_set_persister

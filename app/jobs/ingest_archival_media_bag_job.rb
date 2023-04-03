@@ -8,7 +8,7 @@ require "bagit"
 class IngestArchivalMediaBagJob < ApplicationJob
   class InvalidBagError < StandardError; end
 
-  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/.freeze
+  BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
 
   def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)

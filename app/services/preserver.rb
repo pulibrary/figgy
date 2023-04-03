@@ -80,9 +80,7 @@ class Preserver
 
     def preservation_object
       @preservation_object ||=
-        begin
-          Wayfinder.for(resource).try(:preservation_object) || create_preservation_object
-        end
+        Wayfinder.for(resource).try(:preservation_object) || create_preservation_object
     end
 
     def create_preservation_object
@@ -148,15 +146,13 @@ class Preserver
 
     def metadata_node
       @metadata_node ||=
-        begin
-          FileMetadata.new(
+        FileMetadata.new(
             label: "#{resource.id}.json",
             mime_type: "application/json",
             checksum: MultiChecksum.for(temp_metadata_file),
             use: Valkyrie::Vocab::PCDMUse.PreservedMetadata,
             id: SecureRandom.uuid
           )
-        end
     end
 
     def temp_metadata_file

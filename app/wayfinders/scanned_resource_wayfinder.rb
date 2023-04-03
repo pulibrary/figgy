@@ -34,8 +34,6 @@ class ScannedResourceWayfinder < BaseWayfinder
   def playlists
     return [] unless ChangeSet.for(resource).is_a?(RecordingChangeSet)
     @playlists ||=
-      begin
-        query_service.custom_queries.playlists_from_recording(recording: resource)
-      end
+      query_service.custom_queries.playlists_from_recording(recording: resource)
   end
 end

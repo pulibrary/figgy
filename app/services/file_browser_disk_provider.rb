@@ -91,10 +91,8 @@ class Entry
 
   def valid_children
     @valid_children ||=
-      begin
-        file_path.children.select do |child|
-          !child.basename.to_s.start_with?(".")
-        end
+      file_path.children.select do |child|
+        !child.basename.to_s.start_with?(".")
       end
   end
 end

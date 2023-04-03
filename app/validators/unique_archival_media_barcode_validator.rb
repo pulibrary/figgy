@@ -35,10 +35,8 @@ class UniqueArchivalMediaBarcodeValidator < ActiveModel::Validator
       def previously_imported
         return [] if record.model.id.nil? # it's a new resource
         @previously_imported ||=
-          begin
-            decorator.members.flat_map do |component_id_resource|
-              Wayfinder.for(component_id_resource).members.flat_map(&:local_identifier)
-            end
+          decorator.members.flat_map do |component_id_resource|
+            Wayfinder.for(component_id_resource).members.flat_map(&:local_identifier)
           end
       end
 

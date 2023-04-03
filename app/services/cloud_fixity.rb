@@ -36,17 +36,13 @@ module CloudFixity
     end
 
     def pubsub
-      @pubsub ||= begin
-                    Google::Cloud::Pubsub.new
-                  end
+      @pubsub ||= Google::Cloud::Pubsub.new
     end
   end
 
   class FixityRequestor
     def self.pubsub
-      @pubsub ||= begin
-                    Google::Cloud::Pubsub.new
-                  end
+      @pubsub ||= Google::Cloud::Pubsub.new
     end
 
     def self.pubsub_topic

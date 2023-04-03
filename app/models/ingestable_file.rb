@@ -45,9 +45,7 @@ class IngestableFile < Valkyrie::Resource
 
     def opened_file
       @opened_file ||=
-        begin
-          File.open(path)
-        end
+        File.open(path)
     end
 
     def copied_file_name

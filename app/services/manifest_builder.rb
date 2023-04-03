@@ -245,10 +245,8 @@ class ManifestBuilder
     # @return [Resource]
     def members
       @members ||=
-        begin
-          Wayfinder.for(@resource).members.to_a.select do |member|
-            !current_ability || current_ability.can?(:read, member)
-          end
+        Wayfinder.for(@resource).members.to_a.select do |member|
+          !current_ability || current_ability.can?(:read, member)
         end
     end
 
@@ -437,16 +435,14 @@ class ManifestBuilder
     end
 
     def members
-      @members ||= begin
-        manifestable_members.map do |member|
-          decorator = member.decorate
-          if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
-            member.decorate.geo_members.first
-          else
-            member
-          end
-        end.compact
-      end
+      @members ||= manifestable_members.map do |member|
+        decorator = member.decorate
+        if decorator.respond_to?(:decorated_scanned_maps) && decorator.decorated_scanned_maps.empty?
+          member.decorate.geo_members.first
+        else
+          member
+        end
+      end.compact
     end
 
     def leaf_nodes
@@ -810,17 +806,15 @@ class ManifestBuilder
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= begin
-        if audio_collection? || recording?
-          IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
-        # If not multi-part and a collection, it's not a MVW
-        elsif @resource.viewing_hint.blank? && @resource.collection?
-          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
-        else
-          # note this assumes audio resources use flat modeling
-          IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
-        end
-      end
+      @manifest ||= if audio_collection? || recording?
+                      IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
+                    # If not multi-part and a collection, it's not a MVW
+                    elsif @resource.viewing_hint.blank? && @resource.collection?
+                      IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
+                    else
+                      # NOTE: this assumes audio resources use flat modeling
+                      IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
+                    end
     end
 
     def recording?

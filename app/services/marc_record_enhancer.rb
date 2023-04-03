@@ -48,7 +48,7 @@ class MarcRecordEnhancer
       manifest856.append(MARC::Subfield.new("q", "JSON (IIIF Manifest)")) unless manifest856_q
     end
 
-    def add_024
+    def add_024 # rubocop:disable Naming/VariableNumber
       return unless resource.try(:local_identifier)&.present?
       dcl_numbers = resource.local_identifier.select { |s| s.start_with?("dcl:") }.uniq
       dcl_numbers.each do |dcl|
@@ -64,7 +64,7 @@ class MarcRecordEnhancer
       end
     end
 
-    def add_510
+    def add_510 # rubocop:disable Naming/VariableNumber
       return add_510_from_024 unless resource.try(:imported_metadata)&.first&.references&.present?
       cico_reference = resource.imported_metadata.first.references.first
       return unless cico_reference =~ /Cicognara/ && cico_reference =~ /(\d+)[\[A-Za-z\]]*$/
@@ -79,7 +79,7 @@ class MarcRecordEnhancer
       )
     end
 
-    def add_510_from_024
+    def add_510_from_024 # rubocop:disable Naming/VariableNumber
       return if cico_024s.blank?
       cico_024s.each do |cico024|
         cico_number = cico024.subfields.find { |s| s.code == "a" }.value
@@ -99,7 +99,7 @@ class MarcRecordEnhancer
       @existing_856s ||= marc.fields("856").select { |f| f.indicator1.eql?("4") && f.indicator2.eql?("1") }
     end
 
-    def existing_856(uri)
+    def existing_856(uri) # rubocop:disable Naming/VariableNumber
       existing_856s.find do |f|
         f.subfields.find { |s| s.code == "u" }.value == uri
       end
@@ -107,10 +107,8 @@ class MarcRecordEnhancer
 
     def cico_024s
       @cico_024s ||=
-        begin
-          marc.fields("024").select do |f|
-            f.subfields.find { |s| s.code == "2" }&.value == "cico"
-          end
+        marc.fields("024").select do |f|
+          f.subfields.find { |s| s.code == "2" }&.value == "cico"
         end
     end
 
