@@ -10,7 +10,7 @@
       />
     </div>
     <div id="file-browser-preview">
-      <FolderPreview
+      <DirectoryContents
         :folder="listFocus"
         :mode="mode"
         @folderSelect="folderSelect"
@@ -20,15 +20,13 @@
   </div>
 </template>
 <script>
-// Support choosing a single directory for use in Bulk Ingest.
-// TODO: Add multi-select functionality for file select.
 import DirectoryPicker from './directory_picker.vue'
-import FolderPreview from './folder_preview.vue'
+import DirectoryContents from './directory_contents.vue'
 export default {
   name: 'FileBrowser',
   components: {
     DirectoryPicker,
-    FolderPreview
+    DirectoryContents
   },
   props: {
     startTree: {

@@ -3,6 +3,10 @@
 # used for bulk ingest and the file manager.
 class FileBrowserDiskProvider
   attr_reader :root, :base
+  # @param root [String] Root file path on the server to return file information
+  #   from
+  # @param base [String, nil] Relative path from root to return file information
+  #   from.
   def initialize(root:, base: nil)
     @root = Pathname.new(root)
     @base = base.to_s

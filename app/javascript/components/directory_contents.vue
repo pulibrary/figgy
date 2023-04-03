@@ -1,5 +1,5 @@
 <template>
-  <div id="folder-preview">
+  <div id="directory-contents">
     <div class="info-pane">
       <a
         v-if="mode === 'fileIngest'"
@@ -82,10 +82,8 @@
   </div>
 </template>
 <script>
-// Support choosing a single directory for use in Bulk Ingest.
-// TODO: Add multi-select functionality for file select.
 export default {
-  name: 'FolderPreview',
+  name: 'DirectoryContents',
   props: {
     folder: {
       type: Object,
@@ -174,43 +172,43 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-  #folder-preview {
+  #directory-contents {
     width: 100%;
     height: 100%;
     --color-bleu-de-france: rgb(44, 110, 175);
     --color-bleu-de-france-darker: rgb(35, 87, 139);
     --color-bleu-de-france-lighter: rgb(149, 189, 228);
   }
-  #folder-preview > .info-pane {
+  #directory-contents > .info-pane {
     height: 60px;
     padding: 10px;
   }
-  #folder-preview > .details {
+  #directory-contents > .details {
     height: calc(100% - 120px);
     overflow-y: scroll;
     padding: 10px;
   }
-  #folder-preview > .actions {
+  #directory-contents > .actions {
     height: 60px;
     padding: 10px;
     display: flex;
     align-items: center;
   }
-  #folder-preview .icon {
+  #directory-contents .icon {
     display: inline-block;
     margin-left: 0;
   }
-  #folder-preview .lux-icon {
+  #directory-contents .lux-icon {
     margin-left: 0;
   }
-  #folder-preview .icon svg {
+  #directory-contents .icon svg {
     width: 25px;
     height: 25px;
   }
-  #folder-preview .label {
+  #directory-contents .label {
     display: inline-block;
   }
-  #folder-preview li {
+  #directory-contents li {
     width: 100%;
     padding-bottom: 5px;
     border-bottom: 1px solid gray;
@@ -220,13 +218,13 @@ export default {
     }
   }
 
-  #folder-preview ul {
+  #directory-contents ul {
     list-style-type: none;
     padding: 0;
     padding-left: 0px;
   }
 
-  #folder-preview .button {
+  #directory-contents .button {
     background: var(--color-bleu-de-france);
     color: white;
     text-decoration: none;

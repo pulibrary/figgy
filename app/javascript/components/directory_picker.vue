@@ -37,8 +37,6 @@
   </div>
 </template>
 <script>
-// Support choosing a single directory for use in Bulk Ingest.
-// TODO: Add multi-select functionality for file select.
 export default {
   name: 'DirectoryPicker',
   props: {
