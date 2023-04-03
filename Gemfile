@@ -113,7 +113,7 @@ end
 
 group :development, :test do
   gem "awesome_print"
-  gem "bixby", "~> 3.0.0"
+  gem "bixby", "~> 5.0"
   gem "bundler-audit", require: false
   gem "dotenv-rails"
   gem "factory_bot_rails"
