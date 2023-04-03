@@ -21,7 +21,11 @@ class ServerUploadJob < ApplicationJob
     end
   end
 
+  # We have access to the files on disk, so copy them from their locations.
   def change_set_persister
-    ChangeSetPersister.default
+    ChangeSetPersister.new(
+      metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
+      storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
+    )
   end
 end

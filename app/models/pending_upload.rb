@@ -38,7 +38,9 @@ class PendingUpload < Valkyrie::Resource
             file_path: storage_adapter_file.disk_path,
             mime_type: content_type,
             original_filename: storage_adapter_file.disk_path.basename.to_s,
-            copy_before_ingest: false
+            # PendingUploads are used via ServerUploadJob, so disk_via_copy
+            # adapter is used.
+            copy_before_ingest: true
           )
         end
     end
