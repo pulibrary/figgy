@@ -18,6 +18,11 @@
               <svg v-if="child.expanded"><polygon points="5,8 10,13 15,8" /></svg>
               <svg v-else><polygon points="8,5 13,10 8,15" /></svg>
             </div>
+            <div
+              class="icon"
+            >
+              <svg viewBox="0 0 25 25"><path d="M11 5h13v17h-24v-20h8l3 3zm-10-2v18h22v-15h-12.414l-3-3h-6.586z" /></svg>
+            </div>
             <span
               @click="listFocused(child, $event)"
             >
@@ -83,15 +88,17 @@ export default {
 .tree {
   --spacing: 1.5rem;
   --radius: 8px;
+  --color-bleu-de-france-lightest: rgba(149, 189, 228, .25);
   /* I don't know how to use Lux's color tokens.. */
   /* color-grayscale-warm-lighter */
-  --directory-background: rgb(250, 249, 245);
+  --directory-background: rgb(255, 255, 255);
   /* color-grayscale-warm-light */
-  --directory-background-hover: rgb(210, 202, 173);
+  --directory-background-hover: rgba(149, 189, 228, .15);
   /* color-grayscale-warm */
-  --directory-selected: rgb(186, 175, 130);
+  --directory-selected: var(--color-bleu-de-france-lightest);
   padding-left: 0;
 }
+
 .tree li{
   display      : block;
   position     : relative;
@@ -131,11 +138,17 @@ export default {
   flex-grow: 1;
   background-color: var(--directory-background);
   padding-left: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 .item-label > span:hover {
   background-color: var(--directory-background-hover);
 }
 .item-label.list-focus > span {
+  background-color: var(--directory-selected);
+}
+
+.item-label.list-focus > .icon {
   background-color: var(--directory-selected);
 }
 
@@ -158,5 +171,16 @@ label {
 input[type="checkbox"] {
   margin-left: 2px;
   margin-right: 2px;
+}
+
+.tree .icon {
+  display: inline-block;
+  margin-left: 0;
+  padding: 2px 0px 2px 4px;
+}
+
+.tree .icon svg {
+  width: 16px;
+  height: 16px;
 }
 </style>
