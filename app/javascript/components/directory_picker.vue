@@ -84,7 +84,7 @@ export default {
   }
 }
 </script>
-<style scope>
+<style lang="scss" scope>
 .tree {
   --spacing: 1.5rem;
   --radius: 8px;
@@ -97,6 +97,7 @@ export default {
   /* color-grayscale-warm */
   --directory-selected: var(--color-bleu-de-france-lightest);
   padding-left: 0;
+  padding: 10px 0 0 0;
 }
 
 .tree li{
@@ -133,23 +134,35 @@ export default {
   pointer-events: none;
 }
 
-.item-label > span {
-  display: block;
-  flex-grow: 1;
-  background-color: var(--directory-background);
-  padding-left: 5px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-.item-label > span:hover {
-  background-color: var(--directory-background-hover);
-}
-.item-label.list-focus > span {
-  background-color: var(--directory-selected);
-}
+.item-label {
+  &:hover {
+    span, .icon {
+      background-color: var(--directory-background-hover);
+    }
+  }
+  &.list-focus {
+    span, .icon {
+      background-color: var(--directory-selected);
+    }
+  }
+  > span {
+    display: block;
+    flex-grow: 1;
+    background-color: var(--directory-background);
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  .icon {
+    display: inline-block;
+    margin-left: 0;
+    padding: 2px 0px 2px 4px;
 
-.item-label.list-focus > .icon {
-  background-color: var(--directory-selected);
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 }
 
 .tree summary::marker,
