@@ -178,7 +178,8 @@ export default {
     --color-bleu-de-france: rgb(44, 110, 175);
     --color-bleu-de-france-darker: rgb(35, 87, 139);
     --color-bleu-de-france-lighter: rgb(149, 189, 228);
-    --color-bleu-de-france-lightest: rgba(149, 189, 228,.25);
+    --color-bleu-de-france-lightest: rgba(149, 189, 228, .50);
+    --directory-background-hover: rgba(149, 189, 228, .15);
   }
   #directory-contents > .info-pane {
     height: 60px;
@@ -213,11 +214,14 @@ export default {
     width: 100%;
     padding: 10px 0px 10px 10px;
     margin-top: -2px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     user-select: none;
     &.selected {
       border: 2px solid var(--color-bleu-de-france-darker);
       background-color: var(--color-bleu-de-france-lightest);
+    }
+    &.file:hover {
+      background-color: var(--directory-background-hover);
     }
   }
 

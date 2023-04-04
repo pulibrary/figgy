@@ -88,7 +88,7 @@ export default {
 .tree {
   --spacing: 1.5rem;
   --radius: 8px;
-  --color-bleu-de-france-lightest: rgba(149, 189, 228, .25);
+  --color-bleu-de-france-lightest: rgba(149, 189, 228, .50);
   /* I don't know how to use Lux's color tokens.. */
   /* color-grayscale-warm-lighter */
   --directory-background: rgb(255, 255, 255);
