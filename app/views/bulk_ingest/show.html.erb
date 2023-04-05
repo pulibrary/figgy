@@ -13,18 +13,25 @@
   </div>
   <%= form_tag polymorphic_path([main_app, :bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do |f| %>
     <div class="row">
-      <div class="col-md-6">
-        <%= render "visibility" %>
+      <div class="col-md-3">
+        <legend class="bulk-ingest-legend">Files (1)</legend>
+        <div class="well well-sm">
+          <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
+          <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' folder-prefix='' window-target='ingest_directory_field' />
+        </div>
       </div>
       <div class="col-md-3">
         <%= render "workflow_state" %>
       </div>
-      <div class="col-md-3">
-        <%= render "collections" %>
+      <div class="col-md-6">
+        <%= render "visibility" %>
       </div>
     </div>
 
     <div class="row">
+      <div class="col-md-3">
+        <%= render "collections" %>
+      </div>
       <div class="col-md-3">
         <%= render "holding_location" %>
       </div>
@@ -35,13 +42,6 @@
             <%= check_box_tag 'preserve_file_names' %>
             Preserve File Names (prevents naming files 1/2/3 etc)
           </label>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Files (6)</legend>
-        <div class="well well-sm">
-          <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
-          <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' folder-prefix='' window-target='ingest_directory_field' />
         </div>
       </div>
       <div class="col-md-3">
