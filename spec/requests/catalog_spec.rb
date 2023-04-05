@@ -4,6 +4,21 @@ require "rails_helper"
 RSpec.describe "Catalog requests", type: :request do
   with_queue_adapter :inline
 
+  describe "#show" do
+    context "when EZID requests a restricted resource" do
+      it "redirects" do
+        resource = ChangeSetPersister.default.metadata_adapter.persister.save(resource: FactoryBot.build(:complete_private_scanned_resource))
+
+        get "/catalog/#{resource.id}", headers: { "HTTP_ACCEPT_ENCODING" => "identity", "HTTP_ACCEPT" => "*/*" }
+
+        # A redirect is what the HTML response does, JSON sends an unauthorized
+        # header. Make sure this is HTML by default, because that's what
+        # Blacklight's is and if they're different then we get an error like in
+        # figgy#5350
+        expect(response).to be_redirect
+      end
+    end
+  end
   describe "#pdf" do
     context "when the resource was ingested from a pdf" do
       let(:sample_file) { fixture_file_upload("files/sample.pdf", "application/pdf") }

@@ -30,20 +30,24 @@ class ApplicationController < ActionController::Base
 
   rescue_from Blacklight::AccessControls::AccessDenied, CanCan::AccessDenied, with: :deny_resource_access
   def deny_resource_access(exception)
+    # When HTTP_ACCEPT is set to *, it picks the first format. If Blacklight is
+    # HTTP first we're JSON first, it errors, so make sure these are in the same
+    # order as Blacklight.
+    # See figgy#5350 for what happens if they aren't.
     respond_to do |format|
-      format.json do
-        if exception.action == :manifest && @resource.present?
-          manifest_denial
-        else
-          head :forbidden
-        end
-      end
       format.html do
         raise exception if :manifest == exception.action
         if current_user
           redirect_to root_url, alert: exception.message
         else
           redirect_to "/users/auth/cas", alert: exception.message
+        end
+      end
+      format.json do
+        if exception.action == :manifest && @resource.present?
+          manifest_denial
+        else
+          head :forbidden
         end
       end
     end
@@ -60,8 +64,8 @@ class ApplicationController < ActionController::Base
   # Named as such due to namespace conflict with Hydra::Controller::DownloadBehavior
   def render_figgy_404
     respond_to do |format|
-      format.json { head :not_found }
       format.html { render "errors/not_found", status: :not_found }
+      format.json { head :not_found }
     end
   end
 
@@ -121,8 +125,8 @@ class ApplicationController < ActionController::Base
              end
 
     respond_to do |format|
-      format.json { render json: config }
       format.html { render json: config }
+      format.json { render json: config }
     end
   end
 
