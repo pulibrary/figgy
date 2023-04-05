@@ -177,15 +177,6 @@ export default {
 .tree summary:focus-visible{
   outline : 1px dotted #000;
 }
-label {
-  display: inline-block;
-  position: relative;
-}
-input[type="checkbox"] {
-  margin-left: 2px;
-  margin-right: 2px;
-}
-
 .tree .icon {
   display: inline-block;
   margin-left: 0;
