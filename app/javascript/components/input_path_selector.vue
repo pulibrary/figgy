@@ -1,10 +1,15 @@
 <template>
   <div id="input-path-selector">
-    <button
-      type="button"
-      class="btn btn-input-path"
+    <div
+      class="button-wrapper"
       @click="launchBrowser"
-    />
+    >
+      <button
+        type="button"
+        class="btn btn-input-path"
+        @click="launchBrowser"
+      />
+    </div>
     <div
       v-if="browserLaunched"
       id="file-browser-modal"
@@ -82,6 +87,9 @@ export default {
 <style lang="scss" scope>
   #input-path-selector {
     display: inline-block;
+    .button-wrapper {
+      cursor: pointer;
+    }
   }
   #file-browser-modal {
     position: fixed;

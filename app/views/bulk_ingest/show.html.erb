@@ -19,7 +19,7 @@
           <div class="input-group mb-2">
             <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
             <div class="input-group-append">
-              <div class="input-group-text">
+              <div class="input-group-text input-path-wrapper">
                 <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' input-element-id='ingest_directory_field' summary-element-id='ingestDirectorySummary' />
               </div>
             </div>
