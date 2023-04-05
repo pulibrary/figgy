@@ -16,8 +16,15 @@
       <div class="col-md-3">
         <legend class="bulk-ingest-legend">Files (1)</legend>
         <div class="well well-sm">
-          <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
-          <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' folder-prefix='' window-target='ingest_directory_field' />
+          <div class="input-group mb-2">
+            <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' input-element-id='ingest_directory_field' summary-element-id='ingestDirectorySummary' />
+              </div>
+            </div>
+          </div>
+          <small id="ingestDirectorySummary" class="form-text text-muted"></small>
         </div>
       </div>
       <div class="col-md-3">

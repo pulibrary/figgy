@@ -95,7 +95,7 @@ const startChildren = () => {
 
 test('renders a button to launch a file browser', async () => {
   document.body.innerHTML = "<input id='test' type='text'>"
-  const wrapper = mount(InputPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', windowTarget: 'test' } })
+  const wrapper = mount(InputPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', inputElementId: 'test' } })
 
   await wrapper.get('button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
@@ -111,7 +111,7 @@ test('renders a button to launch a file browser', async () => {
 
 test('populates a target input', async () => {
   document.body.innerHTML = "<input id='test' type='text'>"
-  const wrapper = mount(InputPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', windowTarget: 'test' } })
+  const wrapper = mount(InputPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', inputElementId: 'test' } })
 
   await wrapper.get('button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
@@ -119,4 +119,17 @@ test('populates a target input', async () => {
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(0)
   expect(document.getElementById('test').value).toEqual('/bla/Dir1/Subdir1')
+})
+
+test('populates a summary field', async () => {
+  document.body.innerHTML = "<input id='test' type='text'><span id='testSummary'></span>"
+  const wrapper = mount(InputPathSelector, { propsData: { startTree: startChildren(), inputElementId: 'test', summaryElementId: 'testSummary' } })
+
+  await wrapper.get('button').trigger('click')
+  expect(wrapper.findAll('ul.tree').length).toEqual(1)
+  await wrapper.findAll('summary span').at(1).trigger('click')
+  await wrapper.get('.actions a').trigger('click')
+  expect(wrapper.findAll('ul.tree').length).toEqual(0)
+  expect(document.getElementById('test').value).toEqual('Dir1/Subdir1')
+  expect(document.getElementById('testSummary').innerHTML).toEqual('Will create 2 resource(s).')
 })

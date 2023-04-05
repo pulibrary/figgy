@@ -36,13 +36,17 @@ export default {
       type: Array,
       default: null
     },
-    windowTarget: {
+    inputElementId: {
       type: String,
       required: true
     },
+    summaryElementId: {
+      type: String,
+      default: null
+    },
     folderPrefix: {
       type: String,
-      required: true
+      default () { return '' }
     }
   },
   data () {
@@ -51,6 +55,12 @@ export default {
     }
   },
   computed: {
+    summaryElement () {
+      return document.getElementById(this.summaryElementId)
+    },
+    inputElement () {
+      return document.getElementById(this.inputElementId)
+    }
   },
   methods: {
     launchBrowser () {
@@ -61,7 +71,10 @@ export default {
     },
     folderSelect (folder) {
       this.browserLaunched = false
-      document.getElementById(this.windowTarget).value = `${this.folderPrefix}${folder.path}`
+      this.inputElement.value = `${this.folderPrefix}${folder.path}`
+      if (this.summaryElement !== null) {
+        this.summaryElement.innerHTML = `Will create ${folder.children.length} resource(s).`
+      }
     }
   }
 }

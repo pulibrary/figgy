@@ -85,6 +85,7 @@ export default {
   flex-grow: 1;
   width: 100%;
   height: 100%;
+  text-align: left;
 }
 #file-browser-directory-tree {
   flex-grow: 1;
