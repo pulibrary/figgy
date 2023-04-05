@@ -1,66 +1,85 @@
 <h2>Bulk Ingest <%= @resource_class.human_readable_type.pluralize %></h2>
 
 <div class="col-md-12">
-  <div class="row">
-    <div class="col-md-12">
-      <p>Ingest one or more individual, multi-volume, or mixed resources. Files selected must be contained in a parent directory.</p>
-    </div>
-    <div class="col-md-12">
-      <button id="bulk_structure_example" type="button" class="btn btn-info browse-everything" data-toggle="modal" data-target="#bulk-structure-example-modal">
-        Show example directory structure
-      </button>
-    </div>
-  </div>
   <%= form_tag polymorphic_path([main_app, :bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do |f| %>
     <div class="row">
-      <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Files (1)</legend>
-        <div class="well well-sm">
-          <div class="input-group mb-2">
-            <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
-            <div class="input-group-append">
-              <div class="input-group-text input-path-wrapper">
-                <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' input-element-id='ingest_directory_field' summary-element-id='ingestDirectorySummary' />
+      <div role="main" class="col-xs-12 col-sm-8">
+        <div id="metadata" class="form-panel-content">
+          <div class="card">
+            <div class="card-header">Metadata</div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="ingest_directory">Ingest Folder&nbsp;<a href="#" data-toggle="modal" data-target="#bulk-structure-example-modal">?</a></label>
+                <div class="input-group mb-2">
+                  <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
+                  <div class="input-group-append">
+                    <div class="input-group-text input-path-wrapper">
+                      <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' input-element-id='ingest_directory_field' summary-element-id='ingestDirectorySummary' />
+                    </div>
+                  </div>
+                </div>
+
+                <small id="ingestDirectorySummary" class="form-text text-muted"></small>
+              </div>
+              <div class="form-group">
+                <div class="form-check">
+                  <%= check_box_tag 'preserve_file_names', class: "form-check-input" %>
+                  <label class="form-check-label" for="preserve_file_names">
+                    Preserve File Names (prevents naming files 1/2/3 etc)
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="workflow">Workflow State</label>
+                <%= select "workflow", "state", @states, {}, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <label for="collections">Collection(s)</label>
+                <%= select_tag "collections", options_for_select(@collections), multiple: true, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <label for="holding_location">Holding Location</label>
+                <%= select_tag :holding_location,
+                  options_from_collection_for_select(ControlledVocabulary.for(:holding_location).all, "value", "label"),
+                  include_blank: "[Do not update]",
+                  class: 'form-control holding-location',
+                  required: false %>
               </div>
             </div>
           </div>
-          <small id="ingestDirectorySummary" class="form-text text-muted"></small>
         </div>
       </div>
-      <div class="col-md-3">
-        <%= render "workflow_state" %>
-      </div>
-      <div class="col-md-6">
-        <%= render "visibility" %>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-3">
-        <%= render "collections" %>
-      </div>
-      <div class="col-md-3">
-        <%= render "holding_location" %>
-      </div>
-      <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Options (5)</legend>
-        <div class="checkbox">
-          <label>
-            <%= check_box_tag 'preserve_file_names' %>
-            Preserve File Names (prevents naming files 1/2/3 etc)
-          </label>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Submit (7)</legend>
-        <div class="well well-sm">
-          <%= submit_tag "Bulk Ingest", class: 'btn btn-primary' %>
-        </div>
+      <div id="savewidget" role="complementary" class="col-xs-12 col-sm-4">
+        <aside id="form-progress" class="form-progress card">
+          <div class="card-header">
+            <div class="card-title">
+              Bulk Ingest
+            </div>
+            <div class="list-group">
+              <div class="set-access-controls list-group-item">
+                <legend class="legend-save-work">Visibility</legend>
+                <ul class="set-access-controls visibility">
+                  <% @visibility.each_with_index do |viz, i| %>
+                    <li class="radio">
+                      <label>
+                        <%= radio_button_tag :visibility, viz.value, viz.value == "open" %>
+                        <%= visibility_badge(viz.value) %>
+                        <%= viz.definition %>
+                      </label>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-center card-save-controls">
+            <%= submit_tag "Bulk Ingest", class: 'btn btn-primary' %>
+          </div>
+        </aside>
       </div>
     </div>
   <% end %>
 </div>
-
 <div class="modal fade" id="bulk-structure-example-modal" tabindex="-1" role="dialog" aria-labelledby="bulk structure example">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
