@@ -7,7 +7,7 @@ import DocumentAdder from '../components/document_adder'
 import DirectoryPicker from '../components/directory_picker'
 import FileBrowser from '../components/file_browser'
 import FileBrowserLauncher from '../components/file_browser_launcher'
-import BagPathSelector from '../components/bag_path_selector'
+import InputPathSelector from '../components/input_path_selector'
 import PlaylistMembers from '../components/playlist_members'
 import IssueMonograms from '../components/issue_monograms'
 import axios from 'axios'
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'directory-picker': DirectoryPicker,
         'file-browser': FileBrowser,
         'file-browser-launcher': FileBrowserLauncher,
-        'bag-path-selector': BagPathSelector
+        'input-path-selector': InputPathSelector
       },
       data: {
         options: []

@@ -1,4 +1,4 @@
 <%= f.input :bag_path, input_html: { class: 'form-control' }, required: f.object.required?(key) %>
 
 
-<bag-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' folder-prefix='<%= Figgy.config["ingest_folder_path"] %>/' window-target='collection_bag_path' />
+<input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' folder-prefix='<%= Figgy.config["ingest_folder_path"] %>/' window-target='collection_bag_path' />

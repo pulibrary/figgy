@@ -1,3 +1,16 @@
+.btn-input-path {
+  background-image: image-url("folder.png");
+  background-repeat: no-repeat;
+  display: inline-block;
+  background-position: center;
+  background-size: 18px;
+}
+
+#ingest_directory_field {
+  width: calc(100% - 31px);
+  display: inline-block;
+}
+
 #metadata {
   .nested-fields {
     border: 1px solid #ddd;
@@ -11,14 +24,6 @@
 
   .required-tag {
     background-color: $dark-blue;
-  }
-
-  .btn-bag-path {
-    background-image: image-url("folder.png");
-    background-repeat: no-repeat;
-    display: inline-block;
-    background-position: center;
-    background-size: 18px;
   }
 
   .collection_bag_path {

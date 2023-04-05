@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import BagPathSelector from '../components/bag_path_selector.vue'
+import InputPathSelector from '../components/input_path_selector.vue'
 
 const startChildren = () => {
   return [
@@ -95,7 +95,7 @@ const startChildren = () => {
 
 test('renders a button to launch a file browser', async () => {
   document.body.innerHTML = "<input id='test' type='text'>"
-  const wrapper = mount(BagPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', windowTarget: 'test' } })
+  const wrapper = mount(InputPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', windowTarget: 'test' } })
 
   await wrapper.get('button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
@@ -111,7 +111,7 @@ test('renders a button to launch a file browser', async () => {
 
 test('populates a target input', async () => {
   document.body.innerHTML = "<input id='test' type='text'>"
-  const wrapper = mount(BagPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', windowTarget: 'test' } })
+  const wrapper = mount(InputPathSelector, { propsData: { startTree: startChildren(), folderPrefix: '/bla/', windowTarget: 'test' } })
 
   await wrapper.get('button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)

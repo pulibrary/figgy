@@ -1,9 +1,8 @@
 <template>
-  <div id="bag-path-selector">
+  <div id="input-path-selector">
     <button
-      id="browse_everything"
       type="button"
-      class="btn btn-bag-path browse-everything"
+      class="btn btn-input-path"
       @click="launchBrowser"
     />
     <div
@@ -28,7 +27,7 @@
 <script>
 import FileBrowser from './file_browser.vue'
 export default {
-  name: 'BagPathSelector',
+  name: 'InputPathSelector',
   components: {
     FileBrowser
   },
@@ -68,7 +67,7 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-  #bag-path-selector {
+  #input-path-selector {
     display: inline-block;
   }
   #file-browser-modal {

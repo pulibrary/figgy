@@ -11,7 +11,7 @@
       </button>
     </div>
   </div>
-  <%= form_tag polymorphic_path([main_app, :bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do %>
+  <%= form_tag polymorphic_path([main_app, :bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do |f| %>
     <div class="row">
       <div class="col-md-6">
         <%= render "visibility" %>
@@ -40,7 +40,8 @@
       <div class="col-md-3">
         <legend class="bulk-ingest-legend">Files (6)</legend>
         <div class="well well-sm">
-          <file-browser-launcher :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' mode='directoryIngest' />
+          <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
+          <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' folder-prefix='' window-target='ingest_directory_field' />
         </div>
       </div>
       <div class="col-md-3">
