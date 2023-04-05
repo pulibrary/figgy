@@ -148,7 +148,6 @@ export default {
   > span {
     display: block;
     flex-grow: 1;
-    background-color: var(--directory-background);
     padding-left: 5px;
     padding-top: 2px;
     padding-bottom: 2px;

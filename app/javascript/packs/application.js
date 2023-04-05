@@ -7,6 +7,7 @@ import DocumentAdder from '../components/document_adder'
 import DirectoryPicker from '../components/directory_picker'
 import FileBrowser from '../components/file_browser'
 import FileBrowserLauncher from '../components/file_browser_launcher'
+import EmbeddedFileBrowser from '../components/embedded_file_browser'
 import InputPathSelector from '../components/input_path_selector'
 import PlaylistMembers from '../components/playlist_members'
 import IssueMonograms from '../components/issue_monograms'
@@ -41,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'directory-picker': DirectoryPicker,
         'file-browser': FileBrowser,
         'file-browser-launcher': FileBrowserLauncher,
-        'input-path-selector': InputPathSelector
+        'input-path-selector': InputPathSelector,
+        'embedded-file-browser': EmbeddedFileBrowser
       },
       data: {
         options: []
