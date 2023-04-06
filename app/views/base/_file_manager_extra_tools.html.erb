@@ -11,6 +11,7 @@
 
 <% if @change_set.pending_uploads.present? %>
   <div class="col-md-9">
+    <h3>Files Queued for Ingest</h2>
     <div class="card card-body bg-light">
       <%= render "pending_uploads", uploads: @change_set.pending_uploads %>
     </div>
