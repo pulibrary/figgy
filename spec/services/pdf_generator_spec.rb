@@ -301,6 +301,34 @@ RSpec.describe PDFGenerator do
       end
     end
 
+    context "when a resource is a volume in a MVW" do
+      it "renders metadata from the parent MVW" do
+        stub_catalog(bib_id: "991234563506421")
+        resource = FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"], title: "Volume 1")
+        FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource.id], source_metadata_identifier: "991234563506421", import_metadata: true)
+        file_set = Wayfinder.for(resource).file_sets.first
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+
+        generator = described_class.new(resource: resource, storage_adapter: storage_adapter)
+        file_node = generator.render
+
+        file = Valkyrie::StorageAdapter.find_by(id: file_node.file_identifiers.first)
+        expect(File.exist?(file.io.path)).to eq true
+
+        pdf_reader = PDF::Reader.new(file.io.path)
+        cover_page = pdf_reader.pages.first
+        # Strip newlines, since the PDF adds them to fit stuff on the cover
+        # page.
+        text = cover_page.text.tr("\n", " ")
+        expect(text).to include("Earth rites : fertility rites in pre-industrial Britain / Janet and Colin Bord., Volume 1")
+        expect(text).to include("Bord, Janet, 1945-")
+        expect(text).to include("xiv, 273 p. : ill. ; 24 cm.")
+        expect(text).to include("Includes index.")
+        expect(text).to include("BL980.G7 B66 1982")
+      end
+    end
+
     context "with an ephemera folder" do
       let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, files: [file], pdf_type: ["color"]) }
 
