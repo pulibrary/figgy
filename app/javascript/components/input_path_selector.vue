@@ -16,15 +16,20 @@
       @click.self="closeBrowser"
     >
       <div class="modal-content">
-        <span
-          class="close"
-          @click="closeBrowser"
-        >&times;</span>
-        <file-browser
-          :start-tree="startTree"
-          mode="directoryIngest"
-          @folderSelect="folderSelect"
-        />
+        <div class="header">
+          <h1>Select Folder to Ingest</h1>
+          <span
+            class="close"
+            @click="closeBrowser"
+          >&times;</span>
+        </div>
+        <div class="modal-browser">
+          <file-browser
+            :start-tree="startTree"
+            mode="directoryIngest"
+            @folderSelect="folderSelect"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -107,6 +112,10 @@ export default {
       border: 1px solid black;
       width: 80%;
       height: 80%;
+    }
+    .modal-browser {
+      flex-grow: 1;
+      min-height: 0;
     }
     /* The Close Button */
     .close {
