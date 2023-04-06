@@ -47,7 +47,7 @@ class PDFGenerator
         prawn_document.image Rails.root.join("app", "assets", "images", "pul_logo_long.png").to_s, position: :center, width: Canvas::LETTER_WIDTH - 30
         prawn_document.stroke_color "000000"
         prawn_document.move_down(20)
-        header(prawn_document, resource.title, size: 24)
+        header(prawn_document, pdf_metadata[:title], size: 24)
         resource.rights_statement.each do |statement|
           text(prawn_document, rights_statement_label(statement))
           rights_statement_text(statement).split(/\n/).flat_map { |x| x.split("<br/>") }.each do |line|
@@ -61,26 +61,13 @@ class PDFGenerator
         prawn_document.move_down 20
 
         header(prawn_document, "Citation Information")
-        if resource.respond_to?(:primary_imported_metadata) && resource.try(:change_set) != "simple"
-          creator = resource.primary_imported_metadata.creator
-          edition = resource.primary_imported_metadata.edition
-          extent = resource.primary_imported_metadata.extent
-          description = resource.primary_imported_metadata.description
-          call_number = resource.primary_imported_metadata.call_number
-        else
-          creator = resource.creator if resource.respond_to?(:creator)
-          edition = resource.edition if resource.respond_to?(:edition)
-          extent = resource.extent if resource.respond_to?(:extent)
-          description = resource.description if resource.respond_to?(:description)
-          call_number = resource.call_number if resource.respond_to?(:call_number)
-        end
 
-        text(prawn_document, creator)
-        text(prawn_document, resource.title)
-        text(prawn_document, edition)
-        text(prawn_document, extent)
-        text(prawn_document, description)
-        text(prawn_document, call_number)
+        text(prawn_document, pdf_metadata[:creator])
+        text(prawn_document, pdf_metadata[:title])
+        text(prawn_document, pdf_metadata[:edition])
+        text(prawn_document, pdf_metadata[:extent])
+        text(prawn_document, pdf_metadata[:description])
+        text(prawn_document, pdf_metadata[:call_number])
         # collection name (from EAD) ? not in jsonld
 
         header(prawn_document, "Contact Information")
@@ -102,6 +89,43 @@ class PDFGenerator
     end
 
     private
+
+      def pdf_metadata
+        {
+          title: parented_field_value(:title),
+          creator: imported_field_value(:creator),
+          edition: imported_field_value(:edition),
+          extent: imported_field_value(:extent),
+          description: imported_field_value(:description),
+          call_number: imported_field_value(:call_number)
+        }
+      end
+
+      # Returns a field value by asking both the resource and the
+      # parent, returning the first time it finds one.
+      def imported_field_value(field)
+        resource.try(field) || resource.try(:primary_imported_metadata)&.[](field) || parent_resource&.try(field) || parent_resource&.try(:primary_imported_metadata)&.[](field)
+      end
+
+      # Returns the field values by using send() against both the parent and the
+      # resource and combining them.
+      def parented_field_value(field)
+        if parent_resource
+          [parent_resource.send(field), resource.send(field)].flatten.compact.join(", ")
+        else
+          resource.send(field)
+        end
+      end
+
+      # If a resource is a volume without imported metadata, get the parent
+      # resource so we can use some of its metadata.
+      def parent_resource
+        @parent_resource ||=
+          begin
+            return nil if resource.try(:imported_metadata).present?
+            Wayfinder.for(resource).parent
+          end
+      end
 
       def holding_location_text(holding_location)
         ControlledVocabulary.for(:holding_location).find(holding_location).label
