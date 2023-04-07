@@ -88,10 +88,10 @@ export default {
   text-align: left;
 }
 #file-browser-directory-tree {
-  flex-grow: 1;
   overflow-y: scroll;
+  width: 30%;
 }
 #file-browser-preview {
-  flex-grow: 3;
+  flex-grow: 1;
 }
 </style>
