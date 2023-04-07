@@ -112,6 +112,10 @@ export default {
       border: 1px solid black;
       width: 80%;
       height: 80%;
+      .header {
+        display: flex;
+        border-bottom: 1px solid rgba(60, 60, 60, 0.26);
+      }
     }
     .modal-browser {
       flex-grow: 1;
@@ -119,16 +123,19 @@ export default {
     }
     /* The Close Button */
     .close {
-      color: #aaa;
+      color: #000000;
+      text-shadow: 0 1px 0 #ffffff;
+      opacity: .5;
       position: absolute;
       right: 20px;
-      font-size: 28px;
-      font-weight: bold;
+      top: 12px;
+      font-size: 1.5rem;
+      font-weight: 700;
     }
 
     .close:hover,
     .close:focus {
-      color: black;
+      opacity: .75;
       text-decoration: none;
       cursor: pointer;
     }
