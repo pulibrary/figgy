@@ -1,22 +1,8 @@
+<%= form_tag polymorphic_path([main_app, :server_upload, @change_set]), id: "server-upload-form" do %>
  <div class="row" id="ba-row">
-  <div class="col-md-3">
-    <div class="card card-body bg-light">
-      <%= form_tag polymorphic_path([main_app, :browse_everything_files, @change_set]), id: "browse-everything-form" do %>
-        <% if params[:parent_id] %>
-          <%= hidden_field_tag 'parent_id', params[:parent_id] %>
-        <% end %>
-
-        <button id="browse_everything" type="button" class="btn btn-primary browse-everything" data-toggle="modal" data-target="#browse-everything-modal">
-          Upload Files from Server
-        </button>
-        <%= render 'browse_everything/modal' %>
-      <% end %>
-    </div>
-  </div>
-  <% if @change_set.pending_uploads.present? %>
-    <div class="col-md-9">
-      <div class="card card-body bg-light">
-        <%= render "pending_uploads", uploads: @change_set.pending_uploads %>
+    <div class="col-md-12">
+      <div class="server-upload-container card card-body bg-light">
+        <embedded-file-browser :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' form-id='server-upload-form' />
       </div>
     </div>
   <% end %>

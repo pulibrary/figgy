@@ -2,7 +2,8 @@
 require "tempfile"
 
 class PendingUpload < Valkyrie::Resource
-  attribute :file_name
+  attribute :storage_adapter_id, Valkyrie::Types::ID.optional
+  attribute :file_name, Valkyrie::Types::String
   attribute :local_id
   attribute :url
   attribute :file_size, Valkyrie::Types::Set.of(Valkyrie::Types::Coercible::Integer)
@@ -13,43 +14,39 @@ class PendingUpload < Valkyrie::Resource
   # Store optional extra upload arguments which can be passed to StorageAdapter#upload.
   # Currently used for passing height/width to S3.
   attribute :upload_arguments, Valkyrie::Types::Hash
-  attribute :upload_id
-  attribute :upload_file_id
 
-  # This is still needed
-  def original_filename
-    upload_file.name
-  end
-
-  def path
-    downloaded_file
-  end
+  delegate :path, :original_filename, to: :ingestable_file
 
   # This is normally overridden during characterization
   def content_type
     "application/octet-stream"
   end
 
-  delegate :container_id, to: :upload_file
+  def close
+    # Clean up file handles.
+    storage_adapter_file.close
+    ingestable_file.close
+  end
 
   private
 
-    def upload_file
-      @upload_file ||= begin
-                         upload_files = BrowseEverything::UploadFile.find(upload_file_id)
-                         upload_files.first
-                       end
+    def ingestable_file
+      return unless storage_adapter_id
+      @ingestable_file ||=
+        begin
+          IngestableFile.new(
+            file_path: storage_adapter_file.disk_path,
+            mime_type: content_type,
+            original_filename: storage_adapter_file.disk_path.basename.to_s,
+            # PendingUploads are used via ServerUploadJob, so disk_via_copy
+            # adapter is used.
+            copy_before_ingest: true
+          )
+        end
     end
-    delegate :bytestream, to: :upload_file
 
-    def downloaded_file
-      @downloaded_file ||= begin
-                             target = Dir::Tmpname.create(original_filename) {}
-                             File.open(target, "wb") do |output|
-                               output.write(upload_file.download)
-                             end
-                             upload_file.purge_bytestream
-                             target
-                           end
+    def storage_adapter_file
+      return unless storage_adapter_id
+      @storage_adapter_file ||= Valkyrie::StorageAdapter.find_by(id: storage_adapter_id)
     end
 end

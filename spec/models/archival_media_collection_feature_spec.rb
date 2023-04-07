@@ -41,9 +41,9 @@ RSpec.feature "Browsing archival media collections" do
     it "provides a file browser for selecting bag paths" do
       visit "collections/new/archival_media_collection"
 
-      expect(page).to have_css ".btn-bag-path.browse-everything"
-      click_on(class: "btn-bag-path")
-      expect(page).to have_css "#browse_everything"
+      expect(page).to have_css ".btn-input-path"
+      click_on(class: "btn-input-path")
+      expect(page).to have_css "#file-browser-container"
     end
   end
 end

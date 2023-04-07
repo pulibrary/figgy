@@ -1,3 +1,29 @@
+.btn-input-path {
+  background-image: image-url("folder.png");
+  background-repeat: no-repeat;
+  display: inline-block;
+  background-position: center;
+  background-size: 18px;
+}
+
+#ingest_directory_field {
+  display: inline-block;
+}
+
+.input-path-wrapper {
+  background-color: white;
+  padding: 0;
+  #input-path-selector {
+    width: 100%;
+    height: 100%;
+    .button-wrapper {
+      width: 100%;
+      height: 100%;
+      padding: 5px;
+    }
+  }
+}
+
 #metadata {
   .nested-fields {
     border: 1px solid #ddd;
@@ -11,14 +37,6 @@
 
   .required-tag {
     background-color: $dark-blue;
-  }
-
-  .btn-bag-path {
-    background-image: image-url("folder.png");
-    background-repeat: no-repeat;
-    display: inline-block;
-    background-position: center;
-    background-size: 18px;
   }
 
   .collection_bag_path {

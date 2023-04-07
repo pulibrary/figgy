@@ -16,3 +16,29 @@ ul.multivolume {
   list-style-type: none;
   padding-left: 8px;
 }
+
+#bulk-structure-example-modal {
+  ul {
+    list-style-type: none;
+    li {
+      padding-left: 2rem;
+    }
+  }
+  div.directory-listing {
+    padding-left: 4rem;
+  }
+  ul.directory-list {
+    li {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 5h13v17h-24v-20h8l3 3zm-10-2v18h22v-15h-12.414l-3-3h-6.586z' /%3E%3C/svg%3E");
+    }
+  }
+  ul.file-list {
+    li {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20.5,24h-17C3.2,24,3,23.8,3,23.5v-23C3,0.2,3.2,0,3.5,0h11c0.1,0,0.3,0.1,0.4,0.1l6,6C20.9,6.2,21,6.4,21,6.5v17 C21,23.8,20.8,24,20.5,24z M4,23h16V6.7L14.3,1H4V23z' /%3E%3Cpath d='M20.5,7h-6C14.2,7,14,6.8,14,6.5v-6C14,0.2,14.2,0,14.5,0S15,0.2,15,0.5V6h5.5C20.8,6,21,6.2,21,6.5S20.8,7,20.5,7z' /%3E%3C/svg%3E");
+    }
+  }
+}
+
+#bulk-structure-example-modal .modal-title {
+  margin-top: 0;
+}

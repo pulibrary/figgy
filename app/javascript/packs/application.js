@@ -4,6 +4,8 @@ import 'lux-design-system/dist/system/system.css'
 import 'lux-design-system/dist/system/tokens/tokens.scss'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
+import EmbeddedFileBrowser from '../components/file_browser/embedded_file_browser'
+import InputPathSelector from '../components/file_browser/input_path_selector'
 import PlaylistMembers from '../components/playlist_members'
 import IssueMonograms from '../components/issue_monograms'
 import axios from 'axios'
@@ -13,8 +15,10 @@ import AjaxSelect from '../components/ajax-select'
 import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select.js'
 import FileUploader from '../components/file-uploader'
 import Initializer from '../figgy/figgy_boot'
+import VueDetails from 'vue-details'
 
 Vue.use(system)
+Vue.component('v-details', VueDetails)
 
 // mount the filemanager app
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,7 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'order-manager': OrderManager,
         'issue-monograms': IssueMonograms,
         'ajax-select': AjaxSelect,
-        'file-uploader': FileUploader
+        'file-uploader': FileUploader,
+        'input-path-selector': InputPathSelector,
+        'embedded-file-browser': EmbeddedFileBrowser
       },
       data: {
         options: []

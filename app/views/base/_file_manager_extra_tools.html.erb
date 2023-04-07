@@ -1,7 +1,19 @@
-<div class="col-md-12" id="uploading-stuff">
-  <%= render "server_upload" if controller.respond_to?(:browse_everything_files) %>
-</div>
-<div class="col-md-12" id="local-upload">
-  <%= render "local_upload" if @change_set.respond_to?(:files) %>
+<div class="col-md-12" id="upload-tools">
+  <a class="btn btn-primary" data-toggle="collapse" href="#server-ingest-pane">Ingest from Server</a>
+  <a class="btn btn-primary" data-toggle="collapse" href="#local-ingest-pane">Ingest Local Files</a>
+  <div class="collapse" id="server-ingest-pane" data-parent="#upload-tools">
+    <%= render "server_upload" if controller.respond_to?(:server_upload) %>
+  </div>
+  <div class="collapse" id="local-ingest-pane" data-parent="#upload-tools">
+    <%= render "local_upload" if @change_set.respond_to?(:files) %>
+  </div>
 </div>
 
+<% if @change_set.pending_uploads.present? %>
+  <div class="col-md-9">
+    <h3>Files Queued for Ingest</h3>
+    <div class="card card-body bg-light">
+      <%= render "pending_uploads", uploads: @change_set.pending_uploads %>
+    </div>
+  </div>
+<% end %>

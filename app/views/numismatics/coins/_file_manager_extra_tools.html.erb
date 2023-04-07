@@ -1,14 +1,20 @@
-<div class="col-md-12" id="uploading-stuff">
+<div class="col-md-12" id="upload-tools">
   <% if @children.empty? %>
     <div class="pull-right">
       <%= simple_form_for @change_set, url: auto_ingest_numismatics_coin_path(@change_set), method: :post do |f| %>
-        <%= f.submit "Searching...", disabled: true, id: 'auto-ingest-button', class: 'btn btn-primary',
-                                     data: { id: @change_set.id.to_s } %>
+        <%= f.submit "Searching...",
+          disabled: true,
+          id: 'auto-ingest-button',
+          class: 'btn btn-primary',
+          data: { id: @change_set.id.to_s } %>
         <div id="auto-ingest-info">
         </div>
       <% end %>
     </div>
   <% end %>
 
-  <%= render "server_upload" if controller.respond_to?(:browse_everything_files) %>
+  <a class="btn btn-primary" data-toggle="collapse" href="#server-ingest-pane">Ingest from Server</a>
+  <div class="collapse" id="server-ingest-pane" data-parent="#upload-tools">
+    <%= render "server_upload" if controller.respond_to?(:server_upload) %>
+  </div>
 </div>

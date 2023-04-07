@@ -1,90 +1,168 @@
 <h2>Bulk Ingest <%= @resource_class.human_readable_type.pluralize %></h2>
 
 <div class="col-md-12">
-  <div class="row">
-    <div class="col-md-12">
-      <p>Ingest one or more individual, multi-volume, or mixed resources. Files selected must be contained in a parent directory.</p>
-    </div>
-    <div class="col-md-12">
-      <button id="bulk_structure_example" type="button" class="btn btn-info browse-everything" data-toggle="modal" data-target="#bulk-structure-example-modal">
-        Show example directory structure
-      </button>
-    </div>
-  </div>
-  <%= form_tag polymorphic_path([main_app, :browse_everything_files_bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do %>
+  <%= form_tag polymorphic_path([main_app, :bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do |f| %>
     <div class="row">
-      <div class="col-md-6">
-        <%= render "visibility" %>
-      </div>
-      <div class="col-md-3">
-        <%= render "workflow_state" %>
-      </div>
-      <div class="col-md-3">
-        <%= render "collections" %>
-      </div>
-    </div>
+      <div role="main" class="col-xs-12 col-sm-8">
+        <div id="metadata" class="form-panel-content">
+          <div class="card">
+            <div class="card-header">Metadata</div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="ingest_directory">Ingest Folder&nbsp;<a href="#" data-toggle="modal" data-target="#bulk-structure-example-modal">?</a></label>
+                <div class="input-group mb-2">
+                  <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
+                  <div class="input-group-append">
+                    <div class="input-group-text input-path-wrapper">
+                      <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"]).to_json %>' input-element-id='ingest_directory_field' summary-element-id='ingestDirectorySummary' />
+                    </div>
+                  </div>
+                </div>
 
-    <div class="row">
-      <div class="col-md-3">
-        <%= render "holding_location" %>
-      </div>
-      <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Options (5)</legend>
-        <div class="checkbox">
-          <label>
-            <%= check_box_tag 'preserve_file_names' %>
-            Preserve File Names (prevents naming files 1/2/3 etc)
-          </label>
+                <small id="ingestDirectorySummary" class="form-text text-muted"></small>
+              </div>
+              <div class="form-group">
+                <div class="form-check">
+                  <%= check_box_tag 'preserve_file_names', class: "form-check-input" %>
+                  <label class="form-check-label" for="preserve_file_names">
+                    Preserve File Names (prevents naming files 1/2/3 etc)
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="workflow">Workflow State</label>
+                <%= select "workflow", "state", @states, {}, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <label for="collections">Collection(s)</label>
+                <%= select_tag "collections", options_for_select(@collections), multiple: true, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <label for="holding_location">Holding Location</label>
+                <%= select_tag :holding_location,
+                  options_from_collection_for_select(ControlledVocabulary.for(:holding_location).all, "value", "label"),
+                  include_blank: "[Do not update]",
+                  class: 'form-control holding-location',
+                  required: false %>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-3">
-        <legend class="bulk-ingest-legend">Files (6)</legend>
-        <div class="well well-sm">
-          <button id="browse_everything" type="button" class="btn btn-primary browse-everything" data-toggle="modal" data-target="#browse-everything-modal">
-            Select Folder on Server
-          </button>
-          <%= render 'browse_everything/modal' %>
-        </div>
+      <div id="savewidget" role="complementary" class="col-xs-12 col-sm-4">
+        <aside id="form-progress" class="form-progress card">
+          <div class="card-header">
+            <div class="card-title">
+              Bulk Ingest
+            </div>
+            <div class="list-group">
+              <div class="set-access-controls list-group-item">
+                <legend class="legend-save-work">Visibility</legend>
+                <ul class="set-access-controls visibility">
+                  <% @visibility.each_with_index do |viz, i| %>
+                    <li class="radio">
+                      <label>
+                        <%= radio_button_tag :visibility, viz.value, viz.value == "open" %>
+                        <%= visibility_badge(viz.value) %>
+                        <%= viz.definition %>
+                      </label>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-center card-save-controls">
+            <%= submit_tag "Bulk Ingest", class: 'btn btn-primary' %>
+          </div>
+        </aside>
       </div>
     </div>
   <% end %>
 </div>
-
 <div class="modal fade" id="bulk-structure-example-modal" tabindex="-1" role="dialog" aria-labelledby="bulk structure example">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="myModalLabel">Example directory structures</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <p>Single volume work:</p>
-        <ul>
-          <li>ingest_dir</li>
-          <ul>
-            <li>bib_id</li>
+        <p>These examples show the structure needed for bulk ingest results. In each example below, select the "new_ingest" directory. A text label can be used in place of a source metadata identifier if you don't need metadata from another system.</p>
+
+        <p>Ingest a single-volume work that pulls metadata from alma or aspace via the source_metadata_identifier:
+        <div class="directory-listing">
+          <ul class="directory-list">
+            <li>new_ingest</li>
             <ul>
-              <li>1.tiff</li>
-            </ul>
-          </ul>
-        </ul>
-        <p>Multi-volume work:</p>
-        <ul>
-          <li>ingest_dir</li>
-          <ul>
-            <li>bib_id</li>
-            <ul>
-              <li>vol1</li>
-              <ul>
-                <li>1.tiff</li>
-              </ul>
-              <li>vol2</li>
-              <ul>
-                <li>1.tiff</li>
+              <li>source_metadata_identifier</li>
+              <ul class="file-list">
+                <li>00000001.tif</li>
+                <li>00000002.tif</li>
               </ul>
             </ul>
           </ul>
+        </p>
+        </div>
+
+        <p>Ingest a multi-volume work that pulls metadata from alma or aspace via the source_metadata_identifier:
+        <div class="directory-listing">
+          <ul class="directory-list">
+            <li>new_ingest</li>
+            <ul>
+              <li>source_metadata_identifier</li>
+              <ul>
+                <li>volume_title_1</li>
+                <ul class="file-list">
+                  <li>00000001.tif</li>
+                  <li>00000002.tif</li>
+                </ul>
+                <li>volume_title_2</li>
+                <ul class="file-list">
+                  <li>00000001.tif</li>
+                  <li>00000002.tif</li>
+                </ul>
+              </ul>
+            </ul>
+          </ul>
+        </div>
+        </p>
+
+        <p>Ingest multiple multi-volume works that pull metadata from alma or aspace via the source_metadata_identifier:
+        <div class="directory-listing">
+          <ul class="directory-list">
+          <li>new_ingest</li>
+            <ul>
+              <li>source_metadata_identifier_1</li>
+                <ul>
+                  <li>volume_title_1</li>
+                    <ul class="file-list">
+                      <li>00000001.tif</li>
+                      <li>00000002.tif</li>
+                    </ul>
+                  <li>volume_title_2</li>
+                    <ul class="file-list">
+                      <li>00000001.tif</li>
+                      <li>00000002.tif</li>
+                    </ul>
+                </ul>
+              <li>source_metadata_identifier_2</li>
+                <ul>
+                  <li>volume_title_1</li>
+                    <ul class="file-list">
+                      <li>00000001.tif</li>
+                      <li>00000002.tif</li>
+                    </ul>
+                  <li>volume_title_2</li>
+                    <ul class="file-list">
+                      <li>00000001.tif</li>
+                      <li>00000002.tif</li>
+                    </ul>
+                </ul>
+            </ul>
         </ul>
+        </div>
+        </p>
       </div>
     </div>
   </div>

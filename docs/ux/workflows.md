@@ -13,7 +13,7 @@ Some projects collect both physical and digital ephemera, and do not use the sam
 ## Books and Manuscripts
 1. Books and manuscripts are photographed by the digitization studio, with TIFF page images stored on a local staging server.
 2. ScannedResources are created when photography is complete, using a BibID or PULFA component ID to retrieve remote metadata.
-3. Files are uploaded using BrowseEverything, which accesses the TIFFs on a network-mounted share.
+3. Files are uploaded using a file browser, which accesses the TIFFs on a network-mounted share.
 4. When the files have been loaded, the object is reviewed by Cataloging & Metadata Services, including adding structural metadata.
 5. After metadata review, the item is reviewed by the appropriate curator.
 6. After curatorial review, the item is published.

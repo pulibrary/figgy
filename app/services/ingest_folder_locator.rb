@@ -10,11 +10,10 @@ class IngestFolderLocator
     @search_directory = search_directory || default_search_directory
   end
 
-  # Access the upload directory path from the BrowseEverything file system provider configuration
+  # Access the upload directory path for ingests.
   # @return [String]
   def upload_path_value
-    file_system_config = BrowseEverything.config[:fast_file_system]
-    file_system_config[:home]
+    Figgy.config["ingest_folder_path"]
   end
 
   # Generate the path to the studio directory used for ingestion

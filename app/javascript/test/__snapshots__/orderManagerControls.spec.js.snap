@@ -3,6 +3,9 @@
 exports[`OrderManagerControls.vue has the expected html structure 1`] = `
 <wrapper-stub
   class="lux-bg"
+  horizontal=""
+  maxwidth="1170"
+  type="div"
 >
   <div
     class="lux-controls"
@@ -11,8 +14,10 @@ exports[`OrderManagerControls.vue has the expected html structure 1`] = `
      
     <input-button-stub
       disabled="true"
+      icon=""
       id="save_btn"
       size="medium"
+      type=""
       variation="solid"
     >
       
@@ -25,6 +30,7 @@ exports[`OrderManagerControls.vue has the expected html structure 1`] = `
    
   <heading-stub
     level="h2"
+    size="h1"
   >
     
     Zoom 

@@ -36,30 +36,6 @@ GIT
       valkyrie
 
 GIT
-  remote: https://github.com/samvera/browse-everything.git
-  revision: 04916c6769ef7ee1572954fe7b7d0107d8625506
-  branch: 2.x-stable-no-thor-6-1
-  specs:
-    browse-everything (2.0.0.pre.beta1)
-      activestorage
-      addressable (~> 2.5)
-      aws-sdk-s3
-      dropbox_api (>= 0.1.10)
-      fast_jsonapi
-      foreman
-      google-api-client (~> 0.23)
-      google_drive (~> 2.1)
-      googleauth (= 0.6.6)
-      jsonapi-resources
-      puma (>= 3.11)
-      rails (>= 5.1)
-      rswag
-      ruby-box
-      signet (~> 0.8)
-      thor (>= 0.19)
-      typhoeus
-
-GIT
   remote: https://github.com/yob/pdf-reader.git
   revision: 946559b06a381ba2651fd037afc95a24309e94e4
   specs:
@@ -339,9 +315,6 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
       ruby2_keywords
-    dropbox_api (0.1.21)
-      faraday (< 3.0)
-      oauth2 (~> 1.1)
     dry-cli (0.7.0)
     dry-core (1.0.0)
       concurrent-ruby (~> 1.0)
@@ -371,8 +344,6 @@ GEM
       sxp (~> 1.2)
       unicode-types (~> 1.7)
     erubi (1.12.0)
-    ethon (0.15.0)
-      ffi (>= 1.15.0)
     execjs (2.8.1)
     ezid-client (1.8.0)
       hashie (~> 3.4, >= 3.4.3)
@@ -392,8 +363,6 @@ GEM
       multipart-post (~> 2)
     faraday_middleware (0.14.0)
       faraday (>= 0.7.4, < 1.0)
-    fast_jsonapi (1.5)
-      activesupport (>= 4.2)
     ffi (1.15.5)
     filewatcher (1.1.1)
       optimist (~> 3.0)
@@ -443,10 +412,6 @@ GEM
       grpc (>= 1.7.2, < 2.0)
       rly (~> 0.2.3)
     google-protobuf (3.21.12)
-    google_drive (2.1.3)
-      google-api-client (>= 0.11.0, < 1.0.0)
-      googleauth (>= 0.5.0, < 1.0.0)
-      nokogiri (>= 1.5.3, < 2.0.0)
     googleapis-common-protos (1.3.12)
       google-protobuf (~> 3.14)
       googleapis-common-protos-types (~> 1.2)
@@ -541,10 +506,6 @@ GEM
       rdf (~> 3.2, >= 3.2.9)
     json-schema (2.8.1)
       addressable (>= 2.4)
-    jsonapi-resources (0.10.7)
-      activerecord (>= 4.1)
-      concurrent-ruby
-      railties (>= 4.1)
     jwt (2.4.1)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -631,12 +592,6 @@ GEM
       builder (>= 3.1.0)
       faraday
       faraday_middleware
-    oauth2 (1.4.10)
-      faraday (>= 0.17.3, < 3.0)
-      jwt (>= 1.0, < 3.0)
-      multi_json (~> 1.3)
-      multi_xml (~> 0.5)
-      rack (>= 1.2, < 3)
     oj (3.13.18)
     omniauth (1.9.2)
       hashie (>= 3.4.6)
@@ -784,19 +739,6 @@ GEM
     rspec-support (3.11.0)
     rspec_junit_formatter (0.5.1)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rswag (2.5.1)
-      rswag-api (= 2.5.1)
-      rswag-specs (= 2.5.1)
-      rswag-ui (= 2.5.1)
-    rswag-api (2.5.1)
-      railties (>= 3.1, < 7.1)
-    rswag-specs (2.5.1)
-      activesupport (>= 3.1, < 7.1)
-      json-schema (~> 2.2)
-      railties (>= 3.1, < 7.1)
-    rswag-ui (2.5.1)
-      actionpack (>= 3.1, < 7.1)
-      railties (>= 3.1, < 7.1)
     rubocop (0.85.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
@@ -816,11 +758,6 @@ GEM
       rubocop (>= 0.82.0)
     rubocop-rspec (1.41.0)
       rubocop (>= 0.68.1)
-    ruby-box (1.15.0)
-      addressable
-      json
-      multipart-post
-      oauth2
     ruby-prof (1.4.3)
     ruby-progressbar (1.11.0)
     ruby-rc4 (0.1.5)
@@ -920,8 +857,6 @@ GEM
       rails (>= 3.1)
     trailblazer-option (0.1.2)
     ttfunk (1.7.0)
-    typhoeus (1.4.0)
-      ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -1009,7 +944,6 @@ DEPENDENCIES
   bootsnap
   bootstrap (~> 4.0)
   bootstrap_form (~> 4.5.0)
-  browse-everything!
   bundler (= 2.2.16)
   bundler-audit
   bunny
@@ -1061,6 +995,7 @@ DEPENDENCIES
   m3u8
   marc
   mediainfo (~> 1.0)!
+  mime-types
   mini_magick
   modernizr-rails
   normalize-rails

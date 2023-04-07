@@ -48,6 +48,14 @@ Rails.application.config.to_prepare do
     :disk_via_copy
   )
 
+  Valkyrie::StorageAdapter.register(
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["ingest_folder_path"],
+      file_mover: FileUtils.method(:cp)
+    ),
+    :ingest_adapter
+  )
+
   if ENV["STORAGE_PROJECT"] && ENV["STORAGE_CREDENTIALS"] && !Rails.env.test?
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),

@@ -1,7 +1,5 @@
 import SaveWorkControl from 'figgy/form/save_work_control'
 import DuplicateResourceDetectorFactory from 'figgy/form/detect_duplicates'
-import ServerUploader from "figgy/server_uploader"
-import CollectionBagUploader from "figgy/collection_bag_uploader"
 import StructureManager from "figgy/structure_manager"
 import ModalViewer from "figgy/modal_viewer"
 import DerivativeForm from "figgy/derivative_form"
@@ -18,8 +16,6 @@ import FieldManager from "figgy/field_manager"
 
 export default class Initializer {
   constructor() {
-    this.server_uploader = new ServerUploader
-    this.collection_bag_uploader = new CollectionBagUploader
     this.initialize_form()
     this.initialize_timepicker()
     this.initialize_bbox()
