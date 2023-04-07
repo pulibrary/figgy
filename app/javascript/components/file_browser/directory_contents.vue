@@ -42,10 +42,10 @@
           :key="child.path"
           :class="{ selected: isSelected(child) }"
           class="file"
-          @click.exact="fileSelect($event, child)"
-          @click.shift="fileRangeSelect($event, child)"
-          @click.ctrl.prevent="fileToggleSelect($event, child)"
-          @contextmenu.prevent="fileToggleSelect($event, child)"
+          @click.exact="enableFileClick && fileSelect($event, child)"
+          @click.shift="enableFileClick && fileRangeSelect($event, child)"
+          @click.ctrl.prevent="enableFileClick && fileToggleSelect($event, child)"
+          @contextmenu.prevent="enableFileClick && fileToggleSelect($event, child)"
         >
           <lux-icon-base
             class="icon"
@@ -119,6 +119,9 @@ export default {
       let copiedFiles = Object.assign([], this.selectedFiles)
       return copiedFiles.sort((a, b) => this.folder.children.indexOf(a) -
         this.folder.children.indexOf(b))
+    },
+    enableFileClick () {
+      return this.mode === 'fileIngest'
     }
   },
   watch: {

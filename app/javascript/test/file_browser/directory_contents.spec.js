@@ -74,6 +74,13 @@ test('in directoryIngest mode it renders an ingest directory button', () => {
   expect(wrapper.findAll('.actions a').length).toEqual(1)
 })
 
+test("in directoryIngest mode it doesn't add selected files on click", async () => {
+  const wrapper = mount(DirectoryContents, { propsData: { folder: folder(), mode: 'directoryIngest' } })
+
+  await wrapper.get('li.file').trigger('click')
+  expect(wrapper.vm.selectedFiles).toEqual([])
+})
+
 test('in directoryIngest mode, when selectable is false, it disables the ingest directory button', () => {
   const wrapper = mount(DirectoryContents, { propsData: { folder: disabledFolder(), mode: 'directoryIngest' } })
 
