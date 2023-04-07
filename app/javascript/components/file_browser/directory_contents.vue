@@ -1,8 +1,13 @@
 <template>
-  <div id="directory-contents">
-    <div class="info-pane">
+  <div
+    id="directory-contents"
+    :class="mode"
+  >
+    <div
+      v-if="mode == 'fileIngest'"
+      class="info-pane"
+    >
       <a
-        v-if="mode === 'fileIngest'"
         href="#"
         class="button"
         :class="{ disabled: !folder || childFiles.length === 0 }"
@@ -175,6 +180,8 @@ export default {
   #directory-contents {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     --color-bleu-de-france: rgb(44, 110, 175);
     --color-bleu-de-france-darker: rgb(35, 87, 139);
     --color-bleu-de-france-lighter: rgb(149, 189, 228);
@@ -182,16 +189,15 @@ export default {
     --directory-background-hover: rgba(149, 189, 228, .15);
   }
   #directory-contents > .info-pane {
-    height: 60px;
     padding: 10px;
   }
   #directory-contents > .details {
-    height: calc(100% - 120px);
+    min-height: 0;
+    flex-grow: 1;
     overflow-y: scroll;
     padding: 10px;
   }
   #directory-contents > .actions {
-    height: 60px;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -210,12 +216,7 @@ export default {
   #directory-contents .label {
     display: inline-block;
   }
-  #directory-contents li {
-    width: 100%;
-    padding: 10px 0px 10px 10px;
-    margin-top: -2px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    user-select: none;
+  #directory-contents.fileIngest li {
     &.selected {
       border: 2px solid var(--color-bleu-de-france-darker);
       background-color: var(--color-bleu-de-france-lightest);
@@ -223,6 +224,13 @@ export default {
     &.file:hover {
       background-color: var(--directory-background-hover);
     }
+  }
+  #directory-contents li {
+    width: 100%;
+    padding: 10px 0px 10px 10px;
+    margin-top: -2px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    user-select: none;
   }
 
   #directory-contents ul {
