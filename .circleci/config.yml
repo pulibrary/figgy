@@ -19,6 +19,7 @@ jobs:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
           POSTGRES_HOST_AUTH_METHOD: trust
+    resource_class: xlarge
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
@@ -79,6 +80,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: solr:7.7-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
+    resource_class: xlarge
     parallelism: 4
     environment:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
@@ -139,6 +141,7 @@ jobs:
     working_directory: ~/figgy
     docker:
       - image: pulibrary/ci-figgy:1.3
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: '~/figgy'
@@ -161,6 +164,7 @@ jobs:
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
           PSQL_PAGER: ''
+    resource_class: xlarge
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
