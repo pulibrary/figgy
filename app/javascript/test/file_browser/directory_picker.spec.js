@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils'
-import DirectoryPicker from '../components/directory_picker.vue'
-import flushPromises from 'flush-promises'
+import DirectoryPicker from '../../components/file_browser/directory_picker.vue'
 
 const startChildren = () => {
   return [

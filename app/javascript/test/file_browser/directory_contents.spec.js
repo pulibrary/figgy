@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import DirectoryContents from '../components/directory_contents.vue'
+import DirectoryContents from '../../components/file_browser/directory_contents.vue'
 
 const folder = () => {
   return {

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import InputPathSelector from '../components/input_path_selector.vue'
+import InputPathSelector from '../../components/file_browser/input_path_selector.vue'
 
 const startChildren = () => {
   return [

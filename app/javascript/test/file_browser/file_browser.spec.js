@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import FileBrowser from '../components/file_browser.vue'
+import FileBrowser from '../../components/file_browser/file_browser.vue'
 import flushPromises from 'flush-promises'
 
 function stubFailedChildLoad () {

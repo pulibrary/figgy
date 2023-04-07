@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import EmbeddedFileBrowser from '../components/embedded_file_browser.vue'
+import EmbeddedFileBrowser from '../../components/file_browser/embedded_file_browser.vue'
 
 const startChildren = () => {
   return [

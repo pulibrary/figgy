@@ -4,10 +4,8 @@ import 'lux-design-system/dist/system/system.css'
 import 'lux-design-system/dist/system/tokens/tokens.scss'
 import store from '../store'
 import DocumentAdder from '../components/document_adder'
-import DirectoryPicker from '../components/directory_picker'
-import FileBrowser from '../components/file_browser'
-import EmbeddedFileBrowser from '../components/embedded_file_browser'
-import InputPathSelector from '../components/input_path_selector'
+import EmbeddedFileBrowser from '../components/file_browser/embedded_file_browser'
+import InputPathSelector from '../components/file_browser/input_path_selector'
 import PlaylistMembers from '../components/playlist_members'
 import IssueMonograms from '../components/issue_monograms'
 import axios from 'axios'
@@ -38,8 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'issue-monograms': IssueMonograms,
         'ajax-select': AjaxSelect,
         'file-uploader': FileUploader,
-        'directory-picker': DirectoryPicker,
-        'file-browser': FileBrowser,
         'input-path-selector': InputPathSelector,
         'embedded-file-browser': EmbeddedFileBrowser
       },
