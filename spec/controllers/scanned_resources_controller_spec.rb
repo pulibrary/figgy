@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include FixtureFileUpload
 
 RSpec.describe ScannedResourcesController, type: :controller do
   with_queue_adapter :inline

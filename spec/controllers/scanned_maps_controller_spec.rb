@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include FixtureFileUpload
 
 RSpec.describe ScannedMapsController, type: :controller do
   include Rails.application.routes.url_helpers

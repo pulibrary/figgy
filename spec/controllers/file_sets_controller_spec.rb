@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include FixtureFileUpload
 
 RSpec.describe FileSetsController, type: :controller do
   let(:persister) { Valkyrie.config.metadata_adapter.persister }
