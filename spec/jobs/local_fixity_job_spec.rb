@@ -42,7 +42,7 @@ RSpec.describe LocalFixityJob do
     end
 
     context "with a preservation file and an intermediate file" do
-      let(:file) { fixture_file_upload("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
+      let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
 
       it "creates a local_fixity Event for both files" do
         IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
@@ -80,7 +80,7 @@ RSpec.describe LocalFixityJob do
     end
 
     context "with a preservation file and an intermediate file and the checksum doesn't match" do
-      let(:file) { fixture_file_upload("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
+      let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
 
       it "creates a local_fixity Event for both files" do
         allow(Honeybadger).to receive(:notify)
