@@ -1,10 +1,10 @@
 <div class="col-md-12" id="upload-tools">
-  <a class="btn btn-primary" data-toggle="collapse" href="#uploading-stuff">Ingest from Server</a>
-  <a class="btn btn-primary" data-toggle="collapse" href="#local-upload">Ingest Local Files</a>
-  <div class="collapse" id="uploading-stuff" data-parent="#upload-tools">
+  <a class="btn btn-primary" data-toggle="collapse" href="#server-ingest-pane">Ingest from Server</a>
+  <a class="btn btn-primary" data-toggle="collapse" href="#local-ingest-pane">Ingest Local Files</a>
+  <div class="collapse" id="server-ingest-pane" data-parent="#upload-tools">
     <%= render "server_upload" if controller.respond_to?(:server_upload) %>
   </div>
-  <div class="collapse" id="local-upload" data-parent="#upload-tools">
+  <div class="collapse" id="local-ingest-pane" data-parent="#upload-tools">
     <%= render "local_upload" if @change_set.respond_to?(:files) %>
   </div>
 </div>
