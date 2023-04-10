@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 require "rails_helper"
-include FixtureFileUpload
 
 RSpec.describe EphemeraFieldsController, type: :controller do
   let(:user) { nil }
