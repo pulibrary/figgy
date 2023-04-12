@@ -20,7 +20,6 @@ worker_timeout 3600
 
 preload_app!
 
-rackup DefaultRackup
 environment ENV.fetch("RACK_ENV", "development")
 
 on_worker_boot do
