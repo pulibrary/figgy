@@ -34,7 +34,7 @@ gem "font-awesome-rails"
 gem "geoserver-publish"
 gem "google-cloud-pubsub"
 # This breaks PreserveResourceJob somewhere between 1.39 and 1.44.
-gem "google-cloud-storage", "1.38.0"
+gem "google-cloud-storage", "1.39.0"
 gem "graphiql-rails", "1.4.10", group: :development
 gem "graphql", "~> 1.13.19"
 gem "honeybadger"
