@@ -151,16 +151,14 @@ class ManifestBuilderV3
     end
 
     def members
-      @members ||= begin
-        manifestable_members.map do |member|
-          wayfinder = Wayfinder.for(member)
-          if wayfinder.respond_to?(:decorated_scanned_maps) && wayfinder.decorated_scanned_maps.empty?
-            wayfinder.geo_members.first
-          else
-            member
-          end
-        end.compact
-      end
+      @members ||= manifestable_members.map do |member|
+        wayfinder = Wayfinder.for(member)
+        if wayfinder.respond_to?(:decorated_scanned_maps) && wayfinder.decorated_scanned_maps.empty?
+          wayfinder.geo_members.first
+        else
+          member
+        end
+      end.compact
     end
 
     def leaf_nodes
@@ -386,8 +384,6 @@ class ManifestBuilderV3
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= begin
-        IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
-      end
+      @manifest ||= IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
     end
 end

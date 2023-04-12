@@ -95,11 +95,10 @@ module Types::Resource
 
   def thumbnail_resource
     @thumbnail_resource ||=
-      begin
-        members.find do |member|
-          member.id == object.try(:thumbnail_id).first
-        end || query_service.find_by(id: object.try(:thumbnail_id).first)
-      end
+      members.find do |member|
+        member.id == object.try(:thumbnail_id).first
+      end || query_service.find_by(id: object.try(:thumbnail_id).first)
+
   rescue Valkyrie::Persistence::ObjectNotFoundError
     nil
   end

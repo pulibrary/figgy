@@ -4,6 +4,7 @@
 #   provides data about workflows in agregate
 class WorkflowRegistry
   class EntryNotFound < StandardError; end
+
   # @return array of strings
   def self.all_states
     workflows.map { |klass| klass.new(nil).valid_states }.flatten.uniq

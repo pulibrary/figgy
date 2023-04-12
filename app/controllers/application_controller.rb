@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Named as such due to namespace conflict with Hydra::Controller::DownloadBehavior
-  def render_figgy_404
+  def render_figgy_404 # rubocop:disable Naming/VariableNumber
     respond_to do |format|
       format.html { render "errors/not_found", status: :not_found }
       format.json { head :not_found }

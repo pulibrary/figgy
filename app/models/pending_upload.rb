@@ -33,8 +33,7 @@ class PendingUpload < Valkyrie::Resource
     def ingestable_file
       return unless storage_adapter_id
       @ingestable_file ||=
-        begin
-          IngestableFile.new(
+        IngestableFile.new(
             file_path: storage_adapter_file.disk_path,
             mime_type: content_type,
             original_filename: storage_adapter_file.disk_path.basename.to_s,
@@ -42,7 +41,6 @@ class PendingUpload < Valkyrie::Resource
             # adapter is used.
             copy_before_ingest: true
           )
-        end
     end
 
     def storage_adapter_file

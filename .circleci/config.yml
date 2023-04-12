@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: pulibrary/ci-figgy:1.2
+      - image: pulibrary/ci-figgy:1.3
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -19,6 +19,7 @@ jobs:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
           POSTGRES_HOST_AUTH_METHOD: trust
+    resource_class: large
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
@@ -37,7 +38,7 @@ jobs:
           keys:
             - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230112
       # Install Bundler
-      - run: gem install bundler -v '2.2.14'
+      - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - save_cache:
@@ -64,7 +65,7 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: pulibrary/ci-figgy:1.2
+      - image: pulibrary/ci-figgy:1.3
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -79,6 +80,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: solr:7.7-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
+    resource_class: large
     parallelism: 4
     environment:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
@@ -97,7 +99,7 @@ jobs:
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       # Install Bundler
-      - run: gem install bundler -v '2.2.14'
+      - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - run: yarn exec jest --coverage
@@ -138,7 +140,8 @@ jobs:
   coverage_report:
     working_directory: ~/figgy
     docker:
-      - image: pulibrary/ci-figgy:1.2
+      - image: pulibrary/ci-figgy:1.3
+    resource_class: large
     steps:
       - attach_workspace:
           at: '~/figgy'
@@ -154,13 +157,14 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: pulibrary/ci-figgy:1.2
+      - image: pulibrary/ci-figgy:1.3
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
           PSQL_PAGER: ''
+    resource_class: large
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
@@ -172,7 +176,7 @@ jobs:
       - run:
           name: Check current version of node
           command: node -v
-      - run: gem install bundler -v '2.2.14'
+      - run: gem install bundler -v '2.3.18'
       - run: bundle install --path vendor/bundle
       - run: bundle exec spring stop
       - run: bundle exec rake rubocop

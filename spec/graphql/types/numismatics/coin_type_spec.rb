@@ -8,7 +8,7 @@ RSpec.describe Types::Numismatics::CoinType do
     end
   end
 
-  subject(:type) { described_class.new(coin, ability: ability) }
+  subject(:type) { make_graphql_object(described_class, coin, { ability: ability }) }
   let(:coin) do
     FactoryBot.create_for_repository(
       :coin,
@@ -122,7 +122,7 @@ RSpec.describe Types::Numismatics::CoinType do
       child_resource2 = FactoryBot.create_for_repository(:file_set)
       coin = FactoryBot.create_for_repository(:coin, member_ids: [child_resource1.id, child_resource2.id])
 
-      type = described_class.new(coin, {})
+      type = make_graphql_object(described_class, coin)
 
       expect(type.members.map(&:id)).to eq [child_resource1.id, child_resource2.id]
     end

@@ -1,4 +1,4 @@
-FROM cimg/ruby:2.7.5-browsers
+FROM cimg/ruby:3.1.0-browsers
 
 RUN git clone https://github.com/pulibrary/figgy.git \
   && cd figgy \

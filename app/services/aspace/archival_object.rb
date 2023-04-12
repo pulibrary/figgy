@@ -23,10 +23,8 @@ module Aspace
 
     def resolved_digital_objects
       @resolved_digital_objects ||=
-        begin
-          digital_objects.map do |digital_object|
-            aspace_client.find_digital_object_by_ref(ref: digital_object["digital_object"]["ref"])
-          end
+        digital_objects.map do |digital_object|
+          aspace_client.find_digital_object_by_ref(ref: digital_object["digital_object"]["ref"])
         end
     end
 

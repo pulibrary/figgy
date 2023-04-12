@@ -7,13 +7,13 @@ gem "archivesspace-client"
 gem "autoprefixer-rails"
 gem "aws-sdk-s3"
 gem "bagit", "~> 0.4"
-gem "blacklight", "7.29.0"
+gem "blacklight", "7.33.1"
 gem "blacklight_iiif_search"
 gem "blacklight_range_limit"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
-gem "bundler", "2.2.16"
+gem "bundler", "2.3.18"
 gem "bunny"
 gem "capistrano-passenger"
 gem "capistrano-rails"
@@ -26,7 +26,7 @@ gem "devise", ">= 4.6.0"
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "dnsruby"
 gem "draper"
-gem "ezid-client", "1.8.0" # v1.9.0 introduces response errors in our tests/stubbing
+gem "ezid-client", "1.9.4" # v1.9.0 introduces response errors in our tests/stubbing
 gem "faker"
 gem "filewatcher"
 gem "flutie"
@@ -34,7 +34,7 @@ gem "font-awesome-rails"
 gem "geoserver-publish"
 gem "google-cloud-pubsub"
 gem "graphiql-rails", "1.4.10", group: :development
-gem "graphql", "1.8.2"
+gem "graphql", "~> 1.13.19"
 gem "honeybadger"
 gem "hydra-access-controls"
 gem "hydra-head"
@@ -75,8 +75,8 @@ gem "reform"
 gem "riiif"
 gem "rsolr"
 gem "ruby-progressbar"
-gem "ruby-vips"
 gem "ruby_tika_app", git: "https://github.com/pulibrary/ruby_tika_app", branch: "main"
+gem "ruby-vips"
 gem "rubyzip"
 gem "shrine-google_cloud_storage"
 gem "simple_form"
@@ -91,6 +91,11 @@ gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
 gem "webpacker", "5.4.3"
 gem "whenever", "~> 0.10"
+
+# Required for deployment under ruby 3.1
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "net-smtp", require: false
 
 source "https://gems.contribsys.com/" do
   gem "sidekiq-pro"
@@ -108,7 +113,7 @@ end
 
 group :development, :test do
   gem "awesome_print"
-  gem "bixby", "~> 3.0.0"
+  gem "bixby", "~> 5.0"
   gem "bundler-audit", require: false
   gem "dotenv-rails"
   gem "factory_bot_rails"
@@ -129,7 +134,7 @@ group :test do
   gem "database_cleaner"
   gem "database_cleaner-sequel"
   gem "formulaic"
-  gem "rspec-graphql_matchers", "0.7.1"
+  gem "rspec-graphql_matchers", "~> 1.3.1"
   gem "rspec_junit_formatter"
   gem "simplecov", require: false
   gem "timecop"

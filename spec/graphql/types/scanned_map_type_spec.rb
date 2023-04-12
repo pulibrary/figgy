@@ -8,7 +8,7 @@ RSpec.describe Types::ScannedMapType do
     end
   end
 
-  subject(:type) { described_class.new(scanned_map, ability: ability) }
+  subject(:type) { make_graphql_object(described_class, scanned_map, { ability: ability }) }
   let(:bibid) { "5144620" }
   let(:scanned_map) do
     FactoryBot.create_for_repository(
@@ -151,7 +151,7 @@ RSpec.describe Types::ScannedMapType do
       image_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
       scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [metadata_file_set.id, image_file_set.id, child_resource.id])
 
-      type = described_class.new(scanned_map, {})
+      type = make_graphql_object(described_class, scanned_map, {})
 
       expect(type.members.map(&:id)).to eq [metadata_file_set.id, image_file_set.id, child_resource.id]
     end

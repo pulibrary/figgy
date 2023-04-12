@@ -248,7 +248,7 @@ module PulMetadataServices
       ALPHA = %w[a b c d e f g h i j k l m n o p q r s t u v w x y z].freeze
 
       def data
-        @data ||= reader.select { |r| BIB_LEADER06_TYPES.include?(r.leader[6]) }[0]
+        @data ||= reader.find { |r| BIB_LEADER06_TYPES.include?(r.leader[6]) }
       end
 
       def reader
@@ -272,7 +272,7 @@ module PulMetadataServices
         data.select { |df| df.tag == "880" }[idx]
       end
 
-      def date_from_008
+      def date_from_008 # rubocop:disable Naming/VariableNumber
         return unless data["008"]
         d = data["008"].value[7, 4]
         d = d.tr "u", "0" unless d == "uuuu"

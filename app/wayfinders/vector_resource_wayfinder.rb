@@ -11,21 +11,17 @@ class VectorResourceWayfinder < BaseWayfinder
 
   def geo_members
     @geo_members ||=
-      begin
-        members.select do |member|
-          next unless member.respond_to?(:mime_type)
-          ControlledVocabulary.for(:geo_vector_format).include?(member.mime_type.first)
-        end
+      members.select do |member|
+        next unless member.respond_to?(:mime_type)
+        ControlledVocabulary.for(:geo_vector_format).include?(member.mime_type.first)
       end
   end
 
   def geo_metadata_members
     @geo_metadata_members ||=
-      begin
-        members.select do |member|
-          next unless member.respond_to?(:mime_type)
-          ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
-        end
+      members.select do |member|
+        next unless member.respond_to?(:mime_type)
+        ControlledVocabulary.for(:geo_metadata_format).include?(member.mime_type.first)
       end
   end
 

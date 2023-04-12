@@ -126,8 +126,7 @@ RSpec.describe CloudFixity do
       id = SecureRandom.uuid
       id2 = SecureRandom.uuid
       resource = FactoryBot.create_for_repository(:scanned_resource)
-      preservation_object = begin
-                              FactoryBot.create_for_repository(
+      preservation_object = FactoryBot.create_for_repository(
                                 :preservation_object,
                                 preserved_object_id: resource.id,
                                 metadata_node: FileMetadata.new(
@@ -143,7 +142,7 @@ RSpec.describe CloudFixity do
                                   )
                                 ]
                               )
-                            end
+
       allow(Rails.logger).to receive(:info)
 
       CloudFixity::FixityRequestor.queue_resource_check!(id: resource.id.to_s)

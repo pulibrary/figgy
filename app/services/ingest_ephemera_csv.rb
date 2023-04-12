@@ -120,7 +120,7 @@ class FolderData
   def files
     return @files unless @files.nil?
     raise IOError, format("%s does not exist", image_path) unless File.directory?(image_path)
-    @files ||= Dir.glob("#{image_path}/*.{tif,tiff,jpg,jpeg,png}", File::FNM_CASEFOLD).sort.map do |file|
+    @files ||= case_insensitive_files.sort.map do |file|
       IngestableFile.new(
         file_path: file,
         mime_type: case File.extname(file)
@@ -132,6 +132,16 @@ class FolderData
         copy_before_ingest: true
       )
     end
+  end
+
+  def case_insensitive_files
+    Pathname.new(image_path).children.select do |f|
+      f.file? && allowed_extensions.include?(f.extname.downcase)
+    end.map(&:to_s)
+  end
+
+  def allowed_extensions
+    [".tif", ".tiff", ".jpg", ".jpeg", ".png"]
   end
 
   def barcode

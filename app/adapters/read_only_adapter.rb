@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ReadOnlyError < StandardError; end
+
 class ReadOnlyAdapter < SimpleDelegator
   def persister
     @persister ||= ReadOnlyPersister.new(super)

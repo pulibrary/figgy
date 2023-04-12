@@ -21,6 +21,7 @@ class ImageDerivativeService
       attribute :output_name, Valkyrie::Types::String
     end
   end
+
   class IoDecorator < SimpleDelegator
     attr_reader :original_filename, :content_type, :use
     def initialize(io, original_filename, content_type, use)

@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::ScannedResourceType do
-  subject(:type) { described_class.new(scanned_resource, ability: ability) }
+  subject(:type) { make_graphql_object(described_class, scanned_resource, { ability: ability }) }
   let(:bibid) { "123456" }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(
@@ -169,7 +169,7 @@ RSpec.describe Types::ScannedResourceType do
       image_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
       scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [metadata_file_set.id, image_file_set.id, child_resource.id])
 
-      type = described_class.new(scanned_resource, {})
+      type = make_graphql_object(described_class, scanned_resource, {})
 
       expect(type.members.map(&:id)).to eq [metadata_file_set.id, image_file_set.id, child_resource.id]
     end
@@ -180,7 +180,7 @@ RSpec.describe Types::ScannedResourceType do
       child_resource = FactoryBot.create_for_repository(:file_set, ocr_content: "test")
       scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: child_resource.id)
 
-      type = described_class.new(scanned_resource, {})
+      type = make_graphql_object(described_class, scanned_resource, {})
 
       expect(type.ocr_content).to eq ["test"]
     end

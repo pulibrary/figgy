@@ -32,9 +32,7 @@ class CollectionIndexer
   def collections
     return [] unless resource.respond_to?(:member_of_collection_ids) && resource.member_of_collection_ids
     @collections ||=
-      begin
-        query_service.find_references_by(resource: resource, property: :member_of_collection_ids).to_a.map(&:decorate)
-      end
+      query_service.find_references_by(resource: resource, property: :member_of_collection_ids).to_a.map(&:decorate)
   end
 
   def metadata_adapter

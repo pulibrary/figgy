@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Types::VectorResourceType do
-  subject(:type) { described_class.new(vector_resource, {}) }
+  subject(:type) { make_graphql_object(described_class, vector_resource, {}) }
   let(:bibid) { "123456" }
   let(:vector_resource) do
     FactoryBot.create_for_repository(
@@ -60,7 +60,7 @@ RSpec.describe Types::VectorResourceType do
       vector_file_set = FactoryBot.create_for_repository(:geo_vector_file_set)
       vector_resource = FactoryBot.create_for_repository(:vector_resource, member_ids: [metadata_file_set.id, vector_file_set.id, child_resource.id])
 
-      type = described_class.new(vector_resource, {})
+      type = make_graphql_object(described_class, vector_resource, {})
 
       expect(type.members.map(&:id)).to eq [metadata_file_set.id, vector_file_set.id, child_resource.id]
     end

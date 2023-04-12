@@ -8,11 +8,11 @@ class Types::ScannedMapType < Types::BaseObject
   field :source_metadata_identifier, String, null: true
 
   def viewing_hint
-    Array.wrap(super).first
+    Array.wrap(object.viewing_hint).first
   end
 
   def viewing_direction
-    Array.wrap(super).first
+    Array.wrap(object.viewing_direction).first
   end
 
   # Use decorated resource to include portion note in title

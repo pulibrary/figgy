@@ -22,10 +22,8 @@ class ChangeSetPersister
 
     def proxy_file_sets
       @proxy_file_sets ||=
-        begin
-          file_sets.map do |file_set|
-            persister.save(resource: ProxyFileSet.new(proxied_file_id: file_set.id, label: file_set.title))
-          end
+        file_sets.map do |file_set|
+          persister.save(resource: ProxyFileSet.new(proxied_file_id: file_set.id, label: file_set.title))
         end
     end
 

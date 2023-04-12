@@ -11,11 +11,11 @@ class Types::Numismatics::CoinType < Types::BaseObject
   end
 
   def viewing_hint
-    Array.wrap(super).first
+    Array.wrap(object.viewing_hint).first
   end
 
   def viewing_direction
-    Array.wrap(super).first
+    Array.wrap(object.viewing_direction).first
   end
 
   def label
