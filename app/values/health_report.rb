@@ -26,7 +26,7 @@ class HealthReport
     @checks ||=
       self.class.check_classes.map do |check_class|
         check_class.for(resource)
-      end
+      end.select(&:valid?)
   end
 
   private

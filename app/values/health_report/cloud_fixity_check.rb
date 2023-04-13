@@ -9,6 +9,10 @@ class HealthReport::CloudFixityCheck
     @resource = resource
   end
 
+  def valid?
+    ChangeSet.for(resource).try(:preserve?)
+  end
+
   def status
     @status ||=
       if fixity_map[0]&.positive?

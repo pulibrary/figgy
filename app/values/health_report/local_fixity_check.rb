@@ -9,6 +9,10 @@ class HealthReport::LocalFixityCheck
     @resource = resource
   end
 
+  def valid?
+    true
+  end
+
   def type
     I18n.t("health_status.local_fixity_check.type")
   end

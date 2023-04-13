@@ -12,9 +12,19 @@ RSpec.describe HealthReport do
         expect(report.status).to eq :healthy
       end
     end
+    context "for a resource not yet marked complete" do
+      it "only checks local fixity" do
+        resource = FactoryBot.create_for_repository(:pending_scanned_resource)
+
+        report = described_class.for(resource)
+
+        expect(report.checks.length).to eq 1
+        expect(report.checks.first.type).to eq "Local Fixity"
+      end
+    end
     context "for a resource with a successful local fixity event" do
       it "returns :healthy" do
-        fs1 = FactoryBot.create_for_repository(:original_file_file_set)
+        fs1 = create_file_set(cloud_fixity_success: true)
         FactoryBot.create(:local_fixity_success, resource_id: fs1.id)
         resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id])
 
@@ -32,7 +42,7 @@ RSpec.describe HealthReport do
       it "returns :needs_attention" do
         fs1 = FactoryBot.create_for_repository(:original_file_file_set)
         FactoryBot.create(:local_fixity_failure, resource_id: fs1.id)
-        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id])
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
         report = described_class.for(resource)
 
@@ -47,7 +57,7 @@ RSpec.describe HealthReport do
     context "for a resource with a failed cloud fixity event" do
       it "returns :needs_attention" do
         fs1 = create_file_set(cloud_fixity_success: false)
-        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id])
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
         report = described_class.for(resource)
 
@@ -62,7 +72,7 @@ RSpec.describe HealthReport do
     context "for a resource that hasn't preserved yet" do
       it "returns :in_progress" do
         fs1 = FactoryBot.create_for_repository(:file_set)
-        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id])
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
         report = described_class.for(resource)
 
@@ -77,7 +87,7 @@ RSpec.describe HealthReport do
     context "for a resource with a successful cloud fixity event" do
       it "returns :healthy" do
         fs1 = create_file_set(cloud_fixity_success: true)
-        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id])
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
         report = described_class.for(resource)
 
