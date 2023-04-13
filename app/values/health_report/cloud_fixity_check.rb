@@ -25,8 +25,23 @@ class HealthReport::CloudFixityCheck
       end
   end
 
+  # This code also exists in resource_decorator.rb, but might be removed in the
+  # future - so duplicated here.
   def fixity_map
-    @fixity_map ||= resource.decorate.cloud_fixity_map
+    return {} unless resource.decorate.respond_to?(:file_sets)
+    unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count
+    @cloud_fixity_map ||=
+      begin
+        m = {}
+        m[0] = wayfinder.deep_failed_cloud_fixity_count if wayfinder.deep_failed_cloud_fixity_count.positive?
+        m[1] = wayfinder.deep_succeeded_cloud_fixity_count if wayfinder.deep_succeeded_cloud_fixity_count.positive?
+        m[nil] = unknown_count if unknown_count.positive?
+        m
+      end
+  end
+
+  def wayfinder
+    @wayfinder ||= Wayfinder.for(resource)
   end
 
   def type
