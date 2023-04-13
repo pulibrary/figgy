@@ -127,7 +127,7 @@ class ManifestBuilder
     def ranges
       return audio_ranges if audio_manifest?
       logical_structure.map do |top_structure|
-        TopStructure.new(top_structure)
+        TopStructure.new(top_structure, resource)
       end
     end
 
@@ -523,19 +523,23 @@ class ManifestBuilder
   ##
   # Presenter modeling the top node of nested structure resource trees
   class TopStructure
-    attr_reader :structure
+    attr_reader :structure, :resource
 
     ##
     # @param [Hash] structure the top structure node
-    def initialize(structure)
+    def initialize(structure, resource = nil)
       @structure = structure
+      @resource = resource
     end
 
     ##
-    # Retrieve the label for the Structure
-    # @return [String]
+    # Retrieve the label for the Structure. If it's RTL return it as an RDF
+    # Literal
+    # @return [String, RDF::Literal]
     def label
-      structure.label.to_sentence
+      return structure_label unless structure_label.dir == "rtl"
+      return structure_label unless resource&.decorate&.imported_attribute(:language)
+      RDF::Literal.new(structure_label, language: resource.decorate.imported_attribute(:language).first)
     end
 
     ##
@@ -543,7 +547,7 @@ class ManifestBuilder
     # @return [TopStructure]
     def ranges
       @ranges ||= structure.nodes.select { |x| x.proxy.blank? }.map do |node|
-        TopStructure.new(node)
+        TopStructure.new(node, resource)
       end
     end
 
@@ -553,6 +557,10 @@ class ManifestBuilder
       @file_set_presenters ||= structure.nodes.select { |x| x.proxy.present? }.map do |node|
         LeafStructureNode.new(node)
       end
+    end
+
+    def structure_label
+      structure.label.to_sentence
     end
   end
 
