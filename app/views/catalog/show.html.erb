@@ -2,14 +2,10 @@
   <div id="appliedParams" class="clearfix constraints-container">
     <%= render 'start_over' %>
     <%= link_back_to_catalog class: 'btn btn-outline-secondary' %>
-    <div id="health-status">
-      Sup
-    </div>
+    <%= render "health_status" %>
   </div>
 <% else %>
-    <div id="health-status">
-      Sup
-    </div>
+  <%= render "health_status" %>
 <% end %>
 
 <%= render 'show_main_content' %>
