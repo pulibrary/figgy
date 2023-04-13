@@ -68,7 +68,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
   end
 
   def cloud_fixity_map
-    return [] unless respond_to?(:file_sets)
+    return {} unless respond_to?(:file_sets)
     unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count
     @cloud_fixity_map ||=
       begin
