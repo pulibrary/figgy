@@ -875,6 +875,13 @@ RSpec.describe CatalogController, type: :controller do
         expect(response.body).to have_selector "h2", text: "Playlists"
         expect(response.body).to have_link playlist.title.first, href: "/catalog/#{playlist.id}"
       end
+      it "renders a Health Report" do
+        resource = persister.save(resource: FactoryBot.build(:complete_open_scanned_resource))
+
+        get :show, params: { id: resource.id.to_s }
+
+        expect(response.body).to have_content "Preservation Status: Healthy"
+      end
     end
 
     context "when logged in as a campus patron" do

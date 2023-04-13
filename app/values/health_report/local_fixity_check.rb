@@ -9,6 +9,10 @@ class HealthReport::LocalFixityCheck
     @resource = resource
   end
 
+  def type
+    I18n.t("health_status.local_fixity_check.type")
+  end
+
   def status
     @status ||=
       if Wayfinder.for(resource).try(:deep_failed_local_fixity_count)&.positive?
@@ -16,5 +20,9 @@ class HealthReport::LocalFixityCheck
       else
         :healthy
       end
+  end
+
+  def summary
+    I18n.t("health_status.local_fixity_check.summary.#{status}")
   end
 end

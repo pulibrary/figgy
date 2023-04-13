@@ -74,6 +74,10 @@ module ApplicationHelper
     @document.resource
   end
 
+  def health_report
+    @health_report ||= HealthReport.for(resource)
+  end
+
   def build_authorized_link
     viewer_url = "#{root_url}viewer#?manifest=#{polymorphic_url([:manifest, resource], auth_token: resource.auth_token)}"
     link_to viewer_url, viewer_url

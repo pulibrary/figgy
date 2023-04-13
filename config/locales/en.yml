@@ -162,6 +162,26 @@ en:
     published:
       label: 'Published'
       desc: 'Published and accessible according to access control rules'
+  health_status:
+    status:
+      healthy:
+        icon_color: 'green'
+        icon: 'report-healthy'
+        label: "Healthy"
+      needs_attention:
+        icon_color: 'red'
+        icon: 'report-unhealthy'
+        label: "Needs Attention"
+    local_fixity_check:
+      type: 'Local Fixity'
+      summary:
+        healthy: 'All local file checksums are verified.'
+        needs_attention: 'One or more files failed Local Fixity Checks. Contact DLS with a link to this resource via #digital-library.'
+    cloud_fixity_check:
+      type: 'Cloud Fixity'
+      summary:
+        healthy: 'All files are preserved and their checksums verified.'
+        needs_attention: 'One or more files failed Cloud Fixity Checks. Contact DLS with a link to this resource via #digital-library.'
   notices:
     harmful_content:
       heading: "Content Warning"

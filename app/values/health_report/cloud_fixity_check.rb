@@ -17,4 +17,12 @@ class HealthReport::CloudFixityCheck
         :healthy
       end
   end
+
+  def type
+    I18n.t("health_status.cloud_fixity_check.type")
+  end
+
+  def summary
+    I18n.t("health_status.cloud_fixity_check.summary.#{status}")
+  end
 end
