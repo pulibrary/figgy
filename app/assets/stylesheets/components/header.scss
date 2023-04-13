@@ -90,6 +90,9 @@
   align-self: end;
 }
 #healthModal {
+  img {
+    height: 60px;
+  }
   .check {
     display: flex;
     margin-bottom: 25px;

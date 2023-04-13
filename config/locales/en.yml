@@ -172,6 +172,10 @@ en:
         icon_color: 'red'
         icon: 'report-unhealthy'
         label: "Needs Attention"
+      in_progress:
+        icon_color: 'orange'
+        icon: 'report-unhealthy'
+        label: "In Progress"
     local_fixity_check:
       type: 'Local Fixity'
       summary:
@@ -182,6 +186,7 @@ en:
       summary:
         healthy: 'All files are preserved and their checksums verified.'
         needs_attention: 'One or more files failed Cloud Fixity Checks. Contact DLS with a link to this resource via #digital-library.'
+        in_progress: "One or more files are in the process of being preserved. If this doesn't resolve itself, contact DLS with a link to this resource via #digital-library."
   notices:
     harmful_content:
       heading: "Content Warning"

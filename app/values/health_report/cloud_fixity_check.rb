@@ -11,11 +11,17 @@ class HealthReport::CloudFixityCheck
 
   def status
     @status ||=
-      if Wayfinder.for(resource).try(:deep_failed_cloud_fixity_count)&.positive?
+      if fixity_map[0]&.positive?
         :needs_attention
+      elsif fixity_map[nil]&.positive?
+        :in_progress
       else
         :healthy
       end
+  end
+
+  def fixity_map
+    @fixity_map ||= resource.decorate.cloud_fixity_map
   end
 
   def type

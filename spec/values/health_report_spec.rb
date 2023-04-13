@@ -59,6 +59,21 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.summary).to start_with "One or more files failed Cloud Fixity Checks."
       end
     end
+    context "for a resource that hasn't preserved yet" do
+      it "returns :in_progress" do
+        fs1 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id])
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :in_progress
+        # Second check is cloud fixity
+        cloud_fixity_report = report.checks.second
+        expect(cloud_fixity_report.type).to eq "Cloud Fixity"
+        expect(cloud_fixity_report.status).to eq :in_progress
+        expect(cloud_fixity_report.summary).to start_with "One or more files are in the process of being preserved."
+      end
+    end
     context "for a resource with a successful cloud fixity event" do
       it "returns :healthy" do
         fs1 = create_file_set(cloud_fixity_success: true)
