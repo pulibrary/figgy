@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Checks that local fixity checks for all sub-files are reporting success.
 class HealthReport::LocalFixityCheck
   def self.for(resource)
     new(resource: resource)

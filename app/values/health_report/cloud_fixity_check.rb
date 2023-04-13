@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Checks that cloud fixity has run for all sub-files and that preservation is complete.
 class HealthReport::CloudFixityCheck
   def self.for(resource)
     new(resource: resource)
