@@ -34,7 +34,6 @@
                 <th>Title</th>
                 <th>Date Uploaded</th>
                 <th>Visibility</th>
-                <th>Local Fixity</th>
                 <th>Actions</th>
                 </tr>
               </thead>
@@ -47,7 +46,6 @@
                     <td><%= resource.first_title %></td>
                     <td><%= resource.created_at %></td>
                     <td><%= resource.visibility_badge.first.html_safe %></td>
-                    <td><%= resource.fixity_badges.html_safe %></td>
                     <td>
                       <%= link_to 'View', resource_url, class: 'btn btn-secondary' %>
                       <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-secondary' %>
