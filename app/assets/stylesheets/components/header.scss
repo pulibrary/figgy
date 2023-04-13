@@ -84,3 +84,8 @@
     font-style:italic;
   }
 }
+#health-status {
+  flex-grow: 1;
+  text-align: right;
+  align-self: center;
+}

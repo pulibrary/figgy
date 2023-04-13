@@ -22,12 +22,10 @@ class HealthReport
     :needs_attention
   end
 
-  private
-
-    def checks
-      @checks ||=
-        self.class.check_classes.map do |check_class|
-          check_class.for(resource)
-        end
-    end
+  def checks
+    @checks ||=
+      self.class.check_classes.map do |check_class|
+        check_class.for(resource)
+      end
+  end
 end
