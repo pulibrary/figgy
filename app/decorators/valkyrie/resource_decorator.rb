@@ -86,18 +86,6 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     end.join(" ")
   end
 
-  def fixity_summary
-    fixity_map.map do |status, count|
-      h.format_fixity_status(status, count)
-    end.join(" ")
-  end
-
-  def cloud_fixity_summary
-    cloud_fixity_map.map do |status, count|
-      h.format_fixity_status(status, count)
-    end.join(" ")
-  end
-
   def header
     merged_titles
   end

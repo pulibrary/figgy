@@ -25,8 +25,6 @@ class HealthReport::CloudFixityCheck
       end
   end
 
-  # This code also exists in resource_decorator.rb, but might be removed in the
-  # future - so duplicated here.
   def fixity_map
     return {} unless resource.decorate.respond_to?(:file_sets)
     unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count

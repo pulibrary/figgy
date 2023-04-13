@@ -167,10 +167,6 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector "th", text: "Holding Location"
       expect(rendered).not_to have_selector ".holding_location"
       expect(rendered).not_to have_selector "th", text: "Rendered Holding Location"
-
-      # Fixity
-      expect(rendered).to have_selector "th", text: "Local Fixity"
-      expect(rendered).to have_selector "span.badge-primary.fixity-count", text: "1"
     end
   end
 
