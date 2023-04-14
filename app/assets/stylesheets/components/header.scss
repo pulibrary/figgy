@@ -84,25 +84,3 @@
     font-style:italic;
   }
 }
-#health-status {
-  flex-grow: 1;
-  text-align: right;
-  align-self: end;
-}
-#healthModal {
-  img {
-    height: 60px;
-  }
-  .check {
-    display: flex;
-    margin-bottom: 25px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-    .check-status {
-      flex-grow: 1;
-      text-align: left;
-      padding: 10px;
-    }
-  }
-}
