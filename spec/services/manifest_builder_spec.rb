@@ -1010,4 +1010,44 @@ RSpec.describe ManifestBuilder do
       expect(geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
     end
   end
+
+  context "when the structure has labels in arabic" do
+    let(:structure) do
+      {
+        "label": "Logical",
+        "nodes": [
+          {
+            "label": "الجزؤ العاشر من كتاب الاستيعاب",
+            "nodes": [
+              {
+                "proxy": resource1.id
+              }
+            ]
+          },
+          {
+            "label": "فائدة",
+            "nodes": [
+              {
+                "proxy": resource2.id
+              }
+            ]
+          }
+        ]
+      }
+    end
+    let(:imported_metadata) { [{ language: "ara" }] }
+    let(:resource1) { FactoryBot.create_for_repository(:original_image_file_set) }
+    let(:resource2) { FactoryBot.create_for_repository(:original_image_file_set) }
+    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource1.id, resource2.id], logical_structure: structure, imported_metadata: imported_metadata) }
+
+    # TODO: I think marc uses 3-character language codes but rdf literal
+    # language tags use 2-char codes -- will UV read it anyway?
+    it "sets the label as an RDF literal" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["structures"][0]["label"]).to eq("Logical")
+      expect(output["structures"][1]["label"]).to eq({ "@language" => "ara", "@value" => "الجزؤ العاشر من كتاب الاستيعاب" })
+      expect(output["structures"][2]["label"]).to eq({ "@language" => "ara", "@value" => "فائدة" })
+    end
+  end
 end

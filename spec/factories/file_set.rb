@@ -16,6 +16,10 @@ FactoryBot.define do
       file_metadata { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
     end
 
+    factory :original_image_file_set do
+      file_metadata { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "image/tiff") }
+    end
+
     factory :geo_metadata_file_set do
       file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_metadata_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
     end
