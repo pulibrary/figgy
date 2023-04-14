@@ -27,18 +27,6 @@
           </tr>
         <% end %>
       <% end %>
-      <% if resource.decorate.respond_to?(:file_sets) %>
-        <tr>
-          <th>Local Fixity</th>
-          <td><%= document.decorated_resource.fixity_summary.html_safe %></td>
-        </tr>
-        <% if @change_set.try(:preserve?) %>
-          <tr>
-            <th>Cloud Fixity Status</th>
-            <td><%= document.decorated_resource.cloud_fixity_summary.html_safe %></td>
-          </tr>
-        <% end %>
-      <% end %>
     </tbody>
   </table>
 </div>

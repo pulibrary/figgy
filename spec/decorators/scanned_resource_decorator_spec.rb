@@ -264,88 +264,12 @@ RSpec.describe ScannedResourceDecorator do
     expect(decorator.downloadable).to eq ["public"]
   end
 
-  describe "#fixity_map" do
-    context "when there's a failed FileSet" do
-      it "returns 0 => 1" do
-        file_set = FactoryBot.create_for_repository(
-          :file_set,
-          file_metadata: {
-            fixity_success: 0,
-            use: Valkyrie::Vocab::PCDMUse.OriginalFile
-          }
-        )
-        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: file_set.id)
-
-        decorator = described_class.new(resource)
-
-        expect(decorator.fixity_map).to eq(0 => 1)
-      end
-    end
-    context "when there's a successful file set" do
-      it "returns 1 => 1" do
-        file_set = FactoryBot.create_for_repository(
-          :file_set,
-          file_metadata: {
-            fixity_success: 1,
-            use: Valkyrie::Vocab::PCDMUse.OriginalFile
-          }
-        )
-        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: file_set.id)
-
-        decorator = described_class.new(resource)
-
-        expect(decorator.fixity_map).to eq(1 => 1)
-      end
-    end
-  end
-
   describe "#notice_type" do
     let(:resource) do
       FactoryBot.build(:scanned_resource, notice_type: "senior_thesis")
     end
     it "displays the label" do
       expect(described_class.new(resource).notice_type).to eq "Senior Thesis"
-    end
-  end
-
-  describe "#cloud_fixity_summary" do
-    it "returns a cloud fixity summary" do
-      fs1 = create_file_set(cloud_fixity_success: false)
-      fs2 = create_file_set(cloud_fixity_success: false)
-      fs3 = create_file_set(cloud_fixity_success: false)
-      ok_fs = create_file_set(cloud_fixity_success: true)
-      unchecked_fs = FactoryBot.create_for_repository(:file_set)
-      # Unrelated FS
-      create_file_set(cloud_fixity_success: false)
-      volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id, unchecked_fs.id])
-      volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
-      mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
-
-      decorator = described_class.new(mvw)
-
-      expect(decorator.cloud_fixity_summary).to eq(
-        "<div>failed <span title=\"failed\" class=\"fixity-count badge badge-warning\">3</span></div>" \
-        " <div>succeeded <span title=\"succeeded\" class=\"fixity-count badge badge-primary\">1</span></div>" \
-        " <div>in progress <span title=\"in progress\" class=\"fixity-count badge badge-info\">1</span></div>"
-      )
-    end
-
-    def create_file_set(cloud_fixity_success: true)
-      file_set = FactoryBot.create_for_repository(:file_set)
-      metadata_node = FileMetadata.new(id: SecureRandom.uuid)
-      preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
-      if cloud_fixity_success
-        # Create an old failure, to guard for the case where it failed and we
-        # fixed it.
-        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node, current: true)
-      else
-        # Create an old success, to guard for the case where it once succeeded
-        # and now it failed.
-        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-        FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node, current: true)
-      end
-      file_set
     end
   end
 end

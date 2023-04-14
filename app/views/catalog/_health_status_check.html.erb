@@ -1,0 +1,9 @@
+          <div class="check">
+            <lux-icon-base width="50" height="50" icon-color="<%= t("health_status.status.#{check.status}.icon_color") %>">
+              <lux-icon-<%= t("health_status.status.#{check.status}.icon") %>></lux-icon-<%= t("health_status.status.#{check.status}.icon") %>>
+            </lux-icon-base>
+            <div class="check-status">
+              <h6><%= check.type %> Status: <%= t("health_status.status.#{check.status}.label") %></h6>
+              <small><%= check.summary %></small>
+            </div>
+          </div>

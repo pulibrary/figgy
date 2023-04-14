@@ -7565,7 +7565,7 @@ long@^4.0.0:
   resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
   integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
 
-loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.4.0:
+loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -7599,10 +7599,10 @@ lru-cache@^7.4.4, lru-cache@^7.5.1, lru-cache@^7.7.1:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.13.1.tgz#267a81fbd0881327c46a81c5922606a2cfe336c4"
   integrity sha512-CHqbAq7NFlW3RSnoWXLJBxCWaZVBrfa9UEHId2M3AW8iEBurbqduNexEUCGc3SHc6iCYXNJCDi903LajSVAEPQ==
 
-lux-design-system@4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-4.0.2.tgz#5f104bd3f09e2b772112ce643a5739204606c606"
-  integrity sha512-C0SBB4Dbc1/DNmuYidyt4SPTgumAhms0XLNa4VH04KW9W1pCISJjWVLYXUhwbJJ6iJjGv4544aqYFf3ZtpridA==
+lux-design-system@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-4.2.0.tgz#30e3b7f9a10bfd5f68fa6ec69106c12b5b909562"
+  integrity sha512-YEopvRTJSnC2kciXZ6qPyJRzPymo9QvLXBZfKzZZB2gofEee5aX03Pw44GOmMbfa45LcbsBck5WYoIyzCZ4j1w==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.4.5"
@@ -7615,9 +7615,9 @@ lux-design-system@4.0.2:
     v-calendar "^0.9.7"
     vue "^2.5.18"
     vue-cookies "^1.7.4"
-    vue-focus "^2.1.0"
     vue-lodash "^2.0.0"
     vue-meta "^1.5.6"
+    vue-multiselect "^2.1.7"
     vue-router "^3.0.2"
     vuedraggable "^2.16.0"
     vuex "^3.0.1"
@@ -12049,13 +12049,6 @@ vue-eslint-parser@^5.0.0:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
-vue-focus@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/vue-focus/-/vue-focus-2.1.0.tgz#7a0337ce9074d5ef03d15a4b5b862cf45e5e04e3"
-  integrity sha512-4eUqO1fPEpzXyNlyjFvDbwZ3lU28k24vURbx90mG0VlQGuk2CdXdWxxjAR8nmOVb8oWbm0xX+968BpbRy2qzCw==
-  dependencies:
-    loose-envify "^1.2.0"
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
@@ -12103,6 +12096,11 @@ vue-meta@^1.5.6:
     lodash.isplainobject "^4.0.6"
     lodash.uniqueid "^4.0.1"
     object-assign "^4.1.1"
+
+vue-multiselect@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/vue-multiselect/-/vue-multiselect-2.1.7.tgz#f27afe3d46482b94810382af7a4826219255c47d"
+  integrity sha512-KIegcN+Ntwg3cbkY/jhw2s/+XJUM0Lpi/LcKFYCS8PrZHcWBl2iKCVze7ZCnRj3w8H7/lUJ9v7rj9KQiNxApBw==
 
 vue-router@^3.0.2:
   version "3.5.4"

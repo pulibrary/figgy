@@ -1,0 +1,23 @@
+<div id="health-status">
+  <a href="#" data-toggle="modal" data-target="#healthModal">
+    <lux-icon-base icon-color="<%= t("health_status.status.#{health_report.status}.icon_color") %>">
+      <lux-icon-<%= t("health_status.status.#{health_report.status}.icon") %>></lux-icon-<%= t("health_status.status.#{health_report.status}.icon") %>>
+    </lux-icon-base>
+    Preservation Status: <%= t("health_status.status.#{health_report.status}.label") %>
+  </a>
+  <div class="modal" tabindex="-1" role="dialog" id="healthModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><%= image_tag "health-report-graphic.svg" %> Resource Health Report</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= render partial: "health_status_check", collection: health_report.checks, as: :check %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -36,12 +36,4 @@ module FixityDashboardHelper
       "primary"
     end
   end
-
-  def format_fixity_status(val, count)
-    tag.div "#{format_fixity_success(val)} #{format_fixity_count(val, count)}".html_safe
-  end
-
-  def format_fixity_count(val, count)
-    tag.span count, title: format_fixity_success(val), class: ["fixity-count", "badge", "badge-#{fixity_success_level(val)}"]
-  end
 end
