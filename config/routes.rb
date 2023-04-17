@@ -79,6 +79,7 @@ Rails.application.routes.draw do
         get :file_manager
         get :order_manager
         get :structure
+        get :struct_manager
         get :manifest, defaults: { format: :json }
         post :server_upload
         get :pdf
