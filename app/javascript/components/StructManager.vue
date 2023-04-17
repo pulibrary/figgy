@@ -146,6 +146,11 @@ export default {
 }
 </script>
 <style lang="scss">
+.lux-resourceTitle {
+  background-color: grey;
+  margin-bottom: 10em;
+}
+
 .lux-title {
   font-weight: bold;
 }
@@ -165,7 +170,7 @@ export default {
 .lux-sidePanel {
   position: absolute;
   top: 20px;
-  right: 10px;
+  left: 0px;
   height: 95%;
   width: 28.5%;
   border: 1px solid #ddd;
@@ -181,13 +186,13 @@ export default {
 .lux-galleryPanel {
   position: absolute;
   top: 20px;
-  left: 0;
+  right: 10px;
   height: 95%;
   width: 70%;
   border-radius: 4px;
   border: 1px solid #ddd;
 }
-.lux-galleryPanel .lux-icon {
+.lux-icon {
   margin: auto;
 }
 .lux-galleryWrapper {
