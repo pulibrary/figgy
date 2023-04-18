@@ -12,6 +12,7 @@ class DraftCompleteWorkflow < BaseWorkflow
     # ingest workflow
     event :make_complete do
       transitions from: :draft, to: :complete
+      transitions from: :complete_when_processed, to: :complete
     end
     event :make_draft do
       transitions from: :complete, to: :draft
