@@ -4,21 +4,13 @@
     :class="['lux-toolbar']"
   >
     <dropdown-menu
-      button-label="Selection Options"
+      class="dropdown"
+      button-label="Actions"
       :menu-items="[
-        {name: 'All', component: 'All'},
-        {name: 'None', component: 'None'},
-        {name: 'Alternate', component: 'Alternate', disabled: true},
-        {name: 'Inverse', component: 'Inverse'}
-      ]"
-      @menu-item-clicked="menuSelection($event)"
-    />
-    <dropdown-menu
-      button-label="With Selected..."
-      :menu-items="[
-        {name: 'Cut', component: 'Cut', disabled: isCutDisabled()},
-        {name: 'Paste Before', component: 'Paste Before', disabled: isPasteDisabled()},
-        {name: 'Paste After', component: 'Paste After', disabled: isPasteDisabled()}
+        {name: 'Create New Folder', component: 'FolderCreate'},
+        {name: 'Delete Folder', component: 'FolderDelete'},
+        {name: 'Cut', component: 'Cut', disabled: true},
+        {name: 'Paste', component: 'Paste'}
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
@@ -188,6 +180,8 @@ export default {
 }
 
 .lux-zoom-slider {
+  margin-top: -10px;
+
   .lux-svg-icon,
   input {
     vertical-align: middle;
@@ -209,5 +203,8 @@ export default {
     width: 1px;
     overflow: hidden;
   }
+}
+.dropdown {
+  top: 10px;
 }
 </style>
