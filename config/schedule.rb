@@ -36,6 +36,10 @@ every :hour, roles: [:db] do
   rake "figgy:cdl:automatic_completion"
 end
 
+every 30.minutes, roles: [:db] do
+  rake "figgy:auto_complete:run"
+end
+
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"
