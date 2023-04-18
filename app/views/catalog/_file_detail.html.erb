@@ -1,5 +1,19 @@
       <td><%= file.updated_at.strftime("%b %d, %Y @ %I:%M %P") %></td>
-      <td><%= format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) %>
+      <td>
+        <% if resource.decorate.local_fixity_success_of(file.id).nil? %>
+          <lux-icon-base width="30" height="30" icon-name="approved" icon-color="yellow">
+            <lux-icon-approved></lux-icon-approved>
+          </lux-icon-base>
+        <% elsif resource.decorate.local_fixity_success_of(file.id) == 1 %>
+          <lux-icon-base width="30" height="30" icon-name="approved" icon-color="green">
+            <lux-icon-approved></lux-icon-approved>
+          </lux-icon-base>
+        <% elsif resource.decorate.local_fixity_success_of(file.id) == 0 %>
+          <lux-icon-base width="30" height="30" icon-name="approved" icon-color="red">
+            <lux-icon-approved></lux-icon-approved>
+          </lux-icon-base>
+        <% end %>
+          <%= format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) %>
           <br/>Last Success: <%= resource.decorate.local_fixity_last_success_date_of(file.id) %></td>
       <td><%= format_cloud_fixity_success(resource.decorate.cloud_fixity_success_of(file.id)) %>
           <br/>Last Success: <%= resource.decorate.cloud_fixity_last_success_date_of(file.id) %></td>

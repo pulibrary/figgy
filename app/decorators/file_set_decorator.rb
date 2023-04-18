@@ -78,7 +78,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   end
 
   def deprecated_fixity_last_success_date
-    return "n/a" unless primary_file.fixity_last_success_date
+    return "Foo n/a" unless primary_file.fixity_last_success_date
     primary_file.fixity_last_success_date.iso8601
   end
 
