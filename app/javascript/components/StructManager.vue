@@ -19,7 +19,7 @@
 <script>
 import { mapState } from 'vuex'
 import Controls from './OrderManagerControls'
-import Toolbar from './OrderManagerToolbar'
+import Toolbar from './StructManagerToolbar'
 import FilesetForm from './OrderManagerFilesetForm'
 import FilesetsForm from './OrderManagerFilesetsForm'
 import ResourceForm from './OrderManagerResourceForm'
