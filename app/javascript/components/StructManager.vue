@@ -3,7 +3,63 @@
     <toolbar @cards-resized="resizeCards($event)" />
     <div
       class="lux-sidePanel"
-    ></div>
+    >
+    <tree
+      selected="C0614_c00002"
+      :json-data='{
+        "id": "C0614",
+        "level": "collection",
+        "component_level": null,
+        "components": [
+          {
+            "id": "C0614_c00001",
+            "level": "Series",
+            "component_level": 1,
+            "reference": "C0614_c00001",
+            "components": [
+              {
+                "id": "C0614_c00002",
+                "level": "Subseries",
+                "component_level": 2,
+                "reference": "C0614_c00002",
+                "components": [
+                  {
+                    "id": "C0614_c00003",
+                    "level": "File",
+                    "component_level": 3,
+                    "reference": "C0614_c00003",
+                    "components": [],
+                    "title": [
+                      "General Writings 1"
+                    ]
+                  },
+                  {
+                    "id": "C0614_c00004",
+                    "level": "File",
+                    "component_level": 3,
+                    "reference": "C0614_c00004",
+                    "components": [],
+                    "title": [
+                      "General Writings 2"
+                    ]
+                  }
+                ],
+                "title": [
+                  "Writings"
+                ]
+              }
+            ],
+            "title": [
+              "Papers of Francis Preston Blair"
+            ]
+          }
+        ],
+        "title": [
+          "Blair and Lee Family Papers"
+        ]
+      }'>
+      </tree>
+    </div>
     <div
       class="lux-galleryPanel"
       >
@@ -19,6 +75,7 @@
 <script>
 import { mapState } from 'vuex'
 import Toolbar from './StructManagerToolbar'
+import Tree from './Tree'
 
 /**
  * OrderManager is a tool for reordering thumbnails that represent members of a complex object (a book, CD, multi-volume work, etc.).
@@ -36,6 +93,7 @@ export default {
   type: 'Pattern',
   components: {
     'toolbar': Toolbar,
+    'tree': Tree,
   },
   props: {
     /**
@@ -155,7 +213,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: 4px;
 
-  padding: 0 30px 0 30px;
+  padding: 0 5px 0 5px;
   // height: 100%;
   overflow-y: scroll;
 }
