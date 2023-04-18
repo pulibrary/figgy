@@ -6,6 +6,7 @@
 class DraftCompleteWorkflow < BaseWorkflow
   aasm do
     state :draft, initial: true
+    state :complete_when_processed
     state :complete
 
     # ingest workflow

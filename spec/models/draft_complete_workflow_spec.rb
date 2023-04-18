@@ -27,7 +27,7 @@ describe DraftCompleteWorkflow do
   end
 
   it "reports valid states" do
-    expect(workflow.valid_states).to eq %w[draft complete]
+    expect(workflow.valid_states).to eq %w[draft complete_when_processed complete]
   end
 
   describe "access states" do

@@ -9,6 +9,7 @@ class BookWorkflow < BaseWorkflow
     state :pending, initial: true
     state :metadata_review
     state :final_review
+    state :complete_when_processed
     state :complete
     state :takedown
     state :flagged
