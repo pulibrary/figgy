@@ -56,7 +56,7 @@ export default {
 
 <style lang="scss" scoped>
 .lux-tree {
-  margin-left: -40px;
+  margin-left: -50px;
 }
 .lux-tree.lux-button.icon.small {
   padding: 0px;

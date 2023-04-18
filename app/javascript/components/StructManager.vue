@@ -4,6 +4,9 @@
     <div
       class="lux-sidePanel"
     >
+    <div class="panelHeader">
+      <heading level="h2" size="h6">Table of Contents</heading>
+    </div>
     <tree
       selected="C0614_c00002"
       :json-data='{
@@ -63,6 +66,9 @@
     <div
       class="lux-galleryPanel"
       >
+      <div class="panelHeader">
+        <heading level="h2" size="h6">Unstructured Files</heading>
+      </div>
       <gallery
         class="lux-galleryWrapper"
         :card-pixel-width="cardPixelWidth"
@@ -257,5 +263,16 @@ export default {
 }
 .loader .galleryLoader .lux-loader {
   margin: auto;
+}
+.panelHeader {
+  background-color: #e1f1fd;
+  border-radius: 4px;
+  padding: .5em .5em .5em 1em;
+  margin: .5em;
+
+  h2 {
+    font-size: 12px;
+    color: #333;
+  }
 }
 </style>
