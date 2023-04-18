@@ -127,10 +127,12 @@ class FileAppender
     rescue StandardError => error
       message = "#{self.class}: Failed to append the new file #{original_filename} for #{node.id} to resource #{parent.id}: #{error}"
       # For FileSet parents we're likely attaching a derivative, so let the
-      # error fall through so sidekiq restarts.
+      # error raise so sidekiq restarts.
       raise FileUploadFailed, message if file_set?(parent)
-      # Prevent error fallthrough for resource file attachments - otherwise if
-      # this keeps retrying we'll end up with a bunch of orphan files on disk.
+      # Prevent raising the error for resource file attachments - otherwise if
+      # this keeps retrying (e.g this gets called 6 times by file_nodes and fails on the 5th) we'll end up with a bunch of orphan files on disk
+      # - they've been uploaded to the storage adapter but not associated to a
+      # FileSet.
       Valkyrie.logger.error message
       Honeybadger.notify message
       nil
