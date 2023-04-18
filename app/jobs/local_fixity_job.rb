@@ -35,6 +35,7 @@ class LocalFixityJob < ApplicationJob
         buffered_change_set_persister.save(change_set: previous_event_change_set) if previous_event
         buffered_change_set_persister.save(change_set: event_change_set)
       end
+      RestoreLocalFixityJob.perform_later(file_set_id.to_s) if event_change_set.status == "REPAIRING"
     end
 
     def build_event_change_set(new_checksum)
@@ -42,35 +43,46 @@ class LocalFixityJob < ApplicationJob
         build_success_change_set
       else
         Honeybadger.notify("Local fixity failure on file set #{file_set_id} at location #{file_object.id}")
-        build_failure_change_set(new_checksum)
+        if previous_event&.status == "REPAIRING"
+          build_failure_change_set(new_checksum)
+        else
+          build_repairing_change_set(new_checksum)
+        end
       end
     end
 
     def build_success_change_set
-      change_set = ChangeSet.for(Event.new)
-      change_set.validate(
-        type: :local_fixity,
-        status: "SUCCESS",
-        resource_id: Valkyrie::ID.new(file_set_id),
-        child_id: target_file.id,
-        child_property: :file_metadata,
-        current: true
+      build_change_set(
+        status: "SUCCESS"
       )
-      change_set
     end
 
     def build_failure_change_set(new_checksum)
-      change_set = ChangeSet.for(Event.new)
-      change_set.validate(
-        type: :local_fixity,
+      build_change_set(
         status: "FAILURE",
-        resource_id: Valkyrie::ID.new(file_set_id),
-        child_id: target_file.id,
-        child_property: :file_metadata,
-        message: new_checksum.to_h.to_json,
-        current: true
+        message: new_checksum.to_h.to_json
       )
-      change_set
+    end
+
+    def build_repairing_change_set(new_checksum)
+      build_change_set(
+        status: "REPAIRING",
+        message: new_checksum.to_h.to_json
+      )
+    end
+
+    def build_change_set(status:, message: nil)
+      ChangeSet.for(Event.new).tap do |cs|
+        cs.validate(
+          type: :local_fixity,
+          status: status,
+          resource_id: Valkyrie::ID.new(file_set_id),
+          child_id: target_file.id,
+          child_property: :file_metadata,
+          message: message,
+          current: true
+        )
+      end
     end
 
     def previous_event_change_set

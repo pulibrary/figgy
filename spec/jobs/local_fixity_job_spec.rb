@@ -58,50 +58,113 @@ RSpec.describe LocalFixityJob do
         new_file = File.join(fixture_path, "files/color-landscape.tif")
         FileUtils.cp(new_file, filename)
         allow(Honeybadger).to receive(:notify)
+        allow(RestoreLocalFixityJob).to receive(:perform_later)
       end
 
-      it "creates a failed event and notifies Honeybadger" do
-        described_class.perform_now(file_set_id)
-        fs = query_service.find_by(id: file_set_id)
+      context "when the previous event had status: repairing" do
+        it "creates a failed event and notifies Honeybadger" do
+          FactoryBot.create(:local_fixity_repairing, resource_id: file_set_id, child_id: file_set.original_file.id)
 
-        events = query_service.find_all_of_model(model: Event)
-        expect(events.to_a.length).to eq 1
-        event = events.first
-        expect(event.type).to eq "local_fixity"
-        expect(event.resource_id).to eq fs.id
-        expect(event.status).to eq "FAILURE"
-        expect(JSON.parse(event.message).keys).to eq [
-          "id", "internal_resource", "created_at", "updated_at",
-          "new_record", "sha256", "md5", "sha1"
-        ]
-        expect(Honeybadger).to have_received(:notify)
+          described_class.perform_now(file_set_id)
+          fs = query_service.find_by(id: file_set_id)
+
+          events = query_service.find_all_of_model(model: Event)
+          expect(events.to_a.length).to eq 2
+          event = events.find(&:current)
+          expect(event.type).to eq "local_fixity"
+          expect(event.resource_id).to eq fs.id
+          expect(event.status).to eq "FAILURE"
+          expect(JSON.parse(event.message).keys).to eq [
+            "id", "internal_resource", "created_at", "updated_at",
+            "new_record", "sha256", "md5", "sha1"
+          ]
+          expect(Honeybadger).to have_received(:notify)
+          expect(RestoreLocalFixityJob).not_to have_received(:perform_later)
+        end
+      end
+
+      context "when the previous event had any other status" do
+        it "creates a repairing event, notifies Honeybadger, and starts a restore job" do
+          FactoryBot.create(:local_fixity_success, resource_id: file_set_id, child_id: file_set.original_file.id)
+          described_class.perform_now(file_set_id)
+          fs = query_service.find_by(id: file_set_id)
+
+          events = query_service.find_all_of_model(model: Event)
+          expect(events.to_a.length).to eq 2
+          event = events.find(&:current)
+          expect(event.type).to eq "local_fixity"
+          expect(event.resource_id).to eq fs.id
+          expect(event.status).to eq "REPAIRING"
+          expect(JSON.parse(event.message).keys).to eq [
+            "id", "internal_resource", "created_at", "updated_at",
+            "new_record", "sha256", "md5", "sha1"
+          ]
+          expect(Honeybadger).to have_received(:notify)
+          expect(RestoreLocalFixityJob).to have_received(:perform_later)
+        end
       end
     end
 
-    context "with a preservation file and an intermediate file and the checksum doesn't match" do
+    context "with a preservation file and an intermediate file and one checksum doesn't match" do
       let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
+      before do
+        allow(RestoreLocalFixityJob).to receive(:perform_later)
+      end
 
-      it "creates a local_fixity Event for both files" do
-        allow(Honeybadger).to receive(:notify)
-        IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
+      context "when the previous event had status: repairing" do
+        it "creates one success event and failed event and notifies Honeybadger" do
+          FactoryBot.create(:local_fixity_repairing, resource_id: file_set_id, child_id: file_set.primary_file.id)
+          allow(Honeybadger).to receive(:notify)
+          IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
 
-        fs = query_service.find_by(id: file_set_id)
-        filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
-        new_file = File.join(fixture_path, "files/color-landscape.tif")
-        FileUtils.cp(new_file, filename)
-        described_class.perform_now(file_set_id)
+          fs = query_service.find_by(id: file_set_id)
+          filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
+          new_file = File.join(fixture_path, "files/color-landscape.tif")
+          FileUtils.cp(new_file, filename)
+          described_class.perform_now(file_set_id)
 
-        events = query_service.find_all_of_model(model: Event)
-        expect(events.to_a.length).to eq 2
-        event = events.find { |e| e.status == "FAILURE" }
-        expect(event.type).to eq "local_fixity"
-        expect(event.resource_id).to eq fs.id
-        expect(event.child_id).to eq fs.primary_file.id
-        expect(JSON.parse(event.message).keys).to eq [
-          "id", "internal_resource", "created_at", "updated_at",
-          "new_record", "sha256", "md5", "sha1"
-        ]
-        expect(Honeybadger).to have_received(:notify)
+          events = query_service.find_all_of_model(model: Event)
+          expect(events.to_a.length).to eq 3
+          expect(events.map(&:status)).to contain_exactly("FAILURE", "REPAIRING", "SUCCESS")
+          event = events.find { |e| e.status == "FAILURE" && e.current }
+          expect(event.type).to eq "local_fixity"
+          expect(event.resource_id).to eq fs.id
+          expect(event.child_id).to eq fs.primary_file.id
+          expect(JSON.parse(event.message).keys).to eq [
+            "id", "internal_resource", "created_at", "updated_at",
+            "new_record", "sha256", "md5", "sha1"
+          ]
+          expect(Honeybadger).to have_received(:notify)
+          expect(RestoreLocalFixityJob).not_to have_received(:perform_later)
+        end
+      end
+
+      context "when the previous event had any other status" do
+        it "creates one success event and repairing event, notifies Honeybadger, and starts a restore job" do
+          FactoryBot.create(:local_fixity_failure, resource_id: file_set_id, child_id: file_set.primary_file.id)
+          allow(Honeybadger).to receive(:notify)
+          IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
+
+          fs = query_service.find_by(id: file_set_id)
+          filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
+          new_file = File.join(fixture_path, "files/color-landscape.tif")
+          FileUtils.cp(new_file, filename)
+          described_class.perform_now(file_set_id)
+
+          events = query_service.find_all_of_model(model: Event)
+          expect(events.to_a.length).to eq 3
+          expect(events.map(&:status)).to contain_exactly("FAILURE", "REPAIRING", "SUCCESS")
+          event = events.find { |e| e.status == "REPAIRING" && e.current }
+          expect(event.type).to eq "local_fixity"
+          expect(event.resource_id).to eq fs.id
+          expect(event.child_id).to eq fs.primary_file.id
+          expect(JSON.parse(event.message).keys).to eq [
+            "id", "internal_resource", "created_at", "updated_at",
+            "new_record", "sha256", "md5", "sha1"
+          ]
+          expect(Honeybadger).to have_received(:notify)
+          expect(RestoreLocalFixityJob).to have_received(:perform_later)
+        end
       end
     end
 

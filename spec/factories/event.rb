@@ -29,5 +29,14 @@ FactoryBot.define do
         Valkyrie.config.metadata_adapter.persister.save(resource: instance)
       end
     end
+
+    factory :local_fixity_repairing do
+      type { :local_fixity }
+      status { "REPAIRING" }
+      current { true }
+      to_create do |instance|
+        Valkyrie.config.metadata_adapter.persister.save(resource: instance)
+      end
+    end
   end
 end
