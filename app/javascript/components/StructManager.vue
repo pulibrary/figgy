@@ -1,5 +1,5 @@
 <template>
-  <div class="lux-orderManager">
+  <div class="lux-structManager">
     <toolbar @cards-resized="resizeCards($event)" />
     <div
       class="lux-sidePanel"
@@ -18,11 +18,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import Controls from './OrderManagerControls'
 import Toolbar from './StructManagerToolbar'
-import FilesetForm from './OrderManagerFilesetForm'
-import FilesetsForm from './OrderManagerFilesetsForm'
-import ResourceForm from './OrderManagerResourceForm'
 
 /**
  * OrderManager is a tool for reordering thumbnails that represent members of a complex object (a book, CD, multi-volume work, etc.).
@@ -34,16 +30,12 @@ import ResourceForm from './OrderManagerResourceForm'
  * Vuex module, *resourceModule*. Please see [the state management documentation](/#!/State%20Management) for how to manage state in complex patterns.
  */
 export default {
-  name: 'OrderManager',
+  name: 'StructManager',
   status: 'ready',
   release: '1.0.0',
   type: 'Pattern',
   components: {
     'toolbar': Toolbar,
-    'resource-form': ResourceForm,
-    'filesets-form': FilesetsForm,
-    'fileset-form': FilesetForm,
-    'controls': Controls
   },
   props: {
     /**
@@ -141,16 +133,16 @@ export default {
 .lux-title {
   font-weight: bold;
 }
-.lux-orderManager {
+.lux-structManager {
   position: relative;
   height: 80vh;
 }
-.lux-orderManager .lux-heading {
+.lux-structManager .lux-heading {
   margin: 12px 0 12px 0;
   line-height: 0.75;
   color: #001123;
 }
-.lux-orderManager h2 {
+.lux-structManager h2 {
   letter-spacing: 0;
   font-size: 24px;
 }
