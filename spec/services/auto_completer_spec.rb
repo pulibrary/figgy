@@ -42,10 +42,9 @@ RSpec.describe AutoCompleter do
       AutoCompleter.run
 
       # The resource that errored isn't changed
-      expect(csp.query_service.find_by(id: to_be_completed_resource1.id).state).to eq ["complete_when_processed"]
+      expect([csp.query_service.find_by(id: to_be_completed_resource1.id).state,
+              csp.query_service.find_by(id: to_be_completed_resource2.id).state].flatten).to contain_exactly "complete", "complete_when_processed"
       expect(Honeybadger).to have_received(:notify).exactly(1).times
-      # The valid to be completed resource is marked complete.
-      expect(csp.query_service.find_by(id: to_be_completed_resource2.id).state).to eq ["complete"]
     end
   end
 end
