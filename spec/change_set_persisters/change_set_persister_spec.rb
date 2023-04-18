@@ -243,6 +243,16 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.processing_status).to eq "in process"
       end
     end
+    context "when a storage adapter errors", run_real_derivatives: true do
+      it "lets the error fall through so it retries" do
+        allow(Valkyrie::StorageAdapter.find(:pyramidal_derivatives)).to receive(:upload).and_raise("Broken")
+        resource = FactoryBot.build(:scanned_resource)
+        change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
+        change_set.files = [file]
+
+        expect { change_set_persister.save(change_set: change_set) }.to raise_error(FileAppender::FileUploadFailed)
+      end
+    end
     it "can append files as FileSets", run_real_derivatives: true do
       resource = FactoryBot.build(:scanned_resource)
       change_set = change_set_class.new(resource, characterize: false, ocr_language: ["eng"])
