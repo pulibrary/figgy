@@ -1,31 +1,18 @@
 <template>
   <div class="lux-orderManager">
-    <wrapper
-      :full-width="false"
+    <toolbar @cards-resized="resizeCards($event)" />
+    <div
+      class="lux-sidePanel"
+    ></div>
+    <div
       class="lux-galleryPanel"
-      type="div"
-    >
-      <toolbar @cards-resized="resizeCards($event)" />
-      <div
-        v-if="isLoading"
-        class="loader"
       >
-        <loader
-          size="medium"
-          class="galleryLoader"
-        />
-      </div>
       <gallery
         class="lux-galleryWrapper"
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
       />
-    </wrapper>
-    <wrapper
-      class="lux-sidePanel"
-      type="div"
-      :full-width="false"
-    ></wrapper>
+    </div>
   </div>
 </template>
 
@@ -169,9 +156,9 @@ export default {
 }
 .lux-sidePanel {
   position: absolute;
-  top: 20px;
+  top: 70px;
   left: 0px;
-  height: 95%;
+  height: 85%;
   width: 28.5%;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -185,9 +172,9 @@ export default {
 }
 .lux-galleryPanel {
   position: absolute;
-  top: 20px;
-  right: 10px;
-  height: 95%;
+  top: 70px;
+  left: 30%;
+  height: 85%;
   width: 70%;
   border-radius: 4px;
   border: 1px solid #ddd;
