@@ -116,12 +116,14 @@ ul.lux-tree li {
   list-style-type: none;
   font-family: sans-serif;
   margin: 0px;
+  line-height: 25px;
+  font-size: 12px;
 }
 
 ul.lux-tree li div.lux-item-label {
   background: rgb(186, 175, 130);
   width: 100%;
-  padding: 0.5em 0.5em 0.5em 1em;
+  padding: 0.5em 0.5em .5em 1em;
 }
 
 ul.lux-tree li div.lux-item-label.selected {
