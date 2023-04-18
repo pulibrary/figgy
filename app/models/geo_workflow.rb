@@ -4,6 +4,7 @@ class GeoWorkflow < BaseWorkflow
   aasm do
     state :pending, initial: true
     state :final_review
+    state :complete_when_processed
     state :complete
     state :takedown
     state :flagged
@@ -15,6 +16,7 @@ class GeoWorkflow < BaseWorkflow
     event :make_complete do
       transitions from: :pending, to: :complete
       transitions from: :final_review, to: :complete
+      transitions from: :complete_when_processed, to: :complete
     end
 
     # takedown/restore workflow
