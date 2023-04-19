@@ -14,7 +14,7 @@
         </input-button>
       </div>
       <div
-        @click.capture="select(collection.id, $event)"
+        @click.capture="select(structure.id, $event)"
         :class="[
           'lux-item-label',
           { selected: isSelected },
@@ -32,15 +32,15 @@
           <lux-icon-end-node></lux-icon-end-node>
         </lux-icon-base>
         <div>
-          {{ collection.title[0] }}
+          {{ structure.title[0] }}
         </div>
       </div>
     </div>
     <ul v-show="isOpen && hasChildren">
       <tree-item
-        v-for="(component, index) in collection.components"
-        :json-data="component"
-        :id="component.id"
+        v-for="(folder, index) in structure.folders"
+        :json-data="folder"
+        :id="folder.id"
       ></tree-item>
     </ul>
   </li>
@@ -75,9 +75,9 @@ export default {
   },
   data: function() {
     return {
-      hasChildren: this.jsonData.components.length > 0,
+      hasChildren: this.jsonData.folders.length > 0,
       isOpen: true,
-      collection: this.jsonData,
+      structure: this.jsonData,
     }
   },
   computed: {
