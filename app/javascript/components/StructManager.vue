@@ -9,45 +9,7 @@
     </div>
     <tree
       selected="C0614_c00002"
-      :json-data='{
-        "id": "C0614",
-        "folders": [
-          {
-            "id": "C0614_c00001",
-            "folders": [
-              {
-                "id": "C0614_c00002",
-                "folders": [
-                  {
-                    "id": "C0614_c00003",
-                    "level": "File",
-                    "folders": [],
-                    "title": [
-                      "General Writings 1"
-                    ]
-                  },
-                  {
-                    "id": "C0614_c00004",
-                    "folders": [],
-                    "title": [
-                      "General Writings 2"
-                    ]
-                  }
-                ],
-                "title": [
-                  "Writings"
-                ]
-              }
-            ],
-            "title": [
-              "Papers of Francis Preston Blair"
-            ]
-          }
-        ],
-        "title": [
-          "Blair and Lee Family Papers"
-        ]
-      }'>
+      :json-data="tree.structure">
       </tree>
     </div>
     <div
@@ -97,6 +59,13 @@ export default {
       default: null
     },
     /**
+     * The structure object in json format.
+     */
+    // structureObject: {
+    //  type: Object,
+    //  default: null
+    // },
+    /**
      * The resource id. Requires host app to have async lookup of resource.
      */
     resourceId: {
@@ -111,7 +80,35 @@ export default {
   data: function () {
     return {
       cardPixelWidth: 300,
-      captionPixelPadding: 9
+      captionPixelPadding: 9,
+      structureObject: {
+        "id": "C0614",
+        "folders": [
+          {
+            "id": "C0614_c00001",
+            "folders": [
+              {
+                "id": "C0614_c00002",
+                "folders": [
+                  {
+                    "id": "C0614_c00003",
+                    "folders": [],
+                    "label": "General Writings 1"
+                  },
+                  {
+                    "id": "C0614_c00004",
+                    "folders": [],
+                    "label": "General Writings 2"
+                  }
+                ],
+                "label": "Writings"
+              }
+            ],
+            "label": "Papers of Francis Preston Blair"
+          }
+        ],
+        "label": "Blair and Lee Family Papers"
+      }
     }
   },
   computed: {
@@ -138,6 +135,7 @@ export default {
     },
     ...mapState({
       resource: state => state.ordermanager.resource,
+      tree: state => state.tree,
       gallery: state => state.gallery
     }),
     loading: function () {
@@ -162,6 +160,10 @@ export default {
       this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING')
       this.$store.dispatch('loadImageCollectionGql', resource)
     }
+    if (this.structureObject) {
+      // if props are passed in set the structure on mount
+      this.$store.commit('SET_STRUCTURE', this.structureObject)
+    }
   },
   methods: {
     resizeCards: function (event) {
@@ -181,7 +183,7 @@ export default {
   margin-bottom: 10em;
 }
 
-.lux-title {
+.lux-label {
   font-weight: bold;
 }
 .lux-structManager {

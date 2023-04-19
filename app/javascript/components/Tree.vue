@@ -1,6 +1,6 @@
 <template>
   <ul class="lux-tree">
-    <tree-item :id="structure.id" :json-data="structure" :selected="selected"> </tree-item>
+    <tree-item :id="structure.id" :json-data="tree.structure" :selected="selected"> </tree-item>
   </ul>
 </template>
 
