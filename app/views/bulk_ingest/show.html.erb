@@ -1,7 +1,7 @@
 <h2>Bulk Ingest <%= @resource_class.human_readable_type.pluralize %></h2>
 
 <div class="col-md-12">
-  <%= form_tag polymorphic_path([main_app, :bulk_ingest]), class: "bulk-ingest-form", id: "browse-everything-form" do |f| %>
+  <%= form_tag polymorphic_path([main_app, :bulk_ingest], resource_type: params[:resource_type].to_s), class: "bulk-ingest-form", id: "browse-everything-form" do |f| %>
     <div class="row">
       <div role="main" class="col-xs-12 col-sm-8">
         <div id="metadata" class="form-panel-content">
@@ -23,7 +23,7 @@
               </div>
               <div class="form-group">
                 <div class="form-check">
-                  <%= check_box_tag 'preserve_file_names', class: "form-check-input" %>
+                  <%= check_box_tag 'preserve_file_names', "1", false, class: "form-check-input" %>
                   <label class="form-check-label" for="preserve_file_names">
                     Preserve File Names (prevents naming files 1/2/3 etc)
                   </label>
