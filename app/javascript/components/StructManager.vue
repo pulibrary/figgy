@@ -11,37 +11,24 @@
       selected="C0614_c00002"
       :json-data='{
         "id": "C0614",
-        "level": "collection",
-        "component_level": null,
-        "components": [
+        "folders": [
           {
             "id": "C0614_c00001",
-            "level": "Series",
-            "component_level": 1,
-            "reference": "C0614_c00001",
-            "components": [
+            "folders": [
               {
                 "id": "C0614_c00002",
-                "level": "Subseries",
-                "component_level": 2,
-                "reference": "C0614_c00002",
-                "components": [
+                "folders": [
                   {
                     "id": "C0614_c00003",
                     "level": "File",
-                    "component_level": 3,
-                    "reference": "C0614_c00003",
-                    "components": [],
+                    "folders": [],
                     "title": [
                       "General Writings 1"
                     ]
                   },
                   {
                     "id": "C0614_c00004",
-                    "level": "File",
-                    "component_level": 3,
-                    "reference": "C0614_c00004",
-                    "components": [],
+                    "folders": [],
                     "title": [
                       "General Writings 2"
                     ]
