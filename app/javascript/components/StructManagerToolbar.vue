@@ -71,6 +71,7 @@ export default {
   computed: {
     ...mapState({
       resource: state => state.ordermanager.resource,
+      tree: state => state.tree,
       gallery: state => state.gallery
     }),
     cut: {
@@ -115,8 +116,8 @@ export default {
     },
     menuSelection (value) {
       switch (value.target.innerText) {
-        case 'All':
-          this.selectAll()
+        case 'Create New Folder':
+          this.createFolder([])
           break
         case 'None':
           this.selectNone()
@@ -137,6 +138,50 @@ export default {
           this.paste(1)
           break
       }
+    },
+    createFolder: function (contentsList) {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id;
+      const newFolder = {
+        id: this.generateId(),
+        folders: contentsList,
+        label: "Untitled",
+      }
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+      let newParent = parentFolderObject.folders.push(newFolder)
+      const structure = {
+        id: this.tree.structure.id,
+        folders: this.addNewFolder(folderList, newParent),
+        label: this.tree.structure.label,
+      }
+      // replace updated SelectedFolder
+      // console.log(newFolder)
+      // console.log(structure)
+      // this.$store.dispatch('createFolder', structure)
+      this.$store.commit("CREATE_FOLDER", structure)
+    },
+    addNewFolder: function (array, newParent) {
+      for (let item of array) {
+        if (item.id === newParent.id) {
+          item = newParent
+        } else if (item.folders?.length) {
+          const innerResult = this.addNewFolder(item.folders, newParent)
+        }
+      }
+      return array
+    },
+    findSelectedFolderById: function (array, id) {
+      for (const item of array) {
+        if (item.id === id) return item;
+        if (item.folders?.length) {
+          const innerResult = this.findSelectedFolderById(item.folders, id);
+          if (innerResult) return innerResult;
+        }
+      }
+    },
+    generateId: function () {
+      return Math.floor(Math.random() * 10000000).toString()
     },
     selectAll: function () {
       this.$store.dispatch('select', this.gallery.items)

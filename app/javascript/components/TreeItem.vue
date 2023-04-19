@@ -32,7 +32,7 @@
           <lux-icon-end-node></lux-icon-end-node>
         </lux-icon-base>
         <div>
-          {{ structure.title[0] }}
+          {{ structure.label }}
         </div>
       </div>
     </div>
