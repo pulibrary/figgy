@@ -1,6 +1,6 @@
 <template>
   <ul class="lux-tree">
-    <tree-item :id="collection.id" :json-data="collection" :selected="selected"> </tree-item>
+    <tree-item :id="structure.id" :json-data="structure" :selected="selected"> </tree-item>
   </ul>
 </template>
 
@@ -37,7 +37,7 @@ export default {
   data: function() {
     return {
       isOpen: false,
-      collection: this.jsonData,
+      structure: this.jsonData,
     }
   },
   computed: {
