@@ -23,17 +23,17 @@ This auto-completion could be handled in one of two ways - either via a cron
 job that runs on some regular interval or by utilizing [Sidekiq
 Batches](https://github.com/sidekiq/sidekiq/wiki/Batches).
 
-The cron job is not as immediate, but is easy to maintain and reason through.
-The batches allow us to track the lifecycle of the object through jobs and will
-enable early-as-possible completion, but is
+The cron job would not be as immediate, but would be easy to maintain and reason through.
+The batches would allow us to track the lifecycle of the object through jobs and would
+enable early-as-possible completion, but would be
 unable to handle adding files post-bulk-ingest but pre-auto-complete, would
 require us to avoid deleting jobs from Sidekiq (or the batches would never
-succeed), is harder to test, and is much harder to reason through the edge cases
+succeed), would be harder to test, and would be much harder to reason through the edge cases
 of.
 
 Further, while normally we'd have to worry about race conditions in the cron
 job, all of our resources have optimistic locking enabled - if two crons run into
-one another, one will win appropriately and the second will error. We can then
+one another, one would win appropriately and the second would error. We could then
 send those errors to Honeybadger to track any problems with the auto completer.
 
 ## Decision
