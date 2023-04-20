@@ -118,11 +118,11 @@ class BaseWayfinder
   end
 
   def deep_failed_local_fixity_count
-    @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_status: "FAILURE")
+    @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_status: Event::FAILURE)
   end
 
   def deep_succeeded_local_fixity_count
-    @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_status: "SUCCESS")
+    @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_status: Event::SUCCESS)
   end
 
   def deep_failed_cloud_fixity_count

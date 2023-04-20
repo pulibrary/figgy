@@ -19,9 +19,9 @@ module FixityDashboardHelper
     case val
     when nil
       "in progress"
-    when "FAILURE"
+    when Event::FAILURE
       "failed"
-    when "SUCCESS"
+    when Event::SUCCESS
       "succeeded"
     end
   end

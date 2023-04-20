@@ -64,7 +64,7 @@ RSpec.describe CloudFixity do
         expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-status")
         expect(topic).to have_received(:subscription).with("figgy-staging-fixity-status")
 
-        cloud_event = query_service.custom_queries.find_fixity_events(status: "SUCCESS", type: :cloud_fixity)
+        cloud_event = query_service.custom_queries.find_fixity_events(status: Event::SUCCESS, type: :cloud_fixity)
         expect(cloud_event).not_to be_empty
         persisted_event = cloud_event.first
         expect(persisted_event.resource_id).to eq resource.id

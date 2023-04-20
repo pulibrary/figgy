@@ -35,7 +35,7 @@ RSpec.describe LocalFixityJob do
       event = events.first
       expect(event.type).to eq "local_fixity"
       expect(event.resource_id).to eq fs.id
-      expect(event.status).to eq "SUCCESS"
+      expect(event).to be_successful
       expect(event.child_id).to eq fs.original_file.id
       expect(event.child_property).to eq "file_metadata"
     end
@@ -70,10 +70,10 @@ RSpec.describe LocalFixityJob do
 
           events = query_service.find_all_of_model(model: Event)
           expect(events.to_a.length).to eq 2
-          event = events.find(&:current)
+          event = events.find(&:current?)
           expect(event.type).to eq "local_fixity"
           expect(event.resource_id).to eq fs.id
-          expect(event.status).to eq "FAILURE"
+          expect(event).to be_failed
           expect(JSON.parse(event.message).keys).to eq [
             "id", "internal_resource", "created_at", "updated_at",
             "new_record", "sha256", "md5", "sha1"
@@ -91,10 +91,10 @@ RSpec.describe LocalFixityJob do
 
           events = query_service.find_all_of_model(model: Event)
           expect(events.to_a.length).to eq 2
-          event = events.find(&:current)
+          event = events.find(&:current?)
           expect(event.type).to eq "local_fixity"
           expect(event.resource_id).to eq fs.id
-          expect(event.status).to eq "REPAIRING"
+          expect(event).to be_repairing
           expect(JSON.parse(event.message).keys).to eq [
             "id", "internal_resource", "created_at", "updated_at",
             "new_record", "sha256", "md5", "sha1"
@@ -125,8 +125,9 @@ RSpec.describe LocalFixityJob do
 
           events = query_service.find_all_of_model(model: Event)
           expect(events.to_a.length).to eq 3
-          expect(events.map(&:status)).to contain_exactly("FAILURE", "REPAIRING", "SUCCESS")
-          event = events.find { |e| e.status == "FAILURE" && e.current }
+          current_events = events.select(&:current?)
+          expect(current_events.map(&:status)).to contain_exactly("FAILURE", "SUCCESS")
+          event = current_events.find(&:failed?)
           expect(event.type).to eq "local_fixity"
           expect(event.resource_id).to eq fs.id
           expect(event.child_id).to eq fs.primary_file.id
@@ -153,8 +154,9 @@ RSpec.describe LocalFixityJob do
 
           events = query_service.find_all_of_model(model: Event)
           expect(events.to_a.length).to eq 3
-          expect(events.map(&:status)).to contain_exactly("FAILURE", "REPAIRING", "SUCCESS")
-          event = events.find { |e| e.status == "REPAIRING" && e.current }
+          current_events = events.select(&:current?)
+          expect(current_events.map(&:status)).to contain_exactly("REPAIRING", "SUCCESS")
+          event = current_events.find(&:repairing?)
           expect(event.type).to eq "local_fixity"
           expect(event.resource_id).to eq fs.id
           expect(event.child_id).to eq fs.primary_file.id
@@ -202,14 +204,14 @@ RSpec.describe LocalFixityJob do
       it "sets that Event current property to false" do
         described_class.perform_now(file_set_id)
         first_event = query_service.find_all_of_model(model: Event).first
-        expect(first_event.current).to eq true
+        expect(first_event).to be_current
 
         described_class.perform_now(file_set_id)
         events = query_service.find_all_of_model(model: Event)
         event1 = events.find { |e| e.id == first_event.id }
         event2 = events.find { |e| e.id != first_event.id }
-        expect(event1.current).to eq false
-        expect(event2.current).to eq true
+        expect(event1).not_to be_current
+        expect(event2).to be_current
       end
     end
   end

@@ -35,7 +35,7 @@ class LocalFixityJob < ApplicationJob
         buffered_change_set_persister.save(change_set: previous_event_change_set) if previous_event
         buffered_change_set_persister.save(change_set: event_change_set)
       end
-      RestoreLocalFixityJob.perform_later(file_set_id.to_s) if event_change_set.status == "REPAIRING"
+      RestoreLocalFixityJob.perform_later(file_set_id.to_s) if event_change_set.repairing?
     end
 
     def build_event_change_set(new_checksum)
@@ -43,7 +43,7 @@ class LocalFixityJob < ApplicationJob
         build_success_change_set
       else
         Honeybadger.notify("Local fixity failure on file set #{file_set_id} at location #{file_object.id}")
-        if previous_event&.status == "REPAIRING"
+        if previous_event&.repairing?
           build_failure_change_set(new_checksum)
         else
           build_repairing_change_set(new_checksum)
@@ -53,20 +53,20 @@ class LocalFixityJob < ApplicationJob
 
     def build_success_change_set
       build_change_set(
-        status: "SUCCESS"
+        status: Event::SUCCESS
       )
     end
 
     def build_failure_change_set(new_checksum)
       build_change_set(
-        status: "FAILURE",
+        status: Event::FAILURE,
         message: new_checksum.to_h.to_json
       )
     end
 
     def build_repairing_change_set(new_checksum)
       build_change_set(
-        status: "REPAIRING",
+        status: Event::REPAIRING,
         message: new_checksum.to_h.to_json
       )
     end
