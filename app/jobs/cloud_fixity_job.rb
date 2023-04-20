@@ -26,7 +26,7 @@ class CloudFixityJob < ApplicationJob
       Honeybadger.notify("Cloud fixity failure on object with resource id: #{resource_id}, child property: #{child_property}, child id: #{child_id}")
     end
     if updated_status == Event::REPAIRING
-      RestoreCloudFixityJob.perform_later
+      RepairCloudFixityJob.perform_later
     end
   end
   # rubocop:enable Style/GuardClause

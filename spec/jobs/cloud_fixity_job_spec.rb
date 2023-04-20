@@ -25,7 +25,7 @@ RSpec.describe CloudFixityJob do
     context "when status is FAILURE" do
       before do
         allow(Honeybadger).to receive(:notify)
-        allow(RestoreCloudFixityJob).to receive(:perform_later)
+        allow(RepairCloudFixityJob).to receive(:perform_later)
       end
 
       context "and previous event was repairing" do
@@ -38,12 +38,12 @@ RSpec.describe CloudFixityJob do
           event = current_events.first
           expect(event).to be_failed
           expect(Honeybadger).to have_received(:notify)
-          expect(RestoreCloudFixityJob).not_to have_received(:perform_later)
+          expect(RepairCloudFixityJob).not_to have_received(:perform_later)
         end
       end
 
       context "and previous event was not repairing" do
-        it "creates a repairing event, kicks off restore job, and notifies honeybadger" do
+        it "creates a repairing event, kicks off repair job, and notifies honeybadger" do
           FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: resource.metadata_node.id, child_property: "metadata_node", current: true)
           described_class.perform_now(status: "FAILURE", resource_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
           events = query_service.find_all_of_model(model: Event)
@@ -52,7 +52,7 @@ RSpec.describe CloudFixityJob do
           event = current_events.first
           expect(event).to be_repairing
           expect(Honeybadger).to have_received(:notify)
-          expect(RestoreCloudFixityJob).to have_received(:perform_later)
+          expect(RepairCloudFixityJob).to have_received(:perform_later)
         end
       end
     end

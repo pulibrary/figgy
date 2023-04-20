@@ -35,7 +35,7 @@ class LocalFixityJob < ApplicationJob
         buffered_change_set_persister.save(change_set: previous_event_change_set) if previous_event
         buffered_change_set_persister.save(change_set: event_change_set)
       end
-      RestoreLocalFixityJob.perform_later(file_set_id.to_s) if event_change_set.repairing?
+      RepairLocalFixityJob.perform_later(file_set_id.to_s) if event_change_set.repairing?
     end
 
     def build_event_change_set(new_checksum)

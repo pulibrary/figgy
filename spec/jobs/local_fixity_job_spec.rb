@@ -58,7 +58,7 @@ RSpec.describe LocalFixityJob do
         new_file = File.join(fixture_path, "files/color-landscape.tif")
         FileUtils.cp(new_file, filename)
         allow(Honeybadger).to receive(:notify)
-        allow(RestoreLocalFixityJob).to receive(:perform_later)
+        allow(RepairLocalFixityJob).to receive(:perform_later)
       end
 
       context "when the previous event had status: repairing" do
@@ -79,12 +79,12 @@ RSpec.describe LocalFixityJob do
             "new_record", "sha256", "md5", "sha1"
           ]
           expect(Honeybadger).to have_received(:notify)
-          expect(RestoreLocalFixityJob).not_to have_received(:perform_later)
+          expect(RepairLocalFixityJob).not_to have_received(:perform_later)
         end
       end
 
       context "when the previous event had any other status" do
-        it "creates a repairing event, notifies Honeybadger, and starts a restore job" do
+        it "creates a repairing event, notifies Honeybadger, and starts a repair job" do
           FactoryBot.create(:local_fixity_success, resource_id: file_set_id, child_id: file_set.original_file.id)
           described_class.perform_now(file_set_id)
           fs = query_service.find_by(id: file_set_id)
@@ -100,7 +100,7 @@ RSpec.describe LocalFixityJob do
             "new_record", "sha256", "md5", "sha1"
           ]
           expect(Honeybadger).to have_received(:notify)
-          expect(RestoreLocalFixityJob).to have_received(:perform_later)
+          expect(RepairLocalFixityJob).to have_received(:perform_later)
         end
       end
     end
@@ -108,7 +108,7 @@ RSpec.describe LocalFixityJob do
     context "with a preservation file and an intermediate file and one checksum doesn't match" do
       let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
       before do
-        allow(RestoreLocalFixityJob).to receive(:perform_later)
+        allow(RepairLocalFixityJob).to receive(:perform_later)
       end
 
       context "when the previous event had status: repairing" do
@@ -136,12 +136,12 @@ RSpec.describe LocalFixityJob do
             "new_record", "sha256", "md5", "sha1"
           ]
           expect(Honeybadger).to have_received(:notify)
-          expect(RestoreLocalFixityJob).not_to have_received(:perform_later)
+          expect(RepairLocalFixityJob).not_to have_received(:perform_later)
         end
       end
 
       context "when the previous event had any other status" do
-        it "creates one success event and repairing event, notifies Honeybadger, and starts a restore job" do
+        it "creates one success event and repairing event, notifies Honeybadger, and starts a repair job" do
           FactoryBot.create(:local_fixity_failure, resource_id: file_set_id, child_id: file_set.primary_file.id)
           allow(Honeybadger).to receive(:notify)
           IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
@@ -165,7 +165,7 @@ RSpec.describe LocalFixityJob do
             "new_record", "sha256", "md5", "sha1"
           ]
           expect(Honeybadger).to have_received(:notify)
-          expect(RestoreLocalFixityJob).to have_received(:perform_later)
+          expect(RepairLocalFixityJob).to have_received(:perform_later)
         end
       end
     end

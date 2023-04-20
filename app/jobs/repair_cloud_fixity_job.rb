@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RestoreCloudFixityJob < ApplicationJob
+class RepairCloudFixityJob < ApplicationJob
   def perform
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe RestoreLocalFixity do
+RSpec.describe RepairLocalFixity do
   with_queue_adapter :inline
 
   let(:change_set_persister) { ChangeSetPersister.default }
