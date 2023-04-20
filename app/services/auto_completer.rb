@@ -16,6 +16,7 @@ class AutoCompleter
   end
 
   def run
+    Rails.logger.info("Performing auto-completion of complete_when_processed resources")
     eligible_resources.each do |resource|
       change_set = ChangeSet.for(resource)
       change_set.validate(state: "complete")
@@ -23,6 +24,7 @@ class AutoCompleter
     rescue StandardError
       Honeybadger.notify "Exception occurred trying to auto-complete resource #{resource.id}"
     end
+    Rails.logger.info("Performed auto-completion of complete_when_processed resources")
   end
 
   private
