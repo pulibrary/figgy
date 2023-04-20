@@ -122,8 +122,10 @@ class BulkIngestController < ApplicationController
       params[:resource_type].classify
     end
 
+    # All valid workflow states except complete - prefer
+    # complete_when_processed.
     def workflow_states
-      workflow_class.aasm.states.map { |s| s.name.to_s }
+      workflow_class.aasm.states.map { |s| s.name.to_s } - ["complete"]
     end
 
     def workflow_class

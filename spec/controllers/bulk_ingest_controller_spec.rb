@@ -37,7 +37,7 @@ RSpec.describe BulkIngestController do
     context "when logged in" do
       it "assigns workflow states based on the resource type" do
         get :show, params: { resource_type: "scanned_maps" }
-        expect(assigns(:states)).to eq ["pending", "final_review", "complete", "takedown", "flagged"]
+        expect(assigns(:states)).to eq ["pending", "final_review", "complete_when_processed", "takedown", "flagged"]
       end
 
       it "assigns collections" do

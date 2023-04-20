@@ -132,6 +132,9 @@ en:
     final_review:
       label: 'Final Review'
       desc:  'Awaiting final approval before being published'
+    complete_when_processed:
+      label: 'Complete (When Processed)'
+      desc: 'Awaiting processing, will automatically progress to Complete when done.'
     complete:
       label: 'Complete'
       desc:  'Published and accessible according to access control rules'

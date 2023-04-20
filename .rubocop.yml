@@ -46,6 +46,7 @@ Metrics/BlockLength:
     - '**/*.rake'
     - 'app/controllers/catalog_controller.rb'
     - 'app/models/book_workflow.rb'
+    - 'app/models/geo_workflow.rb'
     - 'config/environments/**/*'
     - 'spec/**/*'
     - 'config/initializers/*'

@@ -9,6 +9,7 @@ class BookWorkflow < BaseWorkflow
     state :pending, initial: true
     state :metadata_review
     state :final_review
+    state :complete_when_processed
     state :complete
     state :takedown
     state :flagged
@@ -24,6 +25,7 @@ class BookWorkflow < BaseWorkflow
       transitions from: :final_review, to: :complete
       transitions from: :pending, to: :complete
       transitions from: :metadata_review, to: :complete
+      transitions from: :complete_when_processed, to: :complete
     end
 
     # takedown/restore workflow

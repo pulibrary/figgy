@@ -79,6 +79,12 @@ describe BookWorkflow do
     end
   end
 
+  describe "valid_states" do
+    it "returns all the appropriate states" do
+      expect(workflow.valid_states).to eq [:pending, :metadata_review, :final_review, :complete_when_processed, :complete, :takedown, :flagged].map(&:to_s)
+    end
+  end
+
   describe "access states" do
     it "provides a list of read-accessible states" do
       expect(described_class.public_read_states).to contain_exactly "complete", "flagged"
