@@ -25,6 +25,7 @@ module Types::Resource
   field :ocr_content, [String], null: true
   field :embed, Types::EmbedType, null: true
   field :notice, Types::NoticeType, null: true
+  field :member_ids, [String], null: true
 
   definition_methods do
     def resolve_type(object, _context)

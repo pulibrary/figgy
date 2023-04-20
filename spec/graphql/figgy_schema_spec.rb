@@ -20,7 +20,8 @@ RSpec.describe FiggySchema do
 
   describe "resource query" do
     # provide a query string for `result`
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals", notice_type: "senior_thesis") }
+    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals", notice_type: "senior_thesis", member_ids: [member.id]) }
+    let(:member) { FactoryBot.create_for_repository(:file_set) }
     let(:id) { resource.id }
     let(:query_string) { %|{ resource(id: "#{id}") { viewingHint } }| }
 
@@ -28,6 +29,13 @@ RSpec.describe FiggySchema do
       it "returns a viewing hint" do
         # calling `result` executes the query
         expect(result["data"]["resource"]["viewingHint"]).to eq("individuals")
+      end
+    end
+
+    context "when requesting member_ids" do
+      let(:query_string) { %|{ resource(id: "#{id}") { memberIds } }| }
+      it "returns it" do
+        expect(result["data"]["resource"]["memberIds"]).to eq([member.id.to_s])
       end
     end
 
