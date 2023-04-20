@@ -32,13 +32,13 @@
           <lux-icon-end-node></lux-icon-end-node>
         </lux-icon-base>
         <div>
-          {{ structure.label }}
+          {{ this.jsonData.label }}
         </div>
       </div>
     </div>
     <ul v-show="isOpen && hasChildren">
       <tree-item
-        v-for="(folder, index) in structure.folders"
+        v-for="(folder, index) in this.jsonData.folders"
         :json-data="folder"
         :id="folder.id"
       ></tree-item>
@@ -73,9 +73,14 @@ export default {
       required: true,
     },
   },
+  // watch: {
+  //       jsonData: function(newVal, oldVal) { // watch it
+  //         // console.log('jsonData changed: ', JSON.parse(JSON.stringify(newVal)), ' | was: ', JSON.parse(JSON.stringify(oldVal)))
+  //       }
+  // },
   data: function() {
     return {
-      hasChildren: this.jsonData.folders.length > 0,
+      // hasChildren: this.jsonData.folders.length > 0,
       isOpen: true,
       structure: this.jsonData,
     }
@@ -86,6 +91,9 @@ export default {
         return "arrow-down"
       }
       return "arrow-right"
+    },
+    hasChildren: function() {
+      return this.jsonData.folders.length > 0
     },
     isSelected: function() {
       if (this.tree.selected === this.id) {
