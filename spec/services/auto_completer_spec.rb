@@ -25,6 +25,25 @@ RSpec.describe AutoCompleter do
       expect(csp.query_service.find_by(id: unprocessed_resource.id).updated_at).to eq unprocessed_resource.updated_at
     end
   end
+  context "when a MVW is auto-completed" do
+    it "doesn't error on its volume" do
+      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      allow(Honeybadger).to receive(:notify)
+      parent = FactoryBot.create_for_repository(:scanned_resource, state: "complete_when_processed")
+      to_be_completed_resource = FactoryBot.create_for_repository(:scanned_resource, files: [file], state: "complete_when_processed", append_id: parent.id)
+      csp = ChangeSetPersister.default
+
+      AutoCompleter.run
+
+      # The parent will complete, then propagate its complete status to the
+      # volume, then the auto-completer will try to complete the volume (which
+      # was also complete_when_processed). Without some code, that would hit an
+      # optimistic lock error.
+      expect([csp.query_service.find_by(id: to_be_completed_resource.id).state,
+              csp.query_service.find_by(id: parent.id).state].flatten).to contain_exactly "complete", "complete"
+      expect(Honeybadger).not_to have_received(:notify)
+    end
+  end
   context "when one eligible resource ready for completion errors" do
     it "notifies and completes the others" do
       stub_ezid(shoulder: "99999/fk4", blade: "123456")

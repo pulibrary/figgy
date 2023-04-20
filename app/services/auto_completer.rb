@@ -18,7 +18,12 @@ class AutoCompleter
   def run
     Rails.logger.info("Performing auto-completion of complete_when_processed resources")
     eligible_resources.each do |resource|
-      change_set = ChangeSet.for(resource)
+      # Reload in case a previous iteration completed a MVW that propagated its
+      # state to a volume that's also in eligible_resources. Skip the iteration
+      # if it's not still complete_when_processed.
+      reloaded_resource = query_service.find_by(id: resource.id)
+      next unless reloaded_resource.state == ["complete_when_processed"]
+      change_set = ChangeSet.for(reloaded_resource)
       change_set.validate(state: "complete")
       change_set_persister.save(change_set: change_set) if change_set.valid?
     rescue StandardError
