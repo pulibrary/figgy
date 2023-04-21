@@ -10,22 +10,12 @@ RSpec.describe FixityDashboardController, type: :controller do
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource) }
   let(:resource3) { FactoryBot.create_for_repository(:scanned_resource) }
 
-  let(:file_metadata) { FileMetadata.new(fixity_success: 0) }
-
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:change_set) { ScannedResourceChangeSet.new(resource) }
   let(:output) do
     change_set.files = [file]
     change_set_persister.save(change_set: change_set)
-  end
-
-  before do
-    # they have to be saved to come out in the query
-    file_set = query_service.find_members(resource: output).first
-    file_set_change_set = FileSetChangeSet.new(file_set)
-    file_set_change_set.validate(file_metadata: file_metadata)
-    change_set_persister.save(change_set: file_set_change_set)
   end
 
   describe "GET #show" do

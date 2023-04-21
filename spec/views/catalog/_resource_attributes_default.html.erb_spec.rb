@@ -68,13 +68,14 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
         holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1")
       )
     end
-    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile, fixity_success: 1 }) }
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile }) }
     let(:original_file) { instance_double FileMetadata }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }
     let(:solr_document) { SolrDocument.new(document) }
     before do
       Timecop.freeze(Time.zone.local(1990))
+      FactoryBot.create(:local_fixity_success, resource_id: file_set.id)
       assign :document, solr_document
       allow(view).to receive(:has_search_parameters?).and_return(false)
       allow(view).to receive(:document).and_return(solr_document)

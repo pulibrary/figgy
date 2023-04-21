@@ -406,7 +406,6 @@ Rails.application.config.to_prepare do
     FindProjectFolders,
     FindIdentifiersToReconcile,
     FileSetsSortedByUpdated,
-    FindFixityFailures,
     FindFixityEvents,
     CountMembers,
     FindSavedIds,

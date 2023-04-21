@@ -16,8 +16,7 @@ RSpec.describe LocalFixityJob do
   let(:file_metadata2) do
     FileMetadata.new(
       use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
-      mime_type: "image/tiff",
-      fixity_success: 1
+      mime_type: "image/tiff"
     )
   end
 

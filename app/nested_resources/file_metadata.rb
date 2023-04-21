@@ -25,11 +25,6 @@ class FileMetadata < Valkyrie::Resource
   attribute :source_media_type, Valkyrie::Types::Set # OriginalSourceForm
   attribute :duration, Valkyrie::Types::Set # Duration
 
-  # DEPRECATED fixity attributes -- Events are used now for local fixity
-  attribute :fixity_actual_checksum, Valkyrie::Types::Set
-  attribute :fixity_success, Valkyrie::Types::Integer
-  attribute :fixity_last_success_date, Valkyrie::Types::DateTime.optional
-
   # PDF Metadata
   attribute :page_count, Valkyrie::Types::Integer
 

@@ -54,23 +54,6 @@ RSpec.describe Wayfinder do
     end
 
     describe "#deep_failed_local_fixity_count", db_cleaner_deletion: true do
-      context "when there are no local_fixity Events" do
-        it "uses the file set properties to return a count of all failed local fixity file sets, deep" do
-          fs1 = create_file_set(fixity_success: 0)
-          fs2 = create_file_set(fixity_success: 0)
-          fs3 = create_file_set(fixity_success: 0)
-          ok_fs = create_file_set(fixity_success: 1)
-          # Unrelated FS
-          create_file_set(fixity_success: 0)
-          volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
-          volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
-          mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
-
-          expect(described_class.for(mvw).deep_failed_local_fixity_count).to eq 3
-          expect(described_class.for(mvw).deep_succeeded_local_fixity_count).to eq 1
-        end
-      end
-
       context "when there are local_fixity Events" do
         it "uses the Events to return a count of all failed local fixity file sets, deep" do
           # failing file sets
@@ -95,16 +78,6 @@ RSpec.describe Wayfinder do
           expect(described_class.for(mvw).deep_failed_local_fixity_count).to eq 3
           expect(described_class.for(mvw).deep_succeeded_local_fixity_count).to eq 1
         end
-      end
-
-      def create_file_set(fixity_success:)
-        FactoryBot.create_for_repository(
-          :file_set,
-          file_metadata: {
-            use: Valkyrie::Vocab::PCDMUse.OriginalFile,
-            fixity_success: fixity_success
-          }
-        )
       end
     end
 
