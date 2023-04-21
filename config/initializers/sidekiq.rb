@@ -5,7 +5,7 @@ require "redis"
 # the same initializer as Sidekiq. See:
 # https://github.com/redis/redis-rb/commit/9745e22db65ac294be51ed393b584c0f8b72ae98
 redis_config = YAML.safe_load(ERB.new(IO.read(Rails.root.join("config", "redis.yml"))).result, [], [], true)[Rails.env].with_indifferent_access
-redis_url = "redis://#{redis_config['host']}:#{redis_config['port']}/0"
+redis_url = "redis://#{redis_config['host']}:#{redis_config['port']}/#{redis_config['db']}"
 Sidekiq::Client.reliable_push! unless Rails.env.test?
 Sidekiq.configure_server do |config|
   config.redis = { url:  redis_url }
