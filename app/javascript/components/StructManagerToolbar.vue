@@ -119,8 +119,8 @@ export default {
         case 'Create New Folder':
           this.createFolder([])
           break
-        case 'None':
-          this.selectNone()
+        case 'Delete Folder':
+          this.deleteFolder(value.target)
           break
         case 'Alternate':
           this.selectAlternate()
@@ -155,10 +155,6 @@ export default {
         folders: this.addNewFolder(folderList, newParent),
         label: this.tree.structure.label,
       }
-      // replace updated SelectedFolder
-      // console.log(newFolder)
-      // console.log(structure)
-      // this.$store.dispatch('createFolder', structure)
       this.$store.commit("CREATE_FOLDER", structure)
     },
     addNewFolder: function (array, newParent) {
@@ -171,11 +167,72 @@ export default {
       }
       return array
     },
+    deleteFolder: function () {
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let folderToBeRemoved = this.findSelectedFolderById(folderList, this.tree.selected)
+      const selectedNode = this.tree.selected
+      if(folderList.includes(folderToBeRemoved)) {
+        if (folderToBeRemoved.folders.length) {
+          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
+          if (confirm(text) == true) {
+            const index = folderList.indexOf(folderToBeRemoved)
+            folderList.splice(index, 1)
+            const structure = {
+              id: this.tree.structure.id,
+              folders: folderList,
+              label: this.tree.structure.label,
+            }
+            this.$store.commit("DELETE_FOLDER", structure)
+            this.$store.commit("SELECT", null)
+          }
+        }
+      } else {
+        // if there are sub-folders, warn the user that they will also be deleted.
+        if (folderToBeRemoved.folders.length) {
+          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
+          if (confirm(text) == true) {
+            this.commitRemoveFolder(folderList, folderToBeRemoved)
+          }
+        } else {
+          this.commitRemoveFolder(folderList, folderToBeRemoved)
+        }
+      }
+    },
+    commitRemoveFolder: function(folderList, folderToBeRemoved) {
+      const structure = {
+        id: this.tree.structure.id,
+        folders: this.removeFolder(folderList, folderToBeRemoved),
+        label: this.tree.structure.label,
+      }
+      this.$store.commit("DELETE_FOLDER", structure)
+      this.$store.commit("SELECT", null)
+    },
+    removeFolder: function (array, folder) {
+      for (const item of array) {
+        if (item.folders.includes(folder)) {
+          const index = item.folders.indexOf(folder)
+          item.folders.splice(index, 1)
+        }
+        if (item.folders?.length) {
+          const innerResult = this.removeFolder(item.folders, folder)
+        }
+      }
+      return array
+    },
     findSelectedFolderById: function (array, id) {
       for (const item of array) {
         if (item.id === id) return item;
         if (item.folders?.length) {
           const innerResult = this.findSelectedFolderById(item.folders, id);
+          if (innerResult) return innerResult;
+        }
+      }
+    },
+    getParentByID: function (array, childFolder) {
+      for (const item of array) {
+        if (item.id === id) return item;
+        if (item.folders?.length) {
+          const innerResult = this.getParentByID(item.folders, childFolder);
           if (innerResult) return innerResult;
         }
       }
