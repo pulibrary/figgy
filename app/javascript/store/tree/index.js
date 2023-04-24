@@ -8,6 +8,10 @@ export const treeMutations = {
     state.structure = structure
     console.log(structure)
   },
+  DELETE_FOLDER(state, structure) {
+    state.structure = structure
+    // console.log(structure)
+  },
   SELECT(state, selectedId) {
     state.selected = selectedId
   },

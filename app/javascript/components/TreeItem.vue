@@ -1,7 +1,7 @@
 <template>
   <li>
     <div class="container">
-      <div class="lux-item" v-if="hasChildren">
+      <div class="lux-item" v-if="!isFile">
         <input-button
           @button-clicked="toggled($event)"
           class="expand-collapse"
@@ -23,7 +23,7 @@
         ]"
       >
         <lux-icon-base
-          v-if="!hasChildren"
+          v-if="isFile"
           width="30"
           height="30"
           icon-name="End Node"
@@ -73,11 +73,6 @@ export default {
       required: true,
     },
   },
-  // watch: {
-  //       jsonData: function(newVal, oldVal) { // watch it
-  //         // console.log('jsonData changed: ', JSON.parse(JSON.stringify(newVal)), ' | was: ', JSON.parse(JSON.stringify(oldVal)))
-  //       }
-  // },
   data: function() {
     return {
       // hasChildren: this.jsonData.folders.length > 0,
@@ -94,6 +89,9 @@ export default {
     },
     hasChildren: function() {
       return this.jsonData.folders.length > 0
+    },
+    isFile: function() {
+      return false
     },
     isSelected: function() {
       if (this.tree.selected === this.id) {
