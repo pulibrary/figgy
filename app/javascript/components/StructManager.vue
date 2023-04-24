@@ -5,7 +5,7 @@
       class="lux-sidePanel"
     >
     <div class="panelHeader">
-      <heading level="h2" size="h6">Table of Contents</heading>
+      <heading level="h2" size="h6">Logical Structure</heading>
     </div>
     <tree
       selected="C0614_c00002"
@@ -107,7 +107,7 @@ export default {
             "label": "Papers of Francis Preston Blair"
           }
         ],
-        "label": "Blair and Lee Family Papers"
+        "label": "Table of Contents"
       }
     }
   },
