@@ -53,7 +53,7 @@ Other dependencies:
 
 ## Automatically pull vault password from lastpass
 
-These steps are performed by `./bin/setup`.
+Before running `./bin/setup`, you must log in to your LastPass account.
 
 More information about lastpass-cli can be found here: https://lastpass.github.io/lastpass-cli/lpass.1.html
 ```
