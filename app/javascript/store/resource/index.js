@@ -12,6 +12,7 @@ export const resourceState = {
     members: [],
     loadState: "NOT_LOADED",
     saveState: "NOT_SAVED",
+    errMsg: "",
     ogState: {},
   },
 }
@@ -27,6 +28,9 @@ export const resourceMutations = {
   },
   SAVED_STATE(state, saveStatus) {
     state.resource.saveState = saveStatus
+  },
+  ERROR_MESSAGE(state, err) {
+    state.resource.errMsg = err
   },
   SET_RESOURCE(state, resource) {
     state.resource.id = resource.id

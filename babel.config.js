@@ -58,6 +58,13 @@ module.exports = function(api) {
         }
       ],
       [
+        require('@babel/plugin-proposal-private-methods').default,
+        {
+          loose: true
+        }
+      ],
+      ["@babel/plugin-proposal-private-property-in-object", { "loose": true }],
+      [
         require('@babel/plugin-proposal-object-rest-spread').default,
         {
           useBuiltIns: true
@@ -74,6 +81,12 @@ module.exports = function(api) {
         require('@babel/plugin-transform-regenerator').default,
         {
           async: false
+        }
+      ],
+      isProductionEnv && [
+        require('babel-plugin-transform-react-remove-prop-types').default,
+        {
+          removeImport: true
         }
       ]
     ].filter(Boolean)

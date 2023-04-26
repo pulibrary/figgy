@@ -9,6 +9,7 @@
     >
       <input-text
         id="unitLabel"
+        name="unitLabel"
         v-model="unitLabel"
         label="Label"
         placeholder="e.g., p."
@@ -16,6 +17,7 @@
       />
       <input-text
         id="startNum"
+        name="startNum"
         v-model="start"
         label="Starting Numeral"
         placeholder="e.g., 10"
@@ -31,6 +33,7 @@
       <input-select
         v-if="bracket"
         id="bracketLocation"
+        name="bracketLocation"
         v-model="bracketLocation"
         label="Bracket Location"
         :options="bracketLocationOpts"
@@ -40,6 +43,7 @@
       <input-select
         v-if="!isMultiVolume"
         id="labelMethod"
+        name="labelMethod"
         v-model="method"
         label="Labeling Method"
         :options="methodOpts"
@@ -48,6 +52,7 @@
 
       <input-select
         id="twoUp"
+        name="twoUp"
         v-model="twoUp"
         label="Two Up"
         :options="twoUpOpts"
@@ -57,6 +62,7 @@
       <input-text
         v-if="twoUp"
         id="twoUpSeparator"
+        name="twoUpSeparator"
         v-model="twoUpSeparator"
         label="Two-Up Separator"
         @input="updateMultiLabels()"
@@ -68,6 +74,7 @@
       >
         <input-text
           id="frontLabel"
+          name="frontLabel"
           v-model="frontLabel"
           label="Front Label"
           placeholder="(recto)"
@@ -75,6 +82,7 @@
         />
         <input-text
           id="backLabel"
+          name="backLabel"
           v-model="backLabel"
           label="Back Label"
           placeholder="(verso)"
@@ -83,6 +91,7 @@
         <input-select
           v-if="!isMultiVolume"
           id="startWith"
+          name="startWith"
           v-model="startWith"
           label="Start With"
           :options="startWithOpts"
