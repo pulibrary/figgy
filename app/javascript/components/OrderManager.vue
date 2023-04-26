@@ -21,10 +21,11 @@
       v-if="saveError"
       status="error"
       type="alert"
-      autoclear
       dismissible
     >
-      Sorry, there was a problem saving your work!
+      <h1>Sorry, there was a problem saving your work!</h1>
+      <p>The following error message may help IT staff debug the problem:</p>
+      <p><em>{{ errMsg }}</em></p>
     </alert>
     <wrapper
       :full-width="false"
@@ -115,7 +116,8 @@ export default {
   data: function () {
     return {
       cardPixelWidth: 300,
-      captionPixelPadding: 9
+      captionPixelPadding: 9,
+      errMsg: ''
     }
   },
   computed: {
@@ -150,8 +152,8 @@ export default {
     saved () {
       return this.resource.saveState === 'SAVED'
     },
-    saveError () {
-      return this.resource.saveState === 'ERROR'
+    saveError: function () {
+      return this.saveErrorMsg(this.resource.saveState)
     },
     isLoading () {
       return this.resource.saveState === 'SAVING'
@@ -175,7 +177,13 @@ export default {
       } else {
         this.captionPixelPadding = 9
       }
-    }
+    },
+    saveErrorMsg: function (err) {
+      if (err === 'ERROR') {
+        this.errMsg = this.resource.errMsg
+      }
+      return this.resource.saveState === 'ERROR'
+    },
   }
 }
 </script>
