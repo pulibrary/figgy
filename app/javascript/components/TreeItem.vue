@@ -3,7 +3,7 @@
     <div class="container">
       <div class="lux-item" v-if="!isFile">
         <input-button
-          @button-clicked="toggled($event)"
+          @button-clicked="toggleFolder($event)"
           class="expand-collapse"
           type="button"
           variation="icon"
@@ -14,6 +14,7 @@
         </input-button>
       </div>
       <div
+        class="folder-container"
         @click.capture="select(structure.id, $event)"
         :class="[
           'lux-item-label',
@@ -31,9 +32,38 @@
         >
           <lux-icon-end-node></lux-icon-end-node>
         </lux-icon-base>
-        <div>
-          {{ this.jsonData.label }}
-        </div>
+        <template v-if="editedFieldId === id">
+          <div class="folder-label">
+            <input type="text" v-model="jsonData.label" :ref="`field${id}`" />
+          </div>
+          <div class="folder-edit">
+            <input-button
+              @button-clicked="toggleEdit(id)"
+              class="expand-collapse"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="approved"
+            >
+            </input-button>
+          </div>
+        </template>
+        <template v-else>
+          <div class="folder-label">
+            {{ this.jsonData.label }}
+          </div>
+          <div class="folder-edit">
+            <input-button
+              @button-clicked="toggleEdit(id)"
+              class="expand-collapse"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="globe"
+            >
+            </input-button>
+          </div>
+        </template>
       </div>
     </div>
     <ul v-show="isOpen && hasChildren">
@@ -78,6 +108,7 @@ export default {
       // hasChildren: this.jsonData.folders.length > 0,
       isOpen: true,
       structure: this.jsonData,
+      editedFieldId: null,
     }
   },
   computed: {
@@ -110,8 +141,20 @@ export default {
       }
       store.commit("SELECT", id)
     },
-    toggled: function() {
+    toggleFolder: function() {
       this.isOpen = !this.isOpen
+    },
+    toggleEdit: function(id) {
+      if (id) {
+        this.editedFieldId = id;
+        this.$nextTick(() => {
+          if (this.$refs["field" + id]) {
+            this.$refs["field" + id].focus();
+          }
+        });
+      } else {
+        this.editedFieldId = null;
+      }
     },
   },
 }
@@ -190,4 +233,31 @@ ul.lux-tree .lux-item-label {
 .lux-tree .lux-button.icon.small {
   padding: 4px;
 }
+
+.folder-container {
+  display: flex;
+}
+
+.folder-new,
+.folder-edit,
+.folder-delete {
+  display: inline-block;
+}
+
+.folder-label {
+  flex: 1;
+}
+
+.folder-label input[type=text]  {
+  background: transparent;
+  border: none;
+  width: 80%;
+  line-height: 22px;
+}
+
+.folder-edit .lux-button.icon.small {
+  padding: 0px;
+  margin: 0px;
+}
+
 </style>
