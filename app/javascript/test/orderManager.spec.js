@@ -202,12 +202,12 @@ describe("OrderManager.vue", () => {
       __typename: "ScannedResource",
       members: [
         {
-	  id: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
-	  label: "a",
-	  viewingHint: null,
-	  thumbnail: null,
-	  __typename: "FileSet",
-	}
+      	  id: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
+      	  label: "a",
+      	  viewingHint: null,
+      	  thumbnail: null,
+      	  __typename: "FileSet",
+      	}
       ],
       loadState: "LOADED",
       saveState: "NOT_SAVED",
@@ -229,7 +229,7 @@ describe("OrderManager.vue", () => {
     let store = new Vuex.Store({
       modules: {
         ordermanager: resource,
-	gallery: gallery,
+	      gallery: gallery,
       }
     })
 
@@ -238,7 +238,7 @@ describe("OrderManager.vue", () => {
       store: store,
       propsData: {
         resourceObject: resourceObject,
-	defaultThumbnail: Global.figgy.resource.defaultThumbnail
+	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
       },
       stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
     })
@@ -247,6 +247,68 @@ describe("OrderManager.vue", () => {
       expect(wrapper.vm.defaultThumbnail).toEqual(Global.figgy.resource.defaultThumbnail)
       expect(wrapper.vm.galleryItems.length).toEqual(1)
       expect(wrapper.vm.galleryItems[0]['mediaUrl']).toEqual("https://institution.edu/repository/assets/random.png")
+    })
+
+    it("does not display an alert with an error message when the state is NOT SAVED", () => {
+      expect(wrapper.text()).not.toContain('Sorry, there was a problem saving your work!')
+    })
+  })
+
+  describe('when the resources errors on Save', () => {
+
+    let resourceObject = {
+      id: "example3-id",
+      label: "Resource with 1 files",
+      viewingHint: "individuals",
+      viewingDirection: "LEFTTORIGHT",
+      startPage: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
+      thumbnail: null,
+      __typename: "ScannedResource",
+      members: [
+        {
+      	  id: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
+      	  label: "a",
+      	  viewingHint: null,
+      	  thumbnail: null,
+      	  __typename: "FileSet",
+      	}
+      ],
+      loadState: "LOADED",
+      saveState: "ERROR",
+      ogState: {}
+    }
+
+    resource = {
+      state: {
+        resource: resourceObject
+      },
+      mutations: resourceMutations,
+      getters: resourceGetters,
+      actions: actions,
+      modules: {
+        gallery: gallery,
+      }
+    }
+
+    let store = new Vuex.Store({
+      modules: {
+        ordermanager: resource,
+	      gallery: gallery,
+      }
+    })
+
+    let wrapper = mount(OrderManager, {
+      localVue,
+      store: store,
+      propsData: {
+        resourceObject: resourceObject,
+	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      },
+      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+    })
+
+    it("displays an alert with an error message", () => {
+      expect(wrapper.text()).toContain('Sorry, there was a problem saving your work!')
     })
   })
 })

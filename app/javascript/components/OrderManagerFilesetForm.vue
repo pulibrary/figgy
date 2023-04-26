@@ -9,6 +9,7 @@
     >
       <input-text
         id="itemLabel"
+        name="itemLabel"
         v-model="singleForm.caption"
         label="Label"
         placeholder="e.g., example.tif"
@@ -19,6 +20,7 @@
         v-if="!isMultiVolume"
         id="pageType"
         label="Page Type"
+        name="pageType"
         :value="singleForm.viewingHint"
         :options="viewHintOpts"
         @change="updateViewHint($event)"
