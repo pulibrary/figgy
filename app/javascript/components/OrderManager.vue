@@ -183,7 +183,7 @@ export default {
         this.errMsg = this.resource.errMsg
       }
       return this.resource.saveState === 'ERROR'
-    },
+    }
   }
 }
 </script>
