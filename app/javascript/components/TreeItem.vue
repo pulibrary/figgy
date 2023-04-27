@@ -38,7 +38,7 @@
           </div>
           <div class="folder-edit">
             <input-button
-              @button-clicked="toggleEdit(id)"
+              @button-clicked="saveLabel(id)"
               class="expand-collapse"
               type="button"
               variation="icon"
@@ -135,11 +135,44 @@ export default {
     }),
   },
   methods: {
+    findSelectedFolderById: function (array, id) {
+      for (const item of array) {
+        if (item.id === id) return item;
+        if (item.folders?.length) {
+          const innerResult = this.findSelectedFolderById(item.folders, id);
+          if (innerResult) return innerResult;
+        }
+      }
+    },
     select: function(id, event) {
       if (!this.isOpen) {
         this.isOpen = !this.isOpen
       }
       store.commit("SELECT", id)
+    },
+    saveLabel: function(id) {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id;
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let selectedFolder = this.findSelectedFolderById(folderList, parentId)
+      const structure = {
+        id: this.tree.structure.id,
+        folders: this.updateFolderLabel(folderList, selectedFolder),
+        label: this.tree.structure.label,
+      }
+
+      store.commit("SAVE_LABEL", structure)
+      this.editedFieldId = null;
+    },
+    updateFolderLabel: function (array, selectedFolder) {
+      for (let item of array) {
+        if (item.id === selectedFolder.id) {
+          item.label = this.jsonData.label
+        } else if (item.folders?.length) {
+          const innerResult = this.updateFolderLabel(item.folders, selectedFolder)
+        }
+      }
+      return array
     },
     toggleFolder: function() {
       this.isOpen = !this.isOpen
