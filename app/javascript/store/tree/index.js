@@ -12,6 +12,9 @@ export const treeMutations = {
     state.structure = structure
     // console.log(structure)
   },
+  SAVE_LABEL(state, structure) {
+    state.structure = structure
+  },
   SELECT(state, selectedId) {
     state.selected = selectedId
   },
