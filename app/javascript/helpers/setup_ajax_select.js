@@ -1,5 +1,5 @@
 import Vue from 'vue/dist/vue.esm'
-import AjaxSelect from '../components/ajax-select'
+import AjaxSelect from '@components/ajax-select.vue'
 
 function appendAjaxSelect (ajaxInput) {
   const inputId = ajaxInput.id

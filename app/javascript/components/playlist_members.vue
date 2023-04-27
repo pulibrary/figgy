@@ -41,7 +41,7 @@
 </template>
 <script>
 import axios from 'axios'
-import PlaylistMember from './playlist_member'
+import PlaylistMember from './playlist_member.vue'
 
 export default {
   name: 'PlaylistMembers',

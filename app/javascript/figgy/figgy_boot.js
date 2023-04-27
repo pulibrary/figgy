@@ -1,18 +1,18 @@
-import SaveWorkControl from 'figgy/form/save_work_control'
-import DuplicateResourceDetectorFactory from 'figgy/form/detect_duplicates'
-import StructureManager from "figgy/structure_manager"
-import ModalViewer from "figgy/modal_viewer"
-import DerivativeForm from "figgy/derivative_form"
-import MetadataForm from "figgy/metadata_form"
-import UniversalViewer from "figgy/universal_viewer"
-import FileSetForm from "figgy/file_set_form"
-import SaveAndIngestHandler from "figgy/save_and_ingest_handler"
-import AutoIngestHandler from "figgy/auto_ingest_handler"
-import MemberResourcesTables from "figgy/relationships/member_resources_table"
-import ParentResourcesTables from "figgy/relationships/parent_resources_table"
-import BulkLabeler from "figgy/bulk_labeler/bulk_label"
-import BoundingBoxSelector from "figgy/bounding_box_selector"
-import FieldManager from "figgy/field_manager"
+import SaveWorkControl from '@figgy/form/save_work_control'
+import DuplicateResourceDetectorFactory from '@figgy/form/detect_duplicates'
+import StructureManager from '@figgy/structure_manager'
+import ModalViewer from '@figgy/modal_viewer'
+import DerivativeForm from '@figgy/derivative_form'
+import MetadataForm from '@figgy/metadata_form'
+import UniversalViewer from '@figgy/universal_viewer'
+import FileSetForm from '@figgy/file_set_form'
+import SaveAndIngestHandler from '@figgy/save_and_ingest_handler'
+import AutoIngestHandler from '@figgy/auto_ingest_handler'
+import MemberResourcesTables from '@figgy/relationships/member_resources_table'
+import ParentResourcesTables from '@figgy/relationships/parent_resources_table'
+import BulkLabeler from '@figgy/bulk_labeler/bulk_label'
+import BoundingBoxSelector from '@figgy/bounding_box_selector'
+import FieldManager from '@figgy/field_manager'
 
 export default class Initializer {
   constructor() {

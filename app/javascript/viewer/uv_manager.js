@@ -1,10 +1,10 @@
 /* global UV, $, createUV */
-import CDLTimer from 'viewer/cdl_timer'
-import IIIFLogo from 'images/iiif-logo.svg'
-import StatementOnHarmfulContentIcon from 'images/statement.png'
-import TakedownLogo from 'images/copyright.svg'
-import LeafletViewer from 'viewer/leaflet_viewer'
-import TabManager from 'viewer/tab_manager'
+import CDLTimer from '@viewer/cdl_timer'
+import IIIFLogo from '@images/iiif-logo.svg'
+import StatementOnHarmfulContentIcon from '@images/statement.png'
+import TakedownLogo from '@images/copyright.svg'
+import LeafletViewer from '@viewer/leaflet_viewer'
+import TabManager from '@viewer/tab_manager'
 
 export default class UVManager {
   async initialize () {
