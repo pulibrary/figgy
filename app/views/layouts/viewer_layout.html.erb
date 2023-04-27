@@ -4,7 +4,7 @@
     <%= csrf_meta_tag %>
     <link rel="stylesheet" type="text/css" href="uv/uv.css">
     <%= stylesheet_link_tag 'viewer' %>
-    <%= stylesheet_pack_tag 'viewer' %>
+    <%# stylesheet_pack_tag 'viewer' %>
     <%= yield :head %>
     <script type="text/javascript" src="/uv/lib/offline.js"></script>
     <script type="text/javascript" src="/uv/lib/offline.js"></script>
@@ -12,7 +12,7 @@
   </head>
   <body>
     <%= yield %>
-    <%= javascript_pack_tag 'viewer' %>
+    <%# javascript_pack_tag 'viewer' %>
     <script type="text/javascript" src="/uv/uv.js"></script>
   </body>
 </html>
