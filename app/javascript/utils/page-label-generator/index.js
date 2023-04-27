@@ -82,14 +82,26 @@ const labelGen = {
       if (!twoUp) {
         yield `${open}${eoBracketL}${unitLabel}${page1}${eoBracketR}${close}`
       } else {
-        let [num2, c] = numberer.next().value,
+        let [num2, c2] = numberer.next().value,
             side2 = frontBackLabeler.next().value,
             sep = `${bracketLeftClose}${twoUpSeparator}${bracketRightOpen}`,
             page2 = `${num2}${side2}`;
+        let [num3, c3] = numberer.next().value,
+            side3 = frontBackLabeler.next().value,
+            page3 = `${num3}${side3}`;
+        let [num4, c4] = numberer.next().value,
+            side4 = frontBackLabeler.next().value,
+            page4 = `${num4}${side4}`;
+        const hyphen = ' - ';
+        // if (twoUpDir=='rtl') {
+        //   yield `${open}${unitLabel}${page2}${sep}${page1}${close}`;
+        // } else {
+        //   yield `${open}${unitLabel}${page1}${sep}${page2}${close}`;
+        // }
         if (twoUpDir=='rtl') {
-          yield `${open}${unitLabel}${page2}${sep}${page1}${close}`;
+          yield `${open}${unitLabel}${page4}${sep}${page3}${hyphen}${page2}${sep}${page1}${close}`;
         } else {
-          yield `${open}${unitLabel}${page1}${sep}${page2}${close}`;
+          yield `${open}${unitLabel}${page1}${sep}${page2}${hyphen}${page3}${sep}${page4}${close}`;
         }
       }
     }

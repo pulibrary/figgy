@@ -54,7 +54,7 @@
         id="twoUp"
         name="twoUp"
         v-model="twoUp"
-        label="Two Up"
+        label="N Up"
         :options="twoUpOpts"
         @change="updateMultiLabels()"
       />
@@ -201,6 +201,9 @@ export default {
         },
         {
           label: 'Two-up', value: true
+        },
+        {
+          label: 'Four-up', value: true
         }
       ]
     },
