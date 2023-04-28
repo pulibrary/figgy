@@ -3,6 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <%= csrf_meta_tag %>
     <link rel="stylesheet" type="text/css" href="uv/uv.css">
+    <%= vite_javascript_tag 'viewer' %>
     <%= stylesheet_link_tag 'viewer' %>
     <%= yield :head %>
     <script type="text/javascript" src="/uv/lib/offline.js"></script>
@@ -11,7 +12,6 @@
   </head>
   <body>
     <%= yield %>
-    <%= vite_javascript_tag 'viewer' %>
     <script type="text/javascript" src="/uv/uv.js"></script>
   </body>
 </html>
