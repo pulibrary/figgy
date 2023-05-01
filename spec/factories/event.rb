@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :event do
+    current { true }
     type { "Test type" }
     status { "SUCCESS" }
     message { "Test message" }
@@ -15,7 +16,6 @@ FactoryBot.define do
     factory :local_fixity_success do
       type { :local_fixity }
       status { "SUCCESS" }
-      current { true }
       to_create do |instance|
         Valkyrie.config.metadata_adapter.persister.save(resource: instance)
       end
@@ -24,7 +24,6 @@ FactoryBot.define do
     factory :local_fixity_failure do
       type { :local_fixity }
       status { "FAILURE" }
-      current { true }
       to_create do |instance|
         Valkyrie.config.metadata_adapter.persister.save(resource: instance)
       end
@@ -33,7 +32,6 @@ FactoryBot.define do
     factory :local_fixity_repairing do
       type { :local_fixity }
       status { "REPAIRING" }
-      current { true }
       to_create do |instance|
         Valkyrie.config.metadata_adapter.persister.save(resource: instance)
       end

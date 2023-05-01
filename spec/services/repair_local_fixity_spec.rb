@@ -121,14 +121,6 @@ RSpec.describe RepairLocalFixity do
     end
   end
 
-  # change the file on disk so it has a different checksum
-  def modify_file(file_identifier)
-    path = file_identifier.id.gsub("disk://", "")
-    File.open(path, "w") do |f|
-      f.write "p0wned"
-    end
-  end
-
   def new_checksum(file_identifier)
     file_object = Valkyrie::StorageAdapter.find_by(id: file_identifier)
     MultiChecksum.for(file_object)

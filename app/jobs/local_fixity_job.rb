@@ -65,6 +65,7 @@ class LocalFixityJob < ApplicationJob
     end
 
     def build_repairing_change_set(new_checksum)
+      # binding.pry
       build_change_set(
         status: Event::REPAIRING,
         message: new_checksum.to_h.to_json

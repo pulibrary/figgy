@@ -156,6 +156,30 @@ class BaseWayfinder
     )
   end
 
+  def current_cloud_fixity_event
+    @current_cloud_fixity_event ||= query_service.custom_queries.find_by_property(
+      property: :metadata,
+      value: {
+        resource_id: Valkyrie::ID.new(resource.id),
+        type: "cloud_fixity",
+        current: true
+      },
+      model: Event
+    )&.first
+  end
+
+  def current_local_fixity_event
+    @current_local_fixity_event ||= query_service.custom_queries.find_by_property(
+      property: :metadata,
+      value: {
+        resource_id: Valkyrie::ID.new(resource.id),
+        type: "local_fixity",
+        current: true
+      },
+      model: Event
+    )&.first
+  end
+
   # Convenience accessor for loading the first member object, without having to
   # load all of the other members.
   def first_member
