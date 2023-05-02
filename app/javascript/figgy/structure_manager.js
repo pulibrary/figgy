@@ -1,5 +1,5 @@
-import {StructureParser} from "figgy/structure_parser"
-import shift_enabled_selecting from "figgy/shift_selecting"
+import {StructureParser} from '@figgy/structure_parser'
+import shift_enabled_selecting from '@figgy/shift_selecting'
 export default class StructureManager {
   constructor() {
     this.initialize_sortable()

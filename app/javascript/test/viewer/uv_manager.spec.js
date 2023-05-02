@@ -1,8 +1,6 @@
 import UVManager from 'viewer/uv_manager'
 import jQ from 'jquery'
-import LeafletViewer from 'viewer/leaflet_viewer'
 jest.mock('viewer/cdl_timer')
-jest.mock('viewer/leaflet_viewer')
 describe('UVManager', () => {
   const initialHTML =
     '<h1 id="title" class="lux-heading h1" style="display: none;"></h1>' +
@@ -117,6 +115,7 @@ describe('UVManager', () => {
       document.body.innerHTML = initialHTML
       mockJquery()
       mockUvProvider()
+      mockManifests(200)
       stubQuery({
         "type": "html",
         "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
@@ -129,14 +128,17 @@ describe('UVManager', () => {
 
       // Initialize
       const uvManager = new UVManager()
+      let spy = spyOn(uvManager, "buildLeafletViewer")
       await uvManager.initialize()
       expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
+      expect(spy).toHaveBeenCalled()
     })
 
     it('passes on an auth token to graphql', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
       mockUvProvider(false, '12')
+      mockManifests(200)
       stubQuery({
         'type': 'html',
         'content': '<iframe src="https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest"></iframe>',
@@ -159,6 +161,7 @@ describe('UVManager', () => {
       document.body.innerHTML = initialHTML
       mockJquery()
       mockUvProvider()
+      mockManifests(200)
       stubQuery({
         "type": "html",
         "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
@@ -190,9 +193,10 @@ describe('UVManager', () => {
 
       // Initialize
       const uvManager = new UVManager()
+      let spy = spyOn(uvManager, "buildLeafletViewer")
       await uvManager.initialize()
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
-      expect(LeafletViewer).not.toHaveBeenCalled()
+      expect(spy).not.toHaveBeenCalled()
     })
 
     it('falls back to a default viewer URI if not using a figgy manifest', async () => {

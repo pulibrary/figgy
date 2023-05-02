@@ -108,7 +108,7 @@ destroy` or turn off all services with `lando poweroff`.
    - Run jest tests: `yarn test`
 1. For development:
    - In a separate terminal: `bundle exec foreman start`
-     - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/master/Procfile]]
+     - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/main/Procfile]]
    - Access Figgy at http://localhost:3000/
 
 ### Parallel Tests

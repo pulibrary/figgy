@@ -44,7 +44,7 @@
 
 </template>
 <script>
-import IssueMonogram from './issue_monogram'
+import IssueMonogram from './issue_monogram.vue'
 
 export default {
   name: 'IssueMonograms',

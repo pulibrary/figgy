@@ -58,7 +58,6 @@ jobs:
           key: figgy-yarn-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
-      - run: NODE_ENV=test bundle exec rails webpacker:compile
       - persist_to_workspace:
           root: '~/figgy'
           paths: '*'

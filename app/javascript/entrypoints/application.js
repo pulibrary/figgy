@@ -2,19 +2,19 @@ import Vue from 'vue/dist/vue.esm'
 import system from 'lux-design-system'
 import 'lux-design-system/dist/system/system.css'
 import 'lux-design-system/dist/system/tokens/tokens.scss'
-import store from '../store'
-import DocumentAdder from '../components/document_adder'
-import EmbeddedFileBrowser from '../components/file_browser/embedded_file_browser'
-import InputPathSelector from '../components/file_browser/input_path_selector'
-import PlaylistMembers from '../components/playlist_members'
-import IssueMonograms from '../components/issue_monograms'
+import store from '@store'
+import DocumentAdder from '@components/document_adder.vue'
+import EmbeddedFileBrowser from '@components/file_browser/embedded_file_browser.vue'
+import InputPathSelector from '@components/file_browser/input_path_selector.vue'
+import PlaylistMembers from '@components/playlist_members.vue'
+import IssueMonograms from '@components/issue_monograms.vue'
 import axios from 'axios'
-import OrderManager from '../components/OrderManager.vue'
-import setupAuthLinkClipboard from '../packs/auth_link_clipboard.js'
-import AjaxSelect from '../components/ajax-select'
-import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select.js'
-import FileUploader from '../components/file-uploader'
-import Initializer from '../figgy/figgy_boot'
+import OrderManager from '@components/OrderManager.vue'
+import setupAuthLinkClipboard from '@figgy/auth_link_clipboard'
+import AjaxSelect from '@components/ajax-select.vue'
+import { setupAjaxSelect, setupCocoonLinks } from '@helpers/setup_ajax_select'
+import FileUploader from '@components/file-uploader.vue'
+import Initializer from '@figgy/figgy_boot'
 import VueDetails from 'vue-details'
 
 Vue.use(system)
@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
   }
+
   setupAuthLinkClipboard()
   // It's important we initialize Figgy after mounting Vue, otherwise none of
   // the JS will work because Vue takes it all over.

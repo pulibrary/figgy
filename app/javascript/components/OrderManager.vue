@@ -66,11 +66,11 @@
 
 <script>
 import { mapState } from 'vuex'
-import Controls from './OrderManagerControls'
-import Toolbar from './OrderManagerToolbar'
-import FilesetForm from './OrderManagerFilesetForm'
-import FilesetsForm from './OrderManagerFilesetsForm'
-import ResourceForm from './OrderManagerResourceForm'
+import Controls from './OrderManagerControls.vue'
+import Toolbar from './OrderManagerToolbar.vue'
+import FilesetForm from './OrderManagerFilesetForm.vue'
+import FilesetsForm from './OrderManagerFilesetsForm.vue'
+import ResourceForm from './OrderManagerResourceForm.vue'
 
 /**
  * OrderManager is a tool for reordering thumbnails that represent members of a complex object (a book, CD, multi-volume work, etc.).

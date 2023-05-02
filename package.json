@@ -6,13 +6,15 @@
     "lint": "yarn run eslint -- --ext .vue app/javascript"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.21.4",
     "@babel/preset-react": "^7.8.3",
     "@google-cloud/pubsub": "^0.31.0",
     "@google-cloud/storage": "^5.8.4",
-    "@rails/webpacker": "https://github.com/rails/webpacker#v5.4.3",
+    "@vitejs/plugin-vue2": "^2.2.0",
     "ajv": "^6.12.3",
     "apollo-boost": "^0.1.10",
     "axios": "^0.21.2",
+    "babel-plugin-macros": "^3.1.0",
     "core-js": "^3.16.2",
     "flush-promises": "^1.0.2",
     "graphql": "^16.5.0",
@@ -29,6 +31,8 @@
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
     "redux-logger": "^3.0.6",
+    "rollup-plugin-gzip": "^3.1.0",
+    "sass": "^1.62.1",
     "unfetch": "^4.0.1",
     "vue": "^2.5.17",
     "vue-details": "^1.1.0",
@@ -45,6 +49,7 @@
     "babel-core": "^7.0.0-bridge",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.2.5",
+    "dotenv": "^7.0.0",
     "eslint": "^5.11.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-loader": "^2.1.1",
@@ -54,15 +59,14 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.1.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
     "jest-canvas-mock": "^1.1.0",
     "jest-serializer-vue": "^2.0.2",
     "jquery": "^3.5.0",
-    "vue-jest": "^3.0.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.9.3",
-    "dotenv": "^7.0.0",
-    "identity-obj-proxy": "^3.0.0"
+    "vite": "^4.2.0",
+    "vite-plugin-ruby": "^3.2.0",
+    "vue-jest": "^3.0.0"
   },
   "jest": {
     "roots": [
@@ -76,6 +80,8 @@
     ],
     "moduleNameMapper": {
       ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$": "identity-obj-proxy",
+      "@viewer/(.*)$": "<rootDir>/app/javascript/viewer/$1",
+      "@store/(.*)": "<rootDir>/app/javascript/store/$1",
       "^@/(.*)$": "app/javascript/$1"
     },
     "moduleFileExtensions": [
