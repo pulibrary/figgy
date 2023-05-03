@@ -72,7 +72,9 @@ class PDFGenerator
 
         header(prawn_document, "Contact Information")
         text = (resource.try(:holding_location) || []).map { |x| holding_location_text(x) }.join("")
-        prawn_document.text text, inline_format: true
+        text.split("\n").each do |line|
+          prawn_document.text line, inline_format: true
+        end
         prawn_document.move_down 20
 
         header(prawn_document, "Download Information")
@@ -128,7 +130,13 @@ class PDFGenerator
       end
 
       def holding_location_text(holding_location)
-        ControlledVocabulary.for(:holding_location).find(holding_location).label
+        controlled_holding = ControlledVocabulary.for(:holding_location).find(holding_location)
+        <<~EOS
+        #{controlled_holding.label}
+        #{controlled_holding.source_data[:contact_email]}
+        #{controlled_holding.source_data[:address]}
+        #{controlled_holding.source_data[:phone_number]}
+        EOS
       end
 
       def rights_statement_label(statement)

@@ -58,6 +58,7 @@ class ControlledVocabulary
     attribute :definition, Valkyrie::Types::String
     attribute :accept_label, Valkyrie::Types::String
     attribute :label_class, Valkyrie::Types::String
+    attribute :source_data, Valkyrie::Types::Any
 
     # Whether or not this Term has been marked as notable
     #  Notable means that a user can add a note about this term via the UI.
@@ -390,7 +391,7 @@ class ControlledVocabulary
         next if value.nil?
 
         uri = value.gsub(".json", "")
-        Term.new(label: label, value: uri)
+        Term.new(label: label, value: uri, source_data: record)
       end
       values.compact
     end
