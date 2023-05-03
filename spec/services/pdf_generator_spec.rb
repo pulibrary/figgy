@@ -301,6 +301,35 @@ RSpec.describe PDFGenerator do
       end
     end
 
+    context "when a resource has a holding location" do
+      it "displays contact information" do
+        stub_catalog(bib_id: "991234563506421")
+        resource = FactoryBot.create_for_repository(
+          :scanned_resource,
+          files: [file],
+          source_metadata_identifier: "991234563506421",
+          holding_location: ControlledVocabulary.for(:holding_location).all.first.value
+        )
+        file_set = Wayfinder.for(resource).file_sets.first
+        stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+        generator = described_class.new(resource: resource, storage_adapter: storage_adapter)
+        file_node = generator.render
+
+        file = Valkyrie::StorageAdapter.find_by(id: file_node.file_identifiers.first)
+        expect(File.exist?(file.io.path)).to eq true
+
+        pdf_reader = PDF::Reader.new(file.io.path)
+        cover_page = pdf_reader.pages.first
+        # Strip newlines, since the PDF adds them to fit stuff on the cover
+        # page.
+        text = cover_page.text.tr("\n", " ")
+        expect(text).to include("ppllib@princeton.edu")
+        expect(text).to include("Forrestal Campus Princeton, NJ 08544")
+        expect(text).to include("609-243-3565")
+      end
+    end
+
     context "when a resource is a volume in a MVW" do
       it "renders metadata from the parent MVW" do
         stub_catalog(bib_id: "991234563506421")
