@@ -106,22 +106,53 @@ RSpec.describe Wayfinder do
         if cloud_fixity_success
           # Create an old failure, to guard for the case where it failed and we
           # fixed it.
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS",
-                                                   resource_id: preservation_object.id, child_id: metadata_node.id,
-                                                   child_property: :metadata_node, current: true)
+          FactoryBot.create_for_repository(
+            :event,
+            type: :cloud_fixity,
+            status: "FAILURE",
+            resource_id: preservation_object.id,
+            child_id: metadata_node.id,
+            child_property: :metadata_node,
+            current: false
+          )
+          FactoryBot.create_for_repository(
+            :event,
+            type: :cloud_fixity,
+            status: "SUCCESS",
+            resource_id: preservation_object.id, child_id: metadata_node.id,
+            child_property: :metadata_node,
+            current: true
+          )
         else
           # Create an old success, to guard for the case where it once succeeded
           # and now it failed.
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS", resource_id: preservation_object.id, child_id: metadata_node.id, child_property: :metadata_node)
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "FAILURE",
-                                                   resource_id: preservation_object.id, child_id: metadata_node.id,
-                                                   child_property: :metadata_node, current: true)
+          FactoryBot.create_for_repository(
+            :event,
+            type: :cloud_fixity,
+            status: "SUCCESS",
+            resource_id: preservation_object.id,
+            child_id: metadata_node.id,
+            child_property: :metadata_node,
+            current: false
+          )
+          FactoryBot.create_for_repository(
+            :event,
+            type: :cloud_fixity,
+            status: "FAILURE",
+            resource_id: preservation_object.id,
+            child_id: metadata_node.id,
+            child_property: :metadata_node, current: true
+          )
           # Create a success on a different child property, to guard for a
           # different node succeeding.
-          FactoryBot.create_for_repository(:event, type: :cloud_fixity, status: "SUCCESS",
-                                                   resource_id: preservation_object.id, child_id: metadata_node2.id,
-                                                   child_property: :binary_nodes, current: true)
+          FactoryBot.create_for_repository(
+            :event,
+            type: :cloud_fixity,
+            status: "SUCCESS",
+            resource_id: preservation_object.id,
+            child_id: metadata_node2.id,
+            child_property: :binary_nodes, current: true
+          )
         end
         file_set
       end
