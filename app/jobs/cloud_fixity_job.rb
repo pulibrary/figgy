@@ -51,6 +51,10 @@ class CloudFixityJob < ApplicationJob
       false
     end
 
+    def resource
+      @resource ||= query_service.find_by(id: resource_id)
+    end
+
     def previous_event_change_set
       return unless previous_event
       ChangeSet.for(previous_event).tap do |cs|
