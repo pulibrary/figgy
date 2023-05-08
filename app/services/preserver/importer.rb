@@ -74,7 +74,7 @@ class Preserver
         IngestableFile.new(
           file_path: stored_file.disk_path,
           mime_type: "application/octet-stream",
-          original_filename: File.basename(stored_file.disk_path),
+          original_filename: filename_from_metadata(file_identifier) || File.basename(stored_file.disk_path),
           use: use_from_metadata(file_identifier)
         )
       rescue Valkyrie::StorageAdapter::FileNotFound => not_found_error
@@ -90,6 +90,11 @@ class Preserver
         else
           Valkyrie::Vocab::PCDMUse.OriginalFile
         end
+      end
+
+      def filename_from_metadata(file_identifier)
+        file_metadata = file_set.file_metadata.find { |fm| file_identifier.id.include? fm.id.id }
+        return file_metadata.original_filename.first if file_metadata
       end
 
       def default_storage_adapter

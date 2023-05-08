@@ -1443,6 +1443,7 @@ RSpec.describe ChangeSetPersister do
         expect(output.member_ids.length).to eq 1
         file_set = change_set_persister.query_service.find_members(resource: output).first
         expect(file_set.file_metadata.length).to eq 2
+        expect(file_set.primary_file.original_filename).to eq ["example.tif"]
 
         # Expect deletion_marker to be gone
         deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
