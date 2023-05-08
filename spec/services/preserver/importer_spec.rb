@@ -70,8 +70,7 @@ describe Preserver::Importer do
       imported_file_metadata = imported.file_metadata
       expect(imported_file_metadata.length).to eq 1
       expect(imported_file_metadata.first.file_identifiers.length).to eq 1
-      file_identifier = imported_file_metadata.first.file_identifiers.first
-      expect(File.basename(file_identifier.to_s)).to eq File.basename(binary_file_identifiers.first.to_s)
+      expect(imported.primary_file.original_filename).to eq ["example.tif"]
     end
 
     context "when the preserved resource does not have any metadata" do
@@ -112,8 +111,7 @@ describe Preserver::Importer do
       imported_file_metadata = imported.file_metadata
       expect(imported_file_metadata.length).to eq 1
       expect(imported_file_metadata.first.file_identifiers.length).to eq 1
-      file_identifier = imported_file_metadata.first.file_identifiers.first
-      expect(File.basename(file_identifier.to_s)).to eq File.basename(binary_file_identifiers.first.to_s)
+      expect(imported.primary_file.original_filename).to eq ["example.tif"]
     end
 
     context "with an invalid metadata identifier" do
