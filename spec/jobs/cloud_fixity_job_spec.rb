@@ -8,7 +8,7 @@ RSpec.describe CloudFixityJob do
 
     it "creates a new fixity event and marks the previously current event no longer current" do
       old_event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: resource.metadata_node.id, child_property: "metadata_node", current: true)
-      described_class.perform_now(status: "SUCCESS", resource_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+      described_class.perform_now(status: "SUCCESS", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
 
       events = query_service.find_all_of_model(model: Event)
       expect(events.to_a.length).to eq 2
@@ -31,7 +31,7 @@ RSpec.describe CloudFixityJob do
       context "and previous event was repairing" do
         it "creates a failure event and notifies honeybadger" do
           FactoryBot.create_for_repository(:cloud_fixity_event, status: Event::REPAIRING, resource_id: resource.id, child_id: resource.metadata_node.id, child_property: "metadata_node", current: true)
-          described_class.perform_now(status: "FAILURE", resource_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+          described_class.perform_now(status: "FAILURE", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
           events = query_service.find_all_of_model(model: Event)
           current_events = events.select(&:current?)
           expect(current_events.to_a.length).to eq 1
@@ -45,7 +45,7 @@ RSpec.describe CloudFixityJob do
       context "and previous event was not repairing" do
         it "creates a repairing event, kicks off repair job, and notifies honeybadger" do
           FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: resource.metadata_node.id, child_property: "metadata_node", current: true)
-          described_class.perform_now(status: "FAILURE", resource_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+          described_class.perform_now(status: "FAILURE", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
           events = query_service.find_all_of_model(model: Event)
           current_events = events.select(&:current?)
           expect(current_events.to_a.length).to eq 1
@@ -58,7 +58,7 @@ RSpec.describe CloudFixityJob do
 
       context "and there was no previous event" do
         it "creates a repairing event, kicks off repair job, and notifies honeybadger" do
-          described_class.perform_now(status: "FAILURE", resource_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+          described_class.perform_now(status: "FAILURE", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
           events = query_service.find_all_of_model(model: Event)
           current_events = events.select(&:current?)
           expect(current_events.to_a.length).to eq 1
@@ -75,7 +75,7 @@ RSpec.describe CloudFixityJob do
         allow(Honeybadger).to receive(:notify)
       end
       it "exits quietly" do
-        described_class.perform_now(status: "FAILURE", resource_id: "oldresourceid", child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+        described_class.perform_now(status: "FAILURE", preservation_object_id: "oldresourceid", child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
         expect(Honeybadger).not_to have_received(:notify)
       end
     end
