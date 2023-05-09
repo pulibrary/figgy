@@ -15,7 +15,7 @@
       </div>
       <div
         class="folder-container"
-        @click.capture="select(structure.id, $event)"
+        @click.capture="select(jsonData.id, $event)"
         :class="[
           'lux-item-label',
           { selected: isSelected },
@@ -34,7 +34,11 @@
         </lux-icon-base>
         <template v-if="editedFieldId === id">
           <div class="folder-label">
-            <input type="text" v-model="jsonData.label" :ref="`field${id}`" />
+            <input
+              type="text"
+              v-on:keyup.enter="saveLabel(id)"
+              v-model="jsonData.label"
+              :ref="`field${id}`" />
           </div>
           <div class="folder-edit">
             <input-button
@@ -107,7 +111,6 @@ export default {
     return {
       // hasChildren: this.jsonData.folders.length > 0,
       isOpen: true,
-      structure: this.jsonData,
       editedFieldId: null,
     }
   },
