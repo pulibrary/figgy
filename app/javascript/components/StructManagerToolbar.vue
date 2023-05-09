@@ -8,7 +8,7 @@
       button-label="Actions"
       :menu-items="[
         {name: 'Create New Folder', component: 'FolderCreate'},
-        {name: 'Delete Folder', component: 'FolderDelete'},
+        {name: 'Delete Folder', component: 'FolderDelete', disabled: this.rootNodeSelected},
         {name: 'Cut', component: 'Cut', disabled: true},
         {name: 'Paste', component: 'Paste'}
       ]"
@@ -78,7 +78,10 @@ export default {
       get () {
         return this.gallery.cut
       }
-    }
+    },
+    rootNodeSelected: function() {
+      return this.tree.selected === this.tree.structure.id
+    },
   },
   methods: {
     cutSelected: function () {
@@ -140,20 +143,27 @@ export default {
       }
     },
     createFolder: function (contentsList) {
-      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id;
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+      console.log(parentId)
       const newFolder = {
         id: this.generateId(),
         folders: contentsList,
         label: "Untitled",
       }
       // need to stringify and parse to drop the observer that comes with Vue reactive data
-      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
-      let newParent = parentFolderObject.folders.push(newFolder)
-      const structure = {
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let structure = {
         id: this.tree.structure.id,
-        folders: this.addNewFolder(folderList, newParent),
         label: this.tree.structure.label,
+      }
+      if(parentId === rootId) {
+        folderList.push(newFolder)
+        structure.folders = folderList
+      } else {
+        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+        let newParent = parentFolderObject.folders.push(newFolder)
+        structure.folders = this.addNewFolder(folderList, newParent)
       }
       this.$store.commit("CREATE_FOLDER", structure)
     },
@@ -171,6 +181,11 @@ export default {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let folderToBeRemoved = this.findSelectedFolderById(folderList, this.tree.selected)
       const selectedNode = this.tree.selected
+      const rootId = this.tree.structure.id
+      if(selectedNode === rootId) {
+        alert("Sorry, you cannot delete the root node.")
+        return false
+      }
       if(folderList.includes(folderToBeRemoved)) {
         if (folderToBeRemoved.folders.length) {
           let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
@@ -185,6 +200,16 @@ export default {
             this.$store.commit("DELETE_FOLDER", structure)
             this.$store.commit("SELECT", null)
           }
+        } else {
+          const index = folderList.indexOf(folderToBeRemoved)
+          folderList.splice(index, 1)
+          const structure = {
+            id: this.tree.structure.id,
+            folders: folderList,
+            label: this.tree.structure.label,
+          }
+          this.$store.commit("DELETE_FOLDER", structure)
+          this.$store.commit("SELECT", null)
         }
       } else {
         // if there are sub-folders, warn the user that they will also be deleted.
