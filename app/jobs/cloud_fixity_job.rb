@@ -8,8 +8,7 @@ class CloudFixityJob < ApplicationJob
   # rubocop:disable Metrics/MethodLength
   def perform(status:, resource_id:, child_property:, child_id:)
     @fixity_status = status
-    # resource_id is a PreservationObject
-    @resource_id = resource_id
+    @resource_id = resource_id # resource_id is a PreservationObject
     @child_property = child_property
     @child_id = child_id
 
@@ -28,7 +27,7 @@ class CloudFixityJob < ApplicationJob
     end
     if updated_status == Event::REPAIRING
       event = Wayfinder.for(resource).current_cloud_fixity_event
-      RepairCloudFixityJob.perform_later(event: event)
+      RepairCloudFixityJob.perform_later(event_id: event.id.to_s)
     end
   end
   # rubocop:enable Style/GuardClause
