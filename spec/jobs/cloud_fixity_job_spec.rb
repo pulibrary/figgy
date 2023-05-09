@@ -55,6 +55,19 @@ RSpec.describe CloudFixityJob do
           expect(RepairCloudFixityJob).to have_received(:perform_later)
         end
       end
+
+      context "and there was no previous event" do
+        it "creates a repairing event, kicks off repair job, and notifies honeybadger" do
+          described_class.perform_now(status: "FAILURE", resource_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+          events = query_service.find_all_of_model(model: Event)
+          current_events = events.select(&:current?)
+          expect(current_events.to_a.length).to eq 1
+          event = current_events.first
+          expect(event).to be_repairing
+          expect(Honeybadger).to have_received(:notify)
+          expect(RepairCloudFixityJob).to have_received(:perform_later)
+        end
+      end
     end
 
     context "when resource does not exist" do

@@ -8,6 +8,7 @@ class CloudFixityJob < ApplicationJob
   # rubocop:disable Metrics/MethodLength
   def perform(status:, resource_id:, child_property:, child_id:)
     @fixity_status = status
+    # resource_id is a PreservationObject
     @resource_id = resource_id
     @child_property = child_property
     @child_id = child_id
@@ -37,7 +38,7 @@ class CloudFixityJob < ApplicationJob
 
     def updated_status
       @updated_status ||=
-        if fixity_status == Event::FAILURE && !previous_event.repairing?
+        if fixity_status == Event::FAILURE && !previous_event&.repairing?
           Event::REPAIRING
         else
           fixity_status
