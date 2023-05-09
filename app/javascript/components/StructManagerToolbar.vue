@@ -9,7 +9,7 @@
       :menu-items="[
         {name: 'Create New Folder', component: 'FolderCreate'},
         {name: 'Delete Folder', component: 'FolderDelete', disabled: this.rootNodeSelected},
-        {name: 'Cut', component: 'Cut', disabled: true},
+        {name: 'Cut', component: 'Cut', disabled: isCutDisabled()},
         {name: 'Paste', component: 'Paste'}
       ]"
       @menu-item-clicked="menuSelection($event)"
@@ -85,6 +85,7 @@ export default {
   },
   methods: {
     cutSelected: function () {
+      console.log('cutSelected called!')
       this.$store.dispatch('cut', this.gallery.selected)
       this.selectNone()
     },
