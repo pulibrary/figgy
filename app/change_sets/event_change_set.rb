@@ -11,6 +11,7 @@ class EventChangeSet < ChangeSet
             required: true,
             type: Valkyrie::Types::Set.of(Valkyrie::Types::OptimisticLockToken)
   property :current, multiple: false, required: true, type: Valkyrie::Types::Bool
+  delegate :repairing?, to: :model
 
   def preserve?
     false

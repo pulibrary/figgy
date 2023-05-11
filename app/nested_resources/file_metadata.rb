@@ -29,8 +29,9 @@ class FileMetadata < Valkyrie::Resource
   attribute :page_count, Valkyrie::Types::Integer
 
   # preservation attributes
-  # ID of the object this node is a preservation copy of. Points to another
-  # FileMetadata ID (in a PreservationObject), and used for checking if something is
+  # ID of the object this node is a preservation copy of. A PreservationObject's
+  # binary_node (which is a FileMetadata object) uses this value to point to a
+  # FileSet's FileMetadata ID. This value is used for checking if something is
   # already preserved.
   attribute :preservation_copy_of_id, Valkyrie::Types::ID.optional
 

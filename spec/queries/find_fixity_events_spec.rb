@@ -61,7 +61,7 @@ RSpec.describe FindFixityEvents do
     end
 
     context "when a fixity check which has failed later succeeds" do
-      let(:event) { FactoryBot.create_for_repository(:cloud_fixity_event, status:  "FAILURE", resource_id: event_resource_id) }
+      let(:event) { FactoryBot.create_for_repository(:cloud_fixity_event, status:  "FAILURE", resource_id: event_resource_id, current: false) }
       let(:event2) { FactoryBot.create_for_repository(:cloud_fixity_event, status: "SUCCESS", resource_id: event_resource_id, current: true) }
       let(:event3_resource_id) { Valkyrie::ID.new(SecureRandom.uuid) }
       let(:event3) { FactoryBot.create_for_repository(:cloud_fixity_event, status: "FAILURE", resource_id: event3_resource_id, current: true) }
@@ -119,7 +119,7 @@ RSpec.describe FindFixityEvents do
     end
 
     context "when resource_id has more than one event" do
-      let(:event) { FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: event_resource_id) }
+      let(:event) { FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: event_resource_id, current: false) }
       let(:event2) { FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: event_resource_id, current: true) }
 
       it "returns only the current event" do

@@ -3,14 +3,14 @@ class FixityDashboardController < ApplicationController
   delegate :query_service, to: :metadata_adapter
 
   def show
-    @cloud_failures = query_service.custom_queries.find_fixity_events(status: "FAILURE", type: :cloud_fixity).map(&:decorate)
-    @cloud_recent_checks = query_service.custom_queries.find_fixity_events(status: "SUCCESS", sort: "desc", limit: 10, type: :cloud_fixity).map(&:decorate)
+    @cloud_failures = query_service.custom_queries.find_fixity_events(status: Event::FAILURE, type: :cloud_fixity).map(&:decorate)
+    @cloud_recent_checks = query_service.custom_queries.find_fixity_events(status: Event::SUCCESS, sort: "desc", limit: 10, type: :cloud_fixity).map(&:decorate)
 
     # We only check for failures on Events, since there were no failures at the
     # time we migrated to Events. Similarly, all recent checks will have
     # corresponding Events.
-    @failures = query_service.custom_queries.find_fixity_events(status: "FAILURE", type: :local_fixity).map(&:decorate)
-    @recents = query_service.custom_queries.find_fixity_events(status: "SUCCESS", sort: "desc", limit: 10, type: :local_fixity).map(&:decorate)
+    @failures = query_service.custom_queries.find_fixity_events(status: Event::FAILURE, type: :local_fixity).map(&:decorate)
+    @recents = query_service.custom_queries.find_fixity_events(status: Event::SUCCESS, sort: "desc", limit: 10, type: :local_fixity).map(&:decorate)
     authorize! :read, :fixity
   end
 

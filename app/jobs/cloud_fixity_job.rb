@@ -3,10 +3,12 @@ class CloudFixityJob < ApplicationJob
   queue_as :super_low
   delegate :query_service, to: :change_set_persister
 
-  attr_reader :resource_id, :child_property, :child_id
+  attr_reader :preservation_object_id, :child_property, :child_id, :fixity_status
   # rubocop:disable Style/GuardClause
-  def perform(status:, resource_id:, child_property:, child_id:)
-    @resource_id = resource_id
+  # rubocop:disable Metrics/MethodLength
+  def perform(status:, preservation_object_id:, child_property:, child_id:)
+    @fixity_status = status
+    @preservation_object_id = preservation_object_id
     @child_property = child_property
     @child_id = child_id
 
@@ -14,14 +16,18 @@ class CloudFixityJob < ApplicationJob
     # was being checked no longer exists. This happens on occasion.
     return unless resource_exist?
     event_change_set = EventChangeSet.new(Event.new)
-    event_change_set.validate(type: :cloud_fixity, status: status, resource_id: resource_id, child_property: child_property.to_sym, child_id: child_id, current: true)
+    event_change_set.validate(type: :cloud_fixity, status: updated_status, resource_id: preservation_object_id, child_property: child_property.to_sym, child_id: child_id, current: true)
     raise "Unable to update fixity. Invalid event: #{event_change_set.errors.full_messages.to_sentence}" unless event_change_set.valid?
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       buffered_change_set_persister.save(change_set: previous_event_change_set) if previous_event
       buffered_change_set_persister.save(change_set: event_change_set)
     end
-    if status == "FAILURE"
-      Honeybadger.notify("Cloud fixity failure on object with resource id: #{resource_id}, child property: #{child_property}, child id: #{child_id}")
+    if fixity_status == "FAILURE"
+      Honeybadger.notify("Cloud fixity failure on object with resource id: #{preservation_object_id}, child property: #{child_property}, child id: #{child_id}")
+    end
+    if updated_status == Event::REPAIRING
+      event = Wayfinder.for(resource).current_cloud_fixity_events.find { |e| e.child_id.to_s == child_id }
+      RepairCloudFixityJob.perform_later(event_id: event.id.to_s)
     end
   end
   # rubocop:enable Style/GuardClause
@@ -29,11 +35,24 @@ class CloudFixityJob < ApplicationJob
 
   private
 
+    def updated_status
+      @updated_status ||=
+        if fixity_status == Event::FAILURE && !previous_event&.repairing?
+          Event::REPAIRING
+        else
+          fixity_status
+        end
+    end
+
     def resource_exist?
-      query_service.find_by(id: resource_id)
+      query_service.find_by(id: preservation_object_id)
       true
     rescue Valkyrie::Persistence::ObjectNotFoundError
       false
+    end
+
+    def resource
+      @resource ||= query_service.find_by(id: preservation_object_id)
     end
 
     def previous_event_change_set
@@ -48,7 +67,7 @@ class CloudFixityJob < ApplicationJob
         property: :metadata,
         value: {
           type: :cloud_fixity,
-          resource_id: Valkyrie::ID.new(resource_id),
+          resource_id: Valkyrie::ID.new(preservation_object_id),
           child_property: child_property,
           child_id: Valkyrie::ID.new(child_id),
           current: true

@@ -118,11 +118,11 @@ class BaseWayfinder
   end
 
   def deep_failed_local_fixity_count
-    @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_status: "FAILURE")
+    @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_status: Event::FAILURE)
   end
 
   def deep_succeeded_local_fixity_count
-    @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_status: "SUCCESS")
+    @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_status: Event::SUCCESS)
   end
 
   def deep_failed_cloud_fixity_count
@@ -153,6 +153,32 @@ class BaseWayfinder
       property: :file_metadata,
       value: nil,
       count: true
+    )
+  end
+
+  # A resource may have multiple current cloud fixity events because there will
+  # be one for the metadata node and one or more for the binary node/s
+  def current_cloud_fixity_events
+    @current_cloud_fixity_events ||= query_service.custom_queries.find_by_property(
+      property: :metadata,
+      value: {
+        resource_id: Valkyrie::ID.new(resource.id),
+        type: "cloud_fixity",
+        current: true
+      },
+      model: Event
+    )
+  end
+
+  def current_local_fixity_events
+    @current_local_fixity_events ||= query_service.custom_queries.find_by_property(
+      property: :metadata,
+      value: {
+        resource_id: Valkyrie::ID.new(resource.id),
+        type: "local_fixity",
+        current: true
+      },
+      model: Event
     )
   end
 

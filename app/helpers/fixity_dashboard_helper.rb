@@ -8,9 +8,9 @@ module FixityDashboardHelper
     case val
     when nil
       "in progress"
-    when 0
+    when Event::FAILURE
       "failed"
-    when 1
+    when Event::SUCCESS
       "succeeded"
     end
   end
@@ -19,9 +19,9 @@ module FixityDashboardHelper
     case val
     when nil
       "in progress"
-    when "FAILURE"
+    when Event::FAILURE
       "failed"
-    when "SUCCESS"
+    when Event::SUCCESS
       "succeeded"
     end
   end
@@ -30,9 +30,9 @@ module FixityDashboardHelper
     case val
     when nil
       "info"
-    when 0
+    when Event::FAILURE
       "warning"
-    when 1
+    when Event::SUCCESS
       "primary"
     end
   end

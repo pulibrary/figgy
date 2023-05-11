@@ -39,11 +39,11 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   delegate :downloadable?, to: :parent
 
   def cloud_fixity_success_of(file_id)
-    cloud_fixity_events_for(file_id).find { |e| e.current == true }&.status
+    cloud_fixity_events_for(file_id).find(&:current?)&.status
   end
 
   def cloud_fixity_last_success_date_of(file_id)
-    cloud_fixity_events_for(file_id).select { |e| e.status == "SUCCESS" }.map(&:created_at).max || "n/a"
+    cloud_fixity_events_for(file_id).select(&:successful?).map(&:created_at).max || "n/a"
   end
 
   def local_fixity_success_of(file_id)
@@ -61,7 +61,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
     event_date = custom_queries.find_by_property(
       model: Event,
       property: :metadata,
-      value: { status: "SUCCESS", resource_id: id, child_id: file_id }
+      value: { status: Event::SUCCESS, resource_id: id, child_id: file_id }
     ).map(&:created_at).max
     event_date || "n/a"
   end

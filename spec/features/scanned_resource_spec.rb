@@ -37,4 +37,12 @@ RSpec.feature "Scanned Resource" do
       expect(page).to have_selector(".uv.en-gb")
     end
   end
+
+  scenario "show page has a health status" do
+    file = fixture_file_upload("files/example.tif", "image/tiff")
+    resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+
+    visit solr_document_path(id: resource.id)
+    expect(page).to have_selector("#health-status")
+  end
 end
