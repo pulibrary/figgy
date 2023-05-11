@@ -170,10 +170,8 @@ class BaseWayfinder
     )
   end
 
-  # TODO: this should also be plural, because of the possibility of a
-  # preservation file and an intermediate file
-  def current_local_fixity_event
-    @current_local_fixity_event ||= query_service.custom_queries.find_by_property(
+  def current_local_fixity_events
+    @current_local_fixity_events ||= query_service.custom_queries.find_by_property(
       property: :metadata,
       value: {
         resource_id: Valkyrie::ID.new(resource.id),
@@ -181,7 +179,7 @@ class BaseWayfinder
         current: true
       },
       model: Event
-    )&.first
+    )
   end
 
   # Convenience accessor for loading the first member object, without having to

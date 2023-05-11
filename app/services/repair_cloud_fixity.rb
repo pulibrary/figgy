@@ -33,10 +33,9 @@ class RepairCloudFixity
       # Once we know it's a binary node, resource id is the file set id
       # LocalFixityJob will create a new current local_fixity event
       LocalFixityJob.perform_now(resource.id.to_s)
-      local_fixity_event = Wayfinder.for(resource).current_local_fixity_event
+      local_fixity_events = Wayfinder.for(resource).current_local_fixity_events
 
-      # TODO: check that they're all successful
-      if local_fixity_event.successful?
+      if local_fixity_events.count(&:successful?) == local_fixity_events.count
         # Re-preserve using local file
         Preserver.for(change_set: ChangeSet.for(resource), change_set_persister: ChangeSetPersister.default, force_preservation: true).preserve!
       else

@@ -101,9 +101,11 @@ RSpec.describe RepairCloudFixity do
         repairing_event = FactoryBot.create_for_repository(:cloud_fixity_event, status: Event::REPAIRING, resource_id: preservation_object.id, child_property: "binary_nodes",
                                                                                 child_id: preservation_object.binary_nodes.first.id)
 
-        # Modify the intermediate file
-        file_identifier = file_set.intermediate_file.file_identifiers.first
-        modify_file(file_identifier)
+        # Modify the intermediate or preservation file
+        file_metadata = file_set.file_metadata.reverse.find do |r|
+          r.use.include?(Valkyrie::Vocab::PCDMUse.IntermediateFile) || r.use.include?(Valkyrie::Vocab::PCDMUse.PreservationFile)
+        end
+        modify_file(file_metadata.file_identifiers.first)
 
         # Mock repairing local fixity (called in the LocalFixityJob)
         allow(RepairLocalFixityJob).to receive(:perform_later)
