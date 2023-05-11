@@ -7,6 +7,10 @@ RSpec.describe RepairCloudFixity do
   let(:query_service) { metadata_adapter.query_service }
   let(:persister) { metadata_adapter.persister }
 
+  before do
+    allow(CloudFixity::FixityRequestor).to receive(:queue_resource_check!)
+  end
+
   context "when a metadata node has failed fixity" do
     it "re-preserves the metadata file" do
       resource = FactoryBot.create_for_repository(:complete_scanned_resource, title: "Preserved Resource Title")
@@ -49,6 +53,7 @@ RSpec.describe RepairCloudFixity do
         described_class.run(event: failed_event)
         expect(Preserver).to have_received(:for).with(force_preservation: true, change_set: anything, change_set_persister: anything)
         expect(preserver_double).to have_received(:preserve!)
+        expect(CloudFixity::FixityRequestor).to have_received(:queue_resource_check!).with(id: file_set.id.to_s)
       end
     end
 
@@ -109,9 +114,7 @@ RSpec.describe RepairCloudFixity do
 
         # Mock repairing local fixity (called in the LocalFixityJob)
         allow(RepairLocalFixityJob).to receive(:perform_later)
-        preserver_double = instance_double(Preserver)
-        allow(preserver_double).to receive(:preserve!)
-        allow(Preserver).to receive(:for).and_return(preserver_double)
+        allow(Preserver).to receive(:for)
 
         described_class.run(event: repairing_event)
         current_events = Wayfinder.for(preservation_object).current_cloud_fixity_events

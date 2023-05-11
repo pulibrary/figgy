@@ -38,6 +38,7 @@ class RepairCloudFixity
       if local_fixity_events.count(&:successful?) == local_fixity_events.count
         # Re-preserve using local file
         Preserver.for(change_set: ChangeSet.for(resource), change_set_persister: ChangeSetPersister.default, force_preservation: true).preserve!
+        CloudFixity::FixityRequestor.queue_resource_check!(id: resource.id.to_s)
       else
         create_failed_cloud_fixity_event
       end
