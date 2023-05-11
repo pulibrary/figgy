@@ -26,7 +26,7 @@ class CloudFixityJob < ApplicationJob
       Honeybadger.notify("Cloud fixity failure on object with resource id: #{preservation_object_id}, child property: #{child_property}, child id: #{child_id}")
     end
     if updated_status == Event::REPAIRING
-      event = Wayfinder.for(resource).current_cloud_fixity_event
+      event = Wayfinder.for(resource).current_cloud_fixity_events.find{ |e| e.child_id.to_s == child_id }
       RepairCloudFixityJob.perform_later(event_id: event.id.to_s)
     end
   end

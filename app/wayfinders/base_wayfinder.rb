@@ -156,8 +156,10 @@ class BaseWayfinder
     )
   end
 
-  def current_cloud_fixity_event
-    @current_cloud_fixity_event ||= query_service.custom_queries.find_by_property(
+  # A resource may have multiple current cloud fixity events because there will
+  # be one for the metadata node and one or more for the binary node/s
+  def current_cloud_fixity_events
+    @current_cloud_fixity_events ||= query_service.custom_queries.find_by_property(
       property: :metadata,
       value: {
         resource_id: Valkyrie::ID.new(resource.id),
@@ -165,9 +167,11 @@ class BaseWayfinder
         current: true
       },
       model: Event
-    )&.first
+    )
   end
 
+  # TODO: this should also be plural, because of the possibility of a
+  # preservation file and an intermediate file
   def current_local_fixity_event
     @current_local_fixity_event ||= query_service.custom_queries.find_by_property(
       property: :metadata,

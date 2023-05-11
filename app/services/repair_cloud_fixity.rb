@@ -35,6 +35,7 @@ class RepairCloudFixity
       LocalFixityJob.perform_now(resource.id.to_s)
       local_fixity_event = Wayfinder.for(resource).current_local_fixity_event
 
+      # TODO check that they're all successful
       if local_fixity_event.successful?
         # Re-preserve using local file
         Preserver.for(change_set: ChangeSet.for(resource), change_set_persister: ChangeSetPersister.default, force_preservation: true).preserve!

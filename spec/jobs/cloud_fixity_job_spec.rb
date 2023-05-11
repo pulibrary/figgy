@@ -38,21 +38,23 @@ RSpec.describe CloudFixityJob do
           event = current_events.first
           expect(event).to be_failed
           expect(Honeybadger).to have_received(:notify)
-          expect(RepairCloudFixityJob).not_to have_received(:perform_later)
+          expect(RepairCloudFixityJob).not_to have_received(:perform_later).with(event_id: event.id)
         end
       end
 
+      # tests that we get the right event when there's also one for the binary node
       context "and previous event was not repairing" do
         it "creates a repairing event, kicks off repair job, and notifies honeybadger" do
+          FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: Valkyrie::ID.new(SecureRandom.uuid), child_property: "binary_node", current: true)
           FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: resource.metadata_node.id, child_property: "metadata_node", current: true)
           described_class.perform_now(status: "FAILURE", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
           events = query_service.find_all_of_model(model: Event)
           current_events = events.select(&:current?)
-          expect(current_events.to_a.length).to eq 1
-          event = current_events.first
+          expect(current_events.to_a.length).to eq 2
+          event = current_events.find { |e| e.child_id == resource.metadata_node.id }
           expect(event).to be_repairing
           expect(Honeybadger).to have_received(:notify)
-          expect(RepairCloudFixityJob).to have_received(:perform_later)
+          expect(RepairCloudFixityJob).to have_received(:perform_later).with(event_id: event.id.to_s)
         end
       end
 
@@ -65,7 +67,7 @@ RSpec.describe CloudFixityJob do
           event = current_events.first
           expect(event).to be_repairing
           expect(Honeybadger).to have_received(:notify)
-          expect(RepairCloudFixityJob).to have_received(:perform_later)
+          expect(RepairCloudFixityJob).to have_received(:perform_later).with(event_id: event.id.to_s)
         end
       end
     end

@@ -69,8 +69,9 @@ RSpec.describe RepairCloudFixity do
         allow(Preserver).to receive(:for)
 
         described_class.run(event: failed_event)
-        current_event = Wayfinder.for(preservation_object).current_cloud_fixity_event
-        expect(current_event).to be_failed
+        current_events = Wayfinder.for(preservation_object).current_cloud_fixity_events
+        expect(current_events.count).to eq 1
+        expect(current_events.first).to be_failed
         expect(Preserver).not_to have_received(:for).with(force_preservation: true, change_set: anything, change_set_persister: anything)
       end
     end
