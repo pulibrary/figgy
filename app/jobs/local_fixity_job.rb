@@ -65,7 +65,6 @@ class LocalFixityJob < ApplicationJob
     end
 
     def build_repairing_change_set(new_checksum)
-      # binding.pry
       build_change_set(
         status: Event::REPAIRING,
         message: new_checksum.to_h.to_json
@@ -94,7 +93,7 @@ class LocalFixityJob < ApplicationJob
     end
 
     def previous_event
-      @previous_event ||= query_service.custom_queries.find_by_property(
+      query_service.custom_queries.find_by_property(
         property: :metadata,
         value: {
           type: :local_fixity,

@@ -59,8 +59,8 @@ RSpec.describe RepairCloudFixity do
         file_set = resource.decorate.file_sets.first
         file_identifier = file_set.original_file.file_identifiers.first
         preservation_object = query_service.find_all_of_model(model: PreservationObject).find { |po| po.preserved_object_id == file_set.id }
-        failed_event = FactoryBot.create_for_repository(:cloud_fixity_event, status: Event::REPAIRING, resource_id: preservation_object.id, child_property: "binary_nodes",
-                                                                             child_id: preservation_object.binary_nodes.first.id)
+        repairing_event = FactoryBot.create_for_repository(:cloud_fixity_event, status: Event::REPAIRING, resource_id: preservation_object.id, child_property: "binary_nodes",
+                                                                                child_id: preservation_object.binary_nodes.first.id)
 
         modify_file(file_identifier)
 
@@ -68,7 +68,50 @@ RSpec.describe RepairCloudFixity do
         allow(RepairLocalFixityJob).to receive(:perform_later)
         allow(Preserver).to receive(:for)
 
-        described_class.run(event: failed_event)
+        described_class.run(event: repairing_event)
+        current_events = Wayfinder.for(preservation_object).current_cloud_fixity_events
+        expect(current_events.count).to eq 1
+        expect(current_events.first).to be_failed
+        expect(Preserver).not_to have_received(:for).with(force_preservation: true, change_set: anything, change_set_persister: anything)
+      end
+    end
+
+    context "with an ArchivalMediaCollection resource with a fileset that has a good preservation file and a bad intermediate file" do
+      let(:collection_cid) { "C0652" }
+      let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
+      let(:user) { FactoryBot.create(:admin) }
+
+      before do
+        stub_findingaid(pulfa_id: "C0652")
+        stub_findingaid(pulfa_id: "C0652_c0377")
+      end
+
+      it "creates a failure event" do
+        IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
+        resources = query_service.find_all_of_model(model: ScannedResource)
+        resource = resources.find { |r| r.decorate.file_sets.present? }
+        file_set = resource.decorate.file_sets.first
+
+        # Complete the resource
+        cs = ChangeSet.for(resource)
+        cs.validate(state: "complete")
+        ChangeSetPersister.default.save(change_set: cs)
+
+        preservation_object = query_service.find_all_of_model(model: PreservationObject).find { |po| po.preserved_object_id == file_set.id }
+        repairing_event = FactoryBot.create_for_repository(:cloud_fixity_event, status: Event::REPAIRING, resource_id: preservation_object.id, child_property: "binary_nodes",
+                                                                                child_id: preservation_object.binary_nodes.first.id)
+
+        # Modify the intermediate file
+        file_identifier = file_set.intermediate_file.file_identifiers.first
+        modify_file(file_identifier)
+
+        # Mock repairing local fixity (called in the LocalFixityJob)
+        allow(RepairLocalFixityJob).to receive(:perform_later)
+        preserver_double = instance_double(Preserver)
+        allow(preserver_double).to receive(:preserve!)
+        allow(Preserver).to receive(:for).and_return(preserver_double)
+
+        described_class.run(event: repairing_event)
         current_events = Wayfinder.for(preservation_object).current_cloud_fixity_events
         expect(current_events.count).to eq 1
         expect(current_events.first).to be_failed
