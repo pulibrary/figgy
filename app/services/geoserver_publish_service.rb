@@ -9,7 +9,7 @@ class GeoserverPublishService
   end
 
   def create
-    Geoserver::Publish.send(create_method, create_params)
+    Geoserver::Publish.send(create_method, **create_params)
   end
 
   def delete
@@ -50,7 +50,7 @@ class GeoserverPublishService
     def delete_layer(workspace = nil)
       updated_params = delete_params
       updated_params[:workspace_name] = workspace if workspace
-      Geoserver::Publish.send(delete_method, updated_params)
+      Geoserver::Publish.send(delete_method, **updated_params)
     rescue StandardError => e
       logger.info(e.message)
     end

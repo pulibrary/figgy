@@ -65,7 +65,7 @@ RSpec.describe GeoserverPublishService do
       }
       service.create
 
-      expect(Geoserver::Publish).to have_received(:shapefile).with(hash_including(params))
+      expect(Geoserver::Publish).to have_received(:shapefile).with(id: params[:id], workspace_name: params[:workspace_name], title: params[:title], file_path: anything)
     end
   end
 
@@ -87,8 +87,8 @@ RSpec.describe GeoserverPublishService do
     it "calls delete on both public and authenticated workspaces and creates new layer" do
       service.update
 
-      expect(Geoserver::Publish).to have_received(:delete_shapefile).with(hash_including(workspace_name: Figgy.config["geoserver"]["authenticated"]["workspace"]))
-      expect(Geoserver::Publish).to have_received(:delete_shapefile).with(hash_including(workspace_name: Figgy.config["geoserver"]["open"]["workspace"]))
+      expect(Geoserver::Publish).to have_received(:delete_shapefile).with(workspace_name: Figgy.config["geoserver"]["authenticated"]["workspace"], id: anything)
+      expect(Geoserver::Publish).to have_received(:delete_shapefile).with(workspace_name: Figgy.config["geoserver"]["open"]["workspace"], id: anything)
       expect(Geoserver::Publish).to have_received(:shapefile)
     end
 
