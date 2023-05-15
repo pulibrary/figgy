@@ -243,7 +243,7 @@ export default class UVManager {
   }
 
   get iiifUrlAdapter () {
-    return new IIIFURLAdapter();
+    return new IIIFURLAdapter()
   }
 
   get manifest () {

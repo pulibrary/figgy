@@ -1,6 +1,15 @@
+import { init, IIIFURLAdapter } from 'universalviewer';
 import UVManager from '@viewer/uv_manager'
 import jQ from 'jquery'
 vi.mock('viewer/cdl_timer')
+vi.mock('universalviewer', () => ({
+    __esModule: true,
+    init: vi.fn(),
+    IIIFURLAdapter: vi.fn().mockImplementation(() => {
+      return { get: global.getResult }
+    })
+}))
+
 describe('UVManager', () => {
   const initialHTML =
     '<h1 id="title" class="lux-heading h1" style="display: none;"></h1>' +
