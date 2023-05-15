@@ -811,6 +811,19 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "deleting a scanned resource with a PDF fileset", run_real_characterization: true, run_real_derivatives: true do
+    with_queue_adapter :inline
+    it "cleans up its members" do
+      file = fixture_file_upload("files/sample.pdf", "application/pdf")
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+      file_set = Wayfinder.for(resource).members.first
+
+      change_set = ChangeSet.for(resource)
+      expect { change_set_persister.delete(change_set: change_set) }.not_to raise_error(NoMethodError)
+      expect { query_service.find_by(id: file_set.id) }.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+    end
+  end
+
   describe "setting visibility" do
     context "when setting to public" do
       it "adds the public read_group" do
