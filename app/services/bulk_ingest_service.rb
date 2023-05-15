@@ -191,6 +191,6 @@ class BulkIngestService
     end
 
     def ignored_file_names
-      ["Thumbs.db"]
+      ["Thumbs.db", "desktop.ini"]
     end
 end
