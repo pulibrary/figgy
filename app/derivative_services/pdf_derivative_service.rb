@@ -51,6 +51,9 @@ class PDFDerivativeService
 
   # Delete the filesets that were generated from the pdf.
   def cleanup_derivatives
+    # if there's no parent, it's been deleted and its members are cleaned via
+    # change set persister callbacks
+    return unless parent
     intermediate_derivatives = Wayfinder.for(parent).members.select do |member|
       member.intermediate_files.present? && member.primary_file.original_filename.first.starts_with?("converted_from_pdf")
     end
