@@ -1,4 +1,5 @@
-/* global UV, $, createUV */
+import { init, IIIFURLAdapter } from "universalviewer";
+import "universalviewer/dist/esm/index.css";
 import CDLTimer from '@viewer/cdl_timer'
 import IIIFLogo from '@images/iiif-logo.svg'
 import StatementOnHarmfulContentIcon from '@images/statement.png'
@@ -94,21 +95,25 @@ export default class UVManager {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
-    this.uv = createUV('#uv', {
-      root: 'uv',
-      iiifResourceUri: this.manifest,
+    const opts = {
       configUri: this.configURI,
-      collectionIndex: Number(this.urlDataProvider.get('c', 0)),
-      manifestIndex: Number(this.urlDataProvider.get('m', 0)),
-      sequenceIndex: Number(this.urlDataProvider.get('s', 0)),
-      canvasIndex: Number(this.urlDataProvider.get('cv', 0)),
-      rangeId: this.urlDataProvider.get('rid', 0),
-      rotation: Number(this.urlDataProvider.get('r', 0)),
-      xywh: this.urlDataProvider.get('xywh', ''),
-      embedded: true
-    }, this.urlDataProvider)
+      manifest: this.manifest,
+      embedded: true,
+      collectionIndex:
+        this.iiifUrlAdapter.get('c') !== undefined
+          ? Number(this.iiifUrlAdapter.get('c'))
+          : undefined,
+      manifestIndex: Number(this.iiifUrlAdapter.get('m', 0)),
+      canvasIndex: Number(this.iiifUrlAdapter.get('cv', 0)),
+      rotation: Number(this.iiifUrlAdapter.get('r', 0)),
+      rangeId: this.iiifUrlAdapter.get('rid', ''),
+      xywh: this.iiifUrlAdapter.get('xywh', ''),
+      sequenceIndex: Number(this.iiifUrlAdapter.get('s', 0))
+    }
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
+
+    init("uv", opts);
   }
 
   addViewerIcons () {
@@ -187,7 +192,7 @@ export default class UVManager {
     if (this.isFiggyManifest) {
       return '/viewer/config/' + this.manifest.replace('/manifest', '').replace(/.*\//, '') + '.json'
     } else {
-      return this.urlDataProvider.get('config')
+      return this.iiifUrlAdapter.get('config')
     }
   }
 
@@ -237,12 +242,12 @@ export default class UVManager {
     })
   }
 
-  get urlDataProvider () {
-    return new UV.URLDataProvider(false)
+  get iiifUrlAdapter () {
+    return new IIIFURLAdapter();
   }
 
   get manifest () {
-    return this.urlDataProvider.get('manifest')
+    return this.iiifUrlAdapter.get('manifest')
   }
 
   get uvElement () {

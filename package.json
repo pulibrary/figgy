@@ -33,6 +33,7 @@
     "sass": "^1.62.1",
     "unfetch": "^4.0.1",
     "uppy": "^3.9.1",
+    "universalviewer": "^4.0.19",
     "vue": "^2.5.17",
     "vue-details": "^1.1.0",
     "vue-loader": "^15.4.2",
