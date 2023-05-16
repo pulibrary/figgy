@@ -1,5 +1,5 @@
 <div>
   <%= form_tag polymorphic_path([main_app, :server_upload, @change_set]), id: "local-upload-form" do %>
-    <local-uploader form-id="local-upload-form" />
+    <local-uploader folder-prefix="<%= Tus::Server.opts[:storage].directory.to_s %>" form-id="local-upload-form" />
   <% end %>
 </div>

@@ -278,6 +278,8 @@ class ResourcesController < ApplicationController
           file_name: metadata[:filename],
           type: metadata[:type]
         )
-      end
+      rescue
+        nil
+      end.compact
     end
 end

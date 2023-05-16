@@ -1,5 +1,13 @@
 <template>
   <div id="local_uploader">
+    <template v-for="file in uploadedFiles">
+      <input
+        :key="file.id"
+        type="hidden"
+        :name="`metadata_ingest_files[]`"
+        :value="JSON.stringify(file)"
+      >
+    </template>
     <div id="drag-drop" />
     <div id="status-bar" />
   </div>
@@ -22,6 +30,10 @@ export default {
     formId: {
       type: String,
       required: true
+    },
+    folderPrefix: {
+      type: String,
+      default () { return '' }
     }
   },
   data () {
@@ -50,7 +62,16 @@ export default {
   },
   methods: {
     uploadComplete (result) {
-      console.log(result)
+      this.uploadedFiles = result.successful.map((file) => {
+        return {
+          id: `disk://${this.folderPrefix}/${file.uploadURL.split('/').slice(-1)[0]}`,
+          filename: file.name,
+          type: file.type
+        }
+      })
+      this.$nextTick(() => {
+        this.formElement.submit()
+      })
     }
   }
 }

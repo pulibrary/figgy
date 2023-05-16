@@ -102,6 +102,9 @@
     "setupFiles": [
       "jest-canvas-mock"
     ],
-    "setupTestFrameworkScriptFile": "./app/javascript/test/setup.js"
+    "setupTestFrameworkScriptFile": "./app/javascript/test/setup.js",
+    "transformIgnorePatterns": [
+      "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+    ]
   }
 }
