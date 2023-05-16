@@ -269,8 +269,8 @@ class ResourcesController < ApplicationController
     def metadata_ingest_files
       return if params[:metadata_ingest_files].blank?
       params[:metadata_ingest_files].map do |metadata|
-        metadata = JSON.parse(metadata)
-        file = Valkyrie::StorageAdapter.find_by(id: "shrine://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/#{metadata[:id]}")
+        metadata = JSON.parse(metadata, symbolize_names: true)
+        file = Valkyrie::StorageAdapter.find_by(id: metadata[:id])
         PendingUpload.new(
           id: SecureRandom.uuid,
           storage_adapter_id: file.id,

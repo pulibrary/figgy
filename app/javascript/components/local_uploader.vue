@@ -12,7 +12,6 @@ import Tus from '@uppy/tus'
 import '@uppy/core/dist/style.css'
 import '@uppy/drag-drop/dist/style.css'
 import '@uppy/status-bar/dist/style.css'
-const UPLOADER = 'tus'
 const TUS_ENDPOINT = '/files/'
 
 export default {
