@@ -16,6 +16,7 @@ import { setupAjaxSelect, setupCocoonLinks } from '@helpers/setup_ajax_select'
 import FileUploader from '@components/file-uploader.vue'
 import Initializer from '@figgy/figgy_boot'
 import VueDetails from 'vue-details'
+import LocalUploader from '@components/local_uploader.vue'
 
 Vue.use(system)
 Vue.component('v-details', VueDetails)
@@ -37,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'ajax-select': AjaxSelect,
         'file-uploader': FileUploader,
         'input-path-selector': InputPathSelector,
-        'embedded-file-browser': EmbeddedFileBrowser
+        'embedded-file-browser': EmbeddedFileBrowser,
+        'local-uploader': LocalUploader
       },
       data: {
         options: []

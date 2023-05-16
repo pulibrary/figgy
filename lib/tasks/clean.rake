@@ -17,5 +17,14 @@ namespace :figgy do
     task dead_queues: :environment do
       CleanDeadQueuesJob.set(queue: :low).perform_later
     end
+
+    desc "Clean expired uploaded files."
+    task expired_local_files: :environment do
+      expiration_time = Tus::Server.opts[:expiration_time]
+      tus_storage     = Tus::Server.opts[:storage]
+      expiration_date = Time.now.utc - expiration_time
+
+      tus_storage.expire_files(expiration_date)
+    end
   end
 end

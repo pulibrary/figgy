@@ -77,12 +77,6 @@ module.exports = function(api) {
           regenerator: true
         }
       ],
-      [
-        require('@babel/plugin-transform-regenerator').default,
-        {
-          async: false
-        }
-      ],
       isProductionEnv && [
         require('babel-plugin-transform-react-remove-prop-types').default,
         {

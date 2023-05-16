@@ -34,6 +34,7 @@
     "rollup-plugin-gzip": "^3.1.0",
     "sass": "^1.62.1",
     "unfetch": "^4.0.1",
+    "uppy": "^3.9.1",
     "vue": "^2.5.17",
     "vue-details": "^1.1.0",
     "vue-loader": "^15.4.2",
@@ -101,6 +102,9 @@
     "setupFiles": [
       "jest-canvas-mock"
     ],
-    "setupTestFrameworkScriptFile": "./app/javascript/test/setup.js"
+    "setupTestFrameworkScriptFile": "./app/javascript/test/setup.js",
+    "transformIgnorePatterns": [
+      "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+    ]
   }
 }

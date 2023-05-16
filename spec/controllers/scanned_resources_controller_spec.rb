@@ -474,6 +474,48 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(file_sets.first.file_metadata.length).to eq 2
       end
 
+      it "can upload files uploaded via uppy" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: {
+          id: resource.id,
+          metadata_ingest_files: [
+            {
+              id: "disk://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/1",
+              filename: "test.tif",
+              type: "image/tiff"
+            }.to_json
+          ]
+        }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 1
+        expect(reloaded.pending_uploads).to be_empty
+
+        file_sets = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded)
+        expect(file_sets.first.file_metadata.length).to eq 2
+        expect(file_sets.first.mime_type).to eq ["image/tiff"]
+        expect(file_sets.first.title).to eq ["test.tif"]
+      end
+
+      it "doesn't upload files that are outside the mounted path, via uppy" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: {
+          id: resource.id,
+          metadata_ingest_files: [
+            {
+              id: "disk://#{Rails.root.join('spec', 'fixtures', 'files', 'example.tif')}",
+              filename: "test.tif",
+              type: "image/tiff"
+            }.to_json
+          ]
+        }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 0
+      end
+
       it "doesn't upload files that are outside the mounted path" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
         post :server_upload, params: {
