@@ -21,7 +21,7 @@ RSpec.describe CollectionsController, type: :controller do
         collection = query_service.find_by(id: collection.id)
         expect(collection).to be_present
         expect(flash["alert"]).to eq "Unable to delete a collection with members. Please transfer membership to another collection before deleting this collection."
-        expect(response).to redirect_to "/collections/#{collection.id}"
+        expect(response).to redirect_to "/catalog/#{collection.id}"
       end
       it "can delete an empty collection" do
         collection = FactoryBot.create_for_repository(:collection)

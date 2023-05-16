@@ -46,7 +46,7 @@ class CollectionsController < ResourcesController
     # deleted collections.
     if Wayfinder.for(@change_set.resource).members_count.positive?
       flash[:alert] = "Unable to delete a collection with members. Please transfer membership to another collection before deleting this collection."
-      redirect_to collection_path(@change_set.resource)
+      redirect_to solr_document_path(@change_set.resource.id.to_s)
     else
       yield
     end
