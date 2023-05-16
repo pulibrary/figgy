@@ -94,6 +94,10 @@ gem "view_component", require: "view_component/engine"
 gem "vite_rails"
 gem "whenever", "~> 0.10"
 
+# Playing with Uppy for local upload
+gem "shrine-tus", "~> 2.1"
+gem "tus-server", "~> 2.3"
+
 # Required for deployment under ruby 3.1
 gem "net-imap", require: false
 gem "net-pop", require: false

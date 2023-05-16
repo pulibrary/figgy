@@ -3,7 +3,7 @@ require "tempfile"
 
 class PendingUpload < Valkyrie::Resource
   attribute :storage_adapter_id, Valkyrie::Types::ID.optional
-  attribute :file_name, Valkyrie::Types::String
+  attribute :file_name, Valkyrie::Types::String.optional
   attribute :local_id
   attribute :url
   attribute :file_size, Valkyrie::Types::Set.of(Valkyrie::Types::Coercible::Integer)
@@ -19,7 +19,7 @@ class PendingUpload < Valkyrie::Resource
 
   # This is normally overridden during characterization
   def content_type
-    "application/octet-stream"
+    type || "application/octet-stream"
   end
 
   def close
@@ -36,7 +36,7 @@ class PendingUpload < Valkyrie::Resource
         IngestableFile.new(
             file_path: storage_adapter_file.disk_path,
             mime_type: content_type,
-            original_filename: storage_adapter_file.disk_path.basename.to_s,
+            original_filename: file_name || storage_adapter_file.disk_path.basename.to_s,
             # PendingUploads are used via ServerUploadJob, so disk_via_copy
             # adapter is used.
             copy_before_ingest: true

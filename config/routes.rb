@@ -9,6 +9,10 @@ Rails.application.routes.draw do
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
 
+  authenticate :user do
+    mount Tus::Server => "/files"
+  end
+
   root to: "catalog#index"
 
   post "/graphql", to: "graphql#execute", defaults: { format: :json }

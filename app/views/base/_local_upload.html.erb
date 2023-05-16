@@ -1,3 +1,5 @@
 <div>
-  <file-uploader upload-path='<%= polymorphic_path(@change_set) %>' param-name='<%= @change_set.model_name.param_key %>[files]' patch multiple></file-uploader>
+  <%= form_tag polymorphic_path([main_app, :server_upload, @change_set]), id: "local-upload-form" do %>
+    <local-uploader form-id="local-upload-form" />
+  <% end %>
 </div>

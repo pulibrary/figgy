@@ -13,7 +13,6 @@ import ParentResourcesTables from '@figgy/relationships/parent_resources_table'
 import BulkLabeler from '@figgy/bulk_labeler/bulk_label'
 import BoundingBoxSelector from '@figgy/bounding_box_selector'
 import FieldManager from '@figgy/field_manager'
-
 export default class Initializer {
   constructor() {
     this.initialize_form()
@@ -38,6 +37,8 @@ export default class Initializer {
     $("select:not(.select2)").selectpicker({'liveSearch': true})
 
     this.initialize_datatables()
+
+    // this.initialize_uppy()
   }
 
   initialize_timepicker() {
@@ -54,6 +55,9 @@ export default class Initializer {
       minuteMax: 0,
       secondMax: 0
     })
+  }
+
+  initialize_uppy () {
   }
 
   // most datatables can be initialized here

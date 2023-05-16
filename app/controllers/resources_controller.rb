@@ -248,19 +248,36 @@ class ResourcesController < ApplicationController
     def new_pending_uploads
       @new_pending_uploads ||=
         begin
-          (params[:ingest_files] || []).map do |ingest_file|
-            # Skip hidden files.
-            next if ingest_file.split("/").last.start_with?(".")
-            file = Valkyrie::StorageAdapter.find_by(id: ingest_file)
-            PendingUpload.new(
-              id: SecureRandom.uuid,
-              storage_adapter_id: file.id,
-              created_at: Time.current,
-              file_name: ingest_file.split("/").last
-            )
-          rescue
-            nil
-          end.compact
+          metadata_ingest_files ||
+            (params[:ingest_files] || []).map do |ingest_file|
+              # Skip hidden files.
+              next if ingest_file.split("/").last.start_with?(".")
+              file = Valkyrie::StorageAdapter.find_by(id: ingest_file)
+              PendingUpload.new(
+                id: SecureRandom.uuid,
+                storage_adapter_id: file.id,
+                created_at: Time.current,
+                file_name: ingest_file.split("/").last
+              )
+            rescue
+              nil
+            end.compact
         end.flatten
+    end
+
+    # Local file ingest submits file metadata as JSON in fields.
+    def metadata_ingest_files
+      return if params[:metadata_ingest_files].blank?
+      params[:metadata_ingest_files].map do |metadata|
+        metadata = JSON.parse(metadata)
+        file = Valkyrie::StorageAdapter.find_by(id: "shrine://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/#{metadata[:id]}")
+        PendingUpload.new(
+          id: SecureRandom.uuid,
+          storage_adapter_id: file.id,
+          created_at: Time.current,
+          file_name: metadata[:filename],
+          type: metadata[:type]
+        )
+      end
     end
 end

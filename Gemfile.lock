@@ -306,6 +306,8 @@ GEM
       simpleidn (~> 0.1)
     docile (1.4.0)
     docopt (0.5.0)
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
@@ -372,6 +374,9 @@ GEM
     faraday-retry (2.1.0)
       faraday (~> 2.0)
     ffi (1.15.5)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     filewatcher (1.1.1)
       optimist (~> 3.0)
     flutie (2.2.0)
@@ -469,6 +474,14 @@ GEM
     hashie (3.6.0)
     honeybadger (5.2.1)
     htmlentities (4.3.4)
+    http (5.1.1)
+      addressable (~> 2.8)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      llhttp-ffi (~> 0.4.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
+    http-form_data (2.3.0)
     http_logger (0.7.0)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
@@ -613,6 +626,9 @@ GEM
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    llhttp-ffi (0.4.0)
+      ffi-compiler (~> 1.0)
+      rake (~> 13.0)
     logger (1.5.3)
     lograge (0.12.0)
       actionpack (>= 4)
@@ -879,6 +895,8 @@ GEM
       deprecation (>= 1.0.0)
       iiif-image-api (>= 0.1.0)
       railties (>= 4.2, < 8)
+    roda (3.68.0)
+      rack
     rsolr (2.5.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
@@ -976,6 +994,14 @@ GEM
       addressable
       google-cloud-storage (~> 1.6)
       shrine (~> 3.0)
+    shrine-tus (2.1.1)
+      shrine (~> 3.2)
+      shrine-url (~> 2.4)
+      tus-server (~> 2.0)
+    shrine-url (2.4.1)
+      down (~> 5.0)
+      http (>= 3.2, < 6)
+      shrine (>= 3.0.0.rc, < 4)
     sidekiq (6.5.8)
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
@@ -1062,6 +1088,9 @@ GEM
       rails (>= 3.1)
     trailblazer-option (0.1.2)
     ttfunk (1.7.0)
+    tus-server (2.3.0)
+      content_disposition (~> 1.0)
+      roda (>= 2.27, < 4)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -1246,6 +1275,7 @@ DEPENDENCIES
   ruby_tika_app!
   rubyzip
   shrine-google_cloud_storage
+  shrine-tus (~> 2.1)
   sidekiq-pro!
   simple_form
   simplecov
@@ -1256,6 +1286,7 @@ DEPENDENCIES
   string_rtl
   timecop
   title
+  tus-server (~> 2.3)
   valkyrie (~> 3.0.0)
   valkyrie-derivatives!
   valkyrie-sequel (~> 3.0.0.pre.beta.1)
