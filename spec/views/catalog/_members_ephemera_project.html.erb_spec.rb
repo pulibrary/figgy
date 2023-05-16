@@ -25,6 +25,20 @@ RSpec.describe "catalog/_members_ephemera_project" do
       expect(rendered).to have_selector "h2", text: "Folders"
     end
   end
+  context "when it's a project with boxes that have been deleted" do
+    it "renders the project" do
+      change_set_persister = ChangeSetPersister.default
+      child = FactoryBot.create_for_repository(:ephemera_box, state: "complete")
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [child.id])
+      change_set_persister.persister.save(resource: child)
+      change_set_persister.persister.save(resource: project)
+      change_set_persister.delete(change_set: ChangeSet.for(child))
+      document = SolrDocument.new(Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: project))
+
+      assign :document, document
+      render
+    end
+  end
   context "when it's a project with templates" do
     let(:parent) { FactoryBot.create_for_repository(:ephemera_project) }
     let(:child) { FactoryBot.create_for_repository(:template, parent_id: parent.id) }
