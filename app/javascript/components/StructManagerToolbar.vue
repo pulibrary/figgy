@@ -146,7 +146,7 @@ export default {
     createFolder: function (contentsList) {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       const rootId = this.tree.structure.id
-      console.log(parentId)
+  
       const newFolder = {
         id: this.generateId(),
         folders: contentsList,

@@ -63,7 +63,25 @@
               type="button"
               variation="icon"
               size="small"
-              icon="globe"
+              icon="edit"
+            >
+            </input-button>
+            <input-button
+              @button-clicked="createFolder(id)"
+              class="expand-collapse"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="add"
+            >
+            </input-button>
+            <input-button
+              @button-clicked="deleteFolder()"
+              class="expand-collapse"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="denied"
             >
             </input-button>
           </div>
@@ -138,6 +156,40 @@ export default {
     }),
   },
   methods: {
+    addNewFolder: function (array, newParent) {
+      for (let item of array) {
+        if (item.id === newParent.id) {
+          item = newParent
+        } else if (item.folders?.length) {
+          const innerResult = this.addNewFolder(item.folders, newParent)
+        }
+      }
+      return array
+    },
+    createFolder: function(id) {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+      const newFolder = {
+        id: this.generateId(),
+        folders: [],
+        label: "Untitled",
+      }
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label,
+      }
+      if(parentId === rootId) {
+        folderList.push(newFolder)
+        structure.folders = folderList
+      } else {
+        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+        let newParent = parentFolderObject.folders.push(newFolder)
+        structure.folders = this.addNewFolder(folderList, newParent)
+      }
+      this.$store.commit("CREATE_FOLDER", structure)
+    },
     findSelectedFolderById: function (array, id) {
       for (const item of array) {
         if (item.id === id) return item;
@@ -146,6 +198,76 @@ export default {
           if (innerResult) return innerResult;
         }
       }
+    },
+    deleteFolder: function () {
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let folderToBeRemoved = this.findSelectedFolderById(folderList, this.tree.selected)
+      const selectedNode = this.tree.selected
+      const rootId = this.tree.structure.id
+      if(selectedNode === rootId) {
+        alert("Sorry, you cannot delete the root node.")
+        return false
+      }
+      if(folderList.includes(folderToBeRemoved)) {
+        if (folderToBeRemoved.folders.length) {
+          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
+          if (confirm(text) == true) {
+            const index = folderList.indexOf(folderToBeRemoved)
+            folderList.splice(index, 1)
+            const structure = {
+              id: this.tree.structure.id,
+              folders: folderList,
+              label: this.tree.structure.label,
+            }
+            this.$store.commit("DELETE_FOLDER", structure)
+            this.$store.commit("SELECT", null)
+          }
+        } else {
+          const index = folderList.indexOf(folderToBeRemoved)
+          folderList.splice(index, 1)
+          const structure = {
+            id: this.tree.structure.id,
+            folders: folderList,
+            label: this.tree.structure.label,
+          }
+          this.$store.commit("DELETE_FOLDER", structure)
+          this.$store.commit("SELECT", null)
+        }
+      } else {
+        // if there are sub-folders, warn the user that they will also be deleted.
+        if (folderToBeRemoved.folders.length) {
+          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
+          if (confirm(text) == true) {
+            this.commitRemoveFolder(folderList, folderToBeRemoved)
+          }
+        } else {
+          this.commitRemoveFolder(folderList, folderToBeRemoved)
+        }
+      }
+    },
+    commitRemoveFolder: function(folderList, folderToBeRemoved) {
+      const structure = {
+        id: this.tree.structure.id,
+        folders: this.removeFolder(folderList, folderToBeRemoved),
+        label: this.tree.structure.label,
+      }
+      this.$store.commit("DELETE_FOLDER", structure)
+      this.$store.commit("SELECT", null)
+    },
+    removeFolder: function (array, folder) {
+      for (const item of array) {
+        if (item.folders.includes(folder)) {
+          const index = item.folders.indexOf(folder)
+          item.folders.splice(index, 1)
+        }
+        if (item.folders?.length) {
+          const innerResult = this.removeFolder(item.folders, folder)
+        }
+      }
+      return array
+    },
+    generateId: function () {
+      return Math.floor(Math.random() * 10000000).toString()
     },
     select: function(id, event) {
       if (!this.isOpen) {
@@ -157,11 +279,20 @@ export default {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id;
       // need to stringify and parse to drop the observer that comes with Vue reactive data
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let selectedFolder = this.findSelectedFolderById(folderList, parentId)
-      const structure = {
+
+      let structure = {
         id: this.tree.structure.id,
-        folders: this.updateFolderLabel(folderList, selectedFolder),
-        label: this.tree.structure.label,
+        folders: folderList,
+        label: this.jsonData.label,
+      }
+
+      if (id !== this.tree.structure.id) {
+        let selectedFolder = this.findSelectedFolderById(folderList, parentId)
+        structure = {
+          id: this.tree.structure.id,
+          folders: this.updateFolderLabel(folderList, selectedFolder),
+          label: this.tree.structure.label,
+        }
       }
 
       store.commit("SAVE_LABEL", structure)
