@@ -86,6 +86,7 @@ gem "sprockets"
 gem "sqlite3"
 gem "string_rtl"
 gem "title"
+gem "tus-server", "~> 2.3"
 gem "valkyrie", "~> 3.0.0"
 gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-derivatives.git"
 gem "valkyrie-sequel", "~> 3.0.0-beta.1"
@@ -93,10 +94,6 @@ gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
 gem "vite_rails"
 gem "whenever", "~> 0.10"
-
-# Playing with Uppy for local upload
-gem "shrine-tus", "~> 2.1"
-gem "tus-server", "~> 2.3"
 
 # Required for deployment under ruby 3.1
 gem "net-imap", require: false
