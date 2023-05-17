@@ -17,7 +17,7 @@ RSpec.describe FindMissingThumbnailResources do
 
   before do
     stub_catalog(bib_id: "991234563506421")
-    stub_ezid(shoulder: "99999/fk4", blade: "8675309")
+    stub_ezid
   end
 
   describe "#find_missing_thumbnail_resources" do

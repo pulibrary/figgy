@@ -5,12 +5,10 @@ describe GeoserverPublishJob do
   with_queue_adapter :inline
 
   let(:publish_service) { instance_double(GeoserverPublishService) }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
   let(:tika_output) { tika_shapefile_output }
 
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
     allow(publish_service).to receive(:delete)
     allow(GeoserverPublishService).to receive(:new).and_return(publish_service)
   end

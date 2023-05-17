@@ -35,7 +35,7 @@ RSpec.describe RepairCloudFixity do
     with_queue_adapter :inline
 
     before do
-      stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
+      stub_ezid
     end
 
     context "when the local file matches its recorded checksum" do

@@ -2,10 +2,8 @@
 require "rails_helper"
 
 RSpec.describe FileSet do
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
   end
 
   describe "optimistic locking" do

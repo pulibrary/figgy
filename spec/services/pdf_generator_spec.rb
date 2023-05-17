@@ -262,14 +262,12 @@ RSpec.describe PDFGenerator do
 
     context "when a resource is complete and has an ARK for identifier" do
       let(:resource) { FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file], pdf_type: ["color"], identifier: "ark:/99999/fk4") }
-      let(:shoulder) { "99999" }
-      let(:blade) { "fk4" }
       let(:ark) { instance_double(Ark) }
 
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
-        stub_ezid(shoulder: shoulder, blade: blade)
+        stub_ezid
         allow(Ark).to receive(:new).and_return(ark)
         allow(ark).to receive(:uri)
       end

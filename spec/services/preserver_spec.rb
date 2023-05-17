@@ -16,8 +16,6 @@ describe Preserver do
   end
   let(:preservation_objects) { Wayfinder.for(resource).preservation_objects }
   let(:preservation_object) { preservation_objects.first }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
   let(:change_set) { ScannedResourceChangeSet.new(unpreserved_resource) }
   let(:storage_adapter) { instance_double(Valkyrie::Storage::Disk) }
   let(:valkyrie_file) { FileMetadata.new(id: "disk://" + Rails.root.join("tmp", "cloud_backup_test", resource.id, "#{resource.id}.json").to_s) }
@@ -33,7 +31,7 @@ describe Preserver do
 
   describe "#preserve!" do
     before do
-      stub_ezid(shoulder: shoulder, blade: blade)
+      stub_ezid
       stub_catalog(bib_id: "991234563506421")
     end
 

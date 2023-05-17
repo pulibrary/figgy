@@ -38,7 +38,7 @@ RSpec.describe CDL::AutomaticCompleter do
     context "when there's CDL items with processed files", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
       it "completes them" do
-        stub_ezid(shoulder: "99999/fk4", blade: "")
+        stub_ezid
         stub_catalog(bib_id: "991234563506421")
         User.create!(uid: "skye", email: "skye@princeton.edu")
         User.create!(uid: "zelda", email: "zelda@princeton.edu")

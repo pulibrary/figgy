@@ -26,7 +26,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       Rails.cache.clear
     end
     it "caches a manifest between sessions" do
-      stub_ezid(shoulder: "99999/fk4", blade: "")
+      stub_ezid
       resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, files: [file])
 
       get :manifest, params: { id: resource.id, format: :json }
@@ -35,7 +35,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       expect(ManifestBuilder).to have_received(:new).exactly(1).times
     end
     it "caches based on a given auth token" do
-      stub_ezid(shoulder: "99999/fk4", blade: "")
+      stub_ezid
       resource = FactoryBot.create_for_repository(:complete_campus_only_scanned_resource, files: [file])
 
       get :manifest, params: { id: resource.id, format: :json }
