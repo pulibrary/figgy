@@ -2,7 +2,7 @@ import LeafletViewer from 'viewer/leaflet_viewer'
 import jQ from 'jquery'
 import L from 'leaflet'
 import TabManager from 'viewer/tab_manager'
-jest.mock('leaflet')
+vi.mock('leaflet')
 describe('LeafletViewer', () => {
   const initialHTML =
     '<h1 id="title" class="lux-heading h1" style="display: none;"></h1>' +
@@ -38,7 +38,7 @@ describe('LeafletViewer', () => {
   })
   function buildMocks (status) {
     // Mock jQuery
-    global.$ = jest.fn().mockImplementation(() => null)
+    global.$ = vi.fn().mockImplementation(() => null)
 
     // Mock $.ajax
     const data = {
@@ -63,7 +63,7 @@ describe('LeafletViewer', () => {
       ]
     }
     const jqxhr = { getResponseHeader: () => null }
-    global.$.ajax = jest.fn().mockImplementation(() => {
+    global.$.ajax = vi.fn().mockImplementation(() => {
       if (status !== 200) { return jQ.Deferred().reject(data, status, jqxhr) } else { return jQ.Deferred().resolve(data, status, jqxhr) }
     })
 
@@ -78,7 +78,7 @@ describe('LeafletViewer', () => {
       buildMocks(404)
 
       // Spy on TabManager event binding.
-      const bindMock = jest.spyOn(TabManager.prototype, 'onTabSelect')
+      const bindMock = vi.spyOn(TabManager.prototype, 'onTabSelect')
       const tabManager = new TabManager()
       // Initialize
       const leafletViewer = new LeafletViewer('1', tabManager)
@@ -93,7 +93,7 @@ describe('LeafletViewer', () => {
       buildMocks(200)
 
       // Spy on TabManager event binding.
-      const bindMock = jest.spyOn(TabManager.prototype, 'onTabSelect')
+      const bindMock = vi.spyOn(TabManager.prototype, 'onTabSelect')
       const tabManager = new TabManager()
       // Initialize
       const leafletViewer = new LeafletViewer('1', tabManager)

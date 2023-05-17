@@ -1,68 +1,73 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OrderManagerToolbar.vue has the expected html structure 1`] = `
+exports[`OrderManagerToolbar.vue > has the expected html structure 1`] = `
 <div
   class="lux-toolbar"
+  data-v-5c9142c7=""
 >
   <dropdown-menu-stub
     align="left"
     buttonlabel="Selection Options"
+    data-v-5c9142c7=""
     element="div"
     menuitems="[object Object],[object Object],[object Object],[object Object]"
     size="medium"
     type="buttons"
   />
-   
   <dropdown-menu-stub
     align="left"
     buttonlabel="With Selected..."
+    data-v-5c9142c7=""
     element="div"
     menuitems="[object Object],[object Object],[object Object]"
     size="medium"
     type="buttons"
   />
-   
   <spacer-stub
+    data-v-5c9142c7=""
     type="div"
   />
-   
   <div
     class="lux-zoom-slider"
+    data-v-5c9142c7=""
   >
     <lux-icon-base-stub
       class="lux-svg-icon"
+      data-v-5c9142c7=""
       height="12"
       iconcolor="rgb(0,0,0)"
       iconname="shrink"
       width="12"
     >
-      <lux-icon-picture-stub />
+      <lux-icon-picture-stub
+        data-v-5c9142c7=""
+      />
     </lux-icon-base-stub>
-     
     <label
+      data-v-5c9142c7=""
       for="img_zoom"
     >
-      
-      Image zoom
-    
+       Image zoom 
     </label>
-     
     <input
+      data-v-5c9142c7=""
       id="img_zoom"
       max="500"
       min="40"
       type="range"
       value="300"
     />
-     
     <lux-icon-base-stub
       class="lux-svg-icon"
+      data-v-5c9142c7=""
       height="24"
       iconcolor="rgb(0,0,0)"
       iconname="grow"
       width="24"
     >
-      <lux-icon-picture-stub />
+      <lux-icon-picture-stub
+        data-v-5c9142c7=""
+      />
     </lux-icon-base-stub>
   </div>
 </div>

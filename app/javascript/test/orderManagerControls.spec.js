@@ -65,8 +65,8 @@ let resourceObject = {
 describe("OrderManagerControls.vue", () => {
   beforeEach(() => {
     actions = {
-      loadImageCollectionGql: jest.fn(),
-      saveStateGql: jest.fn()
+      loadImageCollectionGql: vi.fn(),
+      saveStateGql: vi.fn()
     }
 
     const gallery = {
@@ -165,8 +165,8 @@ describe("OrderManagerControls.vue", () => {
 
   it('tests a number of scenarios once something has changed', async () => {
     actions = {
-      loadImageCollectionGql: jest.fn(),
-      saveStateGql: jest.fn()
+      loadImageCollectionGql: vi.fn(),
+      saveStateGql: vi.fn()
     }
 
     const changedGetters = {
@@ -263,8 +263,8 @@ describe("OrderManagerControls.vue", () => {
 
   it('assures saveStateGql is called for MVWs', () => {
     actions = {
-      loadImageCollectionGql: jest.fn(),
-      saveStateGql: jest.fn()
+      loadImageCollectionGql: vi.fn(),
+      saveStateGql: vi.fn()
     }
 
     const changedGetters = {

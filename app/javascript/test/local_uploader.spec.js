@@ -4,7 +4,7 @@ import LocalUploader from '../components/local_uploader.vue'
 test('populates a hidden input for files uploaded and fires a formId', async () => {
   document.body.innerHTML = "<form id='test'><div id='bla'></div></form>'"
   const div = document.getElementById('bla')
-  const mockSubmit = jest.fn()
+  const mockSubmit = vi.fn()
   window.HTMLFormElement.prototype.submit = mockSubmit
   const wrapper = mount(LocalUploader, { attachTo: div, propsData: { folderPrefix: '/prefix', formId: 'test' } })
   wrapper.vm.uploadComplete({ successful: [{ uploadURL: 'http://localhost:3000/files/561688f1e9dd0fd1865125c2f45c0', type: 'image/tiff', name: 'test1.tif' }] })

@@ -1,25 +1,29 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
-<div>
+exports[`OrderManagerFilesetForm.vue > has the expected html structure 1`] = `
+<div
+  data-v-09416229=""
+>
   <heading-stub
+    data-v-09416229=""
     level="h2"
     size="h1"
   >
-    
-    Edit 
+     Edit 
     <small
       class="text-muted"
+      data-v-09416229=""
     >
       the selected item
     </small>
   </heading-stub>
-   
   <form
+    data-v-09416229=""
     id="app"
     novalidate="novalidate"
   >
     <input-text-stub
+      data-v-09416229=""
       errormessage=""
       helper=""
       icon=""
@@ -35,8 +39,8 @@ exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
       width="auto"
       wrapper="div"
     />
-     
     <input-select-stub
+      data-v-09416229=""
       errormessage=""
       id="pageType"
       label="Page Type"
@@ -47,16 +51,16 @@ exports[`OrderManagerFilesetForm.vue has the expected html structure 1`] = `
       width="auto"
       wrapper="div"
     />
-     
     <input-checkbox-stub
+      data-v-09416229=""
       errormessage=""
       grouplabel=""
       id="startCanvasCheckbox"
       label=""
       options="[object Object]"
     />
-     
     <input-checkbox-stub
+      data-v-09416229=""
       errormessage=""
       grouplabel=""
       id="thumbnailCheckbox"

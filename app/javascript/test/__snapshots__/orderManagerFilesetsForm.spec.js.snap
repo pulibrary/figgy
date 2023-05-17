@@ -1,25 +1,29 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
-<div>
+exports[`OrderManagerFilesetsForm.vue > has the expected html structure 1`] = `
+<div
+  data-v-6f9610f0=""
+>
   <heading-stub
+    data-v-6f9610f0=""
     level="h2"
     size="h1"
   >
-    
-    Generate Labels 
+     Generate Labels 
     <small
       class="text-muted"
+      data-v-6f9610f0=""
     >
       for selected items
     </small>
   </heading-stub>
-   
   <form
+    data-v-6f9610f0=""
     id="app"
     novalidate="novalidate"
   >
     <input-text-stub
+      data-v-6f9610f0=""
       errormessage=""
       helper=""
       icon=""
@@ -35,8 +39,8 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
       width="auto"
       wrapper="div"
     />
-     
     <input-text-stub
+      data-v-6f9610f0=""
       errormessage=""
       helper=""
       icon=""
@@ -52,17 +56,16 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
       width="auto"
       wrapper="div"
     />
-     
     <input-checkbox-stub
+      data-v-6f9610f0=""
       errormessage=""
       grouplabel=""
       label=""
       options="[object Object]"
     />
-     
     <!---->
-     
     <input-select-stub
+      data-v-6f9610f0=""
       errormessage=""
       id="labelMethod"
       label="Labeling Method"
@@ -73,8 +76,8 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
       width="auto"
       wrapper="div"
     />
-     
     <input-select-stub
+      data-v-6f9610f0=""
       errormessage=""
       id="twoUp"
       label="Two Up"
@@ -84,9 +87,7 @@ exports[`OrderManagerFilesetsForm.vue has the expected html structure 1`] = `
       width="auto"
       wrapper="div"
     />
-     
     <!---->
-     
     <!---->
   </form>
 </div>

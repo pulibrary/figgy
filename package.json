@@ -2,7 +2,7 @@
   "name": "lux-rails",
   "private": true,
   "scripts": {
-    "test": "jest --coverage",
+    "test": "vitest run",
     "lint": "yarn run eslint -- --ext .vue app/javascript"
   },
   "dependencies": {
@@ -48,63 +48,24 @@
     "@babel/preset-env": "^7.18.10",
     "@vue/test-utils": "^1.0.0-beta.25",
     "babel-core": "^7.0.0-bridge",
-    "babel-jest": "^23.6.0",
     "babel-loader": "^8.2.5",
     "dotenv": "^7.0.0",
     "eslint": "^5.11.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jest": "^23.18.0",
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vitest": "^0.2.2",
+    "eslint-plugin-vitest-globals": "^1.3.1",
     "eslint-plugin-vue": "^5.1.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^23.6.0",
-    "jest-canvas-mock": "^1.1.0",
-    "jest-serializer-vue": "^2.0.2",
+    "jest-serializer-vue": "^3.1.0",
     "jquery": "^3.5.0",
+    "jsdom": "^22.0.0",
     "vite": "^4.2.0",
     "vite-plugin-ruby": "^3.2.0",
-    "vue-jest": "^3.0.0"
-  },
-  "jest": {
-    "roots": [
-      "app/javascript/test",
-      "cloud_fixity/test"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "app/javascript",
-      "app/assets/javascripts"
-    ],
-    "moduleNameMapper": {
-      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$": "identity-obj-proxy",
-      "@viewer/(.*)$": "<rootDir>/app/javascript/viewer/$1",
-      "@store/(.*)": "<rootDir>/app/javascript/store/$1",
-      "^@/(.*)$": "app/javascript/$1"
-    },
-    "moduleFileExtensions": [
-      "es6",
-      "js",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
-      "^.+\\.es6$": "<rootDir>/node_modules/babel-jest"
-    },
-    "snapshotSerializers": [
-      "<rootDir>/node_modules/jest-serializer-vue"
-    ],
-    "setupFiles": [
-      "jest-canvas-mock"
-    ],
-    "setupTestFrameworkScriptFile": "./app/javascript/test/setup.js",
-    "transformIgnorePatterns": [
-      "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
-    ]
+    "vitest": "^0.31.1"
   }
 }

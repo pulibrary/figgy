@@ -22,8 +22,8 @@ let items = [
 describe("OrderManagerFilesetsForm.vue", () => {
   beforeEach(() => {
     actions = {
-      updateItems: jest.fn(),
-      updateChanges: jest.fn()
+      updateItems: vi.fn(),
+      updateChanges: vi.fn()
     }
 
     const gallery = {

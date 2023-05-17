@@ -3,7 +3,7 @@ import FileBrowser from '../../components/file_browser/file_browser.vue'
 import flushPromises from 'flush-promises'
 
 function stubFailedChildLoad () {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       status: 404,
       json: () => { throw Error('broken') }
@@ -12,7 +12,7 @@ function stubFailedChildLoad () {
 }
 
 function stubChildLoad () {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       status: 200,
       json: () => Promise.resolve(

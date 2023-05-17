@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OrderManager.vue has the expected html structure 1`] = `
+exports[`OrderManager.vue > has the expected html structure 1`] = `
 <div
   class="lux-orderManager"
 >
@@ -9,11 +9,8 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
   >
     <!---->
   </transition-stub>
-   
   <!---->
-   
   <!---->
-   
   <wrapper-stub
     class="lux-galleryPanel"
     horizontal=""
@@ -23,16 +20,13 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
     <toolbar-stub
       type="div"
     />
-     
     <!---->
-     
     <gallery-stub
       cardpixelwidth="300"
       class="lux-galleryWrapper"
       galleryitems="[object Object],[object Object],[object Object]"
     />
   </wrapper-stub>
-   
   <wrapper-stub
     class="lux-sidePanel"
     horizontal=""
@@ -40,13 +34,10 @@ exports[`OrderManager.vue has the expected html structure 1`] = `
     type="div"
   >
     <!---->
-     
     <!---->
-     
     <fileset-form-stub
       type="div"
     />
-     
     <controls-stub
       type="div"
       viewerid="viewer"
