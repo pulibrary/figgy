@@ -37,8 +37,6 @@ export default class Initializer {
     $("select:not(.select2)").selectpicker({'liveSearch': true})
 
     this.initialize_datatables()
-
-    // this.initialize_uppy()
   }
 
   initialize_timepicker() {
@@ -55,9 +53,6 @@ export default class Initializer {
       minuteMax: 0,
       secondMax: 0
     })
-  }
-
-  initialize_uppy () {
   }
 
   // most datatables can be initialized here
