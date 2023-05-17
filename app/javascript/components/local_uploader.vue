@@ -53,7 +53,7 @@ export default {
         target: '#drag-drop'
       })
       .use(StatusBar, { target: '#status-bar' })
-    uppy.use(Tus, { endpoint: TUS_ENDPOINT, limit: 6 })
+    uppy.use(Tus, { endpoint: TUS_ENDPOINT, limit: 6, chunkSize: (5 * 1024 * 1024) })
     this.uppy = uppy
 
     uppy.on('complete', (result) => {
