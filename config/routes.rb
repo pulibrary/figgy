@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   end
 
   authenticate :user do
-    mount Tus::Server => "/files"
+    mount Tus::Server => "/local_file_upload"
   end
 
   root to: "catalog#index"
