@@ -18,7 +18,7 @@ RSpec.feature "Numismatics::Issues" do
   end
 
   before do
-    stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    stub_ezid
 
     change_set_persister.save(change_set: change_set)
     sign_in user

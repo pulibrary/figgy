@@ -64,7 +64,7 @@ RSpec.describe OaiController do
     context "when requesting a Louis-Alexandre Berthier set" do
       it "returns all the resources in oai_dc" do
         collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         stub_findingaid(pulfa_id: "C0022_c0145")
         FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id, source_metadata_identifier: "C0022_c0145", import_metadata: true)
 
@@ -99,7 +99,7 @@ RSpec.describe OaiController do
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
           file2 = fixture_file_upload("files/abstract.tiff", "image/tiff")
-          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          stub_ezid
           stub_catalog(bib_id: bib_id)
           child1 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file1])
           child2 = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file2])
@@ -129,7 +129,7 @@ RSpec.describe OaiController do
         it "returns the record with desired fields populated" do
           bib_id = "9968663863506421"
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
-          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          stub_ezid
           stub_catalog(bib_id: bib_id)
           resource = FactoryBot.create_for_repository(
             :complete_scanned_resource,
@@ -157,7 +157,7 @@ RSpec.describe OaiController do
         it "returns the record with desired fields populated" do
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
-          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          stub_ezid
           stub_findingaid(pulfa_id: "C0022_c0145")
           resource = FactoryBot.create_for_repository(
             :complete_scanned_resource,
@@ -187,7 +187,7 @@ RSpec.describe OaiController do
       context "for a resource with no source metadata identifier and no file_sets" do
         it "returns the record with desired fields populated" do
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
-          stub_ezid(shoulder: "99999/fk4", blade: "123456")
+          stub_ezid
           resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_of_collection_ids: collection.id)
 
           get :index, params: { "verb" => "GetRecord", "identifier" => "oai:figgy:#{resource.id}", "metadataPrefix" => "oai_dc" }

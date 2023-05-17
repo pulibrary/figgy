@@ -7,7 +7,7 @@ RSpec.describe AutoCompleter do
   let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
   context "when there are complete_when_processed resources ready for completion" do
     it "marks them complete" do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
       complete_resource = FactoryBot.create_for_repository(:complete_open_scanned_resource)
       to_be_completed_resource = FactoryBot.create_for_repository(:scanned_resource, files: [file], state: "complete_when_processed")
       no_files_resource = FactoryBot.create_for_repository(:scanned_resource, state: "complete_when_processed")
@@ -27,7 +27,7 @@ RSpec.describe AutoCompleter do
   end
   context "when a MVW is auto-completed" do
     it "doesn't error on its volume" do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
       allow(Honeybadger).to receive(:notify)
       parent = FactoryBot.create_for_repository(:scanned_resource, state: "complete_when_processed")
       to_be_completed_resource = FactoryBot.create_for_repository(:scanned_resource, files: [file], state: "complete_when_processed", append_id: parent.id)
@@ -46,7 +46,7 @@ RSpec.describe AutoCompleter do
   end
   context "when one eligible resource ready for completion errors" do
     it "notifies and completes the others" do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
       allow(Honeybadger).to receive(:notify)
       to_be_completed_resource1 = FactoryBot.create_for_repository(:scanned_resource, files: [file], state: "complete_when_processed")
       to_be_completed_resource2 = FactoryBot.create_for_repository(:scanned_resource, files: [file2], state: "complete_when_processed")

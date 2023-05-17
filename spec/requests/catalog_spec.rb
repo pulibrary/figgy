@@ -26,7 +26,7 @@ RSpec.describe "Catalog requests", type: :request do
 
       before do
         stub_catalog(bib_id: "991234563506421")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
       end
 
       it "downloads the original pdf" do
@@ -72,7 +72,7 @@ RSpec.describe "Catalog requests", type: :request do
 
       before do
         stub_catalog(bib_id: "991234563506421")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         # used in pdf generation
         stub_request(:any, "http://www.example.com/image-service/#{scanned_resource.member_ids.first}/full/200,/0/gray.jpg")
           .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)

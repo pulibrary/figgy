@@ -115,7 +115,7 @@ RSpec.describe Numismatics::IssuesController, type: :controller do
   describe "GET /concern/numismatic_issues/:id/manifest" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     before do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
     end
     it "returns a IIIF manifest for a resource with a file" do
       coin = FactoryBot.create_for_repository(:complete_open_coin, files: [file])

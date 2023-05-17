@@ -5,7 +5,7 @@ RSpec.feature "FileSet" do
   let(:user) { FactoryBot.create(:admin) }
 
   before do
-    stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    stub_ezid
 
     sign_in user
   end

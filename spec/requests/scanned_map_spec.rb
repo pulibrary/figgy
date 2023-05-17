@@ -10,7 +10,7 @@ RSpec.describe "ScannedMap requests", type: :request do
   let(:user) { FactoryBot.create(:admin) }
 
   before do
-    stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    stub_ezid
     stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
       .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
   end

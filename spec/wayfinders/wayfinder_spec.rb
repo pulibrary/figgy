@@ -17,7 +17,7 @@ RSpec.describe Wayfinder do
 
     describe "#child_deletion_markers" do
       it "returns all deletion_markers with the given parent_id" do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         query_service = ChangeSetPersister.default.query_service
         file = fixture_file_upload("files/example.tif", "image/tiff")
         change_set_persister = ChangeSetPersister.default

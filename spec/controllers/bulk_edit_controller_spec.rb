@@ -38,7 +38,7 @@ RSpec.describe BulkEditController, type: :controller do
   describe "POST /bulk_edit" do
     let(:params) { { mark_complete: "1", search_params: { f: { member_of_collection_titles_ssim: collection_title, state_ssim: state }, q: "significant" } } }
     before do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
     end
     context "when not logged in" do
       let(:user) { nil }

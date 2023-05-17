@@ -89,7 +89,7 @@ RSpec.describe CatalogController, type: :controller do
       render_views
       it "can search by imported metadata title" do
         stub_catalog(bib_id: "991234563506421")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "991234563506421", import_metadata: true)
         reloaded_resource = query_service.find_by(id: resource.id)
         output = persister.save(resource: reloaded_resource)
@@ -179,7 +179,7 @@ RSpec.describe CatalogController, type: :controller do
     end
     it "can search by ARK" do
       stub_catalog(bib_id: "991234563506421")
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
       resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "991234563506421", import_metadata: true)
       reloaded_resource = query_service.find_by(id: resource.id)
       persister.save(resource: reloaded_resource)
@@ -759,7 +759,7 @@ RSpec.describe CatalogController, type: :controller do
       it "renders RDF views" do
         stub_catalog(bib_id: "991234563506421")
         stub_catalog_context
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         collection = FactoryBot.create_for_repository(:collection)
         resource = FactoryBot.create_for_repository(
           :complete_scanned_resource,
