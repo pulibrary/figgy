@@ -6,12 +6,10 @@ RSpec.describe Preserver::BlindImporter do
   let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:query_service) { ChangeSetPersister.default.query_service }
   let(:persister) { ChangeSetPersister.default.metadata_adapter.persister }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
   let(:importer) { described_class.new }
   with_queue_adapter :inline
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
   end
   describe ".import" do
     it "can import arbitrarily deep" do

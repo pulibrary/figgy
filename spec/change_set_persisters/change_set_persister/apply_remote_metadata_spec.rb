@@ -7,7 +7,7 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
   let(:query_service) { ChangeSetPersister.default.query_service }
   let(:blade) { "123456" }
   before do
-    stub_ezid(shoulder: "99999/fk4", blade: blade)
+    stub_ezid
     stub_catalog(bib_id: "991234563506421")
   end
   context "when a bibid source_metadata_identifier is set for the first time on a scanned resource" do

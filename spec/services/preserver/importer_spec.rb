@@ -7,8 +7,6 @@ describe Preserver::Importer do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, files: [file]) }
   let(:file_set) { resource.decorate.file_sets.first }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
   let(:change_set_persister) { ChangeSetPersister.default }
   let(:query_service) { change_set_persister.query_service }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
@@ -36,7 +34,7 @@ describe Preserver::Importer do
   end
 
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
     persisted_file_set
     change_set = ChangeSet.for(persisted_resource)
     change_set_persister.save(change_set: change_set)

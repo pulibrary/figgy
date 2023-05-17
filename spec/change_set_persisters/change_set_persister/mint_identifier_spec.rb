@@ -11,7 +11,7 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
   describe "#run" do
     let(:identifier_service) { class_double(IdentifierService).as_stubbed_const transfer_nested_constants: true }
     let(:shoulder) { "99999/fk4" }
-    let(:blade) { "123456" }
+    let(:blade) { "newark" }
     let(:new_ark) { "ark:/#{shoulder}#{blade}" }
 
     before do

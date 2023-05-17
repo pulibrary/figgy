@@ -90,7 +90,7 @@ RSpec.describe BulkIngestService do
     let(:coll) { FactoryBot.create_for_repository(:collection) }
     before do
       stub_catalog(bib_id: "9946093213506421")
-      stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
+      stub_ezid
     end
     context "with a directory of Scanned TIFFs" do
       it "ingests the resources, skipping dotfiles and ignored files" do
@@ -189,7 +189,7 @@ RSpec.describe BulkIngestService do
 
       before do
         stub_catalog(bib_id: "9946093213506421")
-        stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
+        stub_ezid
       end
 
       it "ingests the resources", bulk: true do
@@ -231,7 +231,7 @@ RSpec.describe BulkIngestService do
       let(:coll) { FactoryBot.create_for_repository(:collection) }
       before do
         stub_catalog(bib_id: "9946093213506421")
-        stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
+        stub_ezid
       end
 
       it "applies that metadata" do
@@ -340,7 +340,7 @@ RSpec.describe BulkIngestService do
         allow(logger).to receive(:warn)
         allow(logger).to receive(:info)
         stub_catalog(bib_id: "9946093213506421")
-        stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
+        stub_ezid
       end
 
       it "does not ingest the resources and logs a warning" do

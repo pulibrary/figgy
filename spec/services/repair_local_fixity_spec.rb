@@ -15,7 +15,7 @@ RSpec.describe RepairLocalFixity do
 
   before do
     allow(LocalFixityJob).to receive(:perform_later)
-    stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    stub_ezid
     scanned_resource
   end
 

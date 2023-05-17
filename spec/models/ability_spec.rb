@@ -13,11 +13,9 @@ describe Ability do
   let(:page_file_3) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:audio_file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
   let(:audio_file_2) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
 
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
     allow(CDL::EligibleItemService).to receive(:item_ids)
   end
 
@@ -790,10 +788,8 @@ describe Ability do
       let(:vector_resource) do
         change_set_persister.save(change_set: VectorResourceChangeSet.new(campus_only_vector_resource, files: [file]))
       end
-      let(:shoulder) { "99999/fk4" }
-      let(:blade) { "123456" }
       before do
-        stub_ezid(shoulder: shoulder, blade: blade)
+        stub_ezid
       end
 
       it {
@@ -1018,10 +1014,8 @@ describe Ability do
       let(:vector_resource) do
         change_set_persister.save(change_set: VectorResourceChangeSet.new(open_vector_resource, files: [file]))
       end
-      let(:shoulder) { "99999/fk4" }
-      let(:blade) { "123456" }
       before do
-        stub_ezid(shoulder: shoulder, blade: blade)
+        stub_ezid
       end
 
       it {
@@ -1035,10 +1029,8 @@ describe Ability do
       let(:vector_resource) do
         change_set_persister.save(change_set: VectorResourceChangeSet.new(private_vector_resource, files: [file]))
       end
-      let(:shoulder) { "99999/fk4" }
-      let(:blade) { "123456" }
       before do
-        stub_ezid(shoulder: shoulder, blade: blade)
+        stub_ezid
       end
 
       it {

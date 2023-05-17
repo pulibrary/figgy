@@ -5,11 +5,9 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
 
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
     allow(MosaicJob).to receive(:perform_later)
   end
 

@@ -75,7 +75,7 @@ RSpec.describe DownloadsController do
       let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE, files: [sample_file]) }
 
       before do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
       end
 
       it "redirects to login" do
@@ -88,7 +88,7 @@ RSpec.describe DownloadsController do
       let(:resource) { FactoryBot.create_for_repository(:complete_scanned_resource, visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC, files: [sample_file]) }
 
       before do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
       end
 
       it "allows downloading the file" do
@@ -153,7 +153,7 @@ RSpec.describe DownloadsController do
       it "allows download", run_real_derivatives: true, run_real_characterization: true do
         sign_in user
         file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         parent = FactoryBot.create_for_repository(:complete_recording, files: [file], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
         file_set = Wayfinder.for(parent).members.first
         partial = file_set.derivative_partial_files.first
@@ -165,7 +165,7 @@ RSpec.describe DownloadsController do
       it "disallows download of the original file", run_real_derivatives: true, run_real_characterization: true do
         sign_in user
         file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         parent = FactoryBot.create_for_repository(:complete_recording, files: [file], visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED)
         file_set = Wayfinder.for(parent).members.first
         wav_file = file_set.original_files.first

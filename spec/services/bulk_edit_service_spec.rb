@@ -13,7 +13,7 @@ RSpec.describe BulkEditService do
   describe "#perform" do
     context "when updating state" do
       before do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
       end
 
       it "updates the state of the member objects and mints an ark" do
@@ -62,7 +62,7 @@ RSpec.describe BulkEditService do
 
     context "when updating multiple objects and multiple attributes" do
       before do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
       end
 
       it "updates them all" do

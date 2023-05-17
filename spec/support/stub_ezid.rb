@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module EzidStubbing
-  def stub_ezid(shoulder:, blade:, location: "http://example.com")
+  def stub_ezid(shoulder: "99999/fk4", blade: "123456", location: "http://example.com")
     stub_request(:post, "https://ezid.cdlib.org/shoulder/ark:/#{shoulder}")
       .to_return(status: 200, body: "success: ark:/#{shoulder}#{blade}", headers: {})
     stub_request(:head, "http://arks.princeton.edu/ark:/#{shoulder}/#{blade}")

@@ -23,7 +23,7 @@ RSpec.describe DataSeeder do
   # combine tests to reduce expensive object creation
   describe "#generate_dev_data" do
     before do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
     end
     it "generates lots of objects" do
       n_files = mvw_volumes + # each volume member has a fileset
@@ -81,7 +81,7 @@ RSpec.describe DataSeeder do
 
   describe "#generate_collection" do
     before do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
     end
     it "adds a collection containing 3 scanned resources, 1 complete and 2 pending" do
       FactoryBot.create(:admin) # collection assigns an owner

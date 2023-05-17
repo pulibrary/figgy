@@ -66,7 +66,7 @@ RSpec.feature "Scanned Resources" do
 
     before do
       stub_catalog(bib_id: "991234563506421")
-      stub_ezid(shoulder: "99999/fk4", blade: "")
+      stub_ezid
       reloaded_resource = query_service.find_by(id: resource.id)
       change_set = ChangeSet.for(reloaded_resource)
       change_set.validate(state: "complete")

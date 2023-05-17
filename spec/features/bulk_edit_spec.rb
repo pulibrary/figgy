@@ -17,7 +17,7 @@ RSpec.feature "Bulk edit", js: true do
   end
 
   before do
-    stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+    stub_ezid
 
     [collection, member_scanned_resource, nonmember_scanned_resource].each do |resource|
       change_set = ChangeSet.for(resource)

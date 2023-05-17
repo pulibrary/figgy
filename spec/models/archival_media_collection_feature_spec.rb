@@ -21,7 +21,7 @@ RSpec.feature "Browsing archival media collections" do
   before do
     stub_findingaid(pulfa_id: "C0652")
     stub_findingaid(pulfa_id: "C0652_c0377")
-    stub_ezid(shoulder: "99999/fk4", blade: "123456")
+    stub_ezid
     member
     sign_in user
   end

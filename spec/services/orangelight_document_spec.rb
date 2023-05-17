@@ -91,7 +91,7 @@ describe OrangelightDocument do
       end
 
       before do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         coin
         issue
       end

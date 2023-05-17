@@ -311,7 +311,7 @@ RSpec.describe ScannedMapsController, type: :controller do
   describe "GET /concern/scanned_maps/:id/manifest" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     before do
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
     end
     it "returns a IIIF manifest for a resource with a file" do
       scanned_map = FactoryBot.create_for_repository(:complete_scanned_map, files: [file])

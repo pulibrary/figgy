@@ -18,8 +18,6 @@ RSpec.describe CloudFixity do
     }.to_json
   end
   let(:subscriber) { instance_double(Google::Cloud::Pubsub::Subscriber) }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:query_service) { metadata_adapter.query_service }
 
@@ -28,7 +26,7 @@ RSpec.describe CloudFixity do
     described_class.instance_variable_set(:@pubsub, nil)
     described_class::FixityRequestor.instance_variable_set(:@pubsub, nil)
 
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
     allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
     allow(pubsub).to receive(:topic).and_return(topic)
     allow(topic).to receive(:subscription).and_return(subscription)

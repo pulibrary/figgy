@@ -23,11 +23,9 @@ RSpec.feature "Fixity dashboard" do
   let(:failed_local_fixity_event) do
     FactoryBot.create_for_repository(:local_fixity_failure, resource_id: Wayfinder.for(scanned_resource).file_sets.first.id, current: true)
   end
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
 
   before do
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
     sign_in user
   end
 

@@ -24,7 +24,7 @@ describe BulkUpdateJob do
     before do
       resource1
       resource2
-      stub_ezid(shoulder: "99999/fk4", blade: "123456")
+      stub_ezid
     end
 
     it "updates the resource state" do

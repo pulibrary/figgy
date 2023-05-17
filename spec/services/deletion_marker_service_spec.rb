@@ -6,8 +6,6 @@ describe DeletionMarkerService do
 
   let(:change_set_persister) { ChangeSetPersister.default }
   let(:query_service) { change_set_persister.query_service }
-  let(:shoulder) { "99999/fk4" }
-  let(:blade) { "123456" }
 
   before do
     # Make preservation deletes not actually happen to simulate a versioned
@@ -16,7 +14,7 @@ describe DeletionMarkerService do
     # This is a bug - right now all disk:// storage adapter IDs are going to
     # this adapter, no matter what, so the above never gets called.
     allow(Valkyrie::StorageAdapter.find(:disk)).to receive(:delete)
-    stub_ezid(shoulder: shoulder, blade: blade)
+    stub_ezid
   end
 
   context "when restoring a deleted resource with children" do

@@ -6,7 +6,7 @@ RSpec.describe Migrations::MapCopyrightMigrator do
   describe ".call" do
     context "when a map is restricted" do
       it "updates the rights statement to be \"in copyright\"" do
-        stub_ezid(shoulder: "99999/fk4", blade: "123456")
+        stub_ezid
         scanned_map = FactoryBot.create_for_repository(:complete_campus_only_scanned_map)
         raster_map = FactoryBot.create_for_repository(:complete_campus_only_raster_resource)
         vector_map = FactoryBot.create_for_repository(:complete_campus_only_vector_resource)
