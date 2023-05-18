@@ -36,13 +36,13 @@ jobs:
       # Restore Cached Dependencies
       - restore_cache:
           keys:
-            - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230112
+            - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230518
       # Install Bundler
       - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - save_cache:
-          key: figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230112
+          key: figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230518
           paths:
             - ./vendor/bundle
       - run:
@@ -55,7 +55,7 @@ jobs:
             yarn install --frozen-lockfile
       - save_cache:
           name: Save Yarn Package Cache
-          key: figgy-yarn-{{ checksum "yarn.lock" }}
+          key: figgy-yarn-{{ checksum "yarn.lock" }}-20230518
           paths:
             - ~/.cache/yarn
       - persist_to_workspace:
