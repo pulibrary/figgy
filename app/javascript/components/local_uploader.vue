@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import Uppy, { debugLogger } from '@uppy/core'
+import Uppy from '@uppy/core'
 import DragDrop from '@uppy/drag-drop'
 import StatusBar from '@uppy/status-bar'
 import Tus from '@uppy/tus'
@@ -38,8 +38,7 @@ export default {
   },
   data () {
     return {
-      uploadedFiles: [],
-      uppy: null
+      uploadedFiles: []
     }
   },
   computed: {
@@ -48,13 +47,12 @@ export default {
     }
   },
   mounted () {
-    const uppy = new Uppy({ logger: debugLogger })
+    const uppy = new Uppy()
       .use(DragDrop, {
         target: '#drag-drop'
       })
       .use(StatusBar, { target: '#status-bar' })
     uppy.use(Tus, { endpoint: TUS_ENDPOINT, limit: 6, chunkSize: (5 * 1024 * 1024) })
-    this.uppy = uppy
 
     uppy.on('complete', (result) => {
       this.uploadComplete(result)
