@@ -101,7 +101,7 @@ jobs:
       - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
-      - run: yarn exec jest --ci --runInBand --coverage
+      - run: yarn exec jest -w 2 --coverage
       - run:
           name: Run Cloud Fixity tests
           command: |
