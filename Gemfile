@@ -115,9 +115,11 @@ end
 
 group :development, :test do
   gem "awesome_print"
+  gem "bcrypt_pbkdf"
   gem "bixby", "~> 5.0"
   gem "bundler-audit", require: false
   gem "dotenv-rails"
+  gem "ed25519"
   gem "factory_bot_rails"
   gem "parallel_tests"
   gem "pdf-reader", github: "yob/pdf-reader"
