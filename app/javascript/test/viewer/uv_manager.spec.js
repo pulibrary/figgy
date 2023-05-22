@@ -1,6 +1,6 @@
 import UVManager from 'viewer/uv_manager'
 import jQ from 'jquery'
-jest.mock('viewer/cdl_timer')
+vi.mock('viewer/cdl_timer')
 describe('UVManager', () => {
   const initialHTML =
     '<h1 id="title" class="lux-heading h1" style="display: none;"></h1>' +
@@ -44,20 +44,20 @@ describe('UVManager', () => {
   function mockJquery () {
     // Mock jQuery
     const clickable = { click: () => clickable, on: () => clickable, is: () => clickable, outerHeight: () => clickable, width: () => clickable, height: () => clickable, hide: () => clickable, show: () => clickable, children: () => clickable }
-    global.$ = jest.fn().mockImplementation(() => clickable)
+    global.$ = vi.fn().mockImplementation(() => clickable)
   }
 
   function mockManifests (status) {
     // Mock $.ajax
     const data = { status: status }
     const jqxhr = { getResponseHeader: () => null }
-    global.$.ajax = jest.fn().mockImplementation(() => {
+    global.$.ajax = vi.fn().mockImplementation(() => {
       if (status !== 200) { return jQ.Deferred().reject(data, status, jqxhr) } else { return jQ.Deferred().resolve(data, status, jqxhr) }
     })
   }
 
   function mockUvProvider (externalManifest = false, authToken = null) {
-    const getResult = jest.fn().mockImplementation(function (k) {
+    const getResult = vi.fn().mockImplementation(function (k) {
       if (k === 'manifest') {
         if (externalManifest === true) {
           return 'https://example.org/other/iiif/manifest'
@@ -74,18 +74,19 @@ describe('UVManager', () => {
     })
 
     // This makes it so global.UV.URLDataProvider.get returns our mock data
-    const provider = jest.fn().mockImplementation(() => {
+    const provider = vi.fn().mockImplementation(() => {
       return { get: getResult }
     })
     global.UV = { URLDataProvider: provider }
-    global.createUV = jest.fn()
+    global.createUV = vi.fn()
     // Allow window location assign
-    jest.spyOn(window.location, 'assign').mockImplementation(() => true)
+    const location = window.location
+    vi.spyOn(location, 'assign').mockImplementation(() => true)
   }
 
   let figgy_id = "12345"
   function stubQuery(embedHash, noticeHash=null,label='Test', type='ScannedResource') {
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         status: 200,
         json: () => Promise.resolve(
@@ -107,7 +108,7 @@ describe('UVManager', () => {
   }
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('initialize', () => {
@@ -128,7 +129,7 @@ describe('UVManager', () => {
 
       // Initialize
       const uvManager = new UVManager()
-      let spy = spyOn(uvManager, "buildLeafletViewer")
+      let spy = vi.spyOn(uvManager, "buildLeafletViewer")
       await uvManager.initialize()
       expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
       expect(spy).toHaveBeenCalled()
@@ -193,7 +194,7 @@ describe('UVManager', () => {
 
       // Initialize
       const uvManager = new UVManager()
-      let spy = spyOn(uvManager, "buildLeafletViewer")
+      let spy = vi.spyOn(uvManager, "buildLeafletViewer")
       await uvManager.initialize()
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
       expect(spy).not.toHaveBeenCalled()

@@ -881,6 +881,8 @@ GEM
       deprecation (>= 1.0.0)
       iiif-image-api (>= 0.1.0)
       railties (>= 4.2, < 8)
+    roda (3.68.0)
+      rack
     rsolr (2.5.0)
       builder (>= 2.1.2)
       faraday (>= 0.9, < 3, != 2.0.0)
@@ -1064,6 +1066,9 @@ GEM
       rails (>= 3.1)
     trailblazer-option (0.1.2)
     ttfunk (1.7.0)
+    tus-server (2.3.0)
+      content_disposition (~> 1.0)
+      roda (>= 2.27, < 4)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -1260,6 +1265,7 @@ DEPENDENCIES
   string_rtl
   timecop
   title
+  tus-server (~> 2.3)
   valkyrie (~> 3.0.0)
   valkyrie-derivatives!
   valkyrie-sequel (~> 3.0.0.pre.beta.1)

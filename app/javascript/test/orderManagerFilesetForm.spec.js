@@ -22,10 +22,10 @@ let items = [
 describe("OrderManagerFilesetForm.vue", () => {
   beforeEach(() => {
     actions = {
-      updateStartCanvas: jest.fn(),
-      updateThumbnail: jest.fn(),
-      updateItems: jest.fn(),
-      updateChanges: jest.fn()
+      updateStartCanvas: vi.fn(),
+      updateThumbnail: vi.fn(),
+      updateItems: vi.fn(),
+      updateChanges: vi.fn()
     }
 
     const gallery = {
@@ -113,7 +113,7 @@ describe("OrderManagerFilesetForm.vue", () => {
     expect(actions.updateThumbnail).toHaveBeenCalled()
   })
 
-  it('updateSingle should call the updateChanges and updateItems actions', () => {
+  it('updateSingle should call the updateChanges and updateItems actions', async () => {
     wrapper.vm.updateSingle()
     expect(actions.updateChanges).toHaveBeenCalled()
     expect(actions.updateItems).toHaveBeenCalled()
@@ -121,10 +121,10 @@ describe("OrderManagerFilesetForm.vue", () => {
 
   it('pageType and  should not display for MVWs', () => {
     actions = {
-      updateStartCanvas: jest.fn(),
-      updateThumbnail: jest.fn(),
-      updateItems: jest.fn(),
-      updateChanges: jest.fn()
+      updateStartCanvas: vi.fn(),
+      updateThumbnail: vi.fn(),
+      updateItems: vi.fn(),
+      updateChanges: vi.fn()
     }
 
     const gallery = {

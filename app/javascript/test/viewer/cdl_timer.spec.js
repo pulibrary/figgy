@@ -32,7 +32,7 @@ describe('CDLTimer', () => {
         json: () => json,
         ok: true
       })
-      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      global.fetch = vi.fn().mockImplementation(() => mockFetchPromise)
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()
       expect(timer.status.charged).toBe(false)
@@ -50,7 +50,7 @@ describe('CDLTimer', () => {
         json: () => json,
         ok: true
       })
-      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      global.fetch = vi.fn().mockImplementation(() => mockFetchPromise)
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()
       expect(document.getElementById('remaining-time').innerHTML).toMatch(/Remaining Checkout Time: \d\d:\d\d:\d\d/)
@@ -68,7 +68,7 @@ describe('CDLTimer', () => {
         json: () => json,
         ok: false
       })
-      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      global.fetch = vi.fn().mockImplementation(() => mockFetchPromise)
 
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()
@@ -90,7 +90,7 @@ describe('CDLTimer', () => {
         json: () => json,
         ok: true
       })
-      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      global.fetch = vi.fn().mockImplementation(() => mockFetchPromise)
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()
 
@@ -112,7 +112,7 @@ describe('CDLTimer', () => {
         json: () => json,
         ok: true
       })
-      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      global.fetch = vi.fn().mockImplementation(() => mockFetchPromise)
 
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()
@@ -134,7 +134,7 @@ describe('CDLTimer', () => {
         json: () => json,
         ok: true
       })
-      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      global.fetch = vi.fn().mockImplementation(() => mockFetchPromise)
       const id = 'b627a6ce-6717-4dd0-a16a-7a0c0b8a5788'
       const timer = new CDLTimer(id)
       await timer.initializeTimer()
@@ -158,9 +158,9 @@ describe('CDLTimer', () => {
         json: () => json,
         ok: true
       })
-      global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+      global.fetch = vi.fn().mockImplementation(() => mockFetchPromise)
 
-      jest.spyOn(window.location, 'reload').mockImplementation(() => true)
+      vi.spyOn(window.location, 'reload').mockImplementation(() => true)
 
       const timer = new CDLTimer('b627a6ce-6717-4dd0-a16a-7a0c0b8a5788')
       await timer.initializeTimer()

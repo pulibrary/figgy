@@ -5,9 +5,10 @@ module.exports = {
   ],
   "plugins": [
     "vue",
-    "jest"
+    "vitest",
+    "vitest-globals"
   ],
   "env": {
-    "jest/globals": true
+    "vitest-globals/env": true
   }
 };

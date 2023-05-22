@@ -1,15 +1,13 @@
 require('dotenv').config()
-const checkFixity = require('..').checkFixity
+const mock = require('mock-require');
 const fs = require('fs')
 const { Readable } = require('stream');
 class RequestError extends Error {
 }
 
 // Mock Cloud Storage
-const { Storage } = require('@google-cloud/storage')
-jest.mock('@google-cloud/storage')
-const file = jest.fn()
-const bucket = jest.fn(() => ({ file }))
+const file = vi.fn()
+const bucket = vi.fn(() => ({ file }))
 beforeEach(() => {
   file.mockImplementation(name => ({
     createReadStream: () => {
@@ -19,16 +17,14 @@ beforeEach(() => {
 })
 
 // Mock PubSub
-const { PubSub } = require('@google-cloud/pubsub')
-jest.mock('@google-cloud/pubsub')
-var publishStatusJSON = jest.fn(() => {
+var publishStatusJSON = vi.fn(() => {
   return new Promise((resolve, reject) => { resolve() })
 })
-var publishRequestJSON = jest.fn(() => {
+var publishRequestJSON = vi.fn(() => {
   return new Promise((resolve, reject) => { resolve() })
 })
 
-const topic = jest.fn(function(name) {
+const topic = vi.fn(function(name) {
   let publishFunction = null
   if(name == "figgy-staging-fixity-status") {
     publishFunction = publishStatusJSON
@@ -38,8 +34,10 @@ const topic = jest.fn(function(name) {
   return { publishJSON: publishFunction }
 })
 
-Storage.mockImplementation(() => ({ bucket }))
-PubSub.mockImplementation(() => ({ topic }))
+mock('@google-cloud/storage', { Storage: vi.fn().mockImplementation(() => ({ bucket })) })
+mock('@google-cloud/pubsub', { PubSub: vi.fn().mockImplementation(() => ({ topic })) })
+
+const checkFixity = require('..').checkFixity
 
 describe('when given a good MD5', () => {
   test('succeeds', async () => {

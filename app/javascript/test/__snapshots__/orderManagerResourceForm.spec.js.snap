@@ -1,60 +1,58 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OrderManagerResourceForm.vue has the expected html structure 1`] = `
-<div>
+exports[`OrderManagerResourceForm.vue > has the expected html structure 1`] = `
+<div
+  data-v-e62d4199=""
+>
   <heading-stub
+    data-v-e62d4199=""
     level="h2"
     size="h1"
   >
-    
-      Set Properties 
+     Set Properties 
     <small
       class="text-muted"
+      data-v-e62d4199=""
     >
-      
-        for this 
+       for this 
       <!---->
-       resource
-      
+       resource 
     </small>
   </heading-stub>
-   
   <span
     class="lux-file_count"
+    data-v-e62d4199=""
   >
     <text-style-stub
+      data-v-e62d4199=""
       type="p"
       variation="emphasis"
     >
-      
-        Total files: 3
-      
+       Total files: 3 
     </text-style-stub>
-     
     <!---->
   </span>
-   
   <span
     class="lux-bibid"
+    data-v-e62d4199=""
   >
-    
-      | BibId: 4609321
-    
+     | BibId: 4609321 
   </span>
-   
   <form
+    data-v-e62d4199=""
     id="app"
     novalidate="novalidate"
   >
     <input-radio-stub
+      data-v-e62d4199=""
       errormessage=""
       grouplabel="Viewing Direction"
       id="viewDir"
       options="[object Object],[object Object],[object Object],[object Object]"
       vertical="true"
     />
-     
     <input-radio-stub
+      data-v-e62d4199=""
       errormessage=""
       grouplabel="Viewing Hint"
       id="viewHint"

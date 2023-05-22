@@ -95,7 +95,7 @@ const startChildren = () => {
 
 test('populates a hidden input for files selected and fires a formId', async () => {
   document.body.innerHTML = "<form id='test'></form>"
-  const mockSubmit = jest.fn()
+  const mockSubmit = vi.fn()
   window.HTMLFormElement.prototype.submit = mockSubmit
   const wrapper = mount(EmbeddedFileBrowser, { propsData: { startTree: startChildren(), formId: 'test' } })
 

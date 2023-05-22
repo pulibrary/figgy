@@ -21,6 +21,17 @@ RSpec.describe FileBrowserDiskProvider do
               children: []
             },
             {
+              label: "ingest_scratch",
+              path: "ingest_scratch",
+              loadChildrenPath: "/file_browser/disk/ingest_scratch.json",
+              expanded: false,
+              expandable: true,
+              selected: false,
+              selectable: true,
+              loaded: false,
+              children: []
+            },
+            {
               label: "music",
               path: "music",
               loadChildrenPath: "/file_browser/disk/music.json",

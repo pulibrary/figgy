@@ -22,9 +22,9 @@ let items = [
 describe("OrderManagerToolbar.vue", () => {
   beforeEach(() => {
     actions = {
-      cut: jest.fn(),
-      paste: jest.fn(),
-      select: jest.fn(),
+      cut: vi.fn(),
+      paste: vi.fn(),
+      select: vi.fn(),
     }
 
     const gallery = {

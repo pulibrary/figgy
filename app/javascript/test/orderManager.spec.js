@@ -80,7 +80,7 @@ const gallery = {
 }
 
 const actions = {
-  loadImageCollectionGql: jest.fn()
+  loadImageCollectionGql: vi.fn()
 }
 
 let resource = {

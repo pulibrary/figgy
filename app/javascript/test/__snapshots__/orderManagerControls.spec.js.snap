@@ -1,18 +1,20 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`OrderManagerControls.vue has the expected html structure 1`] = `
+exports[`OrderManagerControls.vue > has the expected html structure 1`] = `
 <wrapper-stub
   class="lux-bg"
+  data-v-eccb99cf=""
   horizontal=""
   maxwidth="1170"
   type="div"
 >
   <div
     class="lux-controls"
+    data-v-eccb99cf=""
   >
     <!---->
-     
     <input-button-stub
+      data-v-eccb99cf=""
       disabled="true"
       icon=""
       id="save_btn"
@@ -20,33 +22,33 @@ exports[`OrderManagerControls.vue has the expected html structure 1`] = `
       type=""
       variation="solid"
     >
-      
-      Apply Changes
-    
+       Apply Changes 
     </input-button-stub>
-     
     <!---->
   </div>
-   
   <heading-stub
+    data-v-eccb99cf=""
     level="h2"
     size="h1"
   >
-    
-    Zoom 
-    <small>
+     Zoom 
+    <small
+      data-v-eccb99cf=""
+    >
       on the selected item
     </small>
   </heading-stub>
-   
   <div
     class="lux-osd-wrapper"
+    data-v-eccb99cf=""
   >
     <div
       class="lux-osd"
+      data-v-eccb99cf=""
     >
       <div
         class="lux-viewport"
+        data-v-eccb99cf=""
         id="viewer"
       />
     </div>

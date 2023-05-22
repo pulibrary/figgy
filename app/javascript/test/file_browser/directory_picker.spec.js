@@ -88,7 +88,7 @@ const startChildren = () => {
 }
 
 function stubFailedChildLoad () {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       status: 404,
       json: () => { throw Error('broken') }
@@ -96,7 +96,7 @@ function stubFailedChildLoad () {
   )
 }
 function stubChildLoad () {
-  global.fetch = jest.fn(() =>
+  global.fetch = vi.fn(() =>
     Promise.resolve({
       status: 200,
       json: () => Promise.resolve(

@@ -22,8 +22,8 @@ let items = [
 describe("OrderManagerResourceForm.vue", () => {
   beforeEach(() => {
     actions = {
-      updateViewHint: jest.fn(),
-      updateViewDir: jest.fn()
+      updateViewHint: vi.fn(),
+      updateViewDir: vi.fn()
     }
 
     const gallery = {

@@ -19,6 +19,11 @@ export default defineConfig({
       '@store': resolve(__dirname, 'app/javascript/store')
     }
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./test/setup.js']
+  },
   plugins: [
     RubyPlugin(),
     vue(),
