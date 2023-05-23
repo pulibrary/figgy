@@ -1426,6 +1426,84 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq false
       end
     end
+
+    context "when deleting a numismatic place resource" do
+      it "assigns a title to the deletion marker" do
+        resource = FactoryBot.create_for_repository(:numismatic_place)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
+        expect(deletion_marker.resource_title.first).to eq "city, state, region"
+      end
+    end
+
+    context "when deleting a numismatic person resource" do
+      it "assigns a title to the deletion marker" do
+        resource = FactoryBot.create_for_repository(:numismatic_person)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
+        expect(deletion_marker.resource_title.first).to eq "name1 name2 epithet (1868 to 1963)"
+      end
+    end
+
+    context "when deleting a numismatic firm resource" do
+      it "assigns a title to the deletion marker" do
+        resource = FactoryBot.create_for_repository(:numismatic_firm)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
+        expect(deletion_marker.resource_title.first).to eq "firm name, firm city"
+      end
+    end
+
+    context "when deleting a numismatic accession resource" do
+      it "assigns a title to the deletion marker" do
+        resource = FactoryBot.create_for_repository(:numismatic_accession)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
+        expect(deletion_marker.resource_title.first).to eq "Accession 1: 2001-01-01 gift  ($99.00)"
+      end
+    end
+
+    context "when deleting an ephemera field resource" do
+      it "assigns a title to the deletion marker" do
+        resource = FactoryBot.create_for_repository(:ephemera_field)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
+        expect(deletion_marker.resource_title.first).to eq "EphemeraFolder.language"
+      end
+    end
+
+    context "when deleting an ephemera term resource" do
+      it "assigns a title to the deletion marker" do
+        resource = FactoryBot.create_for_repository(:ephemera_term)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
+        expect(deletion_marker.resource_title.first).to eq "test term"
+      end
+    end
+
+    context "when deleting an ephemera vocabulary resource" do
+      it "assigns a title to the deletion marker" do
+        resource = FactoryBot.create_for_repository(:ephemera_vocabulary)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_marker = deletion_markers.find { |m| m.resource_id == resource.id }
+        expect(deletion_marker.resource_title.first).to eq "test vocabulary"
+      end
+    end
+
     context "when reinstating a FileSet from its deletion_marker" do
       before do
         # Make preservation deletes not actually happen to simulate a versioned
