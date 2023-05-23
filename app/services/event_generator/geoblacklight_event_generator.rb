@@ -37,7 +37,7 @@ class EventGenerator
     def valid?(record)
       return false if record.is_a?(FileSet)
       return false unless record.try(:geo_resource?)
-      return false if errors?(record)
+      return false if schema_errors?(record)
 
       true
     end
@@ -80,9 +80,14 @@ class EventGenerator
         GeoDiscovery::DocumentBuilder::SlugBuilder.new(record).slug
       end
 
-      def errors?(record)
-        doc = document_generator(record).to_hash
-        return true unless doc[:error].nil?
+      def schema_errors?(record)
+        begin
+          doc = document_generator(record).to_hash
+          return true unless doc[:error].nil?
+        rescue
+          # the resource could not generate a document at all
+          return false
+        end
 
         false
       end
