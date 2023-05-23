@@ -101,7 +101,8 @@ class BulkIngestController < ApplicationController
         visibility: params[:visibility],
         preserve_file_names: params[:preserve_file_names] == "1",
         depositor: current_user&.uid,
-        holding_location: params[:holding_location]
+        holding_location: params[:holding_location],
+        rights_statement: params[:rights_statement]
       }
     end
 
