@@ -38,6 +38,13 @@
                 <%= select_tag "collections", options_for_select(@collections), multiple: true, class: "form-control" %>
               </div>
               <div class="form-group">
+                <label for="rights-statement">Rights Statement</label>
+                <%= select_tag :rights_statement,
+                  options_from_collection_for_select(ControlledVocabulary.for(:rights_statement).all, "value", "label"),
+                  class: 'form-control rights-statement',
+                  required: true %>
+              </div>
+              <div class="form-group">
                 <label for="holding_location">Holding Location</label>
                 <%= select_tag :holding_location,
                   options_from_collection_for_select(ControlledVocabulary.for(:holding_location).all, "value", "label"),

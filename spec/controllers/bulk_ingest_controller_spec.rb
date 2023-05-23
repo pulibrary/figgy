@@ -294,7 +294,8 @@ RSpec.describe BulkIngestController do
           collections: [collection.id.to_s],
           visibility: "open",
           resource_type: "scanned_resource",
-          ingest_directory: "examples/bulk_ingest"
+          ingest_directory: "examples/bulk_ingest",
+          rights_statement: RightsStatements.copyright_not_evaluated
         }
       stub_catalog(bib_id: "991234563506421")
 
@@ -308,6 +309,7 @@ RSpec.describe BulkIngestController do
       expect(resource.decorate.volumes.first.file_sets.length).to eq(1)
       expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
       expect(resource.decorate.collections.first.id).to eq collection.id
+      expect(resource.decorate.rights_statement.first).to eq RightsStatements.copyright_not_evaluated
     end
   end
 end
