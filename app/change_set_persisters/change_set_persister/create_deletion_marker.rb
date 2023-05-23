@@ -26,7 +26,7 @@ class ChangeSetPersister
       def attributes
         {
           resource_id: resource.id,
-          resource_title: resource.try(:title),
+          resource_title: resource.decorate.try(:title),
           resource_type: resource.class.to_s,
           resource_identifier: resource.try(:identifier),
           resource_source_metadata_identifier: resource.try(:source_metadata_identifier),
