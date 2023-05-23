@@ -182,9 +182,10 @@ en:
     local_fixity_check:
       type: 'Local Fixity'
       summary:
+        in_progress: "Local fixity check is in progress for one or more files. If this doesn't resolve itself then contact DLS with a link to this resource via #digital-library."
         healthy: 'All local file checksums are verified.'
         needs_attention: 'One or more files failed Local Fixity Checks. Contact DLS with a link to this resource via #digital-library.'
-        in_progress: "One or more files are in the process of being repaired. If this doesn't resolve itself then contact DLS with a link to this resource via #digital-library."
+        repairing: "One or more files are in the process of being repaired. If this doesn't resolve itself then contact DLS with a link to this resource via #digital-library."
     cloud_fixity_check:
       type: 'Cloud Fixity'
       summary:

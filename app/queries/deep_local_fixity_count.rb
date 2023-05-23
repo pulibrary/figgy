@@ -22,7 +22,8 @@ class DeepLocalFixityCount
   def event_metadata
     {
       "FAILURE" => '{"current": [true], "type": ["local_fixity"], "status": ["FAILURE"]}',
-      "SUCCESS" => '{"current": [true], "type": ["local_fixity"], "status": ["SUCCESS"]}'
+      "SUCCESS" => '{"current": [true], "type": ["local_fixity"], "status": ["SUCCESS"]}',
+      "REPAIRING" => '{"current": [true], "type": ["local_fixity"], "status": ["REPAIRING"]}'
     }
   end
 

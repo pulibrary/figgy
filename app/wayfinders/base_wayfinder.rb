@@ -125,6 +125,10 @@ class BaseWayfinder
     @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_status: Event::SUCCESS)
   end
 
+  def deep_repairing_local_fixity_count
+    @deep_repairing_local_fixity_count ||= deep_fixity_count(fixity_status: Event::REPAIRING)
+  end
+
   def deep_failed_cloud_fixity_count
     @deep_failed_cloud_fixity_count ||= query_service.custom_queries.find_deep_failed_cloud_fixity_count(
       resource: resource

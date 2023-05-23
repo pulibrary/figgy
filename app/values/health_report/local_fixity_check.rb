@@ -22,6 +22,8 @@ class HealthReport::LocalFixityCheck
     @status ||=
       if fixity_map[0]&.positive?
         :needs_attention
+      elsif fixity_map[2]&.positive?
+        :repairing
       elsif fixity_map[nil]&.positive?
         :in_progress
       else
@@ -32,12 +34,14 @@ class HealthReport::LocalFixityCheck
   def fixity_map
     # this count will include events with status "REPAIRING", which will thereby
     # add to the "in_progress" count.
-    unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_local_fixity_count - wayfinder.deep_succeeded_local_fixity_count
+
+    unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_local_fixity_count - wayfinder.deep_succeeded_local_fixity_count - wayfinder.deep_repairing_local_fixity_count
     @local_fixity_map ||=
       begin
         m = {}
         m[0] = wayfinder.deep_failed_local_fixity_count if wayfinder.deep_failed_local_fixity_count.positive?
         m[1] = wayfinder.deep_succeeded_local_fixity_count if wayfinder.deep_succeeded_local_fixity_count.positive?
+        m[2] = wayfinder.deep_repairing_local_fixity_count if wayfinder.deep_repairing_local_fixity_count.positive?
         m[nil] = unknown_count if unknown_count.positive?
         m
       end
