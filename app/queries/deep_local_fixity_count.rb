@@ -11,20 +11,16 @@ class DeepLocalFixityCount
     @query_service = query_service
   end
 
-  def deep_local_fixity_count(resource:, status: "FAILURE")
+  def deep_local_fixity_count(resource:, status: Event::FAILURE)
     query_service.connection[
       relationship_query,
       id: resource.id.to_s,
-      event_metadata: event_metadata[status]
+      event_metadata: event_metadata(status)
     ].first[:count]
   end
 
-  def event_metadata
-    {
-      "FAILURE" => '{"current": [true], "type": ["local_fixity"], "status": ["FAILURE"]}',
-      "SUCCESS" => '{"current": [true], "type": ["local_fixity"], "status": ["SUCCESS"]}',
-      "REPAIRING" => '{"current": [true], "type": ["local_fixity"], "status": ["REPAIRING"]}'
-    }
+  def event_metadata(status)
+    %Q({"current": [true], "type": ["local_fixity"], "status": ["#{status}"]})
   end
 
   def relationship_query
@@ -47,9 +43,7 @@ class DeepLocalFixityCount
         ON member.id = (event.metadata->'resource_id'->0->>'id')::UUID
         WHERE member.internal_resource = 'FileSet'
           AND (event.internal_resource = 'Event' OR event IS NULL)
-          AND (
-            (event.metadata @> :event_metadata)
-          )
+          AND (event.metadata @> :event_metadata)
     SQL
   end
 end

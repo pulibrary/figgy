@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-class FindDeepFailedCloudFixityCount
+class DeepCloudFixityCount
   def self.queries
-    [:find_deep_failed_cloud_fixity_count]
+    [:deep_cloud_fixity_count]
   end
 
   attr_reader :query_service
@@ -10,8 +10,16 @@ class FindDeepFailedCloudFixityCount
     @query_service = query_service
   end
 
-  def find_deep_failed_cloud_fixity_count(resource:)
-    query_service.connection[relationship_query, id: resource.id.to_s].first[:count]
+  def deep_cloud_fixity_count(resource:, status: Event::FAILURE)
+    query_service.connection[
+      relationship_query,
+      id: resource.id.to_s,
+      event_metadata: event_metadata(status)
+    ].first[:count]
+  end
+
+  def event_metadata(status)
+    %Q({"current": [true], "type": ["cloud_fixity"], "status": ["#{status}"]})
   end
 
   def relationship_query
@@ -36,7 +44,7 @@ class FindDeepFailedCloudFixityCount
           WHERE member.internal_resource = 'FileSet'
           AND po.internal_resource = 'PreservationObject'
           AND event.internal_resource = 'Event'
-          AND event.metadata @> '{"current": [true], "status": ["FAILURE"]}'
+          AND event.metadata @> :event_metadata
         )
         select COUNT(DISTINCT deep_events.file_set_id) from deep_events
     SQL

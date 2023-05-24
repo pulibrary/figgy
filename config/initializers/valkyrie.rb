@@ -420,7 +420,7 @@ Rails.application.config.to_prepare do
     DeepLocalFixityCount,
     FindDeepChildrenWithProperty,
     FindIdsWithPropertyNotEmpty,
-    FindDeepFailedCloudFixityCount,
+    DeepCloudFixityCount,
     FindDeepPreservationObjectCount,
     PagedAllQuery,
     FindResourcesWithoutMembers,

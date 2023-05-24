@@ -191,7 +191,8 @@ en:
       summary:
         healthy: 'All files are preserved and their checksums verified.'
         needs_attention: 'One or more files failed Cloud Fixity Checks. Contact DLS with a link to this resource via #digital-library.'
-        in_progress: "One or more files are in the process of being preserved or repaired. If this doesn't resolve itself, edit this resource and save it again - if that still doesn't work then contact DLS with a link to this resource via #digital-library."
+        in_progress: "One or more files are in the process of being preserved. If this doesn't resolve itself, edit this resource and save it again - if that still doesn't work then contact DLS with a link to this resource via #digital-library."
+        repairing: "One or more files are in the process of being repaired. If this doesn't resolve itself then contact DLS with a link to this resource via #digital-library."
   notices:
     harmful_content:
       heading: "Content Warning"

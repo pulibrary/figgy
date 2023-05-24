@@ -18,6 +18,8 @@ class HealthReport::CloudFixityCheck
     @status ||=
       if fixity_map[0]&.positive?
         :needs_attention
+      elsif fixity_map[2]&.positive?
+        :repairing
       elsif fixity_map[nil]&.positive?
         :in_progress
       else
@@ -29,12 +31,13 @@ class HealthReport::CloudFixityCheck
     return {} unless resource.decorate.respond_to?(:file_sets)
     # this count will include events with status "REPAIRING", which will thereby
     # add to the "in_progress" count.
-    unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count
+    unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count - wayfinder.deep_repairing_cloud_fixity_count
     @cloud_fixity_map ||=
       begin
         m = {}
         m[0] = wayfinder.deep_failed_cloud_fixity_count if wayfinder.deep_failed_cloud_fixity_count.positive?
         m[1] = wayfinder.deep_succeeded_cloud_fixity_count if wayfinder.deep_succeeded_cloud_fixity_count.positive?
+        m[2] = wayfinder.deep_repairing_cloud_fixity_count if wayfinder.deep_repairing_cloud_fixity_count.positive?
         m[nil] = unknown_count if unknown_count.positive?
         m
       end

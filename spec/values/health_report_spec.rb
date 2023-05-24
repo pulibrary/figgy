@@ -39,7 +39,7 @@ RSpec.describe HealthReport do
     end
     context "for a resource with a successful local fixity event" do
       it "returns :healthy" do
-        fs1 = create_file_set(cloud_fixity_success: true)
+        fs1 = create_file_set(cloud_fixity_status: Event::SUCCESS)
         FactoryBot.create(:local_fixity_success, resource_id: fs1.id)
         resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs1.id])
 
@@ -88,7 +88,7 @@ RSpec.describe HealthReport do
 
     context "for a resource with a failed cloud fixity event" do
       it "returns :needs_attention" do
-        fs1 = create_file_set(cloud_fixity_success: false)
+        fs1 = create_file_set(cloud_fixity_status: Event::FAILURE)
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
         report = described_class.for(resource)
@@ -113,13 +113,13 @@ RSpec.describe HealthReport do
         cloud_fixity_report = report.checks.second
         expect(cloud_fixity_report.type).to eq "Cloud Fixity"
         expect(cloud_fixity_report.status).to eq :in_progress
-        expect(cloud_fixity_report.summary).to start_with "One or more files are in the process of being preserved or repaired."
+        expect(cloud_fixity_report.summary).to start_with "One or more files are in the process of being preserved."
       end
     end
 
     context "for a resource with a successful cloud fixity event" do
       it "returns :healthy" do
-        fs1 = create_file_set(cloud_fixity_success: true)
+        fs1 = create_file_set(cloud_fixity_status: Event::SUCCESS)
         FactoryBot.create(:local_fixity_success, resource_id: fs1.id)
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
@@ -133,24 +133,33 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.summary).to start_with "All files are preserved and their checksums verified."
       end
     end
+
+    context "for a resource with a repairing cloud fixity event" do
+      it "returns :repairing" do
+        fs1 = create_file_set(cloud_fixity_status: Event::REPAIRING)
+        FactoryBot.create(:local_fixity_success, resource_id: fs1.id)
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :repairing
+        # Second check is cloud fixity
+        cloud_fixity_report = report.checks.second
+        expect(cloud_fixity_report.type).to eq "Cloud Fixity"
+        expect(cloud_fixity_report.status).to eq :repairing
+        expect(cloud_fixity_report.summary).to start_with "One or more files are in the process of being repaired."
+      end
+    end
     # rubocop:disable Metrics/MethodLength
-    def create_file_set(cloud_fixity_success: true)
+    def create_file_set(cloud_fixity_status:)
       file_set = FactoryBot.create_for_repository(:file_set)
       metadata_node = FileMetadata.new(id: SecureRandom.uuid)
       preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
-      if cloud_fixity_success
-        FactoryBot.create_for_repository(
-          :event, type: :cloud_fixity, status: "SUCCESS",
-                  resource_id: preservation_object.id, child_id: metadata_node.id,
-                  child_property: :metadata_node, current: true
-        )
-      else
-        FactoryBot.create_for_repository(
-          :event, type: :cloud_fixity, status: "FAILURE",
-                  resource_id: preservation_object.id, child_id: metadata_node.id,
-                  child_property: :metadata_node, current: true
-        )
-      end
+      FactoryBot.create_for_repository(
+        :event, type: :cloud_fixity, status: cloud_fixity_status,
+        resource_id: preservation_object.id, child_id: metadata_node.id,
+        child_property: :metadata_node, current: true
+      )
       file_set
     end
     # rubocop:enable Metrics/MethodLength
