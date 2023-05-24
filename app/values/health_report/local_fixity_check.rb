@@ -50,6 +50,15 @@ class HealthReport::LocalFixityCheck
   private
 
     def unknown_count
+      # There's a bug here in the following case:
+      # - the resource has 2 preserved binary nodes and one has been checked
+      # and the other has not
+      #
+      # In this case, we will likely get too many successes and obscure an in
+      # progress status.
+      #
+      # However, these checks get queued simultaneously so unless one never runs
+      # for some reason, the misinformation will be short-lived.
       @unknown_count ||= wayfinder.deep_file_set_count - wayfinder.deep_failed_local_fixity_count - wayfinder.deep_succeeded_local_fixity_count - wayfinder.deep_repairing_local_fixity_count
     end
 
