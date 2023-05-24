@@ -19,7 +19,7 @@ class DeepCloudFixityCount
   end
 
   def event_metadata(status)
-    %Q({"current": [true], "type": ["cloud_fixity"], "status": ["#{status}"]})
+    %({"current": [true], "type": ["cloud_fixity"], "status": ["#{status}"]})
   end
 
   def relationship_query

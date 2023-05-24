@@ -20,7 +20,7 @@ class DeepLocalFixityCount
   end
 
   def event_metadata(status)
-    %Q({"current": [true], "type": ["local_fixity"], "status": ["#{status}"]})
+    %({"current": [true], "type": ["local_fixity"], "status": ["#{status}"]})
   end
 
   def relationship_query

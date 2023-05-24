@@ -156,9 +156,13 @@ RSpec.describe HealthReport do
       metadata_node = FileMetadata.new(id: SecureRandom.uuid)
       preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
       FactoryBot.create_for_repository(
-        :event, type: :cloud_fixity, status: cloud_fixity_status,
-        resource_id: preservation_object.id, child_id: metadata_node.id,
-        child_property: :metadata_node, current: true
+        :event,
+        type: :cloud_fixity,
+        status: cloud_fixity_status,
+        resource_id: preservation_object.id,
+        child_id: metadata_node.id,
+        child_property: :metadata_node,
+        current: true
       )
       file_set
     end

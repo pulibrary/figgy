@@ -32,10 +32,6 @@ class HealthReport::LocalFixityCheck
   end
 
   def fixity_map
-    # this count will include events with status "REPAIRING", which will thereby
-    # add to the "in_progress" count.
-
-    unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_local_fixity_count - wayfinder.deep_succeeded_local_fixity_count - wayfinder.deep_repairing_local_fixity_count
     @local_fixity_map ||=
       begin
         m = {}
@@ -52,6 +48,10 @@ class HealthReport::LocalFixityCheck
   end
 
   private
+
+    def unknown_count
+      @unknown_count ||= wayfinder.deep_file_set_count - wayfinder.deep_failed_local_fixity_count - wayfinder.deep_succeeded_local_fixity_count - wayfinder.deep_repairing_local_fixity_count
+    end
 
     def wayfinder
       @wayfinder ||= Wayfinder.for(resource)
