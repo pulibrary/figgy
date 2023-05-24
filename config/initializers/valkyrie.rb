@@ -421,7 +421,6 @@ Rails.application.config.to_prepare do
     FindDeepChildrenWithProperty,
     FindIdsWithPropertyNotEmpty,
     DeepCloudFixityCount,
-    FindDeepPreservationObjectCount,
     PagedAllQuery,
     FindResourcesWithoutMembers,
     PluckEarliestUpdatedAt,
