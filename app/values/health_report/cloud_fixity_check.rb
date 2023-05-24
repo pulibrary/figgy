@@ -18,6 +18,8 @@ class HealthReport::CloudFixityCheck
     @status ||=
       if fixity_map[0]&.positive?
         :needs_attention
+      elsif fixity_map[2]&.positive?
+        :repairing
       elsif fixity_map[nil]&.positive?
         :in_progress
       else
@@ -27,28 +29,43 @@ class HealthReport::CloudFixityCheck
 
   def fixity_map
     return {} unless resource.decorate.respond_to?(:file_sets)
-    # this count will include events with status "REPAIRING", which will thereby
-    # add to the "in_progress" count.
-    unknown_count = wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count
     @cloud_fixity_map ||=
       begin
         m = {}
         m[0] = wayfinder.deep_failed_cloud_fixity_count if wayfinder.deep_failed_cloud_fixity_count.positive?
         m[1] = wayfinder.deep_succeeded_cloud_fixity_count if wayfinder.deep_succeeded_cloud_fixity_count.positive?
+        m[2] = wayfinder.deep_repairing_cloud_fixity_count if wayfinder.deep_repairing_cloud_fixity_count.positive?
         m[nil] = unknown_count if unknown_count.positive?
         m
       end
   end
 
-  def wayfinder
-    @wayfinder ||= Wayfinder.for(resource)
+  def summary
+    I18n.t("health_status.cloud_fixity_check.summary.#{status}")
   end
 
   def type
     I18n.t("health_status.cloud_fixity_check.type")
   end
 
-  def summary
-    I18n.t("health_status.cloud_fixity_check.summary.#{status}")
-  end
+  private
+
+    def unknown_count
+      # There's a bug here in the following case:
+      # - The metadata node has been checked but the binary node has not, or
+      # vice-versa
+      # - OR the resource has 2 preserved binary nodes and one has been checked
+      # and the other has not
+      #
+      # In this case, we will likely get too many successes and obscure an in
+      # progress status.
+      #
+      # However, these checks get queued simultaneously so unless one never runs
+      # for some reason, the misinformation will be short-lived.
+      @unknown_count ||= wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count - wayfinder.deep_repairing_cloud_fixity_count
+    end
+
+    def wayfinder
+      @wayfinder ||= Wayfinder.for(resource)
+    end
 end

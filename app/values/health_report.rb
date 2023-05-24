@@ -45,7 +45,8 @@ class HealthReport
       {
         healthy: 0,
         in_progress: 1,
-        needs_attention: 2
+        repairing: 2,
+        needs_attention: 3
       }
     end
 end
