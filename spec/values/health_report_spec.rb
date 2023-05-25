@@ -103,9 +103,11 @@ RSpec.describe HealthReport do
     end
     context "for a FileSet with a failed cloud fixity event" do
       it "returns :needs_attention" do
-        resource = create_file_set(cloud_fixity_status: Event::FAILURE)
+        fs1 = create_file_set(cloud_fixity_status: Event::FAILURE)
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
+        FactoryBot.create_for_repository(:preservation_object, preserved_object_id: resource.id)
 
-        report = described_class.for(resource)
+        report = described_class.for(fs1)
 
         expect(report.status).to eq :needs_attention
         # Second check is cloud fixity

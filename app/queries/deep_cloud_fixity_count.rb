@@ -31,6 +31,8 @@ class DeepCloudFixityCount
           JOIN orm_resources member ON (b.member->>'id')::UUID = member.id
           WHERE a.id = :id
           UNION
+          select * from orm_resources WHERE id = :id
+          UNION
           SELECT mem.*
           FROM deep_members f,
           jsonb_array_elements(f.metadata->'member_ids') AS g(member)
