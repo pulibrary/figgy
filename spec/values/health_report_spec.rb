@@ -85,6 +85,22 @@ RSpec.describe HealthReport do
         expect(local_fixity_report.summary).to start_with "One or more files failed Local Fixity Checks."
       end
     end
+    context "for a FileSEt with a failed local fixity event" do
+      it "returns :needs_attention" do
+        fs1 = FactoryBot.create_for_repository(:original_file_file_set)
+        FactoryBot.create(:local_fixity_failure, resource_id: fs1.id)
+        FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
+
+        report = described_class.for(fs1)
+
+        expect(report.status).to eq :needs_attention
+        # First check is local fixity
+        local_fixity_report = report.checks.first
+        expect(local_fixity_report.type).to eq "Local Fixity"
+        expect(local_fixity_report.status).to eq :needs_attention
+        expect(local_fixity_report.summary).to start_with "This resource failed Local Fixity Checks."
+      end
+    end
 
     context "for a resource with a failed cloud fixity event" do
       it "returns :needs_attention" do
@@ -114,7 +130,7 @@ RSpec.describe HealthReport do
         cloud_fixity_report = report.checks.second
         expect(cloud_fixity_report.type).to eq "Cloud Fixity"
         expect(cloud_fixity_report.status).to eq :needs_attention
-        expect(cloud_fixity_report.summary).to start_with "One or more files failed Cloud Fixity Checks."
+        expect(cloud_fixity_report.summary).to start_with "This resource failed Cloud Fixity Checks."
       end
     end
     context "for a resource that hasn't preserved yet" do

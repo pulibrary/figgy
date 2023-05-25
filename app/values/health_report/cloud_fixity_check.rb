@@ -28,7 +28,11 @@ class HealthReport::CloudFixityCheck
   end
 
   def summary
-    I18n.t("health_status.cloud_fixity_check.summary.#{status}")
+    if resource.respond_to?(:member_ids)
+      I18n.t("health_status.cloud_fixity_check.summary.#{status}")
+    else
+      I18n.t("health_status.cloud_fixity_check.summary.self.#{status}")
+    end
   end
 
   def type
