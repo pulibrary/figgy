@@ -50,6 +50,6 @@ class RecordingChangeSet < ChangeSet
   end
 
   def preserve?
-    persisted?
+    persisted? && state == "complete"
   end
 end
