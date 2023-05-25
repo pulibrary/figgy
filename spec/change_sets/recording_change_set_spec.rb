@@ -120,6 +120,12 @@ RSpec.describe RecordingChangeSet do
     context "when persisted" do
       let(:form_resource) { FactoryBot.create_for_repository(:complete_recording) }
 
+      context "and incomplete" do
+        let(:form_resource) { FactoryBot.create_for_repository(:draft_recording) }
+        it "is not preserved" do
+          expect(change_set.preserve?).to be false
+        end
+      end
       it "is preserved" do
         expect(change_set.preserve?).to be true
       end
