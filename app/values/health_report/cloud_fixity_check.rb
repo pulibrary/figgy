@@ -16,27 +16,14 @@ class HealthReport::CloudFixityCheck
 
   def status
     @status ||=
-      if fixity_map[0]&.positive?
+      if wayfinder.deep_failed_cloud_fixity_count.positive?
         :needs_attention
-      elsif fixity_map[2]&.positive?
+      elsif wayfinder.deep_repairing_cloud_fixity_count.positive?
         :repairing
-      elsif fixity_map[nil]&.positive?
+      elsif unknown_count.positive?
         :in_progress
       else
         :healthy
-      end
-  end
-
-  def fixity_map
-    return {} unless resource.decorate.respond_to?(:file_sets)
-    @cloud_fixity_map ||=
-      begin
-        m = {}
-        m[0] = wayfinder.deep_failed_cloud_fixity_count if wayfinder.deep_failed_cloud_fixity_count.positive?
-        m[1] = wayfinder.deep_succeeded_cloud_fixity_count if wayfinder.deep_succeeded_cloud_fixity_count.positive?
-        m[2] = wayfinder.deep_repairing_cloud_fixity_count if wayfinder.deep_repairing_cloud_fixity_count.positive?
-        m[nil] = unknown_count if unknown_count.positive?
-        m
       end
   end
 
