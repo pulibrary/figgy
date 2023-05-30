@@ -20,31 +20,23 @@ class HealthReport::LocalFixityCheck
 
   def status
     @status ||=
-      if fixity_map[0]&.positive?
+      if wayfinder.deep_failed_local_fixity_count.positive?
         :needs_attention
-      elsif fixity_map[2]&.positive?
+      elsif wayfinder.deep_repairing_local_fixity_count.positive?
         :repairing
-      elsif fixity_map[nil]&.positive?
+      elsif unknown_count.positive?
         :in_progress
       else
         :healthy
       end
   end
 
-  def fixity_map
-    @local_fixity_map ||=
-      begin
-        m = {}
-        m[0] = wayfinder.deep_failed_local_fixity_count if wayfinder.deep_failed_local_fixity_count.positive?
-        m[1] = wayfinder.deep_succeeded_local_fixity_count if wayfinder.deep_succeeded_local_fixity_count.positive?
-        m[2] = wayfinder.deep_repairing_local_fixity_count if wayfinder.deep_repairing_local_fixity_count.positive?
-        m[nil] = unknown_count if unknown_count.positive?
-        m
-      end
-  end
-
   def summary
-    I18n.t("health_status.local_fixity_check.summary.#{status}")
+    if resource.respond_to?(:member_ids)
+      I18n.t("health_status.local_fixity_check.summary.#{status}")
+    else
+      I18n.t("health_status.local_fixity_check.summary.self.#{status}")
+    end
   end
 
   private

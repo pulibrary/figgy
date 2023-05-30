@@ -97,6 +97,41 @@ RSpec.describe Wayfinder do
         expect(described_class.for(mvw).deep_succeeded_cloud_fixity_count).to eq 1
       end
 
+      it "returns 1 if there's a non-FileSet with a failed fixity" do
+        volume1 = FactoryBot.create_for_repository(:scanned_resource)
+        metadata_node = FileMetadata.new(id: SecureRandom.uuid)
+        preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: volume1.id, metadata_node: metadata_node)
+        FactoryBot.create_for_repository(
+          :event,
+          type: :cloud_fixity,
+          status: "FAILURE",
+          resource_id: preservation_object.id,
+          child_id: metadata_node.id,
+          child_property: :metadata_node,
+          current: true
+        )
+        mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id])
+
+        expect(described_class.for(mvw).deep_failed_cloud_fixity_count).to eq 1
+      end
+
+      it "returns 1 if there's a cloud fixity failure on itself" do
+        mvw = FactoryBot.create_for_repository(:scanned_resource)
+        metadata_node = FileMetadata.new(id: SecureRandom.uuid)
+        preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: mvw.id, metadata_node: metadata_node)
+        FactoryBot.create_for_repository(
+          :event,
+          type: :cloud_fixity,
+          status: "FAILURE",
+          resource_id: preservation_object.id,
+          child_id: metadata_node.id,
+          child_property: :metadata_node,
+          current: true
+        )
+
+        expect(described_class.for(mvw).deep_failed_cloud_fixity_count).to eq 1
+      end
+
       # rubocop:disable Metrics/MethodLength
       def create_file_set(cloud_fixity_success: true)
         file_set = FactoryBot.create_for_repository(:file_set)

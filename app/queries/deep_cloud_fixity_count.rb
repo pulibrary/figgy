@@ -31,6 +31,8 @@ class DeepCloudFixityCount
           JOIN orm_resources member ON (b.member->>'id')::UUID = member.id
           WHERE a.id = :id
           UNION
+          select * from orm_resources WHERE id = :id
+          UNION
           SELECT mem.*
           FROM deep_members f,
           jsonb_array_elements(f.metadata->'member_ids') AS g(member)
@@ -41,7 +43,6 @@ class DeepCloudFixityCount
           from deep_members member
           JOIN orm_resources po ON member.id = (po.metadata->'preserved_object_id'->0->>'id')::UUID
           JOIN orm_resources event ON po.id = (event.metadata->'resource_id'->0->>'id')::UUID
-          WHERE member.internal_resource = 'FileSet'
           AND po.internal_resource = 'PreservationObject'
           AND event.internal_resource = 'Event'
           AND event.metadata @> :event_metadata
