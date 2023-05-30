@@ -183,7 +183,7 @@ en:
       type: 'Local Fixity'
       summary:
         self:
-          in_progress: "Local fixity check is in progress this resource. If this doesn't resolve itself then contact DLS with a link to this resource via #digital-library."
+          in_progress: "Local fixity check is in progress for this resource. If this doesn't resolve itself then contact DLS with a link to this resource via #digital-library."
           healthy: 'All local file checksums are verified.'
           needs_attention: 'This resource failed Local Fixity Checks. Contact DLS with a link to this resource via #digital-library.'
           repairing: "This resource is in the process of being repaired. If this doesn't resolve itself then contact DLS with a link to this resource via #digital-library."
