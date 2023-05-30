@@ -130,6 +130,7 @@ export default {
       // hasChildren: this.jsonData.folders.length > 0,
       isOpen: true,
       editedFieldId: null,
+      isFile: this.jsonData.file
     }
   },
   computed: {
@@ -142,9 +143,9 @@ export default {
     hasChildren: function() {
       return this.jsonData.folders.length > 0
     },
-    isFile: function() {
-      return false
-    },
+    // isFile: function() {
+    //   return false
+    // },
     isSelected: function() {
       if (this.tree.selected === this.id) {
         return true

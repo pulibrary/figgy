@@ -98,7 +98,8 @@ export default {
                   {
                     "id": "C0614_c00004",
                     "folders": [],
-                    "label": "General Writings 2"
+                    "label": "General Writings 2",
+                    "file": true
                   }
                 ],
                 "label": "Writings"
