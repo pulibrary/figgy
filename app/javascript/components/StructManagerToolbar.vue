@@ -105,9 +105,60 @@ export default {
     paste: function (indexModifier) {
       let items = this.gallery.items
       items = items.filter(val => !this.gallery.cut.includes(val))
-      let pasteAfterIndex =
-        this.getItemIndexById(this.gallery.selected[this.gallery.selected.length - 1].id) + indexModifier
-      items.splice(pasteAfterIndex, 0, ...this.gallery.cut)
+      // Find the selected folder in the tree structure
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+      let structuredResources = JSON.parse(JSON.stringify(this.gallery.cut))
+
+      // we will need to loop this to convert multiple cut gallery items into tree items
+      structuredResources[0].label = structuredResources[0].caption
+      structuredResources[0].file = true
+      structuredResources[0].folders = []
+      const newItem = structuredResources[0]
+
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label,
+      }
+
+      if(parentId === rootId) {
+        alert('You must paste a resource into a folder.')
+      } else {
+        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+        let newParent = parentFolderObject.folders.push(newItem)
+        structure.folders = this.addNewFolder(folderList, newParent)
+      }
+
+      console.log(structure)
+
+      // forEach gallery item, create a new tree item
+      // const newItem = {
+      //   id: this.generateId(),
+      //   folders: contentsList,
+      //   label: "Untitled",
+      // }
+
+      // if(parentId === rootId) {
+      //   folderList.push(newFolder)
+      //   structure.folders = folderList
+      // } else {
+      //   let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+      //   let newParent = parentFolderObject.folders.push(newFolder)
+      //   structure.folders = this.addNewFolder(folderList, newParent)
+      // }
+      this.$store.commit("CREATE_FOLDER", structure)
+      // // Add item to selected folder
+      //
+      // let pasteAfterIndex =
+      //   this.getItemIndexById(this.gallery.selected[this.gallery.selected.length - 1].id) + indexModifier
+      // // This line needs to remove the item from the gallery, not move it
+      // // items.splice(pasteAfterIndex, 0, ...this.gallery.cut)
+      //
+      // this.$store.dispatch('pasteToStruct', items)
+      // this.resetCut()
+      // this.selectNone()
       this.$store.dispatch('paste', items)
       this.resetCut()
       this.selectNone()
@@ -135,18 +186,15 @@ export default {
         case 'Cut':
           this.cutSelected()
           break
-        case 'Paste Before':
+        case 'Paste':
           this.paste(-1)
-          break
-        case 'Paste After':
-          this.paste(1)
           break
       }
     },
     createFolder: function (contentsList) {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       const rootId = this.tree.structure.id
-  
+
       const newFolder = {
         id: this.generateId(),
         folders: contentsList,
