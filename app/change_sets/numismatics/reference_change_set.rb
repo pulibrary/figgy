@@ -25,5 +25,10 @@ module Numismatics
         :append_id
       ]
     end
+
+    # Always preserve - this is a metadata object.
+    def preserve?
+      true
+    end
   end
 end
