@@ -4,13 +4,14 @@ export const treeState = {
 }
 
 export const treeMutations = {
+  ADD_RESOURCE(state, structure) {
+    state.structure = structure
+  },
   CREATE_FOLDER(state, structure) {
     state.structure = structure
-    console.log(structure)
   },
   DELETE_FOLDER(state, structure) {
     state.structure = structure
-    // console.log(structure)
   },
   SAVE_LABEL(state, structure) {
     state.structure = structure
