@@ -85,7 +85,6 @@ export default {
   },
   methods: {
     cutSelected: function () {
-      console.log('cutSelected called!')
       this.$store.dispatch('cut', this.gallery.selected)
       this.selectNone()
     },
@@ -132,13 +131,13 @@ export default {
         let parentFolders = parentFolderObject.folders.concat(newItems)
         parentFolderObject.folders = parentFolders
         structure.folders = this.addNewNode(folderList, parentFolderObject)
+
+        this.$store.commit("ADD_RESOURCE", structure)
+
+        this.$store.dispatch('paste', items)
+        this.resetCut()
+        this.selectNone()
       }
-
-      this.$store.commit("ADD_RESOURCE", structure)
-
-      this.$store.dispatch('paste', items)
-      this.resetCut()
-      this.selectNone()
     },
     resetCut: function () {
       this.$store.dispatch('cut', [])
@@ -313,6 +312,25 @@ export default {
     selectNone: function () {
       this.$store.dispatch('select', [])
     }
+  },
+  mounted: function () {
+      this._keyListener = function(e) {
+          if (e.key === "x" && (e.ctrlKey || e.metaKey)) {
+              e.preventDefault();
+
+              this.cutSelected()
+          }
+          if (e.key === "v" && (e.ctrlKey || e.metaKey)) {
+              e.preventDefault();
+
+              this.paste(-1)
+          }
+      };
+
+      document.addEventListener('keydown', this._keyListener.bind(this));
+  },
+  beforeDestroy: function () {
+      document.removeEventListener('keydown', this._keyListener);
   }
 }
 </script>
