@@ -66,13 +66,23 @@
               icon="edit"
             >
             </input-button>
-            <input-button
+
+            <input-button v-if="!isFile"
               @button-clicked="createFolder(id)"
               class="expand-collapse"
               type="button"
               variation="icon"
               size="small"
               icon="add"
+            >
+            </input-button>
+            <input-button v-else
+              @button-clicked="viewFile(id)"
+              class="expand-collapse"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="search"
             >
             </input-button>
             <input-button
@@ -130,7 +140,7 @@ export default {
       // hasChildren: this.jsonData.folders.length > 0,
       isOpen: true,
       editedFieldId: null,
-      isFile: this.jsonData.file
+      isFile: !!this.jsonData.file
     }
   },
   computed: {
@@ -323,6 +333,9 @@ export default {
       } else {
         this.editedFieldId = null;
       }
+    },
+    viewFile: function (id) {
+      console.log(id)
     },
   },
 }
