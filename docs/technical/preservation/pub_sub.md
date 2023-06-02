@@ -1,6 +1,4 @@
-# Preservation Documentation
-
-## Pub/Sub Configuration
+# Preservation Pub/Sub Configuration
 
 1. Production
   ```
