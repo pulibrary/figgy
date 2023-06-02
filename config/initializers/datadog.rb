@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 require_relative "figgy"
 Datadog.configure do |c|
-  c.service = "figgy"
   c.tracing.enabled = false unless Rails.env.production?
+  c.env = Rails.env.to_s
+  c.service = "figgy"
   # Rails
   c.tracing.instrument :rails
 
