@@ -20,14 +20,12 @@ class HealthReport::LocalFixityCheck
 
   def status
     @status ||=
-      if wayfinder.deep_failed_local_fixity_count.positive?
-        :needs_attention
-      elsif wayfinder.deep_repairing_local_fixity_count.positive?
-        :repairing
-      elsif unknown_count.positive?
-        :in_progress
-      else
+      if resource.is_a?(EphemeraProject)
+        # Don't check ephemera projects deep, and they don't have any files, so
+        # there's no fixity to check.
         :healthy
+      else
+        deep_status
       end
   end
 
@@ -40,6 +38,18 @@ class HealthReport::LocalFixityCheck
   end
 
   private
+
+    def deep_status
+      if wayfinder.deep_failed_local_fixity_count.positive?
+        :needs_attention
+      elsif wayfinder.deep_repairing_local_fixity_count.positive?
+        :repairing
+      elsif unknown_count.positive?
+        :in_progress
+      else
+        :healthy
+      end
+    end
 
     def unknown_count
       # There's a bug here in the following case:
