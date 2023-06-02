@@ -16,14 +16,10 @@ class HealthReport::CloudFixityCheck
 
   def status
     @status ||=
-      if wayfinder.deep_failed_cloud_fixity_count.positive?
-        :needs_attention
-      elsif wayfinder.deep_repairing_cloud_fixity_count.positive?
-        :repairing
-      elsif unknown_count.positive?
-        :in_progress
+      if resource.is_a?(EphemeraProject)
+        shallow_status
       else
-        :healthy
+        deep_status
       end
   end
 
@@ -40,6 +36,32 @@ class HealthReport::CloudFixityCheck
   end
 
   private
+
+    # shallow_status only checks the resource itself.
+    def shallow_status
+      preservation_object = Wayfinder.for(resource).preservation_object
+      return :in_progress unless preservation_object
+      events = Wayfinder.for(preservation_object).current_cloud_fixity_events
+      if events.count(&:failed?).positive?
+        :needs_attention
+      elsif events.count(&:repairing?).positive?
+        :repairing
+      else
+        :healthy
+      end
+    end
+
+    def deep_status
+      if wayfinder.deep_failed_cloud_fixity_count.positive?
+        :needs_attention
+      elsif wayfinder.deep_repairing_cloud_fixity_count.positive?
+        :repairing
+      elsif unknown_count.positive?
+        :in_progress
+      else
+        :healthy
+      end
+    end
 
     def unknown_count
       # There's a bug here in the following case:

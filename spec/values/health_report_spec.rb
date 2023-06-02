@@ -22,6 +22,45 @@ RSpec.describe HealthReport do
         expect(report.checks.first.type).to eq "Local Fixity"
       end
     end
+    context "for an EphemeraProject" do
+      it "only checks itself, not members" do
+        fs1 = FactoryBot.create_for_repository(:original_file_file_set)
+        fs2 = create_file_set(cloud_fixity_status: Event::FAILURE)
+        box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [fs1.id, fs2.id])
+        project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id])
+        create_preservation_object(event_status: Event::SUCCESS, resource_id: project.id, event_type: :cloud_fixity)
+
+        report = described_class.for(project)
+        # It would be in_progress if it checked the box for local fixity, and
+        # :needs_attention if it checked the box for cloud fixity.
+        expect(report.status).to eq :healthy
+        expect(report.checks.length).to eq 2
+      end
+      it "can report if it's repairing" do
+        project = FactoryBot.create_for_repository(:ephemera_project)
+        create_preservation_object(event_status: Event::REPAIRING, resource_id: project.id, event_type: :cloud_fixity)
+
+        report = described_class.for(project)
+        expect(report.status).to eq :repairing
+        expect(report.checks.length).to eq 2
+      end
+    end
+    it "can report if it's in progress (no preservation object)" do
+      project = FactoryBot.create_for_repository(:ephemera_project)
+
+      report = described_class.for(project)
+
+      expect(report.status).to eq :in_progress
+      expect(report.checks.length).to eq 2
+    end
+    it "can report if it needs attention" do
+      project = FactoryBot.create_for_repository(:ephemera_project)
+      create_preservation_object(event_status: Event::FAILURE, resource_id: project.id, event_type: :cloud_fixity)
+
+      report = described_class.for(project)
+      expect(report.status).to eq :needs_attention
+      expect(report.checks.length).to eq 2
+    end
     context "for a resource whose local fixity event hasn't run yet" do
       it "returns :in_progress" do
         fs1 = FactoryBot.create_for_repository(:original_file_file_set)
@@ -185,18 +224,22 @@ RSpec.describe HealthReport do
     # rubocop:disable Metrics/MethodLength
     def create_file_set(cloud_fixity_status:)
       file_set = FactoryBot.create_for_repository(:file_set)
+      create_preservation_object(resource_id: file_set.id, event_status: cloud_fixity_status, event_type: :cloud_fixity)
+      file_set
+    end
+
+    def create_preservation_object(event_status:, resource_id:, event_type:)
       metadata_node = FileMetadata.new(id: SecureRandom.uuid)
-      preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
+      preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: resource_id, metadata_node: metadata_node)
       FactoryBot.create_for_repository(
         :event,
-        type: :cloud_fixity,
-        status: cloud_fixity_status,
+        type: event_type,
+        status: event_status,
         resource_id: preservation_object.id,
         child_id: metadata_node.id,
         child_property: :metadata_node,
         current: true
       )
-      file_set
     end
     # rubocop:enable Metrics/MethodLength
   end
