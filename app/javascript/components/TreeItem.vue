@@ -24,7 +24,7 @@
         ]"
       >
         <lux-icon-base
-          v-if="isFile"
+          v-if="isFile && !thumbnail"
           width="30"
           height="30"
           icon-name="End Node"
@@ -32,6 +32,11 @@
         >
           <lux-icon-end-node></lux-icon-end-node>
         </lux-icon-base>
+        <media-image
+          v-if="thumbnail"
+          :alt="jsonData.label"
+          :src="thumbnail" height="30px" 
+          style="margin-top: .5em;margin-right: .5em;"></media-image>
         <template v-if="editedFieldId === id">
           <div class="folder-label">
             <input
@@ -144,6 +149,14 @@ export default {
     }
   },
   computed: {
+    thumbnail: function() {
+      let has_service = !!this.jsonData.service
+      if (has_service) {
+        return this.jsonData.service + '/full/30,/0/default.jpg'
+      } else {
+        return false
+      }
+    },
     expandCollapseIcon: function() {
       if (this.isOpen) {
         return "arrow-down"
@@ -284,6 +297,9 @@ export default {
       if (!this.isOpen) {
         this.isOpen = !this.isOpen
       }
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let selected = this.findSelectedFolderById(folderList, id)
+      console.log(JSON.stringify(selected))
       store.commit("SELECT", id)
     },
     saveLabel: function(id) {
