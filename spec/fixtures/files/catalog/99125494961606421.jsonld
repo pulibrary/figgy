@@ -1,0 +1,62 @@
+{
+  "@context": "https://catalog.princeton.edu/context.json",
+  "@id": "https://catalog.princeton.edu/catalog/99125494961606421",
+  "title": [
+    {
+      "@value": "[Concert, 2022, April 02] [sound recording]",
+      "@language": "en"
+    }
+  ],
+  "language": "en",
+  "creator": "Princeton University. Chamber Choir",
+  "call_number": "CD- 2022-04-02",
+  "extent": "2 sound discs : digital ; 4 3/4 in.",
+  "format": "Audio",
+  "description": [
+    "A complete program is available online.",
+    "Ukraine Refugee Appeal",
+    "PUGC"
+  ],
+  "publisher": "Princeton, NJ. : Princeton University, Dept. of Music, 2022.",
+  "alternative": "Figure humaine : featuring Cyrus Chestnut, piano.",
+  "contents": [
+    "Disc 1. Gabriel Crouch Program Introduction",
+    "Before the night is gone / Allison Spann '20",
+    "St. Martin de Porres (Black Christ of the Andes) / Mary Lou Williams --",
+    "Disc 2. Kate Ivshina Ukraine Relief announcement",
+    "Le jour m'é tonne (Figure Humaine, vi) ; Figure humaine / Francis Poulenc."
+  ],
+  "director": [
+    "Crouch, Gabriel, 1973-"
+  ],
+  "conductor": [
+    "Crouch, Gabriel, 1973-"
+  ],
+  "instrumentalist": [
+    "Chestnut, Cyrus",
+    "Kim, David"
+  ],
+  "performer": [
+    "Spann, Allison"
+  ],
+  "contributor": [
+    "Princeton University. Department of Music",
+    "Princeton University. Princeton Performance Archives"
+  ],
+  "author": "Princeton University. Chamber Choir",
+  "created": "2022-01-01T00:00:00Z",
+  "date": "2022",
+  "identifier": "http://arks.princeton.edu/ark:/88435/dc1c18ds73h/pdf",
+  "location": [
+    "Mendel Music Library CD- 2022-04-02"
+  ],
+  "electronic_locations": [
+    {
+      "@id": "http://arks.princeton.edu/ark:/88435/dc1c18ds73h/pdf",
+      "label": [
+        "arks.princeton.edu",
+        "Program."
+      ]
+    }
+  ]
+}

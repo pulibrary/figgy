@@ -7,7 +7,7 @@ class Ark
   end
 
   def identifier
-    ark.gsub("http://arks.princeton.edu", "")
+    ark.gsub("http://arks.princeton.edu", "").gsub(/\/pdf$/, "")
   end
 
   def uri
