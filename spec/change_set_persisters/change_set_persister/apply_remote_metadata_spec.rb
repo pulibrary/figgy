@@ -50,6 +50,17 @@ RSpec.describe ChangeSetPersister::ApplyRemoteMetadata do
 
       expect(output.identifier).to be nil
     end
+
+    it "strips /pdf from identifiers it imports" do
+      resource = FactoryBot.build(:scanned_resource, title: [])
+      alma_id = "99125494961606421"
+      stub_catalog(bib_id: alma_id)
+      change_set = ChangeSet.for(resource)
+      change_set.validate(source_metadata_identifier: alma_id)
+      output = change_set_persister.save(change_set: change_set)
+
+      expect(output.identifier).to eq ["ark:/88435/dc1c18ds73h"]
+    end
   end
 
   context "when a source_metadata_identifier is set for the first time on a scanned map" do
