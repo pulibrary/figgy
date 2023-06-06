@@ -1,72 +1,49 @@
 # How to Demo File Repair
 
-## Create resources
-In the figgy staging instance, create 3 scanned resources which each have one image. Name them clearly so you can tell which is which, e.g.
-  * Test Repair Bad Cloud File
-  * Test Repair Bad Local File
-  * Test Repair Bad Cloud and Local Files
+There's a script to automate the technical portions of the file repair process.
 
-Complete each resource so they all preserve to the cloud.
+## Run Script
 
-## Corrupt a local file
-You'll want to corrupt the local file for both the "bad local file" and the "bad
-cloud and local files" objects.
+`$ ssh -t deploy@figgy-staging2 -C "cd /opt/figgy/current && ./bin/rails runner scripts/fixity_demo.rb"`
 
-`$ bundle exec cap staging rails:console`
+This will create three resources (Bad Local File Set, Bad Cloud File Set, and Bad Local & Cloud File Set) and prompt you for input when everything is
+preserved. Check https://figgy-staging.princeton.edu/sidekiq to make sure no
+jobs are running, then hit enter. This will corrupt the files.
 
-```ruby
-# set an id variable to your fileset's id
-qs = ChangeSetPersister.default.query_service
-fs = qs.find_by(id: id)
-fs.file_metadata.first.file_identifiers.first
-```
+### Bad Local File Demo
 
-This will print the disk location of the local file. ssh to the staging box and
-cd to that location. then you can corrupt it by appending something to the end
-of it, e.g.
-```
-% echo "p0wn3d" >> [filename].tif
-```
+You will be prompted to run a cloud fixity check on the "Bad Local File Set"
+resource. Find it in Figgy, go its first File Set, and take note of the cloud
+fixity date (there may be none). Hit enter, refresh, and continue when that date increases.
 
-## Corrupt a cloud file
-You'll want to corrupt the cloud file for both the "bad cloud file" and the "bad
-cloud and local files" objects.
+You'll be prompted to run a local fixity check and repair. Download the local
+file, show that it's broken, hit enter, wait for the local fixity check date to
+increase, and then download again - the file should be repaired.
 
-`$ bundle exec cap staging rails:console`
+### Bad Cloud File Demo
 
-```
-# set an id variable to your fileset's id
-qs = ChangeSetPersister.default.query_service
-fs = qs.find_by(id: id)
-po = Wayfinder.for(fs).preservation_object
-po.binary_nodes.first.file_identifiers.first.id
-```
+You will be prompted run a local fixity check. Find the bad cloud file set item
+in Figgy, go to its first File Set, and take note of the local fixity date. Hit
+enter in the terminal, refresh, and continue when that date increases.
 
+You'll be prompted to run a cloud fixity check & repair.
+
+To demo the broken cloud file beforehand do this:
 * go to console.cloud.google.com
 * make sure you're logged in with your princeton account (check your avatar on the top right)
 * select pulibrary-figgy-storage from the project drop-down
 * search for and/or navigate to cloud storage
 * select figgy-staging-preservation 
-* filter to the first part of the id to get into the right folder, then keep
-    clicking through the paths until you see the file listed.
-* Upload some other file (you can use `spec/fixtures/files/bad.tif`)
-* copy the filename of the good file, then delete it
-* rename the bad file to have the good file's name
+* filter to the ID of the resource to get into the right folder, then keep
+    clicking through the paths until you see the file listed. Attempt to
+    download and open it - it should be corrupt.
 
-## Force the repair
+Hit enter in the terminal, refresh Figgy and continue when the cloud fixity says
+it succeeded. Download the file from preservation storage again to show that
+it's now repaired.
 
-For 'Test Repair Bad Local File'
+### Both Bad
 
-An object where we've corrupted the local isilon file
-1. Run cloud fixity check on the FileSet with `CloudFixity::FixityRequestor.queue_resource_check!(id: fileset_id)`. The fileset's cloud fixity timestamp should update.
-1. Run local fixity check on the FileSet with `LocalFixityJob.perform_now(fileset_id)`. We saw it enqueue and perform the RepairLocalFixityJob. You can downloaded the cloud file before and after. The file status should change to healthy.
-
-For 'Test Repair Bad Cloud File'
-
-1. Run local fixity check. Should succeed.
-1. Run cloud fixity check. Should repair.
-
-
-For 'Test Repair Bad Cloud and Local Files'
-
-1. Run cloud fixity check (which kicks off a local fixity check as well). Both should fail and resource should report a broken state.
+You'll be prompted to run fixity checks on both cloud and local fixity. Hit
+enter, look at the Resource or FileSet pages and it should show that both need
+attention.
