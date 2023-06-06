@@ -419,6 +419,7 @@ Rails.application.config.to_prepare do
     CountAllOfModel,
     DeepLocalFixityCount,
     FindDeepChildrenWithProperty,
+    FindDeepPreservationObjectCount,
     FindIdsWithPropertyNotEmpty,
     DeepCloudFixityCount,
     PagedAllQuery,

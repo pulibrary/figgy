@@ -136,11 +136,14 @@ class BaseWayfinder
     )
   end
 
+  # This method encodes the assumption that the existence of a preservation
+  # object, with no other events, represents a success
+  # This is because google checks fixity when a resource is preserved
   def deep_succeeded_cloud_fixity_count
-    @deep_succeeded_cloud_fixity_count ||= query_service.custom_queries.deep_cloud_fixity_count(
-      resource: resource,
-      status: Event::SUCCESS
-    )
+    @deep_succeeded_cloud_fixity_count ||=
+      query_service.custom_queries.find_deep_preservation_object_count(resource: resource) -
+      deep_repairing_cloud_fixity_count -
+      deep_failed_cloud_fixity_count
   end
 
   def deep_repairing_cloud_fixity_count

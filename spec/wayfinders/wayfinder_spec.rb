@@ -81,14 +81,46 @@ RSpec.describe Wayfinder do
       end
     end
 
+    describe "#deep_succeeded_cloud_fixity_count" do
+      it "returns a count of all successful cloud fixity file sets, deep" do
+        fs1 = create_file_set(cloud_fixity_event: Event::SUCCESS)
+        fs2 = create_file_set(cloud_fixity_event: Event::SUCCESS)
+        fs3 = create_file_set(cloud_fixity_event: Event::SUCCESS)
+        bad_fs = create_file_set(cloud_fixity_event: Event::FAILURE)
+        # Unrelated FS
+        create_file_set(cloud_fixity_event: Event::SUCCESS)
+        volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+        volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, bad_fs.id])
+        mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
+
+        expect(described_class.for(mvw).deep_failed_cloud_fixity_count).to eq 1
+        expect(described_class.for(mvw).deep_succeeded_cloud_fixity_count).to eq 3
+      end
+
+      it "counts a file_set as successful if it doesn't have any events" do
+        fs1 = create_file_set(cloud_fixity_event: nil)
+        fs2 = create_file_set(cloud_fixity_event: nil)
+        fs3 = create_file_set(cloud_fixity_event: Event::SUCCESS)
+        bad_fs = create_file_set(cloud_fixity_event: Event::FAILURE)
+        # Unrelated FS
+        create_file_set(cloud_fixity_event: Event::SUCCESS)
+        volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+        volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, bad_fs.id])
+        mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
+
+        expect(described_class.for(mvw).deep_failed_cloud_fixity_count).to eq 1
+        expect(described_class.for(mvw).deep_succeeded_cloud_fixity_count).to eq 3
+      end
+    end
+
     describe "#deep_failed_cloud_fixity_count" do
       it "returns a count of all failed cloud fixity file sets, deep" do
-        fs1 = create_file_set(cloud_fixity_success: false)
-        fs2 = create_file_set(cloud_fixity_success: false)
-        fs3 = create_file_set(cloud_fixity_success: false)
-        ok_fs = create_file_set(cloud_fixity_success: true)
+        fs1 = create_file_set(cloud_fixity_event: Event::FAILURE)
+        fs2 = create_file_set(cloud_fixity_event: Event::FAILURE)
+        fs3 = create_file_set(cloud_fixity_event: Event::FAILURE)
+        ok_fs = create_file_set(cloud_fixity_event: Event::SUCCESS)
         # Unrelated FS
-        create_file_set(cloud_fixity_success: false)
+        create_file_set(cloud_fixity_event: Event::FAILURE)
         volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
         volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id, ok_fs.id])
         mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
@@ -131,58 +163,58 @@ RSpec.describe Wayfinder do
 
         expect(described_class.for(mvw).deep_failed_cloud_fixity_count).to eq 1
       end
-
-      # rubocop:disable Metrics/MethodLength
-      def create_file_set(cloud_fixity_success: true)
-        file_set = FactoryBot.create_for_repository(:file_set)
-        metadata_node = FileMetadata.new(id: SecureRandom.uuid)
-        preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
-        if cloud_fixity_success
-          # Create an old failure, to guard for the case where it failed and we
-          # fixed it.
-          FactoryBot.create_for_repository(
-            :event,
-            type: :cloud_fixity,
-            status: "FAILURE",
-            resource_id: preservation_object.id,
-            child_id: metadata_node.id,
-            child_property: :metadata_node,
-            current: false
-          )
-          FactoryBot.create_for_repository(
-            :event,
-            type: :cloud_fixity,
-            status: "SUCCESS",
-            resource_id: preservation_object.id, child_id: metadata_node.id,
-            child_property: :metadata_node,
-            current: true
-          )
-        else
-          # Create an old success, to guard for the case where it once succeeded
-          # and now it failed.
-          FactoryBot.create_for_repository(
-            :event,
-            type: :cloud_fixity,
-            status: "SUCCESS",
-            resource_id: preservation_object.id,
-            child_id: metadata_node.id,
-            child_property: :metadata_node,
-            current: false
-          )
-          FactoryBot.create_for_repository(
-            :event,
-            type: :cloud_fixity,
-            status: "FAILURE",
-            resource_id: preservation_object.id,
-            child_id: metadata_node.id,
-            child_property: :metadata_node,
-            current: true
-          )
-        end
-        file_set
-      end
-      # rubocop:enable Metrics/MethodLength
     end
+
+    # rubocop:disable Metrics/MethodLength
+    def create_file_set(cloud_fixity_event: nil)
+      file_set = FactoryBot.create_for_repository(:file_set)
+      metadata_node = FileMetadata.new(id: SecureRandom.uuid)
+      preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: metadata_node)
+      if cloud_fixity_event == Event::SUCCESS
+        # Create an old failure, to guard for the case where it failed and we
+        # fixed it.
+        FactoryBot.create_for_repository(
+          :event,
+          type: :cloud_fixity,
+          status: "FAILURE",
+          resource_id: preservation_object.id,
+          child_id: metadata_node.id,
+          child_property: :metadata_node,
+          current: false
+        )
+        FactoryBot.create_for_repository(
+          :event,
+          type: :cloud_fixity,
+          status: "SUCCESS",
+          resource_id: preservation_object.id, child_id: metadata_node.id,
+          child_property: :metadata_node,
+          current: true
+        )
+      elsif cloud_fixity_event == Event::FAILURE
+        # Create an old success, to guard for the case where it once succeeded
+        # and now it failed.
+        FactoryBot.create_for_repository(
+          :event,
+          type: :cloud_fixity,
+          status: "SUCCESS",
+          resource_id: preservation_object.id,
+          child_id: metadata_node.id,
+          child_property: :metadata_node,
+          current: false
+        )
+        FactoryBot.create_for_repository(
+          :event,
+          type: :cloud_fixity,
+          status: "FAILURE",
+          resource_id: preservation_object.id,
+          child_id: metadata_node.id,
+          child_property: :metadata_node,
+          current: true
+        )
+      end
+      file_set
+    end
+    # rubocop:enable Metrics/MethodLength
 
     describe "#members_with_parents" do
       it "returns undecorated members with parents pre-loaded" do
