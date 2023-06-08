@@ -14,6 +14,8 @@ class FindByProperty
 
   # Find by an arbitrary property. If property is :metadata, then value should
   # be a hash to query for the value of multiple properties.
+  # @param created_at [DateTime, Range<DateTime>] Either a date or a range of
+  #   dates
   def find_by_property(property:, value:, model: nil, created_at: nil, lazy: false)
     relation = orm_class.use_cursor
     if property.to_sym != :metadata
