@@ -29,6 +29,17 @@ RSpec.describe FindByProperty do
       expect(output.first.contributor).to eq ["testing"]
     end
 
+    it "can filter by created_at" do
+      Timecop.travel(2021, 6, 30) do
+        FactoryBot.create_for_repository(:scanned_resource, title: "test", contributor: "testing")
+      end
+      FactoryBot.create_for_repository(:scanned_resource, title: "test", contributor: "testing2")
+
+      output = query.find_by_property(property: :title, value: "test", created_at: DateTime.new(2021, 3, 30)..DateTime.new(2021, 8, 30))
+      expect(output.to_a.length).to eq 1
+      expect(output.first.contributor).to eq ["testing"]
+    end
+
     it "can return a lazy result set" do
       FactoryBot.create_for_repository(:scanned_resource, title: "test", contributor: "testing")
       FactoryBot.create_for_repository(:scanned_map, title: "test")
