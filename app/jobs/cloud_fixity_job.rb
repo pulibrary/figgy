@@ -65,15 +65,22 @@ class CloudFixityJob < ApplicationJob
     def previous_event
       @previous_event ||= query_service.custom_queries.find_by_property(
         property: :metadata,
-        value: {
-          type: :cloud_fixity,
-          resource_id: Valkyrie::ID.new(preservation_object_id),
-          child_property: child_property,
-          child_id: Valkyrie::ID.new(child_id),
-          current: true
-        },
+        value: previous_event_query,
         model: Event
       ).first
+    end
+
+    def previous_event_query
+      query = {
+        type: :cloud_fixity,
+        resource_id: Valkyrie::ID.new(preservation_object_id),
+        child_property: child_property,
+        current: true
+      }
+      # child_id gets re-created on re-preservation for metadata_nodes, so don't
+      # find event based on it.
+      query[:child_id] = Valkyrie::ID.new(child_id) unless child_property.to_s == "metadata_node"
+      query
     end
 
     def change_set_persister
