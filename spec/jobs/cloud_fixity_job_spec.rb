@@ -7,7 +7,9 @@ RSpec.describe CloudFixityJob do
     let(:resource) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid)) }
 
     it "creates a new fixity event and marks the previously current event no longer current" do
-      old_event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: resource.metadata_node.id, child_property: "metadata_node", current: true)
+      # The old event will have a different child_id, because a new node is made
+      # when it's preserved.
+      old_event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: SecureRandom.uuid, child_property: "metadata_node", current: true)
       described_class.perform_now(status: "SUCCESS", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
 
       events = query_service.find_all_of_model(model: Event)
