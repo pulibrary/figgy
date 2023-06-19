@@ -19,7 +19,7 @@ bad_local_file_set = csp.save(change_set: bad_local_file_set)
 bad_cloud_file_set = csp.save(change_set: bad_cloud_file_set)
 both_bad = csp.save(change_set: both_bad)
 
-puts "Push any key after files are preserved to corrupt files."
+puts "Files have been saved. Ensure background preservation jobs are finished, then press any key to corrupt files."
 
 gets
 
@@ -38,29 +38,29 @@ end
 
 puts "BAD LOCAL FILE SET"
 fileset_id = bad_local_file_set.member_ids.first
-puts "Push any key to execute cloud fixity check of #{bad_local_file_set.id}"
+puts "Press any key to execute cloud fixity check of #{bad_local_file_set.id}"
 gets
 
 CloudFixity::FixityRequestor.queue_resource_check!(id: fileset_id)
-puts "Push any key to execute local fixity check and repair of #{bad_local_file_set.id}"
+puts "Press any key to execute local fixity check and repair of #{bad_local_file_set.id}"
 gets
 
 LocalFixityJob.perform_now(fileset_id)
 
 puts "BAD CLOUD FILE SET"
 fileset_id = bad_cloud_file_set.member_ids.first
-puts "Push any key to execute local fixity check of #{bad_cloud_file_set}"
+puts "Press any key to execute local fixity check of #{bad_cloud_file_set}"
 gets
 
 LocalFixityJob.perform_now(fileset_id)
-puts "Push any key to execute cloud fixity check and repair of #{bad_cloud_file_set}"
+puts "Press any key to execute cloud fixity check and repair of #{bad_cloud_file_set}"
 gets
 
 CloudFixity::FixityRequestor.queue_resource_check!(id: fileset_id)
 
 puts "Both Bad"
 fileset_id = both_bad.member_ids.first
-puts "Push any key to execute fixity checks for both bad - it will report being broken."
+puts "Press any key to execute fixity checks for both bad - it will report being broken."
 gets
 LocalFixityJob.perform_now(fileset_id)
 
