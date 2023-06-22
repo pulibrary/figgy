@@ -11,4 +11,8 @@ class EphemeraFieldChangeSet < Valkyrie::ChangeSet
   def primary_terms
     [:field_name, :member_of_vocabulary_id, :favorite_term_ids, :append_id, :rarely_used_term_ids]
   end
+
+  def preserve?
+    true
+  end
 end
