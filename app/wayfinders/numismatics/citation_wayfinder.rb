@@ -6,6 +6,8 @@ module Numismatics
     def numismatic_references
       resource.numismatic_reference_id.map do |id|
         query_service.find_by(id: id)
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end
     end
   end

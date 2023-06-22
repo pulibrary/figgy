@@ -7,8 +7,9 @@ describe Numismatics::CitationWayfinder do
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:numismatic_reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+  let(:numismatic_reference_id) { numismatic_reference.id }
   let(:numismatic_citation) do
-    res = Numismatics::Citation.new(title: "athens", numismatic_reference_id: numismatic_reference.id)
+    res = Numismatics::Citation.new(title: "athens", numismatic_reference_id: numismatic_reference_id)
     ch = Numismatics::CitationChangeSet.new(res)
     change_set_persister.save(change_set: ch)
   end
@@ -25,6 +26,14 @@ describe Numismatics::CitationWayfinder do
   describe "#decorated_numismatic_reference" do
     it "returns a decorated numismatic reference" do
       expect(numismatic_citation_wayfinder.decorated_numismatic_reference).to eq numismatic_reference.decorate
+    end
+
+    context "when the numismatic reference does not exist" do
+      let(:numismatic_reference_id) { Valkyrie::ID.new(SecureRandom.uuid) }
+
+      it "returns nil" do
+        expect(numismatic_citation_wayfinder.decorated_numismatic_reference).to be_nil
+      end
     end
   end
 end
