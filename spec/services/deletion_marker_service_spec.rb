@@ -62,6 +62,22 @@ describe DeletionMarkerService do
     end
   end
 
+  context "when restoring an EphemeraProject" do
+    it "restores it" do
+      resource = FactoryBot.build(:ephemera_field)
+      resource = ChangeSetPersister.default.save(change_set: ChangeSet.for(resource))
+      change_set_persister.delete(change_set: ChangeSet.for(resource))
+      resource_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(resource.id)).first
+
+      described_class.restore(resource_deletion_marker.id)
+      resources = query_service.find_all_of_model(model: EphemeraField)
+      dm = query_service.find_all_of_model(model: DeletionMarker)
+
+      expect(resources.count).to eq 1
+      expect(dm.count).to eq 0
+    end
+  end
+
   context "when restoring a FileSet only" do
     it "restores the FileSet and re-attaches it to its parent" do
       file = fixture_file_upload("files/example.tif", "image/tiff")
