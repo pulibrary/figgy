@@ -18,4 +18,8 @@ class CollectionChangeSet < ChangeSet
   def primary_terms
     [:title, :slug, :source_metadata_identifier, :description, :owners, :restricted_viewers]
   end
+
+  def preserve?
+    true
+  end
 end
