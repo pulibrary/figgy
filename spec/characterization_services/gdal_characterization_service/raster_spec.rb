@@ -27,6 +27,17 @@ RSpec.describe GdalCharacterizationService::Raster do
     end
   end
 
+  context "with a geotiff containing a single quote in the name" do
+    let(:file) { fixture_file_upload("files/raster/geo'tiff.tif", "image/tiff") }
+    let(:tika_output) { tika_geotiff_output }
+
+    it "sets the correct mime_type on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["image/tiff; gdal-format=GTiff"]
+    end
+  end
+
   context "with an arcgrid file" do
     let(:file) { fixture_file_upload("files/raster/arcgrid.zip", "application/zip") }
     let(:tika_output) { tika_arcgrid_output }

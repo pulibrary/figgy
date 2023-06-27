@@ -79,7 +79,7 @@ module GeoDerivatives
           # @param path [String] path to raster file
           # @return [String] output of gdalinfo
           def gdalinfo(path)
-            stdout, _stderr, _status = Open3.capture3("gdalinfo -mm #{path}")
+            stdout, _stderr, _status = Open3.capture3("gdalinfo", "-mm", path.to_s)
             stdout
           end
 
