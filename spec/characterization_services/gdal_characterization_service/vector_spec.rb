@@ -28,6 +28,18 @@ RSpec.describe GdalCharacterizationService::Vector do
     end
   end
 
+  context "with a geojson file containing a single quote in the name" do
+    let(:file) { fixture_file_upload("files/vector/g'eo.json", "application/vnd.geo+json") }
+    let(:tika_output) { tika_geojson_output }
+
+    it "sets the correct mime_type and geometry attributes on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/vnd.geo+json"]
+      expect(new_file_set.original_file.geometry).to eq ["Multi Polygon"]
+    end
+  end
+
   context "with a non-vector file" do
     let(:tika_output) { tika_tiff_output }
 

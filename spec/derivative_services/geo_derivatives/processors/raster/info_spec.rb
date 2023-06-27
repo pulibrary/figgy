@@ -14,7 +14,7 @@ RSpec.describe GeoDerivatives::Processors::Raster::Info do
 
     it "shells out to gdalinfo and sets the doc variable to the output string" do
       expect(processor.doc).to eq(info_doc)
-      expect(Open3).to have_received(:capture3).with("gdalinfo -mm #{path}")
+      expect(Open3).to have_received(:capture3).with("gdalinfo", "-mm", path.to_s)
     end
   end
 
