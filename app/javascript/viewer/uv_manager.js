@@ -128,6 +128,7 @@ export default class UVManager {
 
     shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
     mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
+    this.resize()
   }
 
   createIIIFDragElement () {
@@ -207,7 +208,10 @@ export default class UVManager {
     const titleHeight = $('#title').outerHeight($('#title').is(':visible'))
     let tabHeight = 0
     if ($('#tab-container').is(':visible')) {
-      tabHeight = $('#tab-container').outerHeight(true)
+      // There is some kind of race condition that makes this way of determining tab height to fail
+      // tabHeight = $('#tab-container').outerHeight(true)
+      // hardcoding tab height as a temporary workaround
+      tabHeight = 49
     }
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight - tabHeight)
