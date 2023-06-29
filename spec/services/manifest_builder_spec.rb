@@ -1011,6 +1011,21 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when given a ScannedMap with Raster child" do
+    it "adds a rendering property for the GeoTiff" do
+      scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_child)
+      output = described_class.new(scanned_map).build
+
+      geo_rendering = output["sequences"][0]["canvases"][0]["rendering"].find do |rendering|
+        rendering["label"] == "Download GeoTiff"
+      end
+
+      expect(geo_rendering).to be_present
+      file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.blank? }
+      expect(geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
+    end
+  end
+
   context "when the structure has labels in arabic" do
     let(:structure) do
       {

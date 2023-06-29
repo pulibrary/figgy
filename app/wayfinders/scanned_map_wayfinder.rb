@@ -39,10 +39,6 @@ class ScannedMapWayfinder < BaseWayfinder
     @logical_structure_members ||= generate_logical_structure_members
   end
 
-  def uncropped_geotiff_filesets
-    @uncropped_geotiff_filesets ||= decorated_raster_resources.first.members.select { |x| x.service_targets.blank? }
-  end
-
   def mosaic_file_count
     query_service.custom_queries.find_deep_children_with_property(resource: resource, model: FileSet, property: :service_targets, value: "tiles", count: true)
   end
