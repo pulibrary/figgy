@@ -208,16 +208,13 @@ export default class UVManager {
     const titleHeight = $('#title').outerHeight($('#title').is(':visible'))
     let tabHeight = 0
     if ($('#tab-container').is(':visible')) {
-      // There is some kind of race condition that makes this way of determining tab height to fail
-      // tabHeight = $('#tab-container').outerHeight(true)
-      // hardcoding tab height as a temporary workaround
-      tabHeight = 49
+      tabHeight = $('#tab-container').outerHeight(true)
     }
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight - tabHeight)
     this.uvElement.children('div').height(windowHeight - titleHeight - tabHeight)
     if (this.uv) { this.uv.resize() }
-    this.waitForElementToDisplay('button.share', 500, this.addViewerIcons.bind(this))
+    this.waitForElementToDisplay('button.share', 1000, this.addViewerIcons.bind(this))
   }
 
   bindResize () {
