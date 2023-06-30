@@ -128,6 +128,7 @@ export default class UVManager {
 
     shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
     mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
+    this.resize()
   }
 
   createIIIFDragElement () {
@@ -213,7 +214,7 @@ export default class UVManager {
     this.uvElement.height(windowHeight - titleHeight - tabHeight)
     this.uvElement.children('div').height(windowHeight - titleHeight - tabHeight)
     if (this.uv) { this.uv.resize() }
-    this.waitForElementToDisplay('button.share', 500, this.addViewerIcons.bind(this))
+    this.waitForElementToDisplay('button.share', 1000, this.addViewerIcons.bind(this))
   }
 
   bindResize () {
