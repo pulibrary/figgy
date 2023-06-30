@@ -40,7 +40,7 @@ module GeoDerivatives
           # @param path [String] path to vector file or shapefile directory
           # @return [String] output of ogrinfo
           def ogrinfo(path)
-            stdout, _stderr, _status = Open3.capture3("ogrinfo -ro -so -al #{path}")
+            stdout, _stderr, _status = Open3.capture3("ogrinfo", "-ro", "-so", "-al", path.to_s)
             stdout
           end
 

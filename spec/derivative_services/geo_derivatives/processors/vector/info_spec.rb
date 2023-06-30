@@ -15,7 +15,7 @@ RSpec.describe GeoDerivatives::Processors::Vector::Info do
 
     it "shells out to ogrinfo and sets the doc variable to the output string" do
       expect(processor.doc).to eq(polygon_info_doc)
-      expect(Open3).to have_received(:capture3).with("ogrinfo -ro -so -al #{path}")
+      expect(Open3).to have_received(:capture3).with("ogrinfo", "-ro", "-so", "-al", path.to_s)
     end
   end
 
