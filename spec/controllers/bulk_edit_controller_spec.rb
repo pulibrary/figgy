@@ -33,6 +33,17 @@ RSpec.describe BulkEditController, type: :controller do
         expect(response).to redirect_to("/users/auth/cas")
       end
     end
+    context "when bulk editing vector resources and not faceting on collection" do
+      let(:resource1) { FactoryBot.create_for_repository(:vector_resource, title: "Resource 1 - Significant") }
+      let(:resource2) { FactoryBot.create_for_repository(:vector_resource, title: "Resource 2 - Significant") }
+      let(:params) { { f: { state_ssim: state }, q: "significant" } }
+
+      it "renders the selected " do
+        get :resources_edit, params: params
+        expect(response.body).to have_content("Bulk edit 2 resources")
+        expect(response.body).to have_field("mark_complete")
+      end
+    end
   end
 
   describe "POST /bulk_edit" do

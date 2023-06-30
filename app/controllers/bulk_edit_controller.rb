@@ -43,7 +43,7 @@ class BulkEditController < ApplicationController
     end
 
     def load_removable_collections
-      @removable_collections = @collections.reject { |c| c.title == edit_params["f"]["member_of_collection_titles_ssim"][0] }
+      @removable_collections = @collections.reject { |c| c.title == edit_params["f"].fetch(:member_of_collection_titles_ssim, [])[0] }
     end
 
     # Prepare / execute the search and process into id arrays
