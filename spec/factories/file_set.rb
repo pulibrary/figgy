@@ -50,7 +50,7 @@ FactoryBot.define do
             original_filename: "display_raster.tif",
             file_identifiers: ["cloud-geo-derivatives-shrine://#{Figgy.config['cloud_geo_bucket']}/example.tif"]
           ),
-          FileMetadata.new(id: Valkyrie::ID.new(SecureRandom.uuid), mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.OriginalFile)
+          FileMetadata.new(id: Valkyrie::ID.new(SecureRandom.uuid), mime_type: "image/tiff; gdal-format=GTiff", use: Valkyrie::Vocab::PCDMUse.OriginalFile)
         ]
       end
       service_targets { "tiles" }
