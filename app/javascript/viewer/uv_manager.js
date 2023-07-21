@@ -25,7 +25,7 @@ export default class UVManager {
       } else if (result.embed.status === 'authorized') {
         this.displayNotice(result)
         this.createUV(null, null, result)
-        this.buildLeafletViewer()
+        await this.buildLeafletViewer()
       }
     } else {
       return this.createUV()
@@ -85,7 +85,7 @@ export default class UVManager {
   }
 
   // Adds a tabbed viewer for Leaflet to show rasters, especially for mosaics.
-  buildLeafletViewer () {
+  async buildLeafletViewer () {
     this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
     return this.leafletViewer.loadLeaflet()
   }
@@ -213,8 +213,8 @@ export default class UVManager {
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight - tabHeight)
     this.uvElement.children('div').height(windowHeight - titleHeight - tabHeight)
-    if (this.uv) { this.uv.resize() }
     this.waitForElementToDisplay('button.share', 1000, this.addViewerIcons.bind(this))
+    if (this.uv) { this.uv.resize() }
   }
 
   bindResize () {
