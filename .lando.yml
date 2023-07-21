@@ -13,7 +13,7 @@ services:
     config:
       dir: solr/config
   figgy_database:
-    type: postgres:10
+    type: postgres:15
     portforward: true
   redis:
     type: redis:6

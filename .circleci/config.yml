@@ -14,7 +14,7 @@ jobs:
           FIGGY_DB_USERNAME: figgy
           FIGGY_DB_PASSWORD: ""
           PSQL_PAGER: ''
-      - image: postgres:10.6-alpine
+      - image: cimg/postgres:15.2
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
@@ -70,7 +70,7 @@ jobs:
           FIGGY_DB_PASSWORD: ""
           MEDIAINFO_PATH: /usr/bin/mediainfo
           PSQL_PAGER: ''
-      - image: postgres:10.6-alpine
+      - image: cimg/postgres:15.2
         environment:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test

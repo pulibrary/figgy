@@ -49,6 +49,8 @@ CREATE FUNCTION public.get_ids_array(jsonb, text) RETURNS text[]
 
 SET default_tablespace = '';
 
+SET default_table_access_method = heap;
+
 --
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
 --
