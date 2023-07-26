@@ -15,13 +15,23 @@
             </lux-icon-base>
           <% end %>
           <%= format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) %>
-          <br/>Last Success: <%= resource.decorate.local_fixity_last_success_date_of(file.id) %>
+          <% if format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) == "Not tested yet." %>
+            <br/><a href="#">Test manually</a>
+          <% else %>
+            <br/>Last Success: <%= resource.decorate.local_fixity_last_success_date_of(file.id) %>
+          <% end %>
         <% else %>
           Derivative files are not preserved.
         <% end %>
       </td>
-      <td><%= format_cloud_fixity_success(resource.decorate.cloud_fixity_success_of(file.id)) %>
-          <br/>Last Success: <%= resource.decorate.cloud_fixity_last_success_date_of(file.id) %></td>
+      <td>
+        <% if file.preserve? %>
+          <%= format_cloud_fixity_success(resource.decorate.cloud_fixity_success_of(file.id)) %>
+          <br/>Last Success: <%= resource.decorate.cloud_fixity_last_success_date_of(file.id) %>
+        <% else %>
+          Derivative files are not preserved.
+        <% end %>
+      </td>
       <% if can?(:download, resource) %>
         <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
       <% else %>

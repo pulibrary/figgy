@@ -7,22 +7,30 @@ module FixityDashboardHelper
   def format_fixity_success(val)
     case val
     when nil
-      "in progress"
+      "In progress"
+    when 'n/a'
+      "Not tested yet."
     when Event::FAILURE
-      "failed"
+      "Failed"
     when Event::SUCCESS
-      "succeeded"
+      "Successful"
+    else
+      val
     end
   end
 
   def format_cloud_fixity_success(val)
     case val
     when nil
-      "in progress"
+      "In progress"
+    when 'n/a'
+      "Not tested yet."
     when Event::FAILURE
-      "failed"
+      "Failed"
     when Event::SUCCESS
-      "succeeded"
+      "Successful"
+    else
+      val
     end
   end
 
