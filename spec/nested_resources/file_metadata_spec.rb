@@ -98,6 +98,11 @@ describe FileMetadata do
     it "determines if the FileMetadata if for a copy of a binary for preservation in a (BagIt)" do
       expect(file_metadata.preservation_copy?).to be true
     end
+
+    it "gets preserved" do
+      expect(file_metadata.preserve?).to be true
+    end
+
   end
 
   describe "intermediate_file?" do
@@ -106,6 +111,11 @@ describe FileMetadata do
     it "determines if the FileMetadata is for an intermediate file" do
       expect(file_metadata.intermediate_file?).to be true
     end
+
+    it "does not get preserved" do
+      expect(file_metadata.preserve?).to be false
+    end
+
   end
 
   describe "#cloud_derivative?" do
@@ -114,6 +124,11 @@ describe FileMetadata do
     it "determines if the FileMetadata is for a derivative file" do
       expect(file_metadata.cloud_derivative?).to be true
     end
+
+    it "does not get preserved" do
+      expect(file_metadata.preserve?).to be false
+    end
+
   end
 
   describe "#cloud_uri" do

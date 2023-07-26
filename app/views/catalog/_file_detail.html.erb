@@ -15,11 +15,7 @@
             </lux-icon-base>
           <% end %>
           <%= format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) %>
-          <% if format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) == "Not tested yet." %>
-            <br/><a href="#">Test manually</a>
-          <% else %>
-            <br/>Last Success: <%= resource.decorate.local_fixity_last_success_date_of(file.id) %>
-          <% end %>
+          <br/>Last Success: <%= resource.decorate.local_fixity_last_success_date_of(file.id) %>
         <% else %>
           Derivative files are not preserved.
         <% end %>
