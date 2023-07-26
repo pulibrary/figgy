@@ -50,6 +50,10 @@ describe FileMetadata do
     it "determines if the FileMetadata is for an ingested file" do
       expect(file_metadata.original_file?).to be true
     end
+
+    it "gets preserved?" do
+      expect(file_metadata.preserve?).to be true
+    end
   end
 
   describe "thumbnail_file?" do
@@ -57,6 +61,10 @@ describe FileMetadata do
 
     it "determines if the FileMetadata is for a thumbnail file" do
       expect(file_metadata.thumbnail_file?).to be true
+    end
+
+    it "gets preserved?" do
+      expect(file_metadata.preserve?).to be false
     end
   end
 
@@ -99,7 +107,7 @@ describe FileMetadata do
       expect(file_metadata.preservation_copy?).to be true
     end
 
-    it "gets preserved" do
+    it "gets preserved?" do
       expect(file_metadata.preserve?).to be true
     end
   end
@@ -111,8 +119,8 @@ describe FileMetadata do
       expect(file_metadata.intermediate_file?).to be true
     end
 
-    it "does not get preserved" do
-      expect(file_metadata.preserve?).to be false
+    it "gets preserved?" do
+      expect(file_metadata.preserve?).to be true
     end
   end
 
@@ -123,7 +131,7 @@ describe FileMetadata do
       expect(file_metadata.cloud_derivative?).to be true
     end
 
-    it "does not get preserved" do
+    it "gets preserved?" do
       expect(file_metadata.preserve?).to be false
     end
   end
