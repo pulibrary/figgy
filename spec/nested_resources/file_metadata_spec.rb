@@ -102,7 +102,6 @@ describe FileMetadata do
     it "gets preserved" do
       expect(file_metadata.preserve?).to be true
     end
-
   end
 
   describe "intermediate_file?" do
@@ -115,7 +114,6 @@ describe FileMetadata do
     it "does not get preserved" do
       expect(file_metadata.preserve?).to be false
     end
-
   end
 
   describe "#cloud_derivative?" do
@@ -128,7 +126,6 @@ describe FileMetadata do
     it "does not get preserved" do
       expect(file_metadata.preserve?).to be false
     end
-
   end
 
   describe "#cloud_uri" do

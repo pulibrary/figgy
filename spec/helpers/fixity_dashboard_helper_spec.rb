@@ -13,7 +13,7 @@ RSpec.describe FixityDashboardHelper do
   describe "#format_fixity_success" do
     it "translates the nil / 0 / 1 into human-readable text" do
       expect(helper.format_fixity_success(nil)).to eq "In progress"
-      expect(helper.format_fixity_success('n/a')).to eq "Not tested yet."
+      expect(helper.format_fixity_success("n/a")).to eq "Not tested yet."
       expect(helper.format_fixity_success(Event::FAILURE)).to eq "Failed"
       expect(helper.format_fixity_success(Event::SUCCESS)).to eq "Successful"
     end
@@ -22,7 +22,7 @@ RSpec.describe FixityDashboardHelper do
   describe "#format_cloud_fixity_success" do
     it "translates the google status values to match our local labels" do
       expect(helper.format_cloud_fixity_success(nil)).to eq "In progress"
-      expect(helper.format_cloud_fixity_success('n/a')).to eq "Not tested yet."
+      expect(helper.format_cloud_fixity_success("n/a")).to eq "Not tested yet."
       expect(helper.format_cloud_fixity_success(Event::FAILURE)).to eq "Failed"
       expect(helper.format_cloud_fixity_success(Event::SUCCESS)).to eq "Successful"
     end

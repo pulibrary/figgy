@@ -8,7 +8,7 @@ module FixityDashboardHelper
     case val
     when nil
       "In progress"
-    when 'n/a'
+    when "n/a"
       "Not tested yet."
     when Event::FAILURE
       "Failed"
@@ -23,7 +23,7 @@ module FixityDashboardHelper
     case val
     when nil
       "In progress"
-    when 'n/a'
+    when "n/a"
       "Not tested yet."
     when Event::FAILURE
       "Failed"
