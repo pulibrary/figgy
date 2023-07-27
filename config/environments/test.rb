@@ -23,4 +23,5 @@ Rails.application.configure do
   config.cache_store = :null_store
   # Mocking login only works with lax cookies.
   config.action_dispatch.cookies_same_site_protection = :lax
+  config.active_record.dump_schema_after_migration = false
 end
