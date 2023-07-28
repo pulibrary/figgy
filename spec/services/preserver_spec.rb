@@ -29,6 +29,12 @@ describe Preserver do
   let(:digest_md5) { instance_double(Digest::MD5) }
   let(:digest_md5_2) { instance_double(Digest::MD5) }
 
+  describe "GCS preservation settings" do
+    it "is configured to have a really long timeout" do
+      expect(Google::Cloud::Storage.configure.timeout).to eq 36_000
+    end
+  end
+
   describe "#preserve!" do
     before do
       stub_ezid
