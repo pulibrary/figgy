@@ -23,10 +23,10 @@ class CloudFixityJob < ApplicationJob
       buffered_change_set_persister.save(change_set: event_change_set)
     end
     if fixity_status == "FAILURE"
-      Honeybadger.notify("Cloud fixity failure on object with resource id: #{preservation_object_id}, child property: #{child_property}, child id: #{child_id}")
+      Honeybadger.notify("Cloud fixity failure on object with preserved resource id: #{preservation_object.preserved_object_id} (preservation object id: #{preservation_object_id})")
     end
     if updated_status == Event::REPAIRING
-      event = Wayfinder.for(resource).current_cloud_fixity_events.find { |e| e.child_id.to_s == child_id }
+      event = current_cloud_fixity_event
       RepairCloudFixityJob.perform_later(event_id: event.id.to_s)
     end
   end
@@ -34,6 +34,10 @@ class CloudFixityJob < ApplicationJob
   # rubocop:enable Metrics/MethodLength
 
   private
+
+    def current_cloud_fixity_event
+      Wayfinder.for(preservation_object).current_cloud_fixity_events.find { |e| e.child_id.to_s == child_id }
+    end
 
     def updated_status
       @updated_status ||=
@@ -51,8 +55,8 @@ class CloudFixityJob < ApplicationJob
       false
     end
 
-    def resource
-      @resource ||= query_service.find_by(id: preservation_object_id)
+    def preservation_object
+      @preservation_object ||= query_service.find_by(id: preservation_object_id)
     end
 
     def previous_event_change_set
