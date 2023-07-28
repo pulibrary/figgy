@@ -185,10 +185,12 @@ in [preservation_documentation.md](/preservation_documentation.md).
 1. `gcloud config set project pulibrary-figgy-storage-1`
 1. `cap [staging/production] deploy:google_cloud_function`
 
-## ArchivesSpace Synchronization
+## ArchivesSpace Synchronization and TiTiler functionality
 
 Figgy will persist DAOs to ArchivesSpace on completion of finding aid resources.
-To set this up in development, do the following:
+It also uses an s3 bucket to store geo derivatives and serve them via titiler
+
+To set these up in development, do the following:
 
 1. `lpass login <email>`
 1. `bundle exec rake figgy:setup_keys`
