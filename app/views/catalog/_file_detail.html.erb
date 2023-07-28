@@ -1,4 +1,8 @@
-      <td><%= file.updated_at.strftime("%b %d, %Y @ %I:%M %P") %></td>
+      <td>
+        <% unless file.updated_at.nil? %>
+          <%= file.updated_at.strftime("%b %d, %Y @ %I:%M %P") %>
+        <% end %>
+      </td>
       <td>
         <% if file.preserve? %>
           <% if resource.decorate.local_fixity_success_of(file.id).nil? %>
