@@ -5,6 +5,7 @@ require "selenium-webdriver"
 # there's a bug in capybara-screenshot that requires us to name
 #   the driver ":selenium" so we changed it from :headless_chrome"
 Capybara.register_driver(:selenium) do |app|
+  Webdrivers::Chromedriver.required_version = "114.0.5735.90"
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     { "goog:chromeOptions": %w[headless disable-gpu disable-setuid-sandbox window-size=7680,4320] }
   )

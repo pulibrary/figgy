@@ -3,7 +3,13 @@
           <%= file.updated_at.strftime("%b %d, %Y @ %I:%M %P") %>
         <% end %>
       </td>
-      <td>
+      <td
+        <% if file.preserve? %>
+            class="preserved"
+        <% else %>
+            class="not_preserved"
+        <% end %>
+      >
         <% if file.preserve? %>
           <% if resource.decorate.local_fixity_success_of(file.id).nil? %>
             <lux-icon-base width="30"  height="30" icon-name="alert" icon-color="yellow">
@@ -24,7 +30,13 @@
           Derivative files are not preserved.
         <% end %>
       </td>
-      <td>
+      <td
+        <% if file.preserve? %>
+            class="preserved"
+        <% else %>
+            class="not_preserved"
+        <% end %>
+      >
         <% if file.preserve? %>
           <%= format_cloud_fixity_success(resource.decorate.cloud_fixity_success_of(file.id)) %>
           <br/>Last Success: <%= resource.decorate.cloud_fixity_last_success_date_of(file.id) %>
