@@ -51,7 +51,7 @@ describe FileMetadata do
       expect(file_metadata.original_file?).to be true
     end
 
-    it "gets preserved?" do
+    it "returns true for #preserved?" do
       expect(file_metadata.preserve?).to be true
     end
   end
@@ -63,7 +63,7 @@ describe FileMetadata do
       expect(file_metadata.thumbnail_file?).to be true
     end
 
-    it "gets preserved?" do
+    it "returns false for #preserved?" do
       expect(file_metadata.preserve?).to be false
     end
   end
@@ -107,7 +107,7 @@ describe FileMetadata do
       expect(file_metadata.preservation_copy?).to be true
     end
 
-    it "gets preserved?" do
+    it "returns true for #preserved?" do
       expect(file_metadata.preserve?).to be true
     end
   end
@@ -119,7 +119,7 @@ describe FileMetadata do
       expect(file_metadata.intermediate_file?).to be true
     end
 
-    it "gets preserved?" do
+    it "returns true for #preserved?" do
       expect(file_metadata.preserve?).to be true
     end
   end
@@ -131,7 +131,7 @@ describe FileMetadata do
       expect(file_metadata.cloud_derivative?).to be true
     end
 
-    it "gets preserved?" do
+    it "returns false for #preserved?" do
       expect(file_metadata.preserve?).to be false
     end
   end
