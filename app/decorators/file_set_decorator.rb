@@ -21,6 +21,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :service_targets,
           :error_message
 
+
   delegate :collections, :preservation_objects, to: :wayfinder
 
   def manageable_files?
