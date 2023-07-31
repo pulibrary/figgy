@@ -14,8 +14,6 @@ module FixityDashboardHelper
       "Failed"
     when Event::SUCCESS
       "Successful"
-    else
-      val
     end
   end
 
@@ -29,8 +27,6 @@ module FixityDashboardHelper
       "Failed"
     when Event::SUCCESS
       "Successful"
-    else
-      val
     end
   end
 
