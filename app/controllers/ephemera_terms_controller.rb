@@ -12,6 +12,16 @@ class EphemeraTermsController < ResourcesController
     render "index"
   end
 
+  def destroy
+    folders = query_service.custom_queries.find_id_usage_by_model(model: EphemeraFolder, id: resource.id)
+    if folders.empty?
+      super
+    else
+      flash[:alert] = "This is term is currently in use. To delete, please remove from related folders."
+      redirect_back(fallback_location: root_path)
+    end
+  end
+
   def load_vocabularies
     @vocabularies = query_service.find_all_of_model(model: EphemeraVocabulary).map(&:decorate)
   end
