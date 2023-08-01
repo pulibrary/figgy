@@ -37,7 +37,7 @@ RSpec.feature "FileSet" do
     expect(page).to have_css ".preserved", text: "Last Success:"
   end
 
-  context 'when there is a derivative file' do
+  context "when there is a derivative file" do
     with_queue_adapter :inline
     scenario "the fileset fixity ui table informs the user of any files that are intentionally not preserved" do
       file = fixture_file_upload("files/example.tif", "image/tiff")
