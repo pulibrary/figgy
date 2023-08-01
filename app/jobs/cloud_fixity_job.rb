@@ -19,7 +19,9 @@ class CloudFixityJob < ApplicationJob
     event_change_set.validate(type: :cloud_fixity, status: updated_status, resource_id: preservation_object_id, child_property: child_property.to_sym, child_id: child_id, current: true)
     raise "Unable to update fixity. Invalid event: #{event_change_set.errors.full_messages.to_sentence}" unless event_change_set.valid?
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
-      buffered_change_set_persister.save(change_set: previous_event_change_set) if previous_event
+      previous_events.each do |previous_event|
+        buffered_change_set_persister.save(change_set: previous_event_change_set(previous_event))
+      end
       buffered_change_set_persister.save(change_set: event_change_set)
     end
     if fixity_status == "FAILURE"
@@ -41,7 +43,7 @@ class CloudFixityJob < ApplicationJob
 
     def updated_status
       @updated_status ||=
-        if fixity_status == Event::FAILURE && !previous_event&.repairing?
+        if fixity_status == Event::FAILURE && !previous_events&.first&.repairing?
           Event::REPAIRING
         else
           fixity_status
@@ -59,19 +61,18 @@ class CloudFixityJob < ApplicationJob
       @preservation_object ||= query_service.find_by(id: preservation_object_id)
     end
 
-    def previous_event_change_set
-      return unless previous_event
+    def previous_event_change_set(previous_event)
       ChangeSet.for(previous_event).tap do |cs|
         cs.validate(current: false)
       end
     end
 
-    def previous_event
-      @previous_event ||= query_service.custom_queries.find_by_property(
+    def previous_events
+      @previous_events ||= query_service.custom_queries.find_by_property(
         property: :metadata,
         value: previous_event_query,
         model: Event
-      ).first
+      )
     end
 
     def previous_event_query
