@@ -91,6 +91,10 @@ class FileMetadata < Valkyrie::Resource
     mime_type.first == "application/pdf"
   end
 
+  def preserve?
+    original_file? || intermediate_file? || preservation_copy?
+  end
+
   def cloud_uri
     return unless cloud_derivative?
     file_id = file_identifiers.first.to_s

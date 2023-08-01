@@ -50,6 +50,10 @@ describe FileMetadata do
     it "determines if the FileMetadata is for an ingested file" do
       expect(file_metadata.original_file?).to be true
     end
+
+    it "returns true for #preserved?" do
+      expect(file_metadata.preserve?).to be true
+    end
   end
 
   describe "thumbnail_file?" do
@@ -57,6 +61,10 @@ describe FileMetadata do
 
     it "determines if the FileMetadata is for a thumbnail file" do
       expect(file_metadata.thumbnail_file?).to be true
+    end
+
+    it "returns false for #preserved?" do
+      expect(file_metadata.preserve?).to be false
     end
   end
 
@@ -98,6 +106,10 @@ describe FileMetadata do
     it "determines if the FileMetadata if for a copy of a binary for preservation in a (BagIt)" do
       expect(file_metadata.preservation_copy?).to be true
     end
+
+    it "returns true for #preserved?" do
+      expect(file_metadata.preserve?).to be true
+    end
   end
 
   describe "intermediate_file?" do
@@ -106,6 +118,10 @@ describe FileMetadata do
     it "determines if the FileMetadata is for an intermediate file" do
       expect(file_metadata.intermediate_file?).to be true
     end
+
+    it "returns true for #preserved?" do
+      expect(file_metadata.preserve?).to be true
+    end
   end
 
   describe "#cloud_derivative?" do
@@ -113,6 +129,10 @@ describe FileMetadata do
 
     it "determines if the FileMetadata is for a derivative file" do
       expect(file_metadata.cloud_derivative?).to be true
+    end
+
+    it "returns false for #preserved?" do
+      expect(file_metadata.preserve?).to be false
     end
   end
 

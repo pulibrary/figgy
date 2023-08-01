@@ -1,8 +1,49 @@
-      <td><%= file.updated_at %></td>
-      <td><%= format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) %>
-          <br/>Last Success: <%= resource.decorate.local_fixity_last_success_date_of(file.id) %></td>
-      <td><%= format_cloud_fixity_success(resource.decorate.cloud_fixity_success_of(file.id)) %>
-          <br/>Last Success: <%= resource.decorate.cloud_fixity_last_success_date_of(file.id) %></td>
+      <td>
+        <% unless file.updated_at.nil? %>
+          <%= file.updated_at.strftime("%b %d, %Y @ %I:%M %P") %>
+        <% end %>
+      </td>
+      <td
+        <% if file.preserve? %>
+            class="preserved"
+        <% else %>
+            class="not_preserved"
+        <% end %>
+      >
+        <% if file.preserve? %>
+          <% if resource.decorate.local_fixity_success_of(file.id).nil? %>
+            <lux-icon-base width="30"  height="30" icon-name="alert" icon-color="yellow">
+              <lux-icon-alert></lux-icon-alert>
+            </lux-icon-base>
+          <% elsif resource.decorate.local_fixity_success_of(file.id) == 1 %>
+            <lux-icon-base width="30" height="30" icon-name="approved" icon-color="green">
+              <lux-icon-approved></lux-icon-approved>
+            </lux-icon-base>
+          <% elsif resource.decorate.local_fixity_success_of(file.id) == 0 %>
+            <lux-icon-base width="30" height="30" icon-name="denied" icon-color="red">
+              <lux-icon-denied></lux-icon-denied>
+            </lux-icon-base>
+          <% end %>
+          <%= format_fixity_success(resource.decorate.local_fixity_success_of(file.id)) %>
+          <br/>Last Success: <%= resource.decorate.local_fixity_last_success_date_of(file.id) %>
+        <% else %>
+          Derivative files are not preserved.
+        <% end %>
+      </td>
+      <td
+        <% if file.preserve? %>
+            class="preserved"
+        <% else %>
+            class="not_preserved"
+        <% end %>
+      >
+        <% if file.preserve? %>
+          <%= format_cloud_fixity_success(resource.decorate.cloud_fixity_success_of(file.id)) %>
+          <br/>Last Success: <%= resource.decorate.cloud_fixity_last_success_date_of(file.id) %>
+        <% else %>
+          Derivative files are not preserved.
+        <% end %>
+      </td>
       <% if can?(:download, resource) %>
         <td><%= link_to "Download", download_path(resource.id, file.id) %></td>
       <% else %>
