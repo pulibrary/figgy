@@ -56,6 +56,7 @@ Rails.application.config.to_prepare do
     :ingest_adapter
   )
 
+  Google::Cloud::Storage.configure.timeout = 36_000 # 10 hour timeout
   if ENV["STORAGE_PROJECT"] && ENV["STORAGE_CREDENTIALS"] && !Rails.env.test?
     Shrine.storages = {
       preservation: Shrine::Storage::GoogleCloudStorage.new(bucket: Figgy.config["preservation_bucket"]),
