@@ -107,7 +107,20 @@ RSpec.describe EphemeraVocabulariesController, type: :controller do
       let(:factory) { :ephemera_vocabulary }
       it_behaves_like "an access controlled destroy request"
     end
-    it "can delete a book" do
+
+    it "doesn't let you delete a vocabulary with members" do
+      ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
+      FactoryBot.create_for_repository(:ephemera_term, member_of_vocabulary_id: ephemera_vocabulary.id)
+
+      delete :destroy, params: { id: ephemera_vocabulary.id.to_s }
+
+      ephemera_vocabulary = query_service.find_by(id: ephemera_vocabulary.id)
+      expect(ephemera_vocabulary).to be_present
+      expect(flash["alert"]).to eq "Unable to delete a vocabulary with members."
+      expect(response).to redirect_to "/catalog/#{ephemera_vocabulary.id}"
+    end
+
+    it "can delete an empty vocabulary" do
       ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
       delete :destroy, params: { id: ephemera_vocabulary.id.to_s }
 
