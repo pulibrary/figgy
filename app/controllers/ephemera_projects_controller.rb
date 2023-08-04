@@ -28,6 +28,18 @@ class EphemeraProjectsController < ResourcesController
     end
   end
 
+  def around_delete_action
+    # Only allow deleting empty projects. Avoids difficulty of restoring a
+    # full project from preservation and supporting restoring accidentally
+    # deleted projects.
+    if @change_set.resource.member_ids.present?
+      flash[:alert] = "Unable to delete a project with members."
+      redirect_to solr_document_path(@change_set.resource.id.to_s)
+    else
+      yield
+    end
+  end
+
   private
 
     def helper

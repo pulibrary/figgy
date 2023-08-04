@@ -130,7 +130,20 @@ RSpec.describe EphemeraProjectsController, type: :controller do
       let(:factory) { :ephemera_project }
       it_behaves_like "an access controlled destroy request"
     end
-    it "can delete a book" do
+
+    it "doesn't let you delete a project with members" do
+      folder = FactoryBot.create_for_repository(:ephemera_folder)
+      ephemera_project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [folder.id])
+
+      delete :destroy, params: { id: ephemera_project.id.to_s }
+
+      ephemera_project = query_service.find_by(id: ephemera_project.id)
+      expect(ephemera_project).to be_present
+      expect(flash["alert"]).to eq "Unable to delete a project with members."
+      expect(response).to redirect_to "/catalog/#{ephemera_project.id}"
+    end
+
+    it "can delete an empty project" do
       ephemera_project = FactoryBot.create_for_repository(:ephemera_project)
       delete :destroy, params: { id: ephemera_project.id.to_s }
 
