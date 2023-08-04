@@ -207,4 +207,30 @@ RSpec.describe ScannedResourceChangeSet do
       expect(change_set).to respond_to(:complainant_appellant)
     end
   end
+
+  describe "#preserve?" do
+    context "in a complete state" do
+      let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource) }
+
+      it "preserves" do
+        expect(change_set.preserve?).to be true
+      end
+    end
+
+    context "in flagged state" do
+      let(:scanned_resource) { FactoryBot.create_for_repository(:flagged_scanned_resource) }
+
+      it "preserves" do
+        expect(change_set.preserve?).to be true
+      end
+    end
+
+    context "in a pending state" do
+      let(:scanned_resource) { FactoryBot.create_for_repository(:pending_scanned_resource) }
+
+      it "does not preserve" do
+        expect(change_set.preserve?).to be false
+      end
+    end
+  end
 end
