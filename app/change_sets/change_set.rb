@@ -111,7 +111,7 @@ class ChangeSet < Valkyrie::ChangeSet
     if parent.present? && parent.id != resource.id
       ChangeSet.for(parent).try(:preserve?)
     elsif resource.respond_to?(:state)
-      state == "complete"
+      resource.decorate.public_readable_state?
     else
       true
     end
