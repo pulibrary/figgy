@@ -26,7 +26,8 @@ RSpec.describe DeleteDuplicateFixityEvents do
         FactoryBot.create_for_repository(:cloud_fixity_event, child_property: "binary_node", resource_id: ids.first, child_id: Valkyrie::ID.new(SecureRandom.uuid), current: true)
 
         expect(query_service.find_all_of_model(model: Event).count).to eq 7
-        query.delete_duplicate_fixity_events
+        deletion_count = query.delete_duplicate_fixity_events
+        expect(deletion_count).to eq 2
         events = query_service.find_all_of_model(model: Event)
         expect(events.count).to eq 5
         events_to_create.each do |tuple|

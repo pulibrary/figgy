@@ -12,8 +12,9 @@ class DeleteDuplicateFixityEvents
     @query_service = query_service
   end
 
+  # @return the number of rows deleted
   def delete_duplicate_fixity_events
-    query_service.connection << delete_query
+    query_service.connection[delete_query].all.count
   end
 
   def delete_query
@@ -27,6 +28,7 @@ class DeleteDuplicateFixityEvents
       AND a.metadata @> '{"type":["cloud_fixity"],"current":[true],"child_property":["metadata_node"]}'
       AND b.metadata @> '{"type":["cloud_fixity"],"current":[true],"child_property":["metadata_node"]}'
       AND a.created_at < b.created_at
+      RETURNING a.id
     SQL
   end
 end
