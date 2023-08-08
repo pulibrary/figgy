@@ -135,7 +135,6 @@ module GeoDiscovery
           "http://schema.org/thumbnailUrl" => thumbnail,
           "http://www.opengis.net/def/serviceType/ogc/wms" => wms_path,
           "http://www.opengis.net/def/serviceType/ogc/wfs" => wfs_path,
-          "http://www.opengis.net/def/serviceType/ogc/wcs" => wcs_path,
           "http://iiif.io/api/image" => iiif,
           "http://iiif.io/api/presentation#manifest" => iiif_manifest,
           "http://www.opengis.net/def/serviceType/ogc/wmts" => wmts_path,
