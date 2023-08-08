@@ -38,6 +38,7 @@ class PDFDerivativeService
     resource = parent
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       files.each_slice(50) do |file_slice|
+        GC.start
         change_set = ChangeSet.for(resource)
         change_set.validate(files: file_slice)
         resource = buffered_change_set_persister.save(change_set: change_set)
