@@ -26,15 +26,27 @@
       <div class="spacer">
       </div>
     </div>
+  <div class="fm_errors">
+    <% if f.object.model.error_message.present? %>
+      <div class="fm_error warn">
+        <lux-icon-base width="24"  height="24" icon-name="warning" icon-color="#f8a000">
+          <lux-icon-alert></lux-icon-alert>
+        </lux-icon-base>
+        <span>
+          <% if geo_metadata_file?(node) %>
+            Extracting Metadata
+          <% else %>
+            Repairing Derivatives
+          <% end %>
+        </span>
+      </div>
+    <% end %>
+    <div class="fm_error err">
+      <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
+        <lux-icon-denied></lux-icon-denied>
+      </lux-icon-base>
+      <span>Local Fixity Failed | <a href="foo">Report</a></span>
+    </div>
+  </div>
   <% end %>
-  <% if geo_metadata_file?(node) %>
-    <%= render "geo_extract_metadata", node: node %>
-  <% else %>
-    <%= render "file_manager_derivatives", node: node %>
-  <% end %>
-  <div class="fm_error">
-    <lux-icon-base width="24"  height="24" icon-name="alert" icon-color="#f8a000">
-      <lux-icon-alert></lux-icon-alert>
-    </lux-icon-base>
-    <span>Repairing Derviatives</span></div>
 </div>
