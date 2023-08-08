@@ -42,6 +42,7 @@ class PDFDerivativeService
         change_set = ChangeSet.for(resource)
         change_set.validate(files: file_slice)
         resource = buffered_change_set_persister.save(change_set: change_set)
+        file_slice.each(&:close)
       end
     end
   end
