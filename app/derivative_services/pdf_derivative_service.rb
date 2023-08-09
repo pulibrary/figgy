@@ -37,7 +37,7 @@ class PDFDerivativeService
   def add_file_sets(files)
     resource = parent
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
-      files.each_slice(200) do |file_slice|
+      files.each_slice(page_slice) do |file_slice|
         change_set = ChangeSet.for(resource)
         change_set.validate(files: file_slice)
         resource = buffered_change_set_persister.save(change_set: change_set)
@@ -77,19 +77,18 @@ class PDFDerivativeService
     @resource ||= query_service.find_by(id: id)
   end
 
+  def page_slice
+    50
+  end
+
   def convert_pages
     image = Vips::Image.pdfload(filename, access: :sequential, memory: true)
     pages = image.get_value("pdf-n_pages")
     files = Array.new(pages).lazy.each_with_index.map do |_, page|
-      # Ruby's set to mark and sweep for GC, and we can't explicitly close VIPS
-      # references. The file handles aren't freed up until the garbage collector
-      # runs, but it's 4 handles per VIPS access. So force a GC to keep the
-      # handles low.
-      # See https://github.com/libvips/ruby-vips/issues/67
-      GC.start
-      page_image = Vips::Image.new_from_file(filename, access: :sequential, memory: true, page: page, dpi: 300)
+      # Extract the slice of images to disk if we're on an index where it's
+      # necessary.
       location = temporary_output(page).to_s
-      page_image.tiffsave(location)
+      `vips pdfload #{filename} #{location} --page #{page} --n 1 --dpi 300 --access sequential`
       build_file(page + 1, location)
     end
     files
