@@ -24,8 +24,6 @@ class IngestableFile < Valkyrie::Resource
   #   various bulk ingest jobs.
   attribute :copy_before_ingest, Valkyrie::Types::Bool
 
-  delegate :close, to: :file
-
   def content_type
     mime_type
   end
@@ -37,8 +35,9 @@ class IngestableFile < Valkyrie::Resource
 
   def close
     # Clean up all the file handles.
-    opened_file.try(:close) if File.exist?(path)
-    file.try(:close) if File.exist?(file_path)
+    opened_file.try(:close) if @opened_file
+    file.try(:close) if @file
+    copied_temp_file.try(:close) if @copied_temp_file
   end
 
   private
