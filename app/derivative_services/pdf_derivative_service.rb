@@ -85,8 +85,6 @@ class PDFDerivativeService
     image = Vips::Image.pdfload(filename, access: :sequential, memory: true)
     pages = image.get_value("pdf-n_pages")
     files = Array.new(pages).lazy.each_with_index.map do |_, page|
-      # Extract the slice of images to disk if we're on an index where it's
-      # necessary.
       location = temporary_output(page).to_s
       `vips pdfload #{filename} #{location} --page #{page} --n 1 --dpi 300 --access sequential`
       build_file(page + 1, location)
