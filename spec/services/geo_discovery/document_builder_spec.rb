@@ -417,8 +417,8 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
       # References
       refs = JSON.parse(document["dct_references_s"])
-      expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
-      expect(refs["http://www.opengis.net/def/serviceType/ogc/wcs"]).to match(/geoserver\/public-figgy\/wcs/)
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to be_nil
+      expect(refs["http://www.opengis.net/def/serviceType/ogc/wcs"]).to be_nil
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to match(/WMTSCapabilities/)
       expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to match(/tiles/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to be_nil

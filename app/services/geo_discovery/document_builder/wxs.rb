@@ -35,13 +35,6 @@ module GeoDiscovery
         "#{path}/#{@config[visibility][:workspace]}/wfs"
       end
 
-      # Returns the wfc server url.
-      # @return [String] wcs server url
-      def wcs_path
-        return unless @config && visibility && file_set && raster_file_set?
-        "#{path}/#{@config[visibility][:workspace]}/wcs"
-      end
-
       # Returns the wmts server url.
       # @return [String] wmts server url
       def wmts_path
@@ -73,20 +66,13 @@ module GeoDiscovery
         # Determines if the wms path should be generated
         # @return [Boolean]
         def generate_wms_path?
-          @config && visibility && file_set && (raster_file_set? || vector_file_set?)
+          @config && visibility && file_set && vector_file_set?
         end
 
         # Geoserver base url.
         # @return [String] geoserver base url
         def path
           @config[:url].chomp("/rest")
-        end
-
-        # Tests if the file set is a valid raster format.
-        # @return [Bool]
-        def raster_file_set?
-          return unless file_set
-          ControlledVocabulary.for(:geo_raster_format).include? file_set_mime_type
         end
 
         # Tests if the file set is a valid vector format.
