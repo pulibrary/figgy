@@ -1,4 +1,9 @@
 import UVManager from '@viewer/uv_manager'
 import 'leaflet/dist/leaflet.css'
 const UVManagerInstance = new UVManager()
-UVManagerInstance.initialize()
+let timer = window.setInterval(() => {
+  if (window.Hls !== undefined) {
+    UVManagerInstance.initialize()
+    window.clearInterval(timer)
+  }
+}, 5)
