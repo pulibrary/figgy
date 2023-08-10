@@ -8,6 +8,16 @@ RSpec.shared_examples "a workflow controller" do |factory_resource|
     expect(reloaded.workflow_note.first.author).to eq ["Shakespeare"]
     expect(reloaded.workflow_note.first.note).to eq ["Test"]
   end
+
+  it "adds a confetti-triggering flash when resource is completed" do
+    stub_ezid
+    resource = FactoryBot.create_for_repository(factory_resource)
+    skip("No Complete state to confetti for #{resource.class}") unless ChangeSet.for(resource).workflow.valid_states.include?("complete")
+
+    patch :update, params: { id: resource.id.to_s, resource.model_name.singular.to_sym => { state: "complete" } }
+
+    expect(flash[:confetti]).to eq true
+  end
   it "doesn't create a workflow note with an empty note" do
     resource = FactoryBot.create_for_repository(factory_resource)
 

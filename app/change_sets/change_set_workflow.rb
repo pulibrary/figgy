@@ -32,11 +32,11 @@ module ChangeSetWorkflow
     end
 
     def new_state
-      Array.wrap(state).first
+      @new_state ||= Array.wrap(state).first
     end
 
     def old_state
-      Array.wrap(model.state).first
+      @old_state ||= Array.wrap(model.state).first
     end
   end
 end

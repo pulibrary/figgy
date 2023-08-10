@@ -108,6 +108,7 @@ class ResourcesController < ApplicationController
       obj = nil
       change_set_persister.buffer_into_index do |persist|
         obj = persist.save(change_set: @change_set)
+        flash[:confetti] = true if @change_set.try(:state_changed?) && @change_set.new_state == "complete"
       end
       after_update_success(obj, @change_set)
     else
