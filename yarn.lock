@@ -8627,10 +8627,10 @@ universalify@^0.2.0:
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.2.0.tgz#6451760566fa857534745ab1dde952d1b1761be0"
   integrity sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg==
 
-universalviewer@^4.0.19:
-  version "4.0.25"
-  resolved "https://registry.yarnpkg.com/universalviewer/-/universalviewer-4.0.25.tgz#c2c937a6205b4c49f9530833e921f86d84f92122"
-  integrity sha512-3f6kH55Gk6Ke0OQjy9X4t21VjVO+FEOfiVnYwZ5+CodQonMAx+2SiwKFWW4L+VdFkyFd5Eb93darhdd9MPektA==
+universalviewer@^4.0.22:
+  version "4.0.22"
+  resolved "https://registry.yarnpkg.com/universalviewer/-/universalviewer-4.0.22.tgz#4e89a97638194ed6f0dad484bbe7717efb0fafda"
+  integrity sha512-B+tb61vPCwieYWtUwOKNV002RodFoM0p8rYliZ0ElDaDk1tkwYOzeUlTpdmZAkjT+hSUOXb2W67clLv45iHSvQ==
   dependencies:
     "@edsilv/http-status-codes" "1.0.3"
     "@edsilv/key-codes" "1.0.0"
