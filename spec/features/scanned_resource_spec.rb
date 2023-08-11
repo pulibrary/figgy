@@ -57,6 +57,5 @@ RSpec.feature "Scanned Resource" do
     click_button("Submit")
 
     expect(page).to have_selector("*[data-confetti-trigger]")
-
   end
 end
