@@ -13,6 +13,8 @@ import ParentResourcesTables from '@figgy/relationships/parent_resources_table'
 import BulkLabeler from '@figgy/bulk_labeler/bulk_label'
 import BoundingBoxSelector from '@figgy/bounding_box_selector'
 import FieldManager from '@figgy/field_manager'
+import Confetti from 'canvas-confetti'
+
 export default class Initializer {
   constructor() {
     this.initialize_form()
@@ -37,6 +39,7 @@ export default class Initializer {
     $("select:not(.select2)").selectpicker({'liveSearch': true})
 
     this.initialize_datatables()
+    this.do_confetti()
   }
 
   initialize_timepicker() {
@@ -205,5 +208,30 @@ export default class Initializer {
         $('#embargo-date-picker').hide();
       }
     });
+  }
+
+  do_confetti() {
+    if ($('*[data-confetti-trigger]').length > 0) {
+      var duration = 5 * 1000; // 5 seconds
+      var animationEnd = Date.now() + duration;
+      var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, disableForReducedMotion: true };
+
+      function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      var interval = setInterval(function() {
+        var timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        var particleCount = 50 * (timeLeft / duration);
+        // since particles fall down, start a bit higher than random
+        Confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+        Confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+      }, 250);
+    }
   }
 }
