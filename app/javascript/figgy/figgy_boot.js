@@ -214,7 +214,7 @@ export default class Initializer {
     if ($('*[data-confetti-trigger]').length > 0) {
       var duration = 5 * 1000; // 5 seconds
       var animationEnd = Date.now() + duration;
-      var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+      var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, disableForReducedMotion: true };
 
       function randomInRange(min, max) {
         return Math.random() * (max - min) + min;
