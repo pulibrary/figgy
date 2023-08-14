@@ -33,11 +33,7 @@
           <lux-icon-alert></lux-icon-alert>
         </lux-icon-base>
         <span>
-          <% if geo_metadata_file?(node) %>
-            Extracting Metadata
-          <% else %>
-            Repairing Derivatives
-          <% end %>
+          Repairing Derivatives
         </span>
       </div>
     <% end %>
@@ -45,7 +41,8 @@
       <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
         <lux-icon-denied></lux-icon-denied>
       </lux-icon-base>
-      <span>Local Fixity Failed | <a href="foo">Report</a></span>
+      <span>
+        Local Fixity Failed | <a href="foo">Report</a></span>
     </div>
   </div>
   <% end %>
