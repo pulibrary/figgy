@@ -34,6 +34,19 @@ class ReportsController < ApplicationController
     end
   end
 
+  def collection_item_and_image_count
+    authorize! :show, Report
+    @report = ImageReportGenerator.new(collection_ids: ["f5bd03b1-6585-4f59-acbe-9a17bde6563a"], date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
+    @report.write(path: Rails.root.join("tmp", "output.csv"))
+    @read = CSV.read(Rails.root.join("tmp", "output.csv"), headers: true, header_converters: :symbol)
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data @read.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
+      end
+    end
+  end
+
   def pulfa_ark_report
     authorize! :show, Report
     if params[:since_date].present?
@@ -65,6 +78,10 @@ class ReportsController < ApplicationController
       @identifiers_to_reconcile ||= query_service.custom_queries.find_identifiers_to_reconcile.select do |r|
         PulMetadataServices::Client.catalog?(r.source_metadata_identifier.first)
       end
+    end
+
+    def find_resource(id)
+      query_service.find_by(id: Valkyrie::ID.new(id))
     end
 
     def find_resource(id)

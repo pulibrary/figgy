@@ -1,0 +1,40 @@
+<h2>Collection Item and Image Count</h2>
+
+<p>
+  <%= link_to "Download CSV", collection_item_and_image_count_path(format: :csv) %>
+</p>
+
+<%
+@report = ImageReportGenerator.new(collection_ids: ["f5bd03b1-6585-4f59-acbe-9a17bde6563a"], date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
+@report.write(path: Rails.root.join("tmp", "output.csv"))
+@read = CSV.read(Rails.root.join("tmp", "output.csv"), headers: true, header_converters: :symbol)
+%>
+
+<table class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>Open Titles</th>
+      <th>Private Titles</th>
+      <th>Reading Room Titles</th>
+      <th>Princeton Only Titles</th>
+      <th>Open Image Count</th>
+      <th>Private Image Count</th>
+      <th>Reading Room Image Count</th>
+      <th>Princeton Only Image Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @read.each do |r| %>
+      <tr>
+        <td><%= r[:open_titles] %></td>
+        <td><%= r[:private_titles] %></td>
+        <td><%= r[:reading_room_titles] %></td>
+        <td><%= r[:princeton_only_titles] %></td>
+        <td><%= r[:open_image_count] %></td>
+        <td><%= r[:private_image_count] %></td>
+        <td><%= r[:reading_room_image_count] %></td>
+        <td><%= r[:princeton_only_image_count] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
