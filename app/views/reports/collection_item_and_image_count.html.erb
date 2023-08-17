@@ -1,5 +1,14 @@
 <h2>Collection Item and Image Count</h2>
+
+<%= form_with(url: collection_item_and_image_count_path, method: :get, local: true) do |f| %>
+  <%= f.label :collection_ids, "Collection IDs:" %>
+  <%= f.text_field :collection_ids %>
+  <%= f.label :collection_ids, "Date Range:" %>
+  <%= f.text_field :date_range %>
+  <%= f.submit("View") %>
+<% end %>
 <% if @report %>
+<hr/>
 <p>
   <%= link_to "Download CSV", collection_item_and_image_count_path(params: {collection_ids: params[:collection_ids], date_range: params[:date_range]}, format: :csv) %>
 </p>
@@ -34,13 +43,4 @@
     <% end %>
   </tbody>
 </table>
-<% else %>
-  <%= form_with(url: collection_item_and_image_count_path, method: :get, local: true) do |f| %>
-    <%= f.label :collection_ids, "Collection IDs:" %>
-    <%= f.text_field :collection_ids %>
-    <%= f.label :collection_ids, "Date Range:" %>
-    <%= f.text_field :date_range %>
-    <%= f.submit("View") %>
-  <% end %>
-  <lux-date-picker id="dateRange" name="daterange" label="Date Range" mode="range" :disabled-dates="[{ start: null, end: new Date(2019, 05, 01)}, { start: new Date(), end: null }]"  placeholder="01/10/2020" />
 <% end %>
