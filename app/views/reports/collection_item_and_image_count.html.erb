@@ -1,18 +1,13 @@
 <h2>Collection Item and Image Count</h2>
-
+<% if @report %>
 <p>
-  <%= link_to "Download CSV", collection_item_and_image_count_path(format: :csv) %>
+  <%= link_to "Download CSV", collection_item_and_image_count_path(params: {collection_ids: params[:collection_ids], date_range: params[:date_range]}, format: :csv) %>
 </p>
-
-<%
-@report = ImageReportGenerator.new(collection_ids: ["f5bd03b1-6585-4f59-acbe-9a17bde6563a"], date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
-@report.write(path: Rails.root.join("tmp", "output.csv"))
-@read = CSV.read(Rails.root.join("tmp", "output.csv"), headers: true, header_converters: :symbol)
-%>
 
 <table class="table table-striped datatable">
   <thead>
     <tr>
+      <th>Figgy Collection (<%= params[:date_range] %>)</th>
       <th>Open Titles</th>
       <th>Private Titles</th>
       <th>Reading Room Titles</th>
@@ -24,8 +19,9 @@
     </tr>
   </thead>
   <tbody>
-    <% @read.each do |r| %>
+    <% @report.to_h.each do |r| %>
       <tr>
+        <td><%= r[:figgy_collection] %></td>
         <td><%= r[:open_titles] %></td>
         <td><%= r[:private_titles] %></td>
         <td><%= r[:reading_room_titles] %></td>
@@ -38,3 +34,13 @@
     <% end %>
   </tbody>
 </table>
+<% else %>
+  <%= form_with(url: collection_item_and_image_count_path, method: :get, local: true) do |f| %>
+    <%= f.label :collection_ids, "Collection IDs:" %>
+    <%= f.text_field :collection_ids %>
+    <%= f.label :collection_ids, "Date Range:" %>
+    <%= f.text_field :date_range %>
+    <%= f.submit("View") %>
+  <% end %>
+  <lux-date-picker id="dateRange" name="daterange" label="Date Range" mode="range" :disabled-dates="[{ start: null, end: new Date(2019, 05, 01)}, { start: new Date(), end: null }]"  placeholder="01/10/2020" />
+<% end %>

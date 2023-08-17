@@ -36,13 +36,21 @@ class ReportsController < ApplicationController
 
   def collection_item_and_image_count
     authorize! :show, Report
-    @report = ImageReportGenerator.new(collection_ids: ["f5bd03b1-6585-4f59-acbe-9a17bde6563a"], date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
-    @report.write(path: Rails.root.join("tmp", "output.csv"))
-    @read = CSV.read(Rails.root.join("tmp", "output.csv"), headers: true, header_converters: :symbol)
+    if params[:collection_ids].present? #&& params[:date_range].present?
+      collection_ids = params[:collection_ids].gsub(" ","").split(",")
+      date_range = params[:date_range].gsub(" ","").split("-")
+      s_array = date_range.first.split("/")
+      e_array = date_range.last.split("/")
+      start_date = s_array[2] + "-" + s_array[0] + "-" + s_array[1]
+      end_date = e_array[2] + "-" + e_array[0] + "-" + e_array[1]
+      #{date_range.first.to_date} - #{date_range.last.to_date}
+      #@report = ImageReportGenerator.new(collection_ids: collection_ids, date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
+      @report = ImageReportGenerator.new(collection_ids: collection_ids, date_range: start_date.to_date..end_date.to_date)
+    end
     respond_to do |format|
       format.html
       format.csv do
-        send_data @read.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
+        send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
       end
     end
   end
