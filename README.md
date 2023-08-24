@@ -201,9 +201,12 @@ There are two types of read-only mode.
 
 ### Read-only Mode
 
-This disables writing to the Postgres database. There's a playbook to switch it
-on and off in Ansible. Documentation can be found here:
-[https://github.com/pulibrary/princeton_ansible/blob/9d63e9b7f5c7af358ec439d0226372e241d490d6/playbooks/figgy_toggle_readonly.yml#L5](https://github.com/pulibrary/princeton_ansible/blob/9d63e9b7f5c7af358ec439d0226372e241d490d6/playbooks/figgy_toggle_readonly.yml#L5)
+Read-only mode disables writing to the Postgres database. Use princeton_ansible to activate it:
+* change the `figgy_read_only_mode` value in the relevant group_vars file (example: https://github.com/pulibrary/princeton_ansible/blob/9ccaadf336ddac973c4c18e836d46d445f15d38f/group_vars/figgy/staging.yml#L30)
+* run the figgy playbook on the relevant environment using the command line switch `--tags=site_config` (this will also restart the site; visit it in browser to confirm)
+* run the 'sidekiq:restart' cap task for the relevant environment to ensure workers all have the switch loaded correctly
+
+Known issue: In read-only mode users cannot download pdfs (unless they've been cached). See #2866
 
 ### Index Read-Only
 
