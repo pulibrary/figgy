@@ -5,33 +5,16 @@ require "open3"
 RSpec.describe GeoDerivatives::Processors::Raster::Info do
   let(:processor) { described_class.new(path) }
   let(:path) { "test.tif" }
-  let(:info_doc) { file_fixture("files/gdal/gdalinfo.txt").read }
+  let(:info_doc) { file_fixture("files/gdal/gdalinfo.json").read }
 
-  context "when initializing a new info class" do
-    before do
-      allow(Open3).to receive(:capture3).and_return([info_doc, "", ""])
-    end
-
-    it "shells out to gdalinfo and sets the doc variable to the output string" do
-      expect(processor.doc).to eq(info_doc)
-      expect(Open3).to have_received(:capture3).with("gdalinfo", "-mm", path.to_s)
-    end
+  before do
+    allow(Open3).to receive(:capture3).and_return([info_doc, "", ""])
   end
 
   context "after intialization" do
-    before do
-      allow(processor).to receive(:doc).and_return(info_doc)
-    end
-
     describe "#driver" do
       it "returns the gdal driver" do
-        expect(processor.driver).to eq("USGSDEM/USGS")
-      end
-    end
-
-    describe "#min_max" do
-      it "returns with min and max values" do
-        expect(processor.min_max).to eq("354.000 900.000")
+        expect(processor.driver).to eq("USGSDEM")
       end
     end
 
@@ -43,10 +26,29 @@ RSpec.describe GeoDerivatives::Processors::Raster::Info do
 
     describe "#bounds" do
       it "returns bounds hash" do
-        expect(processor.bounds).to eq(north: 42.11273,
-                                       east: 74.394897,
-                                       south: 42.088583,
-                                       west: 74.432166)
+        expect(processor.bounds).to eq(north: 42.112773,
+                                       east: -74.394294,
+                                       south: 42.088625,
+                                       west: -74.432005)
+      end
+
+      context "when a raster is located in the southern hemisphere" do
+        let(:info_doc) { file_fixture("files/gdal/gdalinfo-southern.json").read }
+
+        it "returns bounds hash" do
+          expect(processor.bounds).to eq(north: -13.506975,
+                                         east: -71.966924,
+                                         south: -13.528812,
+                                         west: -71.991192)
+        end
+      end
+    end
+
+    describe "#min_max" do
+      let(:info_doc) { file_fixture("files/gdal/gdalinfo-aig.json").read }
+
+      it "returns with min and max values" do
+        expect(processor.min_max).to eq("2.054 11.717")
       end
     end
 
@@ -79,7 +81,7 @@ RSpec.describe GeoDerivatives::Processors::Raster::Info do
     end
 
     context "when processor is run against a non-geo tiff" do
-      let(:info_doc) { file_fixture("files/gdal/gdalinfo-no-geo-tiff.txt").read }
+      let(:info_doc) { file_fixture("files/gdal/gdalinfo-no-geo-tiff.json").read }
 
       describe "#bounds" do
         it "returns an empty string" do

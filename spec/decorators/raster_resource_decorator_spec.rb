@@ -214,7 +214,7 @@ RSpec.describe RasterResourceDecorator do
         coverage: []
       )
     end
-    let(:coverage) { "northlimit=9.01; eastlimit=11.21; southlimit=0.000002; westlimit=0.000002; units=degrees; projection=EPSG:4326" }
+    let(:coverage) { "northlimit=9.01; eastlimit=11.21; southlimit=0; westlimit=0; units=degrees; projection=EPSG:4326" }
 
     it "returns coverage from the raster file" do
       expect(decorator.coverage).to eq(coverage)
