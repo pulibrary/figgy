@@ -56,6 +56,20 @@ RSpec.describe "ScannedResource requests", type: :request do
     end
   end
 
+  # Added a more generic check because Read Only Mode might throw an error.
+  context "when the PDF is generated but something prevents a save" do
+    it "serves the generated PDF anyway" do
+      buffered_csp_mock = instance_double(ChangeSetPersister::Basic)
+      allow(buffered_csp_mock).to receive(:save).and_raise("something weird happened")
+      csp_mock = instance_double(ChangeSetPersister::Basic)
+      allow(csp_mock).to receive(:buffer_into_index).and_yield(buffered_csp_mock)
+      pdf_service = PDFService.new(csp_mock)
+      allow(PDFService).to receive(:new).and_return(pdf_service)
+      expect { get "/concern/scanned_resources/#{scanned_resource.id}/pdf" }.not_to raise_error
+      expect(response.status).to eq 302
+    end
+  end
+
   context "when the file metadata for the PDF exists but the file binary cannot be retrieved" do
     before do
       allow(Valkyrie.logger).to receive(:error)

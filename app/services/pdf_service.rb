@@ -19,10 +19,13 @@ class PDFService
         change_set.validate(file_metadata: [pdf_file])
         buffered_changeset_persister.save(change_set: change_set)
       # rubocop:disable Lint/SuppressedException
-      rescue Valkyrie::Persistence::StaleObjectError
+      rescue
         # If a user initiatves PDF generation, waits, then gives up and tries again,
         # the second one may fail because the first one successfully generated the PDF
         # and then saved before the second one did. Just serve the generated PDF.
+        # This might also fail because of Read Only - we never want to prevent
+        # the user getting the PDF even if we can't cache it, so just always
+        # serve it.
       end
       # rubocop:enable Lint/SuppressedException
     end
