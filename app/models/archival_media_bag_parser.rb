@@ -5,10 +5,15 @@ class ArchivalMediaBagParser
   BARCODE_WITH_SIDE_AND_PART_REGEX = /(\d{14}_\d+?_p\d+).*/
   attr_reader :path, :component_dict
 
-  def initialize(path:, component_id:, barcodes: nil)
+  def initialize(path:, component_id: nil, barcodes: nil)
     @path = path
-    @component_dict = BarcodeComponentDict.new(component_id)
+    @component_id = component_id
+    @component_dict = BarcodeComponentDict.new(self.component_id)
     @barcodes = barcodes
+  end
+
+  def component_id
+    @component_id ||= path.basename.to_s.split("_").first.upcase
   end
 
   # Constructs IngestableAudioFile objects for each wav/mp3 file in the Bag
