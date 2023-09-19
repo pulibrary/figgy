@@ -1,9 +1,4 @@
-<h2>
-  Bulk Ingest <%= @resource_class.human_readable_type.pluralize %>
-  <% if @resource_class == ScannedResource %>
-     or Vendor Bags
-  <% end %>
-</h2>
+<h2>Bulk Ingest <%= @resource_class.human_readable_type.pluralize %></h2>
 
 <div class="col-md-12">
   <%= form_tag polymorphic_path([main_app, :bulk_ingest], resource_type: params[:resource_type].to_s), class: "bulk-ingest-form", id: "browse-everything-form" do |f| %>

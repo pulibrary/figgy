@@ -11,7 +11,6 @@ RSpec.describe IngestArchivalMediaBagJob do
   let(:query_service) { adapter.query_service }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:collection_cid) { "C0652" }
-  let(:collection) { FactoryBot.create_for_repository(:collection, source_metadata_identifier: "C0652") }
 
   before do
     stub_findingaid(pulfa_id: "C0652")
@@ -21,15 +20,7 @@ RSpec.describe IngestArchivalMediaBagJob do
   context "general functionality" do
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag") }
     before do
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [collection.id.to_s])
-    end
-
-    context "when not given a collection_component" do
-      let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "bulk_ingest", "c0652_2017_05_bag") }
-      let(:collection_cid) { nil }
-      it "pulls it from the bag path" do
-        expect(query_service.find_all_of_model(model: FileSet).map(&:title)).to include ["32101047382401_1"], ["32101047382401_2"]
-      end
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "creates one FileSet per barcode (with part, e.g., 32101047382401_1)" do
@@ -74,11 +65,13 @@ RSpec.describe IngestArchivalMediaBagJob do
 
   describe "visibility settings" do
     before do
-      coll = FactoryBot.create_for_repository(:collection)
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, visibility: vis_auth, member_of_collection_ids: [coll.id])
+      cs = ChangeSet.for(Collection.new(change_set: "archival_media_collection"))
+      cs.validate(source_metadata_identifier: collection_cid, visibility: vis_auth, slug: "test-collection")
+      change_set_persister.save(change_set: cs)
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
-    context "when visbility is set to authenticated" do
+    context "when collection is set to authenticated" do
       let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED }
 
@@ -92,7 +85,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
     end
 
-    context "when visibility is set to public" do
+    context "when collection is set to public" do
       let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC }
 
@@ -105,27 +98,13 @@ RSpec.describe IngestArchivalMediaBagJob do
         ]
       end
     end
-
-    context "when visibility is set to private" do
-      let(:vis_auth) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
-      let(:read_auth) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PRIVATE }
-
-      it "assigns correct visibility and read_groups access control to each resource and file_set" do
-        expect(query_service.find_all_of_model(model: ScannedResource).map(&:visibility)).to contain_exactly [vis_auth], [vis_auth]
-
-        file_sets = query_service.find_all_of_model(model: FileSet)
-        expect(file_sets.map(&:read_groups).to_a).to eq [
-          [], [], [], []
-        ]
-      end
-    end
   end
 
   context "when the bag contains a PBCore XML file" do
     let(:tika_output) { tika_xml_pbcore_output }
 
     before do
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "creates one FileSet with the filename as the title and the correct MIME type" do
@@ -138,7 +117,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     let(:tika_output) { tika_jpeg_output }
 
     before do
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "creates one FileSet with the filename as the title and the correct MIME type" do
@@ -154,7 +133,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     before do
       stub_findingaid(pulfa_id: "C0652_c0383")
 
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "does not have an image FileSet" do
@@ -172,7 +151,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
     before do
       stub_findingaid(pulfa_id: "C0652_c0383")
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "add FileSets for each part" do
@@ -207,9 +186,9 @@ RSpec.describe IngestArchivalMediaBagJob do
       # create the collection
       cs = ChangeSet.for(Collection.new(change_set: "archival_media_collection"))
       cs.validate(source_metadata_identifier: collection_cid, slug: "test-collection")
-      coll = change_set_persister.save(change_set: cs)
+      change_set_persister.save(change_set: cs)
       # ingest to the same collection_cid
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [coll.id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "uses the existing collection" do
@@ -219,7 +198,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
   context "when the collection doesn't exist yet" do
     before do
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "creates a collection for you" do
@@ -238,7 +217,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       # create another resource with the same component id
       FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: collection_cid)
       # ingest to the collection id
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
     end
 
     it "doesn't try to use that other resource as an archival media collection" do
@@ -257,8 +236,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "raises an error" do
-      coll = FactoryBot.create_for_repository(:collection)
-      expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [coll.id]) }.to raise_error(
+      expect { described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user) }.to raise_error(
         IngestArchivalMediaBagJob::InvalidBagError, "Bag at #{bag_path} is an invalid bag"
       )
     end
@@ -271,9 +249,8 @@ RSpec.describe IngestArchivalMediaBagJob do
     before do
       stub_findingaid(pulfa_id: "C0652_c0383")
       stub_findingaid(pulfa_id: "C0652_c0389")
-      coll = FactoryBot.create_for_repository(:collection)
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path1, user: user, member_of_collection_ids: [coll.id.to_s])
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path2, user: user, member_of_collection_ids: [coll.id.to_s])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path1, user: user)
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path2, user: user)
     end
 
     it "uploads all resources to the same collection, giving them different upload set ids" do
@@ -287,7 +264,7 @@ RSpec.describe IngestArchivalMediaBagJob do
   describe "ingesting a bag and applying EAD modeling" do
     context "a single cassette with 2 sides" do
       it "Creates 2 audio FileSets, 1 image FileSet, 1 xml FileSet, and 2 Resources", run_real_characterization: true do
-        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id.to_s])
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         collection = query_service.find_all_of_model(model: Collection).first
         resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
@@ -319,7 +296,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       it "creates a Recording which is put in a filler descriptive proxy" do
         stub_findingaid(pulfa_id: "C0652_c0383")
         stub_findingaid(pulfa_id: "C0652_c0389")
-        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         collection = query_service.find_all_of_model(model: Collection).first
         resources = query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids)
@@ -343,7 +320,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
 
       it "Creates 3 Resources from barcodes, 2 Resources from component IDs", run_real_characterization: true do
-        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         # Ensure there are two descriptive resources.
         collection = query_service.find_all_of_model(model: Collection).first
@@ -421,7 +398,7 @@ RSpec.describe IngestArchivalMediaBagJob do
       end
 
       it "gives all Recordings the same upload set id" do
-        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+        described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user)
 
         expect(query_service.find_all_of_model(model: ScannedResource).map(&:upload_set_id).to_a.uniq.size).to eq 1
       end

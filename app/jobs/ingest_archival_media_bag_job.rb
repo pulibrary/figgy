@@ -10,17 +10,32 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
   BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/
 
-  def perform(collection_component: nil, bag_path:, user:, **attributes)
+  def perform(collection_component:, bag_path:, user:)
     bag_path = Pathname.new(bag_path.to_s)
     # This requires a resource
     bag = ArchivalMediaBagParser.new(path: bag_path, component_id: collection_component)
     raise InvalidBagError, "Bag at #{bag_path} is an invalid bag" unless bag.valid?
     changeset_persister.buffer_into_index do |buffered_persister|
-      Ingester.new(bag: bag, user: user, changeset_persister: buffered_persister, **attributes).ingest
+      amc = find_or_create_amc(collection_component)
+      Ingester.new(collection: amc, bag: bag, user: user, changeset_persister: buffered_persister).ingest
     end
   end
 
   private
+
+    def change_set_class
+      ArchivalMediaCollectionChangeSet
+    end
+
+    def find_or_create_amc(component_id)
+      existing_amc = metadata_adapter.query_service.custom_queries
+                                     .find_by_property(property: :source_metadata_identifier, value: component_id)
+                                     .find { |r| r.is_a? Collection }
+      return existing_amc unless existing_amc.nil?
+      change_set = change_set_class.new(Collection.new)
+      change_set.validate(source_metadata_identifier: component_id)
+      changeset_persister.save(change_set: change_set)
+    end
 
     def changeset_persister
       @changeset_persister ||= ChangeSetPersister.new(metadata_adapter: metadata_adapter,
@@ -38,7 +53,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
 
     # Service Class for ingesting the bag as a procedure
     class Ingester
-      attr_reader :attributes, :bag, :user, :changeset_persister, :upload_set_id
+      attr_reader :collection, :bag, :user, :changeset_persister, :upload_set_id
       delegate :storage_adapter, :metadata_adapter, to: :changeset_persister
       delegate :query_service, to: :metadata_adapter
       delegate :barcode_groups, to: :bag
@@ -48,12 +63,12 @@ class IngestArchivalMediaBagJob < ApplicationJob
       # @param bag [ArchivalMediaBagParser] bag parser Object
       # @param user [User]
       # @param changeset_persister [ChangeSetPersister] persister used for storing the bag
-      def initialize(bag:, user:, changeset_persister:, **attributes)
+      def initialize(collection:, bag:, user:, changeset_persister:)
+        @collection = collection
         @bag = bag
         @user = user
         @changeset_persister = changeset_persister
         @upload_set_id = Valkyrie::ID.new(SecureRandom.uuid)
-        @attributes = attributes.except(:source_metadata_identifier)
       end
 
       delegate :barcodes, to: :bag
@@ -72,7 +87,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
               part: audio_files.first.part,
               barcode: barcode,
               transfer_notes: pbcore&.transfer_notes,
-              read_groups: file_set_read_groups(recording_change_set)
+              read_groups: file_set_read_groups
             )
 
             audio_files.each do |ingestable_audio_file|
@@ -101,7 +116,7 @@ class IngestArchivalMediaBagJob < ApplicationJob
           file_path: builder.path,
           mime_type: builder.mime_type,
           original_filename: builder.original_filename,
-          container_attributes: { read_groups: file_set_read_groups(recording_change_set) }
+          container_attributes: { read_groups: file_set_read_groups }
         )
         recording_change_set.files << file
       end
@@ -111,28 +126,31 @@ class IngestArchivalMediaBagJob < ApplicationJob
           barcode_lookup: barcode_lookup,
           component_groups: component_groups,
           changeset_persister: changeset_persister,
+          collection: collection,
           recording_attributes: {
             upload_set_id: upload_set_id,
             rights_statement: RightsStatements.copyright_not_evaluated
-          }.merge(attributes)
+          }
         ).build!
       end
 
       class DescriptiveProxyBuilder
-        attr_reader :barcode_lookup, :component_groups, :changeset_persister, :recording_attributes
+        attr_reader :barcode_lookup, :component_groups, :changeset_persister, :recording_attributes, :collection
         delegate :query_service, to: :changeset_persister
-        def initialize(barcode_lookup:, component_groups:, changeset_persister:, recording_attributes: {})
+        def initialize(barcode_lookup:, component_groups:, changeset_persister:, collection:, recording_attributes: {})
           @barcode_lookup = barcode_lookup
           @component_groups = component_groups
           @changeset_persister = changeset_persister
           @recording_attributes = recording_attributes
+          @collection = collection
         end
 
         def build!
           component_groups.each do |component_id, barcodes|
             component_change_set = find_or_create_recording(:source_metadata_identifier, component_id)
             component_change_set.validate(
-              member_ids: barcodes.flat_map { |b| barcode_lookup[b] }
+              member_ids: barcodes.flat_map { |b| barcode_lookup[b] },
+              member_of_collection_ids: [collection.id]
             )
             if component_id.nil?
               component_change_set.validate(
@@ -150,22 +168,21 @@ class IngestArchivalMediaBagJob < ApplicationJob
         def find_or_create_recording(property, value)
           results = value.nil? ? [] : query_service.custom_queries.find_by_property(property: property, value: value)
           recording = results.size.zero? ? ScannedResource.new : results.first
-          r = RecordingChangeSet.new(
-            recording
-          )
-          r.validate(
+          RecordingChangeSet.new(
+            recording,
             property => value,
+            visibility: collection.visibility.first,
+            downloadable: "public",
             **recording_attributes
           )
-          r
         end
       end
 
       private
 
         # get the correct read groups based on the collection visibility
-        def file_set_read_groups(recording)
-          case recording.visibility
+        def file_set_read_groups
+          case collection.visibility.first
           when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
             [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC]
           when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
@@ -196,10 +213,10 @@ class IngestArchivalMediaBagJob < ApplicationJob
             recording,
             property => value,
             files: [],
+            visibility: collection.visibility.first,
             upload_set_id: upload_set_id,
             downloadable: "public",
-            rights_statement: RightsStatements.copyright_not_evaluated,
-            visibility: attributes[:visibility]
+            rights_statement: RightsStatements.copyright_not_evaluated
           )
         end
 

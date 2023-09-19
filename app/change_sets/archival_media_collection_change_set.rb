@@ -1,9 +1,4 @@
 # frozen_string_literal: true
-# ArchivalMediaCollections are a legacy construct that was used for ingesting
-# bags of AV material from vendors. Since then we've moved to using Bulk Ingest
-# for that, but haven't removed this because we aren't sure it's no longer
-# needed.
-# @TODO Remove this.
 class ArchivalMediaCollectionChangeSet < ChangeSet
   apply_workflow(DraftCompleteWorkflow)
   delegate :human_readable_type, to: :model

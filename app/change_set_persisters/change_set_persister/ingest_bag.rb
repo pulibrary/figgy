@@ -19,8 +19,7 @@ class ChangeSetPersister
       IngestArchivalMediaBagJob.perform_later(
         collection_component: post_save_resource.source_metadata_identifier.first,
         bag_path: change_set.bag_path.to_s,
-        user: user,
-        member_of_collection_ids: [post_save_resource.id.to_s]
+        user: user
       )
     end
 
