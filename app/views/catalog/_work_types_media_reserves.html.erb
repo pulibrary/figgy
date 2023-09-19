@@ -19,18 +19,6 @@
               </div>
             <% end %>
           <% end %>
-          <div class="work-type-card-col">
-            <div class="card work-type work-type-vendor-bag">
-              <div class="card-body">
-                <div class="card-title">Vendor Bags</div>
-                <%= content_tag(:div, nil, class: ['work-icon', "icon-scanned-resource"]) %>
-                <%= link_to 'Bulk Ingest',
-                  bulk_ingest_show_path(ScannedResource.to_s.underscore),
-                  class: "add-button btn btn-primary #{dom_class(ScannedResource)}"
-                %>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

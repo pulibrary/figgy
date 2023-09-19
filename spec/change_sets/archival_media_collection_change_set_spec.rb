@@ -132,7 +132,7 @@ RSpec.describe ArchivalMediaCollectionChangeSet do
         # create the collection so we know its id
         collection = FactoryBot.create_for_repository(:collection, source_metadata_identifier: collection_cid)
         # ingest the bag so it has the barcodes
-        IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: av_fixture_bag, user: nil, member_of_collection_ids: [collection.id])
+        IngestArchivalMediaBagJob.perform_now(collection_component: collection_cid, bag_path: av_fixture_bag, user: nil)
         # retrieve the collection via the query service and put it in a change set with the bag
         collection = query_service.find_by(id: collection.id)
         change_set = described_class.new(collection, bag_path: av_fixture_bag)
