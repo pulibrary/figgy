@@ -234,11 +234,11 @@ RSpec.describe IngestArchivalMediaBagJob do
       # create the collection
       cs = ChangeSet.for(Collection.new(change_set: "archival_media_collection"))
       cs.validate(source_metadata_identifier: collection_cid, slug: "test-collection")
-      change_set_persister.save(change_set: cs)
+      collection = change_set_persister.save(change_set: cs)
       # create another resource with the same component id
       FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: collection_cid)
       # ingest to the collection id
-      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
+      described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [collection.id])
     end
 
     it "doesn't try to use that other resource as an archival media collection" do
