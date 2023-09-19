@@ -1,6 +1,17 @@
 # frozen_string_literal: true
 namespace :figgy do
   namespace :bulk do
+    desc "Move a box to a new project"
+    task move_box: :environment do
+      target_project_id = ENV["TARGET_PROJECT_ID"]
+      box_id = ENV["BOX_ID"]
+
+      usage = "usage: rake figgy:bulk:move_box TARGET_PROJECT_ID=project_id BOX_ID=box_id"
+      abort usage unless target_project_id && box_id
+      target_project = ChangeSetPersister.default.query_service.find_by(id: target_project_id)
+      box = ChangeSetPersister.default.query_service.find_by(id: box_id)
+      BoxMover.new(box: box, target_project: target_project).move!
+    end
     desc "Migrates directory of METS files"
     task ingest_mets: :environment do
       md_root = ENV["METADATA"]
