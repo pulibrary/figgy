@@ -12,22 +12,24 @@ class PDFService
     unless pdf_file && binary_exists_for?(pdf_file)
       pdf_file = PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
 
-      # Reload the resource and change set to comply with optimistic locking
-      resource = query_service.find_by(id: change_set.id)
-      change_set = ChangeSet.for(resource)
-      change_set_persister.buffer_into_index do |buffered_changeset_persister|
-        change_set.validate(file_metadata: [pdf_file])
-        buffered_changeset_persister.save(change_set: change_set)
-      # rubocop:disable Lint/SuppressedException
-      rescue
-        # If a user initiatves PDF generation, waits, then gives up and tries again,
-        # the second one may fail because the first one successfully generated the PDF
-        # and then saved before the second one did. Just serve the generated PDF.
-        # This might also fail because of Read Only - we never want to prevent
-        # the user getting the PDF even if we can't cache it, so just always
-        # serve it.
+      begin
+        # Reload the resource and change set to comply with optimistic locking
+        resource = query_service.find_by(id: change_set.id)
+        change_set = ChangeSet.for(resource)
+        change_set_persister.buffer_into_index do |buffered_changeset_persister|
+          change_set.validate(file_metadata: [pdf_file])
+          buffered_changeset_persister.save(change_set: change_set)
+          # rubocop:disable Lint/SuppressedException
+        rescue
+          # If a user initiatves PDF generation, waits, then gives up and tries again,
+          # the second one may fail because the first one successfully generated the PDF
+          # and then saved before the second one did. Just serve the generated PDF.
+          # This might also fail because of Read Only - we never want to prevent
+          # the user getting the PDF even if we can't cache it, so just always
+          # serve it.
+        end
+        # rubocop:enable Lint/SuppressedException
       end
-      # rubocop:enable Lint/SuppressedException
     end
 
     pdf_file
