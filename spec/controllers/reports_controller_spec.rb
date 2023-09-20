@@ -163,4 +163,32 @@ RSpec.describe ReportsController, type: :controller do
       end
     end
   end
+
+  describe "GET #collection_item_and_image_count" do
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), storage_adapter: Valkyrie.config.storage_adapter) }
+    let(:collection) { FactoryBot.build(:collection, title: ["Foo"]) }
+
+    before do
+      change_set = CollectionChangeSet.new(collection)
+      change_set_persister.save(change_set: change_set)
+      sign_in user
+    end
+
+    it "displays a html view" do
+      get :collection_item_and_image_count, params: { id: collection.id.to_s, date_range: "10/04/2020-10/04/2022" }
+      expect(response).to render_template :collection_item_and_image_count
+    end
+
+    it "allows downloading a CSV file with only the open, complete, pulfa resource included" do
+      get :collection_item_and_image_count, params: { id: collection.id.to_s, date_range: "10/04/2020-10/04/2022" }, format: "csv"
+      expect(response.body).to eq(data)
+    end
+
+    context "with an empty since_date" do
+      it "does not raise an error" do
+        get :pulfa_ark_report, params: { since_date: "" }
+        expect { response }.not_to raise_error
+      end
+    end
+  end
 end

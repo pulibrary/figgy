@@ -43,8 +43,6 @@ class ReportsController < ApplicationController
       e_array = date_range.last.split("/")
       start_date = s_array[2] + "-" + s_array[0] + "-" + s_array[1]
       end_date = e_array[2] + "-" + e_array[0] + "-" + e_array[1]
-      #{date_range.first.to_date} - #{date_range.last.to_date}
-      #@report = ImageReportGenerator.new(collection_ids: collection_ids, date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
       @report = ImageReportGenerator.new(collection_ids: collection_ids, date_range: start_date.to_date..end_date.to_date)
     end
     respond_to do |format|
