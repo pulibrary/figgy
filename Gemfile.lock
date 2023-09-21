@@ -616,14 +616,6 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.5.3)
-    lograge (0.12.0)
-      actionpack (>= 4)
-      activesupport (>= 4)
-      railties (>= 4)
-      request_store (~> 1.0)
-    lograge-sql (2.1.0)
-      activerecord (>= 5, < 7.1)
-      lograge (~> 0.11)
     logstash-event (1.2.02)
     loofah (2.21.2)
       crass (~> 1.0.2)
@@ -766,6 +758,10 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.5.0)
       loofah (~> 2.19, >= 2.19.1)
+    rails_semantic_logger (4.12.0)
+      rack
+      railties (>= 5.1)
+      semantic_logger (~> 4.13)
     railties (6.1.7.3)
       actionpack (= 6.1.7.3)
       activesupport (= 6.1.7.3)
@@ -954,6 +950,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    semantic_logger (4.14.0)
+      concurrent-ruby (~> 1.0)
     sequel (5.66.0)
     sequel_pg (1.17.1)
       pg (>= 0.18.0, != 1.2.0)
@@ -1150,6 +1148,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  amazing_print
   arabic-letter-connector
   archivesspace-client
   autoprefixer-rails
@@ -1211,8 +1210,6 @@ DEPENDENCIES
   lcsort (>= 0.9.1)
   leaflet-rails
   listen
-  lograge
-  lograge-sql
   logstash-event
   loofah
   m3u8
@@ -1241,6 +1238,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 6.1.0)
   rails-controller-testing
+  rails_semantic_logger
   recipient_interceptor
   redis-namespace
   reform

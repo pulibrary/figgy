@@ -59,5 +59,8 @@ module Figgy
     # This got set on Rails 5.2 to be true, but breaks BrowseEverything. When we
     # remove BrowseEverything, remove this.
     config.action_controller.default_protect_from_forgery = false
+
+    # JSON logging
+    config.rails_semantic_logger.format = :json
   end
 end

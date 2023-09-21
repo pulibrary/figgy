@@ -50,8 +50,6 @@ gem "jquery-ui-rails", "~> 5.0"
 gem "json-schema"
 gem "lcsort", ">= 0.9.1"
 gem "leaflet-rails"
-gem "lograge"
-gem "lograge-sql"
 gem "logstash-event"
 gem "loofah"
 gem "m3u8"
@@ -103,6 +101,10 @@ gem "net-smtp", require: false
 source "https://gems.contribsys.com/" do
   gem "sidekiq-pro"
 end
+
+# JSON Logging
+gem "amazing_print"
+gem "rails_semantic_logger"
 
 group :development do
   gem "benchmark-ips"
