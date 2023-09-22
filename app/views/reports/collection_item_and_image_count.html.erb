@@ -1,8 +1,8 @@
 <h2>Collection Item and Image Count Report</h2>
 <p>
 <%= form_with(url: collection_item_and_image_count_path, method: :get, local: true) do |f| %>
-  <input-text id="collection_ids" name="value" label="Collection IDs:" helper="Please separate multiple Collection IDs with commas." required></input-text>
-  <lux-date-picker id="date_range" name="date_range" label="Date Range" mode="range" :disabled-dates="[{ start: null, end: new Date(2019, 05, 01)}, { start: new Date(), end: null }]"></lux-date-picker>
+  <input-text id="collection_ids" name="collection_ids" required="true" label="Collection IDs:" helper="Please separate multiple Collection IDs with commas." required></input-text>
+  <lux-date-picker id="date_range" name="date_range" helper="Entering a single date will result in a report for that day." required="true" label="Date Range" mode="range" :disabled-dates="[{ start: null, end: new Date(2019, 05, 01)}, { start: new Date(), end: null }]"></lux-date-picker>
   <%= f.submit("Generate Report") %>
 <% end %>
 </p>

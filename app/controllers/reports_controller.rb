@@ -36,7 +36,8 @@ class ReportsController < ApplicationController
 
   def collection_item_and_image_count
     authorize! :show, Report
-    if params[:collection_ids].present? #&& params[:date_range].present?
+    valid = true
+    if params[:collection_ids].present? && params[:date_range].present?
       collection_ids = params[:collection_ids].gsub(" ","").split(",")
       date_range = params[:date_range].gsub(" ","").split("-")
       s_array = date_range.first.split("/")
@@ -44,11 +45,21 @@ class ReportsController < ApplicationController
       start_date = s_array[2] + "-" + s_array[0] + "-" + s_array[1]
       end_date = e_array[2] + "-" + e_array[0] + "-" + e_array[1]
       @report = ImageReportGenerator.new(collection_ids: collection_ids, date_range: start_date.to_date..end_date.to_date)
+      if !@report.valid?
+        valid = false
+      end
+    else
+      valid = false
     end
     respond_to do |format|
-      format.html
-      format.csv do
-        send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
+      if valid
+        format.html
+        format.csv do
+          send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
+        end
+      else
+        format.html
+        flash.alert = "There was a problem generating your report. Valid Collection IDs and at least one valid Date are required."
       end
     end
   end
