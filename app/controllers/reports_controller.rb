@@ -37,16 +37,20 @@ class ReportsController < ApplicationController
   def collection_item_and_image_count
     authorize! :show, Report
     valid = true
+    # validate params
     if params[:collection_ids].present? && params[:date_range].present?
       collection_ids = params[:collection_ids].gsub(" ","").split(",")
       date_range = params[:date_range].gsub(" ","").split("-")
-      s_array = date_range.first.split("/")
-      e_array = date_range.last.split("/")
-      start_date = s_array[2] + "-" + s_array[0] + "-" + s_array[1]
-      end_date = e_array[2] + "-" + e_array[0] + "-" + e_array[1]
-      @report = ImageReportGenerator.new(collection_ids: collection_ids, date_range: start_date.to_date..end_date.to_date)
-      if !@report.valid?
+      sm, sd, sy = date_range.first.split("/")
+      em, ed, ey = date_range.last.split("/")
+      s_valid = Date.valid_date? sy.to_i, sm.to_i, sd.to_i
+      e_valid = Date.valid_date? ey.to_i, em.to_i, ed.to_i
+      if !s_valid || !e_valid
         valid = false
+      else
+        start_date = sy + "-" + sm + "-" + sd
+        end_date = ey + "-" + em + "-" + ed
+        @report = ImageReportGenerator.new(collection_ids: collection_ids, date_range: start_date.to_date..end_date.to_date)
       end
     else
       valid = false

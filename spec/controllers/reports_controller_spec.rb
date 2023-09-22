@@ -190,13 +190,16 @@ RSpec.describe ReportsController, type: :controller do
 
     it "raises an error if id field is blank" do
       get :collection_item_and_image_count, params: { collection_ids: "", date_range: "10/04/2020-10/04/2022" }
-      # expect { response }.to raise_error
       expect(flash.alert).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
 
     it "raises an error if date_range field is blank" do
       get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "" }
-      # expect { response }.to raise_error
+      expect(flash.alert).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+    end
+
+    it "raises an error if date is invalid" do
+      get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "10/04/2020-30/04/2022" }
       expect(flash.alert).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
   end
