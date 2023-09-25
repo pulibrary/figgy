@@ -168,7 +168,9 @@ RSpec.describe ReportsController, type: :controller do
     let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), storage_adapter: Valkyrie.config.storage_adapter) }
     # let(:collection) { FactoryBot.build(:collection, title: ["Foo"], id: [SecureRandom.uuid]) }
     let(:collection) { FactoryBot.create_for_repository(:collection, title: ["Foo"], id: [SecureRandom.uuid]) }
-    let(:data) { "Figgy Collection,Open Titles,Private Titles,Reading Room Titles,Princeton Only Titles,Open Image Count,Private Image Count,Reading Room Image Count,Princeton Only Image Count\nFoo,,,,,0,0,0,0\n" }
+    let(:data) do
+      "Figgy Collection,Open Titles,Private Titles,Reading Room Titles,Princeton Only Titles,Open Image Count,Private Image Count,Reading Room Image Count,Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
+    end
 
     before do
       sign_in user

@@ -10,6 +10,6 @@ RSpec.describe Report do
   end
 
   it "has a list of available reports" do
-    expect(described_class.all).to eq [:ephemera_data, :identifiers_to_reconcile, :pulfa_ark_report]
+    expect(described_class.all).to eq [:ephemera_data, :identifiers_to_reconcile, :pulfa_ark_report, :collection_item_and_image_count]
   end
 end
