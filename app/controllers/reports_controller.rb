@@ -94,12 +94,18 @@ class ReportsController < ApplicationController
     def validate_collection_count_params
       return nil unless params[:collection_ids].present? && params[:date_range].present?
       collection_ids = params[:collection_ids].delete(" ").split(",")
+      date_range = valid_dates
+      return nil unless date_range
+      { collection_ids: collection_ids, date_range: date_range }
+    end
+
+    def valid_dates
       date_range = params[:date_range].delete(" ").split("-")
       sm, sd, sy = date_range.first.split("/")
       em, ed, ey = date_range.last.split("/")
       return nil unless (Date.valid_date? sy.to_i, sm.to_i, sd.to_i) && (Date.valid_date? ey.to_i, em.to_i, ed.to_i)
       start_date = sy + "-" + sm + "-" + sd
       end_date = ey + "-" + em + "-" + ed
-      { collection_ids: collection_ids, date_range: start_date.to_date..end_date.to_date }
+      return start_date.to_date..end_date.to_date
     end
 end

@@ -169,7 +169,15 @@ RSpec.describe ReportsController, type: :controller do
     # let(:collection) { FactoryBot.build(:collection, title: ["Foo"], id: [SecureRandom.uuid]) }
     let(:collection) { FactoryBot.create_for_repository(:collection, title: ["Foo"], id: [SecureRandom.uuid]) }
     let(:data) do
-      "Figgy Collection,Open Titles,Private Titles,Reading Room Titles,Princeton Only Titles,Open Image Count,Private Image Count,Reading Room Image Count,Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
+      "Figgy Collection,\
+Open Titles,\
+Private Titles,\
+Reading Room Titles,\
+Princeton Only Titles,\
+Open Image Count,\
+Private Image Count,\
+Reading Room Image Count,\
+Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
     end
 
     before do
