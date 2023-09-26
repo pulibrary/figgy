@@ -179,6 +179,10 @@ en:
         icon_color: 'orange'
         icon: 'report-unhealthy'
         label: "In Progress"
+      repairing:
+        icon_color: 'orange'
+        icon: 'report-unhealthy'
+        label: "Repairing"
     local_fixity_check:
       type: 'Local Fixity'
       summary:
