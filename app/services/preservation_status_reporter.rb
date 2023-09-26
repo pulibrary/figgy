@@ -31,7 +31,12 @@ class PreservationStatusReporter
       next unless ChangeSet.for(resource).preserve?
       # if it should preserve and there's no preservation object, it's a failure
       po = Wayfinder.for(resource).preservation_object
+      binary_composite = Preserver::BinaryNodeComposite.new(resource: resource, preservation_object: po)
       if po.nil?
+        failures << resource
+        next
+      # PO is missing a binary node or the checksums don't match.
+      elsif binary_composite.any? { |x| !x.preserved? }
         failures << resource
         next
       end

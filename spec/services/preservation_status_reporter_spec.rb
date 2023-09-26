@@ -25,8 +25,8 @@ RSpec.describe PreservationStatusReporter do
       recording_file_set = Wayfinder.for(recording).file_sets.first
       intermediate_file = recording_file_set.intermediate_file
       fs_po = Wayfinder.for(recording_file_set).preservation_objects.first
-      fs_po.binary_nodes = fs_po.binary_nodes.find { |node| node.preservation_copy_of_id != intermediate_file.id}
-      ruined_po = ChangeSetPersister.default.save(change_set: ChangeSet.for(fs_po))
+      fs_po.binary_nodes = fs_po.binary_nodes.find { |node| node.preservation_copy_of_id != intermediate_file.id }
+      ChangeSetPersister.default.save(change_set: ChangeSet.for(fs_po))
 
       # Verify files exist or not
       # #preserved resource files
@@ -53,6 +53,6 @@ RSpec.describe PreservationStatusReporter do
     resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
     reloaded_resource = query_service.find_by(id: resource.id)
     change_set = ChangeSet.for(reloaded_resource)
-    output = change_set_persister.save(change_set: change_set)
+    change_set_persister.save(change_set: change_set)
   end
 end

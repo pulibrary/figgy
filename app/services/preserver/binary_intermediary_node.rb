@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Preserver
   # Encapsulate logic for converting a binary node to a preservation node.
-  class PreservationIntermediaryNode
+  class BinaryIntermediaryNode
     attr_reader :binary_node, :preservation_object
     delegate :file_identifiers, :checksum, to: :binary_node
     # @param binary_node [FileMetadata] Node to convert to a preservation
@@ -13,7 +13,7 @@ class Preserver
       @preservation_object = preservation_object
     end
 
-    def uploaded_content?
+    def local_files?
       binary_node.file_identifiers.present?
     end
 

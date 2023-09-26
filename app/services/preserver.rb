@@ -36,22 +36,25 @@ class Preserver
       # same time somehow, this will make one of them error with a database
       # constraint error before uploading anything.
       preservation_object
-      # These are PreservationIntermediaryNodes
-      resource_binary_nodes.each do |resource_binary_node|
-        file_metadata = resource_binary_node.preservation_node
-        next unless resource_binary_node.uploaded_content?
-        preserve_binary_node(resource_binary_node, file_metadata) if force
-        next if resource_binary_node.preserved?
-        next if file_metadata.persisted?
-        preserve_binary_node(resource_binary_node, file_metadata)
+      # These are BinaryIntermediaryNodes
+      binary_node_composite.each do |binary_intermediary_node|
+        if force || !binary_intermediary_node.preserved?
+          preserve_binary_node(binary_intermediary_node)
+        end
       end
     end
 
-    def preserve_binary_node(resource_binary_node, file_metadata)
+    def binary_node_composite
+      @binary_node_composite ||= BinaryNodeComposite.new(resource: resource, preservation_object: preservation_object)
+    end
+
+    def preserve_binary_node(binary_intermediary_node)
+      return unless binary_intermediary_node.local_files?
+      file_metadata = binary_intermediary_node.preservation_node
       local_checksum = file_metadata.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
-      f = File.open(Valkyrie::StorageAdapter.find_by(id: resource_binary_node.file_identifiers.first).disk_path)
+      f = File.open(Valkyrie::StorageAdapter.find_by(id: binary_intermediary_node.file_identifiers.first).disk_path)
       uploaded_file = storage_adapter.upload(
         file: f,
         original_filename: file_metadata.label.first,
@@ -60,7 +63,7 @@ class Preserver
         metadata: preservation_metadata
       )
       f.close
-      file_metadata.checksum = resource_binary_node.calculate_checksum
+      file_metadata.checksum = binary_intermediary_node.calculate_checksum
       # The FileSet or its parent resource has moved and is now under a different resource hierarchy
       if file_metadata.file_identifiers.present? && !file_metadata.file_identifiers.include?(uploaded_file.id)
         CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))
@@ -70,12 +73,6 @@ class Preserver
       preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
       # mark it as persisted for future checks
       file_metadata.new_record = false
-    end
-
-    def resource_binary_nodes
-      [:original_files, :intermediate_files, :preservation_files].flat_map do |node_type|
-        Array(resource.try(node_type)).map { |x| PreservationIntermediaryNode.new(binary_node: x, preservation_object: preservation_object) }
-      end
     end
 
     def preservation_object
