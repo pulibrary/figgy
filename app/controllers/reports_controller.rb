@@ -36,16 +36,23 @@ class ReportsController < ApplicationController
 
   def collection_item_and_image_count
     authorize! :show, Report
-    valid_params = validate_collection_count_params
-    if valid_params.present?
-      @report = ImageReportGenerator.new(collection_ids: valid_params[:collection_ids], date_range: valid_params[:date_range])
+    # if the form has been submitted
+    if params.key?(:collection_ids) && params.key?(:date_range)
+      valid_params = validate_collection_count_params
+      if valid_params.present?
+        @report = ImageReportGenerator.new(collection_ids: valid_params[:collection_ids], date_range: valid_params[:date_range])
+        respond_to do |format|
+          format.html
+          format.csv do
+            send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
+          end
+        end
+      else
+        flash.alert = "There was a problem generating your report. Valid Collection IDs and at least one valid Date are required."
+      end
     else
-      flash.alert = "There was a problem generating your report. Valid Collection IDs and at least one valid Date are required."
-    end
-    respond_to do |format|
-      format.html
-      format.csv do
-        send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
+      respond_to do |format|
+        format.html
       end
     end
   end
@@ -92,11 +99,9 @@ class ReportsController < ApplicationController
     end
 
     def validate_collection_count_params
-      return nil unless params[:collection_ids].present? && params[:date_range].present?
+      return nil if params[:collection_ids].blank? || params[:date_range].blank? || !valid_dates
       collection_ids = params[:collection_ids].delete(" ").split(",")
-      date_range = valid_dates
-      return nil unless date_range
-      { collection_ids: collection_ids, date_range: date_range }
+      { collection_ids: collection_ids, date_range: valid_dates }
     end
 
     def valid_dates
@@ -106,6 +111,6 @@ class ReportsController < ApplicationController
       return nil unless (Date.valid_date? sy.to_i, sm.to_i, sd.to_i) && (Date.valid_date? ey.to_i, em.to_i, ed.to_i)
       start_date = sy + "-" + sm + "-" + sd
       end_date = ey + "-" + em + "-" + ed
-      return start_date.to_date..end_date.to_date
+      start_date.to_date..end_date.to_date
     end
 end
