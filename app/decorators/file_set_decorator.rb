@@ -43,7 +43,13 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   end
 
   def cloud_fixity_last_success_date_of(file_id)
-    cloud_fixity_events_for(file_id).select(&:successful?).map(&:created_at).max || "n/a"
+    events = cloud_fixity_events_for(file_id)
+    if events.present?
+      events.select(&:successful?).map(&:created_at).max || "n/a"
+    else
+      preservation_object = preservation_object_for(file_id)
+      preservation_object&.created_at || "n/a"
+    end
   end
 
   def local_fixity_success_of(file_id)
@@ -74,6 +80,10 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
     preservation_id = preservation_id_of(file_id)
     return [] if preservation_id.blank?
     custom_queries.find_by_property(property: :child_id, value: preservation_id, model: Event)
+  end
+
+  def preservation_object_for(file_id)
+    preservation_objects.find { |po| po.binary_nodes.find { |b| b.preservation_copy_of_id == file_id } }
   end
 
   def preservation_id_of(file_id)
