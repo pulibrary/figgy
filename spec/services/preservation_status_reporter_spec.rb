@@ -20,9 +20,13 @@ RSpec.describe PreservationStatusReporter do
       #  - a fileset with a binary node that has the wrong checksum
       stub_ezid
       preserved_resource = create_preserved_resource
-      unpreserved_metadata_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
-      fileset_no_binary = create_preserved_av_resource
-      fs_po = Wayfinder.for(fileset_no_binary).
+      unpreserved_metadata_resource = FactoryBot.create_for_repository(:complete_scanned_resource) # doesn't run change set persister so no preservation will happen
+      recording = FactoryBot.create_for_repository(:complete_recording_with_real_files)
+      recording_file_set = Wayfinder.for(recording).file_sets.first
+      intermediate_file = recording_file_set.intermediate_file
+      fs_po = Wayfinder.for(recording_file_set).preservation_objects.first
+      fs_po.binary_nodes = fs_po.binary_nodes.find { |node| node.preservation_copy_of_id != intermediate_file.id}
+      ruined_po = ChangeSetPersister.default.save(change_set: ChangeSet.for(fs_po))
 
       # Verify files exist or not
       # #preserved resource files
@@ -38,20 +42,13 @@ RSpec.describe PreservationStatusReporter do
       reporter = described_class.new(progress_bar: false)
       failures = reporter.cloud_audit_failures
       expect(failures.map(&:id)).to contain_exactly(
-        unpreserved_metadata_resource.id
+        unpreserved_metadata_resource.id,
+        recording_file_set.id
       )
     end
   end
 
   def create_preserved_resource
-    file = fixture_file_upload("files/example.tif", "image/tiff")
-    resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
-    reloaded_resource = query_service.find_by(id: resource.id)
-    change_set = ChangeSet.for(reloaded_resource)
-    output = change_set_persister.save(change_set: change_set)
-  end
-
-  def create_preserved_av_resource
     file = fixture_file_upload("files/example.tif", "image/tiff")
     resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
     reloaded_resource = query_service.find_by(id: resource.id)
