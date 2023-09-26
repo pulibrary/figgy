@@ -188,7 +188,12 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
       end
     end
 
-    it "displays a html view" do
+    it "displays a html view when no params are passed" do
+      get :collection_item_and_image_count
+      expect(response).to render_template :collection_item_and_image_count
+    end
+
+    it "displays a html view when params are passed" do
       get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "10/04/2020-10/04/2022" }
       expect(response).to render_template :collection_item_and_image_count
     end
