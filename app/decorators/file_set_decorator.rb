@@ -45,10 +45,10 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   def cloud_fixity_last_success_date_of(file_id)
     events = cloud_fixity_events_for(file_id)
     if events.present?
-      events.select(&:successful?).map(&:created_at).max || "n/a"
+      format_date(events.select(&:successful?).map(&:created_at).max)
     else
       preservation_object = preservation_object_for(file_id)
-      preservation_object&.created_at || "n/a"
+      format_date(preservation_object&.created_at)
     end
   end
 
@@ -69,7 +69,15 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
       property: :metadata,
       value: { status: Event::SUCCESS, resource_id: id, child_id: file_id }
     ).map(&:created_at).max
-    event_date || "n/a"
+    format_date(event_date)
+  end
+
+  def format_date(date)
+    if date
+      date.strftime("%b %d, %Y @ %I:%M %P")
+    else
+      "n/a"
+    end
   end
 
   def custom_queries

@@ -49,13 +49,13 @@ RSpec.describe FileSetDecorator do
   end
 
   describe "fixity" do
-    let(:created_at) { "2023-09-26T17:33:35.013Z" }
+    let(:created_at) { "2023-09-25T17:33:35.013Z" }
     let(:good_file) { FileMetadata.new(label: "good.jp2", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.PreservationFile) }
     let(:bad_file) { FileMetadata.new(label: "bad.tif", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.IntermediateFile) }
     let(:derivative_file) { FileMetadata.new(label: "derivative.tif", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.ServiceFile) }
     let(:good_file_pres) { FileMetadata.new(preservation_copy_of_id: good_file.id, id: SecureRandom.uuid) }
     let(:bad_file_pres) { FileMetadata.new(preservation_copy_of_id: bad_file.id, id: SecureRandom.uuid) }
-    let(:cloud_good_event) { FactoryBot.create_for_repository(:cloud_fixity_event, child_id: good_file_pres.id, status: "SUCCESS", current: true) }
+    let(:cloud_good_event) { FactoryBot.create_for_repository(:cloud_fixity_event, created_at: created_at, child_id: good_file_pres.id, status: "SUCCESS", current: true) }
     let(:cloud_bad_event) { FactoryBot.create_for_repository(:cloud_fixity_event, child_id: bad_file_pres.id, status: "FAILURE", current: true) }
     let(:pres_obj) { FactoryBot.create_for_repository(:preservation_object, created_at: created_at, preserved_object_id: file_set.id, binary_nodes: [good_file_pres, bad_file_pres]) }
     let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [good_file, bad_file, derivative_file]) }
@@ -68,7 +68,7 @@ RSpec.describe FileSetDecorator do
 
     it "differentiates between the good and bad cloud files" do
       expect(decorator.cloud_fixity_success_of(good_file.id)).to eq("SUCCESS")
-      expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to eq(cloud_good_event.created_at)
+      expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to include("Sep 25, 2023")
 
       expect(decorator.cloud_fixity_success_of(bad_file.id)).to eq("FAILURE")
       expect(decorator.cloud_fixity_last_success_date_of(bad_file.id)).to eq("n/a")
@@ -86,16 +86,16 @@ RSpec.describe FileSetDecorator do
       let(:cloud_good_event) {}
       it "returns success" do
         expect(decorator.cloud_fixity_success_of(good_file.id)).to eq nil
-        expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to eq(created_at)
+        expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to include("Sep 25, 2023")
       end
     end
 
     context "when local fixity is sucessful" do
       it "reports success for the primary file, and nothing for other files" do
-        local_event = FactoryBot.create_for_repository(:local_fixity_success, resource_id: file_set.id, child_id: good_file.id, current: true)
+        FactoryBot.create_for_repository(:local_fixity_success, created_at: created_at, resource_id: file_set.id, child_id: good_file.id, current: true)
         FactoryBot.create_for_repository(:local_fixity_failure, resource_id: file_set.id, child_id: bad_file.id, current: true)
         expect(decorator.local_fixity_success_of(good_file.id)).to eq("SUCCESS")
-        expect(decorator.local_fixity_last_success_date_of(good_file.id)).to eq(local_event.created_at)
+        expect(decorator.local_fixity_last_success_date_of(good_file.id)).to include("Sep 25, 2023")
         expect(decorator.local_fixity_success_of(bad_file.id)).to eq("FAILURE")
         expect(decorator.local_fixity_last_success_date_of(bad_file.id)).to eq("n/a")
         expect(decorator.local_fixity_success_of(derivative_file.id)).to eq("n/a")
