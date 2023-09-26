@@ -12,8 +12,8 @@ RSpec.describe PreservationStatusReporter do
   describe "#cloud_audit" do
     it "identifies resources that should be preserved and either are not preserved or have the wrong checksum" do
       # Test setup required:
-      #  - a fileset with a metadata and binary node that are both preserved
-      #  - a scannedresource with a metadata node that was never preserved
+      #  - preserved_resource: a fileset with a metadata and binary node that are both preserved
+      #  - unpreserved_metadata_resource: a scannedresource with a metadata node that was never preserved
       #  - a fileset with a binary node that is not preserved
       #  - a fileset with both metadata and a binary nodes that are not preserved
       #  - a scannedresource with a metadata node that has the wrong checksum
@@ -21,6 +21,8 @@ RSpec.describe PreservationStatusReporter do
       stub_ezid
       preserved_resource = create_preserved_resource
       unpreserved_metadata_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+      fileset_no_binary = create_preserved_av_resource
+      fs_po = Wayfinder.for(fileset_no_binary).
 
       # Verify files exist or not
       # #preserved resource files
@@ -42,6 +44,14 @@ RSpec.describe PreservationStatusReporter do
   end
 
   def create_preserved_resource
+    file = fixture_file_upload("files/example.tif", "image/tiff")
+    resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
+    reloaded_resource = query_service.find_by(id: resource.id)
+    change_set = ChangeSet.for(reloaded_resource)
+    output = change_set_persister.save(change_set: change_set)
+  end
+
+  def create_preserved_av_resource
     file = fixture_file_upload("files/example.tif", "image/tiff")
     resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
     reloaded_resource = query_service.find_by(id: resource.id)
