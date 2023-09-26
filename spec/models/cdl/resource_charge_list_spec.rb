@@ -31,4 +31,16 @@ describe CDL::ResourceChargeList do
     change_set.validate(resource_id: SecureRandom.uuid)
     expect { ChangeSetPersister.default.save(change_set: change_set) }.to raise_error Valkyrie::Persistence::StaleObjectError
   end
+
+  describe "deletion" do
+    it "doesn't delete the referenced resource" do
+      resource = FactoryBot.create_for_repository(:scanned_resource)
+      resource_charge_list = FactoryBot.create_for_repository(:resource_charge_list, resource_id: resource.id)
+      change_set = ChangeSet.for(resource)
+
+      ChangeSetPersister.default.delete(change_set: change_set)
+
+      expect { ChangeSetPersister.default.query_service.find_by(id: resource_charge_list.id) }.not_to raise_error
+    end
+  end
 end

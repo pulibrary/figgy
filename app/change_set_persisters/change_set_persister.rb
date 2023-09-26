@@ -68,7 +68,8 @@ class ChangeSetPersister
         CleanupMembership::Factory.new(property: :member_of_collection_ids),
         PublishMessage::Factory.new(operation: :derivatives_delete),
         DeleteReferenced::Factory.new(property: :preserved_object_id),
-        CleanupTerms
+        CleanupTerms,
+        DeleteReferenced::Factory.new(property: :resource_id, parent_model: PreservationObject)
       ],
       after_delete_commit: [
         DeleteAuthToken,
