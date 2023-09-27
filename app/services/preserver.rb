@@ -37,11 +37,15 @@ class Preserver
       # constraint error before uploading anything.
       preservation_object
       # These are BinaryIntermediaryNodes
-      binary_node_composite.each do |binary_intermediary_node|
+      binary_intermediary_nodes(preservation_object).each do |binary_intermediary_node|
         if force || !binary_intermediary_node.preserved?
           preserve_binary_node(binary_intermediary_node)
         end
       end
+    end
+
+    def binary_intermediary_nodes(preservation_object)
+      (resource.try(:preservation_targets) || []).map { |x| ::Preserver::BinaryIntermediaryNode.new(binary_node: x, preservation_object: preservation_object) }
     end
 
     def binary_node_composite
