@@ -39,7 +39,12 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
   delegate :downloadable?, to: :parent
 
   def cloud_fixity_success_of(file_id)
-    cloud_fixity_events_for(file_id).find(&:current?)&.status
+    events = cloud_fixity_events_for(file_id)
+    if events.present?
+      events.find(&:current?)&.status
+    elsif preservation_object_for(file_id)
+      Event::SUCCESS
+    end
   end
 
   def cloud_fixity_last_success_date_of(file_id)
