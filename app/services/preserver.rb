@@ -45,16 +45,38 @@ class Preserver
     end
 
     def binary_intermediary_nodes(preservation_object)
-      (resource.try(:preservation_targets) || []).map { |x| ::Preserver::BinaryIntermediaryNode.new(binary_node: x, preservation_object: preservation_object) }
+      (resource.try(:preservation_targets) || []).map { |x| ::Preserver::BinaryIntermediaryNode.new(file_metadata: x, preservation_object: preservation_object) }
     end
 
-    def binary_node_composite
-      @binary_node_composite ||= BinaryNodeComposite.new(resource: resource, preservation_object: preservation_object)
+    def build_preservation_node(binary_node)
+      FileMetadata.new(
+        label: preservation_label(binary_node),
+        use: Valkyrie::Vocab::PCDMUse.PreservationCopy,
+        mime_type: binary_node.mime_type,
+        checksum: calculate_checksum(binary_node),
+        preservation_copy_of_id: binary_node.id,
+        id: SecureRandom.uuid
+      )
+    end
+
+    def calculate_checksum(binary_node)
+      @calculated_checksum ||= MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: binary_node.file_identifiers.first))
+    end
+
+    # Creates the binary name for a preserved copy of a file by setting the
+    # label before the ID and extension of the file.
+    # @example Get a label
+    #   x.binary_node.label # => "bla.tif"
+    #   x.binary_node.id # => "123"
+    #   x.preservation_label # => "bla-123.tif"
+    def preservation_label(binary_node)
+      label, splitter, extension = binary_node.label.first.to_s.rpartition(".")
+      "#{label}-#{binary_node.id}#{splitter}#{extension}"
     end
 
     def preserve_binary_node(binary_intermediary_node)
       return unless binary_intermediary_node.local_files?
-      file_metadata = binary_intermediary_node.preservation_node
+      file_metadata = build_preservation_node(binary_intermediary_node.file_metadata)
       local_checksum = file_metadata.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
@@ -67,7 +89,6 @@ class Preserver
         metadata: preservation_metadata
       )
       f.close
-      file_metadata.checksum = binary_intermediary_node.calculate_checksum
       # The FileSet or its parent resource has moved and is now under a different resource hierarchy
       if file_metadata.file_identifiers.present? && !file_metadata.file_identifiers.include?(uploaded_file.id)
         CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))

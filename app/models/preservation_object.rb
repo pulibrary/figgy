@@ -12,4 +12,9 @@ class PreservationObject < Resource
 
   # FileMetadata nested objects for the preservation copies of the binaries
   attribute :binary_nodes, Valkyrie::Types::Set
+
+  # @return [FileMetadata] Preservation Node in binary_nodes which is the preserved copy of the file_metadata given.
+  def binary_node_for(file_metadata)
+    binary_nodes.find { |x| x.preservation_copy_of_id == file_metadata.id }
+  end
 end
