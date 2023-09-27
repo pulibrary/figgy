@@ -30,7 +30,13 @@ class PreservationStatusReporter
       # if it doesn't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?
       # if it should preserve and there's no preservation object, it's a failure
-      po = Wayfinder.for(resource).preservation_object
+      #  TODO: Options Options for refactors
+      # po = Wayfinder.for(resource).preservation_object
+      # preservation_object.intermediaries_for(resource)
+      # resource.preservation_intermediaries_for(preservation_object)
+      # resource.preservation_targets.map { |file_metadata| file_metadata.intermediary_for(preservation_object) }
+      # PreservationObject.intermediaries_for(resource, preservation_object)
+      # BinaryIntermediaryNode.for(resource, preservation_object) # => []
       binary_composite = Preserver::BinaryNodeComposite.new(resource: resource, preservation_object: po)
       if po.nil?
         failures << resource
