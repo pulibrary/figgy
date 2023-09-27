@@ -41,18 +41,14 @@ class ReportsController < ApplicationController
       valid_params = validate_collection_count_params
       if valid_params.present?
         @report = ImageReportGenerator.new(collection_ids: valid_params[:collection_ids], date_range: valid_params[:date_range])
-        respond_to do |format|
-          format.html
-          format.csv do
-            send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
-          end
-        end
       else
         flash.alert = "There was a problem generating your report. Valid Collection IDs and at least one valid Date are required."
       end
-    else
-      respond_to do |format|
-        format.html
+    end
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
       end
     end
   end
