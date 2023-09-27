@@ -124,7 +124,7 @@ RSpec.describe HealthReport do
         expect(local_fixity_report.summary).to start_with "One or more files failed Local Fixity Checks."
       end
     end
-    context "for a FileSEt with a failed local fixity event" do
+    context "for a FileSet with a failed local fixity event" do
       it "returns :needs_attention" do
         fs1 = FactoryBot.create_for_repository(:original_file_file_set)
         FactoryBot.create(:local_fixity_failure, resource_id: fs1.id)
