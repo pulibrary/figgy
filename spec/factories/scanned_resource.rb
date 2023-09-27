@@ -75,7 +75,8 @@ FactoryBot.define do
         )
         files { [file] }
         after(:create) do |resource, _evaluator|
-          IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401_1_i.wav").to_s, file_set_id: resource.member_ids.first.to_s)
+          IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401_1_i.wav").to_s,
+                                                file_set_id: resource.member_ids.first.to_s)
         end
       end
     end

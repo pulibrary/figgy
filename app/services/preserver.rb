@@ -48,19 +48,19 @@ class Preserver
       (resource.try(:preservation_targets) || []).map { |x| ::Preserver::BinaryIntermediaryNode.new(file_metadata: x, preservation_object: preservation_object) }
     end
 
-    def build_preservation_node(binary_node)
+    def build_preservation_node(file_metadata)
       FileMetadata.new(
-        label: preservation_label(binary_node),
+        label: preservation_label(file_metadata),
         use: Valkyrie::Vocab::PCDMUse.PreservationCopy,
-        mime_type: binary_node.mime_type,
-        checksum: calculate_checksum(binary_node),
-        preservation_copy_of_id: binary_node.id,
+        mime_type: file_metadata.mime_type,
+        checksum: calculate_checksum(file_metadata),
+        preservation_copy_of_id: file_metadata.id,
         id: SecureRandom.uuid
       )
     end
 
-    def calculate_checksum(binary_node)
-      @calculated_checksum ||= MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: binary_node.file_identifiers.first))
+    def calculate_checksum(file_metadata)
+      @calculated_checksum ||= MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first))
     end
 
     # Creates the binary name for a preserved copy of a file by setting the
@@ -69,9 +69,9 @@ class Preserver
     #   x.binary_node.label # => "bla.tif"
     #   x.binary_node.id # => "123"
     #   x.preservation_label # => "bla-123.tif"
-    def preservation_label(binary_node)
-      label, splitter, extension = binary_node.label.first.to_s.rpartition(".")
-      "#{label}-#{binary_node.id}#{splitter}#{extension}"
+    def preservation_label(file_metadata)
+      label, splitter, extension = file_metadata.label.first.to_s.rpartition(".")
+      "#{label}-#{file_metadata.id}#{splitter}#{extension}"
     end
 
     def preserve_binary_node(binary_intermediary_node)
