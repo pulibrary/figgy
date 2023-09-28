@@ -22,7 +22,7 @@
     "graphql-tag": "^2.9.2",
     "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
-    "lux-design-system": "4.2.0",
+    "lux-design-system": "4.5.2",
     "mapnik": "^4.5.9",
     "npm": "^8.5.5",
     "openseadragon": "^2.3.1",

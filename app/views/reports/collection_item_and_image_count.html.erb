@@ -1,0 +1,45 @@
+<h2>Collection Item and Image Count Report</h2>
+<p>
+<%= form_with(url: collection_item_and_image_count_path, method: :get, local: true) do |f| %>
+  <input-text id="collection_ids" name="collection_ids" required="true" label="Collection IDs:" helper="Please separate multiple Collection IDs with commas." required></input-text>
+  <lux-date-picker id="date_range" name="date_range" helper="Entering a single date will result in a report for that day." required="true" label="Date Range" mode="range" :disabled-dates="[{ start: null, end: new Date(2019, 05, 01)}, { start: new Date(), end: null }]"></lux-date-picker>
+  <%= f.submit("Generate Report") %>
+<% end %>
+</p>
+<% if @report %>
+<hr/>
+<p>
+  <%= link_to "Download CSV", collection_item_and_image_count_path(params: {collection_ids: params[:collection_ids], date_range: params[:date_range]}, format: :csv) %>
+</p>
+
+<table class="table table-striped datatable">
+  <thead>
+    <tr>
+      <th>Figgy Collection (<%= params[:date_range] %>)</th>
+      <th>Open Titles</th>
+      <th>Private Titles</th>
+      <th>Reading Room Titles</th>
+      <th>Princeton Only Titles</th>
+      <th>Open Image Count</th>
+      <th>Private Image Count</th>
+      <th>Reading Room Image Count</th>
+      <th>Princeton Only Image Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @report.to_h.each do |r| %>
+      <tr>
+        <td><%= r[:figgy_collection] %></td>
+        <td><%= r[:open_titles] %></td>
+        <td><%= r[:private_titles] %></td>
+        <td><%= r[:reading_room_titles] %></td>
+        <td><%= r[:princeton_only_titles] %></td>
+        <td><%= r[:open_image_count] %></td>
+        <td><%= r[:private_image_count] %></td>
+        <td><%= r[:reading_room_image_count] %></td>
+        <td><%= r[:princeton_only_image_count] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>

@@ -163,4 +163,61 @@ RSpec.describe ReportsController, type: :controller do
       end
     end
   end
+
+  describe "GET #collection_item_and_image_count" do
+    let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister), storage_adapter: Valkyrie.config.storage_adapter) }
+    # let(:collection) { FactoryBot.build(:collection, title: ["Foo"], id: [SecureRandom.uuid]) }
+    let(:collection) { FactoryBot.create_for_repository(:collection, title: ["Foo"], id: [SecureRandom.uuid]) }
+    let(:data) do
+      "Figgy Collection,\
+Open Titles,\
+Private Titles,\
+Reading Room Titles,\
+Princeton Only Titles,\
+Open Image Count,\
+Private Image Count,\
+Reading Room Image Count,\
+Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
+    end
+
+    before do
+      sign_in user
+      file = fixture_file_upload("files/example.tif", "image/tiff")
+      5.times do
+        FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, files: [file])
+      end
+    end
+    render_views
+    it "displays a html view when no params are passed" do
+      get :collection_item_and_image_count
+      expect(response).to render_template :collection_item_and_image_count
+      expect(response.body).not_to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+    end
+
+    it "displays a html view when params are passed" do
+      get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "10/04/2020-10/04/2022" }
+      expect(response).to render_template :collection_item_and_image_count
+      expect(response.body).to include("Figgy Collection (10/04/2020-10/04/2022)")
+    end
+
+    it "allows downloading a CSV file with item and image counts for the collection" do
+      get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "10/04/2020-10/04/2022" }, format: "csv"
+      expect(response.body).to eq(data)
+    end
+
+    it "raises an error if id field is blank" do
+      get :collection_item_and_image_count, params: { collection_ids: "", date_range: "10/04/2020-10/04/2022" }
+      expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+    end
+
+    it "raises an error if date_range field is blank" do
+      get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "" }
+      expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+    end
+
+    it "raises an error if date is invalid" do
+      get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "10/04/2020-30/04/2022" }
+      expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+    end
+  end
 end

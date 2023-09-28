@@ -20,9 +20,22 @@ class ImageReportGenerator
     end
   end
 
+  def to_csv
+    CSV.generate do |csv|
+      csv << headers
+      csv_rows.each do |row|
+        csv << row
+      end
+    end
+  end
+
+  def to_h
+    CSV.parse(to_csv, headers: true, header_converters: :symbol)
+  end
+
   def headers
     [
-      "Figgy Collection (#{date_range.first.to_date} - #{date_range.last.to_date})",
+      "Figgy Collection",
       "Open Titles",
       "Private Titles",
       "Reading Room Titles",

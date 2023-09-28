@@ -34,6 +34,25 @@ class ReportsController < ApplicationController
     end
   end
 
+  def collection_item_and_image_count
+    authorize! :show, Report
+    # if the form has been submitted
+    if params.key?(:collection_ids) && params.key?(:date_range)
+      valid_params = validate_collection_count_params
+      if valid_params.present?
+        @report = ImageReportGenerator.new(collection_ids: valid_params[:collection_ids], date_range: valid_params[:date_range])
+      else
+        flash.alert = "There was a problem generating your report. Valid Collection IDs and at least one valid Date are required."
+      end
+    end
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data @report.to_csv, filename: "collection_item_and_image_count-#{Time.zone.today}.csv"
+      end
+    end
+  end
+
   def pulfa_ark_report
     authorize! :show, Report
     if params[:since_date].present?
@@ -73,5 +92,21 @@ class ReportsController < ApplicationController
 
     def query_service
       Valkyrie.config.metadata_adapter.query_service
+    end
+
+    def validate_collection_count_params
+      return nil if params[:collection_ids].blank? || params[:date_range].blank? || !valid_dates
+      collection_ids = params[:collection_ids].delete(" ").split(",")
+      { collection_ids: collection_ids, date_range: valid_dates }
+    end
+
+    def valid_dates
+      date_range = params[:date_range].delete(" ").split("-")
+      sm, sd, sy = date_range.first.split("/")
+      em, ed, ey = date_range.last.split("/")
+      return nil unless (Date.valid_date? sy.to_i, sm.to_i, sd.to_i) && (Date.valid_date? ey.to_i, em.to_i, ed.to_i)
+      start_date = sy + "-" + sm + "-" + sd
+      end_date = ey + "-" + em + "-" + ed
+      start_date.to_date..end_date.to_date
     end
 end
