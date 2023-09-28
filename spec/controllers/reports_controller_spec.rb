@@ -191,6 +191,7 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
     it "displays a html view when no params are passed" do
       get :collection_item_and_image_count
       expect(response).to render_template :collection_item_and_image_count
+      expect(response.body).not_to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
 
     it "displays a html view when params are passed" do
@@ -206,17 +207,17 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
 
     it "raises an error if id field is blank" do
       get :collection_item_and_image_count, params: { collection_ids: "", date_range: "10/04/2020-10/04/2022" }
-      expect(flash.alert).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+      expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
 
     it "raises an error if date_range field is blank" do
       get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "" }
-      expect(flash.alert).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+      expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
 
     it "raises an error if date is invalid" do
       get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "10/04/2020-30/04/2022" }
-      expect(flash.alert).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+      expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
   end
 end
