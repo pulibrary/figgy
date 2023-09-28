@@ -187,7 +187,7 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
         FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, files: [file])
       end
     end
-
+    render_views
     it "displays a html view when no params are passed" do
       get :collection_item_and_image_count
       expect(response).to render_template :collection_item_and_image_count
@@ -196,6 +196,7 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
     it "displays a html view when params are passed" do
       get :collection_item_and_image_count, params: { collection_ids: collection.id.to_s, date_range: "10/04/2020-10/04/2022" }
       expect(response).to render_template :collection_item_and_image_count
+      expect(response.body).to include("Figgy Collection (10/04/2020-10/04/2022)")
     end
 
     it "allows downloading a CSV file with item and image counts for the collection" do

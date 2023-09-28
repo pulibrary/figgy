@@ -29,6 +29,10 @@ class ImageReportGenerator
     end
   end
 
+  def to_h
+    CSV.parse(to_csv, headers: true, header_converters: :symbol)
+  end
+
   def headers
     [
       "Figgy Collection",
