@@ -46,6 +46,7 @@ class PreservationStatusReporter
       # resource.preservation_targets.map { |file_metadata| file_metadata.intermediary_for(preservation_object) }
       # PreservationObject.intermediaries_for(resource, preservation_object)
       # BinaryIntermediaryNode.for(resource, preservation_object) # => []
+      # PreservationChecker.for(resource, preservation_object)
       binary_composite = Preserver::BinaryNodeComposite.new(resource: resource, preservation_object: po)
       # PO is missing a binary node or the checksums don't match.
       if binary_composite.any? { |x| !x.preserved? }
