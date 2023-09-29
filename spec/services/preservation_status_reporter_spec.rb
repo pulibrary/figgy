@@ -54,12 +54,12 @@ RSpec.describe PreservationStatusReporter do
       failures = reporter.cloud_audit_failures
       expect(failures.map(&:id)).to contain_exactly(
         unpreserved_resource.id,
-        unpreserved_binary_file_set.id
+        unpreserved_binary_file_set.id,
+        unpreserved_metadata_resource.id,
+        # bad_checksum_metadata_resource.id
       )
     end
     # TODO: add these in one at a time
-    # unpreserved_metadata_resource.id,
-    # bad_checksum_metadata_resource.id
     # bad_checksum_binary_file_set.id
     # missing_metadata_file_resource.id
     # missing_binary_file_set.id

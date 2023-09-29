@@ -25,6 +25,20 @@ class PreservationStatusReporter
       next unless ChangeSet.for(resource).preserve?
       # if it should preserve and there's no preservation object, it's a failure
       po = Wayfinder.for(resource).preservation_object
+      if po.nil?
+        failures << resource
+        next
+      end
+
+      # if preservation object doesn't have a metadata node
+      if po.metadata_node.nil?
+        failures << resource
+        next
+      end
+      # Stub this using
+      # https://rubydoc.info/github/rspec/rspec-mocks/RSpec%2FMocks%2FExampleMethods:receive_message_chain
+      # streamfile = Valkyrie::StorageAdapter.find_by(id: po.metadata_node.file_identifiers.first)
+      # remote_compact_md5 = streamfile.io.file.data[:file].md5
 
       #  TODO: Options Options for refactors
       # preservation_object.intermediaries_for(resource)
@@ -33,11 +47,8 @@ class PreservationStatusReporter
       # PreservationObject.intermediaries_for(resource, preservation_object)
       # BinaryIntermediaryNode.for(resource, preservation_object) # => []
       binary_composite = Preserver::BinaryNodeComposite.new(resource: resource, preservation_object: po)
-      if po.nil?
-        failures << resource
-        next
       # PO is missing a binary node or the checksums don't match.
-      elsif binary_composite.any? { |x| !x.preserved? }
+      if binary_composite.any? { |x| !x.preserved? }
         failures << resource
         next
       end
