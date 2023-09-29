@@ -21,17 +21,12 @@ class PreservationStatusReporter
   def run_cloud_audit
     failures = []
     query_service.find_all.each do |resource|
-      # Should it be preserved?
-      #   - ChangeSet.for(resource).preserve? == true
-      # Is it preserved?
-      #   - code that does this:
-      #
-      # Is the checksum correct?
-      # if it doesn't preserve we don't care about it
+      # if it should't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?
       # if it should preserve and there's no preservation object, it's a failure
+      po = Wayfinder.for(resource).preservation_object
+
       #  TODO: Options Options for refactors
-      # po = Wayfinder.for(resource).preservation_object
       # preservation_object.intermediaries_for(resource)
       # resource.preservation_intermediaries_for(preservation_object)
       # resource.preservation_targets.map { |file_metadata| file_metadata.intermediary_for(preservation_object) }

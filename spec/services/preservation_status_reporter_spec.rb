@@ -50,15 +50,15 @@ RSpec.describe PreservationStatusReporter do
       expect(preservation_object.binary_nodes.count).to eq 1
 
       # run audit
-      # reporter = described_class.new(progress_bar: false)
-      # failures = reporter.cloud_audit_failures
-      # expect(failures.map(&:id)).to contain_exactly(
-      #   unpreserved_resource.id,
-      #   unpreserved_metadata_resource.id,
-      #   unpreserved_binary_file_set.id
-      # )
+      reporter = described_class.new(progress_bar: false)
+      failures = reporter.cloud_audit_failures
+      expect(failures.map(&:id)).to contain_exactly(
+        unpreserved_resource.id,
+        unpreserved_binary_file_set.id
+      )
     end
     # TODO: add these in one at a time
+    # unpreserved_metadata_resource.id,
     # bad_checksum_metadata_resource.id
     # bad_checksum_binary_file_set.id
     # missing_metadata_file_resource.id
