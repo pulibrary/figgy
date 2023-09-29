@@ -14,6 +14,8 @@ RSpec.describe PreservationStatusReporter do
       stub_ezid
       # a fileset with a metadata and binary node that are both preserved
       preserved_resource = create_preserved_resource
+      # a resource that should not be preserved
+      _no_preserving_resource = FactoryBot.create_for_repository(:pending_scanned_resource)
       # a scannedresource with no preservation object
       unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource) # doesn't run change set persister so no preservation will happen
       # a scannedresource with a metadata node that was never preserved
