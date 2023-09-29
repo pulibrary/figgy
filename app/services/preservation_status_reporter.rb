@@ -42,7 +42,7 @@ class PreservationStatusReporter
 
       checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: po)
       # PO is missing a binary node or the checksums don't match.
-      if checkers.any? { |x| !x.preserved? }
+      if checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? }
         failures << resource
         next
       end

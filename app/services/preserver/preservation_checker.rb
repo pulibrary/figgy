@@ -35,6 +35,17 @@ class Preserver
         file_metadata.file_identifiers.present?
       end
 
+      def preservation_file_exists?
+        preservation_file.present?
+      rescue Valkyrie::StorageAdapter::FileNotFound
+        false
+      end
+
+      def preservation_file
+        @preservation_file ||=
+          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first).present?
+      end
+
       def preserved?
         preservation_object.binary_nodes.find { |x| x.preservation_copy_of_id == file_metadata.id } &&
           file_metadata.checksum == preservation_node&.checksum
