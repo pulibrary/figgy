@@ -40,16 +40,9 @@ class PreservationStatusReporter
       # streamfile = Valkyrie::StorageAdapter.find_by(id: po.metadata_node.file_identifiers.first)
       # remote_compact_md5 = streamfile.io.file.data[:file].md5
 
-      #  TODO: Options Options for refactors
-      # preservation_object.intermediaries_for(resource)
-      # resource.preservation_intermediaries_for(preservation_object)
-      # resource.preservation_targets.map { |file_metadata| file_metadata.intermediary_for(preservation_object) }
-      # PreservationObject.intermediaries_for(resource, preservation_object)
-      # BinaryIntermediaryNode.for(resource, preservation_object) # => []
-      # PreservationChecker.for(resource, preservation_object)
-      binary_composite = Preserver::BinaryNodeComposite.new(resource: resource, preservation_object: po)
+      checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: po)
       # PO is missing a binary node or the checksums don't match.
-      if binary_composite.any? { |x| !x.preserved? }
+      if checkers.any? { |x| !x.preserved? }
         failures << resource
         next
       end

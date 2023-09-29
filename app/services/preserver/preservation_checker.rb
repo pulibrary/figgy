@@ -4,9 +4,11 @@ class Preserver
   class PreservationChecker
     # @return [Array<Metadata | Binary>]
     def self.for(resource:, preservation_object:)
-      # Metadata.new(resource, preservation_object) + resource.try(:preservation_targets).map(
-      # (resource.try(:preservation_targets) || []).map { |x| ::Preserver::BinaryIntermediaryNode.new(file_metadata: x, preservation_object: preservation_object) }
+      binaries_for(resource: resource, preservation_object: preservation_object)
+    end
 
+    def self.binaries_for(resource:, preservation_object:)
+      (resource.try(:preservation_targets) || []).map { |file_metadata| Binary.new(file_metadata: file_metadata, preservation_object: preservation_object) }
     end
 
     class Metadata
@@ -14,9 +16,7 @@ class Preserver
         true
       end
 
-      def preserved?
-
-      end
+      def preserved?; end
     end
 
     class Binary
@@ -46,4 +46,4 @@ class Preserver
       end
     end
   end
-  end
+end

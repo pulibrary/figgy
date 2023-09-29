@@ -36,7 +36,7 @@ class Preserver
       # same time somehow, this will make one of them error with a database
       # constraint error before uploading anything.
       preservation_object
-      # These are BinaryIntermediaryNodes
+      # These are PreservationChecker::Binary instances
       binary_intermediary_nodes(preservation_object).each do |binary_intermediary_node|
         if force || !binary_intermediary_node.preserved?
           preserve_binary_node(binary_intermediary_node)
@@ -45,7 +45,7 @@ class Preserver
     end
 
     def binary_intermediary_nodes(preservation_object)
-      (resource.try(:preservation_targets) || []).map { |x| ::Preserver::BinaryIntermediaryNode.new(file_metadata: x, preservation_object: preservation_object) }
+      PreservationChecker.binaries_for(resource: resource, preservation_object: preservation_object)
     end
 
     def build_preservation_node(file_metadata)
