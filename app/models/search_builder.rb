@@ -6,19 +6,13 @@ class SearchBuilder < Blacklight::SearchBuilder
   # Add a filter query to restrict the search to documents the current user has access to
   include Hydra::AccessControlsEnforcement
   delegate :unreadable_states, to: :current_ability
-  self.default_processor_chain += [:filter_models, :filter_parented, :hide_incomplete, :hide_suppressed]
+  self.default_processor_chain += [:filter_models, :hide_incomplete, :hide_suppressed]
 
   # Add queries that excludes everything except for works and collections
   def filter_models(solr_parameters)
     return if blacklight_params[:all_models] == "true"
     solr_parameters[:fq] ||= []
     solr_parameters[:fq] << "!{!terms f=internal_resource_ssim}#{models_to_solr_clause}"
-  end
-
-  # Keeps child resources of multi-volume works (MVWs) from appearing in results
-  def filter_parented(solr_params)
-    solr_params[:fq] ||= []
-    solr_params[:fq] << "!member_of_ssim:['' TO *]"
   end
 
   def hide_incomplete(solr_params)
