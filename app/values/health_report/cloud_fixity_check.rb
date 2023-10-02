@@ -16,7 +16,7 @@ class HealthReport::CloudFixityCheck
 
   def status
     @status ||=
-      if resource.is_a?(EphemeraProject)
+      if resource.is_a?(EphemeraProject) || resource.is_a?(FileSet)
         shallow_status
       else
         deep_status

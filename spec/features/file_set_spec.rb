@@ -19,13 +19,18 @@ RSpec.feature "FileSet" do
     expect(page).to have_selector("#health-status")
   end
 
-  scenario "file set show page has a health status" do
+  scenario "with a cloud fixity failure, file set show page has a needs attention health status" do
     file = fixture_file_upload("files/example.tif", "image/tiff")
-    resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+    resource = FactoryBot.create_for_repository(:scanned_resource, state: "complete", files: [file])
     file_set = Wayfinder.for(resource).file_sets.first
+    po = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id)
+    FactoryBot.create_for_repository(:preservation_object, preserved_object_id: resource.id)
+    FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: po.id, status: "FAILURE", current: true)
 
     visit solr_document_path(id: file_set.id)
     expect(page).to have_selector("#health-status")
+    expect(page).to have_text("Preservation Status: Needs Attention")
+    expect(page).to have_text("Cloud Fixity Status: Needs Attention")
   end
 
   scenario "fileset fixity ui table shows the Last Success if it's a preserved file" do
