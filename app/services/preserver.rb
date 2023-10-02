@@ -37,14 +37,14 @@ class Preserver
       # constraint error before uploading anything.
       preservation_object
       # These are PreservationChecker::Binary instances
-      binary_intermediary_nodes(preservation_object).each do |binary_intermediary_node|
-        if force || !binary_intermediary_node.preserved?
-          preserve_binary_node(binary_intermediary_node)
+      binary_checkers(preservation_object).each do |binary_checker|
+        if force || !binary_checker.preserved?
+          preserve_binary_node(binary_checker)
         end
       end
     end
 
-    def binary_intermediary_nodes(preservation_object)
+    def binary_checkers(preservation_object)
       PreservationChecker.binaries_for(resource: resource, preservation_object: preservation_object)
     end
 
@@ -74,13 +74,13 @@ class Preserver
       "#{label}-#{file_metadata.id}#{splitter}#{extension}"
     end
 
-    def preserve_binary_node(binary_intermediary_node)
-      return unless binary_intermediary_node.local_files?
-      file_metadata = binary_intermediary_node.preservation_node || build_preservation_node(binary_intermediary_node.file_metadata)
+    def preserve_binary_node(binary_checker)
+      return unless binary_checker.local_files?
+      file_metadata = binary_checker.preservation_node || build_preservation_node(binary_checker.file_metadata)
       local_checksum = file_metadata.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
-      f = File.open(Valkyrie::StorageAdapter.find_by(id: binary_intermediary_node.file_identifiers.first).disk_path)
+      f = File.open(Valkyrie::StorageAdapter.find_by(id: binary_checker.file_identifiers.first).disk_path)
       uploaded_file = storage_adapter.upload(
         file: f,
         original_filename: file_metadata.label.first,
