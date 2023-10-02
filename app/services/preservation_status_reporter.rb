@@ -49,7 +49,8 @@ class PreservationStatusReporter
     [
       DeletionMarker,
       Event,
-      PreservationObject
+      PreservationObject,
+      CDL::ResourceChargeList
     ]
   end
 
