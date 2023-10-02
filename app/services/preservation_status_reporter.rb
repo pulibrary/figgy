@@ -21,7 +21,7 @@ class PreservationStatusReporter
   def run_cloud_audit
     failures = []
     # TODO: change this to use memory efficient all
-    query_service.find_all.each do |resource|
+    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models).each do |resource|
       # if it should't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?
       # if it should preserve and there's no preservation object, it's a failure
@@ -45,6 +45,14 @@ class PreservationStatusReporter
       end
     end
     failures
+  end
+
+  def unpreserved_models
+    [
+      DeletionMarker,
+      Event,
+      PreservationObject
+    ]
   end
 
   def query_service

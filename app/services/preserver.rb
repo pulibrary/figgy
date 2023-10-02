@@ -76,7 +76,7 @@ class Preserver
 
     def preserve_binary_node(binary_intermediary_node)
       return unless binary_intermediary_node.local_files?
-      file_metadata = build_preservation_node(binary_intermediary_node.file_metadata)
+      file_metadata = binary_intermediary_node.preservation_node || build_preservation_node(binary_intermediary_node.file_metadata)
       local_checksum = file_metadata.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)

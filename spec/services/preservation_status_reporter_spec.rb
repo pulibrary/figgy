@@ -28,7 +28,7 @@ RSpec.describe PreservationStatusReporter do
       # - a fileset with a binary node that has the wrong checksum
       bad_checksum_binary_file_set = create_file_set_bad_binary_checksum
       # - a scannedresource with a metadata node whose file is missing
-      missing_metadata_file_resource =  create_resource_no_metadata_file
+      missing_metadata_file_resource = create_resource_no_metadata_file
       # - a fileset with a binary node whose file is missing
       missing_binary_file_set = create_file_set_no_binary_file
 
@@ -72,10 +72,7 @@ RSpec.describe PreservationStatusReporter do
     resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
     reloaded_resource = query_service.find_by(id: resource.id)
     change_set = ChangeSet.for(reloaded_resource)
-    change_set_persister.save(change_set: change_set).tap do |scanned_resource|
-      file_set = Wayfinder.for(scanned_resource).file_sets.first
-      file_set_po = Wayfinder.for(file_set).preservation_object
-    end
+    change_set_persister.save(change_set: change_set)
   end
 
   def create_resource_unpreserved_metadata

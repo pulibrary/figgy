@@ -24,10 +24,6 @@ class Preserver
         @preservation_object = preservation_object
       end
 
-      def local_files?
-        true
-      end
-
       def preservation_file_exists?
         preservation_file.present?
       rescue Valkyrie::StorageAdapter::FileNotFound
