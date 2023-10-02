@@ -58,13 +58,13 @@ RSpec.describe PreservationStatusReporter do
         unpreserved_resource.id,
         unpreserved_binary_file_set.id,
         unpreserved_metadata_resource.id,
-        missing_binary_file_set.id
+        missing_binary_file_set.id,
+        missing_metadata_file_resource.id
         # bad_checksum_metadata_resource.id
       )
     end
     # TODO: add these in one at a time
     # bad_checksum_binary_file_set.id
-    # missing_metadata_file_resource.id
   end
 
   def create_preserved_resource

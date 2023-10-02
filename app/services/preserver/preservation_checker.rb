@@ -4,7 +4,13 @@ class Preserver
   class PreservationChecker
     # @return [Array<Metadata | Binary>]
     def self.for(resource:, preservation_object:)
-      binaries_for(resource: resource, preservation_object: preservation_object)
+      binaries_for(resource: resource, preservation_object: preservation_object) + metadata_for(resource: resource, preservation_object: preservation_object)
+    end
+
+    def self.metadata_for(resource:, preservation_object:)
+      [
+        Metadata.new(resource: resource, preservation_object: preservation_object)
+      ]
     end
 
     def self.binaries_for(resource:, preservation_object:)
@@ -12,11 +18,35 @@ class Preserver
     end
 
     class Metadata
+      attr_reader :resource, :preservation_object
+      def initialize(resource:, preservation_object:)
+        @resource = resource
+        @preservation_object = preservation_object
+      end
+
       def local_files?
         true
       end
 
-      def preserved?; end
+      def preservation_file_exists?
+        preservation_file.present?
+      rescue Valkyrie::StorageAdapter::FileNotFound
+        false
+      end
+
+      def preserved?
+        preservation_object.preserved_object_id == resource.id
+      end
+
+      def preservation_file
+        @preservation_file ||=
+          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first).present?
+      end
+
+      def preservation_node
+        @preservation_node ||=
+          preservation_object.metadata_node
+      end
     end
 
     class Binary
