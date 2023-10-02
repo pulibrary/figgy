@@ -8,6 +8,7 @@
 # failing.
 class PreservationStatusReporter
   # reporter = PreservationStatusReporter.new(progress_bar: true)
+  # TODO: write a rake task and make the progress bar part work
   def initialize(progress_bar: true)
     @progress_bar = progress_bar
   end
