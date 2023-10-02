@@ -7,20 +7,21 @@
 # it returns something again, we'll want more details about what / why it's
 # failing.
 class PreservationStatusReporter
-  # reporter = PreservationStatusReporter.new(progress_bar: true)
-  # TODO: write a rake task and make the progress bar part work
-  def initialize(progress_bar: true)
-    @progress_bar = progress_bar
+  # @return [Array<Valkyrie::Resource>]
+  # Takes a block which will yield before every resource it's checking, to allow
+  # for a progress bar or other similar counting.
+  def cloud_audit_failures(&block)
+    @cloud_audit_failures ||= run_cloud_audit(&block)
   end
 
-  # @return [Array<Valkyrie::Resource>]
-  def cloud_audit_failures
-    @cloud_audit_failures ||= run_cloud_audit
+  def audited_resource_count
+    query_service.custom_queries.count_all_except_models(except_models: unpreserved_models)
   end
 
   # @return [Array<Valkyrie::Resource>] a lazy enumerator
   def run_cloud_audit
     query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models).select do |resource|
+      yield if block_given?
       # if it should't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?
       # if it should preserve and there's no preservation object, it's a failure

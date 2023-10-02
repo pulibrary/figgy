@@ -53,7 +53,9 @@ RSpec.describe PreservationStatusReporter do
       expect(preservation_object.binary_nodes.count).to eq 1
 
       # run audit
-      reporter = described_class.new(progress_bar: false)
+      reporter = described_class.new
+      # Ensure count of resources it's auditing
+      expect(reporter.audited_resource_count).to eq 13
       failures = reporter.cloud_audit_failures
       expect(failures.map(&:id)).to contain_exactly(
         unpreserved_resource.id,
@@ -64,6 +66,32 @@ RSpec.describe PreservationStatusReporter do
         bad_checksum_binary_file_set.id,
         bad_checksum_metadata_resource.id
       )
+    end
+
+    it "can take a block to do something before every resource" do
+      stub_ezid
+      # a fileset with a metadata and binary node that are both preserved
+      create_preserved_resource
+      # a resource that should not be preserved
+      _no_preserving_resource = FactoryBot.create_for_repository(:pending_scanned_resource)
+      # a scannedresource with no preservation object
+      FactoryBot.create_for_repository(:complete_scanned_resource) # doesn't run change set persister so no preservation will happen
+      # a scannedresource with a metadata node that was never preserved
+      create_resource_unpreserved_metadata
+      # a fileset with one binary node that is not preserved, but 2 should be
+      create_recording_unpreserved_binary
+
+      reporter = described_class.new
+      full_count = reporter.audited_resource_count
+
+      iterated_count = 0
+
+      output = reporter.cloud_audit_failures do
+        iterated_count += 1
+      end
+      sum_of_failures = output.map { |_| 1 }.sum
+      expect(iterated_count).to eq full_count
+      expect(sum_of_failures).not_to eq full_count
     end
   end
 
