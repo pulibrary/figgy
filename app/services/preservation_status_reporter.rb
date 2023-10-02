@@ -17,34 +17,30 @@ class PreservationStatusReporter
     @cloud_audit_failures ||= run_cloud_audit
   end
 
-  # @return [Array<Valkyrie::Resource>]
+  # @return [Array<Valkyrie::Resource>] a lazy enumerator
   def run_cloud_audit
-    failures = []
-    # TODO: change this to use memory efficient all
-    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models).each do |resource|
+    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models).select do |resource|
       # if it should't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?
       # if it should preserve and there's no preservation object, it's a failure
-      po = Wayfinder.for(resource).preservation_object
-      if po.nil?
-        failures << resource
-        next
-      end
-
+      preservation_object = Wayfinder.for(resource).preservation_object
+      if preservation_object.nil?
+        true
       # if preservation object doesn't have a metadata node
-      if po.metadata_node.nil?
-        failures << resource
-        next
-      end
-
-      checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: po)
-      # PO is missing a binary node or the checksums don't match.
-      if checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? || !x.preserved_file_checksums_match? }
-        failures << resource
-        next
+      elsif preservation_object.metadata_node.nil?
+        true
+      elsif incorrectly_preserved?(resource, preservation_object)
+        true
+      else
+        false
       end
     end
-    failures
+  end
+
+  # Preservation object is missing a binary node or the checksums don't match.
+  def incorrectly_preserved?(resource, preservation_object)
+    checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: preservation_object)
+    checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? || !x.preserved_file_checksums_match? }
   end
 
   def unpreserved_models
