@@ -61,11 +61,10 @@ RSpec.describe PreservationStatusReporter do
         unpreserved_metadata_resource.id,
         missing_binary_file_set.id,
         missing_metadata_file_resource.id,
-        bad_checksum_binary_file_set.id
-        # bad_checksum_metadata_resource.id
+        bad_checksum_binary_file_set.id,
+        bad_checksum_metadata_resource.id
       )
     end
-    # TODO: add these in one at a time
   end
 
   def create_preserved_resource
@@ -76,7 +75,6 @@ RSpec.describe PreservationStatusReporter do
     change_set_persister.save(change_set: change_set).tap do |scanned_resource|
       file_set = Wayfinder.for(scanned_resource).file_sets.first
       file_set_po = Wayfinder.for(file_set).preservation_object
-      stub_gcs(file_identifier: file_set_po.binary_nodes.first.file_identifiers.first)
     end
   end
 
@@ -91,10 +89,6 @@ RSpec.describe PreservationStatusReporter do
     resource
   end
 
-  # Stub this using
-  # https://rubydoc.info/github/rspec/rspec-mocks/RSpec%2FMocks%2FExampleMethods:receive_message_chain
-  # streamfile = Valkyrie::StorageAdapter.find_by(id: po.metadata_node.file_identifiers.first)
-  # remote_compact_md5 = streamfile.io.file.data[:file].md5
   def create_file_set_bad_binary_checksum
     file = fixture_file_upload("files/example.tif", "image/tiff")
     resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
@@ -104,40 +98,7 @@ RSpec.describe PreservationStatusReporter do
     file_set = Wayfinder.for(resource).file_sets.first
     po = Wayfinder.for(file_set).preservation_objects.first
     modify_file(po.binary_nodes.first.file_identifiers.first)
-    stub_gcs(file_identifier: po.binary_nodes.first.file_identifiers.first)
     file_set
-  end
-
-  def stub_gcs(file_identifier:)
-    actual_file = Valkyrie::StorageAdapter.find_by(id: file_identifier)
-    gcs_fake = Valkyrie::StorageAdapter::StreamFile.new(io: GcsFake.new(actual_file), id: file_identifier)
-    allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).with(id: file_identifier).and_return(gcs_fake)
-  end
-
-  class GcsFake
-    delegate :size, :read, :rewind, :close, to: :actual_file
-    attr_reader :actual_file
-    def initialize(actual_file)
-      @actual_file = actual_file
-    end
-
-    def file
-      OpenStruct.new(
-        data: {
-          file: OpenStruct.new(
-            md5: compact_md5
-          )
-        }
-      )
-    end
-
-    def compact_md5
-      Base64.strict_encode64([md5].pack("H*"))
-    end
-
-    def md5
-      MultiChecksum.for(actual_file).md5
-    end
   end
 
   def create_resource_bad_metadata_checksum

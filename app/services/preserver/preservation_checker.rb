@@ -39,7 +39,13 @@ class Preserver
       end
 
       def preserved_file_checksums_match?
-        true
+        compact_local_md5 == preservation_file.io.file.data[:file].md5
+      end
+
+      def compact_local_md5
+        # TODO: put a to_json on the resource?
+        local_checksum = Digest::MD5.hexdigest(resource.to_h.compact.to_json)
+        Base64.strict_encode64([local_checksum].pack("H*"))
       end
 
       def preservation_file

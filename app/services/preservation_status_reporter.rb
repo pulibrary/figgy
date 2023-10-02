@@ -20,6 +20,7 @@ class PreservationStatusReporter
   # @return [Array<Valkyrie::Resource>]
   def run_cloud_audit
     failures = []
+    # TODO: change this to use memory efficient all
     query_service.find_all.each do |resource|
       # if it should't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?
