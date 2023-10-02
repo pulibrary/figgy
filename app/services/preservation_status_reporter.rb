@@ -35,14 +35,10 @@ class PreservationStatusReporter
         failures << resource
         next
       end
-      # Stub this using
-      # https://rubydoc.info/github/rspec/rspec-mocks/RSpec%2FMocks%2FExampleMethods:receive_message_chain
-      # streamfile = Valkyrie::StorageAdapter.find_by(id: po.metadata_node.file_identifiers.first)
-      # remote_compact_md5 = streamfile.io.file.data[:file].md5
 
       checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: po)
       # PO is missing a binary node or the checksums don't match.
-      if checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? }
+      if checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? || !x.preserved_file_checksums_match? }
         failures << resource
         next
       end

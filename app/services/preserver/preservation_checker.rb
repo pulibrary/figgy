@@ -38,9 +38,13 @@ class Preserver
         preservation_object.preserved_object_id == resource.id
       end
 
+      def preserved_file_checksums_match?
+        true
+      end
+
       def preservation_file
         @preservation_file ||=
-          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first).present?
+          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first)
       end
 
       def preservation_node
@@ -71,9 +75,17 @@ class Preserver
         false
       end
 
+      def preserved_file_checksums_match?
+        preservation_file.io.file.data[:file].md5 == compact_local_md5
+      end
+
+      def compact_local_md5
+        Base64.strict_encode64([file_metadata.checksum.first.md5].pack("H*"))
+      end
+
       def preservation_file
         @preservation_file ||=
-          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first).present?
+          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first)
       end
 
       def preserved?
