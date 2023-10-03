@@ -60,7 +60,7 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
     let(:member) { FileSetChangeSet.new(file_set) }
 
     it "displays an error message" do
-      expect(rendered).to include "<span>Error generating derivatives</span>"
+      expect(rendered).to include "Derivatives Failed"
     end
   end
 end
