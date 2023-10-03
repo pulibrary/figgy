@@ -398,7 +398,6 @@ Rails.application.config.to_prepare do
   # Register custom queries for the default Valkyrie metadata adapter
   # (see Valkyrie::Persistence::CustomQueryContainer)
   [
-    DeleteDuplicateFixityEvents,
     FindByLocalIdentifier,
     FindByProperty,
     FindManyByProperty,
