@@ -13,6 +13,14 @@ describe MemoryEfficientAllQuery do
       end
     end
 
+    context "when asked to order" do
+      it "orders by date created" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        resource2 = FactoryBot.create_for_repository(:scanned_resource)
+        expect(query.memory_efficient_all(order: true).map(&:id).to_a).to eq [resource.id, resource2.id]
+      end
+    end
+
     it "will only parse as many objects as is necessary" do
       5.times { FactoryBot.create_for_repository(:scanned_resource) }
       allow(query_service.resource_factory).to receive(:to_resource).and_call_original

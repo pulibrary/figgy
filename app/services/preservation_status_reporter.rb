@@ -20,7 +20,7 @@ class PreservationStatusReporter
 
   # @return [Array<Valkyrie::Resource>] a lazy enumerator
   def run_cloud_audit
-    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models).select do |resource|
+    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true).select do |resource|
       yield if block_given?
       # if it should't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?

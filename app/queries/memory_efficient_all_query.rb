@@ -13,10 +13,11 @@ class MemoryEfficientAllQuery
     @query_service = query_service
   end
 
-  def memory_efficient_all(except_models: [])
+  def memory_efficient_all(except_models: [], order: false)
     connection.transaction(savepoint: true) do
       relation = orm_class.use_cursor
       relation = relation.exclude(internal_resource: Array(except_models).map(&:to_s)) if except_models.present?
+      relation = relation.order(Sequel.asc(:created_at)) if order
       relation.lazy.map do |object|
         resource_factory.to_resource(object: object)
       end
