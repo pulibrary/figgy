@@ -156,6 +156,11 @@ class CatalogController < ApplicationController
       assumed_boundaries: [1100, Time.current.year + 1],
       segments: true
     }
+    config.add_facet_field "membership_facet", label: "Membership", query: {
+      no_parent: { label: "No Parent", fq: "!member_of_ssim:['' TO *]" },
+      has_parent: { label: "Has Parent", fq: "member_of_ssim:['' TO *]" }
+    }
+
     config.add_facet_fields_to_solr_request!
 
     config.add_results_collection_tool(:sort_widget)
