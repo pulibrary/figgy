@@ -33,7 +33,13 @@
           <lux-icon-alert></lux-icon-alert>
         </lux-icon-base>
         <span>
-          Repairing Derivatives
+          <% if node.model_name.singular == "file_set" %>
+            <% if geo_metadata_file?(node) %>
+                Metadata Generation Failed |  <a class="rederive" href="<%= scanned_maps_extract_metadata_path(file_set_id: node.id) %>">Extract Metadata</a>
+            <% else %>
+                Derivatives Failed | <a class="rederive" href="<%= derivatives_file_set_path(node) %>">Regenerate</a>
+            <% end %>
+          <% end %>
         </span>
       </div>
     <% end %>
