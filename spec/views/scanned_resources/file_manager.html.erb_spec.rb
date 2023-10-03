@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe "base/file_manager.html.erb", type: :view do
-  let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, title: "Test Title", files: [file]) }
+  let(:scanned_resource) { FactoryBot.create_for_repository(:complete_scanned_resource, title: "Test Title", files: [file]) }
   let(:members) { [member] }
   let(:member) { FileSetChangeSet.new(Wayfinder.for(scanned_resource).members_with_parents.first) }
   let(:parent) { ScannedResourceChangeSet.new(scanned_resource) }
@@ -10,6 +10,7 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
   let(:event) {}
 
   before do
+    stub_ezid
     assign(:change_set, parent)
     assign(:children, members)
     event
@@ -72,6 +73,15 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
 
     it "displays a local fixity error message" do
       expect(rendered).to include "Local Fixity Failed"
+    end
+  end
+
+  context "when a FileSet has Cloud Fixity Errors" do
+    with_queue_adapter :inline
+    let(:event) { FactoryBot.create(:cloud_fixity_failure, resource_id: Wayfinder.for(member).preservation_object.id, child_id: member.resource.primary_file.id) }
+
+    it "displays a cloud fixity error message" do
+      expect(rendered).to include "Cloud Fixity Failed"
     end
   end
 end

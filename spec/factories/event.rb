@@ -13,6 +13,14 @@ FactoryBot.define do
       type { :cloud_fixity }
     end
 
+    factory :cloud_fixity_failure do
+      type { :cloud_fixity }
+      status { "FAILURE" }
+      to_create do |instance|
+        Valkyrie.config.metadata_adapter.persister.save(resource: instance)
+      end
+    end
+
     factory :local_fixity_success do
       type { :local_fixity }
       status { "SUCCESS" }

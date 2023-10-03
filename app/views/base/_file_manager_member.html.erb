@@ -49,7 +49,18 @@
           <lux-icon-denied></lux-icon-denied>
         </lux-icon-base>
         <span>
-          Local Fixity Failed | <a href="foo">Report</a></span>
+          Local Fixity Failed
+        </span>
+      </div>
+    <% end %>
+    <% if HealthReport::CloudFixityCheck.for(f.object).status == :needs_attention %>
+      <div class="fm_error err">
+        <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
+          <lux-icon-denied></lux-icon-denied>
+        </lux-icon-base>
+        <span>
+          Cloud Fixity Failed
+        </span>
       </div>
     <% end %>
   </div>
