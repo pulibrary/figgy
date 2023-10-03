@@ -7,6 +7,11 @@
 # it returns something again, we'll want more details about what / why it's
 # failing.
 class PreservationStatusReporter
+  attr_reader :since
+  def initialize(since: nil)
+    @since = since
+  end
+
   # @return [Array<Valkyrie::Resource>]
   # Takes a block which will yield before every resource it's checking, to allow
   # for a progress bar or other similar counting.
@@ -20,7 +25,7 @@ class PreservationStatusReporter
 
   # @return [Array<Valkyrie::Resource>] a lazy enumerator
   def run_cloud_audit
-    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true).select do |resource|
+    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).select do |resource|
       yield if block_given?
       # if it should't preserve we don't care about it
       next unless ChangeSet.for(resource).preserve?

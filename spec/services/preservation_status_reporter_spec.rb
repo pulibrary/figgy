@@ -68,6 +68,29 @@ RSpec.describe PreservationStatusReporter do
       )
     end
 
+    it "can start at a given timestamp and only reprocess those" do
+      stub_ezid
+      no_preserving_resource = nil
+      Timecop.travel(Time.current - 2.days) do
+        # a resource that should not be preserved
+        FactoryBot.create_for_repository(:pending_scanned_resource)
+      end
+      Timecop.travel(Time.current - 1.day) do
+        no_preserving_resource = FactoryBot.create_for_repository(:pending_scanned_resource)
+      end
+      # a scannedresource with no preservation object
+      _unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+      # run audit
+      query_count = 0
+      reporter = described_class.new(since: no_preserving_resource.created_at.to_s)
+      reporter.cloud_audit_failures do
+        query_count += 1
+      end.to_a
+
+      # It re-does the last one at the given date, but not the ones before it.
+      expect(query_count).to eq 2
+    end
+
     it "can take a block to do something before every resource" do
       stub_ezid
       # a fileset with a metadata and binary node that are both preserved
