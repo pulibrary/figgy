@@ -9,7 +9,7 @@ RSpec.describe PreservationStatusReporter do
   let(:query_service) { adapter.query_service }
   let(:disk_preservation_path) { Pathname.new(Figgy.config["disk_preservation_path"]) }
 
-  describe "#cloud_audit" do
+  describe "#cloud_audit", db_cleaner_deletion: true do
     it "identifies resources that should be preserved and either are not preserved or have the wrong checksum" do
       stub_ezid
       allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
@@ -56,15 +56,15 @@ RSpec.describe PreservationStatusReporter do
       reporter = described_class.new
       # Ensure count of resources it's auditing
       expect(reporter.audited_resource_count).to eq 13
-      failures = reporter.cloud_audit_failures
-      expect(failures.map(&:id)).to contain_exactly(
-        unpreserved_resource.id,
-        unpreserved_binary_file_set.id,
-        unpreserved_metadata_resource.id,
-        missing_binary_file_set.id,
-        missing_metadata_file_resource.id,
-        bad_checksum_binary_file_set.id,
-        bad_checksum_metadata_resource.id
+      failures = reporter.cloud_audit_failures.to_a
+      expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
+        unpreserved_resource.id.to_s,
+        unpreserved_binary_file_set.id.to_s,
+        unpreserved_metadata_resource.id.to_s,
+        missing_binary_file_set.id.to_s,
+        missing_metadata_file_resource.id.to_s,
+        bad_checksum_binary_file_set.id.to_s,
+        bad_checksum_metadata_resource.id.to_s
       )
     end
 
