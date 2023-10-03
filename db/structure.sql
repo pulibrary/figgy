@@ -896,6 +896,13 @@ CREATE UNIQUE INDEX index_orm_resources_on_current_event ON public.orm_resources
 
 
 --
+-- Name: index_orm_resources_on_current_metadata_event; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_orm_resources_on_current_metadata_event ON public.orm_resources USING btree (((metadata ->> 'resource_id'::text)), ((metadata ->> 'type'::text))) WHERE (((internal_resource)::text = 'Event'::text) AND (metadata @> '{"type": ["metadata_node"], "current": [true]}'::jsonb));
+
+
+--
 -- Name: index_orm_resources_on_id_varchar; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1093,6 +1100,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220727213332'),
 ('20220727213333'),
 ('20221214184110'),
-('20230119155402');
+('20230119155402'),
+('20230802152303');
 
 

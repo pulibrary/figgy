@@ -72,4 +72,28 @@ describe Event do
       end.to raise_error(Sequel::UniqueConstraintViolation)
     end
   end
+
+  context "when creating two current metadata_node events with the same resource_id" do
+    it "raises an error" do
+      change_set_persister = ChangeSetPersister.default
+      event = change_set_persister.save(
+        change_set: ChangeSet.for(described_class.new(
+          resource_id: Valkyrie::ID.new(SecureRandom.uuid),
+          child_id: Valkyrie::ID.new(SecureRandom.uuid),
+          current: [true],
+          type: ["metadata_node"]
+        ))
+      )
+      expect do
+        change_set_persister.save(
+          change_set: ChangeSet.for(described_class.new(
+            resource_id: event.resource_id,
+            child_id: Valkyrie::ID.new(SecureRandom.uuid),
+            current: [true],
+            type: ["metadata_node"]
+          ))
+        )
+      end.to raise_error(Sequel::UniqueConstraintViolation)
+    end
+  end
 end
