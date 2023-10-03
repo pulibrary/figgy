@@ -7,10 +7,12 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
   let(:member) { FileSetChangeSet.new(Wayfinder.for(scanned_resource).members_with_parents.first) }
   let(:parent) { ScannedResourceChangeSet.new(scanned_resource) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:event) {}
 
   before do
     assign(:change_set, parent)
     assign(:children, members)
+    event
     stub_blacklight_views
     allow(view).to receive(:controller_name).and_return("catalog")
     render
@@ -51,16 +53,25 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
       expect(rendered).to have_selector "input[name='scanned_resource[deletion_marker_restore_ids][]'][value='#{deletion_marker.id}']", visible: false
       expect(rendered).not_to have_selector "input[name='scanned_resource[deletion_marker_restore_ids][]'][value='#{unpreserved_deletion_marker.id}']", visible: false
       expect(rendered).to have_button "Reinstate"
+      expect(rendered).not_to include "Local Fixity Failed"
     end
   end
 
-  context "when a FileSet has errors" do
+  context "when a FileSet has Derivative errors" do
     let(:original_file) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], error_message: ["errors"]) }
     let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [original_file]) }
     let(:member) { FileSetChangeSet.new(file_set) }
 
     it "displays an error message" do
       expect(rendered).to include "Derivatives Failed"
+    end
+  end
+
+  context "when a FileSet has Local Fixity Errors" do
+    let(:event) { FactoryBot.create(:local_fixity_failure, resource_id: member.id) }
+
+    it "displays a local fixity error message" do
+      expect(rendered).to include "Local Fixity Failed"
     end
   end
 end
