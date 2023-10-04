@@ -53,7 +53,7 @@ RSpec.describe PreservationStatusReporter do
       expect(preservation_object.binary_nodes.count).to eq 1
 
       # run audit
-      reporter = described_class.new
+      reporter = described_class.new(suppress_progress: true)
       # Ensure count of resources it's auditing
       expect(reporter.audited_resource_count).to eq 13
       failures = reporter.cloud_audit_failures.to_a
@@ -66,6 +66,7 @@ RSpec.describe PreservationStatusReporter do
         bad_checksum_binary_file_set.id.to_s,
         bad_checksum_metadata_resource.id.to_s
       )
+      expect(reporter.progress_bar.progress).to eq 13
     end
 
     it "can start at a given timestamp and only reprocess those" do
@@ -81,40 +82,11 @@ RSpec.describe PreservationStatusReporter do
       # a scannedresource with no preservation object
       _unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
       # run audit
-      query_count = 0
-      reporter = described_class.new(since: no_preserving_resource.created_at.to_s)
-      reporter.cloud_audit_failures do
-        query_count += 1
-      end.to_a
+      reporter = described_class.new(since: no_preserving_resource.created_at.to_s, suppress_progress: true)
+      reporter.cloud_audit_failures.to_a
 
       # It re-does the last one at the given date, but not the ones before it.
-      expect(query_count).to eq 2
-    end
-
-    it "can take a block to do something before every resource" do
-      stub_ezid
-      # a fileset with a metadata and binary node that are both preserved
-      create_preserved_resource
-      # a resource that should not be preserved
-      _no_preserving_resource = FactoryBot.create_for_repository(:pending_scanned_resource)
-      # a scannedresource with no preservation object
-      FactoryBot.create_for_repository(:complete_scanned_resource) # doesn't run change set persister so no preservation will happen
-      # a scannedresource with a metadata node that was never preserved
-      create_resource_unpreserved_metadata
-      # a fileset with one binary node that is not preserved, but 2 should be
-      create_recording_unpreserved_binary
-
-      reporter = described_class.new
-      full_count = reporter.audited_resource_count
-
-      iterated_count = 0
-
-      output = reporter.cloud_audit_failures do
-        iterated_count += 1
-      end
-      sum_of_failures = output.map { |_| 1 }.sum
-      expect(iterated_count).to eq full_count
-      expect(sum_of_failures).not_to eq full_count
+      expect(reporter.progress_bar.progress).to eq 2
     end
   end
 

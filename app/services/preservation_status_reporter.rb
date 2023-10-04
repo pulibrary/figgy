@@ -6,10 +6,13 @@
 # Future use case: We'll get this to where it returns nothing. If down the road
 # it returns something again, we'll want more details about what / why it's
 # failing.
+require "ruby-progressbar"
+require "ruby-progressbar/outputs/null"
 class PreservationStatusReporter
-  attr_reader :since
-  def initialize(since: nil)
+  attr_reader :since, :suppress_progress
+  def initialize(since: nil, suppress_progress: false)
     @since = since
+    @suppress_progress = suppress_progress
   end
 
   # @return [Array<Valkyrie::Resource>]
@@ -21,6 +24,14 @@ class PreservationStatusReporter
 
   def audited_resource_count
     query_service.custom_queries.count_all_except_models(except_models: unpreserved_models)
+  end
+
+  def progress_bar
+    @progress_bar ||= ProgressBar.create format: "%a %e %P% Querying: %c from %C", output: progress_output, total: audited_resource_count
+  end
+
+  def progress_output
+    ProgressBar::Outputs::Null if suppress_progress
   end
 
   def records_per_group
@@ -35,7 +46,7 @@ class PreservationStatusReporter
   def run_cloud_audit
     query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).each_slice(records_per_group).lazily.in_threads(parallel_threads) do |resources|
       resources.select do |resource|
-        yield if block_given?
+        progress_bar.increment
         # if it should't preserve we don't care about it
         next unless ChangeSet.for(resource).preserve?
         # if it should preserve and there's no preservation object, it's a failure

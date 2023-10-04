@@ -6,9 +6,7 @@ namespace :figgy do
     desc "Reports the number of unpreserved models."
     task count_unpreserved: :environment do
       auditor = PreservationStatusReporter.new
-      total = auditor.audited_resource_count
-      progress_bar = ProgressBar.create format: "%a %e %P% Querying: %c from %C", total: total
-      failed_count = auditor.cloud_audit_failures { progress_bar.increment }.map(&:id).to_a.size
+      failed_count = auditor.cloud_audit_failures.map(&:id).to_a.size
       puts "Number of Resources Needing Re-Preserved: #{failed_count}"
     end
   end
