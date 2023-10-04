@@ -16,7 +16,7 @@ services:
     type: postgres:15
     portforward: true
   redis:
-    type: redis:6
+    type: redis:7
     portforward: true
 proxy:
   figgy_test_solr:
