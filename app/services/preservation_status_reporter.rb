@@ -28,7 +28,7 @@ class PreservationStatusReporter
   end
 
   def parallel_threads
-    5
+    10
   end
 
   # @return [Array<Valkyrie::Resource>] a lazy enumerator
