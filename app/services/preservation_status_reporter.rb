@@ -40,10 +40,7 @@ class PreservationStatusReporter
         next unless ChangeSet.for(resource).preserve?
         # if it should preserve and there's no preservation object, it's a failure
         preservation_object = Wayfinder.for(resource).preservation_object
-        if preservation_object.nil?
-          true
-          # if preservation object doesn't have a metadata node
-        elsif preservation_object.metadata_node.nil?
+        if preservation_object&.metadata_node.nil?
           true
         elsif incorrectly_preserved?(resource, preservation_object)
           true
