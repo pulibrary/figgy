@@ -33,30 +33,25 @@ class PreservationStatusReporter
 
   # @return [Array<Valkyrie::Resource>] a lazy enumerator
   def run_cloud_audit
-    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).each_slice(records_per_group).each_slice(parallel_threads).flat_map do |parallel_groups|
-      threads = parallel_groups.map do |resources|
-        Thread.new(resources) do |thread_resources|
-          thread_resources.select do |resource|
-            yield if block_given?
-            # if it should't preserve we don't care about it
-            next unless ChangeSet.for(resource).preserve?
-            # if it should preserve and there's no preservation object, it's a failure
-            preservation_object = Wayfinder.for(resource).preservation_object
-            if preservation_object.nil?
-              true
-              # if preservation object doesn't have a metadata node
-            elsif preservation_object.metadata_node.nil?
-              true
-            elsif incorrectly_preserved?(resource, preservation_object)
-              true
-            else
-              false
-            end
-          end
+    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).each_slice(records_per_group).lazily.in_threads(parallel_threads) do |resources|
+      resources.select do |resource|
+        yield if block_given?
+        # if it should't preserve we don't care about it
+        next unless ChangeSet.for(resource).preserve?
+        # if it should preserve and there's no preservation object, it's a failure
+        preservation_object = Wayfinder.for(resource).preservation_object
+        if preservation_object.nil?
+          true
+          # if preservation object doesn't have a metadata node
+        elsif preservation_object.metadata_node.nil?
+          true
+        elsif incorrectly_preserved?(resource, preservation_object)
+          true
+        else
+          false
         end
       end
-      threads.flat_map(&:value)
-    end
+    end.flatten
   end
 
   # Preservation object is missing a binary node or the checksums don't match.
