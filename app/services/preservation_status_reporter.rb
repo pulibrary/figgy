@@ -15,20 +15,21 @@ class PreservationStatusReporter
     @suppress_progress = suppress_progress
     @records_per_group = records_per_group
     @parallel_threads = parallel_threads
+    @found_resources = Set.new
   end
 
   # @return [Array<Valkyrie::Resource>]
   # Takes a block which will yield before every resource it's checking, to allow
   # for a progress bar or other similar counting.
-  def cloud_audit_failures(&block)
-    @cloud_audit_failures ||= run_cloud_audit(&block)
+  def cloud_audit_failures
+    @cloud_audit_failures ||= Lazily.concat(@found_resources, run_cloud_audit).uniq
   end
 
   def audited_resource_count
     query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
   end
 
-  # @return [Array<Valkyrie::Resource>] a lazy enumerator
+  # @return [Array<Valkyrie::ID>] a lazy enumerator
   def run_cloud_audit
     query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).each_slice(records_per_group).lazily.in_threads(parallel_threads) do |resources|
       bad_resources = resources.select do |resource|
@@ -37,9 +38,9 @@ class PreservationStatusReporter
         next unless ChangeSet.for(resource).preserve?
         # if it should preserve and there's no preservation object, it's a failure
         incorrectly_preserved?(resource)
-      end
+      end.map(&:id)
       bad_resources.tap do |selected_resources|
-        processed(last_checked: resources.last, bad_resources: selected_resources)
+        processed(last_checked: resources.last, bad_resource_ids: selected_resources.map(&:to_s))
       end
     end.flatten
   end
@@ -86,13 +87,18 @@ class PreservationStatusReporter
     @state_file_path = state_directory.join("since")
     @since = @state_file_path.read if @state_file_path.exist?
     @found_resource_path = state_directory.join("bad_resources")
-    @found_resources = Set.new(@found_resource_path.read.split) if @found_resource_path.exist?
+    @found_resources = Set.new(@found_resource_path.read.split.map { |x| Valkyrie::ID.new(x) }) if @found_resource_path.exist?
   end
 
-  def processed(last_checked:, bad_resources:)
+  def processed(last_checked:, bad_resource_ids:)
     return unless @state_file_path
     File.open(@state_file_path, "w") do |f|
       f.write(last_checked.created_at.to_s)
+    end
+    File.open(@found_resource_path, "a") do |f|
+      bad_resource_ids.each do |resource_id|
+        f.puts resource_id
+      end
     end
   end
 end

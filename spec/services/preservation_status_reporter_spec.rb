@@ -61,13 +61,13 @@ RSpec.describe PreservationStatusReporter do
       expect(reporter.audited_resource_count).to eq 13
       failures = reporter.cloud_audit_failures.to_a
       expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
-        unpreserved_resource.id.to_s,
-        unpreserved_binary_file_set.id.to_s,
-        unpreserved_metadata_resource.id.to_s,
-        missing_binary_file_set.id.to_s,
-        missing_metadata_file_resource.id.to_s,
-        bad_checksum_binary_file_set.id.to_s,
-        bad_checksum_metadata_resource.id.to_s
+        unpreserved_resource.id,
+        unpreserved_binary_file_set.id,
+        unpreserved_metadata_resource.id,
+        missing_binary_file_set.id,
+        missing_metadata_file_resource.id,
+        bad_checksum_binary_file_set.id,
+        bad_checksum_metadata_resource.id
       )
       expect(reporter.progress_bar.progress).to eq 13
     end
@@ -96,10 +96,10 @@ RSpec.describe PreservationStatusReporter do
       stub_ezid
       Timecop.travel(Time.current - 2.days) do
         # a resource that should not be preserved
-        FactoryBot.create_for_repository(:pending_scanned_resource)
+        FactoryBot.create_for_repository(:complete_scanned_resource)
       end
       Timecop.travel(Time.current - 1.day) do
-        FactoryBot.create_for_repository(:pending_scanned_resource)
+        FactoryBot.create_for_repository(:complete_scanned_resource)
       end
       # a scannedresource with no preservation object
       _unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
@@ -111,13 +111,15 @@ RSpec.describe PreservationStatusReporter do
         raise "Broken" if call_count == 2
         call_count += 1
       end
-      expect { reporter.cloud_audit_failures.to_a }.to raise_error
+      expect { reporter.cloud_audit_failures.to_a }.to raise_error("Broken")
       expect(call_count).to eq 2
 
       # Run it a second time, it should only load the next two it missed.
       reporter = described_class.new(suppress_progress: true)
       reporter.load_state!(state_directory: Rails.root.join("tmp", "audit_state"))
-      reporter.cloud_audit_failures.to_a
+      output = reporter.cloud_audit_failures.to_a
+      # It should merge the previously found resources with the current ones.
+      expect(output.length).to eq 3
       expect(reporter.progress_bar.progress).to eq 2
     end
   end
