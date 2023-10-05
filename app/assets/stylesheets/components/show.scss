@@ -125,6 +125,16 @@ table.dataTable thead > tr > th {
     h3 {
       margin-top: 0;
     }
+
+    // Disable completion radio button when disable-complete class is applied
+    input.disable-final-state[value="complete"] {
+      pointer-events: none;
+      filter: grayscale(100%);
+    }
+    input.disable-final-state[value="complete"] + label {
+      pointer-events: none;
+      filter: grayscale(100%);
+    }
   }
 }
 
