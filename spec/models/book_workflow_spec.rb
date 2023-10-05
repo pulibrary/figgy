@@ -81,7 +81,7 @@ describe BookWorkflow do
 
   describe "valid_states" do
     it "returns all the appropriate states" do
-      expect(workflow.valid_states).to eq [:pending, :metadata_review, :final_review, :complete_when_processed, :complete, :takedown, :flagged].map(&:to_s)
+      expect(workflow.valid_states).to eq [:pending, :metadata_review, :final_review, :complete_when_processed, :takedown, :flagged, :complete].map(&:to_s)
     end
   end
 

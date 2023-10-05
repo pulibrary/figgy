@@ -5,9 +5,9 @@ class GeoWorkflow < BaseWorkflow
     state :pending, initial: true
     state :final_review
     state :complete_when_processed
-    state :complete
     state :takedown
     state :flagged
+    state :complete
 
     # ingest workflow
     event :finalize_digitization do
