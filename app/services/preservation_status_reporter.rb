@@ -9,10 +9,12 @@
 require "ruby-progressbar"
 require "ruby-progressbar/outputs/null"
 class PreservationStatusReporter
-  attr_reader :since, :suppress_progress
-  def initialize(since: nil, suppress_progress: false)
+  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads
+  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10)
     @since = since
     @suppress_progress = suppress_progress
+    @records_per_group = records_per_group
+    @parallel_threads = parallel_threads
   end
 
   # @return [Array<Valkyrie::Resource>]
@@ -23,7 +25,7 @@ class PreservationStatusReporter
   end
 
   def audited_resource_count
-    query_service.custom_queries.count_all_except_models(except_models: unpreserved_models)
+    query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
   end
 
   def progress_bar
@@ -34,18 +36,19 @@ class PreservationStatusReporter
     ProgressBar::Outputs::Null if suppress_progress
   end
 
-  def records_per_group
-    100
-  end
-
-  def parallel_threads
-    10
+  def load_state!(state_directory:)
+    state_directory = Pathname.new(state_directory)
+    FileUtils.mkdir_p(state_directory)
+    @state_file_path = state_directory.join("since")
+    @since = @state_file_path.read if @state_file_path.exist?
+    @found_resource_path = state_directory.join("bad_resources")
+    @found_resources = Set.new(@found_resource_path.read.split) if @found_resource_path.exist?
   end
 
   # @return [Array<Valkyrie::Resource>] a lazy enumerator
   def run_cloud_audit
     query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).each_slice(records_per_group).lazily.in_threads(parallel_threads) do |resources|
-      resources.select do |resource|
+      bad_resources = resources.select do |resource|
         progress_bar.increment
         # if it should't preserve we don't care about it
         next unless ChangeSet.for(resource).preserve?
@@ -59,7 +62,17 @@ class PreservationStatusReporter
           false
         end
       end
+      bad_resources.tap do |selected_resources|
+        processed(last_checked: resources.last, bad_resources: selected_resources)
+      end
     end.flatten
+  end
+
+  def processed(last_checked:, bad_resources:)
+    return unless @state_file_path
+    File.open(@state_file_path, "w") do |f|
+      f.write(last_checked.created_at.to_s)
+    end
   end
 
   # Preservation object is missing a binary node or the checksums don't match.

@@ -25,10 +25,11 @@ class MemoryEfficientAllQuery
     end
   end
 
-  def count_all_except_models(except_models: [])
+  def count_all_except_models(except_models: [], since: nil)
     connection.transaction(savepoint: true) do
       relation = orm_class.use_cursor
       relation = relation.exclude(internal_resource: Array(except_models).map(&:to_s)) if except_models.present?
+      relation = relation.where { created_at > since } if since
       relation.count
     end
   end

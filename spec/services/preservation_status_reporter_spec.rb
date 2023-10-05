@@ -10,6 +10,9 @@ RSpec.describe PreservationStatusReporter do
   let(:disk_preservation_path) { Pathname.new(Figgy.config["disk_preservation_path"]) }
 
   describe "#cloud_audit", db_cleaner_deletion: true do
+    before do
+      FileUtils.rm_rf(Rails.root.join("tmp", "audit_state"))
+    end
     it "identifies resources that should be preserved and either are not preserved or have the wrong checksum" do
       stub_ezid
       allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
@@ -82,10 +85,39 @@ RSpec.describe PreservationStatusReporter do
       # a scannedresource with no preservation object
       _unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
       # run audit
-      reporter = described_class.new(since: no_preserving_resource.created_at.to_s, suppress_progress: true)
+      reporter = described_class.new(since: no_preserving_resource.created_at.to_s, suppress_progress: true, records_per_group: 2, parallel_threads: 2)
       reporter.cloud_audit_failures.to_a
 
       # It re-does the last one at the given date, but not the ones before it.
+      expect(reporter.progress_bar.progress).to eq 2
+    end
+
+    it "can load a state directory and start where it left off" do
+      stub_ezid
+      Timecop.travel(Time.current - 2.days) do
+        # a resource that should not be preserved
+        FactoryBot.create_for_repository(:pending_scanned_resource)
+      end
+      Timecop.travel(Time.current - 1.day) do
+        FactoryBot.create_for_repository(:pending_scanned_resource)
+      end
+      # a scannedresource with no preservation object
+      _unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+      # run audit once, break after checking two.
+      reporter = described_class.new(suppress_progress: true, records_per_group: 1, parallel_threads: 1)
+      reporter.load_state!(state_directory: Rails.root.join("tmp", "audit_state"))
+      call_count = 0
+      allow(reporter.progress_bar).to receive(:increment) do
+        call_count += 1
+        raise "Broken" if call_count == 3
+      end
+      expect { reporter.cloud_audit_failures.to_a }.to raise_error
+      expect(call_count).to eq 3
+
+      # Run it a second time, it should only load the next two it missed.
+      reporter = described_class.new(suppress_progress: true)
+      reporter.load_state!(state_directory: Rails.root.join("tmp", "audit_state"))
+      reporter.cloud_audit_failures.to_a
       expect(reporter.progress_bar.progress).to eq 2
     end
   end
