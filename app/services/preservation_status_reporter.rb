@@ -28,23 +28,6 @@ class PreservationStatusReporter
     query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
   end
 
-  def progress_bar
-    @progress_bar ||= ProgressBar.create format: "%a %e %P% Querying: %c from %C", output: progress_output, total: audited_resource_count
-  end
-
-  def progress_output
-    ProgressBar::Outputs::Null if suppress_progress
-  end
-
-  def load_state!(state_directory:)
-    state_directory = Pathname.new(state_directory)
-    FileUtils.mkdir_p(state_directory)
-    @state_file_path = state_directory.join("since")
-    @since = @state_file_path.read if @state_file_path.exist?
-    @found_resource_path = state_directory.join("bad_resources")
-    @found_resources = Set.new(@found_resource_path.read.split) if @found_resource_path.exist?
-  end
-
   # @return [Array<Valkyrie::Resource>] a lazy enumerator
   def run_cloud_audit
     query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).each_slice(records_per_group).lazily.in_threads(parallel_threads) do |resources|
@@ -53,14 +36,7 @@ class PreservationStatusReporter
         # if it should't preserve we don't care about it
         next unless ChangeSet.for(resource).preserve?
         # if it should preserve and there's no preservation object, it's a failure
-        preservation_object = Wayfinder.for(resource).preservation_object
-        if preservation_object&.metadata_node.nil?
-          true
-        elsif incorrectly_preserved?(resource, preservation_object)
-          true
-        else
-          false
-        end
+        incorrectly_preserved?(resource)
       end
       bad_resources.tap do |selected_resources|
         processed(last_checked: resources.last, bad_resources: selected_resources)
@@ -68,17 +44,17 @@ class PreservationStatusReporter
     end.flatten
   end
 
-  def processed(last_checked:, bad_resources:)
-    return unless @state_file_path
-    File.open(@state_file_path, "w") do |f|
-      f.write(last_checked.created_at.to_s)
-    end
-  end
-
   # Preservation object is missing a binary node or the checksums don't match.
-  def incorrectly_preserved?(resource, preservation_object)
+  def incorrectly_preserved?(resource)
+    preservation_object = Wayfinder.for(resource).preservation_object
     checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: preservation_object)
-    checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? || !x.preserved_file_checksums_match? }
+    if preservation_object&.metadata_node.nil?
+      true
+    elsif checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? || !x.preserved_file_checksums_match? }
+      true
+    else
+      false
+    end
   end
 
   def unpreserved_models
@@ -92,5 +68,31 @@ class PreservationStatusReporter
 
   def query_service
     Valkyrie.config.metadata_adapter.query_service
+  end
+
+  # Progress bar stuff
+  def progress_bar
+    @progress_bar ||= ProgressBar.create format: "%a %e %P% Querying: %c from %C", output: progress_output, total: audited_resource_count
+  end
+
+  def progress_output
+    ProgressBar::Outputs::Null if suppress_progress
+  end
+
+  # State Management
+  def load_state!(state_directory:)
+    state_directory = Pathname.new(state_directory)
+    FileUtils.mkdir_p(state_directory)
+    @state_file_path = state_directory.join("since")
+    @since = @state_file_path.read if @state_file_path.exist?
+    @found_resource_path = state_directory.join("bad_resources")
+    @found_resources = Set.new(@found_resource_path.read.split) if @found_resource_path.exist?
+  end
+
+  def processed(last_checked:, bad_resources:)
+    return unless @state_file_path
+    File.open(@state_file_path, "w") do |f|
+      f.write(last_checked.created_at.to_s)
+    end
   end
 end

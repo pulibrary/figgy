@@ -108,11 +108,11 @@ RSpec.describe PreservationStatusReporter do
       reporter.load_state!(state_directory: Rails.root.join("tmp", "audit_state"))
       call_count = 0
       allow(reporter.progress_bar).to receive(:increment) do
+        raise "Broken" if call_count == 2
         call_count += 1
-        raise "Broken" if call_count == 3
       end
       expect { reporter.cloud_audit_failures.to_a }.to raise_error
-      expect(call_count).to eq 3
+      expect(call_count).to eq 2
 
       # Run it a second time, it should only load the next two it missed.
       reporter = described_class.new(suppress_progress: true)
