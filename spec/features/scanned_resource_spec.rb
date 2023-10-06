@@ -47,9 +47,8 @@ RSpec.feature "Scanned Resource" do
   end
 
   scenario "show page can display confetti" do
-    stub_ezid
-    file = fixture_file_upload("files/example.tif", "image/tiff")
-    resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+    resource = FactoryBot.create_for_repository(:pending_scanned_resource)
+    ChangeSetPersister.default.save(change_set: ChangeSet.for(resource))
 
     visit solr_document_path(id: resource.id)
 
@@ -57,5 +56,14 @@ RSpec.feature "Scanned Resource" do
     click_button("Submit")
 
     expect(page).to have_selector("*[data-confetti-trigger]")
+  end
+
+  scenario "resource with file sets that are in process can't complete" do
+    file = fixture_file_upload("files/example.tif", "image/tiff")
+    resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+
+    visit solr_document_path(id: resource.id)
+    expect(page).to have_css(".disable-final-state")
+    expect(page).to have_text("Resource can't be completed while derivatives are in-process")
   end
 end

@@ -59,6 +59,7 @@ module Numismatics
     validates_with ViewingDirectionValidator
     validates_with ViewingHintValidator
     validates_with RightsStatementValidator
+    validates_with ProcessedValidator
     validates :visibility, presence: true
 
     def primary_terms
