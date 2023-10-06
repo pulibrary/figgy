@@ -18,7 +18,7 @@ class PreservationStatusReporter
     @found_resources = Set.new
   end
 
-  # @return [Array<Valkyrie::Resource>]
+  # @return [Array<Valkyrie::ID>]
   def cloud_audit_failures
     @cloud_audit_failures ||= Lazily.concat(@found_resources, run_cloud_audit).uniq
   end
