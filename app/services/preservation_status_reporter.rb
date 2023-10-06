@@ -19,8 +19,6 @@ class PreservationStatusReporter
   end
 
   # @return [Array<Valkyrie::Resource>]
-  # Takes a block which will yield before every resource it's checking, to allow
-  # for a progress bar or other similar counting.
   def cloud_audit_failures
     @cloud_audit_failures ||= Lazily.concat(@found_resources, run_cloud_audit).uniq
   end
@@ -36,16 +34,17 @@ class PreservationStatusReporter
         progress_bar.increment
         # if it should't preserve we don't care about it
         next unless ChangeSet.for(resource).preserve?
-        # if it should preserve and there's no preservation object, it's a failure
         incorrectly_preserved?(resource)
       end.map(&:id)
+      # At the end of every batch save which resources were found and the last
+      # one checked.
       bad_resources.tap do |selected_resources|
         processed(last_checked: resources.last, bad_resource_ids: selected_resources.map(&:to_s))
       end
     end.flatten
   end
 
-  # Preservation object is missing a binary node or the checksums don't match.
+  # Preservation object doesn't exist, is missing a metadata or binary node, or the checksums don't match.
   def incorrectly_preserved?(resource)
     preservation_object = Wayfinder.for(resource).preservation_object
     checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: preservation_object)
