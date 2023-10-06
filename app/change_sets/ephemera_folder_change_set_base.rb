@@ -8,6 +8,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   validates_with MemberValidator
   validates_with CollectionValidator
   validates_with EmbargoDateValidator
+  validates_with ProcessedValidator
 
   include VisibilityProperty
   include DateRangeProperty

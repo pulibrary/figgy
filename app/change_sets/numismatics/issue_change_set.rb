@@ -70,6 +70,7 @@ module Numismatics
     validates_with StateValidator
     validates_with ViewingDirectionValidator
     validates_with ViewingHintValidator
+    validates_with ProcessedValidator
     validates :visibility, presence: true
     validates :earliest_date, :latest_date, year: true
     validate :earliest_date_and_latest_date_set

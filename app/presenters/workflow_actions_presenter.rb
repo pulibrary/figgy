@@ -26,18 +26,8 @@ class WorkflowActionsPresenter
 
   private
 
-    def in_process
-      @in_process ||= query_service.custom_queries.find_deep_children_with_property(
-        resource: resource,
-        model: "FileSet",
-        property: :processing_status,
-        value: "in process",
-        count: true
-      ).positive?
-    end
-
     def enable_final_state?
-      workflow.final_state? || !in_process
+      workflow.final_state? || !InProcessOrPending.for(resource)
     end
 
     def input_html
@@ -69,10 +59,6 @@ class WorkflowActionsPresenter
 
     def in_process_message
       "Resource can't be completed while derivatives are in-process"
-    end
-
-    def query_service
-      ChangeSetPersister.default.query_service
     end
 
     def collection

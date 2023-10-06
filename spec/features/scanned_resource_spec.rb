@@ -47,9 +47,8 @@ RSpec.feature "Scanned Resource" do
   end
 
   scenario "show page can display confetti" do
-    stub_ezid
-    file = fixture_file_upload("files/example.tif", "image/tiff")
-    resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+    resource = FactoryBot.create_for_repository(:pending_scanned_resource)
+    ChangeSetPersister.default.save(change_set: ChangeSet.for(resource))
 
     visit solr_document_path(id: resource.id)
 

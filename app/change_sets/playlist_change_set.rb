@@ -19,6 +19,7 @@ class PlaylistChangeSet < ChangeSet
 
   validates_with MemberValidator
   validates_with StateValidator
+  validates_with ProcessedValidator
   validates :visibility, :title, presence: true
 
   def primary_terms

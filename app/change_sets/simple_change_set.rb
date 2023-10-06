@@ -81,6 +81,7 @@ class SimpleChangeSet < ChangeSet
   validates_with CollectionValidator
   validates_with RightsStatementValidator
   validates_with EmbargoDateValidator
+  validates_with ProcessedValidator
   validates :visibility, presence: true
 
   def primary_terms

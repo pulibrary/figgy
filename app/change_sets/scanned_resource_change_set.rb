@@ -53,6 +53,7 @@ class ScannedResourceChangeSet < ChangeSet
   validates_with CollectionValidator
   validates_with RightsStatementValidator
   validates_with EmbargoDateValidator
+  validates_with ProcessedValidator
   validates :visibility, presence: true
 
   # filters out structure nodes that proxy deleted resources

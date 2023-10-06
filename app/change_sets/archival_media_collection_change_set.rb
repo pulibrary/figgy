@@ -30,6 +30,7 @@ class ArchivalMediaCollectionChangeSet < ChangeSet
   validates_with UniqueArchivalMediaComponentIdValidator
   validates_with UniqueArchivalMediaBarcodeValidator
   validates_with UniqueSlugValidator
+  validates_with ProcessedValidator
 
   def primary_terms
     [

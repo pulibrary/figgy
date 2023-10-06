@@ -83,7 +83,7 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_css ".blacklight-deleted_resource_depositor_ssi", text: "new_user"
       expect(page).to have_css ".blacklight-resource_source_metadata_identifier_ssim", text: "991234563506421"
       expect(page).to have_css ".blacklight-resource_local_identifier_ssim", text: "local-id-123"
-     expect(page).to have_css ".blacklight-resource_identifier_ssi", text: resource.identifier
+      expect(page).to have_css ".blacklight-resource_identifier_ssi", text: resource.identifier
     end
   end
 end
