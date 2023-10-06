@@ -112,6 +112,10 @@ class FileSet < Resource
     Array.wrap(mime_type).first.to_s.include?("image/")
   end
 
+  def preservation_targets
+    original_files + intermediate_files + preservation_files
+  end
+
   private
 
     def primary_file_checksum

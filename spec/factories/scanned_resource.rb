@@ -65,7 +65,25 @@ FactoryBot.define do
           resource.member_ids += [FactoryBot.create_for_repository(:audio_file_set).id]
         end
       end
+      factory :complete_recording_with_real_files do
+        state { "complete" }
+        files do
+          [
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401_1_pm.wav"),
+              mime_type: "audio/x-wav",
+              original_filename: "32101047382401_1_pm.wav",
+              use: Valkyrie::Vocab::PCDMUse.PreservationFile
+            )
+          ]
+        end
+        after(:create) do |resource, _evaluator|
+          IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401_1_i.wav").to_s,
+                                                file_set_id: resource.member_ids.first.to_s)
+        end
+      end
     end
+
     factory :open_scanned_resource do
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     end

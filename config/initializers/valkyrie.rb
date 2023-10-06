@@ -82,7 +82,7 @@ Rails.application.config.to_prepare do
     # If GCS isn't configured, use a disk persister that saves in the same
     # structure as GCS.
     Valkyrie::StorageAdapter.register(
-      Valkyrie::Storage::Disk.new(
+      GcsFake::Storage.new(
         base_path: Figgy.config["disk_preservation_path"],
         file_mover: FileUtils.method(:cp),
         path_generator: Preserver::NestedStoragePath
