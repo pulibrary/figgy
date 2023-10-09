@@ -39,6 +39,7 @@ The following dependencies will be installed via homebrew by `./bin/setup`:
 * [VIPS]
 * [OCRmyPDF](https://ocrmypdf.readthedocs.io/)
 * [cogeo-mosaic](https://github.com/developmentseed/cogeo-mosaic) for mosaic manifest generation
+* [tippecanoe](https://github.com/felt/tippecanoe) vector tileset generator
 
 Other dependencies:
 
