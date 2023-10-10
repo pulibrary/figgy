@@ -20,5 +20,17 @@ FactoryBot.define do
       mime_type { "image/tiff" }
       use { Valkyrie::Vocab::PCDMUse.OriginalFile }
     end
+
+    factory :vector_original do
+      id { Valkyrie::ID.new(SecureRandom.uuid) }
+      mime_type { "application/vnd.geo+json" }
+      use { Valkyrie::Vocab::PCDMUse.OriginalFile }
+    end
+
+    factory :cloud_vector_derivative do
+      id { Valkyrie::ID.new(SecureRandom.uuid) }
+      mime_type { "application/vnd.pmtiles" }
+      use { Valkyrie::Vocab::PCDMUse.CloudDerivative }
+    end
   end
 end

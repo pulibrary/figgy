@@ -35,7 +35,8 @@ class ChangeSetPersister
         CleanupPdfs,
         CreateProxyFileSets,
         ApplyAuthToken,
-        CacheParentId
+        CacheParentId,
+        UpdateCloudFilePermissions
       ],
       after_save: [
         UpdateAuthToken,
