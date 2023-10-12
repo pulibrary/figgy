@@ -13,16 +13,6 @@ class VectorResourceDerivativeService
     end
   end
 
-  class IoDecorator < SimpleDelegator
-    attr_reader :original_filename, :content_type, :use
-    def initialize(io, original_filename, content_type, use)
-      @original_filename = original_filename
-      @content_type = content_type
-      @use = use
-      super(io)
-    end
-  end
-
   attr_reader :id, :change_set_persister
   delegate :mime_type, to: :primary_file
   delegate :query_service, to: :change_set_persister
