@@ -22,15 +22,16 @@ module GeoDiscovery
         # Builds geospatial file download references.
         # @param [AbstractDocument] discovery document
         def build_download_refs(document)
+          document.cog_path = cog_path
           document.download = download
-          document.url = url
+          document.pmtiles_path = pmtiles_path
           document.thumbnail = thumbnail
+          document.url = url
           document.wxs_identifier = wxs_identifier
           document.wms_path = wms_path
           document.wmts_path = wmts_path
           document.wfs_path = wfs_path
           document.xyz_path = xyz_path
-          document.pmtiles_path = pmtiles_path
         end
 
         # Builds metadata file references.
@@ -81,6 +82,18 @@ module GeoDiscovery
           @wxs ||= Wxs.new(resource_decorator)
         end
 
+        # Returns the cloud optimized geotiff data url.
+        # @return [String] cog data url
+        def cog_path
+          wxs.cog_path
+        end
+
+        # Returns the pmtiles data url.
+        # @return [String] pmtiles data url
+        def pmtiles_path
+          wxs.pmtiles_path
+        end
+
         # Returns the identifier to use with WMS/WFS/WCS services.
         # @return [String] wxs indentifier
         def wxs_identifier
@@ -109,10 +122,6 @@ module GeoDiscovery
         # @return [String] xyz server url
         def xyz_path
           wxs.xyz_path
-        end
-
-        def pmtiles_path
-          wxs.pmtiles_path
         end
     end
   end

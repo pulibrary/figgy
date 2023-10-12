@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 module GeoDiscovery
   class AbstractDocument
-    attr_accessor :access_rights, :all_subject, :call_number, :creator,
+    attr_accessor :access_rights, :all_subject, :call_number, :cog_path, :creator,
                   :dct_references, :description, :download, :fgdc, :format,
                   :geom_types, :identifier, :iiif, :iiif_manifest, :iso19139,
                   :issued, :language, :layer_modified, :layer_year, :pmtiles_path, :mods,

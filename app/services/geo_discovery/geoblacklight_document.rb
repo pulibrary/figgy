@@ -139,7 +139,8 @@ module GeoDiscovery
           "http://iiif.io/api/presentation#manifest" => iiif_manifest,
           "http://www.opengis.net/def/serviceType/ogc/wmts" => wmts_path,
           "https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames" => xyz_path,
-          "https://github.com/protomaps/PMTiles" => pmtiles_path
+          "https://github.com/protomaps/PMTiles" => pmtiles_path,
+          "https://github.com/cogeotiff/cog-spec" => cog_path
         }
       end
       # rubocop:enable Metrics/MethodLength

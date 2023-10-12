@@ -18,6 +18,20 @@ module GeoDiscovery
         "#{@geoserver_config[visibility][:workspace]}:p-#{file_set.id}" if @geoserver_config[visibility][:workspace]
       end
 
+      # Returns the cloud optimized geotiff data url.
+      # @return [String] cog data url
+      def cog_path
+        return unless generate_cog_path?
+        "#{@geodata_config[visibility][:url]}/#{cloud_file_path}"
+      end
+
+      # Returns the pmtiles data url.
+      # @return [String] pmtiles data url
+      def pmtiles_path
+        return unless generate_pmtiles_path?
+        "#{@geodata_config[visibility][:url]}/#{cloud_file_path}"
+      end
+
       # Returns the wms server url.
       # @return [String] wms server url
       def wms_path
@@ -50,11 +64,6 @@ module GeoDiscovery
         TilePath.new(resource_decorator).xyz
       end
 
-      def pmtiles_path
-        return unless generate_pmtiles_path?
-        "#{@geodata_config[visibility][:url]}/#{cloud_file_path}"
-      end
-
       private
 
         def cloud_file_path
@@ -76,6 +85,14 @@ module GeoDiscovery
           file_set.mime_type.first
         end
 
+        # Determines if the cog path should be generated
+        # @return [Boolean]
+        def generate_cog_path?
+          @geodata_config && visibility && file_set && raster_file_set? && cloud_file_path
+        end
+
+        # Determines if the pmtiles path should be generated
+        # @return [Boolean]
         def generate_pmtiles_path?
           @geodata_config && visibility && file_set && vector_file_set? && cloud_file_path
         end
@@ -96,6 +113,12 @@ module GeoDiscovery
         # @return [Bool]
         def vector_file_set?
           ControlledVocabulary.for(:geo_vector_format).include? file_set_mime_type
+        end
+
+        # Tests if the file set is a valid raster format.
+        # @return [Bool]
+        def raster_file_set?
+          ControlledVocabulary.for(:geo_raster_format).include? file_set_mime_type
         end
 
         # Returns the file set visibility if it's open and authenticated.
