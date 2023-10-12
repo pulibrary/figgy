@@ -30,6 +30,7 @@ module GeoDiscovery
           document.wmts_path = wmts_path
           document.wfs_path = wfs_path
           document.xyz_path = xyz_path
+          document.pmtiles_path = pmtiles_path
         end
 
         # Builds metadata file references.
@@ -108,6 +109,10 @@ module GeoDiscovery
         # @return [String] xyz server url
         def xyz_path
           wxs.xyz_path
+        end
+
+        def pmtiles_path
+          wxs.pmtiles_path
         end
     end
   end

@@ -5,7 +5,8 @@ module GeoDiscovery
       attr_reader :resource_decorator
       def initialize(resource_decorator)
         @resource_decorator = resource_decorator
-        @config = Figgy.config["geoserver"].try(:with_indifferent_access)
+        @geoserver_config = Figgy.config["geoserver"].try(:with_indifferent_access)
+        @geodata_config = Figgy.config["geodata"].try(:with_indifferent_access)
       end
 
       # Returns the identifier to use with WMS/WFS/WCS services.
@@ -13,8 +14,8 @@ module GeoDiscovery
       def identifier
         return resource_decorator.layer_name if resource_decorator.layer_name&.first&.present?
         return unless file_set
-        return file_set.id.to_s unless @config && visibility
-        "#{@config[visibility][:workspace]}:p-#{file_set.id}" if @config[visibility][:workspace]
+        return file_set.id.to_s unless @geoserver_config && visibility
+        "#{@geoserver_config[visibility][:workspace]}:p-#{file_set.id}" if @geoserver_config[visibility][:workspace]
       end
 
       # Returns the wms server url.
@@ -23,7 +24,7 @@ module GeoDiscovery
         url = Array.wrap(resource_decorator.wms_url)
         return url.first if url.try(:first).present?
         return unless generate_wms_path?
-        "#{path}/#{@config[visibility][:workspace]}/wms"
+        "#{path}/#{@geoserver_config[visibility][:workspace]}/wms"
       end
 
       # Returns the wfs server url.
@@ -31,8 +32,8 @@ module GeoDiscovery
       def wfs_path
         url = Array.wrap(resource_decorator.wfs_url)
         return url.first if url.try(:first).present?
-        return unless @config && visibility && file_set && vector_file_set?
-        "#{path}/#{@config[visibility][:workspace]}/wfs"
+        return unless @geoserver_config && visibility && file_set && vector_file_set?
+        "#{path}/#{@geoserver_config[visibility][:workspace]}/wfs"
       end
 
       # Returns the wmts server url.
@@ -49,7 +50,19 @@ module GeoDiscovery
         TilePath.new(resource_decorator).xyz
       end
 
+      def pmtiles_path
+        return unless generate_pmtiles_path?
+        "#{@geodata_config[visibility][:url]}/#{cloud_file_path}"
+      end
+
       private
+
+        def cloud_file_path
+          @cloud_file_path ||= begin
+            file = file_set.cloud_derivative_files&.first
+            file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "") if file
+          end
+        end
 
         # Gets the representative file set.
         # @return [FileSet] representative file set
@@ -63,16 +76,20 @@ module GeoDiscovery
           file_set.mime_type.first
         end
 
+        def generate_pmtiles_path?
+          @geodata_config && visibility && file_set && vector_file_set? && cloud_file_path
+        end
+
         # Determines if the wms path should be generated
         # @return [Boolean]
         def generate_wms_path?
-          @config && visibility && file_set && vector_file_set?
+          @geoserver_config && visibility && file_set && vector_file_set?
         end
 
         # Geoserver base url.
         # @return [String] geoserver base url
         def path
-          @config[:url].chomp("/rest")
+          @geoserver_config[:url].chomp("/rest")
         end
 
         # Tests if the file set is a valid vector format.

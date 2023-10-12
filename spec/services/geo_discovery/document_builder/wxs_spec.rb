@@ -134,4 +134,27 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
       end
     end
   end
+
+  describe "#pmtiles_path" do
+    context "with a public document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      it "returns a public pmtiles path" do
+        expect(wxs_builder.pmtiles_path).to include "http://localhost:8080/geodata-open"
+      end
+    end
+
+    context "campus only document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+      it "returns a restricted pmtiles path" do
+        expect(wxs_builder.pmtiles_path).to include "http://localhost:8080/geodata-restricted"
+      end
+    end
+
+    context "private document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+      it "returns a nil value" do
+        expect(wxs_builder.pmtiles_path).to be_nil
+      end
+    end
+  end
 end
