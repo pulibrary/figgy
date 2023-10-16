@@ -9,13 +9,14 @@
 require "ruby-progressbar"
 require "ruby-progressbar/outputs/null"
 class PreservationStatusReporter
-  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads
-  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10)
+  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum
+  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false)
     @since = since
     @suppress_progress = suppress_progress
     @records_per_group = records_per_group
     @parallel_threads = parallel_threads
     @found_resources = Set.new
+    @skip_metadata_checksum = skip_metadata_checksum
   end
 
   # @return [Array<Valkyrie::ID>]
@@ -47,7 +48,7 @@ class PreservationStatusReporter
   # Preservation object doesn't exist, is missing a metadata or binary node, or the checksums don't match.
   def incorrectly_preserved?(resource)
     preservation_object = Wayfinder.for(resource).preservation_object
-    checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: preservation_object)
+    checkers = Preserver::PreservationChecker.for(resource: resource, preservation_object: preservation_object, skip_metadata_checksum: skip_metadata_checksum)
     if preservation_object&.metadata_node.nil?
       true
     elsif checkers.any? { |x| !x.preserved? || !x.preservation_file_exists? || !x.preserved_file_checksums_match? }
