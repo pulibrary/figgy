@@ -31,6 +31,7 @@ class ChangeSetPersister
         RestoreFromDeletionMarkers,
         CreateFile::Factory.new(file_appender: FileAppender),
         PropagateVisibilityAndState,
+        PropagateOCRLanguage,
         CleanupPdfs,
         CreateProxyFileSets,
         ApplyAuthToken,
@@ -103,7 +104,7 @@ class ChangeSetPersister
     end
 
     def prevent_propagation!
-      @handlers[:before_save] -= [PropagateVisibilityAndState]
+      @handlers[:before_save] -= [PropagateVisibilityAndState, PropagateOCRLanguage]
     end
 
     def save(change_set:, external_resource: false)
