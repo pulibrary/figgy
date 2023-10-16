@@ -3,13 +3,13 @@ class Preserver
   # Encapsulate logic for converting a binary node to a preservation node.
   class PreservationChecker
     # @return [Array<Metadata | Binary>]
-    def self.for(resource:, preservation_object:)
-      binaries_for(resource: resource, preservation_object: preservation_object) + metadata_for(resource: resource, preservation_object: preservation_object)
+    def self.for(resource:, preservation_object:, skip_metadata_checksum: false)
+      binaries_for(resource: resource, preservation_object: preservation_object) + metadata_for(resource: resource, preservation_object: preservation_object, skip_checksum: skip_metadata_checksum)
     end
 
-    def self.metadata_for(resource:, preservation_object:)
+    def self.metadata_for(resource:, preservation_object:, skip_checksum: false)
       [
-        Metadata.new(resource: resource, preservation_object: preservation_object)
+        Metadata.new(resource: resource, preservation_object: preservation_object, skip_checksum: skip_checksum)
       ]
     end
 
@@ -18,10 +18,11 @@ class Preserver
     end
 
     class Metadata
-      attr_reader :resource, :preservation_object
-      def initialize(resource:, preservation_object:)
+      attr_reader :resource, :preservation_object, :skip_checksum
+      def initialize(resource:, preservation_object:, skip_checksum:)
         @resource = resource
         @preservation_object = preservation_object
+        @skip_checksum = skip_checksum
       end
 
       def preservation_file_exists?
@@ -35,6 +36,7 @@ class Preserver
       end
 
       def preserved_file_checksums_match?
+        return true if skip_checksum
         compact_local_md5 == preservation_file.io.file.data[:file].md5
       end
 

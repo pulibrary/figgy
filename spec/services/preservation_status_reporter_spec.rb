@@ -72,6 +72,16 @@ RSpec.describe PreservationStatusReporter do
       expect(reporter.progress_bar.progress).to eq 13
     end
 
+    it "can skip checking for bad metadata checksums if requested" do
+      stub_ezid
+      # - a scannedresource with a metadata node that has the wrong checksum
+      create_resource_bad_metadata_checksum
+
+      reporter = described_class.new(suppress_progress: true, skip_metadata_checksum: true)
+      # Ensure count of resources it's auditing
+      expect(reporter.cloud_audit_failures.to_a.length).to eq 0
+    end
+
     it "can start at a given timestamp and only reprocess those" do
       stub_ezid
       no_preserving_resource = nil
