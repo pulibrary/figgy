@@ -17,6 +17,12 @@ class ChangeSetPersister
     # Execute the handler
     def run
       return unless change_set.changed?(:ocr_language)
+      members.each do |member|
+        next unless member.respond_to?(:ocr_language)
+        member_change_set = ChangeSet.for(member)
+        member_change_set.validate(ocr_language: change_set.ocr_language)
+        change_set_persister.save(change_set: member_change_set)
+      end
     end
 
     def members

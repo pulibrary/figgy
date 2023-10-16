@@ -14,7 +14,7 @@ class ChangeSetPersister
       return if append_id.blank?
       return if change_set.id == append_id
       return unless change_set.resource.is_a? ScannedResource
-      change_set.validate(member_of_collection_ids: [])
+      change_set.validate(member_of_collection_ids: [], ocr_language: new_parent.ocr_language)
     end
 
     # add to the parent
