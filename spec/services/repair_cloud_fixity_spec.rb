@@ -28,6 +28,7 @@ RSpec.describe RepairCloudFixity do
       described_class.run(event: failed_event)
       expect(Preserver).not_to have_received(:for).with(force_preservation: true, change_set: anything, change_set_persister: anything)
       expect(preserver_double).to have_received(:preserve!)
+      expect(CloudFixity::FixityRequestor).to have_received(:queue_resource_check!).with(id: resource.id.to_s)
     end
   end
 

@@ -46,6 +46,7 @@ class RepairCloudFixity
 
     def repair_metadata
       Preserver.for(change_set: ChangeSet.for(resource), change_set_persister: ChangeSetPersister.default).preserve!
+      CloudFixity::FixityRequestor.queue_resource_check!(id: resource.id.to_s)
     end
 
     def create_failed_cloud_fixity_event
