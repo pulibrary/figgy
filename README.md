@@ -42,7 +42,6 @@ The following dependencies will be installed via homebrew by `./bin/setup`:
 
 Other dependencies:
 
-* [Google Chrome](https://google.com/chrome/) (for feature tests)
 * Postgres (for OSX dev systems, install via homebrew)
 * [Redis](http://redis.io/)
     * Start Redis with `redis-server` or if you're on certain Linuxes, you can do this via `sudo service redis-server start`.
@@ -110,6 +109,13 @@ destroy` or turn off all services with `lando poweroff`.
    - In a separate terminal: `bundle exec foreman start`
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/main/Procfile]]
    - Access Figgy at http://localhost:3000/
+
+### Feature Tests
+
+If you want to watch feature tests run for debugging purposes, you can go to
+http://localhost:7900, use the password `secret`, and run tests like this:
+
+`RUN_IN_BROWSER=true bundle exec rspec spec/features`
 
 ### Parallel Tests
 

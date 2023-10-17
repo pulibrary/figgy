@@ -21,7 +21,7 @@ Capybara.register_driver(:selenium) do |app|
   )
 
   browser_options = ::Selenium::WebDriver::Chrome::Options.new
-  browser_options.add_argument("--headless")
+  browser_options.add_argument("--headless") unless ENV["RUN_IN_BROWSER"] == "true"
   browser_options.add_argument("--disable-gpu")
 
   http_client = Selenium::WebDriver::Remote::Http::Default.new
