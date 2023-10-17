@@ -12,10 +12,7 @@ if !ENV["CI"]
   selenium_url = "http://127.0.0.1:4445/wd/hub"
   Capybara.server_host = '0.0.0.0'
   Capybara.always_include_port = true
-  ip = Socket.ip_address_list
-    .find(&:ipv4_private?)
-    .ip_address
-  Capybara.app_host = "http://#{ip}:#{Capybara.server_port}"
+  Capybara.app_host = "http://host.docker.internal:#{Capybara.server_port}"
   browser = :remote
 end
 Capybara.register_driver(:selenium) do |app|
