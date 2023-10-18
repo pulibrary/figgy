@@ -66,8 +66,8 @@ RSpec.feature "File Manager" do
     end
   end
 
-  context "with a geo metadata file" do
-    let(:original_file) { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "application/xml; schema=fgdc") }
+  context "with a geo metadata file that has an error" do
+    let(:original_file) { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "application/xml; schema=fgdc", error_message: ["errors"]) }
     let(:extractor) { instance_double(GeoMetadataExtractor) }
     let(:resource) do
       res = FactoryBot.create_for_repository(:scanned_map)
@@ -82,11 +82,9 @@ RSpec.feature "File Manager" do
       allow(extractor).to receive(:extract).and_return(true)
     end
 
-    scenario "users extract metadata from an fgdc metadata file", js: true do
+    scenario "users are notified of the failure", js: true do
       visit polymorphic_path [:file_manager, resource]
-      expect(page).to have_selector("form.extract_metadata button")
-      click_button "Extract Metadata"
-      expect(page).to have_selector ".alert-success .text", text: "Metadata is being extracted"
+      expect(page).to have_content("Metadata Extraction Failed")
     end
   end
 
