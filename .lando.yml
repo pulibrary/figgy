@@ -24,6 +24,7 @@ services:
     services:
       image: seleniarm/standalone-chromium:114.0
       environment:
+        START_XVFB: "true"
         SE_NODE_MAX_SESSIONS: 20
         SE_NODE_OVERRIDE_MAX_SESSIONS: "true"
       logging:
