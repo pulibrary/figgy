@@ -153,6 +153,7 @@ class Preserver
         CleanupFilesJob.perform_later(file_identifiers: preservation_object.metadata_node.file_identifiers.map(&:to_s))
       end
       preservation_object.metadata_node = metadata_node
+      preservation_object.metadata_version = resource.optimistic_lock_token.first.token
       change_set_persister.metadata_adapter.persister.save(resource: preservation_object)
     end
 

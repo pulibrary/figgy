@@ -9,6 +9,8 @@ class PreservationObject < Resource
 
   # FileMetadata nested objects for the serialized metadata files
   attribute :metadata_node, FileMetadata.optional
+  # the optimistic lock token of the preserved metadata
+  attribute :metadata_version, Valkyrie::Types::String
 
   # FileMetadata nested objects for the preservation copies of the binaries
   attribute :binary_nodes, Valkyrie::Types::Set

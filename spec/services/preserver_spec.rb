@@ -67,6 +67,7 @@ describe Preserver do
       expect(preservation_object.metadata_node).not_to be nil
       expect(preservation_object.metadata_node).to be_a FileMetadata
       expect(preservation_object.metadata_node).to be_preserved_metadata
+      expect(preservation_object.metadata_version).to eq "1"
     end
 
     it "preserves children if asked to re-preserve and one doesn't have a PreservationObject" do
@@ -113,6 +114,19 @@ describe Preserver do
           )
         )
       )
+    end
+
+    context "when a resource is edited" do
+      it "updates the metadata_version of the preservation object" do
+        expect(preservation_object.metadata_version).to eq "1"
+        updated_resource = query_service.find_by(id: resource.id)
+        cs = ChangeSet.for(updated_resource)
+        cs.validate(title: "new title")
+        change_set_persister.save(change_set: cs)
+
+        updated_preservation_object = query_service.find_by(id: preservation_object.id)
+        expect(updated_preservation_object.metadata_version).to eq "2"
+      end
     end
 
     context "when retrieving Preservation from a Scanned Resource" do
