@@ -35,7 +35,7 @@
         <span>
           <% if node.model_name.singular == "file_set" %>
             <% if geo_metadata_file?(node) %>
-                Metadata Generation Failed |  <a class="rederive" href="<%= scanned_maps_extract_metadata_path(file_set_id: node.id) %>">Extract Metadata</a>
+                Metadata Extraction Failed |  <a class="rederive" href="<%= scanned_maps_extract_metadata_path(file_set_id: node.id) %>">Extract Metadata</a>
             <% else %>
                 Derivatives Failed | <a class="rederive" href="<%= derivatives_file_set_path(node) %>">Regenerate</a>
             <% end %>
@@ -43,7 +43,7 @@
         </span>
       </div>
     <% end %>
-    <% if HealthReport::LocalFixityCheck.for(f.object).status == :needs_attention %>
+    <% if local_fixity_failure_ids.include?(f.object.id) %>
       <div class="fm_error err">
         <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
           <lux-icon-denied></lux-icon-denied>
@@ -53,7 +53,7 @@
         </span>
       </div>
     <% end %>
-    <% if HealthReport::CloudFixityCheck.for(f.object).status == :needs_attention %>
+    <% if cloud_fixity_failure_ids.include?(f.object.id) %>
       <div class="fm_error err">
         <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
           <lux-icon-denied></lux-icon-denied>

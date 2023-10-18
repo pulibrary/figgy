@@ -121,6 +121,13 @@ class BaseWayfinder
     @deep_failed_local_fixity_count ||= deep_fixity_count(fixity_status: Event::FAILURE)
   end
 
+  def deep_failed_local_fixity_member_ids
+    @deep_failed_local_fixity_member_ids ||= query_service.custom_queries.deep_local_fixity_member_ids(
+      resource: resource,
+      status: Event::FAILURE
+    )
+  end
+
   def deep_succeeded_local_fixity_count
     @deep_succeeded_local_fixity_count ||= deep_fixity_count(fixity_status: Event::SUCCESS)
   end
@@ -134,6 +141,13 @@ class BaseWayfinder
       resource: resource,
       status: Event::FAILURE
     )
+  end
+
+  def deep_failed_cloud_fixity_member_ids
+    @deep_failed_cloud_fixity_member_ids ||= query_service.custom_queries.deep_cloud_fixity_member_ids(
+      resource: resource,
+      status: Event::FAILURE
+    ) || []
   end
 
   # This method encodes the assumption that the existence of a preservation
