@@ -1,14 +1,17 @@
 export default class DerivativeForm {
   constructor() {
-    this.form = $(".rederive")
-    this.element = this.form.find('button')
-    this.element.click(this.onclick)
+    this.element = $(".rederive")
+    var that = this
+    this.element.click(function(event) {
+      event.preventDefault()
+      that.onclick(event)
+    })
   }
 
   onclick(event) {
     $.ajax({
       type: "PUT",
-      url: $(this).parents('.rederive').attr('action'),
+      url: event.currentTarget.attributes.href.value,
       data: $(this).parents('.rederive').serializeArray(),
       dataType: 'json'
     }).done(function(data, textStatus, response) {

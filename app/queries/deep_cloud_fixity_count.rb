@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 class DeepCloudFixityCount
   def self.queries
-    [:deep_cloud_fixity_count]
+    [:deep_cloud_fixity_count, :deep_cloud_fixity_member_ids]
   end
 
   attr_reader :query_service
   delegate :resource_factory, to: :query_service
+  delegate :run_query, to: :query_service
   def initialize(query_service:)
     @query_service = query_service
   end
@@ -18,11 +19,19 @@ class DeepCloudFixityCount
     ].first[:count]
   end
 
+  def deep_cloud_fixity_member_ids(resource:, status: Event::FAILURE)
+    query_service.connection[
+      relationship_query(false),
+      id: resource.id.to_s,
+      event_metadata: event_metadata(status)
+      ].map { |r| r[:file_set_id] }
+  end
+
   def event_metadata(status)
     %({"current": [true], "type": ["cloud_fixity"], "status": ["#{status}"]})
   end
 
-  def relationship_query
+  def relationship_query(count = true)
     <<-SQL
         WITH RECURSIVE deep_members AS (
           select member.*
@@ -47,7 +56,7 @@ class DeepCloudFixityCount
           AND event.internal_resource = 'Event'
           AND event.metadata @> :event_metadata
         )
-        select COUNT(DISTINCT deep_events.file_set_id) from deep_events
+        select #{count ? 'COUNT(DISTINCT deep_events.file_set_id) AS count' : 'file_set_id'} from deep_events
     SQL
   end
 end

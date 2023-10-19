@@ -170,3 +170,48 @@
 .picker-dialog {
   z-index: 10000 !important
 }
+
+.fm_errors {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  align-items: center;
+  font-size: .9em;
+}
+
+.fm_error {
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-right: 2px solid #f8a000;
+  border-left: 2px solid #f8a000;
+  border-top: 2px solid #f8a000;
+  background-color: #fef9e5;
+  color: #f8a000;
+}
+
+.fm_error .lux-icon {
+  vertical-align: sub;
+}
+
+.warn {
+  border-right: 2px solid #f8a000;
+  border-left: 2px solid #f8a000;
+  border-top: 2px solid #f8a000;
+  background-color: #fef9e5;
+  color: #f8a000;
+}
+
+.err {
+  border-right: 2px solid red;
+  border-left: 2px solid red;
+  border-top: 2px solid red;
+  background-color: pink;
+  color: red;
+}
+
+.fm_error:last-child {
+  border-bottom: 2px solid red;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}

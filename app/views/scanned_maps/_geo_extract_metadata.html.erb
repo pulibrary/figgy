@@ -1,7 +1,0 @@
-<div class="form-group member_resource_options">
-  <% if node.model_name.singular == "file_set" %>
-    <%= form_tag(scanned_maps_extract_metadata_path(file_set_id: node.id), class: "extract_metadata", method: "put") do %>
-      <button name="button" type="button" class="btn btn-primary" data-href="<%= scanned_maps_extract_metadata_path(file_set_id: node.id) %>">Extract Metadata</button>
-    <% end %>
-  <% end %>
-</div>
