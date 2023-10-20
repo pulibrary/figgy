@@ -38,4 +38,14 @@ module CatalogHelper
     Honeybadger.notify("Bad visibility value: #{value}")
     value
   end
+
+  # Current value of the show_children parameter.
+  # Used to build the default value in the display children search widget.
+  def show_children_value
+    if params[:show_children]&.downcase == "true"
+      "True"
+    else
+      "False"
+    end
+  end
 end

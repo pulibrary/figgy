@@ -1,3 +1,6 @@
 en:
   blacklight:
     application_name: 'Blacklight'
+    search:
+      show_children:
+        label_html: 'Show children'

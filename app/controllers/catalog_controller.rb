@@ -113,6 +113,7 @@ class CatalogController < ApplicationController
       :save_and_ingest_path,
       :scanned_resource,
       :search_params,
+      :show_children,
       :solr_document_id,
       :template_id,
       :utf8,
@@ -156,15 +157,11 @@ class CatalogController < ApplicationController
       assumed_boundaries: [1100, Time.current.year + 1],
       segments: true
     }
-    config.add_facet_field "membership_facet", label: "Membership", query: {
-      no_parent: { label: "No Parent", fq: "!member_of_ssim:['' TO *]" },
-      has_parent: { label: "Has Parent", fq: "member_of_ssim:['' TO *]" }
-    }
-
     config.add_facet_fields_to_solr_request!
 
     config.add_results_collection_tool(:sort_widget)
     config.add_results_collection_tool(:per_page_widget)
+    config.add_results_collection_tool(:display_children_widget)
     config.add_results_collection_tool(:view_type_group)
     config.add_results_collection_tool(:bulk_edit_button)
     config.add_results_document_tool(:bookmark, partial: "bookmark_control", if: :render_bookmarks_control?)
