@@ -1,0 +1,6 @@
+  <%= render(Blacklight::System::DropdownComponent.new(
+    param: :show_children,
+    choices: ["False", "True"],
+    id: 'membership-dropdown',
+    search_state: search_state,
+    selected: show_children_value)) %>

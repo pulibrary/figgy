@@ -530,7 +530,7 @@ RSpec.describe CatalogController, type: :controller do
       sign_in FactoryBot.create(:admin)
     end
 
-    context "with a scanned resource and the default membership facet value" do
+    context "with a scanned resource and without a show_children parameter" do
       it "doesn't display children of parented resources" do
         child = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
         parent = persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
@@ -538,14 +538,14 @@ RSpec.describe CatalogController, type: :controller do
         #   ChangeSetPersister.
         persister.save(resource: child)
 
-        get :index, params: { q: "", f: { "membership_facet" => "no_parent" } }
+        get :index, params: { q: "" }
 
         expect(assigns(:response).documents.length).to eq 1
         expect(assigns(:response).documents.first.resource.id).to eq parent.id
       end
     end
 
-    context "with a scanned resource and the has_parent membership facet value" do
+    context "with a scanned resource and the show_children parameter set to true" do
       it "displays children of parented resources" do
         child = persister.save(resource: FactoryBot.build(:complete_scanned_resource))
         persister.save(resource: FactoryBot.build(:complete_scanned_resource, member_ids: child.id))
@@ -554,9 +554,9 @@ RSpec.describe CatalogController, type: :controller do
         #   ChangeSetPersister.
         persister.save(resource: child)
 
-        get :index, params: { q: "", f: { "membership_facet" => "has_parent" } }
+        get :index, params: { q: "", show_children: "True" }
 
-        expect(assigns(:response).documents.length).to eq 1
+        expect(assigns(:response).documents.length).to eq 2
         expect(assigns(:response).documents.first.resource.id).to eq child.id
       end
     end
