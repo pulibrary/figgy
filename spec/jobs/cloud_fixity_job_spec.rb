@@ -4,7 +4,10 @@ require "rails_helper"
 RSpec.describe CloudFixityJob do
   describe ".perform" do
     let(:file_set) { FactoryBot.create_for_repository(:file_set) }
-    let(:resource) { FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_node: FileMetadata.new(id: SecureRandom.uuid)) }
+    let(:resource) do
+      FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_version: file_set.optimistic_lock_token.first.token,
+                                                             metadata_node: FileMetadata.new(id: SecureRandom.uuid))
+    end
 
     it "creates a new fixity event and marks the previously current event no longer current" do
       # The old event will have a different child_id, because a new node is made
@@ -22,6 +25,27 @@ RSpec.describe CloudFixityJob do
       expect(new_event.child_property).to eq "metadata_node"
       expect(new_event.current).to be true
       expect(old_event.current).to be false
+    end
+
+    context "when the metadata version and the preserved object lock token don't match" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_version: "invalid-token", metadata_node: FileMetadata.new(id: SecureRandom.uuid))
+      end
+
+      before do
+        allow(Honeybadger).to receive(:notify)
+        allow(RepairCloudFixityJob).to receive(:perform_later)
+      end
+
+      it "creates a repairing event and kicks off repair job" do
+        old_event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: SecureRandom.uuid, child_property: "metadata_node", current: true)
+        described_class.perform_now(status: "SUCCESS", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+        events = query_service.find_all_of_model(model: Event)
+        old_event = events.find { |e| e.id == old_event.id }
+        new_event = events.reject { |e| e.id == old_event.id }.first
+        expect(new_event).to be_repairing
+        expect(RepairCloudFixityJob).to have_received(:perform_later).with(event_id: new_event.id.to_s)
+      end
     end
 
     context "when status is FAILURE" do
