@@ -12,9 +12,9 @@ class CloudFixityJob < ApplicationJob
     @child_property = child_property
     @child_id = child_id
 
-    # Do not create an event and honeybadger notification if the resource that
-    # was being checked no longer exists. This happens on occasion.
-    return unless resource_exist?
+    # Do not create an event and honeybadger notification if the preservation
+    # object or the preseved resource no longer exist. This happens on occasion.
+    return unless resources_exist?
     event_change_set = EventChangeSet.new(Event.new)
     event_change_set.validate(type: :cloud_fixity, status: updated_status, resource_id: preservation_object_id, child_property: child_property.to_sym, child_id: child_id, current: true)
     raise "Unable to update fixity. Invalid event: #{event_change_set.errors.full_messages.to_sentence}" unless event_change_set.valid?
@@ -43,15 +43,18 @@ class CloudFixityJob < ApplicationJob
 
     def updated_status
       @updated_status ||=
-        if fixity_status == Event::FAILURE && !previous_events&.first&.repairing?
+        if metadata_versions_different?
+          Event::REPAIRING
+        elsif fixity_status == Event::FAILURE && !previous_events&.first&.repairing?
           Event::REPAIRING
         else
           fixity_status
         end
     end
 
-    def resource_exist?
-      query_service.find_by(id: preservation_object_id)
+    def resources_exist?
+      preservation_object
+      preserved_resource
       true
     rescue Valkyrie::Persistence::ObjectNotFoundError
       false
@@ -59,6 +62,15 @@ class CloudFixityJob < ApplicationJob
 
     def preservation_object
       @preservation_object ||= query_service.find_by(id: preservation_object_id)
+    end
+
+    def preserved_resource
+      @preserved_resource ||= query_service.find_by(id: preservation_object.preserved_object_id)
+    end
+
+    def metadata_versions_different?
+      return false unless child_property == "metadata_node"
+      preservation_object.metadata_version != preserved_resource.optimistic_lock_token.first.token
     end
 
     def previous_event_change_set(previous_event)
