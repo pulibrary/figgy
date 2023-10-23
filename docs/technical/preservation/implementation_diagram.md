@@ -64,37 +64,26 @@ erDiagram
 
 Preservation is triggered when a resource is marked complete by `ChangeSetPersister::PreserveResource` and runs so long as `ChangeSet.for(resource).preserve?` returns true.
 
-### Scanned resource walkthrough
+### Scanned Resource Walkthrough
 Scenario: The ScannedResource is completed.
-* the ChangeSetPersister::PreserveResource is run as an after_save_commit callback.
-  * calls `preserve?` on the change set.
-* in the change set,
-  * It has to be persisted
-  * If there's a parent, return the `preserve?` check from the parent
-  * If state is complete, or it doesn't respond to `state`, then preserve
-  * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/change_sets/change_set.rb#L102-L112
-* assuming preserve? true
-  * Run PreserveResourceJob as `perform_later` (wrapper for Preserver class)
-* Preserver
-  * `for` factory checks `change_set.preserve?` (again) so it doesn't do
-    anything if that's false.
-    * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/services/preserver.rb#L6
-  * `preserve!` will not do anything with binaries at this time since they are not attached to a scanned resource. The first time preserved, it will preserve both the metadata and members. Subsequent times preserved, it will only preserve metadata.
-  * Uploads the serialized json metadata to Google Cloud (via Valkyrie::Shrine gem)
-    * If the resource has changed its parent then it will re-preserve its
-      children and clean up the old metadata file. In our scenario, that's hasn't happened.
-  * Members are preserved asynchronously via a PreserveChildrenJob via SideKiq through the preserve_children method.
-  * We use PreservationObject to save the cloud / preserved locations of these files, so that we don't add new metadata values to the objects that we are preserving, thus necessitating another preservation action.
 
-### FileSet walkthrough
+1. `ChangeSet::PreserveResource` is run, checking `ChangeSet.for(resource).preserve?`
+   * Default `ChangeSet#preserve?`: https://github.com/pulibrary/figgy/blob/426da54c79bbbd08216f8edb05f034f3659ab41e/app/change_sets/change_set.rb#L108-L118
+2. Enqueue `PreserveResourceJob`, which runs `Preserver#preserve!`
+3. Create a `PreservationObject` for the `ScannedResource`
+   * We use PreservationObject to save the cloud / preserved locations of preservation files, so that we don't add new metadata values to the objects that we are preserving, thus necessitating another preservation action.
+4. Preserve metadata
+   * A JSON serialization of the metadata is uploaded to GCS and its checksum stored in the `metadata_node` attached to the PreservationObject.
+   * The PreservationObject's `metadata_version` field is updated with the `Resource`'s current lock token, so we can ensure that the `PreservationObject` and `Resource` are in sync.
+5. Enqueue preservation of children.
+   * Every time it's run the preserver will automatically enqueue preservation of any children which have never been preserved.
+
+### FileSet Walkthrough
+
 Scenario: The ScannedResource with one FileSet is completed.
 * PreserveChildrenJob queues a PreserveResourceJob for each of the members.
 * PreserveResourceJob is just a wrapper for the Preserver class.
-* Preserver
-  * `for` factory checks `change_set.preserve?` (again) so it doesn't do
-    anything if that's false.
-    * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/services/preserver.rb#L6
-* `preserve!` creates a PreservationIntermediaryNode for each file metadata on the FileSet. Gives an option to force the preservation, otherwise only preserves if it hasn't been preserved before.
+* `preserve!` creates a `PreservationChecker::Binary` for each file metadata on the FileSet. Gives an option to force the preservation, otherwise only preserves if it hasn't been preserved before.
 * After it preserves the binary nodes, it preserves the metadata, as outlined above. It doesn't have any children to preserve.
 
 
@@ -108,6 +97,7 @@ sequenceDiagram
 ```
 
 ### Cloud Fixity Check
+
 Scenario: A preserved object exists in Google Cloud
 Note: Some of this process is documented in [ADR #4, Preservation Fixity](https://github.com/pulibrary/figgy/blob/main/architecture-decisions/0004-preservation-fixity.md).
 * The `request_daily_cloud_fixity` task is run 9PM everyday.
@@ -127,25 +117,14 @@ Scenario: A new file is ingested.
 * After ingesting, CharacterizationJob runs (creates checksums), then runs
     CreateDerivativesJob
 * After derivatives are created in CreateDerivativesJob, it calls
-    CheckFixityJob via perform_later.
+    LocalFixityJob via perform_later.
   * Calls `run_fixity` on the file set, which delegates to the primary_file
       * Runs checksums on the file on disk and compares it to the previously
-          stored checksum. If it matches, sets fixity_success to 1, otherwise 0.
-  * Sets the output of `run_fixity` to the FileSet, then saves it without
-      calling the ChangeSetPersister, bypassing all callbacks. We don't know why
-      we do this, but it means the FileSet won't be re-preserved. NOTE: This
-      would cause the local FileSet metadata to be different than what's in the
-      cloud, if local fixity checks happened after complete. We do see failed
-      fixity checks on metadata occasionally.
+          stored checksum. If it matches, it creates a success Event.
 
 Scenario: A FileSet exists in Figgy, it should be occasionally confirmed its
 fixity is correct.
-* `rake figgy:fixity:run` is run manually once by someone, which queues up
-    CheckFixityRecursiveJob.
-* CheckFixityRecursiveJob runs CheckFixityJob.perform_now on the least recently
-    updated FileSet, and then re-enqueues itself. If anything errors, preventing
-    re-enqueuing, then it stops running and we'd have to notice via the sidekiq
-    dashboard.
+* `rake figgy:fixity:request_daily_local_fixity` is run every day. It checks a random 1/365th of the repository every day.
 
 ### Fixity status show page display
 Scenario: Looking at a Scanned Resource
