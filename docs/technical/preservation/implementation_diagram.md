@@ -1,23 +1,80 @@
 # Implementation Diagram
 
+`FileSetPreservationObject` and `ResourcePreservationObject` are separated below for visual purposes - both in the code are `PreservationObject`. Similarly, `MetadataFileMetadata` and `BinaryFileMetadata` are both `FileMetadata`.
+
+```mermaid
+erDiagram
+    Resource ||--o| ResourcePreservationObject : has_one
+    FileSet ||--o| FileSetPreservationObject : has_one
+    Resource {
+      Valkyrie-ID id PK
+      token[] optimistic_lock_token
+    }
+    Resource ||--o{ FileSet : has_many
+    FileSet {
+      Valkyrie-ID id pk
+      token[] optimistic_lock_token
+    }
+    FileSet ||--o{ FileMetadata : has_many
+    FileMetadata {
+      Valkyrie-ID id PK
+      checksum[] checksum
+      Valkyrie-ID[] file_identifiers
+    }
+    ResourcePreservationObject {
+      Valkyrie-ID id PK
+      Valkyrie-ID preserved_object_id FK
+      FileMetadata metadata_node
+      string metadata_version
+    }
+    ResourcePreservationObject ||--|| MetadataFileMetadata : "has_one metadata_node"
+    FileSetPreservationObject {
+      Valkyrie-ID id PK
+      Valkyrie-ID preserved_object_id FK
+      FileMetadata metadata_node
+      FileMetadata[] binary_nodes
+      string metadata_version
+    }
+    FileSetPreservationObject ||--|| MetadataFileMetadata : "has_one metadata_node"
+    FileSetPreservationObject ||--o{ BinaryFileMetadata : "has_many binary_nodes"
+    MetadataFileMetadata {
+      checksum[] checksum
+      Valkyrie-ID file_identifiers
+    }
+    BinaryFileMetadata {
+      checksum[] checksum
+      Valkyrie-ID[] file_identifiers
+      Valkyrie-ID preservation_copy_of_id FK
+    }
+    FileMetadata ||--|| BinaryFileMetadata : "has_one"
+    Event {
+      Valkyrie-ID id PK
+      string type
+      string status
+      boolean current
+      Valkyrie-ID resource_id FK
+      string child_property
+      Valkyrie-ID child_id FK
+    }
+    FileSetPreservationObject ||--o{ Event : "has_many (resource_id)"
+    Event ||--|| BinaryFileMetadata : "references (child_id)"
+```
+
 ## Preservation
+
+Preservation is triggered when a resource is marked complete by `ChangeSetPersister::PreserveResource` and runs so long as `ChangeSet.for(resource).preserve?` returns true.
 
 ### Scanned resource walkthrough
 Scenario: The ScannedResource is completed.
 * the ChangeSetPersister::PreserveResource is run as an after_save_commit callback.
   * calls `preserve?` on the change set.
-  * https://github.com/pulibrary/figgy/blob/5526-preservation/app/change_set_persisters/change_set_persister/preserve_resource.rb
 * in the change set,
   * It has to be persisted
-  * If there's a parent, return the preserve? check from the parent
+  * If there's a parent, return the `preserve?` check from the parent
   * If state is complete, or it doesn't respond to `state`, then preserve
   * https://github.com/pulibrary/figgy/blob/d32622f0585375a3d3cb475a8193f6b345681838/app/change_sets/change_set.rb#L102-L112
 * assuming preserve? true
-  * if there are members, run PreserveResourceJob as `perform_now`.
-  * If there aren't members, run PreserveResourceJob as `perform_later`. (mostly
-    this codepath is for filesets, unlikely you want to complete a scanned
-    resource that doesn't have any files)
-* PreserveResourceJob is just a wrapper for the Preserver class.
+  * Run PreserveResourceJob as `perform_later` (wrapper for Preserver class)
 * Preserver
   * `for` factory checks `change_set.preserve?` (again) so it doesn't do
     anything if that's false.
