@@ -28,6 +28,8 @@ RSpec.describe PreservationStatusReporter do
       unpreserved_binary_file_set = create_recording_unpreserved_binary
       # - a scannedresource with a metadata node that has the wrong checksum
       bad_checksum_metadata_resource = create_resource_bad_metadata_checksum
+      # - a scannedresource with a metadata node that has the wrong lock token
+      bad_lock_token_metadata_resource = create_resource_bad_metadata_lock_token
       # - a fileset with a binary node that has the wrong checksum
       bad_checksum_binary_file_set = create_file_set_bad_binary_checksum
       # - a scannedresource with a metadata node whose file is missing
@@ -58,7 +60,7 @@ RSpec.describe PreservationStatusReporter do
       # run audit
       reporter = described_class.new(suppress_progress: true)
       # Ensure count of resources it's auditing
-      expect(reporter.audited_resource_count).to eq 13
+      expect(reporter.audited_resource_count).to eq 14
       failures = reporter.cloud_audit_failures.to_a
       expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
         unpreserved_resource.id,
@@ -66,10 +68,11 @@ RSpec.describe PreservationStatusReporter do
         unpreserved_metadata_resource.id,
         missing_binary_file_set.id,
         missing_metadata_file_resource.id,
+        bad_checksum_metadata_resource.id,
         bad_checksum_binary_file_set.id,
-        bad_checksum_metadata_resource.id
+        bad_lock_token_metadata_resource.id
       )
-      expect(reporter.progress_bar.progress).to eq 13
+      expect(reporter.progress_bar.progress).to eq 14
     end
 
     it "can skip checking for bad metadata checksums if requested" do
@@ -172,6 +175,17 @@ RSpec.describe PreservationStatusReporter do
     resource = change_set_persister.save(change_set: change_set)
     po = Wayfinder.for(resource).preservation_objects.first
     modify_file(po.metadata_node.file_identifiers.first)
+    resource
+  end
+
+  def create_resource_bad_metadata_lock_token
+    resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+    reloaded_resource = query_service.find_by(id: resource.id)
+    change_set = ChangeSet.for(reloaded_resource)
+    resource = change_set_persister.save(change_set: change_set)
+    po = Wayfinder.for(resource).preservation_objects.first
+    po.metadata_version = "6"
+    ChangeSetPersister.default.metadata_adapter.persister.save(resource: po)
     resource
   end
 
