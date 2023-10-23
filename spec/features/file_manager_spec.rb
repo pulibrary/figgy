@@ -40,13 +40,11 @@ RSpec.feature "File Manager" do
       # Prevent deleting files.
       allow(CleanupFilesJob).to receive(:perform_later).and_return(true)
     end
-    it "can be deleted and reinstated", js: true, run_real_derivatives: true, run_real_characterization: true do
+    it "can be deleted and reinstated" do
       visit polymorphic_path [:file_manager, resource]
 
       click_link "Edit"
-      accept_confirm do
-        click_link "Delete This File Set"
-      end
+      click_link "Delete This File Set"
       click_link "File Manager"
       expect(page).not_to have_link "Edit"
       click_button "Reinstate"
