@@ -12,6 +12,7 @@ RSpec.feature "File Manager" do
   end
 
   before do
+    stub_ezid
     sign_in user
   end
 
@@ -26,6 +27,30 @@ RSpec.feature "File Manager" do
       visit polymorphic_path [:file_manager, resource]
 
       expect(page).not_to have_selector(".thumbnail span.ignore-select")
+    end
+  end
+
+  context "when a file is preserved" do
+    with_queue_adapter :inline
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    let(:resource) do
+      FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
+    end
+    before do
+      # Prevent deleting files.
+      allow(CleanupFilesJob).to receive(:perform_later).and_return(true)
+    end
+    it "can be deleted and reinstated" do
+      visit polymorphic_path [:file_manager, resource]
+
+      click_link "Edit"
+      click_link "Delete This File Set"
+      click_link "File Manager"
+      expect(page).not_to have_link "Edit"
+      click_button "Reinstate"
+      click_link "File Manager"
+
+      expect(page).to have_link "Edit"
     end
   end
 
