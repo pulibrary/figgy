@@ -1504,6 +1504,16 @@ RSpec.describe ChangeSetPersister do
       end
     end
 
+    context "when deleting an event" do
+      it "doesn't create a DeletionMarker" do
+        resource = FactoryBot.create_for_repository(:event)
+        change_set_persister.delete(change_set: ChangeSet.for(resource))
+
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        expect(deletion_markers).to be_blank
+      end
+    end
+
     context "when reinstating a FileSet from its deletion_marker" do
       before do
         # Make preservation deletes not actually happen to simulate a versioned
