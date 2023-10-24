@@ -70,7 +70,14 @@ class CloudFixityJob < ApplicationJob
 
     def metadata_versions_different?
       return false unless child_property == "metadata_node"
-      preservation_object.metadata_version != preserved_resource.optimistic_lock_token.first.token
+      # If optimistic locking hasn't ever happened, don't bother checking if
+      # metadata matches. It'll happen when the object is saved again.
+      return false if preserved_resource_token.blank?
+      preservation_object.metadata_version != preserved_resource_token
+    end
+
+    def preserved_resource_token
+      preserved_resource.optimistic_lock_token.first&.token
     end
 
     def previous_event_change_set(previous_event)

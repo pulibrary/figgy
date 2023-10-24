@@ -48,6 +48,23 @@ RSpec.describe CloudFixityJob do
       end
     end
 
+    context "when the preserved object lock token is nil" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_version: "invalid-token", metadata_node: FileMetadata.new(id: SecureRandom.uuid))
+      end
+      it "passes no matter the metadata_version" do
+        old_event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: SecureRandom.uuid, child_property: "metadata_node", current: true)
+        allow_any_instance_of(FileSet).to receive(:optimistic_lock_token).and_return([])
+
+        described_class.perform_now(status: "SUCCESS", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+
+        events = query_service.find_all_of_model(model: Event)
+        old_event = events.find { |e| e.id == old_event.id }
+        new_event = events.reject { |e| e.id == old_event.id }.first
+        expect(new_event).to be_successful
+      end
+    end
+
     context "when status is FAILURE" do
       before do
         allow(Honeybadger).to receive(:notify)
