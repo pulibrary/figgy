@@ -72,7 +72,9 @@ class VectorResourceDerivativeService
     unzip_display
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
-    update_error_message(message: error.message)
+    change_set_persister.after_rollback.add do
+      update_error_message(message: error.message)
+    end
     raise error
   end
 
@@ -172,7 +174,8 @@ class VectorResourceDerivativeService
 
     # Updates error message property on the original file.
     def update_error_message(message:)
-      primary_file.error_message = [message]
+      resource = query_service.find_by(id: self.resource.id)
+      resource.primary_file.error_message = [message]
       updated_change_set = ChangeSet.for(resource)
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)

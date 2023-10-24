@@ -65,7 +65,9 @@ class RasterResourceDerivativeService
     generate_mosaic
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
-    update_error_message(message: error.message)
+    change_set_persister.after_rollback.add do
+      update_error_message(message: error.message)
+    end
     raise error
   end
 

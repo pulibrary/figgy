@@ -119,6 +119,7 @@ Metrics/ClassLength:
     - 'app/services/pulfa_exporter.rb'
     - 'app/services/geo_metadata_extractor/iso19139.rb'
     - 'app/services/dao_updater.rb'
+    - 'app/derivative_services/image_derivative_service.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
@@ -204,6 +205,7 @@ Metrics/MethodLength:
     - 'spec/services/manifest_builder_v3_spec.rb'
     - 'app/services/cdl/charge_manager.rb'
     - 'app/services/preserver/blind_importer.rb'
+    - 'app/change_set_persisters/change_set_persister.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
