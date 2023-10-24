@@ -89,6 +89,7 @@ class ChangeSetPersister
   class Basic
     attr_reader :metadata_adapter, :storage_adapter, :handlers
     attr_accessor :queue
+    attr_writer :after_rollback
     delegate :persister, :query_service, to: :metadata_adapter
     def initialize(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, queue: :default, handlers: {})
       @metadata_adapter = metadata_adapter
@@ -139,13 +140,19 @@ class ChangeSetPersister
       end
 
       delayed_queue = nil
+      @after_rollback = DelayedQueue.new
       metadata_adapter.persister.buffer_into_index do |buffered_adapter|
         with(metadata_adapter: buffered_adapter) do |buffered_changeset_persister|
           yield(buffered_changeset_persister)
           delayed_queue = buffered_changeset_persister.delayed_queue
         end
       end
+      @after_rollback = nil
       delayed_queue.run
+    rescue StandardError => error
+      after_rollback.run
+      @after_rollback = nil
+      raise error
     end
 
     def transaction?
@@ -158,6 +165,15 @@ class ChangeSetPersister
 
     def delayed_queue
       @delayed_queue ||=
+        if transaction?
+          DelayedQueue.new
+        else
+          InstantQueue.new
+        end
+    end
+
+    def after_rollback
+      @after_rollback ||=
         if transaction?
           DelayedQueue.new
         else
@@ -193,6 +209,7 @@ class ChangeSetPersister
     # will yield the new adapter.
     def with(metadata_adapter: self.metadata_adapter, storage_adapter: self.storage_adapter)
       new_adapter = self.class.new(metadata_adapter: metadata_adapter, storage_adapter: storage_adapter, transaction: true, characterize: @characterize, queue: queue, handlers: handlers)
+      new_adapter.after_rollback = after_rollback
       return new_adapter unless block_given?
       yield new_adapter
     end

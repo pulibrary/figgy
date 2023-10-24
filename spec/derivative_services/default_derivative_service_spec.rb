@@ -67,6 +67,16 @@ RSpec.describe DefaultDerivativeService do
     expect(adapter.persister).to have_received(:buffer_into_index).exactly(1).times
   end
 
+  context "malformed tiff source", run_real_derivatives: true do
+    let(:file) { fixture_file_upload("files/bad.tif", "image/tiff") }
+
+    it "stores an error message on the fileset" do
+      expect { derivative_service.new(id: valid_change_set.id).create_derivatives }.to raise_error(::Vips::Error)
+      file_set = query_service.find_all_of_model(model: FileSet).first
+      expect(file_set.original_file.error_message).to include(/not a known file format/)
+    end
+  end
+
   describe "#cleanup_derivatives" do
     before do
       derivative_service.new(id: valid_change_set.id).create_derivatives
