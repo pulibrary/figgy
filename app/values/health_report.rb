@@ -11,7 +11,8 @@ class HealthReport
   def self.check_classes
     [
       LocalFixityCheck,
-      CloudFixityCheck
+      CloudFixityCheck,
+      DerivativeCheck
     ]
   end
 

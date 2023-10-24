@@ -221,6 +221,50 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.summary).to start_with "One or more files are in the process of being repaired."
       end
     end
+
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    context "for a resource with a derivative that failed to process" do
+      with_queue_adapter :inline
+      it "returns :needs_attention" do
+        stub_ezid
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+        file_set = Wayfinder.for(resource).file_sets.first
+        file_set.primary_file.error_message = "Broken!"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :needs_attention
+      end
+    end
+
+    context "for a resource with a derivative that worked" do
+      with_queue_adapter :inline
+      it "returns :healthy" do
+        stub_ezid
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :healthy
+      end
+    end
+
+    context "for a resource with a derivative that hasn't processed yet" do
+      with_queue_adapter :inline
+      it "returns :in_progress" do
+        stub_ezid
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+        file_set = Wayfinder.for(resource).file_sets.first
+        file_set.processing_status = "in process"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :in_progress
+      end
+    end
+
     # rubocop:disable Metrics/MethodLength
     def create_file_set(cloud_fixity_status:)
       file_set = FactoryBot.create_for_repository(:file_set)
