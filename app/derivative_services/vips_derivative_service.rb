@@ -187,6 +187,8 @@ class VIPSDerivativeService
       target = resource.file_metadata.find { |x| x.id == target_file.id }
       target.error_message = [message]
       updated_change_set = ChangeSet.for(resource)
-      change_set_persister.save(change_set: updated_change_set)
+      change_set_persister.buffer_into_index do |buffered_persister|
+        buffered_persister.save(change_set: updated_change_set)
+      end
     end
 end
