@@ -3,7 +3,11 @@ class CollectionIndexer
   delegate :query_service, to: :metadata_adapter
   attr_reader :resource
   def initialize(resource:)
-    @resource = resource
+    @resource = if resource.is_a?(DeletionMarker)
+                  resource.deleted_object
+                else
+                  resource
+                end
   end
 
   # Adds a collection title index entry to a resource's index document for each collection that resource belongs to
@@ -17,7 +21,7 @@ class CollectionIndexer
 
   def collection_titles
     @collection_titles ||=
-      ephemera_collection_titles.any? ? ephemera_collection_titles : collections.map(&:title).to_a
+      ephemera_collection_titles.any? ? ephemera_collection_titles : collections.map(&:title)
   end
 
   def decorated_resource
@@ -31,8 +35,11 @@ class CollectionIndexer
 
   def collections
     return [] unless resource.respond_to?(:member_of_collection_ids) && resource.member_of_collection_ids
-    @collections ||=
-      query_service.find_references_by(resource: resource, property: :member_of_collection_ids).to_a.map(&:decorate)
+    @collections ||= resource.member_of_collection_ids.map do |id|
+      query_service.find_by(id: id)&.decorate
+                     rescue Valkyrie::Persistence::ObjectNotFoundError
+                       nil
+    end.compact
   end
 
   def metadata_adapter
