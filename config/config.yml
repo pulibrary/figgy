@@ -215,6 +215,11 @@ defaults: &defaults
       workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
   tileserver:
     url: <%= ENV['TILESERVER_URL'] %>
+  geodata:
+    open:
+      url: <%= ENV['OPEN_GEODATA_URL'] || "http://localhost:8080/geodata-open" %>
+    authenticated:
+      url: <%= ENV['RESTRICTED_GEODATA_URL'] || "http://localhost:8080/geodata-restricted" %>
   characterization:
     imagemagick:
       supported_mime_types:

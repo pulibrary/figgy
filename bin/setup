@@ -11,7 +11,7 @@ asdf plugin-add java || true
 asdf plugin-add nodejs || true
 asdf install
 gem install bundler:2.2.16
-brew install imagemagick gdal tesseract-lang mediainfo ffmpeg vips ocrmypdf lastpass-cli
+brew install imagemagick gdal tesseract-lang mediainfo ffmpeg vips ocrmypdf lastpass-cli tippecanoe
 pip install cogeo-mosaic
 asdf reshim python
 brew install --cask lando

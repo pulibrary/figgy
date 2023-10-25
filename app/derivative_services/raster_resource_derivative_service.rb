@@ -62,6 +62,7 @@ class RasterResourceDerivativeService
     create_local_derivatives
     # Persist a second copy of the display file to the cloud.
     create_cloud_derivatives
+    update_cloud_acl
     generate_mosaic
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
@@ -129,6 +130,13 @@ class RasterResourceDerivativeService
 
   def temporary_thumbnail_output
     @temporary_thumbnail_output ||= Tempfile.new
+  end
+
+  def update_cloud_acl
+    parent = Wayfinder.for(change_set.model).parent
+    cloud_file = change_set.model.cloud_derivative_files.first
+    key = cloud_file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "")
+    CloudFilePermissionsService.new(resource: parent, key: key).run
   end
 
   def use_display

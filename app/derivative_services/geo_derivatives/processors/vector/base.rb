@@ -10,6 +10,7 @@ module GeoDerivatives
         include GeoDerivatives::Processors::Gdal
         include GeoDerivatives::Processors::Rendering
         include GeoDerivatives::Processors::Zip
+        include GeoDerivatives::Processors::Tippecanoe
 
         def self.encode(path, options, output_file)
           case options[:label]
@@ -17,7 +18,13 @@ module GeoDerivatives
             encode_vector(path, output_file, options)
           when :display_vector
             reproject_vector(path, output_file, options)
+          when :cloud_vector
+            cloud_vector(path, output_file, options)
           end
+        end
+
+        def self.cloud_queue
+          [:cloud_reproject, :generate_pmtiles]
         end
 
         # Set of commands to run to encode the vector thumbnail.
@@ -38,6 +45,10 @@ module GeoDerivatives
 
         def self.reproject_vector(in_path, out_path, options)
           run_commands(in_path, out_path, reproject_queue, options)
+        end
+
+        def self.cloud_vector(in_path, out_path, options)
+          run_commands(in_path, out_path, cloud_queue, options)
         end
       end
     end

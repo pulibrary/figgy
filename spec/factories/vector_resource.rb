@@ -54,6 +54,9 @@ FactoryBot.define do
     factory :pending_vector_resource do
       state { "pending" }
     end
+    factory :campus_only_vector_resource do
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+    end
     factory :complete_campus_only_vector_resource do
       state { "complete" }
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }

@@ -84,6 +84,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://schema.org/downloadUrl"]).to match(/downloads/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wms"]).to match(/geoserver\/public-figgy\/wms/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to match(/geoserver\/public-figgy\/wfs/)
+      expect(refs["https://github.com/protomaps/PMTiles"]).to match(/display_vector.pmtiles/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to be nil # only exists for rasters and raster sets
       expect(refs["http://iiif.io/api/image"]).to be nil
       expect(refs["http://iiif.io/api/presentation#manifest"]).to be nil
@@ -421,6 +422,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wcs"]).to be_nil
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to match(/WMTSCapabilities/)
       expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to match(/tiles/)
+      expect(refs["https://github.com/cogeotiff/cog-spec"]).to match(/geodata-open/)
       expect(refs["http://www.opengis.net/def/serviceType/ogc/wfs"]).to be_nil
 
       # Subjects filtered by FGDC topics

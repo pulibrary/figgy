@@ -12,6 +12,8 @@ module GeoDerivatives
               encode_vector(zip_path, output_file, options)
             when :display_vector
               reproject_vector(zip_path, output_file, options)
+            when :cloud_vector
+              cloud_vector(zip_path, output_file, options)
             end
           end
         end

@@ -13,16 +13,6 @@ class VectorResourceDerivativeService
     end
   end
 
-  class IoDecorator < SimpleDelegator
-    attr_reader :original_filename, :content_type, :use
-    def initialize(io, original_filename, content_type, use)
-      @original_filename = original_filename
-      @content_type = content_type
-      @use = use
-      super(io)
-    end
-  end
-
   attr_reader :id, :change_set_persister
   delegate :mime_type, to: :primary_file
   delegate :query_service, to: :change_set_persister
@@ -41,11 +31,17 @@ class VectorResourceDerivativeService
   end
 
   def build_display_file
-    IoDecorator.new(temporary_display_output, "display_vector.zip", 'application/zip; ogr-format="ESRI Shapefile"', use_display)
+    IngestableFile.new(file_path: temporary_display_output.path, mime_type: 'application/zip; ogr-format="ESRI Shapefile"', original_filename: "display_vector.zip", use: use_display,
+                       copy_before_ingest: false)
+  end
+
+  def build_cloud_file
+    IngestableFile.new(file_path: temporary_cloud_output.path, mime_type: "application/vnd.pmtiles", original_filename: "display_vector.pmtiles", use: use_cloud_derivative,
+                       copy_before_ingest: false)
   end
 
   def build_thumbnail_file
-    IoDecorator.new(temporary_thumbnail_output, "thumbnail.png", "image/png", use_thumbnail)
+    IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copy_before_ingest: true)
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
@@ -53,7 +49,7 @@ class VectorResourceDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    vector_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? }
+    vector_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? || file.cloud_derivative? }
     vector_derivatives.each do |file|
       # Delete the entire directory to remove unzipped display derivatives
       id = File.dirname(file.file_identifiers.first.to_s)
@@ -65,17 +61,21 @@ class VectorResourceDerivativeService
 
   def create_derivatives
     run_derivatives
-    change_set.files = [build_display_file, build_thumbnail_file]
-    change_set_persister.buffer_into_index do |buffered_persister|
-      @resource = buffered_persister.save(change_set: change_set)
-    end
+    create_local_derivatives
+    # Persist a second copy of the display file to the cloud.
+    create_cloud_derivatives
     unzip_display
+    update_cloud_acl
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
     change_set_persister.after_rollback.add do
       update_error_message(message: error.message)
     end
     raise error
+  end
+
+  def cloud_storage_adapter
+    Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
   end
 
   def file_object
@@ -94,6 +94,17 @@ class VectorResourceDerivativeService
       format: "zip",
       srid: "EPSG:4326",
       url: URI("file://#{temporary_display_output.path}")
+    }
+  end
+
+  def instructions_for_cloud
+    {
+      input_format: primary_file.mime_type.first,
+      label: :cloud_vector,
+      id: prefixed_id,
+      format: "pmtiles",
+      srid: "EPSG:4326",
+      url: URI("file://#{temporary_cloud_output.path}")
     }
   end
 
@@ -121,12 +132,16 @@ class VectorResourceDerivativeService
 
   def run_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_display, instructions_for_thumbnail]
+      filename, outputs: [instructions_for_display, instructions_for_cloud, instructions_for_thumbnail]
     )
   end
 
   def temporary_display_output
     @temporary_display_output ||= Tempfile.new
+  end
+
+  def temporary_cloud_output
+    @temporary_cloud_output ||= Tempfile.new
   end
 
   def temporary_thumbnail_output
@@ -141,8 +156,19 @@ class VectorResourceDerivativeService
     system "unzip -qq -o #{derivative_path} -d #{shapefile_dir}"
   end
 
+  def update_cloud_acl
+    parent = Wayfinder.for(change_set.model).parent
+    cloud_file = change_set.model.cloud_derivative_files.first
+    key = cloud_file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "")
+    CloudFilePermissionsService.new(resource: parent, key: key).run
+  end
+
   def use_display
     [Valkyrie::Vocab::PCDMUse.ServiceFile]
+  end
+
+  def use_cloud_derivative
+    [Valkyrie::Vocab::PCDMUse.CloudDerivative]
   end
 
   def use_thumbnail
@@ -180,5 +206,33 @@ class VectorResourceDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
+    end
+
+    def create_local_derivatives
+      return unless missing_local_display? && missing_thumbnail?
+      @resource = query_service.find_by(id: id)
+      @change_set = ChangeSet.for(resource)
+      change_set.files = [build_display_file, build_thumbnail_file]
+      change_set_persister.buffer_into_index do |buffered_persister|
+        @resource = buffered_persister.save(change_set: change_set)
+      end
+    end
+
+    def create_cloud_derivatives
+      @change_set = ChangeSet.for(resource)
+      change_set.files = [build_cloud_file]
+      change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
+        cloud_persister.buffer_into_index do |buffered_persister|
+          @resource = buffered_persister.save(change_set: change_set)
+        end
+      end
+    end
+
+    def missing_local_display?
+      resource.file_metadata.find_all { |fm| fm.use == use_display }.empty?
+    end
+
+    def missing_thumbnail?
+      resource.file_metadata.find_all { |fm| fm.use == use_thumbnail }.empty?
     end
 end

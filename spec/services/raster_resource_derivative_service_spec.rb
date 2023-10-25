@@ -41,6 +41,10 @@ RSpec.describe RasterResourceDerivativeService do
 
   context "with a valid geotiff" do
     it "creates a display raster intermediate file and a thumbnail in the geo derivatives directory, and also stores to the cloud" do
+      cloud_file_service = instance_double(CloudFilePermissionsService)
+      allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
+      allow(cloud_file_service).to receive(:run)
+
       resource = query_service.find_by(id: valid_resource.id)
       rasters = resource.file_metadata.find_all { |f| f.label == ["display_raster.tif"] }
       thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
@@ -54,6 +58,7 @@ RSpec.describe RasterResourceDerivativeService do
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(MosaicJob).not_to have_received(:perform_later)
+      expect(cloud_file_service).to have_received(:run)
     end
   end
 

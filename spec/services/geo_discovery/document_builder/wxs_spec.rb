@@ -17,11 +17,7 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
 
   before do
     allow(GeoserverPublishJob).to receive(:perform_later)
-    output = change_set_persister.save(change_set: change_set)
-    file_set_id = output.member_ids[0]
-    file_set = query_service.find_by(id: file_set_id)
-    file_set.primary_file.mime_type = 'application/zip; ogr-format="ESRI Shapefile"'
-    metadata_adapter.persister.save(resource: file_set)
+    change_set_persister.save(change_set: change_set)
   end
 
   describe "#identifier" do
@@ -131,6 +127,57 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
 
       it "does not return the overriden wfs value" do
         expect(wxs_builder.wfs_path).not_to eq wfs_url
+      end
+    end
+  end
+
+  describe "#pmtiles_path" do
+    context "with a public document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      it "returns a public pmtiles path" do
+        expect(wxs_builder.pmtiles_path).to include "http://localhost:8080/geodata-open"
+      end
+    end
+
+    context "campus only document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+      it "returns a restricted pmtiles path" do
+        expect(wxs_builder.pmtiles_path).to include "http://localhost:8080/geodata-restricted"
+      end
+    end
+
+    context "private document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+      it "returns a nil value" do
+        expect(wxs_builder.pmtiles_path).to be_nil
+      end
+    end
+  end
+
+  describe "#cog_path" do
+    let(:geo_work) { FactoryBot.create_for_repository(:raster_resource, visibility: visibility) }
+    let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
+    let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
+    let(:tika_output) { tika_geotiff_output }
+
+    context "with a public document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      it "returns a public cog path" do
+        expect(wxs_builder.cog_path).to include "http://localhost:8080/geodata-open"
+      end
+    end
+
+    context "campus only document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+      it "returns a restricted cog path" do
+        expect(wxs_builder.cog_path).to include "http://localhost:8080/geodata-restricted"
+      end
+    end
+
+    context "private document" do
+      let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+      it "returns a nil value" do
+        expect(wxs_builder.cog_path).to be_nil
       end
     end
   end
