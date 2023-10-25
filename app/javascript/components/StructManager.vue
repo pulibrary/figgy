@@ -1,6 +1,7 @@
 <template>
   <div class="lux-structManager">
     <toolbar @cards-resized="resizeCards($event)" />
+    <deep-zoom v-if="zoomed" resource-id="6d9555cb-4d31-4509-a3a7-29c5aba42d8d" viewer-id="viewer" class="deep-zoom"></deep-zoom>
     <div
       class="lux-sidePanel"
     >
@@ -31,12 +32,11 @@
 import { mapState } from 'vuex'
 import Toolbar from './StructManagerToolbar'
 import Tree from './Tree'
+import DeepZoom from './DeepZoom'
 
 /**
- * OrderManager is a tool for reordering thumbnails that represent members of a complex object (a book, CD, multi-volume work, etc.).
- * Complex patterns like OrderManager come with their own Vuex store that it needs to manage state.
- * The easiest way to use the OrderManager is to simply pass a resource in as a prop.
- * You can see how this is done in the live code example at the end of this section.
+ * StructureManager is a tool for giving structure to a complex object (a book, CD, multi-volume work, etc.).
+ * Complex patterns like StructureManager come with their own Vuex store that it needs to manage state.
  *
  * However you will still need to load the corresponding
  * Vuex module, *resourceModule*. Please see [the state management documentation](/#!/State%20Management) for how to manage state in complex patterns.
@@ -49,6 +49,7 @@ export default {
   components: {
     'toolbar': Toolbar,
     'tree': Tree,
+    'deep-zoom': DeepZoom,
   },
   props: {
     /**
@@ -136,8 +137,12 @@ export default {
     ...mapState({
       resource: state => state.ordermanager.resource,
       tree: state => state.tree,
-      gallery: state => state.gallery
+      gallery: state => state.gallery,
+      zoom: state => state.zoom,
     }),
+    zoomed: function () {
+      return this.zoom.zoomed
+    },
     loading: function () {
       return this.resource.loadState !== 'LOADED'
     },
@@ -173,11 +178,21 @@ export default {
       } else {
         this.captionPixelPadding = 9
       }
-    }
+    },
   }
 }
 </script>
 <style lang="scss">
+
+.deep-zoom {
+  position: absolute;
+  z-index: 3; /* put .gold-box above .green-box and .dashed-box */
+  background: gold;
+  width: 50%;
+  left: 60px;
+  top: 3em;
+}
+
 .lux-resourceTitle {
   background-color: grey;
   margin-bottom: 10em;

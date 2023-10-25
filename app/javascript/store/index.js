@@ -4,6 +4,7 @@ import actions from './vuex/actions'
 import { resourceState, resourceMutations, resourceGetters } from "./resource"
 import {modules} from 'lux-design-system'
 import { treeState, treeMutations } from "./tree/index"
+import { zoomState, zoomMutations } from "./zoom/index"
 Vue.use(Vuex)
 
 const resourceModule = {
@@ -20,12 +21,18 @@ export const treeModule = {
   mutations: treeMutations,
 }
 
+export const zoomModule = {
+  state: zoomState,
+  mutations: zoomMutations,
+}
+
 const store = new Vuex.Store({
   actions,
   modules: {
     ordermanager: resourceModule,
     gallery: modules.galleryModule,
     tree: treeModule,
+    zoom: zoomModule,
   }
 })
 

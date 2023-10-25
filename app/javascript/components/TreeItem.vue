@@ -35,7 +35,7 @@
         <media-image
           v-if="thumbnail"
           :alt="jsonData.label"
-          :src="thumbnail" height="30px" 
+          :src="thumbnail" height="30px"
           style="margin-top: .5em;margin-right: .5em;"></media-image>
         <template v-if="editedFieldId === id">
           <div class="folder-label">
@@ -177,6 +177,7 @@ export default {
     },
     ...mapState({
       tree: state => store.state.tree,
+      zoom: state => store.state.zoom,
     }),
   },
   methods: {
@@ -299,7 +300,7 @@ export default {
       }
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let selected = this.findSelectedFolderById(folderList, id)
-      console.log(JSON.stringify(selected))
+      // console.log(JSON.stringify(selected))
       store.commit("SELECT", id)
     },
     saveLabel: function(id) {
@@ -351,7 +352,10 @@ export default {
       }
     },
     viewFile: function (id) {
-      console.log(id)
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let selected = this.findSelectedFolderById(folderList, id)
+      console.log(JSON.stringify(selected))
+      this.$store.commit("ZOOM", selected)
     },
   },
 }
