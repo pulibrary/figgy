@@ -29,7 +29,7 @@ namespace :figgy do
 
     desc "Clean old derivative processing files"
     task derivative_artifacts: :environment do
-      all_files = Dir.glob("#{Dir.tmpdir}/derivative_generation")
+      all_files = Dir.glob("#{Dir.tmpdir}/derivative_generation/*")
       expiration_date = 1.day.ago
       all_files.each do |file|
         if File.mtime(file) <= expiration_date
