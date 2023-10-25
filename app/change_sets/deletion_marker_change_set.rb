@@ -8,6 +8,7 @@ class DeletionMarkerChangeSet < ChangeSet
   property :resource_local_identifier
   property :resource_id
   property :original_filename
+  property :member_of_collection_titles
   property :deleted_object
   property :preservation_object
   property :parent_id

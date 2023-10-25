@@ -33,10 +33,15 @@ class ChangeSetPersister
           resource_local_identifier: resource.try(:local_identifier),
           resource_archival_collection_code: resource.try(:archival_collection_code),
           original_filename: resource.try(:primary_file)&.original_filename,
+          member_of_collection_titles: collection_titles,
           deleted_object: resource,
           preservation_object: preservation_object,
           depositor: resource.try(:depositor)
         }
+      end
+
+      def collection_titles
+        CollectionIndexer.new(resource: resource).to_solr["member_of_collection_titles_ssim"]
       end
 
       def parent_id

@@ -16,12 +16,20 @@ class CollectionIndexer
   end
 
   def collection_titles
-    @collection_titles ||=
-      ephemera_collection_titles.any? ? ephemera_collection_titles : collections.map(&:title).to_a
+    @collection_titles ||= begin
+      return ephemera_collection_titles if ephemera_collection_titles.any?
+      return deletion_marker_collection_titles if deletion_marker_collection_titles.any?
+      collections.map(&:title).to_a
+    end
   end
 
   def decorated_resource
     @decorated_resource ||= resource.decorate
+  end
+
+  def deletion_marker_collection_titles
+    return [] unless resource.is_a?(DeletionMarker) && resource.member_of_collection_titles.present?
+    resource.member_of_collection_titles
   end
 
   def ephemera_collection_titles
