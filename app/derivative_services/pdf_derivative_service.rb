@@ -88,7 +88,7 @@ class PDFDerivativeService
     pages = image.get_value("pdf-n_pages")
     files = Array.new(pages).lazy.each_with_index.map do |_, page|
       location = temporary_output(page).to_s
-      `vips pdfload #{filename} #{location} --page #{page} --n 1 --dpi 300 --access sequential`
+      `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --dpi 300 --access sequential`
       build_file(page + 1, location)
     end
     files
@@ -103,7 +103,7 @@ class PDFDerivativeService
       container_attributes: {
         title: pad_with_zeroes(page)
       },
-      copy_before_ingest: false
+      copy_before_ingest: true
     )
   end
 
