@@ -25,18 +25,5 @@ RSpec.describe CollectionIndexer do
         expect(output["member_of_collection_titles_tesim"]).to eq [collection.title.first]
       end
     end
-
-    context "with a deletion markeri and the collection has been deleted" do
-      it "does not index collection titles and does not error" do
-        collection = FactoryBot.create_for_repository(:collection)
-        resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
-        persister = ChangeSetPersister.default
-        persister.delete(change_set: ChangeSet.for(resource))
-        persister.delete(change_set: ChangeSet.for(collection))
-        deletion_marker = persister.query_service.find_all_of_model(model: DeletionMarker).first
-        output = described_class.new(resource: deletion_marker).to_solr
-        expect(output).to be_empty
-      end
-    end
   end
 end

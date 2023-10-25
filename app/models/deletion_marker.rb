@@ -9,6 +9,7 @@ class DeletionMarker < Resource
   attribute :resource_source_metadata_identifier
   attribute :resource_local_identifier
   attribute :original_filename
+  attribute :member_of_collection_titles
   attribute :deleted_object, Valkyrie::Types::Anything
   attribute :preservation_object, PreservationObject.optional
   attribute :parent_id, Valkyrie::Types::ID

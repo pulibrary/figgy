@@ -6,6 +6,7 @@ class DeletionMarkerDecorator < Valkyrie::ResourceDecorator
           :resource_identifier,
           :resource_source_metadata_identifier,
           :resource_local_identifier,
+          :member_of_collection_titles,
           :depositor,
           :original_filename,
           :parent_id
