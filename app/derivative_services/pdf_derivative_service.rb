@@ -103,7 +103,7 @@ class PDFDerivativeService
       container_attributes: {
         title: pad_with_zeroes(page)
       },
-      copy_before_ingest: true
+      copy_before_ingest: false
     )
   end
 
@@ -112,7 +112,7 @@ class PDFDerivativeService
   end
 
   def tmpdir
-    @tmpdir ||= Pathname.new(Dir.mktmpdir("pdf_derivatives"))
+    @tmpdir ||= Pathname.new(FileUtils.mkdir_p("#{Dir.tmpdir}/derivative_generation/pdf-#{SecureRandom.uuid}").first)
   end
 
   def temporary_output(page)

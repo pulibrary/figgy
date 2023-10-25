@@ -28,6 +28,10 @@ every :day, at: "11:00 PM", roles: [:db] do
   rake "figgy:clean:expired_local_files"
 end
 
+every :day, at: "12:00 PM", roles: [:db] do
+  rake "figgy:clean:derivative_artifacts"
+end
+
 every 10.minutes, roles: [:db] do
   rake "figgy:cdl:bulk_hold_process"
 end
