@@ -2,7 +2,7 @@
   <wrapper style="max-width:100%;">
     <div class="lux-modal">
       <heading level="h2">
-        Zoom <small>on the item</small>
+        Zoom <small>on {{ isZoomed.caption }}</small>
         <input-button
           @button-clicked="hideZoom()"
           class="expand-collapse"
@@ -26,7 +26,7 @@
 
 <script>
 import OpenSeadragon from 'openseadragon'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 /**
  * This is the Persistence and Deep Zoom pieces of the Order Manager interface.
  * Note: use `yarn add openseadragon` for deep zoom to work.
@@ -62,7 +62,7 @@ export default {
   data: function () {
     return {
       viewer: null,
-      osdId: this.viewerId
+      osdId: this.viewerId,
     }
   },
   computed: {
@@ -72,19 +72,19 @@ export default {
       gallery: state => state.gallery,
       zoom: state => state.zoom,
     }),
+    ...mapGetters({
+      isZoomed: 'getIsZoomed'
+    }),
     resourceClassName: function () {
       return this.resource.resourceClassName
     },
     selectedTotal () {
       return this.gallery.selected.length
-    },
-    zoomed () {
-      return this.zoom.zoomed
     }
   },
-  updated: function () {
-    if (this.zoomed) {
-      console.log("zoomed!")
+  mounted: function () {
+    if (this.isZoomed) {
+      // console.log(this.zoom.zoomed)
       this.initOSD()
     }
   },
@@ -130,6 +130,8 @@ small {
 .lux-modal {
   background: #FFFFFF;
   padding: 1em;
+  width: 50%;
+  height: 50%;
 }
 
 .lux-osd {
@@ -145,7 +147,7 @@ small {
   border: 2px solid #9ecaed;
   box-shadow: 0 0 10px #9ecaed;
   padding: 10px;
-  height: 20em;
+  height: 80%;
   width: 100%;
   margin: 0;
 }
