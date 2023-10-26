@@ -13,12 +13,12 @@ RSpec.describe HealthReport do
       end
     end
     context "for a resource not yet marked complete" do
-      it "only checks local fixity" do
+      it "only checks local fixity and derivatives" do
         resource = FactoryBot.create_for_repository(:pending_scanned_resource)
 
         report = described_class.for(resource)
 
-        expect(report.checks.length).to eq 1
+        expect(report.checks.length).to eq 2
         expect(report.checks.first.type).to eq "Local Fixity"
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe HealthReport do
         # It would be in_progress if it checked the box for local fixity, and
         # :needs_attention if it checked the box for cloud fixity.
         expect(report.status).to eq :healthy
-        expect(report.checks.length).to eq 2
+        expect(report.checks.length).to eq 3
       end
       it "can report if it's repairing" do
         project = FactoryBot.create_for_repository(:ephemera_project)
@@ -42,7 +42,7 @@ RSpec.describe HealthReport do
 
         report = described_class.for(project)
         expect(report.status).to eq :repairing
-        expect(report.checks.length).to eq 2
+        expect(report.checks.length).to eq 3
       end
     end
     it "can report if it's in progress (no preservation object)" do
@@ -51,7 +51,7 @@ RSpec.describe HealthReport do
       report = described_class.for(project)
 
       expect(report.status).to eq :in_progress
-      expect(report.checks.length).to eq 2
+      expect(report.checks.length).to eq 3
     end
     it "can report if it needs attention" do
       project = FactoryBot.create_for_repository(:ephemera_project)
@@ -59,7 +59,7 @@ RSpec.describe HealthReport do
 
       report = described_class.for(project)
       expect(report.status).to eq :needs_attention
-      expect(report.checks.length).to eq 2
+      expect(report.checks.length).to eq 3
     end
     context "for a resource whose local fixity event hasn't run yet" do
       it "returns :in_progress" do
