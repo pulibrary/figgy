@@ -55,7 +55,7 @@ class HealthReport::DerivativeCheck
     end
 
     def children_processing?
-      InProcessOrPending.new(resource).in_process?
+      InProcessOrPending.for(resource)
     end
 
     def query_service
