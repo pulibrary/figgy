@@ -61,8 +61,4 @@ class HealthReport::DerivativeCheck
     def query_service
       ChangeSetPersister.default.query_service
     end
-
-    def wayfinder
-      @wayfinder ||= Wayfinder.for(resource)
-    end
 end
