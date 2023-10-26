@@ -230,11 +230,13 @@ RSpec.describe HealthReport do
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).file_sets.first
         file_set.primary_file.error_message = "Broken!"
-        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+        file_set = ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
 
         report = described_class.for(resource)
+        file_set_report = described_class.for(file_set)
 
         expect(report.status).to eq :needs_attention
+        expect(file_set_report.status).to eq :needs_attention
       end
     end
 
@@ -257,11 +259,13 @@ RSpec.describe HealthReport do
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).file_sets.first
         file_set.processing_status = "in process"
-        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+        file_set = ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
 
         report = described_class.for(resource)
+        file_set_report = described_class.for(file_set)
 
         expect(report.status).to eq :in_progress
+        expect(file_set_report.status).to eq :in_progress
       end
     end
 

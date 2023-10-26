@@ -19,13 +19,25 @@ class HealthReport::DerivativeCheck
 
   def status
     @status ||=
-      if children_errored?
+      if resource.is_a?(FileSet)
+        file_set_status
+      elsif children_errored?
         :needs_attention
       elsif children_processing?
         :in_progress
       else
         :healthy
       end
+  end
+
+  def file_set_status
+    if resource.error_message.present?
+      :needs_attention
+    elsif resource.processing_status == "in process"
+      :in_progress
+    else
+      :healthy
+    end
   end
 
   def summary
