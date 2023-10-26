@@ -185,12 +185,24 @@ export default {
 <style lang="scss">
 
 .deep-zoom {
-  position: absolute;
-  z-index: 3; /* put .gold-box above .green-box and .dashed-box */
-  background: gold;
-  width: 50%;
-  left: 60px;
-  top: 3em;
+  // position: absolute;
+  // z-index: 3; /* put .gold-box above .green-box and .dashed-box */
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC)
+    repeat scroll transparent\9; /* ie fallback png background image */
+  z-index: 9999;
+  color: white;
+  border-radius: 4px;
+  border-color: #ffffff;
 }
 
 .lux-resourceTitle {
