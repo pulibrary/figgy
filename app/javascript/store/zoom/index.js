@@ -10,3 +10,9 @@ export const zoomMutations = {
     state.zoomed = null
   },
 }
+
+export const zoomGetters = {
+  getIsZoomed: state => {
+    return state.zoomed
+  },
+}

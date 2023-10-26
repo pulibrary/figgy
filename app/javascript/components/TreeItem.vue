@@ -354,7 +354,6 @@ export default {
     viewFile: function (id) {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let selected = this.findSelectedFolderById(folderList, id)
-      console.log(JSON.stringify(selected))
       this.$store.commit("ZOOM", selected)
     },
   },
