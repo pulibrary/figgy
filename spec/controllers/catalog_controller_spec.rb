@@ -896,7 +896,7 @@ RSpec.describe CatalogController, type: :controller do
 
         get :show, params: { id: resource.id.to_s }
 
-        expect(response.body).to have_content "Preservation Status: Healthy"
+        expect(response.body).to have_content "Health Status: Healthy"
       end
     end
 
