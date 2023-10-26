@@ -41,11 +41,7 @@ class HealthReport::DerivativeCheck
   end
 
   def summary
-    if resource.respond_to?(:member_ids)
-      I18n.t("health_status.derivative_check.summary.#{status}")
-    else
-      I18n.t("health_status.derivative_check.summary.self.#{status}")
-    end
+    I18n.t("health_status.derivative_check.summary.#{status}")
   end
 
   private

@@ -186,10 +186,6 @@ en:
     derivative_check:
       type: 'Derivative'
       summary:
-        self:
-          in_progress: "Derivatives are being processed. If this does not resolve itself contact DLS with a link to this resource via #digital-library."
-          healthy: 'Derivatives are processed and healthy.'
-          needs_attention: 'There was a problem generating derivatives. Contact DLS in #digital-library if you need assistance.'
         in_progress: "Derivatives are being processed. If this does not resolve itself contact DLS with a link to this resource via #digital-library."
         healthy: 'Derivatives are processed and healthy.'
         needs_attention: 'There was a problem generating derivatives. Contact DLS in #digital-library if you need assistance.'
