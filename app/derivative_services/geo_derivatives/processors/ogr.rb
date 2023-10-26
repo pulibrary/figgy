@@ -23,8 +23,8 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         def self.cloud_reproject(in_path, out_path, options)
           execute "env OGR_ENABLE_PARTIAL_REPROJECTION=YES env ogr2ogr -q "\
-                  "-nln #{options[:id]} -f GeoJSON -t_srs EPSG:4326 "\
-                  "-preserve_fid '#{out_path}' '#{in_path}'"
+                  "-nln #{options[:id]} -f FlatGeobuf -t_srs EPSG:4326 "\
+                  "-preserve_fid '#{out_path}.fgb' '#{in_path}'"
         end
       end
     end

@@ -11,7 +11,7 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         def self.generate_pmtiles(in_path, out_path, _options)
           execute "tippecanoe --maximum-tile-features=10000 --no-tile-size-limit " \
-            "-zg --coalesce-densest-as-needed --extend-zooms-if-still-dropping -o #{out_path} #{in_path}"
+            "-zg --coalesce-densest-as-needed --extend-zooms-if-still-dropping -o #{out_path} #{in_path}.fgb"
         end
       end
     end
