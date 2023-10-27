@@ -16,7 +16,7 @@ export const treeMutations = {
   SAVE_LABEL(state, structure) {
     state.structure = structure
   },
-  SELECT(state, selectedId) {
+  SELECT_TREEITEM(state, selectedId) {
     state.selected = selectedId
   },
   SET_STRUCTURE(state, structureObject) {

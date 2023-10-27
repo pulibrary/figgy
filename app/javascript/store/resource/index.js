@@ -77,6 +77,9 @@ export const resourceMutations = {
   UPDATE_VIEWHINT(state, viewHint) {
     state.resource.viewingHint = viewHint
   },
+  UPDATE_GALLERYITEMS(state, items) {
+    state.gallery.items = items
+  },
 }
 
 export const resourceGetters = {
