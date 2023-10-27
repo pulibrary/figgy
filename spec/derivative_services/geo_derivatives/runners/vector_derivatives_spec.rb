@@ -55,6 +55,16 @@ RSpec.describe GeoDerivatives::Runners::VectorDerivatives do
       it_behaves_like "a set of vector derivatives"
     end
 
+    context "with a zipped shapefile that has a single feature" do
+      let(:input_file_path) { Pathname.new(file_fixture("files/vector/taiwan.zip")) }
+      let(:input_mime_type) { 'application/zip; ogr-format="ESRI Shapefile"' }
+      let(:cloud_vector_uri) { test_derivative_url("shapefile_cloud_vector", "pmtiles") }
+      let(:display_vector_uri) { test_derivative_url("shapefile_display_vector", "zip") }
+      let(:thumbnail_uri) { test_derivative_url("shapefile_thumbnail", "png") }
+
+      it_behaves_like "a set of vector derivatives"
+    end
+
     context "with a geojson file" do
       let(:input_file_path) { Pathname.new(file_fixture("files/vector/geo.json")) }
       let(:input_mime_type) { "application/vnd.geo+json" }
