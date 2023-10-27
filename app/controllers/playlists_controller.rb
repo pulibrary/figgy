@@ -46,7 +46,7 @@ class PlaylistsController < ResourcesController
     # Only allow deleting empty playlists. Avoids difficulty of restoring a
     # full playlist from preservation and supporting restoring accidentally
     # deleted playlists.
-    if @change_set.resource.member_ids.count.positive?
+    if @change_set.resource.is_a?(Playlist) && @change_set.resource.member_ids.count.positive?
       flash[:alert] = "Unable to delete a playlist with tracks."
       redirect_to solr_document_path(@change_set.resource.id.to_s)
     else

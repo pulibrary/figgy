@@ -64,6 +64,22 @@ class ScannedResourcesController < ResourcesController
     end
   end
 
+  def around_delete_action
+    # Only allow deleting recordings whose tracks are not in playlists.
+    playlists = if @change_set.is_a?(RecordingChangeSet)
+                  Wayfinder.for(@change_set.resource).playlists
+                else
+                  []
+                end
+    if playlists.count.positive?
+      playlist_ids = playlists.map(&:id).join(", ")
+      flash[:alert] = "Unable to delete a recording with tracks in a playlist. Please remove this recording's tracks from the following playlists: #{playlist_ids}"
+      redirect_to solr_document_path(@change_set.resource.id.to_s)
+    else
+      yield
+    end
+  end
+
   private
 
     def auth_token_param
