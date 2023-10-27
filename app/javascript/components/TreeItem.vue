@@ -145,7 +145,8 @@ export default {
       // hasChildren: this.jsonData.folders.length > 0,
       isOpen: true,
       editedFieldId: null,
-      isFile: !!this.jsonData.file
+      isFile: !!this.jsonData.file,
+      end_nodes: [],
     }
   },
   computed: {
@@ -222,17 +223,14 @@ export default {
         }
       }
     },
-    findAllFilesInStructure: function (array, end_nodes) {
-      console.log(array)
+    findAllFilesInStructure: function (array) {
       for (const item of array) {
-        if (item.file) end_nodes.push(item)
+        if (item.file) this.end_nodes.push(item)
         if (item.folders?.length) {
-          const innerResult = this.findAllFilesInStructure(item.folders, end_nodes);
+          const innerResult = this.findAllFilesInStructure(item.folders);
           if (innerResult) return innerResult;
         }
       }
-      console.log(end_nodes)
-      return end_nodes;
     },
     deleteFolder: function () {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
@@ -245,41 +243,46 @@ export default {
       }
       // if there are sub-folders, warn the user that they will also be deleted.
       if (folderToBeRemoved.folders.length) {
-        let end_nodes = this.findAllFilesInStructure(folderToBeRemoved.folders, [])
+        this.findAllFilesInStructure(folderToBeRemoved.folders)
         let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
         if (confirm(text) == true) {
-          this.commitRemoveFolder(folderList, folderToBeRemoved, end_nodes)
+          this.commitRemoveFolder(folderList, folderToBeRemoved)
         }
       } else {
-        let end_nodes = this.findAllFilesInStructure([folderToBeRemoved], [])
-        this.commitRemoveFolder(folderList, folderToBeRemoved, end_nodes)
+        this.findAllFilesInStructure([folderToBeRemoved])
+        this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
-    addGalleryItems: function(itemsArray) {
-      let galleryItems = JSON.parse(JSON.stringify(this.gallery.items)).concat(itemsArray)
+    addGalleryItems: function() {
+      let galleryItems = JSON.parse(JSON.stringify(this.gallery.items)).concat(this.end_nodes)
       this.$store.commit("UPDATE_ITEMS", galleryItems)
+      this.end_nodes = []
     },
-    commitRemoveFolder: function(folderList, folderToBeRemoved, end_nodes) {
+    commitRemoveFolder: function(folderList, folderToBeRemoved) {
+      let folders = []
+      if(folderList[0] !== folderToBeRemoved){
+        folders = this.removeFolder(folderList, folderToBeRemoved)
+      }
       const structure = {
         id: this.tree.structure.id,
-        folders: this.removeFolder(folderList, folderToBeRemoved),
+        folders: folders,
         label: this.tree.structure.label,
       }
       this.$store.commit("DELETE_FOLDER", structure)
       this.$store.commit("SELECT_TREEITEM", null)
-      if (end_nodes.length) {
+      if (this.end_nodes.length) {
         // add any images deleted from the tree back into the gallery
-        this.addGalleryItems(end_nodes)
+        this.addGalleryItems()
       }
     },
-    removeFolder: function (array, folder) {
+    removeFolder: function (array, folderToBeRemoved) {
       for (const item of array) {
-        if (item.folders.includes(folder)) {
-          const index = item.folders.indexOf(folder)
+        if (item.folders.includes(folderToBeRemoved)) {
+          const index = item.folders.indexOf(folderToBeRemoved)
           item.folders.splice(index, 1)
         }
         if (item.folders?.length) {
-          const innerResult = this.removeFolder(item.folders, folder)
+          const innerResult = this.removeFolder(item.folders, folderToBeRemoved)
         }
       }
       return array
@@ -294,6 +297,8 @@ export default {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let selected = this.findSelectedFolderById(folderList, id)
       store.commit("SELECT_TREEITEM", id)
+      // tree and gallery items cannot be selected simultaneously, so deselect the gallery
+      store.commit("SELECT", [])
     },
     saveLabel: function(id) {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id;
