@@ -166,9 +166,6 @@ export default {
     hasChildren: function() {
       return this.jsonData.folders.length > 0
     },
-    // isFile: function() {
-    //   return false
-    // },
     isSelected: function() {
       if (this.tree.selected === this.id) {
         return true
@@ -177,6 +174,7 @@ export default {
     },
     ...mapState({
       tree: state => store.state.tree,
+      gallery: state => store.state.gallery,
       zoom: state => store.state.zoom,
     }),
   },
@@ -224,6 +222,18 @@ export default {
         }
       }
     },
+    findAllFilesInStructure: function (array, end_nodes) {
+      console.log(array)
+      for (const item of array) {
+        if (item.file) end_nodes.push(item)
+        if (item.folders?.length) {
+          const innerResult = this.findAllFilesInStructure(item.folders, end_nodes);
+          if (innerResult) return innerResult;
+        }
+      }
+      console.log(end_nodes)
+      return end_nodes;
+    },
     deleteFolder: function () {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let folderToBeRemoved = this.findSelectedFolderById(folderList, this.tree.selected)
@@ -233,51 +243,34 @@ export default {
         alert("Sorry, you cannot delete the root node.")
         return false
       }
-      if(folderList.includes(folderToBeRemoved)) {
-        if (folderToBeRemoved.folders.length) {
-          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
-          if (confirm(text) == true) {
-            const index = folderList.indexOf(folderToBeRemoved)
-            folderList.splice(index, 1)
-            const structure = {
-              id: this.tree.structure.id,
-              folders: folderList,
-              label: this.tree.structure.label,
-            }
-            this.$store.commit("DELETE_FOLDER", structure)
-            this.$store.commit("SELECT", null)
-          }
-        } else {
-          const index = folderList.indexOf(folderToBeRemoved)
-          folderList.splice(index, 1)
-          const structure = {
-            id: this.tree.structure.id,
-            folders: folderList,
-            label: this.tree.structure.label,
-          }
-          this.$store.commit("DELETE_FOLDER", structure)
-          this.$store.commit("SELECT", null)
+      // if there are sub-folders, warn the user that they will also be deleted.
+      if (folderToBeRemoved.folders.length) {
+        let end_nodes = this.findAllFilesInStructure(folderToBeRemoved.folders, [])
+        let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
+        if (confirm(text) == true) {
+          this.commitRemoveFolder(folderList, folderToBeRemoved, end_nodes)
         }
       } else {
-        // if there are sub-folders, warn the user that they will also be deleted.
-        if (folderToBeRemoved.folders.length) {
-          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
-          if (confirm(text) == true) {
-            this.commitRemoveFolder(folderList, folderToBeRemoved)
-          }
-        } else {
-          this.commitRemoveFolder(folderList, folderToBeRemoved)
-        }
+        let end_nodes = this.findAllFilesInStructure([folderToBeRemoved], [])
+        this.commitRemoveFolder(folderList, folderToBeRemoved, end_nodes)
       }
     },
-    commitRemoveFolder: function(folderList, folderToBeRemoved) {
+    addGalleryItems: function(itemsArray) {
+      let galleryItems = JSON.parse(JSON.stringify(this.gallery.items)).concat(itemsArray)
+      this.$store.commit("UPDATE_ITEMS", galleryItems)
+    },
+    commitRemoveFolder: function(folderList, folderToBeRemoved, end_nodes) {
       const structure = {
         id: this.tree.structure.id,
         folders: this.removeFolder(folderList, folderToBeRemoved),
         label: this.tree.structure.label,
       }
       this.$store.commit("DELETE_FOLDER", structure)
-      this.$store.commit("SELECT", null)
+      this.$store.commit("SELECT_TREEITEM", null)
+      if (end_nodes.length) {
+        // add any images deleted from the tree back into the gallery
+        this.addGalleryItems(end_nodes)
+      }
     },
     removeFolder: function (array, folder) {
       for (const item of array) {
@@ -300,8 +293,7 @@ export default {
       }
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let selected = this.findSelectedFolderById(folderList, id)
-      // console.log(JSON.stringify(selected))
-      store.commit("SELECT", id)
+      store.commit("SELECT_TREEITEM", id)
     },
     saveLabel: function(id) {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id;
