@@ -183,6 +183,12 @@ en:
         icon_color: 'orange'
         icon: 'report-unhealthy'
         label: "Repairing"
+    derivative_check:
+      type: 'Derivative'
+      summary:
+        in_progress: "Derivatives are being processed. If this does not resolve itself contact DLS with a link to this resource via #digital-library."
+        healthy: 'Derivatives are processed and healthy.'
+        needs_attention: 'There was a problem generating derivatives. Contact DLS in #digital-library if you need assistance.'
     local_fixity_check:
       type: 'Local Fixity'
       summary:

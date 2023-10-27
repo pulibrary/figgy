@@ -431,7 +431,8 @@ Rails.application.config.to_prepare do
     MosaicFingerprintQuery,
     MosaicFileSetQuery,
     FindPersistedMemberIds,
-    FindNeverPreservedChildIds
+    FindNeverPreservedChildIds,
+    FindDeepErroredFileSets
   ].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end

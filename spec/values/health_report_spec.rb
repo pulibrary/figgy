@@ -13,12 +13,12 @@ RSpec.describe HealthReport do
       end
     end
     context "for a resource not yet marked complete" do
-      it "only checks local fixity" do
+      it "only checks local fixity and derivatives" do
         resource = FactoryBot.create_for_repository(:pending_scanned_resource)
 
         report = described_class.for(resource)
 
-        expect(report.checks.length).to eq 1
+        expect(report.checks.length).to eq 2
         expect(report.checks.first.type).to eq "Local Fixity"
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe HealthReport do
         # It would be in_progress if it checked the box for local fixity, and
         # :needs_attention if it checked the box for cloud fixity.
         expect(report.status).to eq :healthy
-        expect(report.checks.length).to eq 2
+        expect(report.checks.length).to eq 3
       end
       it "can report if it's repairing" do
         project = FactoryBot.create_for_repository(:ephemera_project)
@@ -42,7 +42,7 @@ RSpec.describe HealthReport do
 
         report = described_class.for(project)
         expect(report.status).to eq :repairing
-        expect(report.checks.length).to eq 2
+        expect(report.checks.length).to eq 3
       end
     end
     it "can report if it's in progress (no preservation object)" do
@@ -51,7 +51,7 @@ RSpec.describe HealthReport do
       report = described_class.for(project)
 
       expect(report.status).to eq :in_progress
-      expect(report.checks.length).to eq 2
+      expect(report.checks.length).to eq 3
     end
     it "can report if it needs attention" do
       project = FactoryBot.create_for_repository(:ephemera_project)
@@ -59,7 +59,7 @@ RSpec.describe HealthReport do
 
       report = described_class.for(project)
       expect(report.status).to eq :needs_attention
-      expect(report.checks.length).to eq 2
+      expect(report.checks.length).to eq 3
     end
     context "for a resource whose local fixity event hasn't run yet" do
       it "returns :in_progress" do
@@ -221,6 +221,54 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.summary).to start_with "One or more files are in the process of being repaired."
       end
     end
+
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    context "for a resource with a derivative that failed to process" do
+      with_queue_adapter :inline
+      it "returns :needs_attention" do
+        stub_ezid
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+        file_set = Wayfinder.for(resource).file_sets.first
+        file_set.primary_file.error_message = "Broken!"
+        file_set = ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+
+        report = described_class.for(resource)
+        file_set_report = described_class.for(file_set)
+
+        expect(report.status).to eq :needs_attention
+        expect(file_set_report.status).to eq :needs_attention
+      end
+    end
+
+    context "for a resource with a derivative that worked" do
+      with_queue_adapter :inline
+      it "returns :healthy" do
+        stub_ezid
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :healthy
+      end
+    end
+
+    context "for a resource with a derivative that hasn't processed yet" do
+      with_queue_adapter :inline
+      it "returns :in_progress" do
+        stub_ezid
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+        file_set = Wayfinder.for(resource).file_sets.first
+        file_set.processing_status = "in process"
+        file_set = ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+
+        report = described_class.for(resource)
+        file_set_report = described_class.for(file_set)
+
+        expect(report.status).to eq :in_progress
+        expect(file_set_report.status).to eq :in_progress
+      end
+    end
+
     # rubocop:disable Metrics/MethodLength
     def create_file_set(cloud_fixity_status:)
       file_set = FactoryBot.create_for_repository(:file_set)

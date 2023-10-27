@@ -29,7 +29,7 @@ RSpec.feature "FileSet" do
 
     visit solr_document_path(id: file_set.id)
     expect(page).to have_selector("#health-status")
-    expect(page).to have_text("Preservation Status: Needs Attention")
+    expect(page).to have_text("Health Status: Needs Attention")
     expect(page).to have_text("Cloud Fixity Status: Needs Attention")
   end
 
