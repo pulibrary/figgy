@@ -167,6 +167,9 @@ export default {
     hasChildren: function() {
       return this.jsonData.folders.length > 0
     },
+    // galleryItemSelected: function() {
+    //   return !!this.gallery.selected
+    // },
     isSelected: function() {
       if (this.tree.selected === this.id) {
         return true
@@ -179,6 +182,15 @@ export default {
       zoom: state => store.state.zoom,
     }),
   },
+  // watch: {
+  //   galleryItemSelected (newVal, oldVal) {
+  //     // If gallery item is selected, deselect tree item
+  //     console.log(`Gallery Item Selected = ${newVal} !`)
+  //     if(newVal){
+  //       store.commit("SELECT_TREEITEM", null)
+  //     }
+  //   }
+  // },
   methods: {
     addNewFolder: function (array, newParent) {
       for (let item of array) {
