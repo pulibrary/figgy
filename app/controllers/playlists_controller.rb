@@ -42,6 +42,18 @@ class PlaylistsController < ResourcesController
     @logical_order = WithProxyForObject.new(@logical_order, members)
   end
 
+  def around_delete_action
+    # Only allow deleting empty playlists. Avoids difficulty of restoring a
+    # full playlist from preservation and supporting restoring accidentally
+    # deleted playlists.
+    if @change_set.resource.member_ids.count.positive?
+      flash[:alert] = "Unable to delete a playlist with tracks."
+      redirect_to solr_document_path(@change_set.resource.id.to_s)
+    else
+      yield
+    end
+  end
+
   private
 
     def manifest_builder

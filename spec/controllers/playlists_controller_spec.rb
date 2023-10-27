@@ -60,6 +60,31 @@ RSpec.describe PlaylistsController, type: :controller do
   end
 
   describe "destroy" do
+    let(:user) { FactoryBot.create(:admin) }
+
+    it "doesn't let you delete a playlist with tracks" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      proxy_file_set = FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id)
+      recording = FactoryBot.create_for_repository(:recording, member_ids: file_set.id)
+      playlist = FactoryBot.create_for_repository(:playlist, member_ids: proxy_file_set.id)
+
+      delete :destroy, params: { id: playlist.id.to_s }
+
+      playlist = query_service.find_by(id: playlist.id)
+      expect(playlist).to be_present
+      expect(flash["alert"]).to eq "Unable to delete a playlist with tracks."
+      expect(response).to redirect_to "/catalog/#{playlist.id}"
+    end
+
+    it "can delete an empty playlist" do
+      playlist = FactoryBot.create_for_repository(:playlist)
+
+      delete :destroy, params: { id: playlist.id.to_s }
+
+      expect { query_service.find_by(id: playlist.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+      expect(flash["alert"]).to eq "Deleted Playlist: #{playlist.id}"
+    end
+
     context "access control" do
       let(:factory) { :playlist }
       it_behaves_like "an access controlled destroy request"
