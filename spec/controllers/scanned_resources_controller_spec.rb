@@ -609,4 +609,31 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
     end
   end
+
+  describe "destroy" do
+    let(:user) { FactoryBot.create(:admin) }
+
+    it "doesn't let you delete a recoding whose tracks are on a playlist" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      proxy_file_set = FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id)
+      recording = FactoryBot.create_for_repository(:recording, member_ids: file_set.id)
+      playlist = FactoryBot.create_for_repository(:playlist, member_ids: proxy_file_set.id)
+
+      delete :destroy, params: { id: recording.id.to_s }
+
+      recording = query_service.find_by(id: recording.id)
+      expect(recording).to be_present
+      expect(flash["alert"]).to eq "Unable to delete a recording with tracks in a playlist. Plase remove this recording's tracks from the following playlists: #{playlist.id}"
+      expect(response).to redirect_to "/catalog/#{recording.id}"
+    end
+
+    it "can delete a recoding whose tracks are not on a playlist" do
+      recording = FactoryBot.create_for_repository(:recording)
+
+      delete :destroy, params: { id: recording.id.to_s }
+
+      expect { query_service.find_by(id: recording.id) }.to raise_error Valkyrie::Persistence::ObjectNotFoundError
+      expect(flash["alert"]).to eq "Deleted Scanned Resource: Title"
+    end
+  end
 end

@@ -65,7 +65,7 @@ RSpec.describe PlaylistsController, type: :controller do
     it "doesn't let you delete a playlist with tracks" do
       file_set = FactoryBot.create_for_repository(:file_set)
       proxy_file_set = FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id)
-      recording = FactoryBot.create_for_repository(:recording, member_ids: file_set.id)
+      FactoryBot.create_for_repository(:recording, member_ids: file_set.id)
       playlist = FactoryBot.create_for_repository(:playlist, member_ids: proxy_file_set.id)
 
       delete :destroy, params: { id: playlist.id.to_s }
