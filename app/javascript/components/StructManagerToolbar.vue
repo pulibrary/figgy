@@ -68,6 +68,11 @@ export default {
       default: 'div'
     }
   },
+  data: function() {
+    return {
+      end_nodes: [],
+    }
+  },
   computed: {
     ...mapState({
       resource: state => state.ordermanager.resource,
@@ -211,44 +216,23 @@ export default {
         alert("Sorry, you cannot delete the root node.")
         return false
       }
-      if(folderList.includes(folderToBeRemoved)) {
-        if (folderToBeRemoved.folders.length) {
-          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
-          if (confirm(text) == true) {
-            const index = folderList.indexOf(folderToBeRemoved)
-            folderList.splice(index, 1)
-            const structure = {
-              id: this.tree.structure.id,
-              folders: folderList,
-              label: this.tree.structure.label,
-            }
-            this.$store.commit("DELETE_FOLDER", structure)
-            this.$store.commit("SELECT", null)
-          }
-        } else {
-          const index = folderList.indexOf(folderToBeRemoved)
-          folderList.splice(index, 1)
-          const structure = {
-            id: this.tree.structure.id,
-            folders: folderList,
-            label: this.tree.structure.label,
-          }
-          this.$store.commit("DELETE_FOLDER", structure)
-          this.$store.commit("SELECT", null)
-        }
-      } else {
-        // if there are sub-folders, warn the user that they will also be deleted.
-        if (folderToBeRemoved.folders.length) {
-          let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
-          if (confirm(text) == true) {
-            this.commitRemoveFolder(folderList, folderToBeRemoved)
-          }
-        } else {
+      // if there are sub-folders, warn the user that they will also be deleted.
+      if (folderToBeRemoved.folders.length) {
+        this.findAllFilesInStructure(folderToBeRemoved.folders)
+        let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
+        if (confirm(text) == true) {
           this.commitRemoveFolder(folderList, folderToBeRemoved)
         }
+      } else {
+        this.findAllFilesInStructure([folderToBeRemoved])
+        this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
     commitRemoveFolder: function(folderList, folderToBeRemoved) {
+      let folders = []
+      if(folderList[0] !== folderToBeRemoved){
+        folders = this.removeFolder(folderList, folderToBeRemoved)
+      }
       const structure = {
         id: this.tree.structure.id,
         folders: this.removeFolder(folderList, folderToBeRemoved),
@@ -256,6 +240,15 @@ export default {
       }
       this.$store.commit("DELETE_FOLDER", structure)
       this.$store.commit("SELECT", null)
+      if (this.end_nodes.length) {
+        // add any images deleted from the tree back into the gallery
+        this.addGalleryItems()
+      }
+    },
+    addGalleryItems: function() {
+      let galleryItems = JSON.parse(JSON.stringify(this.gallery.items)).concat(this.end_nodes)
+      this.$store.commit("UPDATE_ITEMS", galleryItems)
+      this.end_nodes = []
     },
     removeFolder: function (array, folder) {
       for (const item of array) {
@@ -274,6 +267,15 @@ export default {
         if (item.id === id) return item;
         if (item.folders?.length) {
           const innerResult = this.findSelectedFolderById(item.folders, id);
+          if (innerResult) return innerResult;
+        }
+      }
+    },
+    findAllFilesInStructure: function (array) {
+      for (const item of array) {
+        if (item.file) this.end_nodes.push(item)
+        if (item.folders?.length) {
+          const innerResult = this.findAllFilesInStructure(item.folders);
           if (innerResult) return innerResult;
         }
       }
