@@ -24,7 +24,10 @@ module GeoDerivatives
         def self.cloud_reproject(in_path, out_path, options)
           execute "env OGR_ENABLE_PARTIAL_REPROJECTION=YES env ogr2ogr -q "\
                   "-nln #{options[:id]} -f GeoJSON -t_srs EPSG:4326 "\
-                  "-preserve_fid '#{out_path}' '#{in_path}'"
+                  "-preserve_fid '#{out_path}.tmp' '#{in_path}'"
+
+          # Fix any encoding issues in the geojson file
+          execute "iconv -f ISO-8859-1 -t utf-8 #{out_path}.tmp > #{out_path}"
         end
       end
     end
