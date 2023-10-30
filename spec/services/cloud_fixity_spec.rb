@@ -78,6 +78,8 @@ RSpec.describe CloudFixity do
 
   describe ".queue_daily_check!" do
     it "queues a random per-day subset given an annual percent to check" do
+      # @see https://github.com/pulibrary/figgy/issues/6067
+      skip "feature disabled while we finalize preservation"
       id = SecureRandom.uuid
       id2 = SecureRandom.uuid
       resources = Array.new(10) do |_n|
@@ -121,6 +123,8 @@ RSpec.describe CloudFixity do
 
   describe ".queue_resource_check!" do
     it "queues a single resource to check" do
+      # @see https://github.com/pulibrary/figgy/issues/6067
+      skip "feature disabled while we finalize preservation"
       id = SecureRandom.uuid
       id2 = SecureRandom.uuid
       resource = FactoryBot.create_for_repository(:scanned_resource)

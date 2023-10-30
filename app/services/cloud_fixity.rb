@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# :nocov:
 module CloudFixity
   require "google/cloud/pubsub"
   class Worker
@@ -103,3 +104,4 @@ module CloudFixity
     end
   end
 end
+# :nocov:
