@@ -462,6 +462,25 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/mosaicjson/WMTSCapabilities.xml?id=#{id}"
         expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to eq "https://map-tiles-test.example.com/mosaicjson/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png?id=#{id}"
       end
+
+      context "with a child resource" do
+        let(:parent_work) do
+          FactoryBot.create_for_repository(
+            :raster_set_with_files,
+            coverage: coverage.to_s
+          )
+        end
+
+        let(:geo_work) do
+          query_service.find_by(id: parent_work.member_ids.first)
+        end
+
+        it "returns a suppressed document with a source field" do
+          geo_work
+          expect(document["suppressed_b"]).to eq true
+          expect(document["dc_source_sm"]).to eq ["princeton-#{parent_work.id}"]
+        end
+      end
     end
 
     context "with an authenticated raster set" do
