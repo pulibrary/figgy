@@ -29,10 +29,15 @@ module GeoDiscovery
           resource_decorator.model.is_a?(ScannedMap)
         end
 
+        def raster?
+          resource_decorator.model.is_a?(RasterResource)
+        end
+
         # Returns an array of parent document ids (slugs).
         # @return [Array] parent document slugs.
         def source
-          return unless scanned_map? && parent?
+          return unless scanned_map? || raster?
+          return unless parent?
           parents
         end
 
@@ -40,7 +45,8 @@ module GeoDiscovery
         # @return [Boolean] should document be supressed?
         def suppressed
           return false if resource_decorator.model.gbl_suppressed_override == "1"
-          return false unless scanned_map? && parent?
+          return false unless scanned_map? || raster?
+          return false unless parent?
           true
         end
     end
