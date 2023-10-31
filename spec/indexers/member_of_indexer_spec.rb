@@ -14,12 +14,24 @@ RSpec.describe MemberOfIndexer do
     end
 
     context "for raster resources" do
-      it "indexes parent resource ids" do
-        child = FactoryBot.create_for_repository(:raster_resource)
-        parent = FactoryBot.create_for_repository(:raster_resource, member_ids: child.id)
-        output = described_class.new(resource: child).to_solr
+      context "when the parent is a RasterResource" do
+        it "indexes parent resource ids" do
+          child = FactoryBot.create_for_repository(:raster_resource)
+          parent = FactoryBot.create_for_repository(:raster_resource, member_ids: child.id)
+          output = described_class.new(resource: child).to_solr
 
-        expect(output["member_of_ssim"]).to eq ["id-#{parent.id}"]
+          expect(output["member_of_ssim"]).to eq ["id-#{parent.id}"]
+        end
+      end
+
+      context "when the parent is a ScannedMap" do
+        it "indexes parent resource ids" do
+          child = FactoryBot.create_for_repository(:raster_resource)
+          parent = FactoryBot.create_for_repository(:scanned_map, member_ids: child.id)
+          output = described_class.new(resource: child).to_solr
+
+          expect(output["member_of_ssim"]).to eq ["id-#{parent.id}"]
+        end
       end
     end
   end

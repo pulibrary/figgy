@@ -29,6 +29,7 @@ class MemberOfIndexer
   end
 
   def raster_set_member
-    resource.is_a?(RasterResource) && parents.first.is_a?(RasterResource)
+    return false unless resource.is_a?(RasterResource)
+    parents.first.is_a?(RasterResource) || parents.first.is_a?(ScannedMap)
   end
 end
