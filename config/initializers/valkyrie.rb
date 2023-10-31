@@ -263,7 +263,7 @@ Rails.application.config.to_prepare do
     ImportedMetadataIndexer,
     MemberOfIndexer,
     RightsLabelIndexer,
-    ParentIssueIndexer,
+    CoinIndexer,
     SortingIndexer,
     TitleIndexer,
     TrackIndexer,

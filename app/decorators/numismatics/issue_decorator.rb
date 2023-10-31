@@ -112,6 +112,10 @@ module Numismatics
       decorated_master&.title
     end
 
+    def monograms
+      decorated_numismatic_monograms.map { |a| a.decorate.title }
+    end
+
     def notes
       numismatic_note.map { |a| a.decorate.title }
     end
