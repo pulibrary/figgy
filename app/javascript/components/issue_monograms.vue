@@ -33,6 +33,16 @@
           </td>
         </template>
       </tr>
+      <tr class="d-none">
+        <template v-if="attachedMembers.length === 0">
+          <td>
+            <input
+              type="hidden"
+              name="numismatics_issue[numismatic_monogram_ids][]"
+              value="" />
+          </td>
+        </template>
+      </tr>
     </tbody>
 
     <tfoot>
