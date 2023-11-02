@@ -266,7 +266,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.2.2)
-    connection_pool (2.4.0)
+    connection_pool (2.4.1)
     content_disposition (1.0.0)
     crack (0.4.5)
       rexml
@@ -854,7 +854,7 @@ GEM
       rexml (~> 3.2)
     recipient_interceptor (0.3.1)
       mail
-    redis (4.7.1)
+    redis (4.8.1)
     redis-namespace (1.8.2)
       redis (>= 3.0.4)
     reform (2.6.2)
@@ -981,7 +981,7 @@ GEM
       addressable
       google-cloud-storage (~> 1.6)
       shrine (~> 3.0)
-    sidekiq (6.5.8)
+    sidekiq (6.5.12)
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
