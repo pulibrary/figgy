@@ -9,7 +9,7 @@ describe('CDLTimer', () => {
   '<div id="uv"><div></div></div>'
 
   afterEach(() => {
-    if (global.fetch !== undefined) {
+    if (global.fetch.mockName !== undefined) {
       global.fetch.mockClear()
       delete global.fetch
     }

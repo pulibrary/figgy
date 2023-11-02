@@ -46,6 +46,8 @@ export default class LeafletViewer {
   }
 
   createLeaflet (tilejson) {
+    if (tilejson.tiles === undefined) { return }
+
     document.getElementById('tab-container').style.display = 'block'
     document.getElementById('map-tab').style.display = 'block'
     let map = L.map('leaflet', {
