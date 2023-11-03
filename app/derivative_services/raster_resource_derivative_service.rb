@@ -186,11 +186,21 @@ class RasterResourceDerivativeService
     end
 
     def generate_mosaic
-      parent = resource.decorate.parent
-      grandparent = parent.parents.first
-      return unless grandparent.is_a? RasterResource
-      return unless grandparent.decorate.public_readable_state?
-      MosaicJob.perform_later(grandparent.id.to_s)
+      ancestor_resource = find_ancestor(resource)
+      return unless ancestor_resource.is_a?(RasterResource) || ancestor_resource.is_a?(ScannedMap)
+      return unless ancestor_resource.decorate.public_readable_state?
+      MosaicJob.perform_later(ancestor_resource.id.to_s)
+    end
+
+    # Recursively find a resource's base ancestor
+    # E.g. Find the MapSet in this chain: FileSet -> RasterResource -> ScannedMap -> ScannedMap*
+    def find_ancestor(resource)
+      parent = resource.decorate.parents&.first
+      if parent
+        find_ancestor(parent)
+      else
+        resource
+      end
     end
 
     def create_local_derivatives

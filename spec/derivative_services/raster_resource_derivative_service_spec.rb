@@ -94,6 +94,32 @@ RSpec.describe RasterResourceDerivativeService do
     end
   end
 
+  context "with a complete raster_set parent" do
+    it "runs a mosaic generation job" do
+      raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "complete")
+      child = Wayfinder.for(raster_set).members.first
+      change_set = ChangeSet.for(child)
+      change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
+      change_set_persister.save(change_set: change_set)
+      expect(MosaicJob).to have_received(:perform_later).once
+    end
+  end
+
+  context "with a raster parent and a complete map_set ancestor" do
+    it "runs a mosaic generation job on the map_set" do
+      map_set = FactoryBot.create_for_repository(:map_set)
+      child_scanned_map = Wayfinder.for(map_set).members.first
+      raster = FactoryBot.create_for_repository(:raster_resource)
+      change_set = ChangeSet.for(child_scanned_map)
+      change_set.member_ids.push(raster.id)
+      change_set_persister.save(change_set: change_set)
+      change_set = ChangeSet.for(raster)
+      change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
+      change_set_persister.save(change_set: change_set)
+      expect(MosaicJob).to have_received(:perform_later).once.with(map_set.id.to_s)
+    end
+  end
+
   context "with a non-complete raster_set parent" do
     it "does not run a mosaic generation job" do
       raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "pending")
