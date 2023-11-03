@@ -4,13 +4,15 @@ module CDL
   class EligibleItemService
     class << self
       def item_ids(source_metadata_identifier:)
-        return [] unless RemoteRecord.catalog?(source_metadata_identifier)
-        item_ids = get_item_ids(source_metadata_identifier: source_metadata_identifier)
-        # If no matches, try the alma ID version.
-        if item_ids.empty?
-          get_item_ids(source_metadata_identifier: "99#{source_metadata_identifier}3506421")
-        else
-          item_ids
+        Rails.cache.fetch("cdl_item_ids_#{source_metadata_identifier}", expires_in: 5.minutes) do
+          return [] unless RemoteRecord.catalog?(source_metadata_identifier)
+          item_ids = get_item_ids(source_metadata_identifier: source_metadata_identifier)
+          # If no matches, try the alma ID version.
+          if item_ids.empty?
+            get_item_ids(source_metadata_identifier: "99#{source_metadata_identifier}3506421")
+          else
+            item_ids
+          end
         end
       end
 
