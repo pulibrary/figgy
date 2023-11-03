@@ -98,6 +98,14 @@ RSpec.describe CDL::EligibleItemService do
       it "returns the item pid" do
         expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq ["23202918780006421"]
       end
+
+      it "caches the response for 5 minutes" do
+        allow(Rails.cache).to receive(:fetch).and_call_original
+
+        expect(described_class.item_ids(source_metadata_identifier: bib_id)).to be_present
+
+        expect(Rails.cache).to have_received(:fetch).with("cdl_item_ids_#{bib_id}", expires_in: 5.minutes)
+      end
     end
 
     context "a non-alma ID has no items, but an alma one does" do
