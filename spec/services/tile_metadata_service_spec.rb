@@ -17,14 +17,11 @@ RSpec.describe TileMetadataService do
       FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
     end
 
-    it "generates a mosaic file the mosiac path" do
+    it "generates a path to the mosaic file" do
       allow(MosaicGenerator).to receive(:new).and_call_original
       raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-      generator = described_class.new(resource: raster_set)
-      fingerprinted_path = generator.path
-      default_path = cloud_path.join("33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
+      default_path = described_class.new(resource: raster_set, generate: true).path
       expect(MosaicGenerator).to have_received(:new)
-      expect(File.exist?(fingerprinted_path)).to be true
       expect(File.exist?(default_path)).to be true
     end
 
@@ -40,7 +37,7 @@ RSpec.describe TileMetadataService do
         generator = instance_double(MosaicGenerator, run: "build")
         allow(MosaicGenerator).to receive(:new).and_return(generator)
 
-        service = described_class.new(resource: map_set)
+        service = described_class.new(resource: map_set, generate: true)
 
         service.path
         expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: [file_set1.file_metadata.first.cloud_uri, file_set2.file_metadata.first.cloud_uri])

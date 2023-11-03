@@ -4,10 +4,11 @@
 # It calls out to the MosaicGenerator as needed.
 class TileMetadataService
   class Error < StandardError; end
-  attr_reader :resource
+  attr_reader :resource, :generate
   # @param resource [RasterResource, ScannedMap]
-  def initialize(resource:)
+  def initialize(resource:, generate: false)
     @resource = resource.decorate
+    @generate = generate
   end
 
   def path
@@ -30,7 +31,10 @@ class TileMetadataService
 
   def mosaic_path
     # build default mosaic file
-    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+    if @generate
+      raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
+    end
+
     build_node(default_filename)
     Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: default_filename, file: nil).to_s
   end

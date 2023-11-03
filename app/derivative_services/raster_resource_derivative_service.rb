@@ -193,7 +193,7 @@ class RasterResourceDerivativeService
     end
 
     # Recursively find a resource's base ancestor
-    # E.g. Find the MapSet in this chain: FileSet -> RasterResource -> ScannedMap -> ScannedMap*
+    # E.g. Finds the MapSet in this chain: FileSet -> RasterResource -> ScannedMap -> ScannedMap*
     def find_ancestor(resource)
       parent = resource.decorate.parents&.first
       if parent

@@ -19,20 +19,18 @@ describe MosaicJob do
     end
 
     context "when a MosaicJob is already enqueued" do
-      before do
-      end
       it "does not run the TileMetadataService" do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files)
         job_item = {
           "retry" => true,
-          "queue" => "low",
+          "queue" => "serial",
           "class" => "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper",
           "wrapped" => "MosaicJob",
           "args" =>
                       [{ "job_class" => "MosaicJob",
                          "job_id" => "12cfd9ff-5555-6666-8892-f44d386967d3",
                          "provider_job_id" => nil,
-                         "queue_name" => "low",
+                         "queue_name" => "serial",
                          "priority" => nil,
                          "arguments" => [raster_set.id.to_s],
                          "executions" => 0,

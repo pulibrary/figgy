@@ -19,7 +19,7 @@ class ChangeSetPersister
 
       def published?(change_set)
         published_states = change_set.resource.decorate.workflow_class.ark_mint_states
-        change_set.changed?(:state) && published_states.include?(change_set.state.to_s)
+        published_states.include?(change_set.state.to_s)
       end
 
       def mosaic?(resource)

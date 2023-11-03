@@ -39,7 +39,7 @@ class TileMetadataController < ApplicationController
       Rails.cache.fetch("mosaic-manifest-#{params[:id]}", expires_in: 600, race_condition_ttl: 60) do
         resource = find_resource(params[:id])
         return nil unless resource.is_a?(RasterResource) || resource.is_a?(ScannedMap)
-        Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
+        TileMetadataService.new(resource: resource).path
       end
     end
 
