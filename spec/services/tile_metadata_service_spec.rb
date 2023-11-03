@@ -17,17 +17,15 @@ RSpec.describe TileMetadataService do
       FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])
     end
 
-    context "when the file does not exist on the storage adapter" do
-      it "generates a default mosaic file and a fingerprinted mosaic file and returns the fingerprinted path" do
-        allow(MosaicGenerator).to receive(:new).and_call_original
-        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        generator = described_class.new(resource: raster_set)
-        fingerprinted_path = generator.path
-        default_path = cloud_path.join("33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
-        expect(MosaicGenerator).to have_received(:new)
-        expect(File.exist?(fingerprinted_path)).to be true
-        expect(File.exist?(default_path)).to be true
-      end
+    it "generates a mosaic file the mosiac path" do
+      allow(MosaicGenerator).to receive(:new).and_call_original
+      raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+      generator = described_class.new(resource: raster_set)
+      fingerprinted_path = generator.path
+      default_path = cloud_path.join("33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic.json").to_s
+      expect(MosaicGenerator).to have_received(:new)
+      expect(File.exist?(fingerprinted_path)).to be true
+      expect(File.exist?(default_path)).to be true
     end
 
     context "when given a ScannedMap with RasterResources" do
@@ -39,30 +37,13 @@ RSpec.describe TileMetadataService do
         raster2 = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set2.id])
         scanned_map = FactoryBot.create_for_repository(:scanned_map, member_ids: [image_file_set.id, raster1.id, raster2.id])
         map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
-        generator = instance_double(MosaicGenerator, run: "fingerprint")
+        generator = instance_double(MosaicGenerator, run: "build")
         allow(MosaicGenerator).to receive(:new).and_return(generator)
 
-        generator = described_class.new(resource: map_set)
+        service = described_class.new(resource: map_set)
 
-        generator.path
+        service.path
         expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: [file_set1.file_metadata.first.cloud_uri, file_set2.file_metadata.first.cloud_uri])
-      end
-    end
-
-    context "when the file already exists on the storage adapter" do
-      let(:raster_set) { FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd") }
-
-      before do
-        described_class.new(resource: raster_set).path
-      end
-
-      it "returns the path" do
-        allow(MosaicGenerator).to receive(:new)
-        query_service = ChangeSetPersister.default.query_service
-        path = described_class.new(resource: raster_set).path
-        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
-        expect(MosaicGenerator).not_to have_received(:new)
-        expect(path).to eq(cloud_path.join("33", "1d", "70", "331d70a54bd94a6580e4763c8f6b34fd", "mosaic-#{fingerprint}.json").to_s)
       end
     end
 
@@ -104,10 +85,9 @@ RSpec.describe TileMetadataService do
     context "when using the disk storage adapter" do
       it "returns a disk id" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         generator = described_class.new(resource: raster_set)
 
-        expect(generator.mosaic_file_id).to eq("disk://#{cloud_path.join('33', '1d', '70', '331d70a54bd94a6580e4763c8f6b34fd', "mosaic-#{fingerprint}.json")}")
+        expect(generator.mosaic_file_id).to eq("disk://#{cloud_path.join('33', '1d', '70', '331d70a54bd94a6580e4763c8f6b34fd', 'mosaic.json')}")
       end
     end
 
@@ -121,9 +101,8 @@ RSpec.describe TileMetadataService do
         )
         allow(Valkyrie::StorageAdapter).to receive(:find).and_return(shrine_adapter)
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         generator = described_class.new(resource: raster_set)
-        expect(generator.mosaic_file_id).to eq("cloud-geo-derivatives-shrine://33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic-#{fingerprint}.json")
+        expect(generator.mosaic_file_id).to eq("cloud-geo-derivatives-shrine://33/1d/70/331d70a54bd94a6580e4763c8f6b34fd/mosaic.json")
       end
     end
   end

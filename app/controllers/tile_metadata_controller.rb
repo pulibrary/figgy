@@ -33,13 +33,13 @@ class TileMetadataController < ApplicationController
 
     def cached_mosaic_path
       # Cache expires after 10 minutes. Race condition TTL set to 60 seconds - if
-      # the fingerprinted mosaic is not found in S3, then it is generated on the
+      # the  mosaic is not found in S3, then it is generated on the
       # fly which can take some time. This multiple calls to the endpoint from
       # generating the document at the same time.
       Rails.cache.fetch("mosaic-manifest-#{params[:id]}", expires_in: 600, race_condition_ttl: 60) do
         resource = find_resource(params[:id])
         return nil unless resource.is_a?(RasterResource) || resource.is_a?(ScannedMap)
-        TileMetadataService.new(resource: resource).path
+        Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: "mosaic.json", file: nil).to_s
       end
     end
 

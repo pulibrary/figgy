@@ -29,17 +29,10 @@ class TileMetadataService
   end
 
   def mosaic_path
-    document_path = Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: fingerprinted_filename, file: nil).to_s
-    return document_path if storage_adapter.find_by(id: mosaic_file_id)
-  rescue Valkyrie::StorageAdapter::FileNotFound
-    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
-
     # build default mosaic file
+    raise Error unless MosaicGenerator.new(output_path: tmp_file.path, raster_paths: raster_paths).run
     build_node(default_filename)
-
-    # save copy of mosaic file with fingerprinted file name
-    build_node(fingerprinted_filename)
-    document_path
+    Valkyrie::Storage::Disk::BucketedStorage.new(base_path: base_path).generate(resource: resource, original_filename: default_filename, file: nil).to_s
   end
 
   # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
@@ -56,9 +49,9 @@ class TileMetadataService
   #   and make private if possible
   def mosaic_file_id
     if storage_adapter.is_a? Valkyrie::Storage::Shrine
-      "#{storage_adapter.send(:protocol_with_prefix)}#{storage_adapter.path_generator.generate(resource: resource, original_filename: fingerprinted_filename, file: nil)}"
+      "#{storage_adapter.send(:protocol_with_prefix)}#{storage_adapter.path_generator.generate(resource: resource, original_filename: default_filename, file: nil)}"
     else
-      "disk://#{storage_adapter.path_generator.generate(resource: resource, original_filename: fingerprinted_filename, file: nil)}"
+      "disk://#{storage_adapter.path_generator.generate(resource: resource, original_filename: default_filename, file: nil)}"
     end
   end
 
@@ -74,14 +67,6 @@ class TileMetadataService
 
     def default_filename
       "mosaic.json"
-    end
-
-    def fingerprint
-      @fingerprint ||= query_service.custom_queries.mosaic_fingerprint_for(id: resource.id)
-    end
-
-    def fingerprinted_filename
-      "mosaic-#{fingerprint}.json"
     end
 
     def query_service
