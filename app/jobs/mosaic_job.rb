@@ -1,22 +1,24 @@
 # frozen_string_literal: true
 class MosaicJob < ApplicationJob
+  class JobRunning < StandardError; end
   discard_on TileMetadataService::Error
-  queue_as :serial
+  retry_on JobRunning
+  queue_as :low
   delegate :query_service, to: :metadata_adapter
 
   attr_reader :resource_id
   def perform(resource_id)
     @resource_id = resource_id
-    return if currently_enqueued?
+    raise JobRunning if currently_running?
     TileMetadataService.new(resource: resource, generate: true).path
   end
 
   private
 
-    def currently_enqueued?
-      queue = Sidekiq::Queue.new("serial")
-      job = queue.find { |j| j.item.dig("args", 0, "job_class") == "MosaicJob" && j.item.dig("args", 0, "arguments", 0) == resource_id }
-      return true if job
+    def currently_running?
+      workers = Sidekiq::Workers.new
+      _, _, work = workers.find { |_, _, work| work.dig("payload", "args", 0, "job_class") == "MosaicJob" && work.dig("payload", "args", 0, "arguments", 0) == resource.id }
+      return true if work
       false
     end
 
