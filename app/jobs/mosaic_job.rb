@@ -7,6 +7,8 @@ class MosaicJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   attr_reader :resource_id
+  # TODO: Pass in current thumbprint and check against current.
+  # Cancel job if they don't match.
   def perform(resource_id)
     @resource_id = resource_id
     raise JobRunning if currently_running?

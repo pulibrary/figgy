@@ -188,7 +188,6 @@ class RasterResourceDerivativeService
     def generate_mosaic
       ancestor_resource = find_ancestor(resource)
       return unless ancestor_resource.is_a?(RasterResource) || ancestor_resource.is_a?(ScannedMap)
-      return unless ancestor_resource.decorate.public_readable_state?
       MosaicJob.perform_later(ancestor_resource.id.to_s)
     end
 
