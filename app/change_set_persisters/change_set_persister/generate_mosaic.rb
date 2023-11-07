@@ -11,7 +11,8 @@ class ChangeSetPersister
     def run
       return unless mosaic?(post_save_resource)
       return unless published?(change_set)
-      MosaicJob.perform_later(post_save_resource.id.to_s)
+      fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: post_save_resource.id)
+      MosaicJob.perform_later(resource_id: post_save_resource.id.to_s, fingerprint: fingerprint)
       change_set
     end
 
@@ -33,6 +34,10 @@ class ChangeSetPersister
         else
           false
         end
+      end
+
+      def query_service
+        change_set_persister.query_service
       end
   end
 end

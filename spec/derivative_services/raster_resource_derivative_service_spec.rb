@@ -104,7 +104,8 @@ RSpec.describe RasterResourceDerivativeService do
       change_set = ChangeSet.for(raster)
       change_set.files = [fixture_file_upload("files/raster/geotiff.tif", "image/tif")]
       change_set_persister.save(change_set: change_set)
-      expect(MosaicJob).to have_received(:perform_later).once.with(map_set.id.to_s)
+      fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: map_set.id)
+      expect(MosaicJob).to have_received(:perform_later).once.with(resource_id: map_set.id.to_s, fingerprint: fingerprint)
     end
   end
 

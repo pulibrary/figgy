@@ -6,20 +6,26 @@ class MosaicJob < ApplicationJob
   queue_as :low
   delegate :query_service, to: :metadata_adapter
 
-  attr_reader :resource_id
-  # TODO: Pass in current thumbprint and check against current.
-  # Cancel job if they don't match.
-  def perform(resource_id)
+  attr_reader :resource_id, :fingerprint
+  def perform(resource_id:, fingerprint:)
     @resource_id = resource_id
+    @fingerprint = fingerprint
+    return unless valid_fingerprint?
     raise JobRunning if currently_running?
     TileMetadataService.new(resource: resource, generate: true).path
+    # TODO: Trigger job/process to invalidate cache
   end
 
   private
 
+    def valid_fingerprint?
+      current_fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: resource.id)
+      current_fingerprint == fingerprint
+    end
+
     def currently_running?
       workers = Sidekiq::Workers.new
-      _, _, work = workers.find { |_, _, work| work.dig("payload", "args", 0, "job_class") == "MosaicJob" && work.dig("payload", "args", 0, "arguments", 0) == resource.id }
+      _, _, work = workers.find { |_, _, work| work.dig("payload", "args", 0, "job_class") == "MosaicJob" && work.dig("payload", "args", 0, "arguments", 0, "resource_id") == resource.id }
       return true if work
       false
     end

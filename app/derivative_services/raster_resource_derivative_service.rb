@@ -188,7 +188,8 @@ class RasterResourceDerivativeService
     def generate_mosaic
       ancestor_resource = find_ancestor(resource)
       return unless ancestor_resource.is_a?(RasterResource) || ancestor_resource.is_a?(ScannedMap)
-      MosaicJob.perform_later(ancestor_resource.id.to_s)
+      fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: ancestor_resource.id)
+      MosaicJob.perform_later(resource_id: ancestor_resource.id.to_s, fingerprint: fingerprint)
     end
 
     # Recursively find a resource's base ancestor

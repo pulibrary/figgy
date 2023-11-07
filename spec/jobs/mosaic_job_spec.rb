@@ -3,6 +3,7 @@ require "rails_helper"
 
 describe MosaicJob do
   let(:mosaic_service) { instance_double(TileMetadataService) }
+  let(:query_service) { ChangeSetPersister.default.query_service }
 
   before do
     allow(mosaic_service).to receive(:path)
@@ -10,19 +11,29 @@ describe MosaicJob do
   end
 
   describe "#perform" do
-    context "when a MosaicJon is not already running" do
+    context "when a MosaicJob is not currently running" do
       with_queue_adapter :inline
 
       it "runs the TileMetadataService" do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files)
-        described_class.perform_now(raster_set.id)
+        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
+        described_class.perform_now(resource_id: raster_set.id.to_s, fingerprint: fingerprint)
         expect(mosaic_service).to have_received(:path)
+      end
+
+      context "with  mosaic fingerprints that don't match" do
+        it "return without running the TileMetadataService and does not re-enqueue itself" do
+          raster_set = FactoryBot.create_for_repository(:raster_set_with_files)
+          expect { described_class.perform_now(resource_id: raster_set.id.to_s, fingerprint: "out-of-date") }.not_to have_enqueued_job(described_class)
+          expect(mosaic_service).not_to have_received(:path)
+        end
       end
     end
 
     context "when a MosaicJob is already running" do
-      it "does not run the TileMetadataService and instead retries the job" do
+      it "does not run the TileMetadataService and instead re-enqueues itself" do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files)
+        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
         worker_record = [nil, nil, {
           "queue" => "low",
           "payload" =>
@@ -36,7 +47,7 @@ describe MosaicJob do
                  "provider_job_id" => nil,
                  "queue_name" => "low",
                  "priority" => nil,
-                 "arguments" => [raster_set.id.to_s],
+                 "arguments" => [{ "resource_id" => raster_set.id.to_s, "fingerprint" => fingerprint }],
                  "executions" => 0,
                  "exception_executions" => {},
                  "locale" => "en",
@@ -48,7 +59,7 @@ describe MosaicJob do
           "run_at" => 1_699_069_060
         }]
         allow(Sidekiq::Workers).to receive(:new).and_return([worker_record])
-        described_class.perform_now(raster_set.id.to_s)
+        expect { described_class.perform_now(resource_id: raster_set.id.to_s, fingerprint: fingerprint) }.to have_enqueued_job(described_class)
         expect(mosaic_service).not_to have_received(:path)
       end
     end
