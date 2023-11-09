@@ -20,7 +20,7 @@ RSpec.describe TileMetadataService do
     it "generates a path to the mosaic file" do
       allow(MosaicGenerator).to receive(:new).and_call_original
       raster_set = FactoryBot.create_for_repository(:raster_set_with_files, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-      default_path = described_class.new(resource: raster_set, generate: true).path
+      default_path = described_class.new(resource: raster_set, generate: true).full_path
       expect(MosaicGenerator).to have_received(:new)
       expect(File.exist?(default_path)).to be true
     end
@@ -39,7 +39,7 @@ RSpec.describe TileMetadataService do
 
         service = described_class.new(resource: map_set, generate: true)
 
-        service.path
+        service.full_path
         expect(MosaicGenerator).to have_received(:new).with(output_path: anything, raster_paths: [file_set1.file_metadata.first.cloud_uri, file_set2.file_metadata.first.cloud_uri])
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe TileMetadataService do
       it "raises TileMetadataService::Error" do
         raster_set = FactoryBot.create_for_repository(:raster_set, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
         generator = described_class.new(resource: raster_set)
-        expect { generator.path }.to raise_error("TileMetadataService::Error")
+        expect { generator.full_path }.to raise_error("TileMetadataService::Error")
       end
     end
   end

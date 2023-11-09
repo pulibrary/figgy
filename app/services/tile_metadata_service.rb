@@ -11,7 +11,7 @@ class TileMetadataService
     @generate = generate
   end
 
-  def path
+  def full_path
     raise Error if raster_file_sets.empty?
     if mosaic?
       # Path to mosaic.json file
@@ -20,6 +20,10 @@ class TileMetadataService
       # Path to cloud raster file
       raster_paths.first
     end
+  end
+
+  def path
+    full_path.gsub(base_path, "")
   end
 
   def mosaic?
