@@ -66,9 +66,9 @@ lpass login <email@email.com>
 ```sh
 git clone https://github.com/pulibrary/figgy.git
 cd figgy
+./bin/setup_asdf
+Follow setup notes for Mac M1 processors if needed
 ./bin/setup
-bundle install
-yarn install
 ```
 
 Remember you'll need to run `bundle install` and `yarn install` on an ongoing basis as dependencies are updated.
