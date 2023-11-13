@@ -13,6 +13,7 @@ class MosaicJob < ApplicationJob
     return unless valid_fingerprint?
     raise JobRunning if currently_running?
     path = TileMetadataService.new(resource: resource, generate: true).path
+    path
     # TODO: Trigger job/process to invalidate cache
   end
 

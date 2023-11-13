@@ -13,18 +13,18 @@ class TilePath
     if Rails.env.development?
       "#{tileserver}/#{endpoint}/tilejson.json?url=#{TileMetadataService.new(resource: resource).path}"
     else
-      "#{tileserver}/#{endpoint}/tilejson.json?id=#{id}"
+      "#{tileserver}/#{id}/#{endpoint}/tilejson.json"
     end
   end
 
   def wmts
     return unless valid?
-    "#{tileserver}/#{endpoint}/WMTSCapabilities.xml?id=#{id}"
+    "#{tileserver}/#{id}/#{endpoint}/WMTSCapabilities.xml"
   end
 
   def xyz
     return unless valid?
-    "#{tileserver}/#{endpoint}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png?id=#{id}"
+    "#{tileserver}/#{id}/#{endpoint}/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png"
   end
 
   private
@@ -38,7 +38,13 @@ class TilePath
     end
 
     def id
-      resource.id.to_s.delete("-")
+      if mosaic?
+        resource.id.to_s.delete("-")
+      else
+        fs = query_service.custom_queries.mosaic_file_sets_for(id: resource.id).first
+        fm = fs.file_metadata.find { |m| m.cloud_uri.present? }
+        fm.cloud_uri.gsub(/^.*\/\//, "").split("/")[-2].delete("-")
+      end
     end
 
     def tileserver
@@ -54,7 +60,7 @@ class TilePath
     def mosaic?
       # A mosaic is single service comprised of multiple raster datasets.
       # This tests if there are multiple child raster FileSets.
-      return true if raster_file_sets.count > 1
+      return true if raster_file_sets && raster_file_sets.count > 1
       false
     end
 
@@ -64,5 +70,11 @@ class TilePath
 
     def raster_file_sets
       @raster_file_sets ||= query_service.custom_queries.mosaic_file_sets_for(id: resource.id)
+    end
+
+    def raster_paths
+      raster_file_sets.map do |fs|
+        fs.file_metadata.map(&:cloud_uri)
+      end.flatten.compact
     end
 end
