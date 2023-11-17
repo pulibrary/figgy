@@ -48,11 +48,11 @@ module GeoDerivatives
         def self.cloud_optimized_geotiff(in_path, out_path, _options)
           system("gdaladdo -q -r average #{in_path} 2 4 8 16 32")
           execute("gdal_translate -q -expand rgb #{in_path} #{out_path} -ot Byte -co TILED=YES "\
-                    "-co COMPRESS=LZW -co COPY_SRC_OVERVIEWS=YES")
+                    "-a_nodata 256 -co COMPRESS=LZW -co COPY_SRC_OVERVIEWS=YES")
         rescue StandardError
           # Try without expanding rgb
           execute("gdal_translate -q #{in_path} #{out_path} -ot Byte -co TILED=YES "\
-                    "-co COMPRESS=LZW -co COPY_SRC_OVERVIEWS=YES")
+                    "-a_nodata 256 -co COMPRESS=LZW -co COPY_SRC_OVERVIEWS=YES")
         end
 
         # Executes a gdal_rasterize command. Used to rasterize vector
