@@ -4,6 +4,11 @@ require "rails_helper"
 RSpec.feature "Home Page" do
   let(:user) { FactoryBot.create(:admin) }
 
+  scenario "has a link to the documentation", js: true do
+    visit "/"
+    expect(page).to have_link "Documentation"
+  end
+
   context "in normal mode" do
     before do
       FactoryBot.create_for_repository(:ephemera_project)
