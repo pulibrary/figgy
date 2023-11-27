@@ -2,6 +2,27 @@
 require "find"
 namespace :figgy do
   namespace :migrate do
+    desc "set a new thumbnail for ephemera folders with orphan file sets as thumbnail"
+    task reset_box_thumbnails: :environment do
+      box_id = ENV["BOX_ID"]
+
+      usage = "usage: rake figgy:migrate:reset_box_thumbnails BOX_ID=box_id"
+      abort usage unless box_id
+      reset = Migrations::ResetBoxThumbnails.call(box_id: box_id)
+      puts "#{reset} thumbnail images reset"
+    end
+
+    desc "Migrate users in group image_editor to group staff"
+    task image_editor: :environment do
+      staff = Role.where(name: "staff").first_or_create
+
+      User.all.select { |u| u.roles.map(&:name).include?("image_editor") }.each do |u|
+        u.roles = u.roles.select { |role| role.name != "image_editor" }
+        u.roles << staff
+        u.save
+      end
+    end
+
     desc "regenerate derivatives for resources with extras"
     task remove_extra_derivatives: :environment do
       Migrations::RemoveExtraDerivatives.call
