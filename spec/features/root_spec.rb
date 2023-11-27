@@ -6,6 +6,9 @@ RSpec.feature "Home Page" do
 
   scenario "has a link to the documentation", js: true do
     visit "/"
+    # ensure the page is large enough that you don't get the hamburger menu,
+    # which hides the documentation link
+    page.driver.browser.manage.window.resize_to(1920, 1080)
     expect(page).to have_link "Documentation"
   end
 
