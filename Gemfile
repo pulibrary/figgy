@@ -120,6 +120,7 @@ group :development, :test do
   gem "bcrypt_pbkdf"
   gem "bixby", "~> 5.0"
   gem "bundler-audit", require: false
+  gem "debug"
   gem "dotenv-rails"
   gem "ed25519"
   gem "factory_bot_rails"
