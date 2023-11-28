@@ -4,6 +4,14 @@ require "rails_helper"
 RSpec.feature "Home Page" do
   let(:user) { FactoryBot.create(:admin) }
 
+  scenario "has a link to the documentation", js: true do
+    visit "/"
+    # ensure the page is large enough that you don't get the hamburger menu,
+    # which hides the documentation link
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+    expect(page).to have_link "Documentation"
+  end
+
   context "in normal mode" do
     before do
       FactoryBot.create_for_repository(:ephemera_project)

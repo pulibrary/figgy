@@ -17,7 +17,7 @@ if !ENV["CI"]
 end
 Capybara.register_driver(:selenium) do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    { "goog:chromeOptions": %w[headless disable-gpu disable-setuid-sandbox window-size=7680,4320] }
+    { "goog:chromeOptions": %w[headless disable-gpu disable-setuid-sandbox window-size=1920,1080] }
   )
 
   browser_options = ::Selenium::WebDriver::Chrome::Options.new

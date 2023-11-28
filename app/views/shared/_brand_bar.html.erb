@@ -1,6 +1,7 @@
 <div>
   <library-header app-name="Figgy" app-url="/">
     <menu-bar type="main-menu" :menu-items="[
+    {name: 'Documentation', href: 'https://pul-confluence.atlassian.net/wiki/spaces/IT/pages/1933580/Figgy+PUL+s+Digital+Repository'},
       <% if current_user %>
         {name: 'Logout', component: 'Logout', href: '<%= main_app.destroy_user_session_path %>'}
       <% else %>
