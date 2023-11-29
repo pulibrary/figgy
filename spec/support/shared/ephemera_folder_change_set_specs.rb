@@ -22,6 +22,12 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
     end
   end
 
+  describe "#description" do
+    it "is multi-valued" do
+      expect(change_set.multiple?(:description)).to be true
+    end
+  end
+
   describe "#state" do
     it "pre-populates" do
       expect(change_set.state).to eq "needs_qa"
