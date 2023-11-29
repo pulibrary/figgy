@@ -6,8 +6,8 @@ RSpec.describe Migrations::ResetBoxThumbnails do
   let(:query_service) { ChangeSetPersister.default.query_service }
 
   describe ".call" do
-    context "when given an ephemera box id" do
-      it "deletes FileSets which were set as thumbnails but have no parent" do
+    context "when given an id for an ephemera box containing a folder whose thumbnail_id is set to an orphan file set" do
+      it "sets a new thumbnail" do
         orphan_file_set = FactoryBot.create_for_repository(:file_set)
         file_set1 = FactoryBot.create_for_repository(:file_set)
         file_set2 = FactoryBot.create_for_repository(:file_set)
@@ -53,7 +53,7 @@ RSpec.describe Migrations::ResetBoxThumbnails do
       end
     end
 
-    context "when the no thumbnail resource doesn't exist and there are no members" do
+    context "when the thumbnail resource doesn't exist and there are no members" do
       it "sets thumbnail id to empty" do
         folder1 = FactoryBot.create_for_repository(:ephemera_folder, member_ids: [], thumbnail_id: Valkyrie::ID.new(SecureRandom.uuid))
         box = FactoryBot.create_for_repository(:ephemera_box, member_ids: [folder1.id])
