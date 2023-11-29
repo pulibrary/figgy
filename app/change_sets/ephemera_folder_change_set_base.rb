@@ -26,7 +26,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :geographic_origin, multiple: false, required: false
   property :subject, multiple: true, required: true
   property :geo_subject, multiple: true, required: false
-  property :description, multiple: false, required: false
+  property :description, multiple: true, required: false
   property :date_created, multiple: false, required: false
   property :provenance, multiple: false, required: false
   property :dspace_url, multiple: false, required: false
