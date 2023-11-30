@@ -8,13 +8,7 @@ class TilePath
 
   def tilejson
     return unless valid?
-    # Our tile service doesn't know how to resolve IDs for development, so just
-    # put the direct URL to S3 here.
-    if Rails.env.development?
-      "#{tileserver}/#{endpoint}/tilejson.json?url=#{TileMetadataService.new(resource: resource).path}"
-    else
-      "#{tileserver}/#{id}/#{endpoint}/tilejson.json"
-    end
+    "#{tileserver}/#{id}/#{endpoint}/tilejson.json"
   end
 
   def wmts
@@ -70,11 +64,5 @@ class TilePath
 
     def raster_file_sets
       @raster_file_sets ||= query_service.custom_queries.mosaic_file_sets_for(id: resource.id)
-    end
-
-    def raster_paths
-      raster_file_sets.map do |fs|
-        fs.file_metadata.map(&:cloud_uri)
-      end.flatten.compact
     end
 end
