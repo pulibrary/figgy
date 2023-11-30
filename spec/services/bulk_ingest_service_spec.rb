@@ -99,7 +99,7 @@ RSpec.describe BulkIngestService do
           file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          collection: coll
+          member_of_collection_ids: [coll.id]
         )
 
         updated_collection = query_service.find_by(id: coll.id)
@@ -117,7 +117,7 @@ RSpec.describe BulkIngestService do
           file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          collection: coll,
+          member_of_collection_ids: [coll.id],
           preserve_file_names: true
         )
 
@@ -143,7 +143,7 @@ RSpec.describe BulkIngestService do
           base_directory: single_dir,
           file_filters: [".tif"],
           local_identifier: local_id,
-          collection: coll
+          member_of_collection_ids: [coll.id]
         )
 
         updated_collection = query_service.find_by(id: coll.id)
@@ -170,7 +170,7 @@ RSpec.describe BulkIngestService do
           file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          collection: coll
+          member_of_collection_ids: [coll.id]
         )
 
         expect(bulk_ingester).to have_received(:attach_children).with(
@@ -192,7 +192,7 @@ RSpec.describe BulkIngestService do
         stub_ezid
       end
 
-      it "ingests the resources", bulk: true do
+      it "ingests them as child resources, and does not add them to collections", bulk: true do
         coll = FactoryBot.create_for_repository(:collection)
 
         ingester.attach_dir(
@@ -200,7 +200,7 @@ RSpec.describe BulkIngestService do
           file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          collection: coll
+          member_of_collection_ids: [coll.id]
         )
 
         updated_collection = query_service.find_by(id: coll.id)
@@ -211,6 +211,7 @@ RSpec.describe BulkIngestService do
         expect(resource).to be_a ScannedResource
         expect(resource.source_metadata_identifier).to include(bib)
         expect(resource.local_identifier).to include(local_id)
+        expect(resource.member_of_collection_ids). to eq [coll.id]
 
         decorated_resource = resource.decorate
         expect(decorated_resource.volumes.length).to eq 2
@@ -219,6 +220,7 @@ RSpec.describe BulkIngestService do
         expect(child_resource.local_identifier).to include(local_id)
         expect(child_resource.source_metadata_identifier).to be_nil
         expect(child_resource.title).to eq ["vol1"]
+        expect(child_resource.member_of_collection_ids). to be_nil
       end
     end
 
@@ -240,7 +242,7 @@ RSpec.describe BulkIngestService do
           file_filters: [".tif"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          collection: coll,
+          member_of_collection_ids: [coll.id],
           depositor: "tpend"
         )
 

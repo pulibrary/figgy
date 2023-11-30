@@ -108,7 +108,7 @@ class BulkIngestService
     # @param resource [Resource] the resource being used to construct child resources
     # @param file_filters [Array] the filter used for matching against the filename extension
     def attach_children(path:, resource:, file_filters: [], preserve_file_names: false, **attributes)
-      child_attributes = attributes.except(:collection)
+      child_attributes = attributes.except(:member_of_collection_ids)
       child_resources = dirs(path: path).map do |subdir_path|
         child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
         attach_children(
@@ -135,13 +135,10 @@ class BulkIngestService
     # @param klass [Class] the class of the resource being constructed
     # @return [Resource] the newly created resource
     def new_resource(klass:, **attributes)
-      collection = attributes.delete(:collection)
-
       resource = klass.new
 
       change_set = ChangeSet.for(resource, change_set_param: change_set_param)
       return unless change_set.validate(**attributes)
-      change_set.member_of_collection_ids = [collection.id] if collection.try(:id)
 
       persisted = change_set_persister.save(change_set: change_set)
       logger.info "Created the resource #{persisted.id}"
