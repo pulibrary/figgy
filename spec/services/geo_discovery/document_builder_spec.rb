@@ -29,6 +29,10 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   let(:file) { fixture_file_upload("files/vector/shapefile.zip") }
   let(:metadata_file) { fixture_file_upload("files/geo_metadata/iso.xml") }
 
+  before do
+    allow(MosaicJob).to receive(:perform_later)
+  end
+
   describe "vector resource", run_real_characterization: true do
     before do
       allow(GeoserverPublishJob).to receive(:perform_later)

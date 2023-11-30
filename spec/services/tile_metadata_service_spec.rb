@@ -3,6 +3,10 @@ require "rails_helper"
 require "shrine/storage/s3"
 
 RSpec.describe TileMetadataService do
+  before do
+    allow(MosaicJob).to receive(:perform_later)
+  end
+
   after(:all) do
     # Clean up mosaic.json documents and cloud rasters after test suite
     FileUtils.rm_rf(Figgy.config["test_cloud_geo_derivative_path"])

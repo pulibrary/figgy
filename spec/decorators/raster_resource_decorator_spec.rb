@@ -20,6 +20,11 @@ RSpec.describe RasterResourceDecorator do
                        coverage: imported_coverage
                      }])
   end
+
+  before do
+    allow(MosaicJob).to receive(:perform_later)
+  end
+
   it "exposes markup for rights statement" do
     expect(resource.decorate.rendered_rights_statement).not_to be_empty
     expect(resource.decorate.rendered_rights_statement.first).to match(/#{Regexp.escape(RightsStatements.no_known_copyright.to_s)}/)

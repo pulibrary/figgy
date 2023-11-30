@@ -654,6 +654,11 @@ RSpec.describe ManifestBuilder do
     let(:scanned_map) do
       FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id)
     end
+
+    before do
+      allow(MosaicJob).to receive(:perform_later)
+    end
+
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
     let(:child) { FactoryBot.create_for_repository(:raster_resource, files: [file]) }
     it "builds a IIIF document without the raster child" do

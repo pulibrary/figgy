@@ -1868,6 +1868,7 @@ RSpec.describe ChangeSetPersister do
   context "when deleting a raster geo FileSet", run_real_characterization: true, run_real_derivatives: true do
     before do
       allow(GeoserverPublishJob).to receive(:perform_now)
+      allow(MosaicJob).to receive(:perform_later)
     end
 
     it "does not trigger a geoserver publish job" do

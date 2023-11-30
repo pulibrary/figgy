@@ -12,6 +12,12 @@ describe MosaicJob do
 
   describe "#perform" do
     context "when a MosaicJob is not currently running" do
+      let(:worker) { instance_double(Sidekiq::Workers, find: [nil, nil, nil]) }
+
+      before do
+        allow(Sidekiq::Workers).to receive(:new).and_return(worker)
+      end
+
       it "runs the TileMetadataService" do
         raster_set = FactoryBot.create_for_repository(:raster_set_with_files)
         fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
