@@ -310,6 +310,8 @@ RSpec.describe BulkIngestController do
       expect(resource.decorate.volumes.last.file_sets.length).to eq(1)
       expect(resource.decorate.collections.first.id).to eq collection.id
       expect(resource.decorate.rights_statement.first).to eq RightsStatements.copyright_not_evaluated
+      child_resources = Wayfinder.for(resource).members
+      expect(child_resources.map(&:member_of_collection_ids)).to eq [nil, nil]
     end
   end
 end
