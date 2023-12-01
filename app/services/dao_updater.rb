@@ -17,7 +17,7 @@ class DaoUpdater
     Honeybadger.notify(
       "DaoUpdater failed to update resource #{change_set.id} with source metadata identifier #{change_set.source_metadata_identifier} because the Archival Object could not be found. " \
       "If the source metadata identifier looks like a collection-level component id (e.g. MC001), this error is expected (see #945). " \
-      "Otherwise if it looks like a component id it may need a dot instead of a dot or just be be a bad id. Contact the depositor or product owner. " \
+      "Otherwise if it looks like a component id it may need a dot instead of a dash or just be be a bad id. Contact the depositor or product owner. " \
       "Make sure they know that to get the DAO to generate they need to fix the id, then mark the item for takedown and mark it complete again. " \
       "If it looks like a bibid that's very unexpected -- ask on #figgy whether anyone recognizes what's going on."
     )
