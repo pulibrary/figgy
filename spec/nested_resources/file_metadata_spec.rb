@@ -83,6 +83,10 @@ describe FileMetadata do
       it "returns true" do
         expect(file_metadata.preservation_file?).to be true
       end
+
+      it "returns true for #preserved?" do
+        expect(file_metadata.preserve?).to be true
+      end
     end
 
     context "when it has the original file use value" do

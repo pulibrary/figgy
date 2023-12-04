@@ -1,23 +1,22 @@
 # frozen_string_literal: true
 
 module Migrations
-  class PreservationFileMigrator
+  # Re-preserve all FileSets with attached PreservationFiles.
+  class PreservationFilePreserver
     def self.call
       new.run
     end
 
     def run
       preservation_file_sets.each do |fs|
-        fs.preservation_file.use = Valkyrie::Vocab::PCDMUse.PreservationFile
-        change_set = ChangeSet.for(fs)
-        change_set_persister.save(change_set: change_set)
+        PreserveResourceJob.perform_later(id: fs.id.to_s, force_preservation: true)
       end
     end
 
     private
 
       def preservation_file_sets
-        query_service.custom_queries.find_by_property(model: FileSet, property: :file_metadata, value: { use: [Valkyrie::Vocab::PCDMUse.PreservationMasterFile] }, lazy: true)
+        query_service.custom_queries.find_by_property(model: FileSet, property: :file_metadata, value: { use: [Valkyrie::Vocab::PCDMUse.PreservationFile] }, lazy: true)
       end
 
       def query_service

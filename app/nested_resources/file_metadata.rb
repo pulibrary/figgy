@@ -92,7 +92,7 @@ class FileMetadata < Valkyrie::Resource
   end
 
   def preserve?
-    original_file? || intermediate_file? || preservation_copy?
+    original_file? || intermediate_file? || preservation_copy? || preservation_file?
   end
 
   def cloud_uri

@@ -69,5 +69,14 @@ FactoryBot.define do
         ]
       end
     end
+
+    factory :pdf_file_set do
+      file_metadata do
+        [
+          FileMetadata.new(mime_type: "application/pdf", use: Valkyrie::Vocab::PCDMUse.PreservationFile, id: "original"),
+          FileMetadata.new(mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.IntermediateFile, id: "intermediate")
+        ]
+      end
+    end
   end
 end
