@@ -604,37 +604,6 @@ class ManifestBuilder
       Valkyrie::ResourceDecorator.new(resource).header
     end
 
-    # Returns a geotiff FileSet for ScannedMaps and MapSets which have attached Raster resources.
-    # Use Case 1:
-    # ScannedMap (MapSet) ->  ScannedMap -> RasterResource -> FileSet (target set to tiles)  + FileSet (no target - uncropped)
-    #
-    # Use Case 2:
-    # ScannedMap -> RasterResource -> FileSet (target set to tiles - uncropped)
-    def geotiff_child
-      @geotiff_child ||=
-        begin
-          return false unless parent_node.is_a?(ScannedMapNode)
-          wayfinder = Wayfinder.for(resource)
-          parent_wayfinder = Wayfinder.for(wayfinder.parent)
-          raster_resource = parent_wayfinder.raster_resources&.first
-          return unless raster_resource
-          raster_wayfinder = Wayfinder.for(raster_resource)
-          geo_members = raster_wayfinder.geo_members
-          return unless geo_members
-          if geo_members.count == 1
-            # Return the single geotiff FileSet if it's the only FileSet
-            # attached to the raster. This occurs when a single (not part of a
-            # set) ScannedMap has child Raster Resource. This will be an
-            # uncropped geotiff.
-            geo_members.first
-          elsif geo_members.count > 1
-            # When there are multiple geotiffs in MapSet mosaic, Return the geotiff FileSet
-            # where the service target is NOT 'tiled'. These are uncropped geotiffs.
-            geo_members.find { |x| x.service_targets.blank? }
-          end
-        end
-    end
-
     ##
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
