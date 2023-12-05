@@ -73,7 +73,7 @@ Scenario: The ScannedResource is completed.
 3. Create a `PreservationObject` for the `ScannedResource`
    * We use PreservationObject to save the cloud / preserved locations of preservation files, so that we don't add new metadata values to the objects that we are preserving, thus necessitating another preservation action.
 4. Preserve metadata
-   * A JSON serialization of the metadata is uploaded to GCS and its checksum stored in the `metadata_node` attached to the PreservationObject.
+   * A JSON serialization of the metadata is uploaded to Google Cloud (GCS) and its checksum stored in the `metadata_node` attached to the PreservationObject.
    * The PreservationObject's `metadata_version` field is updated with the `Resource`'s current lock token, so we can ensure that the `PreservationObject` and `Resource` are in sync.
 5. Enqueue preservation of children.
    * Every time it's run the preserver will automatically enqueue preservation of any children which have never been preserved.
@@ -104,13 +104,16 @@ Note: Some of this process is documented in [ADR #4, Preservation Fixity](https:
   * https://github.com/pulibrary/figgy/blob/150e9def951fd0b1ea8f948069f5a0225fff4f4f/config/schedule.rb#L19
 * The task runs the `CloudFixity::FixityRequestor.queue_daily_check!` method with an 10% annual ratio.
   * https://github.com/pulibrary/figgy/blob/3276f1923c80b3b26929228b7b2fecebf9a90ef8/lib/tasks/fixity_worker.rake#L13
-  * The method computes the number of the resources that need to be check to satisfy the annual ratio, and publishes file information to a fixity request Google PubSub topic.
+  * The method computes the number of the resources that need to be checked to satisfy the annual ratio, and publishes file information to a fixity request Google PubSub topic.
 * In Google Cloud, we have a [Cloud Function](https://github.com/pulibrary/figgy/blob/150e9def951fd0b1ea8f948069f5a0225fff4f4f/cloud_fixity/index.js) that listens to the fixity request topic.
   * A compute promise is constructed that pipes the file into an md5 hash.
   * If the calculated md5 value equals the md5 value passed in the request data, then a 'success' message is published. If not, a 'failure' message is published.
   * If there is an error when streaming the file, a retry_count attribute is added to the request data and it is re-queued. After 5 attempts, a 'failure' message is published.
   * A message gets published to the fixity status topic queue.
   * Cloud Fixity Worker kicks off a UpdateFixityJob which results in an Event getting saved, and notifies Honeybadger if there's a failed fixity check.
+
+TODO: Add metadata_version field (maybe also to above document)
+TODO: Say something about autofix 
 
 ### Local Fixity Check
 Scenario: A new file is ingested.
@@ -125,6 +128,7 @@ Scenario: A new file is ingested.
 Scenario: A FileSet exists in Figgy, it should be occasionally confirmed its
 fixity is correct.
 * `rake figgy:fixity:request_daily_local_fixity` is run every day. It checks a random 1/365th of the repository every day.
+
 
 ### Fixity status show page display
 Scenario: Looking at a Scanned Resource
@@ -166,46 +170,42 @@ This uses the same helpers, `format_fixity_success` and
 
 ### Fixity Dashboard
 
-Note that it's slow. Takes a minute to load due to
-https://github.com/pulibrary/figgy/issues/5545
-
 The code here is very straightforward. See FixityDashboardController and
 accompanying template / partials.
 
-### Creation of Tombstones
+### Creation of Deletion Markers
 
-There's a CreateTombstone before delete hook in the change set persister.
+There's a CreateDeletionMarker before_delete hook in the change set persister.
 
 It saves some identifiers and embeds the preservation object.
 
-The Tombstone model: https://github.com/pulibrary/figgy/blob/main/app/models/tombstone.rb
+The DeletionMarker model: https://github.com/pulibrary/figgy/blob/main/app/models/deletion_marker.rb
 
-### Restore Tombstones
+### Restore from Deletion Markers
 
-When a fileset has been deleted there's a "Deleted Files" section in the File
-Manager. Each deleted file is listed by title with a "Reinstate" button.
+#### Restoring from file manager
 
-There's a `child_tombstones` method on the wayfinder to power this list. Uses
-the parent_id stored on the tombstone. Currently only implemented for
-ScannedResources.
+When a fileset has been deleted there's a "Deleted Files" section in the File Manager. Each deleted file is listed by title with a "Reinstate" button. There's a `child_deletion_markers` method on the wayfinder to power this list. Uses the parent_id stored on the tombstone. Currently only implemented for ScannedResources.
 
-Uses tombstone_restore_ids to pass the value to the restore_tombstones.rb change_set_persister callback.
-- The importer pulls the metadata and binary down from the cloud.
-- The metadata is converted back into a FileSet object using the Valkyrie Sequel ORM converter. This restores id, created date, updated date, and internal resource.
-- Currently intermediate files are not preserved/restorable.
-- The PCDM use is not restored.
+- Restoration uses a deletion_marker_restore_ids param to pass the value to the restore_from_deletion_markers.rb change_set_persister callback.
+- Preserver::Importer.from_preservation_object pulls the metadata and binary down from the cloud.
+- The metadata is converted back into a FileSet object using the Valkyrie Sequel ORM converter. This restores id, created date, updated date, PCDM use, and internal resource.
+- The callback then adds the fileset back onto the resource as a member.
+
+#### Restoring via search
+
+All DeletionMarkers can be searched using the "Search Deletion Markers" link on the home page of figgy. There's a "Restore" button on each deletion marker show page, which enqueues a RestoreFromDeletionMarkerJob.
+
+- The job wraps the DeletionMarkerService, which calls Preserver::Importer.from_preservation_object
+- After the resource is restored, it is re-attached to its parent (stored on the preservation object) and its members are recursively restored.
 
 ### Blind Importer
 
+TODO: add a scenario / use case here
+
 You have to call BlindImporter from the rails console.
 
-- BlindImporter uses FileMetadataAdapter's query_service which navigates Google
-Cloud.
-- This retains the PCDM use for FileSets by keeping the preserved FileMetadata
-    and pointing them to newly uploaded copies of the files.
-  * Instead of using FileAppender via `files: ` in the ChangeSet, it sets the
-      `created_file_sets` property to trigger characterization/derivatives.
+- BlindImporter uses FileMetadataAdapter's query_service which navigates Google Cloud.
 - It recurses through resource membership and imports every member.
-- FileMetadataAdapter::ConvertLocalStorageIDs converts preserved file
-    identifiers to their GCS counterparts, and makes sure they all exist, and
-    returns the ones that exist.
+- Instead of using FileAppender via `files: ` in the ChangeSet, it sets the `created_file_sets` property to trigger characterization/derivatives.
+- FileMetadataAdapter::ConvertLocalStorageIDs converts preserved file identifiers to their GCS counterparts, and makes sure they all exist, and returns the ones that exist.
