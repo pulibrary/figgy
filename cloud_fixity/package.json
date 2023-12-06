@@ -16,8 +16,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^0.28.1",
-    "@google-cloud/storage": "^2.5.0"
+    "@google-cloud/pubsub": "^4.0.7",
+    "@google-cloud/storage": "^7.7.0"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"
