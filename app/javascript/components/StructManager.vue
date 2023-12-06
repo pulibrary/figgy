@@ -19,10 +19,11 @@
       <div class="panelHeader">
         <heading level="h2" size="h6">Unstructured Files</heading>
       </div>
-      <gallery
+      <struct-gallery
         class="lux-galleryWrapper"
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
+        @card-clicked="galleryClicked()"
       />
     </div>
   </div>
@@ -32,6 +33,7 @@
 import { mapState } from 'vuex'
 import Toolbar from './StructManagerToolbar'
 import Tree from './Tree'
+import StructGallery from './StructGallery'
 import DeepZoom from './DeepZoom'
 
 /**
@@ -50,6 +52,7 @@ export default {
     'toolbar': Toolbar,
     'tree': Tree,
     'deep-zoom': DeepZoom,
+    'struct-gallery': StructGallery,
   },
   props: {
     /**
@@ -154,7 +157,7 @@ export default {
     },
     isLoading () {
       return this.resource.saveState === 'SAVING'
-    }
+    },
   },
   beforeMount: function () {
     if (this.resourceObject) {
@@ -171,6 +174,9 @@ export default {
     }
   },
   methods: {
+    galleryClicked() {
+      this.$store.commit('SELECT_TREEITEM', null)
+    },
     resizeCards: function (event) {
       this.cardPixelWidth = event.target.value
       if (this.cardPixelWidth < 75) {
