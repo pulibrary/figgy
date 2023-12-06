@@ -6,7 +6,8 @@ namespace :figgy do
     desc "Reports the number of unpreserved models."
     task count_unpreserved: :environment do
       state_directory = Rails.root.join("tmp", "rake_preservation_audit")
-      auditor = PreservationStatusReporter.new
+      csv_path = ENV["CSV_PATH"]
+      auditor = PreservationStatusReporter.new(csv_path: csv_path)
       auditor.load_state!(state_directory: state_directory)
       failed_count = auditor.cloud_audit_failures.to_a.size
       puts "Number of Resources Needing Re-Preserved: #{failed_count}"
