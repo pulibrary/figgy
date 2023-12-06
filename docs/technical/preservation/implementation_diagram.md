@@ -112,9 +112,6 @@ Note: Some of this process is documented in [ADR #4, Preservation Fixity](https:
   * A message gets published to the fixity status topic queue.
   * Cloud Fixity Worker kicks off a UpdateFixityJob which results in an Event getting saved, and notifies Honeybadger if there's a failed fixity check.
 
-TODO: Add metadata_version field (maybe also to above document)
-TODO: Say something about autofix 
-
 ### Local Fixity Check
 Scenario: A new file is ingested.
 * After ingesting, CharacterizationJob runs (creates checksums), then runs
@@ -130,6 +127,75 @@ fixity is correct.
 * `rake figgy:fixity:request_daily_local_fixity` is run every day. It checks a random 1/365th of the repository every day.
 
 
+### Fixity failures: Autofix
+
+When a cloud or local fixity check results in a failure, figgy attempts to
+autofix by first creating an event with status "REPAIRING" and then attempting
+to recover the file and represerve.
+
+```mermaid
+flowchart TD
+    Start(Preservation Error Occurs) --> TypeDecision{What Type of Failure Event?}
+    TypeDecision -->|Local Fixity| LocalEvent
+    TypeDecision -->|Cloud Fixity| CloudEvent
+
+    subgraph LocalFixityJobA
+        LocalEvent[LocalFixityJob creates event with status REPAIRING] --> LocalDisplayDisagnosing[Display `Diagnosing, trying to fix` to the user in FileManager file]
+        LocalDisplayDisagnosing --> RepairLocalFixty(Enqueue RepairLocalFixityJob)
+    end
+
+    subgraph RepairLocalFixityJob
+        RepairLocalFixty --> RepairLocalFixtyMatchDecision
+        RepairLocalFixtyMatchDecision{Does checksum in db match with Cloud checksum} --> |NO| RepairLocalRequeue
+        RepairLocalFixtyMatchDecision --> |YES| RepairLocalMatch[Restore from Cloud]
+        RepairLocalMatch --> RepairLocalRequeue[Requeues Fixity Checking]
+    end
+
+    subgraph LocalFixityJobB
+        RepairLocalRequeue --> LocalFixityRecheckDecision{Fixity Check Result}
+        LocalFixityRecheckDecision --> |Success| L[Creates `Fixity Success` event]
+        LocalFixityRecheckDecision --> |Failure| CreateLocalFailedEvent[Creates `Fixity Failed` event]
+    end
+    RePreserveWithBinary --> DisplaySuccessState
+    RePreserve --> DisplaySuccessState
+    L --> DisplaySuccessState((UI shows no errors))
+
+    subgraph CloudFixityJob
+        CloudEvent[CloudFixity job creates event with status REPAIRING] --> D[Display `Diagnosing, trying to fix` to the user in FileManager file]
+        D --> RepairCloudFixity[Enqueue RepairCloudFixityJob]
+    end
+
+    subgraph RepairCloudFixityJob
+        RepairCloudFixity --> DecideNodeType{ Is preserved file a MetadataNode or a BinaryNode? }
+        DecideNodeType --> |BinaryNode| BinaryNode[Recalculate Local File checksum]
+
+        BinaryNode --> II{Fixity Check Result}
+        II --> |Success| RePreserveWithBinary[Re-preserve with force flag on]
+        II --> |Failure| CreateCloudFailedEvent[Creates a cloud `Fixity Failed` event for each REPAIRING event on that preservation object]
+        CreateCloudFailedEvent --> KickOffLocalFixity[kick off a LocalFixityJob to ensure that failure registers]
+        DecideNodeType --> |Metadata| RePreserve[Re-preserve]
+    end
+    II --> |Failure2| CheckVersions
+
+    KickOffLocalFixity --> CannotFix
+    CreateLocalFailedEvent --> CannotFix
+    CannotFix((UI Displays `Cannot fix, requires human attention`)) --> QuestionCanDlsFix
+
+    subgraph Communication
+        QuestionCanDlsFix --> |YES| Q(DLS manually repairs until Display has no errors)
+        QuestionCanDlsFix --> |NO| R(Display `Re-ingest Required`)
+    end
+
+
+    subgraph PotentialEnhancement
+        CheckVersions[Check for cloud versions that match the db checksum] --> LL{Does a version match?}
+        LL --> |YES| MM[Promote that version as current in Cloud] 
+        LL --> |NO| QuestionCanDlsFix
+        MM --> OO[Create Cloud Fixity Success event]
+        OO --> PP[Display shows no errors]
+    end
+```
+
 ### Fixity status show page display
 Scenario: Looking at a Scanned Resource
 
@@ -137,36 +203,37 @@ We display fixity summary in three places:
 
 #### Resource Show Page
 
-https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/views/catalog/_resource_attributes_default.html.erb#L30-L39
+On a resource we display fixity check information in a Health Status area at the
+top right of the page:
 
+https://github.com/pulibrary/figgy/blob/aa3f248081e866884b4aa962e6ca270c94a0e426/app/views/catalog/show.html.erb#L8
 
-It uses a decorator which uses a helper. The helper makes queries about failed
-  and succeeded fixity checks.
-  * https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/decorators/valkyrie/resource_decorator.rb#L89-L99
-  * https://github.com/pulibrary/figgy/blob/c106ea719f9473e0fc3d0bfa608da0d345ab4a94/app/helpers/fixity_dashboard_helper.rb#L40-L42
+It uses a HealthReport object, which it creates via a helper method:
 
-#### Member Resource List on Show Page (for MVW)
+https://github.com/pulibrary/figgy/blob/aa3f248081e866884b4aa962e6ca270c94a0e426/app/helpers/application_helper.rb#L78
 
-There's also fixity_badges, which is used in the member_resources list. Look at this next time.
+The HealthReport queries for the relevant Events on the resource itself and all
+resources and filesets it comprises.
 
-We call fixity_badges from here:
+#### File Manager error notifications
 
-https://github.com/pulibrary/figgy/blob/030a01df143cebe3c3c8a8a09d7ccb4be1170a7f/app/views/catalog/_member_resources.html.erb#L50
+If a given file has fixity errors they will show as notifications below the
+file's thumbnail on the File Manager page.
 
-This displays the local fixity count, but with no status. The status helper
-calls the count method.
+https://github.com/pulibrary/figgy/blob/aa3f248081e866884b4aa962e6ca270c94a0e426/app/views/base/_file_manager_member.html.erb
+
 
 #### File Set Show Page
 
-https://github.com/pulibrary/figgy/blob/030a01df143cebe3c3c8a8a09d7ccb4be1170a7f/app/views/catalog/_members_file_set.html.erb
+https://github.com/pulibrary/figgy/blob/aa3f248081e866884b4aa962e6ca270c94a0e426/app/views/catalog/_members_file_set.html.erb
 
-This has a column for local fixity and cloud fixity for every FileMetadata, but
-only the primary file will ever have a populated success/failure.
+This has a column for local fixity and cloud fixity for every FileMetadata. Any
+preserved file will have information, and other types of files display an
+informative message about their preservation status.
 
-https://github.com/pulibrary/figgy/blob/030a01df143cebe3c3c8a8a09d7ccb4be1170a7f/app/views/catalog/_file_detail.html.erb
+https://github.com/pulibrary/figgy/blob/aa3f248081e866884b4aa962e6ca270c94a0e426/app/views/catalog/_file_detail.html.erb
 
-This uses the same helpers, `format_fixity_success` and
-`format_cloud_fixity_success`, but also displays the last success date for each.
+This uses some helpers, `format_fixity_success` and `format_cloud_fixity_success`, and also displays the last success date for each.
 
 ### Fixity Dashboard
 
