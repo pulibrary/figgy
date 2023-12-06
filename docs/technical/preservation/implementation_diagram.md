@@ -58,6 +58,7 @@ erDiagram
     }
     FileSetPreservationObject ||--o{ Event : "has_many (resource_id)"
     Event ||--|| BinaryFileMetadata : "references (child_id)"
+    Event ||--|| MetadataFileMetadata : "references (child_id)"
 ```
 
 ## Preservation
@@ -268,7 +269,7 @@ All DeletionMarkers can be searched using the "Search Deletion Markers" link on 
 
 ### Blind Importer
 
-TODO: add a scenario / use case here
+If a DeletionMarker is not present, such as when the database has been lost or a bug has caused the PostgreSQL row to be deleted, preserved resources can still be recovered by using the `BlindImporter`, which will import any resource ID from its path in preservation storage.
 
 You have to call BlindImporter from the rails console.
 
