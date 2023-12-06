@@ -1,5 +1,5 @@
 <template>
-  <div class="lux-gallery" @click.native="deselect($event)">
+  <wrapper type="div" class="lux-gallery" @click.native="deselect($event)">
     <card
       v-for="(item, index) in items"
       :id="item.id"
@@ -16,7 +16,7 @@
       <heading level="h2">{{ item.title }}</heading>
       <text-style variation="default">{{ item.caption }}</text-style>
     </card>
-  </div>
+  </wrapper>
 </template>
 
 <script>
@@ -62,8 +62,7 @@ export default {
   methods: {
     deselect: function(event) {
       if (
-        event.target.className === "lux-gallery" ||
-        event.target.className === "lux-gallery lux-galleryWrapper"
+        event.target.className === "lux-gallery lux-galleryWrapper lux-wrapper"
       ) {
         this.selectNone()
       }
@@ -83,14 +82,12 @@ export default {
         .indexOf(id)
     },
     hasChanged: function(id) {
-      //console.log(this.gallery.changeList.indexOf(id) > -1)
       return this.gallery.changeList.indexOf(id) > -1
     },
     isDisabled: function(item) {
       return this.gallery.cut.indexOf(item) > -1
     },
     isSelected: function(item) {
-      //console.log(this.gallery.selected.indexOf(item) > -1)
       return this.gallery.selected.indexOf(item) > -1
     },
     select: function(id, event) {
@@ -128,12 +125,6 @@ export default {
       // retrieve the data via an asyn action
     }
   },
-  // This is calling a mutation in another module... may not be necessary
-  // mounted() {
-  //   if (!this.galleryItems) {
-  //     this.$store.commit("CHANGE_RESOURCE_LOAD_STATE", "LOADING")
-  //   }
-  // },
 }
 </script>
 <style lang="scss">
