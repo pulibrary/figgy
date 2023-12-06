@@ -26,7 +26,7 @@ set :deploy_to, "/opt/figgy"
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml', 'config/blacklight.yml', 'config/fedora.yml', 'config/config.yml')
 
 # Default value for linked_dirs is []
-set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/derivatives", "tmp/uploads", "vendor/bundle", "staged_files")
+set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/derivatives", "tmp/uploads", "vendor/bundle", "staged_files", "tmp/rake_preservation_audit")
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

@@ -84,9 +84,9 @@ class PreservationStatusReporter
   def load_state!(state_directory:)
     state_directory = Pathname.new(state_directory)
     FileUtils.mkdir_p(state_directory)
-    @state_file_path = state_directory.join("since")
+    @state_file_path = state_directory.join("since.txt")
     @since = @state_file_path.read if @state_file_path.exist?
-    @found_resource_path = state_directory.join("bad_resources")
+    @found_resource_path = state_directory.join("bad_resources.txt")
     @found_resources = Set.new(@found_resource_path.read.split.map { |x| Valkyrie::ID.new(x) }) if @found_resource_path.exist?
   end
 
