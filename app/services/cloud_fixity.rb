@@ -76,12 +76,12 @@ module CloudFixity
     end
 
     def self.queue_resources(resources, publisher)
-      # resources.each do |resource|
-      #   publish_file_metadata(resource, resource.metadata_node, publisher, :metadata_node) if resource.metadata_node.present?
-      #   resource.binary_nodes.each do |binary_node|
-      #     publish_file_metadata(resource, binary_node, publisher, :binary_nodes)
-      #   end
-      # end
+      resources.each do |resource|
+        publish_file_metadata(resource, resource.metadata_node, publisher, :metadata_node) if resource.metadata_node.present?
+        resource.binary_nodes.each do |binary_node|
+          publish_file_metadata(resource, binary_node, publisher, :binary_nodes)
+        end
+      end
     end
 
     def self.publish_file_metadata(resource, file_metadata, publisher, child_property)
