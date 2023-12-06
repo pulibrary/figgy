@@ -739,6 +739,7 @@ RSpec.describe ManifestBuilder do
       expect(canvases.length).to eq 2
       expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
       expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 0.256
+      expect(output["logo"]).to eq(["https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png"])
     end
 
     context "when given a multi-volume recording", run_real_characterization: true, run_real_derivatives: true do
