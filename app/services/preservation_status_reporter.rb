@@ -1,24 +1,25 @@
 # frozen_string_literal: true
 
+require "ruby-progressbar"
+require "ruby-progressbar/outputs/null"
+
 # Checks every resource in the database. If it should be preserved, then checks
 # that all its files and its metadata are preserved and have the correct
 # MD5 checksums.
 # Future use case: We'll get this to where it returns nothing. If down the road
 # it returns something again, we'll want more details about what / why it's
 # failing.
-require "ruby-progressbar"
-require "ruby-progressbar/outputs/null"
 class PreservationStatusReporter
-  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum, :csv_path
+  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum
+
   # rubocop:disable Metrics/ParameterLists
-  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false, csv_path: nil)
+  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false)
     @since = since
     @suppress_progress = suppress_progress
     @records_per_group = records_per_group
     @parallel_threads = parallel_threads
     @found_resources = Set.new
     @skip_metadata_checksum = skip_metadata_checksum
-    @csv_path = csv_path
   end
   # rubocop:enable Metrics/ParameterLists
 
@@ -28,11 +29,7 @@ class PreservationStatusReporter
   end
 
   def audited_resource_count
-    if csv_path
-      ids_from_csv.count
-    else
-      query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
-    end
+    query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
   end
 
   # @return [Array<Valkyrie::ID>] a lazy enumerator
@@ -91,9 +88,9 @@ class PreservationStatusReporter
   def load_state!(state_directory:)
     state_directory = Pathname.new(state_directory)
     FileUtils.mkdir_p(state_directory)
-    @state_file_path = state_directory.join("since.txt")
+    @state_file_path = state_directory.join(timestamp_filename)
     @since = @state_file_path.read if @state_file_path.exist?
-    @found_resource_path = state_directory.join("bad_resources.txt")
+    @found_resource_path = state_directory.join(output_filename)
     @found_resources = Set.new(@found_resource_path.read.split.map { |x| Valkyrie::ID.new(x) }) if @found_resource_path.exist?
   end
 
@@ -109,17 +106,17 @@ class PreservationStatusReporter
     end
   end
 
+  def timestamp_filename
+    "since.txt"
+  end
+
+  def output_filename
+    "bad_resources.txt"
+  end
+
   private
 
     def resource_query
-      if csv_path
-        query_service.custom_queries.memory_efficient_find_many_by_ids(ids: ids_from_csv)
-      else
-        query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since)
-      end
-    end
-
-    def ids_from_csv
-      @ids_from_csv ||= CSV.read(csv_path).flatten
+      query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since)
     end
 end
