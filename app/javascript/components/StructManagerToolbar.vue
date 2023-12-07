@@ -90,7 +90,13 @@ export default {
   },
   methods: {
     cutSelected: function () {
-      this.$store.dispatch('cut', this.gallery.selected)
+      // if folder is selected, cut folder
+      // if cards are selected, cut gallery items
+      if (this.gallery.selected.length) {
+        this.$store.dispatch('cut', this.gallery.selected)
+      } else if (this.tree.selected) {
+        this.$store.commit("CUT_FOLDER", this.tree.selected)
+      }
       this.selectNone()
     },
     getItemIndexById: function (id) {
@@ -101,7 +107,7 @@ export default {
         .indexOf(id)
     },
     isCutDisabled: function () {
-      return !!this.gallery.cut.length
+      return !!this.gallery.cut.length && !!this.tree.cut
     },
     isPasteDisabled: function () {
       return !(this.gallery.cut.length && this.gallery.selected.length)
