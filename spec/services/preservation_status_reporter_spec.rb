@@ -75,6 +75,38 @@ RSpec.describe PreservationStatusReporter do
       expect(reporter.progress_bar.progress).to eq 14
     end
 
+    context "with a CSV that contains resource IDs" do
+      after do
+        FileUtils.rm_rf(Rails.root.join("tmp", "ids-to-check.csv"))
+      end
+
+      it "can take a path to the CSV as a parameter and will only check those resources" do
+        stub_ezid
+        allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
+        preserved_resource = create_preserved_resource
+        unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+        unpreserved_metadata_resource = create_resource_unpreserved_metadata
+        # resource not included in CSV
+        create_recording_unpreserved_binary
+
+        # build CSV
+        build_csv_file([preserved_resource.id.to_s,
+                        unpreserved_resource.id.to_s,
+                        unpreserved_metadata_resource.id.to_s])
+
+        # run audit
+        reporter = described_class.new(suppress_progress: true, csv_path: Rails.root.join("tmp", "ids-to-check.csv"))
+        # Ensure count of resources it's auditing
+        expect(reporter.audited_resource_count).to eq 3
+
+        failures = reporter.cloud_audit_failures.to_a
+        expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
+          unpreserved_resource.id,
+          unpreserved_metadata_resource.id
+        )
+      end
+    end
+
     it "can skip checking for bad metadata checksums if requested" do
       stub_ezid
       # - a scannedresource with a metadata node that has the wrong checksum
@@ -221,5 +253,11 @@ RSpec.describe PreservationStatusReporter do
     fs_po.binary_nodes = fs_po.binary_nodes.find { |node| node.preservation_copy_of_id != intermediate_file.id }
     ChangeSetPersister.default.save(change_set: ChangeSet.for(fs_po))
     recording_file_set
+  end
+
+  def build_csv_file(values)
+    CSV.open(Rails.root.join("tmp", "ids-to-check.csv"), "w") do |csv|
+      values.each { |value| csv << [value] }
+    end
   end
 end

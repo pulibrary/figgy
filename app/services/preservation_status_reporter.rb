@@ -9,15 +9,18 @@
 require "ruby-progressbar"
 require "ruby-progressbar/outputs/null"
 class PreservationStatusReporter
-  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum
-  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false)
+  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum, :csv_path
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false, csv_path: nil)
     @since = since
     @suppress_progress = suppress_progress
     @records_per_group = records_per_group
     @parallel_threads = parallel_threads
     @found_resources = Set.new
     @skip_metadata_checksum = skip_metadata_checksum
+    @csv_path = csv_path
   end
+  # rubocop:enable Metrics/ParameterLists
 
   # @return [Array<Valkyrie::ID>]
   def cloud_audit_failures
@@ -25,12 +28,16 @@ class PreservationStatusReporter
   end
 
   def audited_resource_count
-    query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
+    if csv_path
+      ids_from_csv.count
+    else
+      query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
+    end
   end
 
   # @return [Array<Valkyrie::ID>] a lazy enumerator
   def run_cloud_audit
-    query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since).each_slice(records_per_group).lazily.in_threads(parallel_threads) do |resources|
+    resource_query.each_slice(records_per_group).lazily.in_threads(parallel_threads) do |resources|
       bad_resources = resources.select do |resource|
         progress_bar.increment
         # if it should't preserve we don't care about it
@@ -101,4 +108,18 @@ class PreservationStatusReporter
       end
     end
   end
+
+  private
+
+    def resource_query
+      if csv_path
+        query_service.custom_queries.memory_efficient_find_many_by_ids(ids: ids_from_csv)
+      else
+        query_service.custom_queries.memory_efficient_all(except_models: unpreserved_models, order: true, since: since)
+      end
+    end
+
+    def ids_from_csv
+      @ids_from_csv ||= CSV.read(csv_path).flatten
+    end
 end
