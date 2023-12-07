@@ -9,16 +9,16 @@
 require "ruby-progressbar"
 require "ruby-progressbar/outputs/null"
 class PreservationStatusReporter
-  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum, :csv_path
+  attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum, :from_file
   # rubocop:disable Metrics/ParameterLists
-  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false, csv_path: nil)
+  def initialize(since: nil, suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false, from_file: nil)
     @since = since
     @suppress_progress = suppress_progress
     @records_per_group = records_per_group
     @parallel_threads = parallel_threads
     @found_resources = Set.new
     @skip_metadata_checksum = skip_metadata_checksum
-    @csv_path = csv_path
+    @from_file = from_file
   end
   # rubocop:enable Metrics/ParameterLists
 
@@ -28,7 +28,7 @@ class PreservationStatusReporter
   end
 
   def audited_resource_count
-    if csv_path
+    if from_file
       ids_from_csv.count
     else
       query_service.custom_queries.count_all_except_models(except_models: unpreserved_models, since: since)
