@@ -1,11 +1,15 @@
 export const treeState = {
   selected: null,
+  cut: null,
   structure: {},
 }
 
 export const treeMutations = {
   ADD_RESOURCE(state, structure) {
     state.structure = structure
+  },
+  CUT_FOLDER(state, folderId) {
+    state.cut = folderId
   },
   CREATE_FOLDER(state, structure) {
     state.structure = structure
