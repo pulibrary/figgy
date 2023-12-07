@@ -21,6 +21,7 @@
           { selected: isSelected },
           { leafnode: !hasChildren },
           { branchnode: hasChildren },
+          { disabled: isDisabled },
         ]"
       >
         <lux-icon-base
@@ -147,6 +148,9 @@ export default {
       editedFieldId: null,
       isFile: !!this.jsonData.file,
       end_nodes: [],
+      // cutItemIDs_array is temporary storage bin for all ids in a given folder
+      // which is used for displaying cut items
+      cutItemIDs_array: [],
     }
   },
   computed: {
@@ -167,12 +171,19 @@ export default {
     hasChildren: function() {
       return this.jsonData.folders.length > 0
     },
-    // galleryItemSelected: function() {
-    //   return !!this.gallery.selected
-    // },
     isSelected: function() {
       if (this.tree.selected === this.id) {
         return true
+      }
+      return false
+    },
+    isDisabled: function() {
+      if (this.tree.cut) {
+        let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
+        let disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
+        // return true if id matches any of the ids in cutItemIDs_array
+        return disabledTreeItems.includes(this.id);
       }
       return false
     },
@@ -182,16 +193,25 @@ export default {
       zoom: state => store.state.zoom,
     }),
   },
-  // watch: {
-  //   galleryItemSelected (newVal, oldVal) {
-  //     // If gallery item is selected, deselect tree item
-  //     console.log(`Gallery Item Selected = ${newVal} !`)
-  //     if(newVal){
-  //       store.commit("SELECT_TREEITEM", null)
-  //     }
-  //   }
-  // },
   methods: {
+    extractIdsInStructure: function(structure) {
+      const result = []
+
+      function traverse(node) {
+        if (node && node.id) {
+          result.push(node.id)
+        }
+
+        if (node && node.folders && node.folders.length > 0) {
+          for (const folder of node.folders) {
+            traverse(folder)
+          }
+        }
+      }
+
+      traverse(structure)
+      return result
+    },
     addNewFolder: function (array, newParent) {
       for (let item of array) {
         if (item.id === newParent.id) {
@@ -234,6 +254,8 @@ export default {
           if (innerResult) return innerResult;
         }
       }
+
+      return null; // Return null if the ID is not found in the array
     },
     findAllFilesInStructure: function (array) {
       for (const item of array) {
@@ -386,6 +408,11 @@ ul.lux-tree li div.lux-item-label {
 
 ul.lux-tree li div.lux-item-label.selected {
   background: rgb(210, 202, 173);
+}
+
+ul.lux-tree li div.lux-item-label.disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
 }
 
 ul.lux-tree .container {
