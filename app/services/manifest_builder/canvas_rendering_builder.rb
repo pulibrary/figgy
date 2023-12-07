@@ -23,14 +23,7 @@ class ManifestBuilder
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
-      # When given a MapSet with both ScannedMap tiffs and attached Raster
-      # Resources we attach a link to the Raster's primary file so users can
-      # download the GeoTiff from the viewer embedded in the catalog.
-      uncropped_download = geotiff_download_hash(label: "Download GeoTiff")
-      manifest["rendering"] << uncropped_download if uncropped_download
-      # Add a download link for cropped geotiffs
-      cropped_download = geotiff_download_hash(cropped: true, label: "Download Cropped GeoTiff")
-      manifest["rendering"] << cropped_download if cropped_download
+      apply_geotiff_downloads(manifest)
     end
 
     # Construct a helper Object
@@ -44,7 +37,7 @@ class ManifestBuilder
       # FileSet resource being presented using the IIIF Manifest
       # @return [FileSet]
       def resource
-        @record.respond_to?(:resource) ? @record.resource : @record
+        @record.respond_to?(:resource) ? @record.resource.to_model : @record
       end
 
       # Determines if the resource be downloaded by the user
@@ -98,11 +91,22 @@ class ManifestBuilder
         }
       end
 
+      def apply_geotiff_downloads(manifest)
+        # When given a MapSet with both ScannedMap tiffs and attached Raster
+        # Resources we attach a link to the Raster's primary file so users can
+        # download the GeoTiff from the viewer embedded in the catalog.
+        uncropped_download = geotiff_download_hash(label: "Download GeoTiff")
+        manifest["rendering"] << uncropped_download if uncropped_download
+        # Add a download link for cropped geotiffs
+        cropped_download = geotiff_download_hash(cropped: true, label: "Download Cropped GeoTiff")
+        manifest["rendering"] << cropped_download if cropped_download
+      end
+
       # Generate a download hash for cropped and uncropped geotiffs
       # @param type [Symbol]
       # @return [Hash]
       def geotiff_download_hash(cropped: false, label:)
-        wayfinder = Wayfinder.for(record.resource)
+        wayfinder = Wayfinder.for(resource)
         resource = wayfinder&.companion_geotiff(cropped: cropped)
         return unless resource
         file = resource&.primary_file

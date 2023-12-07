@@ -203,4 +203,43 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["thumbnail"]).to be_blank
     end
   end
+
+  context "when given a MapSet with Raster children" do
+    it "adds rendering properties for the GeoTiff" do
+      scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+      map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id])
+
+      output = described_class.new(map_set).build
+
+      uncropped_geo_rendering = output["items"][0]["rendering"].find do |rendering|
+        rendering["label"] == "Download GeoTiff"
+      end
+
+      cropped_geo_rendering = output["items"][0]["rendering"].find do |rendering|
+        rendering["label"] == "Download Cropped GeoTiff"
+      end
+
+      expect(uncropped_geo_rendering).to be_present
+      expect(cropped_geo_rendering).to be_present
+      uncropped_file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.blank? }
+      cropped_file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.present? }
+      expect(uncropped_geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{uncropped_file_set.id}/file/#{uncropped_file_set.original_file.id}"
+      expect(cropped_geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{cropped_file_set.id}/file/#{cropped_file_set.original_file.id}"
+    end
+  end
+
+  context "when given a ScannedMap with Raster child" do
+    it "adds a rendering property for the GeoTiff" do
+      scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_child)
+      output = described_class.new(scanned_map).build
+
+      geo_rendering = output["items"][0]["rendering"].find do |rendering|
+        rendering["label"] == "Download GeoTiff"
+      end
+
+      expect(geo_rendering).to be_present
+      file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.blank? }
+      expect(geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
+    end
+  end
 end
