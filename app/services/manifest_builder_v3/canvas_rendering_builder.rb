@@ -17,6 +17,7 @@ class ManifestBuilderV3
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
+      apply_geotiff_downloads(manifest)
     end
 
     private

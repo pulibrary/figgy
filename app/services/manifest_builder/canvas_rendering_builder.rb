@@ -23,11 +23,7 @@ class ManifestBuilder
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
-      return unless geotiff_child
-      # When given a MapSet with both ScannedMap tiffs and attached Raster
-      # Resources we attach a link to the Raster's primary file so users can
-      # download the GeoTiff from the viewer embedded in the catalog.
-      manifest["rendering"] << geotiff_download
+      apply_geotiff_downloads(manifest)
     end
 
     # Construct a helper Object
@@ -41,7 +37,7 @@ class ManifestBuilder
       # FileSet resource being presented using the IIIF Manifest
       # @return [FileSet]
       def resource
-        @record.respond_to?(:resource) ? @record.resource : @record
+        @record.respond_to?(:resource) ? @record.resource.to_model : @record
       end
 
       # Determines if the resource be downloaded by the user
@@ -95,25 +91,35 @@ class ManifestBuilder
         }
       end
 
-      def geotiff_download
-        download_url_args = { resource_id: geotiff_child.id.to_s,
-                              id: geotiff_file.id.to_s,
+      def apply_geotiff_downloads(manifest)
+        # When given a MapSet with both ScannedMap tiffs and attached Raster
+        # Resources we attach a link to the Raster's primary file so users can
+        # download the GeoTiff from the viewer embedded in the catalog.
+        uncropped_download = geotiff_download_hash(label: "Download GeoTiff")
+        manifest["rendering"] << uncropped_download if uncropped_download
+        # Add a download link for cropped geotiffs
+        cropped_download = geotiff_download_hash(cropped: true, label: "Download Cropped GeoTiff")
+        manifest["rendering"] << cropped_download if cropped_download
+      end
+
+      # Generate a download hash for cropped and uncropped geotiffs
+      # @param type [Symbol]
+      # @return [Hash]
+      def geotiff_download_hash(cropped: false, label:)
+        wayfinder = Wayfinder.for(resource)
+        resource = wayfinder&.companion_geotiff(cropped: cropped)
+        return unless resource
+        file = resource&.primary_file
+        download_url_args = { resource_id: resource.id.to_s,
+                              id: file.id.to_s,
                               protocol: protocol,
                               host: host }
         download_url = url_helpers.download_url(download_url_args)
         {
           "@id" => download_url,
-          "label" => "Download GeoTiff",
-          "format" => geotiff_file.mime_type.first
+          "label" => label,
+          "format" => file.mime_type.first
         }
-      end
-
-      def geotiff_file
-        geotiff_child&.primary_file
-      end
-
-      def geotiff_child
-        record.try(:geotiff_child)
       end
 
       def mp3_file_hash
