@@ -94,10 +94,12 @@ export default {
       // if cards are selected, cut gallery items
       if (this.gallery.selected.length) {
         this.$store.dispatch('cut', this.gallery.selected)
+        this.selectNoneGallery()
       } else if (this.tree.selected) {
         this.$store.commit("CUT_FOLDER", this.tree.selected)
+        this.selectNoneTree()
       }
-      this.selectNone()
+
     },
     getItemIndexById: function (id) {
       return this.gallery.items
@@ -110,48 +112,112 @@ export default {
       return !!this.gallery.cut.length && !!this.tree.cut
     },
     isPasteDisabled: function () {
-      return !(this.gallery.cut.length && this.gallery.selected.length)
+      return !(this.gallery.cut.length && this.tree.selected) || (this.tree.cut && this.tree.selected)
     },
     paste: function (indexModifier) {
-      let items = this.gallery.items
-      items = items.filter(val => !this.gallery.cut.includes(val))
-      // Find the selected folder in the tree structure
-      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
-      const rootId = this.tree.structure.id
-      let resources = JSON.parse(JSON.stringify(this.gallery.cut))
-
-      // we will need to loop this to convert multiple cut gallery items into tree items
-      let newItems = resources.map((resource, index) => {
-        resource.label = resource.caption
-        resource.file = true
-        resource.folders = []
-        return resource
-      });
-
-      // need to stringify and parse to drop the observer that comes with Vue reactive data
-      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let structure = {
-        id: this.tree.structure.id,
-        label: this.tree.structure.label,
-      }
-
-      if(parentId === rootId) {
-        alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
+      // figure out what is currently on the clipboard, a gallery item or a tree item
+      if (!this.tree.selected) {
+        alert('You must select a tree item to paste into.')
+        console.log("Nothing is in the clipboard.")
+        return false
       } else {
-        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
-        let parentFolders = parentFolderObject.folders.concat(newItems)
-        parentFolderObject.folders = parentFolders
-        structure.folders = this.addNewNode(folderList, parentFolderObject)
+        const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+        const rootId = this.tree.structure.id
 
-        this.$store.commit("ADD_RESOURCE", structure)
+        if (this.gallery.cut.length) {
+          console.log("Gallery items are in the clipboard.")
+          let items = this.gallery.items
+          items = items.filter(val => !this.gallery.cut.includes(val))
+          // Find the selected folder in the tree structure
+          let resources = JSON.parse(JSON.stringify(this.gallery.cut))
 
-        this.$store.dispatch('paste', items)
-        this.resetCut()
-        this.selectNone()
+          // we will need to loop this to convert multiple cut gallery items into tree items
+          let newItems = resources.map((resource, index) => {
+            resource.label = resource.caption
+            resource.file = true
+            resource.folders = []
+            return resource
+          });
+
+          // need to stringify and parse to drop the observer that comes with Vue reactive data
+          let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+          let structure = {
+            id: this.tree.structure.id,
+            label: this.tree.structure.label,
+          }
+
+          if(parentId === rootId) {
+            alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
+          } else {
+            let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+            let parentFolders = parentFolderObject.folders.concat(newItems)
+            parentFolderObject.folders = parentFolders
+            structure.folders = this.addNewNode(folderList, parentFolderObject)
+
+            this.$store.commit("ADD_RESOURCE", structure)
+
+            this.$store.dispatch('paste', items)
+            this.clearClipboard()
+            this.selectNoneGallery()
+          }
+        } else if (this.tree.cut) {
+          console.log("Tree items are in the clipboard.")
+          // Get the tree structure
+          let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+          // Get the structure of the cut item(s)
+          let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
+          // Remove the cut structure from the folderList
+          let folders = []
+          if(folderList[0] !== cutTreeStructure){
+            folders = this.removeFolder(folderList, cutTreeStructure)
+          } else {
+            alert('You cannot cut the root node.')
+            return false
+          }
+          // get selected tree item
+          // Paste cut structure into the selected tree item (prevent pasting into its children)
+          // New structure
+          let structure = {
+            id: this.tree.structure.id,
+            label: this.tree.structure.label,
+          }
+          if(this.tree.selected === rootId) {
+            folders.push(cutTreeStructure)
+            structure.folders = folders
+          } else {
+            let selectedFolderObject = this.findSelectedFolderById(folders, this.tree.selected)
+            selectedFolderObject.folders.push(cutTreeStructure)
+            structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
+          }
+          this.$store.commit("SET_STRUCTURE", structure)
+          this.SelectNoneTree()
+          this.clearClipboard()
+        }
       }
     },
-    resetCut: function () {
-      this.$store.dispatch('cut', [])
+    replaceObjectById: function(root, idToReplace, replacementObject) {
+      if (root.id === idToReplace) {
+          // If the root object has the matching id, replace it
+          return replacementObject;
+      }
+
+      // Iterate through folders and recursively search for the object to replace
+      if (root.folders && root.folders.length > 0) {
+          root.folders = root.folders.map(folder =>
+              replaceObjectById(folder, idToReplace, replacementObject)
+          );
+      }
+
+      return root;
+    },
+    clearClipboard: function () {
+      if (this.gallery.cut.length) {
+        this.$store.dispatch('cut', [])
+      } else if (this.tree.cut) {
+        this.$store.commit("CUT_FOLDER", null)
+      } else {
+        console.log('nothing is on the clipboard')
+      }
     },
     resizeCards: function (event) {
       this.$emit('cards-resized', event)
@@ -317,8 +383,11 @@ export default {
       }
       this.$store.dispatch('select', selected)
     },
-    selectNone: function () {
+    selectNoneGallery: function () {
       this.$store.dispatch('select', [])
+    },
+    selectNoneTree: function () {
+      this.$store.commit("SELECT_TREEITEM", null)
     }
   },
   mounted: function () {
