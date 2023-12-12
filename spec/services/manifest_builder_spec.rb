@@ -732,6 +732,8 @@ RSpec.describe ManifestBuilder do
       IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
 
       recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").last
+      # it can use the vatican logo
+      recording.rights_statement = [RDF::URI("http://cicognara.org/microfiche_copyright")]
       manifest_builder = described_class.new(recording)
       output = manifest_builder.build
       expect(output).to include "items"
@@ -739,6 +741,7 @@ RSpec.describe ManifestBuilder do
       expect(canvases.length).to eq 2
       expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
       expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 0.256
+      expect(output["logo"]).to eq(["https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png"])
     end
 
     context "when given a multi-volume recording", run_real_characterization: true, run_real_derivatives: true do
@@ -867,6 +870,8 @@ RSpec.describe ManifestBuilder do
       output = manifest_builder.build
       # pres 3 context is always an array
       expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+      # logo is always an array
+      expect(output["logo"]).to eq(["https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png"])
       # Logical structure should be able to have nested and un-nested members.
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
