@@ -119,7 +119,6 @@ export default {
       // figure out what is currently on the clipboard, a gallery item or a tree item
       if (!this.tree.selected) {
         alert('You must select a tree item to paste into.')
-        console.log("Nothing is in the clipboard.")
         return false
       } else {
         if (this.gallery.cut.length) {
@@ -380,7 +379,6 @@ export default {
     },
     selectNoneTree: function () {
       this.$store.commit("SELECT_TREEITEM", null)
-      console.log(this.tree.selected)
     },
   },
   mounted: function () {
