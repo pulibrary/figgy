@@ -115,26 +115,33 @@ RSpec.describe PreservationStatusReporter do
         # resource not included in CSV
         create_recording_unpreserved_binary
 
+        # create a "previous run" file
+        FileUtils.touch(recheck_output)
+
         # build CSV
         build_csv_file(
           audit_output,
           [preserved_resource, unpreserved_resource, unpreserved_metadata_resource]
         )
 
-        # run audit
-        reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
-        # Ensure count of resources it's auditing
-        expect(reporter.audited_resource_count).to eq 3
+        # freeze time so it's easier to check the file timestamp
+        Timecop.freeze do
+          # run audit
+          reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
+          # Ensure count of resources it's auditing
+          expect(reporter.audited_resource_count).to eq 3
 
-        failures = reporter.cloud_audit_failures.to_a
-        expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
-          unpreserved_resource.id,
-          unpreserved_metadata_resource.id
-        )
-        expect(IO.readlines(recheck_output).map(&:chomp)).to contain_exactly(
-          unpreserved_resource.id.to_s,
-          unpreserved_metadata_resource.id.to_s
-        )
+          failures = reporter.cloud_audit_failures.to_a
+          expect(File.exist?(recheck_output.to_s.split(".").first.concat("#{DateTime.now}.txt"))).to be true
+          expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
+            unpreserved_resource.id,
+            unpreserved_metadata_resource.id
+          )
+          expect(IO.readlines(recheck_output).map(&:chomp)).to contain_exactly(
+            unpreserved_resource.id.to_s,
+            unpreserved_metadata_resource.id.to_s
+          )
+        end
       end
     end
 

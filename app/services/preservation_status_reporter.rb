@@ -123,6 +123,8 @@ class PreservationStatusReporter
       FileUtils.mkdir_p(@io_directory)
       if recheck_ids
         @found_resource_path = io_directory.join(RECHECK_OUTPUT_FILE)
+        # rotate previous output
+        FileUtils.mv(@found_resource_path, @found_resource_path.to_s.split(".").first.concat("#{DateTime.now}.txt")) if File.exist?(@found_resource_path)
       else
         @timestamp_file_path = io_directory.join("since.txt")
         @since = @timestamp_file_path.read if @timestamp_file_path.exist?
