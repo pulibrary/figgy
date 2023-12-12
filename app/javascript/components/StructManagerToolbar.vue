@@ -441,6 +441,12 @@ export default {
 
               this.createFolder([])
           }
+          if (e.key === "n" && e.shiftKey && (e.ctrlKey || e.metaKey)) {
+              e.preventDefault();
+              
+              console.log('Create Folder from Selected Items')
+              // this.createFolder(this.gallery.selected)
+          }
           if (e.key === "o" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
 
