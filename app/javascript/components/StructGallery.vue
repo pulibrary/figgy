@@ -15,6 +15,13 @@
       <media-image :src="item.mediaUrl"></media-image>
       <heading level="h2">{{ item.title }}</heading>
       <text-style variation="default">{{ item.caption }}</text-style>
+      <input-button
+        @button-clicked="zoomOnItem(item)"
+        class="zoom-icon"
+        type="button"
+        variation="icon"
+        size="small"
+        icon="search"></input-button>
     </card>
   </wrapper>
 </template>
@@ -41,6 +48,7 @@ export default {
     },
     ...mapState({
       gallery: state => store.state.gallery,
+      zoom: state => store.state.zoom,
     }),
   },
   props: {
@@ -89,6 +97,9 @@ export default {
     },
     isSelected: function(item) {
       return this.gallery.selected.indexOf(item) > -1
+    },
+    zoomOnItem: function(item) {
+      this.$store.commit("ZOOM", item)
     },
     select: function(id, event) {
       this.$emit("card-clicked", event)
@@ -153,6 +164,7 @@ export default {
     height: auto;
     overflow: hidden;
     white-space: wrap;
+    position: relative;
 
     .lux-media-image img {
       height: auto;
@@ -160,6 +172,12 @@ export default {
   }
   .lux-card.lux-galleryCard {
     width: auto;
+  }
+  .zoom-icon {
+    position: absolute;
+    bottom:0;
+    right:0;
+    z-index: 10;
   }
 }
 </style>

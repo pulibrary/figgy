@@ -11,7 +11,8 @@
         {name: 'Delete Folder', component: 'FolderDelete', disabled: this.rootNodeSelected},
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
-        {name: 'Paste (Ctrl-v)', component: 'Paste', disabled: isPasteDisabled()}
+        {name: 'Paste (Ctrl-v)', component: 'Paste', disabled: isPasteDisabled()},
+        {name: 'Zoom on Selected (Ctrl-o)', component: 'Zoom', disabled: isZoomDisabled()}
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
@@ -78,7 +79,8 @@ export default {
     ...mapState({
       resource: state => state.ordermanager.resource,
       tree: state => state.tree,
-      gallery: state => state.gallery
+      gallery: state => state.gallery,
+      zoom: state => store.state.zoom,
     }),
     cut: {
       get () {
@@ -114,6 +116,18 @@ export default {
     },
     isPasteDisabled: function () {
       return !(this.gallery.cut.length || this.tree.cut)
+    },
+    isZoomDisabled: function () {
+      if (this.gallery.selected.length === 1) {
+        return false
+      } else if (this.tree.selected) {
+        let nodeToBeZoomed = this.findFolderById(folderList, this.tree.selected)
+        let has_service = !!nodeToBeZoomed.service
+        if (has_service) {
+          return false
+        }
+      }
+      return true
     },
     paste: function (indexModifier) {
       // figure out what is currently on the clipboard, a gallery item or a tree item
@@ -153,7 +167,7 @@ export default {
       if(parentId === rootId) {
         alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
       } else {
-        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+        let parentFolderObject = this.findFolderById(folderList, parentId)
         let parentFolders = parentFolderObject.folders.concat(newItems)
         parentFolderObject.folders = parentFolders
         structure.folders = this.addNewNode(folderList, parentFolderObject)
@@ -169,7 +183,7 @@ export default {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       const rootId = this.tree.structure.id
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
+      let cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
 
       let folders = []
       if(folderList[0] !== cutTreeStructure){
@@ -188,7 +202,7 @@ export default {
         folders.push(cutTreeStructure)
         structure.folders = folders
       } else {
-        let selectedFolderObject = this.findSelectedFolderById(folders, this.tree.selected)
+        let selectedFolderObject = this.findFolderById(folders, this.tree.selected)
         selectedFolderObject.folders.push(cutTreeStructure)
         structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
       }
@@ -233,6 +247,9 @@ export default {
         case 'Paste (Ctrl-v)':
           this.paste(-1)
           break
+        case 'Zoom on Selected (Ctrl-o)':
+          this.zoomOnItem()
+          break
       }
     },
     createFolder: function (contentsList) {
@@ -254,7 +271,7 @@ export default {
         folderList.push(newFolder)
         structure.folders = folderList
       } else {
-        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+        let parentFolderObject = this.findFolderById(folderList, parentId)
         let newParent = parentFolderObject.folders.push(newFolder)
         structure.folders = this.addNewNode(folderList, newParent)
       }
@@ -272,7 +289,7 @@ export default {
     },
     deleteFolder: function () {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let folderToBeRemoved = this.findSelectedFolderById(folderList, this.tree.selected)
+      let folderToBeRemoved = this.findFolderById(folderList, this.tree.selected)
       const selectedNode = this.tree.selected
       const rootId = this.tree.structure.id
       if(selectedNode === rootId) {
@@ -325,11 +342,11 @@ export default {
       }
       return array
     },
-    findSelectedFolderById: function (array, id) {
+    findFolderById: function (array, id) {
       for (const item of array) {
         if (item.id === id) return item;
         if (item.folders?.length) {
-          const innerResult = this.findSelectedFolderById(item.folders, id);
+          const innerResult = this.findFolderById(item.folders, id);
           if (innerResult) return innerResult;
         }
       }
@@ -380,6 +397,27 @@ export default {
     selectNoneTree: function () {
       this.$store.commit("SELECT_TREEITEM", null)
     },
+    zoomOnItem: function() {
+      // if a tree item is selected, make sure it is a file and get the obj
+      if (this.tree.selected) {
+        let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        let nodeToBeZoomed = this.findFolderById(folderList, this.tree.selected)
+        let has_service = !!nodeToBeZoomed.service
+        if(has_service) {
+          this.$store.commit("ZOOM", nodeToBeZoomed)
+        } else {
+          alert('You may have tried to zoom on a folder. You can only zoom on files that have a service.')
+        }
+      } else if (this.gallery.selected.length){
+        if (this.gallery.selected.length > 1) {
+          alert('Please select only one item to zoom in on.')
+        } else {
+          this.$store.commit("ZOOM", this.gallery.selected[0])
+        }
+      } else {
+        alert('You need to select an item to zoom in on it.')
+      }
+    },
   },
   mounted: function () {
       this._keyListener = function(e) {
@@ -402,6 +440,11 @@ export default {
               e.preventDefault();
 
               this.createFolder([])
+          }
+          if (e.key === "o" && (e.ctrlKey || e.metaKey)) {
+              e.preventDefault();
+
+              this.zoomOnItem()
           }
       };
 
