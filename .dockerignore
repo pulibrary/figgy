@@ -6,10 +6,11 @@
 .\#*.*
 *~
 *.orig
+/spec
+/.git
 /.bundle
 /.byebug_history
 /.env.local
-/.env.production
 /.env.test
 /coverage/*
 /db/*.sqlite3
@@ -42,4 +43,6 @@ node_modules
 # Vite uses dotenv and suggests to ignore local-only env files. See
 # https://vitejs.dev/guide/env-and-mode.html#env-files
 *.local
-
+Dockerfile
+.dockerignore
+.env

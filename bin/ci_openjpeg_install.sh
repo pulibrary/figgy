@@ -1,4 +1,4 @@
-apt-get install libpoppler-glib-dev
+apt-get install -y libpoppler-glib-dev
 if [ ! -d "tmp/openjpeg" ]; then
   mkdir -p -m 777 tmp && cd tmp
   wget --no-check-certificate https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.5.0.tar.gz -O openjpeg.tar.gz

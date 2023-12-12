@@ -115,7 +115,7 @@ Rails.application.config.to_prepare do
     :derivatives
   )
 
-  if Figgy.config["pyramidals_bucket"].present? && !Rails.env.test?
+  if Figgy.config["pyramidals_bucket"].present? && !Rails.env.test? && Figgy.config["aws_access_key_id"].present?
     Shrine.storages = (Shrine.storages || {}).merge(
       pyramidal_storage: Shrine::Storage::S3.new(
         bucket: Figgy.config["pyramidals_bucket"],
