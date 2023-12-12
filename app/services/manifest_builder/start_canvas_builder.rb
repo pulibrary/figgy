@@ -18,7 +18,10 @@ class ManifestBuilder
     private
 
       def path
-        canvas_builder.new(file_set, resource).path
+        canvas_builder.new(
+          ManifestBuilder::LeafNode.new(file_set, resource),
+          resource
+        ).path
       end
 
       def file_set

@@ -92,6 +92,7 @@ class ManifestBuilder
       end
 
       def apply_geotiff_downloads(manifest)
+        return unless @record.parent_node.resource.is_a? ScannedMap
         # When given a MapSet with both ScannedMap tiffs and attached Raster
         # Resources we attach a link to the Raster's primary file so users can
         # download the GeoTiff from the viewer embedded in the catalog.
