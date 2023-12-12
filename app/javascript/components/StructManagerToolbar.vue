@@ -125,10 +125,8 @@ export default {
         const rootId = this.tree.structure.id
 
         if (this.gallery.cut.length) {
-          console.log("Gallery items are in the clipboard.")
           let items = this.gallery.items
           items = items.filter(val => !this.gallery.cut.includes(val))
-          // Find the selected folder in the tree structure
           let resources = JSON.parse(JSON.stringify(this.gallery.cut))
 
           // we will need to loop this to convert multiple cut gallery items into tree items
@@ -161,12 +159,8 @@ export default {
             this.selectNoneGallery()
           }
         } else if (this.tree.cut) {
-          console.log("Tree items are in the clipboard.")
-          // Get the tree structure
           let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-          // Get the structure of the cut item(s)
           let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
-          // Remove the cut structure from the folderList
           let folders = []
           if(folderList[0] !== cutTreeStructure){
             folders = this.removeFolder(folderList, cutTreeStructure)
@@ -174,9 +168,7 @@ export default {
             alert('You cannot cut the root node.')
             return false
           }
-          // get selected tree item
-          // Paste cut structure into the selected tree item (prevent pasting into its children)
-          // New structure
+
           let structure = {
             id: this.tree.structure.id,
             label: this.tree.structure.label,
@@ -190,18 +182,16 @@ export default {
             structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
           }
           this.$store.commit("SET_STRUCTURE", structure)
-          this.SelectNoneTree()
+          this.selectNoneTree()
           this.clearClipboard()
         }
       }
     },
     replaceObjectById: function(root, idToReplace, replacementObject) {
       if (root.id === idToReplace) {
-          // If the root object has the matching id, replace it
           return replacementObject;
       }
 
-      // Iterate through folders and recursively search for the object to replace
       if (root.folders && root.folders.length > 0) {
           root.folders = root.folders.map(folder =>
               replaceObjectById(folder, idToReplace, replacementObject)
@@ -215,9 +205,7 @@ export default {
         this.$store.dispatch('cut', [])
       } else if (this.tree.cut) {
         this.$store.commit("CUT_FOLDER", null)
-      } else {
-        console.log('nothing is on the clipboard')
-      }
+      } 
     },
     resizeCards: function (event) {
       this.$emit('cards-resized', event)
@@ -388,7 +376,8 @@ export default {
     },
     selectNoneTree: function () {
       this.$store.commit("SELECT_TREEITEM", null)
-    }
+      console.log(this.tree.selected)
+    },
   },
   mounted: function () {
       this._keyListener = function(e) {
