@@ -9,7 +9,7 @@ namespace :figgy do
       failures = PreservationStatusReporter.run_full_audit(io_directory: state_directory)
       failed_count = failures.to_a.size
       puts "Number of Resources Needing Re-Preserved: #{failed_count}"
-      puts "The report and the resumption timestamp have been saved to #{state_directory}"
+      puts "The #{PreservationStatusReporter::FULL_AUDIT_OUTPUT_FILE} report and the resumption timestamp have been saved to #{state_directory}"
     end
 
     desc "Reports the number of unpreserved models."
@@ -18,7 +18,7 @@ namespace :figgy do
       failures = PreservationStatusReporter.run_recheck(io_directory: state_directory)
       failed_count = failures.to_a.size
       puts "Number of Resources Needing Re-Preserved: #{failed_count}"
-      puts "The report has been saved to #{state_directory}"
+      puts "The #{PreservationStatusReporter::RECHECK_OUTPUT_FILE} report has been saved to #{state_directory}"
     end
   end
 end

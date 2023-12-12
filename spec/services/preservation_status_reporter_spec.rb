@@ -9,6 +9,16 @@ RSpec.describe PreservationStatusReporter do
   let(:query_service) { adapter.query_service }
   let(:disk_preservation_path) { Pathname.new(Figgy.config["disk_preservation_path"]) }
   let(:io_dir) { Rails.root.join("tmp", "test_recheck") }
+  let(:audit_output) { io_dir.join(described_class::FULL_AUDIT_OUTPUT_FILE) }
+  let(:recheck_output) { io_dir.join(described_class::RECHECK_OUTPUT_FILE) }
+
+  before do
+    FileUtils.mkdir_p(io_dir)
+  end
+
+  after do
+    FileUtils.rm_rf(io_dir)
+  end
 
   describe ".run_full_audit" do
     it "runs with the default params" do
@@ -33,10 +43,6 @@ RSpec.describe PreservationStatusReporter do
   end
 
   describe "#cloud_audit", db_cleaner_deletion: true do
-    before do
-      FileUtils.rm_rf(io_dir)
-    end
-
     it "identifies resources that should be preserved and either are not preserved or have the wrong checksum" do
       stub_ezid
       allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
@@ -100,14 +106,7 @@ RSpec.describe PreservationStatusReporter do
     end
 
     context "with a recheck flag" do
-      let(:audit_output) { io_dir.join("bad_resources.txt") }
-      let(:recheck_output) { io_dir.join("bad_resources_recheck.txt") }
-
-      before do
-        FileUtils.mkdir_p(io_dir)
-      end
-
-      it "can recheck resources found in a full audit" do
+      it "can repeatedly recheck resources found in a full audit" do
         stub_ezid
         allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
         preserved_resource = create_preserved_resource

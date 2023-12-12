@@ -11,6 +11,9 @@ require "ruby-progressbar/outputs/null"
 
 # rubocop:disable Metrics/ClassLength
 class PreservationStatusReporter
+  FULL_AUDIT_OUTPUT_FILE = "bad_resources.txt"
+  RECHECK_OUTPUT_FILE = "bad_resources_recheck.txt"
+
   # Check all resources with resumable state
   def self.run_full_audit(io_directory:)
     new(io_directory: io_directory).cloud_audit_failures
@@ -70,14 +73,6 @@ class PreservationStatusReporter
     @progress_bar ||= ProgressBar.create format: "%a %e %P% Querying: %c from %C", output: progress_output, total: audited_resource_count
   end
 
-  def full_audit_output_file
-    "bad_resources.txt"
-  end
-
-  def recheck_output_file
-    "bad_resources_recheck.txt"
-  end
-
   private
 
     # Preservation object doesn't exist, is missing a metadata or binary node, or the checksums don't match.
@@ -127,11 +122,11 @@ class PreservationStatusReporter
       @io_directory = Pathname.new(io_directory)
       FileUtils.mkdir_p(@io_directory)
       if recheck_ids
-        @found_resource_path = io_directory.join(recheck_output_file)
+        @found_resource_path = io_directory.join(RECHECK_OUTPUT_FILE)
       else
         @timestamp_file_path = io_directory.join("since.txt")
         @since = @timestamp_file_path.read if @timestamp_file_path.exist?
-        @found_resource_path = io_directory.join(full_audit_output_file)
+        @found_resource_path = io_directory.join(FULL_AUDIT_OUTPUT_FILE)
         @found_resources = Set.new(@found_resource_path.read.split.map { |x| Valkyrie::ID.new(x) }) if @found_resource_path.exist?
       end
     end
@@ -145,7 +140,7 @@ class PreservationStatusReporter
     end
 
     def ids_from_csv
-      @ids_from_csv ||= CSV.read(io_directory.join(full_audit_output_file)).flatten
+      @ids_from_csv ||= CSV.read(io_directory.join(FULL_AUDIT_OUTPUT_FILE)).flatten
     end
 end
 # rubocop:enable Metrics/ClassLength
