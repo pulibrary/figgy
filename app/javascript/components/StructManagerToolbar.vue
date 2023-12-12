@@ -7,10 +7,11 @@
       class="dropdown"
       button-label="Actions"
       :menu-items="[
-        {name: 'Create New Folder', component: 'FolderCreate'},
+        {name: 'Create New Folder (Ctrl-n)', component: 'FolderCreate'},
         {name: 'Delete Folder', component: 'FolderDelete', disabled: this.rootNodeSelected},
-        {name: 'Cut', component: 'Cut', disabled: isCutDisabled()},
-        {name: 'Paste', component: 'Paste'}
+        {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
+        {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
+        {name: 'Paste (Ctrl-v)', component: 'Paste', disabled: isPasteDisabled()}
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
@@ -109,10 +110,10 @@ export default {
         .indexOf(id)
     },
     isCutDisabled: function () {
-      return !!this.gallery.cut.length && !!this.tree.cut
+      return !!this.gallery.cut.length || !!this.tree.cut
     },
     isPasteDisabled: function () {
-      return !(this.gallery.cut.length && this.tree.selected) || (this.tree.cut && this.tree.selected)
+      return !(this.gallery.cut.length || this.tree.cut)
     },
     paste: function (indexModifier) {
       // figure out what is currently on the clipboard, a gallery item or a tree item
@@ -121,71 +122,80 @@ export default {
         console.log("Nothing is in the clipboard.")
         return false
       } else {
-        const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
-        const rootId = this.tree.structure.id
-
         if (this.gallery.cut.length) {
-          let items = this.gallery.items
-          items = items.filter(val => !this.gallery.cut.includes(val))
-          let resources = JSON.parse(JSON.stringify(this.gallery.cut))
-
-          // we will need to loop this to convert multiple cut gallery items into tree items
-          let newItems = resources.map((resource, index) => {
-            resource.label = resource.caption
-            resource.file = true
-            resource.folders = []
-            return resource
-          });
-
-          // need to stringify and parse to drop the observer that comes with Vue reactive data
-          let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-          let structure = {
-            id: this.tree.structure.id,
-            label: this.tree.structure.label,
-          }
-
-          if(parentId === rootId) {
-            alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
-          } else {
-            let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
-            let parentFolders = parentFolderObject.folders.concat(newItems)
-            parentFolderObject.folders = parentFolders
-            structure.folders = this.addNewNode(folderList, parentFolderObject)
-
-            this.$store.commit("ADD_RESOURCE", structure)
-
-            this.$store.dispatch('paste', items)
-            this.clearClipboard()
-            this.selectNoneGallery()
-          }
+          this.pasteGalleryItem()
         } else if (this.tree.cut) {
-          let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-          let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
-          let folders = []
-          if(folderList[0] !== cutTreeStructure){
-            folders = this.removeFolder(folderList, cutTreeStructure)
-          } else {
-            alert('You cannot cut the root node.')
-            return false
-          }
-
-          let structure = {
-            id: this.tree.structure.id,
-            label: this.tree.structure.label,
-          }
-          if(this.tree.selected === rootId) {
-            folders.push(cutTreeStructure)
-            structure.folders = folders
-          } else {
-            let selectedFolderObject = this.findSelectedFolderById(folders, this.tree.selected)
-            selectedFolderObject.folders.push(cutTreeStructure)
-            structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
-          }
-          this.$store.commit("SET_STRUCTURE", structure)
-          this.selectNoneTree()
-          this.clearClipboard()
+          this.pasteTreeItem()
         }
       }
+    },
+    pasteGalleryItem: function() {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+      let items = this.gallery.items
+      items = items.filter(val => !this.gallery.cut.includes(val))
+      let resources = JSON.parse(JSON.stringify(this.gallery.cut))
+
+      // we will need to loop this to convert multiple cut gallery items into tree items
+      let newItems = resources.map((resource, index) => {
+        resource.label = resource.caption
+        resource.file = true
+        resource.folders = []
+        return resource
+      });
+
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label,
+      }
+
+      if(parentId === rootId) {
+        alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
+      } else {
+        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
+        let parentFolders = parentFolderObject.folders.concat(newItems)
+        parentFolderObject.folders = parentFolders
+        structure.folders = this.addNewNode(folderList, parentFolderObject)
+
+        this.$store.commit("ADD_RESOURCE", structure)
+
+        this.$store.dispatch('paste', items)
+        this.clearClipboard()
+        this.selectNoneGallery()
+      }
+    },
+    pasteTreeItem: function() {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
+
+      let folders = []
+      if(folderList[0] !== cutTreeStructure){
+        folders = this.removeFolder(folderList, cutTreeStructure)
+      } else {
+        alert('You cannot cut the root node.')
+        return false
+      }
+
+      let structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label,
+      }
+
+      if(this.tree.selected === rootId) {
+        folders.push(cutTreeStructure)
+        structure.folders = folders
+      } else {
+        let selectedFolderObject = this.findSelectedFolderById(folders, this.tree.selected)
+        selectedFolderObject.folders.push(cutTreeStructure)
+        structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
+      }
+      this.$store.commit("SET_STRUCTURE", structure)
+      this.selectNoneTree()
+      this.clearClipboard()
     },
     replaceObjectById: function(root, idToReplace, replacementObject) {
       if (root.id === idToReplace) {
@@ -201,33 +211,27 @@ export default {
       return root;
     },
     clearClipboard: function () {
-      if (this.gallery.cut.length) {
-        this.$store.dispatch('cut', [])
-      } else if (this.tree.cut) {
-        this.$store.commit("CUT_FOLDER", null)
-      } 
+      this.$store.dispatch('cut', [])
+      this.$store.commit("CUT_FOLDER", null)
     },
     resizeCards: function (event) {
       this.$emit('cards-resized', event)
     },
     menuSelection (value) {
       switch (value.target.innerText) {
-        case 'Create New Folder':
+        case 'Create New Folder (Ctrl-n)':
           this.createFolder([])
           break
         case 'Delete Folder':
           this.deleteFolder(value.target)
           break
-        case 'Alternate':
-          this.selectAlternate()
+        case 'Undo Cut (Ctrl-z)':
+          this.clearClipboard()
           break
-        case 'Inverse':
-          this.selectInverse()
-          break
-        case 'Cut':
+        case 'Cut (Ctrl-x)':
           this.cutSelected()
           break
-        case 'Paste':
+        case 'Paste (Ctrl-v)':
           this.paste(-1)
           break
       }
@@ -391,6 +395,16 @@ export default {
 
               this.paste(-1)
           }
+          if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
+              e.preventDefault();
+
+              this.clearClipboard()
+          }
+          if (e.key === "n" && (e.ctrlKey || e.metaKey)) {
+              e.preventDefault();
+
+              this.createFolder([])
+          }
       };
 
       document.addEventListener('keydown', this._keyListener.bind(this));
@@ -443,5 +457,7 @@ export default {
 }
 .dropdown {
   top: 10px;
+  text-align: left;
+  width: 14em;
 }
 </style>

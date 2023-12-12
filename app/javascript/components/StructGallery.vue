@@ -97,7 +97,14 @@ export default {
         let selected = []
         if (event.metaKey) {
           selected = this.gallery.selected
-          selected.push(this.getItemById(id))
+          // if id is in the selected list,
+          // remove it, otherwise, push it
+          if (selected.includes(this.getItemById(id))) {
+            const indexToRemove = selected.findIndex(obj => obj.id === id);
+            selected.splice(indexToRemove, 1);
+          } else {
+            selected.push(this.getItemById(id))
+          }
           store.commit("SELECT", selected)
         } else {
           if (this.gallery.selected.length === 1 && event.shiftKey) {
