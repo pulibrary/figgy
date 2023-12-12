@@ -10,10 +10,11 @@ RSpec.describe ManifestBuilder::CanvasBuilderV3 do
   let(:file_set) { scanned_resource.decorate.file_sets.first }
   let(:record) { file_set }
   let(:parent) { scanned_resource }
+  let(:root_node) { ManifestBuilder::RootNode.new(scanned_resource) }
   let(:builder) do
     described_class.new(
-      ManifestBuilder::LeafNode.new(record, parent),
-      ManifestBuilder::RootNode.new(scanned_resource),
+      ManifestBuilder::LeafNode.new(record, root_node),
+      root_node,
       iiif_canvas_factory: ManifestBuilder::ManifestServiceLocatorV3.iiif_canvas_factory,
       content_builder: ManifestBuilder::ManifestServiceLocatorV3.content_builder,
       choice_builder: ManifestBuilder::ManifestServiceLocatorV3.choice_builder,
