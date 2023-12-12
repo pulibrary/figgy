@@ -183,7 +183,7 @@ export default {
         let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
         let disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
         // return true if id matches any of the ids in cutItemIDs_array
-        return disabledTreeItems.includes(this.id);
+        return disabledTreeItems.includes(this.id)
       }
       return false
     },
