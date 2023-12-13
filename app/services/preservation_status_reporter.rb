@@ -122,6 +122,7 @@ class PreservationStatusReporter
       @io_directory = Pathname.new(io_directory)
       FileUtils.mkdir_p(@io_directory)
       if recheck_ids
+        ids_from_csv # cache these before rotating the file
         @found_resource_path = io_directory.join(RECHECK_OUTPUT_FILE)
         rotate_file(@found_resource_path)
       else
@@ -154,7 +155,12 @@ class PreservationStatusReporter
     end
 
     def ids_from_csv
-      @ids_from_csv ||= CSV.read(io_directory.join(FULL_AUDIT_OUTPUT_FILE)).flatten
+      @ids_from_csv ||=
+        if File.exist?(io_directory.join(RECHECK_OUTPUT_FILE))
+          CSV.read(io_directory.join(RECHECK_OUTPUT_FILE)).flatten
+        else
+          CSV.read(io_directory.join(FULL_AUDIT_OUTPUT_FILE)).flatten
+        end
     end
 end
 # rubocop:enable Metrics/ClassLength

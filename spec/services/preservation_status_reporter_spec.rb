@@ -42,7 +42,7 @@ RSpec.describe PreservationStatusReporter do
     end
   end
 
-  describe "#cloud_audit", db_cleaner_deletion: true do
+  describe "#cloud_audit_failures", db_cleaner_deletion: true do
     it "identifies resources that should be preserved and either are not preserved or have the wrong checksum" do
       stub_ezid
       allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
@@ -106,7 +106,7 @@ RSpec.describe PreservationStatusReporter do
     end
 
     context "with a recheck flag" do
-      it "can repeatedly recheck resources found in a full audit" do
+      it "rechecks resources found in a full audit" do
         stub_ezid
         allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
         preserved_resource = create_preserved_resource
@@ -114,14 +114,6 @@ RSpec.describe PreservationStatusReporter do
         unpreserved_metadata_resource = create_resource_unpreserved_metadata
         # resource not included in CSV
         create_recording_unpreserved_binary
-
-        # create a "previous run" file and stub its birthtime since Timecop
-        # doesn't control file system level timestamps
-        FileUtils.touch(recheck_output)
-        stat_double = double(File::Stat)
-        allow(File).to receive(:stat).and_call_original
-        allow(File).to receive(:stat).with(recheck_output).and_return(stat_double)
-        allow(stat_double).to receive(:birthtime).and_return(Time.zone.local(2007, 9, 1, 12, 47, 8))
 
         # build CSV
         build_csv_file(
@@ -135,7 +127,6 @@ RSpec.describe PreservationStatusReporter do
         expect(reporter.audited_resource_count).to eq 3
 
         failures = reporter.cloud_audit_failures.to_a
-        expect(File.exist?(io_dir.join("bad_resources_recheck-2007-09-01-12-47-08.txt"))).to be true
         expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
           unpreserved_resource.id,
           unpreserved_metadata_resource.id
@@ -144,6 +135,46 @@ RSpec.describe PreservationStatusReporter do
           unpreserved_resource.id.to_s,
           unpreserved_metadata_resource.id.to_s
         )
+      end
+
+      it "rechecks resources found in a previous recheck, and rotates the previous recheck output file" do
+        stub_ezid
+        allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
+        preserved_resource = create_preserved_resource
+        unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+        unpreserved_metadata_resource = create_resource_unpreserved_metadata
+
+        # build CSVs
+        # If it reads from the audit output it would check 3 resources and find
+        # 2 bad ones
+        build_csv_file(
+          audit_output,
+          [preserved_resource, unpreserved_resource, unpreserved_metadata_resource]
+        )
+
+        # If it reads from the recheck output it would check 1 resource and find
+        # 1 bad one
+        build_csv_file(
+          recheck_output,
+          [unpreserved_resource]
+        )
+
+        # stub the a previous birthtime since Timecop
+        # doesn't control file system level timestamps
+        stat_double = double(File::Stat)
+        allow(File).to receive(:stat).and_call_original
+        allow(File).to receive(:stat).with(recheck_output).and_return(stat_double)
+        allow(stat_double).to receive(:birthtime).and_return(Time.zone.local(2007, 9, 1, 12, 47, 8))
+
+        # run audit
+        reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
+        # Ensure count of resources it's auditing
+        expect(reporter.audited_resource_count).to eq 1
+        failures = reporter.cloud_audit_failures.to_a
+        expect(failures.map(&:id).map(&:to_s)).to contain_exactly(unpreserved_resource.id)
+        expect(IO.readlines(recheck_output).map(&:chomp)).to contain_exactly(unpreserved_resource.id.to_s)
+        # it rotated the previous file
+        expect(File.exist?(io_dir.join("bad_resources_recheck-2007-09-01-12-47-08.txt"))).to be true
       end
     end
 
