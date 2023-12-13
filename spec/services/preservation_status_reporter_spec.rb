@@ -20,25 +20,21 @@ RSpec.describe PreservationStatusReporter do
     FileUtils.rm_rf(io_dir)
   end
 
-  describe ".run_full_audit" do
+  describe ".full_audit_reporter" do
     it "runs with the default params" do
       reporter = instance_double(described_class)
       allow(described_class).to receive(:new).and_return(reporter)
-      allow(reporter).to receive(:cloud_audit_failures)
-      described_class.run_full_audit(io_directory: io_dir)
+      described_class.full_audit_reporter(io_directory: io_dir)
       expect(described_class).to have_received(:new).with(io_directory: io_dir)
-      expect(reporter).to have_received(:cloud_audit_failures)
     end
   end
 
-  describe ".run_recheck" do
+  describe ".recheck_reporter" do
     it "runs with the recheck_ids flag" do
       reporter = instance_double(described_class)
       allow(described_class).to receive(:new).and_return(reporter)
-      allow(reporter).to receive(:cloud_audit_failures)
-      described_class.run_recheck(io_directory: io_dir)
+      described_class.recheck_reporter(io_directory: io_dir)
       expect(described_class).to have_received(:new).with(io_directory: io_dir, recheck_ids: true)
-      expect(reporter).to have_received(:cloud_audit_failures)
     end
   end
 

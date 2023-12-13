@@ -13,15 +13,29 @@ require "ruby-progressbar/outputs/null"
 class PreservationStatusReporter
   FULL_AUDIT_OUTPUT_FILE = "bad_resources.txt"
   RECHECK_OUTPUT_FILE = "bad_resources_recheck.txt"
+  RESUME_TIMESTAMP_FILE = "since.txt"
 
   # Check all resources with resumable state
-  def self.run_full_audit(io_directory:)
-    new(io_directory: io_directory).cloud_audit_failures
+  def self.full_audit_reporter(io_directory:)
+    new(io_directory: io_directory)
   end
 
   # Check resources by id, using the list output in the full audit
-  def self.run_recheck(io_directory:)
-    new(io_directory: io_directory, recheck_ids: true).cloud_audit_failures
+  def self.recheck_reporter(io_directory:)
+    new(io_directory: io_directory, recheck_ids: true)
+  end
+
+  # keep previous file, use its date created as a timestamp
+  def self.rotate_file(path)
+    return unless File.exist?(path)
+    birthtime = File.stat(path).birthtime
+    timestamp = birthtime.strftime("%Y-%m-%d-%H-%M-%S")
+    new_filename_array = path.basename.to_s.partition(".")
+    new_filename_array.insert(1, "-#{timestamp}")
+    FileUtils.mv(
+      path,
+      Pathname.new(path.dirname.join(new_filename_array.join))
+    )
   end
 
   attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum, :io_directory, :recheck_ids
@@ -124,26 +138,13 @@ class PreservationStatusReporter
       if recheck_ids
         ids_from_csv # cache these before rotating the file
         @found_resource_path = io_directory.join(RECHECK_OUTPUT_FILE)
-        rotate_file(@found_resource_path)
+        self.class.rotate_file(@found_resource_path)
       else
-        @timestamp_file_path = io_directory.join("since.txt")
+        @timestamp_file_path = io_directory.join(RESUME_TIMESTAMP_FILE)
         @since = @timestamp_file_path.read if @timestamp_file_path.exist?
         @found_resource_path = io_directory.join(FULL_AUDIT_OUTPUT_FILE)
         @found_resources = Set.new(@found_resource_path.read.split.map { |x| Valkyrie::ID.new(x) }) if @found_resource_path.exist?
       end
-    end
-
-    # keep previous file, use its date created as a timestamp
-    def rotate_file(path)
-      return unless File.exist?(path)
-      birthtime = File.stat(path).birthtime
-      timestamp = birthtime.strftime("%Y-%m-%d-%H-%M-%S")
-      new_filename_array = path.basename.to_s.partition(".")
-      new_filename_array.insert(1, "-#{timestamp}")
-      FileUtils.mv(
-        path,
-        Pathname.new(path.dirname.join(new_filename_array.join))
-      )
     end
 
     def resource_query

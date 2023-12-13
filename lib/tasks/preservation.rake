@@ -3,19 +3,46 @@ require "ruby-progressbar"
 
 namespace :figgy do
   namespace :preservation do
-    desc "Reports the number of unpreserved models."
-    task count_unpreserved: :environment do
+    desc "Reports the number of unpreserved models, resuming from last run"
+    task full_audit: :environment do
       state_directory = Rails.root.join("tmp", "rake_preservation_audit")
-      failures = PreservationStatusReporter.run_full_audit(io_directory: state_directory)
+      reporter = PreservationStatusReporter.full_audit_reporter(io_directory: state_directory)
+      failures = reporter.cloud_audit_failures
       failed_count = failures.to_a.size
       puts "Number of Resources Needing Re-Preserved: #{failed_count}"
       puts "The #{PreservationStatusReporter::FULL_AUDIT_OUTPUT_FILE} report and the resumption timestamp have been saved to #{state_directory}"
     end
 
-    desc "Reports the number of unpreserved models."
-    task recheck_ids: :environment do
+    desc "Reports the number of unpreserved models, first rotating previous resumption and output files"
+    task full_audit_restart: :environment do
       state_directory = Rails.root.join("tmp", "rake_preservation_audit")
-      failures = PreservationStatusReporter.run_recheck(io_directory: state_directory)
+      PreservationStatusReporter.rotate_file(state_directory.join(PreservationStatusReporter::FULL_AUDIT_OUTPUT_FILE))
+      PreservationStatusReporter.rotate_file(state_directory.join(PreservationStatusReporter::RESUME_TIMESTAMP_FILE))
+
+      reporter = PreservationStatusReporter.full_audit_reporter(io_directory: state_directory)
+      failures = reporter.cloud_audit_failures
+      failed_count = failures.to_a.size
+      puts "Number of Resources Needing Re-Preserved: #{failed_count}"
+      puts "The #{PreservationStatusReporter::FULL_AUDIT_OUTPUT_FILE} report and the resumption timestamp have been saved to #{state_directory}"
+    end
+
+    desc "Reports the number of unpreserved models, using a previous recheck output file if found"
+    task recheck: :environment do
+      state_directory = Rails.root.join("tmp", "rake_preservation_audit")
+      reporter = PreservationStatusReporter.recheck_reporter(io_directory: state_directory)
+      failures = reporter.cloud_audit_failures
+      failed_count = failures.to_a.size
+      puts "Number of Resources Needing Re-Preserved: #{failed_count}"
+      puts "The #{PreservationStatusReporter::RECHECK_OUTPUT_FILE} report has been saved to #{state_directory}"
+    end
+
+    desc "Reports the number of unpreserved models, deleting previous recheck output file to ensure it reads from a full audit output file"
+    task recheck_restart: :environment do
+      state_directory = Rails.root.join("tmp", "rake_preservation_audit")
+      PreservationStatusReporter.rotate_file(state_directory.join(PreservationStatusReporter::RECHECK_OUTPUT_FILE))
+
+      reporter = PreservationStatusReporter.recheck_reporter(io_directory: state_directory)
+      failures = reporter.cloud_audit_failures
       failed_count = failures.to_a.size
       puts "Number of Resources Needing Re-Preserved: #{failed_count}"
       puts "The #{PreservationStatusReporter::RECHECK_OUTPUT_FILE} report has been saved to #{state_directory}"
