@@ -115,8 +115,13 @@ RSpec.describe PreservationStatusReporter do
         # resource not included in CSV
         create_recording_unpreserved_binary
 
-        # create a "previous run" file
+        # create a "previous run" file and stub its birthtime since Timecop
+        # doesn't control file system level timestamps
         FileUtils.touch(recheck_output)
+        stat_double = double(File::Stat)
+        allow(File).to receive(:stat).and_call_original
+        allow(File).to receive(:stat).with(recheck_output).and_return(stat_double)
+        allow(stat_double).to receive(:birthtime).and_return(Time.zone.local(2007, 9, 1, 12, 47, 8))
 
         # build CSV
         build_csv_file(
@@ -124,24 +129,21 @@ RSpec.describe PreservationStatusReporter do
           [preserved_resource, unpreserved_resource, unpreserved_metadata_resource]
         )
 
-        # freeze time so it's easier to check the file timestamp
-        Timecop.freeze do
-          # run audit
-          reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
-          # Ensure count of resources it's auditing
-          expect(reporter.audited_resource_count).to eq 3
+        # run audit
+        reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
+        # Ensure count of resources it's auditing
+        expect(reporter.audited_resource_count).to eq 3
 
-          failures = reporter.cloud_audit_failures.to_a
-          expect(File.exist?(recheck_output.to_s.split(".").first.concat("#{DateTime.now}.txt"))).to be true
-          expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
-            unpreserved_resource.id,
-            unpreserved_metadata_resource.id
-          )
-          expect(IO.readlines(recheck_output).map(&:chomp)).to contain_exactly(
-            unpreserved_resource.id.to_s,
-            unpreserved_metadata_resource.id.to_s
-          )
-        end
+        failures = reporter.cloud_audit_failures.to_a
+        expect(File.exist?(io_dir.join("bad_resources_recheck-2007-09-01-12-47-08.txt"))).to be true
+        expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
+          unpreserved_resource.id,
+          unpreserved_metadata_resource.id
+        )
+        expect(IO.readlines(recheck_output).map(&:chomp)).to contain_exactly(
+          unpreserved_resource.id.to_s,
+          unpreserved_metadata_resource.id.to_s
+        )
       end
     end
 

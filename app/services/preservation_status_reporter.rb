@@ -123,14 +123,26 @@ class PreservationStatusReporter
       FileUtils.mkdir_p(@io_directory)
       if recheck_ids
         @found_resource_path = io_directory.join(RECHECK_OUTPUT_FILE)
-        # rotate previous output
-        FileUtils.mv(@found_resource_path, @found_resource_path.to_s.split(".").first.concat("#{DateTime.now}.txt")) if File.exist?(@found_resource_path)
+        rotate_file(@found_resource_path)
       else
         @timestamp_file_path = io_directory.join("since.txt")
         @since = @timestamp_file_path.read if @timestamp_file_path.exist?
         @found_resource_path = io_directory.join(FULL_AUDIT_OUTPUT_FILE)
         @found_resources = Set.new(@found_resource_path.read.split.map { |x| Valkyrie::ID.new(x) }) if @found_resource_path.exist?
       end
+    end
+
+    # keep previous file, use its date created as a timestamp
+    def rotate_file(path)
+      return unless File.exist?(path)
+      birthtime = File.stat(path).birthtime
+      timestamp = birthtime.strftime("%Y-%m-%d-%H-%M-%S")
+      new_filename_array = path.basename.to_s.partition(".")
+      new_filename_array.insert(1, "-#{timestamp}")
+      FileUtils.mv(
+        path,
+        Pathname.new(path.dirname.join(new_filename_array.join))
+      )
     end
 
     def resource_query
