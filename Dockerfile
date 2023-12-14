@@ -1,11 +1,3 @@
-# Compile openjpeg
-# FROM debian:buster AS openjpeg
-# RUN apt update -y && apt-get install -y build-essential sudo cmake wget
-# RUN mkdir -p /opt/app/tmp
-# WORKDIR /opt/app
-# COPY ./bin/ci_openjpeg_install.sh ./bin/
-# RUN sh ./bin/ci_openjpeg_install.sh
-
 # Compile tippecanoe
 FROM debian:buster AS tippecanoe
 RUN apt update -y && apt-get install -y build-essential sudo cmake wget git sqlite3 libsqlite3-dev gdal-bin libgdal-dev
@@ -13,22 +5,6 @@ RUN mkdir -p /opt/app/tmp
 WORKDIR /opt/app
 COPY ./bin/ci_tippecanoe_install.sh ./bin/
 RUN rm -rf .git && rm -rf tests && sh ./bin/ci_tippecanoe_install.sh
-
-# # Compile freetds
-# FROM debian:buster AS freetds
-# RUN apt update -y && apt-get install -y build-essential sudo cmake wget
-# RUN mkdir -p /opt/app/tmp
-# WORKDIR /opt/app
-# COPY ./bin/ci_free_tds_install.sh ./bin/
-# RUN sh ./bin/ci_free_tds_install.sh && rm -rf src && rm -rf doc
-
-# # Compile VIPS
-# FROM debian:buster AS vips
-# RUN apt update -y && apt-get install -y build-essential sudo cmake wget imagemagick pkg-config glib2.0-dev libexpat1-dev
-# RUN mkdir -p /opt/app/tmp
-# WORKDIR /opt/app
-# COPY ./bin/ci_vips_install.sh ./bin/
-# RUN sh ./bin/ci_vips_install.sh
 
 ## Assets ########################
 FROM ruby:3.1.0-slim-buster AS assets
@@ -64,17 +40,10 @@ RUN chmod 1777 /tmp
 
 # Install dependencies
 #
-# COPY --from=openjpeg /opt/app/tmp/openjpeg/* tmp/openjpeg/
-# COPY --from=openjpeg /opt/app/tmp/openjpeg/build tmp/openjpeg/build
 COPY --from=tippecanoe /opt/app/tmp/tippecanoe tmp/tippecanoe/
-# COPY --from=freetds /opt/app/tmp/freetds-1.00.108 tmp/freetds-1.00.108/
-# COPY --from=vips /opt/app/tmp/vips tmp/vips/
 RUN sh ./bin/ci_mediainfo_install.sh \
   && apt-get install -y --no-install-recommends git sudo cmake sqlite3 libopenjp2-7 gdal-bin libgdal-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client ocrmypdf lsof python3-pip imagemagick build-essential pkg-config libvips \
   && sh ./bin/ci_tippecanoe_install.sh \
-  # && sh ./bin/ci_free_tds_install.sh \
-  # && sh ./bin/ci_openjpeg_install.sh \
-  # && sh ./bin/ci_vips_install.sh \
   && rm -rf tmp/* \
   && pip3 install pip -U \
   && pip3 install setuptools -U \
@@ -126,17 +95,10 @@ RUN chmod 1777 /tmp
 
 # Install dependencies
 #
-# COPY --from=openjpeg /opt/app/tmp/openjpeg/* tmp/openjpeg/
-# COPY --from=openjpeg /opt/app/tmp/openjpeg/build tmp/openjpeg/build
 COPY --from=tippecanoe /opt/app/tmp/tippecanoe tmp/tippecanoe/
-# COPY --from=freetds /opt/app/tmp/freetds-1.00.108 tmp/freetds-1.00.108/
-# COPY --from=vips /opt/app/tmp/vips tmp/vips/
 RUN sh ./bin/ci_mediainfo_install.sh \
   && apt-get install -y --no-install-recommends git sudo cmake sqlite3 libopenjp2-7 gdal-bin libgdal-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo libvips ffmpeg postgresql-client ocrmypdf lsof python3-pip imagemagick build-essential pkg-config \
   && sh ./bin/ci_tippecanoe_install.sh \
-  # && sh ./bin/ci_free_tds_install.sh \
-  # && sh ./bin/ci_openjpeg_install.sh \
-  # && sh ./bin/ci_vips_install.sh \
   && rm -rf tmp/* \
   && pip3 install pip -U \
   && pip3 install setuptools -U \
@@ -144,7 +106,7 @@ RUN sh ./bin/ci_mediainfo_install.sh \
   && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
   && apt-get clean
 COPY --from=assets /usr/local/bundle /usr/local/bundle
-COPY --from=assets /opt/app/public /public
+COPY --from=assets /opt/app/public /opt/app/public
 # Install mapnik
 RUN npm install --global mapnik
 # # Install Ruby/Node Dependencies

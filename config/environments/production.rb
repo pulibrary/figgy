@@ -19,7 +19,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: ENV.fetch("APPLICATION_HOST", "localhost"), protocol: ENV.fetch("APPLICATION_HOST_PROTOCOL", "http") }
   config.action_mailer.perform_caching = false
   config.action_controller.action_on_unpermitted_parameters = false
-  config.force_ssl = true
+  config.force_ssl = false
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.active_storage.service = :local
   config.cache_store = :mem_cache_store, "figgy1.princeton.edu"

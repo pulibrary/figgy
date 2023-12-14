@@ -19,8 +19,8 @@ x-app: &default-app
   restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
   stop_grace_period: "3s"
   tty: true
-  volumes:
-    - "${DOCKER_WEB_VOLUME:-./public:/opt/app/public}"
+  # volumes:
+  #   - "${DOCKER_WEB_VOLUME:-./public:/opt/app/public}"
 services:
   postgres:
     environment:
@@ -60,8 +60,9 @@ services:
       start_period: "5s"
       retries: 3
     ports:
-      - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:${PORT:-8000}"
+      - "3001:3000"
     profiles: ["web"]
+    command: "rails s -b 0.0.0.0"
 volumes:
   postgres: {}
   redis: {}
