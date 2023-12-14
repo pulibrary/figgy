@@ -11,7 +11,7 @@ namespace :figgy do
       metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       query_service = metadata_adapter.query_service
 
-      vocab = query_service.custom_queries.find_ephemera_vocabulary_by_label(label: "LAE Subjects")
+      vocab = query_service.custom_queries.find_ephemera_vocabulary_by_label(label: "Ephemera Subjects")
       terms = collect_terms(vocab)
       fields = %w[label code uri category]
       CSV.open(output, "w") do |csv|
