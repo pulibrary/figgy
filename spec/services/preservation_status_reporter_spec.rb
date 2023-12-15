@@ -8,11 +8,37 @@ RSpec.describe PreservationStatusReporter do
   let(:change_set_persister) { ChangeSetPersister.default }
   let(:query_service) { adapter.query_service }
   let(:disk_preservation_path) { Pathname.new(Figgy.config["disk_preservation_path"]) }
+  let(:io_dir) { Rails.root.join("tmp", "test_recheck") }
+  let(:audit_output) { io_dir.join(described_class::FULL_AUDIT_OUTPUT_FILE) }
+  let(:recheck_output) { io_dir.join(described_class::RECHECK_OUTPUT_FILE) }
 
-  describe "#cloud_audit", db_cleaner_deletion: true do
-    before do
-      FileUtils.rm_rf(Rails.root.join("tmp", "audit_state"))
+  before do
+    FileUtils.mkdir_p(io_dir)
+  end
+
+  after do
+    FileUtils.rm_rf(io_dir)
+  end
+
+  describe ".full_audit_reporter" do
+    it "runs with the default params" do
+      reporter = instance_double(described_class)
+      allow(described_class).to receive(:new).and_return(reporter)
+      described_class.full_audit_reporter(io_directory: io_dir)
+      expect(described_class).to have_received(:new).with(io_directory: io_dir)
     end
+  end
+
+  describe ".recheck_reporter" do
+    it "runs with the recheck_ids flag" do
+      reporter = instance_double(described_class)
+      allow(described_class).to receive(:new).and_return(reporter)
+      described_class.recheck_reporter(io_directory: io_dir)
+      expect(described_class).to have_received(:new).with(io_directory: io_dir, recheck_ids: true)
+    end
+  end
+
+  describe "#cloud_audit_failures", db_cleaner_deletion: true do
     it "identifies resources that should be preserved and either are not preserved or have the wrong checksum" do
       stub_ezid
       allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
@@ -58,11 +84,11 @@ RSpec.describe PreservationStatusReporter do
       expect(preservation_object.binary_nodes.count).to eq 1
 
       # run audit
-      reporter = described_class.new(suppress_progress: true)
+      reporter = described_class.new(suppress_progress: true, io_directory: io_dir)
       # Ensure count of resources it's auditing
       expect(reporter.audited_resource_count).to eq 14
       failures = reporter.cloud_audit_failures.to_a
-      expect(failures.map(&:id).map(&:to_s)).to contain_exactly(
+      expect(failures.map(&:id)).to contain_exactly(
         unpreserved_resource.id,
         unpreserved_binary_file_set.id,
         unpreserved_metadata_resource.id,
@@ -75,12 +101,8 @@ RSpec.describe PreservationStatusReporter do
       expect(reporter.progress_bar.progress).to eq 14
     end
 
-    context "with a CSV that contains resource IDs" do
-      after do
-        FileUtils.rm_rf(Rails.root.join("tmp", "ids-to-check.csv"))
-      end
-
-      it "can take a path to the CSV as a parameter and will only check those resources" do
+    context "with a recheck flag" do
+      it "rechecks resources found in a full audit" do
         stub_ezid
         allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
         preserved_resource = create_preserved_resource
@@ -90,12 +112,13 @@ RSpec.describe PreservationStatusReporter do
         create_recording_unpreserved_binary
 
         # build CSV
-        build_csv_file([preserved_resource.id.to_s,
-                        unpreserved_resource.id.to_s,
-                        unpreserved_metadata_resource.id.to_s])
+        build_csv_file(
+          audit_output,
+          [preserved_resource, unpreserved_resource, unpreserved_metadata_resource]
+        )
 
         # run audit
-        reporter = described_class.new(suppress_progress: true, csv_path: Rails.root.join("tmp", "ids-to-check.csv"))
+        reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
         # Ensure count of resources it's auditing
         expect(reporter.audited_resource_count).to eq 3
 
@@ -104,6 +127,50 @@ RSpec.describe PreservationStatusReporter do
           unpreserved_resource.id,
           unpreserved_metadata_resource.id
         )
+        expect(IO.readlines(recheck_output).map(&:chomp)).to contain_exactly(
+          unpreserved_resource.id.to_s,
+          unpreserved_metadata_resource.id.to_s
+        )
+      end
+
+      it "rechecks resources found in a previous recheck, and rotates the previous recheck output file" do
+        stub_ezid
+        allow(Valkyrie::StorageAdapter.find(:google_cloud_storage)).to receive(:find_by).and_call_original
+        preserved_resource = create_preserved_resource
+        unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+        unpreserved_metadata_resource = create_resource_unpreserved_metadata
+
+        # build CSVs
+        # If it reads from the audit output it would check 3 resources and find
+        # 2 bad ones
+        build_csv_file(
+          audit_output,
+          [preserved_resource, unpreserved_resource, unpreserved_metadata_resource]
+        )
+
+        # If it reads from the recheck output it would check 1 resource and find
+        # 1 bad one
+        build_csv_file(
+          recheck_output,
+          [unpreserved_resource]
+        )
+
+        # stub the a previous birthtime since Timecop
+        # doesn't control file system level timestamps
+        stat_double = double(File::Stat)
+        allow(File).to receive(:stat).and_call_original
+        allow(File).to receive(:stat).with(recheck_output).and_return(stat_double)
+        allow(stat_double).to receive(:birthtime).and_return(Time.zone.local(2007, 9, 1, 12, 47, 8))
+
+        # run audit
+        reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
+        # Ensure count of resources it's auditing
+        expect(reporter.audited_resource_count).to eq 1
+        failures = reporter.cloud_audit_failures.to_a
+        expect(failures.map(&:id).map(&:to_s)).to contain_exactly(unpreserved_resource.id)
+        expect(IO.readlines(recheck_output).map(&:chomp)).to contain_exactly(unpreserved_resource.id.to_s)
+        # it rotated the previous file
+        expect(File.exist?(io_dir.join("bad_resources_recheck-2007-09-01-12-47-08.txt"))).to be true
       end
     end
 
@@ -112,29 +179,9 @@ RSpec.describe PreservationStatusReporter do
       # - a scannedresource with a metadata node that has the wrong checksum
       create_resource_bad_metadata_checksum
 
-      reporter = described_class.new(suppress_progress: true, skip_metadata_checksum: true)
+      reporter = described_class.new(suppress_progress: true, skip_metadata_checksum: true, io_directory: io_dir)
       # Ensure count of resources it's auditing
       expect(reporter.cloud_audit_failures.to_a.length).to eq 0
-    end
-
-    it "can start at a given timestamp and only reprocess those" do
-      stub_ezid
-      no_preserving_resource = nil
-      Timecop.travel(Time.current - 2.days) do
-        # a resource that should not be preserved
-        FactoryBot.create_for_repository(:pending_scanned_resource)
-      end
-      Timecop.travel(Time.current - 1.day) do
-        no_preserving_resource = FactoryBot.create_for_repository(:pending_scanned_resource)
-      end
-      # a scannedresource with no preservation object
-      _unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
-      # run audit
-      reporter = described_class.new(since: no_preserving_resource.created_at.to_s, suppress_progress: true, records_per_group: 2, parallel_threads: 2)
-      reporter.cloud_audit_failures.to_a
-
-      # It re-does the last one at the given date, but not the ones before it.
-      expect(reporter.progress_bar.progress).to eq 2
     end
 
     it "can load a state directory and start where it left off" do
@@ -149,8 +196,7 @@ RSpec.describe PreservationStatusReporter do
       # a scannedresource with no preservation object
       _unpreserved_resource = FactoryBot.create_for_repository(:complete_scanned_resource)
       # run audit once, break after checking two.
-      reporter = described_class.new(suppress_progress: true, records_per_group: 1, parallel_threads: 1)
-      reporter.load_state!(state_directory: Rails.root.join("tmp", "audit_state"))
+      reporter = described_class.new(suppress_progress: true, records_per_group: 1, parallel_threads: 1, io_directory: io_dir)
       call_count = 0
       allow(reporter.progress_bar).to receive(:increment) do
         raise "Broken" if call_count == 2
@@ -160,8 +206,7 @@ RSpec.describe PreservationStatusReporter do
       expect(call_count).to eq 2
 
       # Run it a second time, it should only load the next two it missed.
-      reporter = described_class.new(suppress_progress: true)
-      reporter.load_state!(state_directory: Rails.root.join("tmp", "audit_state"))
+      reporter = described_class.new(suppress_progress: true, io_directory: io_dir)
       output = reporter.cloud_audit_failures.to_a
       # It should merge the previously found resources with the current ones.
       expect(output.length).to eq 3
@@ -255,9 +300,9 @@ RSpec.describe PreservationStatusReporter do
     recording_file_set
   end
 
-  def build_csv_file(values)
-    CSV.open(Rails.root.join("tmp", "ids-to-check.csv"), "w") do |csv|
-      values.each { |value| csv << [value] }
+  def build_csv_file(filename, resources)
+    CSV.open(filename, "w") do |csv|
+      resources.each { |resource| csv << [resource.id.to_s] }
     end
   end
 end
