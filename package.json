@@ -6,15 +6,12 @@
     "lint": "yarn run eslint -- --ext .vue app/javascript"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.21.4",
-    "@babel/preset-react": "^7.8.3",
     "@google-cloud/pubsub": "^0.31.0",
     "@google-cloud/storage": "^5.8.4",
     "@vitejs/plugin-vue2": "^2.2.0",
     "ajv": "^6.12.3",
     "apollo-boost": "^0.1.10",
     "axios": "^1.6.0",
-    "babel-plugin-macros": "^3.1.0",
     "canvas-confetti": "^1.6.0",
     "core-js": "^3.16.2",
     "flush-promises": "^1.0.2",
@@ -45,11 +42,7 @@
     "vuex": "^2.4.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.9",
-    "@babel/preset-env": "^7.18.10",
     "@vue/test-utils": "^1.0.0-beta.25",
-    "babel-core": "^7.0.0-bridge",
-    "babel-loader": "^8.2.5",
     "dotenv": "^7.0.0",
     "eslint": "^5.11.1",
     "eslint-config-standard": "^12.0.0",
@@ -62,7 +55,6 @@
     "eslint-plugin-vitest-globals": "^1.3.1",
     "eslint-plugin-vue": "^5.1.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest-serializer-vue": "^3.1.0",
     "jquery": "^3.5.0",
     "jsdom": "^22.0.0",
     "vite": "^4.3.9",
