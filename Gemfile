@@ -13,7 +13,6 @@ gem "blacklight_range_limit"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
-gem "bundler", "2.3.18"
 gem "bunny"
 gem "capistrano-passenger"
 gem "capistrano-rails"
