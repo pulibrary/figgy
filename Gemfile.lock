@@ -36,6 +36,15 @@ GIT
       valkyrie
 
 GIT
+  remote: https://github.com/sis-berkeley-edu/omniauth-cas.git
+  revision: 65e67ee45e9d167f9d4986aa14f6d0ca44befa14
+  specs:
+    omniauth-cas (2.0.1)
+      addressable (~> 2.8.5)
+      nokogiri (>= 1.15.5)
+      omniauth (>= 1.9, < 3)
+
+GIT
   remote: https://github.com/yob/pdf-reader.git
   revision: 946559b06a381ba2651fd037afc95a24309e94e4
   specs:
@@ -138,8 +147,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.6)
+      public_suffix (>= 2.0.2, < 6.0)
     afm (0.2.2)
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
@@ -694,13 +703,10 @@ GEM
       faraday (< 3)
       faraday-follow_redirects (>= 0.3.0, < 2)
     oj (3.13.18)
-    omniauth (1.9.2)
+    omniauth (2.1.1)
       hashie (>= 3.4.6)
-      rack (>= 1.6.2, < 3)
-    omniauth-cas (2.0.0)
-      addressable (~> 2.3)
-      nokogiri (~> 1.5)
-      omniauth (~> 1.2)
+      rack (>= 2.2.3)
+      rack-protection
     open4 (1.3.4)
     openseadragon (0.6.0)
       rails (> 3.2.0)
@@ -728,11 +734,11 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     psych (3.3.4)
-    public_suffix (4.0.7)
+    public_suffix (5.0.4)
     puma (6.3.1)
       nio4r (~> 2.0)
     racc (1.7.3)
-    rack (2.2.7)
+    rack (2.2.8)
     rack-cors (2.0.1)
       rack (>= 2.0.0)
     rack-linkeddata (3.2.1)
@@ -1241,7 +1247,7 @@ DEPENDENCIES
   normalize-rails
   oai
   omniauth
-  omniauth-cas
+  omniauth-cas (~> 2.0.1)!
   openseadragon
   parallel_tests
   pdf-reader!
