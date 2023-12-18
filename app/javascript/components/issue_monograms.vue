@@ -1,7 +1,8 @@
 <template>
   <table
     id="numismatic-monograms"
-    class="table table-striped member-resources numismatic-monograms">
+    class="table table-striped member-resources numismatic-monograms"
+  >
     <thead>
       <tr>
         <th />
@@ -29,7 +30,8 @@
             <input
               type="hidden"
               name="numismatics_issue[numismatic_monogram_ids][]"
-              :value="monogram.id" />
+              :value="monogram.id"
+            >
           </td>
         </template>
       </tr>
@@ -39,7 +41,8 @@
             <input
               type="hidden"
               name="numismatics_issue[numismatic_monogram_ids][]"
-              value="" />
+              value=""
+            >
           </td>
         </template>
       </tr>
@@ -51,7 +54,6 @@
       </tr>
     </tfoot>
   </table>
-
 </template>
 <script>
 import IssueMonogram from './issue_monogram.vue'

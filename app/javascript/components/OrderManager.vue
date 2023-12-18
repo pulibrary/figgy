@@ -87,11 +87,11 @@ export default {
   release: '1.0.0',
   type: 'Pattern',
   components: {
-    'toolbar': Toolbar,
+    toolbar: Toolbar,
     'resource-form': ResourceForm,
     'filesets-form': FilesetsForm,
     'fileset-form': FilesetForm,
-    'controls': Controls
+    controls: Controls
   },
   props: {
     /**
@@ -126,11 +126,11 @@ export default {
         id: member.id,
         caption: member.label,
         service:
-          member['thumbnail'] && typeof (member.thumbnail.iiifServiceUrl) !== 'undefined'
+          member.thumbnail && typeof (member.thumbnail.iiifServiceUrl) !== 'undefined'
             ? member.thumbnail.iiifServiceUrl
             : this.defaultThumbnail,
         mediaUrl:
-          member['thumbnail'] && typeof (member.thumbnail.iiifServiceUrl) !== 'undefined'
+          member.thumbnail && typeof (member.thumbnail.iiifServiceUrl) !== 'undefined'
             ? member.thumbnail.iiifServiceUrl + '/full/300,/0/default.jpg'
             : this.defaultThumbnail,
         viewingHint: member.viewingHint
@@ -164,7 +164,7 @@ export default {
       // if props are passed in set the resource on mount
       this.$store.commit('SET_RESOURCE', this.resourceObject)
     } else {
-      let resource = { id: this.resourceId }
+      const resource = { id: this.resourceId }
       this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING')
       this.$store.dispatch('loadImageCollectionGql', resource)
     }

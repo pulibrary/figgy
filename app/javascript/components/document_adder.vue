@@ -92,9 +92,9 @@ export default {
   },
   methods: {
     fileSetFormData (fileSetIds) {
-      let form = new FormData()
+      const form = new FormData()
       form.append('_method', 'patch')
-      for (var id of fileSetIds) {
+      for (const id of fileSetIds) {
         form.append('playlist[file_set_ids][]', id)
       }
       return form
@@ -149,7 +149,7 @@ export default {
         this.recordings = []
         return
       }
-      let vm = this
+      const vm = this
 
       // Get all recording titles and IDs from a catalog search (Solr).
       // Ensure that this AJAX request does not trigger the caching of query
@@ -159,22 +159,22 @@ export default {
           return response.json()
         })
         .then(function (data) { // Map to objects
-          return data['data'].map(
+          return data.data.map(
             function (recordingDocument) {
-              const titles = recordingDocument['attributes']['figgy_title_ssi']
+              const titles = recordingDocument.attributes.figgy_title_ssi
               return {
-                id: recordingDocument['id'],
-                title: titles['attributes']['value'],
+                id: recordingDocument.id,
+                title: titles.attributes.value,
                 tracks: []
               }
             }
           )
         })
         .then(function (recordings) {
-          let promises = []
+          const promises = []
           // Set tracks for every recording, store promises in an array so we
           // can tell when they resolve.
-          for (let recording of recordings) {
+          for (const recording of recordings) {
             promises.concat(vm.tracks_by_recording_id(recording.id).then(function (tracks) {
               recording.tracks = tracks
             }))
