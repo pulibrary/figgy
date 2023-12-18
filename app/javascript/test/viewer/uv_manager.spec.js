@@ -1,4 +1,4 @@
-import UVManager from 'viewer/uv_manager'
+import UVManager from '@viewer/uv_manager'
 import jQ from 'jquery'
 vi.mock('viewer/cdl_timer')
 describe('UVManager', () => {
