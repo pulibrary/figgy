@@ -22,7 +22,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 export default {
   name: 'FileUploader',
   components: {
-    'dropzone': vue2Dropzone
+    dropzone: vue2Dropzone
   },
   props: {
     infoString: {
@@ -32,7 +32,8 @@ export default {
     csrfToken: {
       type: String,
       default: document.getElementsByName('csrf-token')[0]
-        ? document.getElementsByName('csrf-token')[0].content : undefined
+        ? document.getElementsByName('csrf-token')[0].content
+        : undefined
     },
     tableName: {
       type: String,

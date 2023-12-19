@@ -51,8 +51,8 @@ export default {
       // add spinner to button that was clicked
       this.detachClicked = true
       // disable all detach buttons
-      let buttons = document.getElementsByClassName('detach-btn')
-      for (let b of buttons) {
+      const buttons = document.getElementsByClassName('detach-btn')
+      for (const b of buttons) {
         b.disabled = true
       }
       // do the detach

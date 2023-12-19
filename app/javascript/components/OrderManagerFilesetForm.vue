@@ -9,8 +9,8 @@
     >
       <input-text
         id="itemLabel"
-        name="itemLabel"
         v-model="singleForm.caption"
+        name="itemLabel"
         label="Label"
         placeholder="e.g., example.tif"
         @input="updateSingle()"
@@ -75,8 +75,8 @@ export default {
       gallery: state => state.gallery
     }),
     memberViewHint: function () {
-      let id = this.gallery.selected[0].id
-      let selectedMember = this.resource.members.find(member => member.id === id)
+      const id = this.gallery.selected[0].id
+      const selectedMember = this.resource.members.find(member => member.id === id)
       return selectedMember.viewingHint
     },
     startCanvas: function () {
@@ -89,11 +89,11 @@ export default {
       return this.$store.getters.isMultiVolume
     },
     isStartCanvas: function () {
-      let id = this.gallery.selected[0].id
+      const id = this.gallery.selected[0].id
       return this.resource.startCanvas === id
     },
     isThumbnail: function () {
-      let id = this.gallery.selected[0].id
+      const id = this.gallery.selected[0].id
       return this.resource.thumbnail === id
     },
     startCanvasOpts: function () {
@@ -163,9 +163,9 @@ export default {
       this.updateSingle()
     },
     updateSingle: debounce(function () {
-      var changeList = this.gallery.changeList
-      var items = this.gallery.items
-      var index = this.gallery.items
+      const changeList = this.gallery.changeList
+      const items = this.gallery.items
+      const index = this.gallery.items
         .map(function (item) {
           return item.id
         })
@@ -178,7 +178,7 @@ export default {
 
       this.$store.dispatch('updateChanges', changeList)
       this.$store.dispatch('updateItems', items)
-    }, 300, { 'leading': false, 'trailing': true })
+    }, 300, { leading: false, trailing: true })
   }
 }
 </script>
