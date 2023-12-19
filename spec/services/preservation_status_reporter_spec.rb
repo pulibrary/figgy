@@ -155,12 +155,12 @@ RSpec.describe PreservationStatusReporter do
           [unpreserved_resource]
         )
 
-        # stub the a previous birthtime since Timecop
+        # stub the a previous modication_time since Timecop
         # doesn't control file system level timestamps
         stat_double = double(File::Stat)
         allow(File).to receive(:stat).and_call_original
         allow(File).to receive(:stat).with(recheck_output).and_return(stat_double)
-        allow(stat_double).to receive(:birthtime).and_return(Time.zone.local(2007, 9, 1, 12, 47, 8))
+        allow(stat_double).to receive(:mtime).and_return(Time.zone.local(2007, 9, 1, 12, 47, 8))
 
         # run audit
         reporter = described_class.new(suppress_progress: true, recheck_ids: true, io_directory: io_dir)
