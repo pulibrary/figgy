@@ -28,8 +28,8 @@ class PreservationStatusReporter
   # keep previous file, use its date created as a timestamp
   def self.rotate_file(path)
     return unless File.exist?(path)
-    birthtime = File.stat(path).birthtime
-    timestamp = birthtime.strftime("%Y-%m-%d-%H-%M-%S")
+    modification_time = File.stat(path).mtime
+    timestamp = modification_time.strftime("%Y-%m-%d-%H-%M-%S")
     new_filename_array = path.basename.to_s.partition(".")
     new_filename_array.insert(1, "-#{timestamp}")
     FileUtils.mv(
