@@ -30,9 +30,9 @@ GIT
 
 GIT
   remote: https://github.com/samvera-labs/iiif_manifest
-  revision: f4d16cb5eb66a393186cb04dcc45b3a1e34a7e51
+  revision: 6a027ff84d2b1ca65765dea0c83c820643cebe01
   specs:
-    iiif_manifest (1.1.1)
+    iiif_manifest (1.3.1)
       activesupport (>= 4)
 
 GIT
@@ -45,9 +45,9 @@ GIT
 
 GIT
   remote: https://github.com/yob/pdf-reader.git
-  revision: 946559b06a381ba2651fd037afc95a24309e94e4
+  revision: efff95a896a31da0526b01e43c8513dd72ae9a8a
   specs:
-    pdf-reader (2.10.0)
+    pdf-reader (2.11.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
