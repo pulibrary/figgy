@@ -105,7 +105,7 @@ destroy` or turn off all services with `lando poweroff`.
 
 1. For test:
    - In a separate terminal: `bundle exec rspec`
-   - Run jest tests: `yarn test`
+   - Run javascript tests: `yarn test`
 1. For development:
    - In a separate terminal: `bundle exec foreman start`
      - Or run services separately as shown in [[https://github.com/pulibrary/figgy/blob/main/Procfile]]
