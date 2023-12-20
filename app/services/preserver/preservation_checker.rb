@@ -32,7 +32,7 @@ class Preserver
       end
 
       def preserved?
-        preservation_object.preserved_object_id == resource.id && resource.optimistic_lock_token.first.token == preservation_object.metadata_version
+        preservation_object.preserved_object_id == resource.id && resource.optimistic_lock_token.first&.token == preservation_object.metadata_version
       end
 
       def preserved_file_checksums_match?
