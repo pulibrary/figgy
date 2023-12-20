@@ -9,16 +9,16 @@
     >
       <input-text
         id="unitLabel"
-        v-model="unitLabel"
         name="unitLabel"
+        v-model="unitLabel"
         label="Label"
         placeholder="e.g., p."
         @input="updateMultiLabels()"
       />
       <input-text
         id="startNum"
-        v-model="start"
         name="startNum"
+        v-model="start"
         label="Starting Numeral"
         placeholder="e.g., 10"
         @input="updateMultiLabels()"
@@ -33,8 +33,8 @@
       <input-select
         v-if="bracket"
         id="bracketLocation"
-        v-model="bracketLocation"
         name="bracketLocation"
+        v-model="bracketLocation"
         label="Bracket Location"
         :options="bracketLocationOpts"
         @change="updateMultiLabels()"
@@ -43,8 +43,8 @@
       <input-select
         v-if="!isMultiVolume"
         id="labelMethod"
-        v-model="method"
         name="labelMethod"
+        v-model="method"
         label="Labeling Method"
         :options="methodOpts"
         @change="updateUnitLabel"
@@ -52,8 +52,8 @@
 
       <input-select
         id="twoUp"
-        v-model="twoUp"
         name="twoUp"
+        v-model="twoUp"
         label="Two Up"
         :options="twoUpOpts"
         @change="updateMultiLabels()"
@@ -62,8 +62,8 @@
       <input-text
         v-if="twoUp"
         id="twoUpSeparator"
-        v-model="twoUpSeparator"
         name="twoUpSeparator"
+        v-model="twoUpSeparator"
         label="Two-Up Separator"
         @input="updateMultiLabels()"
       />
@@ -74,16 +74,16 @@
       >
         <input-text
           id="frontLabel"
-          v-model="frontLabel"
           name="frontLabel"
+          v-model="frontLabel"
           label="Front Label"
           placeholder="(recto)"
           @input="updateMultiLabels()"
         />
         <input-text
           id="backLabel"
-          v-model="backLabel"
           name="backLabel"
+          v-model="backLabel"
           label="Back Label"
           placeholder="(verso)"
           @input="updateMultiLabels()"
@@ -91,8 +91,8 @@
         <input-select
           v-if="!isMultiVolume"
           id="startWith"
-          v-model="startWith"
           name="startWith"
+          v-model="startWith"
           label="Start With"
           :options="startWithOpts"
           @change="updateMultiLabels()"
@@ -238,10 +238,10 @@ export default {
       }
     },
     labelerOpts () {
-      const unitLabel = this.unitLabel
+      let unitLabel = this.unitLabel
 
-      const frontLabel = this.method === 'paginate' ? '' : this.frontLabel
-      const backLabel = this.method === 'paginate' ? '' : this.backLabel
+      let frontLabel = this.method === 'paginate' ? '' : this.frontLabel
+      let backLabel = this.method === 'paginate' ? '' : this.backLabel
 
       return {
         start: this.start,
@@ -263,20 +263,20 @@ export default {
       return /^\+?(0|[1-9]\d*)$/.test(str)
     },
     updateMultiLabels: debounce(function () {
-      const changeList = this.gallery.changeList
-      const items = this.gallery.items
+      let changeList = this.gallery.changeList
+      let items = this.gallery.items
       this.start = this.isNormalInteger(this.start)
         ? this.start - 0
         : this.start
-      const generator = Lablr.pageLabelGenerator(this.labelerOpts())
+      let generator = Lablr.pageLabelGenerator(this.labelerOpts())
       for (let i = 0; i < this.selectedTotal; i++) {
-        const index = this.gallery.items
+        let index = this.gallery.items
           .map(function (item) {
             return item.id
           })
           .indexOf(this.gallery.selected[i].id)
         // Allow unnumbered pages / flyleaves
-        const caption = !this.start || this.start.length === 0
+        let caption = !this.start || this.start.length === 0
           ? ''
           : generator.next().value
         items[index].caption = caption
@@ -288,7 +288,7 @@ export default {
 
       this.$store.dispatch('updateChanges', changeList)
       this.$store.dispatch('updateItems', items)
-    }, 300, { leading: false, trailing: true })
+    }, 300, { 'leading': false, 'trailing': true })
   }
 }
 </script>

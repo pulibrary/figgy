@@ -1,27 +1,14 @@
 <template>
-  <v-select
-    label="id"
-    :value="selected"
-    :filterable="false"
-    :options="options"
-    @input="updateValue"
-    @search="onSearch"
-  >
+  <v-select label="id" :value="selected" @input=updateValue :filterable="false" :options="options" @search="onSearch">
     <template slot="no-options">
       type to search...
     </template>
-    <template
-      slot="option"
-      slot-scope="option"
-    >
+    <template slot="option" slot-scope="option">
       <div class="d-center">
         {{ option["title"] }}
-      </div>
+        </div>
     </template>
-    <template
-      slot="selected-option"
-      slot-scope="option"
-    >
+    <template slot="selected-option" slot-scope="option">
       <div class="selected d-center">
         {{ option["title"] }}
       </div>

@@ -43,8 +43,8 @@ export default {
   },
   data () {
     return {
-      listFocus: null,
-      tree: this.startTree
+      'listFocus': null,
+      'tree': this.startTree
     }
   },
   computed: {

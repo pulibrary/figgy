@@ -11,11 +11,8 @@
       <text-style variation="emphasis">
         Total files: {{ memberCount }}
       </text-style>
-      <text-style
-        v-if="memberCount < 1"
-        variation="strong"
-      >Please add files to this Resource
-        before proceeding.</text-style>
+      <text-style variation="strong" v-if="memberCount < 1">Please add files to this Resource
+before proceeding.</text-style>
     </span>
     <span
       v-if="resource.bibId"

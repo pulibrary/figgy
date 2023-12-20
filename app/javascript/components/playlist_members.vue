@@ -63,14 +63,14 @@ export default {
   },
   methods: {
     buildFormData () {
-      const form = new FormData()
+      let form = new FormData()
       form.append('_method', 'delete')
 
       return form
     },
     submit () { return false },
     detach (proxyIds) {
-      const vm = this
+      let vm = this
       this.submitting = true
 
       // These have to be detached sequentially because of a race condition.
@@ -79,7 +79,7 @@ export default {
       // reinstated. To fix this we'd have to have a way to tell the parent to
       // delete its children
       let promise = Promise.resolve()
-      for (const proxyId of proxyIds) {
+      for (let proxyId of proxyIds) {
         promise = promise.then((response) => {
           return axios.post(`/concern/playlists/${proxyId}`,
             this.buildFormData()
@@ -92,8 +92,8 @@ export default {
       })
     },
     detachAll () {
-      const buttons = document.getElementsByClassName('detach-btn')
-      for (const b of buttons) {
+      let buttons = document.getElementsByClassName('detach-btn')
+      for (let b of buttons) {
         b.disabled = true
       }
       this.detach(this.selectedFileIds)

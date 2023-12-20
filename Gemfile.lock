@@ -742,7 +742,7 @@ GEM
       rack (>= 1.2.0)
     rack-protection (2.2.4)
       rack
-    rack-proxy (0.7.7)
+    rack-proxy (0.7.6)
       rack
     rack-rdf (3.2.0)
       rack (~> 2.2)
@@ -1116,10 +1116,10 @@ GEM
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
-    vite_rails (3.0.17)
+    vite_rails (3.0.14)
       railties (>= 5.1, < 8)
       vite_ruby (~> 3.0, >= 3.2.2)
-    vite_ruby (3.5.0)
+    vite_ruby (3.3.0)
       dry-cli (>= 0.7, < 2)
       rack-proxy (~> 0.6, >= 0.6.1)
       zeitwerk (~> 2.2)

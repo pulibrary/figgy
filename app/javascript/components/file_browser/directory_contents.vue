@@ -116,7 +116,7 @@ export default {
       return this.folder.children.filter(child => child.expandable === false)
     },
     orderedSelectedFiles () {
-      const copiedFiles = Object.assign([], this.selectedFiles)
+      let copiedFiles = Object.assign([], this.selectedFiles)
       return copiedFiles.sort((a, b) => this.folder.children.indexOf(a) -
         this.folder.children.indexOf(b))
     },

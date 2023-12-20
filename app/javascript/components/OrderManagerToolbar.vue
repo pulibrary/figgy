@@ -108,7 +108,7 @@ export default {
     paste: function (indexModifier) {
       let items = this.gallery.items
       items = items.filter(val => !this.gallery.cut.includes(val))
-      const pasteAfterIndex =
+      let pasteAfterIndex =
         this.getItemIndexById(this.gallery.selected[this.gallery.selected.length - 1].id) + indexModifier
       items.splice(pasteAfterIndex, 0, ...this.gallery.cut)
       this.$store.dispatch('paste', items)
@@ -150,16 +150,16 @@ export default {
       this.$store.dispatch('select', this.gallery.items)
     },
     selectAlternate: function () {
-      const selected = []
-      const itemTotal = this.gallery.items.length
+      let selected = []
+      let itemTotal = this.gallery.items.length
       for (let i = 0; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }
       this.$store.dispatch('select', selected)
     },
     selectInverse: function () {
-      const selected = []
-      const itemTotal = this.gallery.items.length
+      let selected = []
+      let itemTotal = this.gallery.items.length
       for (let i = 1; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }

@@ -109,15 +109,15 @@ export default {
       return this.$store.getters.orderChanged
     },
     payloadFileset: function () {
-      const changed = this.gallery.items.filter(item => this.gallery.changeList.indexOf(item.id) !== -1)
-      const payload = changed.map(file => {
+      let changed = this.gallery.items.filter(item => this.gallery.changeList.indexOf(item.id) !== -1)
+      let payload = changed.map(file => {
         return { id: file.id, title: file.title, page_type: file.viewingHint }
       })
       return payload
     },
     payloadVolume: function () {
-      const changed = this.gallery.items.filter(item => this.gallery.changeList.indexOf(item.id) !== -1)
-      const payload = changed.map(file => {
+      var changed = this.gallery.items.filter(item => this.gallery.changeList.indexOf(item.id) !== -1)
+      var payload = changed.map(file => {
         return { id: file.id, title: file.title }
       })
       return payload
@@ -154,13 +154,13 @@ export default {
       }
     },
     galleryToFileset: function (items) {
-      const members = items.filter(item => this.gallery.changeList.indexOf(item.id) > -1).map(item => {
+      var members = items.filter(item => this.gallery.changeList.indexOf(item.id) > -1).map(item => {
         return { id: item.id, label: item.caption, viewingHint: item.viewingHint }
       })
       return members
     },
     galleryToResource: function (items) {
-      const members = items.map(item => {
+      var members = items.map(item => {
         return item.id
       })
       return members
@@ -173,7 +173,7 @@ export default {
       }
     },
     save: function () {
-      const resource = {}
+      let resource = {}
       resource.body = {
         id: this.resource.id,
         viewingDirection: this.resource.viewingDirection
@@ -185,15 +185,15 @@ export default {
         memberIds: this.galleryToResource(this.gallery.items)
       }
       resource.filesets = []
-      const membersBody = this.galleryToFileset(this.gallery.items)
-      const memberNum = membersBody.length
+      let membersBody = this.galleryToFileset(this.gallery.items)
+      let memberNum = membersBody.length
       for (let i = 0; i < memberNum; i++) {
         resource.filesets.push(membersBody[i])
       }
       this.$store.dispatch('saveStateGql', resource)
     },
     saveMVW: function () {
-      const body = {
+      let body = {
         resource: {},
         volumes: this.payloadVolume
       }
