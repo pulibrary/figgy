@@ -13,6 +13,7 @@ class NullCharacterizationService
   # @param save [Boolean] not used
   # @return [FileNode]
   def characterize(save: false)
+    GenerateChecksumJob.perform_later(file_set.id.to_s)
     @file_set
   end
 

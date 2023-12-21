@@ -6,6 +6,10 @@ RSpec.describe NullCharacterizationService do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:persister) { adapter.persister }
 
+  before do
+    allow(GenerateChecksumJob).to receive(:perform_later)
+  end
+
   context "with a mets file" do
     let(:mets_file) { fixture_file_upload("mets/pudl0001-4612596.mets", "application/xml; schema=mets") }
     describe "#valid?" do
@@ -21,6 +25,7 @@ RSpec.describe NullCharacterizationService do
       file_set = resource.decorate.members.first
       new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
       expect(new_file_set.original_file.mime_type).to eq ["application/xml; schema=mets"]
+      expect(GenerateChecksumJob).to have_received(:perform_later)
     end
   end
 
