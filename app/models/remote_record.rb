@@ -46,7 +46,7 @@ class RemoteRecord
   def self.record_url(id)
     return unless id
     return "https://catalog.princeton.edu/catalog/#{id}" if catalog?(id)
-    "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_')}" if pulfa?(id)
+    "#{Figgy.config[:findingaids_url]}#{id.tr('/', '_').tr('.', '-')}" if pulfa?(id)
   end
 
   class PulfaRecord

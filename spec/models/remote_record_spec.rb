@@ -118,6 +118,10 @@ RSpec.describe RemoteRecord, type: :model do
       it "validates that this is a bib. ID" do
         expect(described_class.record_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/catalog/AC044_c0003"
       end
+
+      it "changes dots to dashes" do
+        expect(described_class.record_url("C0744.06_c314")).to eq "https://findingaids.princeton.edu/catalog/C0744-06_c314"
+      end
     end
 
     context "when passed nil" do
