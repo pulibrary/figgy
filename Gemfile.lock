@@ -188,7 +188,7 @@ GEM
       rubocop-performance
       rubocop-rails
       rubocop-rspec
-    blacklight (7.33.1)
+    blacklight (7.35.0)
       deprecation
       globalid
       hashdiff
@@ -196,8 +196,8 @@ GEM
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
-      rails (>= 5.1, < 7.1)
-      view_component (~> 2.66)
+      rails (>= 5.1, < 7.2)
+      view_component (>= 2.66, < 4)
     blacklight-access_controls (6.0.1)
       blacklight (> 6.0, < 8)
       cancancan (>= 1.8)
@@ -469,7 +469,7 @@ GEM
       tilt
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
-    hashdiff (1.0.1)
+    hashdiff (1.1.0)
     hashery (2.1.2)
     hashie (3.6.0)
     honeybadger (5.2.1)
@@ -678,7 +678,7 @@ GEM
       net-protocol
     net-ssh (7.1.0)
     nio4r (2.7.0)
-    nokogiri (1.15.5)
+    nokogiri (1.16.0)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     normalize-rails (8.0.1)
@@ -700,7 +700,7 @@ GEM
     optimist (3.0.1)
     orm_adapter (0.5.0)
     os (1.1.4)
-    ostruct (0.5.5)
+    ostruct (0.6.0)
     parallel (1.22.1)
     parallel_tests (4.2.0)
       parallel
@@ -1106,7 +1106,7 @@ GEM
       aws-sdk-s3 (~> 1)
       shrine (>= 2.0, < 4.0)
       valkyrie (> 1.0)
-    view_component (2.82.0)
+    view_component (3.9.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
@@ -1164,7 +1164,7 @@ DEPENDENCIES
   bcrypt_pbkdf
   benchmark-ips
   bixby (~> 5.0)
-  blacklight (= 7.33.1)
+  blacklight (= 7.35.0)
   blacklight_iiif_search
   blacklight_range_limit
   bootsnap
