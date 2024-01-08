@@ -45,10 +45,11 @@ class CloudFixityJob < ApplicationJob
 
     def updated_status
       @updated_status ||=
-        if metadata_versions_different?
+        if (metadata_versions_different? || fixity_status == Event::FAILURE) && !previous_events&.first&.repairing?
           Event::REPAIRING
-        elsif fixity_status == Event::FAILURE && !previous_events&.first&.repairing?
-          Event::REPAIRING
+          # Don't repair again if the metadata versions are still different.
+        elsif previous_events&.first&.repairing?
+          Event::FAILURE
         else
           fixity_status
         end

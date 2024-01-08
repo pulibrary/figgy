@@ -62,6 +62,19 @@ RSpec.describe CloudFixityJob do
         expect(RepairCloudFixityJob).to have_received(:perform_later).with(event_id: new_event.id.to_s)
       end
 
+      context "and previous event was repairing" do
+        it "creates a failure event and notifies honeybadger, preventing a loop" do
+          FactoryBot.create_for_repository(:cloud_fixity_event, status: Event::REPAIRING, resource_id: resource.id, child_id: resource.metadata_node.id, child_property: "metadata_node", current: true)
+          described_class.perform_now(status: "SUCCESS", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+          events = query_service.find_all_of_model(model: Event)
+          current_events = events.select(&:current?)
+          expect(current_events.to_a.length).to eq 1
+          event = current_events.first
+          expect(event).to be_failed
+          expect(RepairCloudFixityJob).not_to have_received(:perform_later).with(event_id: event.id)
+        end
+      end
+
       context "but the resource should no longer be preserved" do
         it "doesn't try to repair it" do
           FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: SecureRandom.uuid, child_property: "metadata_node", current: true)
