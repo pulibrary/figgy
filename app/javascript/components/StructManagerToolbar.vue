@@ -8,6 +8,7 @@
       button-label="Actions"
       :menu-items="[
         {name: 'Create New Folder (Ctrl-n)', component: 'FolderCreate'},
+        {name: 'Group Selected into New Folder (Ctrl-g)', component: 'SelectedCreate', disabled: isCutDisabled()},
         {name: 'Delete Folder', component: 'FolderDelete', disabled: this.rootNodeSelected},
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
@@ -96,6 +97,7 @@ export default {
       // if folder is selected, cut folder
       // if cards are selected, cut gallery items
       if (this.gallery.selected.length) {
+
         this.$store.dispatch('cut', this.gallery.selected)
         this.selectNoneGallery()
       } else if (this.tree.selected) {
@@ -233,7 +235,10 @@ export default {
     menuSelection (value) {
       switch (value.target.innerText) {
         case 'Create New Folder (Ctrl-n)':
-          this.createFolder([])
+          this.createFolder()
+          break
+        case 'Group Selected into New Folder (Ctrl-g)':
+          this.groupSelectedIntoFolder()
           break
         case 'Delete Folder':
           this.deleteFolder(value.target)
@@ -252,13 +257,18 @@ export default {
           break
       }
     },
-    createFolder: function (contentsList) {
+    createFolder: function () {
+      // let contentsList = JSON.parse(JSON.stringify(this.gallery.selected))
+      // for (let i = 0; i < contentsList.length; i++) {
+      //   contentsList[i].file = true;
+      //   contentsList[i].folders = [];
+      // }
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       const rootId = this.tree.structure.id
 
       const newFolder = {
         id: this.generateId(),
-        folders: contentsList,
+        folders: [],
         label: "Untitled",
       }
       // need to stringify and parse to drop the observer that comes with Vue reactive data
@@ -276,6 +286,17 @@ export default {
         structure.folders = this.addNewNode(folderList, newParent)
       }
       this.$store.commit("CREATE_FOLDER", structure)
+      return newFolder.id
+    },
+    groupSelectedIntoFolder: function() {
+      this.cutSelected()
+      this.$nextTick(() => {
+        let folderId = this.createFolder()
+        this.$store.commit("SELECT_TREEITEM", folderId)
+        this.$nextTick(() => {
+          this.pasteGalleryItem()
+        })
+      })
     },
     addNewNode: function (array, newParent) {
       for (let item of array) {
@@ -441,11 +462,9 @@ export default {
 
               this.createFolder([])
           }
-          if (e.key === "n" && e.shiftKey && (e.ctrlKey || e.metaKey)) {
+          if (e.key === "g" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
-              
-              console.log('Create Folder from Selected Items')
-              // this.createFolder(this.gallery.selected)
+              this.groupSelectedIntoFolder()
           }
           if (e.key === "o" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
