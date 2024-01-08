@@ -2,11 +2,28 @@
 require "rails_helper"
 
 RSpec.describe CloudFixityJob do
+  with_queue_adapter :inline
   describe ".perform" do
-    let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    let(:parent_resource) do
+      r = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+      r = query_service.find_by(id: r.id)
+      change_set = ChangeSet.for(r)
+      change_set.state = "complete"
+      ChangeSetPersister.default.save(change_set: change_set)
+    end
+    let(:file_set) { Wayfinder.for(parent_resource).members.first }
     let(:resource) do
-      FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_version: file_set.optimistic_lock_token.first.token,
-                                                             metadata_node: FileMetadata.new(id: SecureRandom.uuid))
+      Wayfinder.for(file_set).preservation_object
+    end
+
+    before do
+      stub_ezid
+      resource
+      allow(RepairCloudFixityJob).to receive(:perform_later)
+      events = query_service.find_all_of_model(model: Event)
+      # Delete local fixity event.
+      ChangeSetPersister.default.persister.delete(resource: events.first) if events.present?
     end
 
     it "creates a new fixity event and marks the previously current event no longer current" do
@@ -18,7 +35,7 @@ RSpec.describe CloudFixityJob do
       events = query_service.find_all_of_model(model: Event)
       expect(events.to_a.length).to eq 2
       old_event = events.find { |e| e.id == old_event.id }
-      new_event = events.reject { |e| e.id == old_event.id }.first
+      new_event = events.reject { |e| e.id == old_event.id }.last
       expect(new_event.type).to eq "cloud_fixity"
       expect(new_event.resource_id).to eq resource.id
       expect(new_event.child_id).to eq resource.metadata_node.id
@@ -28,11 +45,9 @@ RSpec.describe CloudFixityJob do
     end
 
     context "when the metadata version and the preserved object lock token don't match" do
-      let(:resource) do
-        FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_version: "invalid-token", metadata_node: FileMetadata.new(id: SecureRandom.uuid))
-      end
-
       before do
+        resource.metadata_version = "invalid-token"
+        ChangeSetPersister.default.persister.save(resource: resource)
         allow(Honeybadger).to receive(:notify)
         allow(RepairCloudFixityJob).to receive(:perform_later)
       end
@@ -46,12 +61,21 @@ RSpec.describe CloudFixityJob do
         expect(new_event).to be_repairing
         expect(RepairCloudFixityJob).to have_received(:perform_later).with(event_id: new_event.id.to_s)
       end
+
+      context "but the resource should no longer be preserved" do
+        it "doesn't try to repair it" do
+          FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: SecureRandom.uuid, child_property: "metadata_node", current: true)
+          # Delete the parent so it's no longer preserved.
+          ChangeSetPersister.default.persister.delete(resource: parent_resource)
+
+          described_class.perform_now(status: "SUCCESS", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
+
+          expect(RepairCloudFixityJob).not_to have_received(:perform_later)
+        end
+      end
     end
 
     context "when the preserved object lock token is nil" do
-      let(:resource) do
-        FactoryBot.create_for_repository(:preservation_object, preserved_object_id: file_set.id, metadata_version: "invalid-token", metadata_node: FileMetadata.new(id: SecureRandom.uuid))
-      end
       it "passes no matter the metadata_version" do
         old_event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: SecureRandom.uuid, child_property: "metadata_node", current: true)
         allow_any_instance_of(FileSet).to receive(:optimistic_lock_token).and_return([])

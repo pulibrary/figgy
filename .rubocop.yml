@@ -41,6 +41,7 @@ Metrics/AbcSize:
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/services/file_appender.rb'
     - 'app/services/cdl/charge_manager.rb'
+    - 'app/jobs/cloud_fixity_job.rb'
 Metrics/BlockLength:
   Exclude:
     - '**/*.rake'
