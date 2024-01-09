@@ -15,6 +15,8 @@ class CloudFixityJob < ApplicationJob
     # Do not create an event and honeybadger notification if the preservation
     # object or the preseved resource no longer exist. This happens on occasion.
     return unless resources_exist?
+    # Don't try to fix something that won't preserve when we ask it to.
+    return unless ChangeSet.for(preserved_resource).preserve?
     event_change_set = EventChangeSet.new(Event.new)
     event_change_set.validate(type: :cloud_fixity, status: updated_status, resource_id: preservation_object_id, child_property: child_property.to_sym, child_id: child_id, current: true)
     raise "Unable to update fixity. Invalid event: #{event_change_set.errors.full_messages.to_sentence}" unless event_change_set.valid?
@@ -43,10 +45,11 @@ class CloudFixityJob < ApplicationJob
 
     def updated_status
       @updated_status ||=
-        if metadata_versions_different?
+        if (metadata_versions_different? || fixity_status == Event::FAILURE) && !previous_events&.first&.repairing?
           Event::REPAIRING
-        elsif fixity_status == Event::FAILURE && !previous_events&.first&.repairing?
-          Event::REPAIRING
+          # Don't repair again if the metadata versions are still different.
+        elsif previous_events&.first&.repairing?
+          Event::FAILURE
         else
           fixity_status
         end
