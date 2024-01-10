@@ -7,7 +7,7 @@ class CreateDerivativesJob < ApplicationJob
     Valkyrie::Derivatives::DerivativeService.for(id: file_set_id).create_derivatives
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     file_set.processing_status = "processed"
-    metadata_adapter.persister.save(resource: file_set)
+    file_set = change_set_persister.save(change_set: ChangeSet.for(file_set))
     messenger.derivatives_created(file_set)
     publish_to_geoserver(file_set)
     LocalFixityJob.perform_later(file_set_id)
@@ -23,6 +23,10 @@ class CreateDerivativesJob < ApplicationJob
 
   def messenger
     @messenger ||= EventGenerator.new
+  end
+
+  def change_set_persister
+    ChangeSetPersister.default
   end
 
   def publish_to_geoserver(file_set)

@@ -1288,7 +1288,7 @@ RSpec.describe ChangeSetPersister do
 
         change_set_persister.save(change_set: change_set)
         expect(PreserveChildrenJob).to have_received(:perform_later).exactly(1).times
-        expect(Preserver).to have_received(:new).exactly(4).times
+        expect(Preserver).to have_received(:new).exactly(5).times
         expect(CleanupFilesJob).not_to have_received(:perform_later)
       end
     end

@@ -57,6 +57,6 @@ RSpec.describe ExternalMetadataDerivativeService do
     expect(parent.visibility).to eq ["open"]
     # 2 for Vector Resource, 2 for FileSet, and 1 for the initial local
     # fixity check Event
-    expect(event_generator).to have_received(:record_updated).exactly(5).times
+    expect(event_generator).to have_received(:record_updated).exactly(6).times
   end
 end
