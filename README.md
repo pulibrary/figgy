@@ -83,7 +83,10 @@ fail. To get this working, do the following:
    using Rosetta"
 1. Open Terminal, go to this directory
 1. `asdf uninstall nodejs`
+1. `asdf uninstall yarn`
+1. `rm ~/.asdf/shims/yarn`
 1. `asdf install nodejs`
+1. `npm install -g yarn`
 1. `yarn install`
 1. Close Terminal, right click "Terminal" app in Finder, go to "Get Info", and
    uncheck "Open using Rosetta"
