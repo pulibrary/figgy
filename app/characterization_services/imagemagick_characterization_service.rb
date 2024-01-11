@@ -32,10 +32,14 @@ class ImagemagickCharacterizationService
     [:original_file, :intermediate_file, :preservation_file].each do |type|
       target_file = @file_set.try(type)
       next unless target_file
-      @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
-      next unless image_valid?
-      new_file = target_file.new(file_characterization_attributes.to_h)
-      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+      begin
+        @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+        new_file = target_file.new(file_characterization_attributes.to_h)
+        @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+      rescue StandardError => e
+        error_message = ["Error during characterization: #{e.message}"]
+        target_file.error_message = error_message
+      end
     end
     @file_set = persister.save(resource: @file_set) if save
     @file_set
@@ -53,21 +57,17 @@ class ImagemagickCharacterizationService
       height: image.height.to_s,
       mime_type: image.mime_type,
       checksum: MultiChecksum.for(@file_object),
-      size: image.size
+      size: image.size,
+      # TODO: write a test before adding this
+      # error_message: []
     }
   end
 
   # Retrieve the image handler from MiniMagick
   # @return [MiniMagick::Image]
   def image
+    # TODO: memoize this?
     MiniMagick::Image.open(filename)
-  rescue MiniMagick::Invalid
-    # Proceed as if this is not an image
-    nil
-  end
-
-  def image_valid?
-    File.size(filename).positive? && image.present?
   end
 
   # Retrieve the Resource to which the FileSet is attached

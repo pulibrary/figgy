@@ -91,12 +91,15 @@ RSpec.describe ImagemagickCharacterizationService do
   context "when provided with a file which is not a valid image file" do
     let(:file) { fixture_file_upload("files/invalid.tif", "image/tiff") }
     let(:invalid_file_set) { book_members.first }
-    it "does not characterize the file" do
+    it "adds an error message to the file set and does not characterize the file" do
       described_class.new(file_set: invalid_file_set, persister: persister).characterize
       file_set = query_service.find_by(id: invalid_file_set.id)
       expect(file_set.file_metadata[0].width).to be_empty
+      expect(file_set.file_metadata[0].error_message.first). to start_with "Error during characterization:"
     end
   end
+
+  # TODO: write a test for a a file that has 0 bytes
 
   describe "#valid?" do
     context "when provided with a scanned resource fileset" do
