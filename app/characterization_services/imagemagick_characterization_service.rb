@@ -58,8 +58,7 @@ class ImagemagickCharacterizationService
       mime_type: image.mime_type,
       checksum: MultiChecksum.for(@file_object),
       size: image.size,
-      # TODO: write a test before adding this
-      # error_message: []
+      error_message: [] # Ensure any previous error messages are removed
     }
   end
 

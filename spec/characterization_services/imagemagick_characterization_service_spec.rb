@@ -99,7 +99,31 @@ RSpec.describe ImagemagickCharacterizationService do
     end
   end
 
-  # TODO: write a test for a a file that has 0 bytes
+  context "when provided with a zero byte length file" do
+    let(:file) { fixture_file_upload("files/empty.tif", "image/tiff") }
+    let(:invalid_file_set) { book_members.first }
+    it "adds an error message to the file set and does not characterize the file" do
+      described_class.new(file_set: invalid_file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: invalid_file_set.id)
+      expect(file_set.file_metadata[0].width).to be_empty
+      expect(file_set.file_metadata[0].error_message.first). to start_with "Error during characterization:"
+    end
+  end
+
+  context "when characterization fails and then succeeds" do
+    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+    let(:test_file_set) { book_members.first }
+    it "removes any previous error messages" do
+      allow(MiniMagick::Image).to receive(:open).and_raise("Error")
+      described_class.new(file_set: test_file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: test_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+      allow(MiniMagick::Image).to receive(:open).and_call_original
+      described_class.new(file_set: file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: test_file_set.id)
+      expect(file_set.file_metadata[0].error_message).to be_empty
+    end
+  end
 
   describe "#valid?" do
     context "when provided with a scanned resource fileset" do
