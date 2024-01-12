@@ -41,4 +41,28 @@ RSpec.describe PDFCharacterizationService do
       expect(file_set.file_metadata[1].checksum).not_to be_empty
     end
   end
+
+  context "when provided with a file that can not be characterized", run_real_characterization: true do
+    let(:file) { fixture_file_upload("files/invalid.pdf", "application/pdf") }
+    it "adds an error message to the file set and raises an error" do
+      invalid_file_set = Wayfinder.for(resource).file_sets.first
+      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
+      file_set = query_service.find_by(id: invalid_file_set.id)
+      expect(file_set.file_metadata[0].width).to be_empty
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+    end
+  end
+
+  context "when characterization fails and then succeeds" do
+    it "removes any previous error messages" do
+      allow(Vips::Image).to receive(:pdfload).and_raise("Error")
+      expect { described_class.new(file_set: valid_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+      allow(Vips::Image).to receive(:pdfload).and_call_original
+      described_class.new(file_set: file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message).to be_empty
+    end
+  end
 end
