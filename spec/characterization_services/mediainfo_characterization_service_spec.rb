@@ -51,24 +51,6 @@ RSpec.describe MediainfoCharacterizationService do
     expect(new_file_set.original_file.duration).to eq ["23.123"]
   end
 
-  context "with a corrupt file or unsupported format" do
-    before do
-      allow(MediaInfo).to receive(:from).and_raise(ArgumentError)
-      allow(Valkyrie.logger).to receive(:warn)
-    end
-
-    it "sets technical metadata attributes empty" do
-      new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
-
-      expect(Valkyrie.logger).to have_received(:warn).at_least(:once).with(/MediainfoCharacterizationService\: Failed to characterize/)
-      expect(new_file_set.original_file.mime_type).to eq ["audio/ogg"]
-      expect(new_file_set.original_file.date_of_digitization).to be_empty
-      expect(new_file_set.original_file.producer).to be_empty
-      expect(new_file_set.original_file.source_media_type).to be_empty
-      expect(new_file_set.original_file.duration).to be_empty
-    end
-  end
-
   context "with an audio file that has an apostrophe in it" do
     let(:file) { fixture_file_upload("files/audio's.wav", "audio/x-wav") }
     it "pulls the mime type" do
@@ -154,6 +136,34 @@ RSpec.describe MediainfoCharacterizationService do
       expect(new_file_set.original_file.producer).to eq ["Test Video Producer"]
       expect(new_file_set.original_file.source_media_type).to eq ["DAV"]
       expect(new_file_set.original_file.duration).to eq ["0.984"]
+    end
+  end
+
+  context "when provided with a file that can not be characterized", run_real_characterization: true do
+    let(:file) { fixture_file_upload("files/invalid.wav", "audio/x-wav") }
+    let(:invalid_file_set) { members.first }
+
+    before do
+      allow(MediaInfo).to receive(:from).and_raise(ArgumentError)
+    end
+
+    it "adds an error message to the file set and raises an error" do
+      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(ArgumentError)
+      file_set = query_service.find_by(id: invalid_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+    end
+  end
+
+  context "when characterization fails and then succeeds" do
+    it "removes any previous error messages" do
+      allow(MediaInfo).to receive(:from).and_raise(ArgumentError)
+      expect { described_class.new(file_set: valid_file_set, persister: persister).characterize }.to raise_error(ArgumentError)
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+      allow(MediaInfo).to receive(:from).and_call_original
+      described_class.new(file_set: file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message).to be_empty
     end
   end
 

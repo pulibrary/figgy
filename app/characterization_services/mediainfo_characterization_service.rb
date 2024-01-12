@@ -27,11 +27,16 @@ class MediainfoCharacterizationService
     [:original_file, :intermediate_file, :preservation_file].each do |type|
       target_file = @file_set.try(type)
       next unless target_file
-      @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
-      new_file = target_file.new(file_characterization_attributes.to_h)
-      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
+      begin
+        @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+        file_characterization_attributes.each { |k, v| target_file.try("#{k}=", v) }
+      rescue => e
+        @characterization_error = e
+        target_file.error_message = ["Error during characterization: #{e.message}"]
+      end
     end
     @file_set = persister.save(resource: @file_set) if save
+    raise @characterization_error if @characterization_error
     @file_set
   end
 
@@ -52,7 +57,8 @@ class MediainfoCharacterizationService
       duration: duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
       checksum: MultiChecksum.for(@file_object),
       size: media.filesize,
-      mime_type: mime_type
+      mime_type: mime_type,
+      error_message: [] # Ensure any previous error messages are removed
     }
   end
 
@@ -68,61 +74,6 @@ class MediainfoCharacterizationService
   end
 
   private
-
-    # Null Object modeling metadata values from MediaInfo.from
-    # @see MediaInfo::Tracks
-    class NullTracks
-      # Implements the video track accessor
-      # @return [nil]
-      def video; end
-
-      # Implements the audio track accessor
-      # @return [nil]
-      def audio; end
-
-      # @return [nil]
-      def video?; end
-
-      # @return [nil]
-      def audio?; end
-
-      # Implements the accessor for track types
-      # Returns only a track of the type "null"
-      # @return [Array<String>]
-      def track_types
-        ["null_track"]
-      end
-
-      # Implements the accessor for the sole "null" track
-      # @return [NullTracks::Attributes]
-      def null_track
-        Attributes.new
-      end
-
-      # Null Object modeling metadata values for MediaInfo::Tracks
-      # @see MediaInfo::Tracks::Attributes
-      class Attributes
-        # Implements the accessor for the encoded date element
-        # @return [nil]
-        def encoded_date; end
-
-        # Implements the accessor for the producer element
-        # @return [nil]
-        def producer; end
-
-        # Implements the accessor for the original source form element
-        # @return [nil]
-        def originalsourceform; end
-
-        # Implements the accessor for the duration element
-        # @return [nil]
-        def duration; end
-
-        # Implements the accessor for the filesize element
-        # @return [nil]
-        def filesize; end
-      end
-    end
 
     # Determine if the media type for the FileSet is supported
     # @return [TrueClass, FalseClass]
@@ -143,13 +94,9 @@ class MediainfoCharacterizationService
     end
 
     # Extract the MediaInfo tracks for the binary file stored on the FileSet
-    # If this fails, the error is logged and a Null Object is returned
-    # @return [MediaInfo::Tracks, NullTracks]
+    # @return [MediaInfo::Tracks]
     def media_info_tracks
       MediaInfo.from(filename)
-    rescue StandardError => error
-      Valkyrie.logger.warn "#{self.class}: Failed to characterize #{filename} using MediaInfo: #{error.message}"
-      NullTracks.new
     end
 
     # Retrieves the MediaInfo metadata values for video, audio, or general/other tracks
