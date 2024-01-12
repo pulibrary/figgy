@@ -50,4 +50,14 @@ RSpec.describe ExternalMetadataCharacterizationService do
       expect(new_file_set.original_file.mime_type).to eq ["application/xml"]
     end
   end
+
+  context "with an invalid file" do
+    let(:file) { fixture_file_upload("files/geo_metadata/empty.xml", "application/xml") }
+
+    it "sets the file node mime_type without a mime type extension" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/xml"]
+    end
+  end
 end
