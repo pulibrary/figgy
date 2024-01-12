@@ -34,14 +34,14 @@ class ImagemagickCharacterizationService
       next unless target_file
       begin
         @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
-        new_file = target_file.new(file_characterization_attributes.to_h)
-        @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-      rescue StandardError => e
-        error_message = ["Error during characterization: #{e.message}"]
-        target_file.error_message = error_message
+        file_characterization_attributes.each { |k, v| target_file.try("#{k}=", v) }
+      rescue => e
+        @characterization_error = e
+        target_file.error_message = ["Error during characterization: #{e.message}"]
       end
     end
     @file_set = persister.save(resource: @file_set) if save
+    raise @characterization_error if @characterization_error
     @file_set
   end
 
