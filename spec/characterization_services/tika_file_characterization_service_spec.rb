@@ -131,6 +131,31 @@ RSpec.describe TikaFileCharacterizationService do
     end
   end
 
+  context "when provided with a file that can not be processed by Tika", run_real_characterization: true do
+    let(:file) { fixture_file_upload("files/empty.tif", "image/tiff") }
+    let(:invalid_file_set) { book_members.first }
+
+    it "adds an error message to the file set and raises an error" do
+      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
+      file_set = query_service.find_by(id: invalid_file_set.id)
+      expect(file_set.file_metadata[0].width).to be_empty
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+    end
+  end
+
+  context "when characterization fails and then succeeds" do
+    it "removes any previous error messages" do
+      allow(RubyTikaApp).to receive(:new).and_raise("Error")
+      expect { described_class.new(file_set: valid_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+      allow(RubyTikaApp).to receive(:new).and_call_original
+      described_class.new(file_set: file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message).to be_empty
+    end
+  end
+
   describe "#valid?" do
     it "returns true" do
       expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
