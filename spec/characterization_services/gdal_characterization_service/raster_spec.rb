@@ -49,13 +49,29 @@ RSpec.describe GdalCharacterizationService::Raster do
     end
   end
 
-  context "with a non-georaster file" do
-    let(:tika_output) { tika_xml_output }
+  context "when provided with a geotiff that cannot be characterized", run_real_characterization: true do
+    let(:file) { fixture_file_upload("files/raster/invalid-geotiff.tif", "image/tiff") }
+    let(:invalid_file_set) { decorated_raster_resources.first }
 
-    it "sets the correct mime_type on the file_set on characterize" do
-      file_set = valid_file_set
-      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
-      expect(new_file_set.original_file.mime_type).to eq ["application/xml"]
+    it "adds an error message to the file set and raises an error" do
+      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(GeoDerivatives::GdalError)
+      file_set = query_service.find_by(id: invalid_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+    end
+  end
+
+  context "when raster characterization fails and then succeeds", run_real_characterization: true do
+    let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
+
+    it "removes any previous error messages" do
+      allow(GeoDerivatives::Processors::Raster::Info).to receive(:new).and_raise(GeoDerivatives::GdalError)
+      expect { described_class.new(file_set: valid_file_set, persister: persister).characterize }.to raise_error(GeoDerivatives::GdalError)
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+      allow(GeoDerivatives::Processors::Raster::Info).to receive(:new).and_call_original
+      described_class.new(file_set: file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message).to be_empty
     end
   end
 
