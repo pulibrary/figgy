@@ -94,17 +94,19 @@ export default {
   },
   methods: {
     cutSelected: function () {
-      // if folder is selected, cut folder
-      // if cards are selected, cut gallery items
       if (this.gallery.selected.length) {
-
+        // if cards are selected, cut gallery items
         this.$store.dispatch('cut', this.gallery.selected)
         this.selectNoneGallery()
       } else if (this.tree.selected) {
-        this.$store.commit("CUT_FOLDER", this.tree.selected)
-        this.selectNoneTree()
+        // if folder is selected, cut tree items
+        if(this.rootNodeSelected) {
+          alert('Sorry, you can\'t cut the root node.')
+        } else {
+          this.$store.commit("CUT_FOLDER", this.tree.selected)
+          this.selectNoneTree()
+        }
       }
-
     },
     getItemIndexById: function (id) {
       return this.gallery.items
@@ -187,27 +189,25 @@ export default {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
 
-      let folders = []
-      if(folderList[0] !== cutTreeStructure){
-        folders = this.removeFolder(folderList, cutTreeStructure)
-      } else {
-        alert('You cannot cut the root node.')
-        return false
-      }
-
       let structure = {
         id: this.tree.structure.id,
         label: this.tree.structure.label,
       }
 
+      // remove the folder if it currently exists
+      let selectedFolderObject = this.findFolderById(folderList, this.tree.selected)
+      let folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
+
       if(this.tree.selected === rootId) {
         folders.push(cutTreeStructure)
         structure.folders = folders
       } else {
-        let selectedFolderObject = this.findFolderById(folders, this.tree.selected)
         selectedFolderObject.folders.push(cutTreeStructure)
         structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
       }
+      // remove the newly pasted structure from its old location
+      console.log(structure.folders)
+
       this.$store.commit("SET_STRUCTURE", structure)
       this.selectNoneTree()
       this.clearClipboard()
@@ -219,7 +219,7 @@ export default {
 
       if (root.folders && root.folders.length > 0) {
           root.folders = root.folders.map(folder =>
-              replaceObjectById(folder, idToReplace, replacementObject)
+              this.replaceObjectById(folder, idToReplace, replacementObject)
           );
       }
 
@@ -241,7 +241,7 @@ export default {
           this.groupSelectedIntoFolder()
           break
         case 'Delete Folder':
-          this.deleteFolder(value.target)
+          this.deleteFolder(this.tree.selected)
           break
         case 'Undo Cut (Ctrl-z)':
           this.clearClipboard()
@@ -308,9 +308,9 @@ export default {
       }
       return array
     },
-    deleteFolder: function () {
+    deleteFolder: function (folder_id) {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let folderToBeRemoved = this.findFolderById(folderList, this.tree.selected)
+      let folderToBeRemoved = this.findFolderById(folderList, folder_id)
       const selectedNode = this.tree.selected
       const rootId = this.tree.structure.id
       if(selectedNode === rootId) {
@@ -330,13 +330,9 @@ export default {
       }
     },
     commitRemoveFolder: function(folderList, folderToBeRemoved) {
-      let folders = []
-      if(folderList[0] !== folderToBeRemoved){
-        folders = this.removeFolder(folderList, folderToBeRemoved)
-      }
       const structure = {
         id: this.tree.structure.id,
-        folders: this.removeFolder(folderList, folderToBeRemoved),
+        folders: this.removeNestedObjectById(folderList, folderToBeRemoved.id),
         label: this.tree.structure.label,
       }
       this.$store.commit("DELETE_FOLDER", structure)
@@ -351,17 +347,40 @@ export default {
       this.$store.commit("UPDATE_ITEMS", galleryItems)
       this.end_nodes = []
     },
-    removeFolder: function (array, folder) {
-      for (const item of array) {
-        if (item.folders.includes(folder)) {
-          const index = item.folders.indexOf(folder)
-          item.folders.splice(index, 1)
+    removeObjectFromArray: function (array, targetObject) {
+        // Base case: If the array is empty, or the target object is not found, return the array as it is
+        if (array.length === 0) {
+            return array;
         }
-        if (item.folders?.length) {
-          const innerResult = this.removeFolder(item.folders, folder)
+
+        // Check if the current element is equal to the target object
+        if (this.isEqual(array[0], targetObject)) {
+            // If found, remove the current element and return the rest of the array
+            return array.slice(1);
+        } else {
+            // If not found, recursively call the function on the rest of the array
+            return [array[0], ...this.removeObjectFromArray(array[0].folders || [], targetObject)];
         }
-      }
-      return array
+    },
+    // Helper function to check if two objects are equal
+    isEqual: function (obj1, obj2) {
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
+    },
+    removeNestedObjectById: function (nestedArray, idToRemove) {
+      return nestedArray.map(item => {
+          if (item.folders && item.folders.length > 0) {
+              // If the current item has folders, recursively call the function
+              item.folders = this.removeNestedObjectById(item.folders, idToRemove);
+          }
+
+          // Check if the current item's id matches the id parameter
+          if (item.id === idToRemove) {
+              return undefined; // Exclude the current item
+          }
+
+          // Otherwise, keep the item in the result array
+          return item;
+      }).filter(item => item !== undefined);
     },
     findFolderById: function (array, id) {
       for (const item of array) {
