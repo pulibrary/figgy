@@ -17,20 +17,29 @@ class GdalCharacterizationService
   #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize
   # @example characterize a file and do not persist the changes
   #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize(save: false)
+  # rubocop:disable Metrics/MethodLength
   def characterize(save: true)
     [:original_file, :intermediate_file, :preservation_file].each do |type|
       @target_file = @file_set.try(type)
       next unless @target_file
-      @file_object = Valkyrie::StorageAdapter.find_by(id: @target_file.file_identifiers[0])
-      @dataset_path = filename
-      unzip_original_file if zip_file?
-      new_file = @target_file.new(file_characterization_attributes.to_h)
-      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != new_file.id } + [new_file]
-      clean_up_zip_directory if zip_file?
+      begin
+        @file_object = Valkyrie::StorageAdapter.find_by(id: @target_file.file_identifiers[0])
+        @dataset_path = filename
+        unzip_original_file if zip_file?
+        file_characterization_attributes.each { |k, v| @target_file.try("#{k}=", v) }
+        @target_file.error_message = []
+      rescue => e
+        @characterization_error = e
+        @target_file.error_message = ["Error during characterization: #{e.message}"]
+      ensure
+        clean_up_zip_directory if zip_file?
+      end
     end
     @file_set = persister.save(resource: @file_set) if save
+    raise @characterization_error if @characterization_error
     @file_set
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Removes unzipped files
   def clean_up_zip_directory

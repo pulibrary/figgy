@@ -6,9 +6,10 @@ RSpec.describe GeoDerivatives::Processors::Raster::Info do
   let(:processor) { described_class.new(path) }
   let(:path) { "test.tif" }
   let(:info_doc) { file_fixture("files/gdal/gdalinfo.json").read }
+  let(:status) { double(success?: true) }
 
   before do
-    allow(Open3).to receive(:capture3).and_return([info_doc, "", ""])
+    allow(Open3).to receive(:capture3).and_return([info_doc, "", status])
   end
 
   context "after intialization" do
@@ -49,34 +50,6 @@ RSpec.describe GeoDerivatives::Processors::Raster::Info do
 
       it "returns with min and max values" do
         expect(processor.min_max).to eq("2.054 11.717")
-      end
-    end
-
-    context "when gdalinfo does not return data" do
-      let(:info_doc) { file_fixture("files/gdal/gdalinfo-blank.txt").read }
-
-      describe "#driver" do
-        it "returns an empty string" do
-          expect(processor.driver).to eq("")
-        end
-      end
-
-      describe "#min_max" do
-        it "returns an empty string" do
-          expect(processor.min_max).to eq("")
-        end
-      end
-
-      describe "#size" do
-        it "returns an empty string" do
-          expect(processor.size).to eq("")
-        end
-      end
-
-      describe "#bounds" do
-        it "returns an empty string" do
-          expect(processor.bounds).to eq("")
-        end
       end
     end
 

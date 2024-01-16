@@ -25,11 +25,7 @@ module GeoDerivatives
         # Parsed json out from gdalinfo
         # @return [Hash]
         def doc
-          @doc ||= begin
-                     JSON.parse(gdalinfo(path))
-                   rescue
-                     {}
-                   end
+          @doc ||= JSON.parse(gdalinfo(path))
         end
 
         # Returns the min and max values for a raster.
@@ -57,7 +53,8 @@ module GeoDerivatives
           # @param path [String] path to raster file
           # @return [String] output of gdalinfo
           def gdalinfo(path)
-            stdout, _stderr, _status = Open3.capture3("gdalinfo", "-json", "-mm", path.to_s)
+            stdout, stderr, status = Open3.capture3("gdalinfo", "-json", "-mm", path.to_s)
+            raise(GeoDerivatives::GdalError, stderr) unless status.success?
             stdout
           end
 

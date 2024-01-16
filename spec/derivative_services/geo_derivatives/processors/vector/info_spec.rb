@@ -7,12 +7,13 @@ RSpec.describe GeoDerivatives::Processors::Vector::Info do
   let(:path) { "test.tif" }
   let(:polygon_info_doc) { file_fixture("files/gdal/ogrinfo_polygon.txt").read }
   let(:line_info_doc) { file_fixture("files/gdal/ogrinfo_line.txt").read }
+  let(:status) { double(success?: true) }
+
+  before do
+    allow(Open3).to receive(:capture3).and_return([polygon_info_doc, "", status])
+  end
 
   context "when initializing a new info class" do
-    before do
-      allow(Open3).to receive(:capture3).and_return([polygon_info_doc, "", ""])
-    end
-
     it "shells out to ogrinfo and sets the doc variable to the output string" do
       expect(processor.doc).to eq(polygon_info_doc)
       expect(Open3).to have_received(:capture3).with("ogrinfo", "-ro", "-so", "-al", path.to_s)

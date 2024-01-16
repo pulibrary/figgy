@@ -25,16 +25,30 @@ class PDFCharacterizationService
     [:original_file, :intermediate_file, :preservation_file].each do |type|
       target_file = @file_set.try(type)
       next unless target_file
-      @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
-      target_file.checksum = MultiChecksum.for(@file_object)
-      target_file.page_count = pdf_page_count
-      @file_set.file_metadata = @file_set.file_metadata.select { |x| x.id != target_file.id } + [target_file]
+      begin
+        @file_object = Valkyrie::StorageAdapter.find_by(id: target_file.file_identifiers[0])
+        file_characterization_attributes.each { |k, v| target_file.try("#{k}=", v) }
+      rescue => e
+        @characterization_error = e
+        target_file.error_message = ["Error during characterization: #{e.message}"]
+      end
     end
     @file_set = persister.save(resource: @file_set) if save
+    raise @characterization_error if @characterization_error
     @file_set
   end
 
-  def pdf_page_count
-    @pdf_page_count ||= Vips::Image.pdfload(@file_object.disk_path.to_s, access: :sequential, memory: true).get_value("pdf-n_pages")
-  end
+  private
+
+    def file_characterization_attributes
+      {
+        checksum: MultiChecksum.for(@file_object),
+        page_count: pdf_page_count,
+        error_message: [] # Ensure any previous error messages are removed
+      }
+    end
+
+    def pdf_page_count
+      @pdf_page_count ||= Vips::Image.pdfload(@file_object.disk_path.to_s, access: :sequential, memory: true).get_value("pdf-n_pages")
+    end
 end
