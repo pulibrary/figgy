@@ -17,6 +17,14 @@
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
+    <input-button
+      id="save_btn"
+      variation="solid"
+      size="medium"
+      @button-clicked="saveHandler($event)"
+    >
+      Save Structure
+    </input-button>
     <spacer />
     <div class="lux-zoom-slider">
       <lux-icon-base
@@ -93,6 +101,52 @@ export default {
     },
   },
   methods: {
+    renamePropertiesForSave: function (arr) {
+      return arr.map(obj => {
+        const newObj = {};
+        for (const key in obj) {
+          if (key === "folders") {
+            if (obj.file === true) {
+              newObj["proxy"] = obj.id;
+            }
+            newObj["node"] = this.renamePropertiesForSave(obj[key]);
+          } else {
+            newObj[key] = obj[key];
+          }
+        }
+        return newObj;
+      });
+    },
+    cleanNestedArrayForSave: function (arr) {
+      return arr.map(obj => {
+        let cleanedObj = {}
+        if (obj.proxy !== undefined) {
+          cleanedObj.proxy = obj.proxy
+        } else {
+          cleanedObj.node = this.cleanNestedArrayForSave(obj.node)
+          cleanedObj.label = obj.label
+        }
+
+        return cleanedObj;
+      });
+    },
+    saveHandler: function (event) {
+      console.log(this.isSaveDisabled())
+      if(this.isSaveDisabled()) {
+        // workaround for a bug in LUX that doesn't style disabled buttons properly
+        alert('The structure has not changed, nothing to save.')
+      } else {
+        let structureNodes = this.renamePropertiesForSave(this.tree.structure.folders)
+        structureNodes = this.cleanNestedArrayForSave(structureNodes)
+        console.log(JSON.stringify(structureNodes))
+
+        let structureToSave = {
+          label: this.tree.structure.label,
+          nodes: structureNodes,
+        }
+        // this.$store.dispatch('saveStructureGql', structureToSave)
+      }
+    },
     cutSelected: function () {
       if (this.gallery.selected.length) {
         // if cards are selected, cut gallery items
@@ -121,11 +175,21 @@ export default {
     isPasteDisabled: function () {
       return !(this.gallery.cut.length || this.tree.cut)
     },
+    isSaveDisabled: function () {
+      if (this.tree.saveState === 'SAVING') {
+        return true
+      } else if (this.tree.modified) {
+        return false
+      } else {
+        console.log(this.tree.modified)
+        return true
+      }
+    },
     isZoomDisabled: function () {
       if (this.gallery.selected.length === 1) {
         return false
       } else if (this.tree.selected) {
-        let nodeToBeZoomed = this.findFolderById(folderList, this.tree.selected)
+        let nodeToBeZoomed = this.findFolderById(this.tree.structure, this.tree.selected)
         let has_service = !!nodeToBeZoomed.service
         if (has_service) {
           return false
@@ -179,6 +243,7 @@ export default {
         this.$store.commit("ADD_RESOURCE", structure)
 
         this.$store.dispatch('paste', items)
+        this.$store.commit("SET_MODIFIED", true)
         this.clearClipboard()
         this.selectNoneGallery()
       }
@@ -205,10 +270,9 @@ export default {
         selectedFolderObject.folders.push(cutTreeStructure)
         structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
       }
-      // remove the newly pasted structure from its old location
-      console.log(structure.folders)
 
       this.$store.commit("SET_STRUCTURE", structure)
+      this.$store.commit("SET_MODIFIED", true)
       this.selectNoneTree()
       this.clearClipboard()
     },
