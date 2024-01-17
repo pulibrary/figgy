@@ -9,7 +9,7 @@ RSpec.describe ExternalMetadataDerivativeService do
   let(:derivative_service) do
     ExternalMetadataDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
-  let(:event_generator) { instance_double(EventGenerator::GeoblacklightEventGenerator).as_null_object }
+  let(:event_generator) { EventGenerator::GeoblacklightEventGenerator.new(nil) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
@@ -55,8 +55,7 @@ RSpec.describe ExternalMetadataDerivativeService do
     parent = query_service.find_by(id: parent_resource.id)
     expect(parent.title).to eq ["China census data by county, 2000-2010"]
     expect(parent.visibility).to eq ["open"]
-    # 2 for Vector Resource, 2 for FileSet, and 1 for the initial local
-    # fixity check Event
-    expect(event_generator).to have_received(:record_updated).exactly(6).times
+    # Twice for VectorResource
+    expect(event_generator).to have_received(:record_updated).exactly(2).times
   end
 end
