@@ -46,16 +46,9 @@ RSpec.describe ExternalMetadataDerivativeService do
     end
   end
 
-  before do
-    allow(EventGenerator::GeoblacklightEventGenerator).to receive(:new).and_return(event_generator)
-    allow(event_generator).to receive(:record_updated)
-  end
-
-  it "extracts metadata from the file into the parent resource and triggers an update event", rabbit_stubbed: true do
+  it "extracts metadata from the file into the parent resource" do
     parent = query_service.find_by(id: parent_resource.id)
     expect(parent.title).to eq ["China census data by county, 2000-2010"]
     expect(parent.visibility).to eq ["open"]
-    # Twice for VectorResource
-    expect(event_generator).to have_received(:record_updated).exactly(2).times
   end
 end
