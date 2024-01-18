@@ -5,9 +5,8 @@ class CharacterizationJob < ApplicationJob
   # @param file_set_id [string] stringified Valkyrie id
   def perform(file_set_id)
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
-    metadata_adapter.persister.buffer_into_index do |buffered_adapter|
-      Valkyrie::Derivatives::FileCharacterizationService.for(file_set: file_set, persister: buffered_adapter.persister).characterize
-    end
+    Valkyrie::Derivatives::FileCharacterizationService.for(file_set: file_set, persister: metadata_adapter.persister).characterize
+
     CreateDerivativesJob.set(queue: queue_name).perform_later(file_set_id)
   rescue Valkyrie::Persistence::ObjectNotFoundError => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
