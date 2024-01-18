@@ -20,9 +20,7 @@ class RecharacterizeJob < ApplicationJob
 
   def recharacterize(file_sets)
     file_sets.each do |file_set|
-      @metadata_adapter.persister.buffer_into_index do |buffered_adapter|
-        Valkyrie::Derivatives::FileCharacterizationService.for(file_set: file_set, persister: buffered_adapter.persister).characterize
-      end
+      Valkyrie::Derivatives::FileCharacterizationService.for(file_set: file_set, persister: @metadata_adapter.persister).characterize
     end
   end
 end
