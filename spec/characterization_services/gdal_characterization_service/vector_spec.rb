@@ -40,6 +40,18 @@ RSpec.describe GdalCharacterizationService::Vector do
     end
   end
 
+  context "with a geojson file with an unsafe filename" do
+    let(:file) { fixture_file_upload("files/vector/geo_&_unsafe.json", "application/vnd.geo+json") }
+    let(:tika_output) { tika_geojson_output }
+
+    it "sets the correct mime_type and geometry attributes on the file_set on characterize" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/vnd.geo+json"]
+      expect(new_file_set.original_file.geometry).to eq ["Multi Polygon"]
+    end
+  end
+
   context "when provided with a shapefile that cannot be characterized", run_real_characterization: true do
     let(:file) { fixture_file_upload("files/vector/invalid-shapefile.zip", "application/zip") }
     let(:resource) do
