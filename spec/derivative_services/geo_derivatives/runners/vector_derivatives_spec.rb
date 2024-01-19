@@ -55,6 +55,16 @@ RSpec.describe GeoDerivatives::Runners::VectorDerivatives do
       it_behaves_like "a set of vector derivatives"
     end
 
+    context "with a zipped shapefile with an unsafe filename" do
+      let(:input_file_path) { Pathname.new(file_fixture("files/vector/shapefile_&_unsafe.zip")) }
+      let(:input_mime_type) { 'application/zip; ogr-format="ESRI Shapefile"' }
+      let(:cloud_vector_uri) { test_derivative_url("shapefile_cloud_vector", "pmtiles") }
+      let(:display_vector_uri) { test_derivative_url("shapefile_display_vector", "zip") }
+      let(:thumbnail_uri) { test_derivative_url("shapefile_thumbnail", "png") }
+
+      it_behaves_like "a set of vector derivatives"
+    end
+
     context "with a zipped shapefile that has a single feature" do
       let(:input_file_path) { Pathname.new(file_fixture("files/vector/taiwan.zip")) }
       let(:input_mime_type) { 'application/zip; ogr-format="ESRI Shapefile"' }
@@ -71,6 +81,16 @@ RSpec.describe GeoDerivatives::Runners::VectorDerivatives do
       let(:cloud_vector_uri) { test_derivative_url("geojson_cloud_vector", "pmtiles") }
       let(:display_vector_uri) { test_derivative_url("geojson_display_vector", "zip") }
       let(:thumbnail_uri) { test_derivative_url("geojson_thumbnail", "png") }
+
+      it_behaves_like "a set of vector derivatives"
+    end
+
+    context "with a geojson file with an unsafe filename" do
+      let(:input_file_path) { Pathname.new(file_fixture("files/vector/geo_&_unsafe.json")) }
+      let(:input_mime_type) { "application/vnd.geo+json" }
+      let(:cloud_vector_uri) { test_derivative_url("geo_&_unsafe_cloud_vector", "pmtiles") }
+      let(:display_vector_uri) { test_derivative_url("geo_&_unsafe_display_vector", "zip") }
+      let(:thumbnail_uri) { test_derivative_url("geo_&_unsafe_thumbnail", "png") }
 
       it_behaves_like "a set of vector derivatives"
     end

@@ -62,6 +62,17 @@ RSpec.describe RasterResourceDerivativeService do
     end
   end
 
+  context "with a geotiff with an unsafe filename" do
+    let(:file) { fixture_file_upload("files/raster/geotiff_&_unsafe.tif", "image/tif") }
+    it "generates derivates without erroring" do
+      resource = query_service.find_by(id: valid_resource.id)
+      rasters = resource.file_metadata.find_all { |f| f.label == ["display_raster.tif"] }
+      raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.first.file_identifiers.first)
+
+      expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+    end
+  end
+
   context "with a non-geo tiff" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tif") }
 

@@ -17,7 +17,7 @@ module GeoDerivatives
         end
 
         # Executes a ogr2ogr command. Used to reproject a
-        # vector dataset and save the output as a flatgeobuff in WGS84
+        # vector dataset and save the output as a GeoJSON file in WGS84
         # @param in_path [String] file input path
         # #param options [Hash] creation options
         # @param out_path [String] processor output file path
