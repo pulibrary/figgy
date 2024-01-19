@@ -73,7 +73,7 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
 
     describe "#warp" do
       it "executes a reproject command" do
-        command = "gdalwarp -q -t_srs EPSG:4326 files/geo.tif output/geo.png -co TILED=YES -co COMPRESS=NONE"
+        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png -co TILED=YES -co COMPRESS=NONE"
         processor.class.warp(file_name, output_file, options)
         expect(processor.class).to have_received(:execute).with command
       end
@@ -81,7 +81,7 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
 
     describe "#compress" do
       it "returns a gdal_translate command with a compress option" do
-        command = "gdal_translate -q -ot Byte -a_srs EPSG:4326 files/geo.tif output/geo.png -co COMPRESS=JPEG -co JPEG_QUALITY=90"
+        command = "gdal_translate -q -ot Byte -a_srs EPSG:4326 \"files/geo.tif\" output/geo.png -co COMPRESS=JPEG -co JPEG_QUALITY=90"
         processor.class.compress(file_name, output_file, options)
         expect(processor.class).to have_received(:execute).with command
       end
@@ -89,7 +89,7 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
 
     describe "#rasterize" do
       it "executes a rasterize command" do
-        command = "gdal_rasterize -q -burn 0 -init 255 -ot Byte -ts 150 150 -of GTiff files/geo.tif output/geo.png"
+        command = "gdal_rasterize -q -burn 0 -init 255 -ot Byte -ts 150 150 -of GTiff \"files/geo.tif\" output/geo.png"
         processor.class.rasterize(file_name, output_file, options)
         expect(processor.class).to have_received(:execute).with command
       end
