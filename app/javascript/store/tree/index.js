@@ -8,6 +8,10 @@ export const treeState = {
 }
 
 export const treeMutations = {
+  APPLY_TREE_STATE(state) {
+    state.modified = false
+    state.saveState = "NOT_SAVED"
+  },
   ADD_RESOURCE(state, structure) {
     state.structure = structure
   },
