@@ -81,13 +81,7 @@ describe('UVManager', () => {
         return 'https://figgy.princeton.edu/uv/uv_config.json'
       } else { return null }
     })
-
-    // This makes it so global.UV.URLDataProvider.get returns our mock data
-    const provider = vi.fn().mockImplementation(() => {
-      return { get: getResult }
-    })
-    global.UV = { URLDataProvider: provider }
-    global.createUV = vi.fn()
+    global.getResult = getResult
     // Allow window location assign
     const location = window.location
     vi.spyOn(location, 'assign').mockImplementation(() => true)
