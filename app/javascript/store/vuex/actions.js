@@ -110,6 +110,41 @@ const actions = {
         context.commit('ERROR_MESSAGE', err)
         context.commit('SAVED_STATE', 'ERROR')
       })
+  },
+  async saveStructureAJAX (context, resource) {
+    context.commit('SAVED_STRUCTURE_STATE', 'SAVING')
+
+    let resource_type = resource.resourceClassName.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
+
+    let xhr = new XMLHttpRequest()
+    let url = `/concern/${resource_type}s/${resource.id}`
+    let data = JSON.stringify({[resource_type]: {'logical_structure': resource.structure }})
+    let token = document.querySelector('meta[name="csrf-token"]').content
+    console.log(token)
+    xhr.open('PUT', url, true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader('dataType', 'json')
+    xhr.setRequestHeader('X-CSRF-Token', token)
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        // Request completed
+        console.log('Request Completed!')
+        if (xhr.status === 200 || xhr.status === 201) {
+          // Successful response
+          console.log('Successful Save!')
+          context.commit('SAVED_STRUCTURE_STATE', 'SAVED');
+          context.commit('APPLY_TREE_STATE');
+        } else {
+          // Handle errors here
+          console.error('Error:', xhr.status, xhr.statusText);
+          context.commit('SAVED_STATE', 'ERROR')
+        }
+      }
+    };
+
+    xhr.send(data);
+
   }
 }
 

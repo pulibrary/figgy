@@ -109,7 +109,7 @@ export default {
             if (obj.file === true) {
               newObj["proxy"] = obj.id;
             }
-            newObj["node"] = this.renamePropertiesForSave(obj[key]);
+            newObj["nodes"] = this.renamePropertiesForSave(obj[key]);
           } else {
             newObj[key] = obj[key];
           }
@@ -123,7 +123,7 @@ export default {
         if (obj.proxy !== undefined) {
           cleanedObj.proxy = obj.proxy
         } else {
-          cleanedObj.node = this.cleanNestedArrayForSave(obj.node)
+          cleanedObj.nodes = this.cleanNestedArrayForSave(obj.nodes)
           cleanedObj.label = obj.label
         }
 
@@ -140,11 +140,15 @@ export default {
         structureNodes = this.cleanNestedArrayForSave(structureNodes)
         console.log(JSON.stringify(structureNodes))
 
-        let structureToSave = {
-          label: this.tree.structure.label,
-          nodes: structureNodes,
+        let resourceToSave = {
+          id: this.resource.id,
+          resourceClassName: this.resource.resourceClassName,
+          structure: {
+            label: this.tree.structure.label,
+            nodes: structureNodes,
+          }
         }
-        // this.$store.dispatch('saveStructureGql', structureToSave)
+        this.$store.dispatch('saveStructureAJAX', resourceToSave)
       }
     },
     cutSelected: function () {
