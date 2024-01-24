@@ -118,7 +118,7 @@ const actions = {
 
     let xhr = new XMLHttpRequest()
     let url = `/concern/${resource_type}s/${resource.id}`
-    let data = JSON.stringify({[resource_type]: {'logical_structure': resource.structure }})
+    let data = JSON.stringify({[resource_type]: {'logical_structure': [resource.structure] }})
     let token = document.querySelector('meta[name="csrf-token"]').content
     console.log(token)
     xhr.open('PUT', url, true)
