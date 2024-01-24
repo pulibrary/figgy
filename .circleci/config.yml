@@ -1,7 +1,7 @@
 ---
 version: 2.1
 orbs:
-  browser-tools: circleci/browser-tools@1.4.1
+  browser-tools: circleci/browser-tools@1.4.6
   node: circleci/node@5.0.2
 jobs:
   build:
@@ -21,8 +21,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
     resource_class: large
     steps:
-      - browser-tools/install-chrome:
-          chrome-version: 114.0.5735.90 # released may 2023
+      - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - checkout
       - node/install:
@@ -83,8 +82,7 @@ jobs:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       COVERALLS_PARALLEL: true
     steps:
-      - browser-tools/install-chrome:
-          chrome-version: 114.0.5735.90 # released may 2023
+      - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'
@@ -166,8 +164,7 @@ jobs:
           PSQL_PAGER: ''
     resource_class: large
     steps:
-      - browser-tools/install-chrome:
-          chrome-version: 114.0.5735.90 # released may 2023
+      - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'

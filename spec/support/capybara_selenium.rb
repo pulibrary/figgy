@@ -15,12 +15,11 @@ if !ENV["CI"]
   Capybara.app_host = "http://host.docker.internal:#{Capybara.server_port}"
   browser = :remote
 end
-Capybara.register_driver(:selenium) do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    { "goog:chromeOptions": %w[headless disable-gpu disable-setuid-sandbox window-size=1920,1080] }
-  )
 
-  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+Capybara.register_driver(:selenium) do |app|
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new(
+    args: %w[headless disable-gpu disable-setuid-sandbox window-size=1920,1080]
+  )
   browser_options.add_argument("--headless") unless ENV["RUN_IN_BROWSER"] == "true"
   browser_options.add_argument("--disable-gpu")
 
@@ -29,7 +28,7 @@ Capybara.register_driver(:selenium) do |app|
   http_client.open_timeout = 120
   Capybara::Selenium::Driver.new(app,
                                  browser: browser,
-                                 capabilities: [capabilities, browser_options],
+                                 options: browser_options,
                                  http_client: http_client,
                                  url: selenium_url)
 end
