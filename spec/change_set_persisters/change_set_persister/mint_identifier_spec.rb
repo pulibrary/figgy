@@ -86,5 +86,22 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
         expect(hook.run).to be nil
       end
     end
+
+    context "when in development" do
+      before do
+        allow(Ezid::Identifier).to receive(:mint)
+        allow(Rails.env).to receive(:development?).and_return(true)
+      end
+
+      it "mints a new ARK for published SimpleResources" do
+        change_set.validate(state: :complete)
+
+        hook.run
+
+        expect(change_set.model.identifier).not_to be_empty
+        expect(change_set.model.identifier.first).to include "ark:/99999"
+        expect(Ezid::Identifier).not_to have_received(:mint)
+      end
+    end
   end
 end

@@ -73,4 +73,12 @@ class IdentifierService
   private_class_method def self.minter
     Ezid::Identifier
   end
+
+  # Mocked service to use in development
+  class Mock
+    def self.mint_or_update(resource:)
+      return if resource.identifier&.first.present?
+      resource.identifier = "ark:/99999/#{SecureRandom.alphanumeric(9).downcase}"
+    end
+  end
 end
