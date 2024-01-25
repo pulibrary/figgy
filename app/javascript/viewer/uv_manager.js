@@ -95,25 +95,40 @@ export default class UVManager {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
-    const opts = {
-      configUri: this.configURI,
+    // const opts = {
+    //   manifest: this.manifest,
+    //   embedded: true,
+    //   collectionIndex:
+    //     this.iiifUrlAdapter.get('c') !== undefined
+    //       ? Number(this.iiifUrlAdapter.get('c'))
+    //       : undefined,
+    //   manifestIndex: Number(this.iiifUrlAdapter.get('m', 0)),
+    //   canvasIndex: Number(this.iiifUrlAdapter.get('cv', 0)),
+    //   rotation: Number(this.iiifUrlAdapter.get('r', 0)),
+    //   rangeId: this.iiifUrlAdapter.get('rid', ''),
+    //   xywh: this.iiifUrlAdapter.get('xywh', ''),
+    //   sequenceIndex: Number(this.iiifUrlAdapter.get('s', 0))
+    // }
+    const opts = this.iiifUrlAdapter.getInitialData({
       manifest: this.manifest,
-      embedded: true,
-      collectionIndex:
-        this.iiifUrlAdapter.get('c') !== undefined
-          ? Number(this.iiifUrlAdapter.get('c'))
-          : undefined,
-      manifestIndex: Number(this.iiifUrlAdapter.get('m', 0)),
-      canvasIndex: Number(this.iiifUrlAdapter.get('cv', 0)),
-      rotation: Number(this.iiifUrlAdapter.get('r', 0)),
-      rangeId: this.iiifUrlAdapter.get('rid', ''),
-      xywh: this.iiifUrlAdapter.get('xywh', ''),
-      sequenceIndex: Number(this.iiifUrlAdapter.get('s', 0))
-    }
+      embedded: true
+    })
+
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
 
-    init("uv", opts);
+    let uv = init("uv", opts)
+    this.iiifUrlAdapter.bindTo(uv)
+
+    uv.on("configure", function ({ config, cb }) {
+      cb(
+        new Promise(function (resolve) {
+          fetch(this.configURI()).then(function (response) {
+            resolve(response.json())
+          })
+        })
+      )
+    })
   }
 
   addViewerIcons () {
