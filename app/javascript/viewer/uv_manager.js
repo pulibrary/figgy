@@ -235,7 +235,8 @@ export default class UVManager {
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight - tabHeight)
     this.uvElement.children('div').height(windowHeight - titleHeight - tabHeight)
-    this.waitForElementToDisplay('button.share', 1000, this.addViewerIcons.bind(this))
+    // TODO: Viewer icons method not working
+    // this.waitForElementToDisplay('button.share', 1000, this.addViewerIcons.bind(this))
     if (this.uv) { this.uv.resize() }
   }
 
