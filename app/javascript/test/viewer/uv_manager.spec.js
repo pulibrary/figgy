@@ -3,10 +3,16 @@ import UVManager from '@viewer/uv_manager'
 import jQ from 'jquery'
 vi.mock('viewer/cdl_timer')
 vi.mock('universalviewer', () => ({
-    __esModule: true,
-    init: vi.fn(),
+    init: vi.fn().mockImplementation(() => {
+      return { on: vi.fn() }
+    }),
     IIIFURLAdapter: vi.fn().mockImplementation(() => {
-      return { get: global.getResult }
+      return {
+        get: global.getResult,
+        getInitialData: vi.fn().mockImplementation(() => {
+          return {}
+        })
+      }
     })
 }))
 

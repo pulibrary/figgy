@@ -25,7 +25,7 @@ export default class UVManager {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
       } else if (result.embed.status === 'authorized') {
         this.displayNotice(result)
-        this.createUV(null, null, result)
+        this.createUV(result)
         await this.buildLeafletViewer()
       }
     } else {
@@ -91,10 +91,11 @@ export default class UVManager {
     return this.leafletViewer.loadLeaflet()
   }
 
-  createUV (data, status, graphqlData) {
+  createUV (graphqlData) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
+
     // const opts = {
     //   manifest: this.manifest,
     //   embedded: true,
@@ -109,6 +110,7 @@ export default class UVManager {
     //   xywh: this.iiifUrlAdapter.get('xywh', ''),
     //   sequenceIndex: Number(this.iiifUrlAdapter.get('s', 0))
     // }
+
     const opts = this.iiifUrlAdapter.getInitialData({
       manifest: this.manifest,
       embedded: true
@@ -117,13 +119,13 @@ export default class UVManager {
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
 
-    let uv = init("uv", opts)
-    this.iiifUrlAdapter.bindTo(uv)
+    let uv = init('uv', opts)
 
-    uv.on("configure", function ({ config, cb }) {
+    const configPath = this.configURI
+    uv.on('configure', function ({ config, cb }) {
       cb(
         new Promise(function (resolve) {
-          fetch(this.configURI()).then(function (response) {
+          fetch(configPath).then(function (response) {
             resolve(response.json())
           })
         })
