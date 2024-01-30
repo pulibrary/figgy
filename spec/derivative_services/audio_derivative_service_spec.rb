@@ -29,7 +29,7 @@ RSpec.describe AudioDerivativeService do
     end
 
     context "when given an mp4 mime_type" do
-      let(:file) { fixture_file_upload("files/small_video.mp4", "video/mp4") }
+      let(:file) { fixture_file_upload("files/city.mp4", "video/mp4") }
       it { is_expected.to be_valid }
     end
 
@@ -45,7 +45,7 @@ RSpec.describe AudioDerivativeService do
 
   describe "#create_derivatives" do
     context "when given a resource with a video", run_real_characterization: true do
-      let(:file) { fixture_file_upload("files/small_video.mp4", "video/mp4") }
+      let(:file) { fixture_file_upload("files/city.mp4", "video/mp4") }
       it "creates HLS partials and attaches it to the fileset" do
         derivative_service.new(id: valid_change_set.id).create_derivatives
         reloaded = query_service.find_by(id: valid_resource.id)

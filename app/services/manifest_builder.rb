@@ -608,7 +608,7 @@ class ManifestBuilder
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
     def display_image
-      return if file.mime_type.first.include?("audio")
+      return if file.mime_type.first.include?("audio") || file.mime_type.first.include?("video")
       @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
                                                         width: width.to_i,
                                                         height: height.to_i,
@@ -630,14 +630,14 @@ class ManifestBuilder
     end
 
     def display_content
-      return unless file.mime_type.first.include?("audio")
+      return unless file.mime_type.first.include?("audio") || file.mime_type.first.include?("video")
 
       @display_content ||= IIIFManifest::V3::DisplayContent.new(
         download_url,
         format: "application/vnd.apple.mpegurl",
         label: resource.title.first,
         duration: file.duration.first.to_f,
-        type: "Audio" # required for the viewer to play audio correctly
+        type: file.mime_type.first.include?("video") ? "Video" : "Audio" # required for the viewer to play audio correctly
       )
     end
 
@@ -820,7 +820,7 @@ class ManifestBuilder
 
       file_sets = Array.wrap(resource.try(:leaf_nodes))
       audio_file_sets = file_sets.select do |fs|
-        fs.mime_type.any? { |str| str.starts_with? "audio" }
+        fs.mime_type.any? { |str| str.starts_with?("audio") || str.starts_with?("video") }
       end
 
       !audio_file_sets.empty?

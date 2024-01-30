@@ -109,7 +109,7 @@ RSpec.describe MediainfoCharacterizationService do
       allow(video_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2010-02-12 13:45:09")
       allow(video_track_attributes).to receive(:producer).and_return("Test Video Producer")
       allow(video_track_attributes).to receive(:originalsourceform).and_return("DAV")
-      allow(video_track_attributes).to receive(:duration).and_return(0.984)
+      allow(video_track_attributes).to receive(:duration).and_return(984)
       allow(video_track_attributes).to receive(:count).and_return 1
       allow(video_track_attributes).to receive(:filesize).and_return 1
 
@@ -194,7 +194,7 @@ RSpec.describe MediainfoCharacterizationService do
     end
 
     context "with a video media type" do
-      let(:file) { fixture_file_upload("files/small_video.mp4", "video/mp4") }
+      let(:file) { fixture_file_upload("files/city.mp4", "video/mp4") }
       it "is valid" do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
       end

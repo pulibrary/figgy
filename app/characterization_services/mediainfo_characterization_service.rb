@@ -41,12 +41,7 @@ class MediainfoCharacterizationService
   end
 
   def duration
-    if media.model.video?
-      media.duration
-    elsif media.model.audio?
-      # MediaInfo returns audio duration in milliseconds
-      media.duration.to_f / 1000
-    end
+    media.duration.to_f / 1000
   end
 
   def file_characterization_attributes

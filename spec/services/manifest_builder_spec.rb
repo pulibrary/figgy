@@ -715,6 +715,26 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when given a scanned resource with video files" do
+    subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
+    let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file], downloadable: "none") }
+    let(:file) { fixture_file_upload("files/city.mp4", "") }
+    let(:logical_structure) { nil }
+    before do
+      stub_catalog(bib_id: "991234563506421")
+      change_set_persister.save(change_set: change_set)
+    end
+
+    it "builds a manifest for playing video back", run_real_characterization: true, run_real_derivatives: true do
+      output = manifest_builder.build
+      expect(output).to include "items"
+      canvases = output["items"]
+      expect(canvases.length).to eq 1
+      expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 5.312
+      expect(canvases.first["items"][0]["items"][0]["body"]["type"]).to eq "Video"
+      expect(output["structures"][0]["items"][0]["id"]).to include "#t="
+    end
+  end
   context "when given a scanned resource with audio files" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
     let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file], downloadable: "none") }
