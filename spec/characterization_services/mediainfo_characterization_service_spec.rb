@@ -192,5 +192,12 @@ RSpec.describe MediainfoCharacterizationService do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
       end
     end
+
+    context "with a video media type" do
+      let(:file) { fixture_file_upload("files/small_video.mp4", "video/mp4") }
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+      end
+    end
   end
 end
