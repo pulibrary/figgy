@@ -2,7 +2,7 @@
 # Generates MP3s from uploaded WAV files.
 # @note This will not generate files for any Resource that stores its primary
 # file as a PreservationFile instead of an original file.
-class AudioDerivativeService
+class AvDerivativeService
   class Factory
     attr_reader :change_set_persister
     delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
@@ -12,7 +12,7 @@ class AudioDerivativeService
     end
 
     def new(id:)
-      AudioDerivativeService.new(id: id, change_set_persister: change_set_persister)
+      AvDerivativeService.new(id: id, change_set_persister: change_set_persister)
     end
   end
 

@@ -2,10 +2,10 @@
 require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
 
-RSpec.describe AudioDerivativeService do
+RSpec.describe AvDerivativeService do
   it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
   let(:derivative_service) do
-    AudioDerivativeService::Factory.new(change_set_persister: change_set_persister)
+    AvDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }

@@ -367,7 +367,7 @@ Rails.application.config.to_prepare do
     )
   )
 
-  Valkyrie::Derivatives::DerivativeService.services << AudioDerivativeService::Factory.new(
+  Valkyrie::Derivatives::DerivativeService.services << AvDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
       storage_adapter: Valkyrie::StorageAdapter.find(:stream_derivatives),
