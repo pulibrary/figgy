@@ -91,6 +91,14 @@ class FileMetadata < Valkyrie::Resource
     mime_type.first == "application/pdf"
   end
 
+  def av?
+    mime_type.first.include?("audio") || video?
+  end
+
+  def video?
+    mime_type.first.include?("video")
+  end
+
   def preserve?
     original_file? || intermediate_file? || preservation_copy? || preservation_file?
   end
