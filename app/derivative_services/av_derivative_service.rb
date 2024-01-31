@@ -92,8 +92,8 @@ class AvDerivativeService
 
   def cleanup_derivatives
     deleted_files = []
-    audio_derivatives = resource.file_metadata.select { |file| (file.derivative? || file.derivative_partial?) && audio_mime_types.include?(file.mime_type.first) }
-    audio_derivatives.each do |file|
+    av_derivatives = resource.file_metadata.select { |file| (file.derivative? || file.derivative_partial?) && av_mime_types.include?(file.mime_type.first) }
+    av_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
@@ -102,7 +102,7 @@ class AvDerivativeService
 
   private
 
-    def audio_mime_types
+    def av_mime_types
       [
         "application/x-mpegURL",
         "audio/mp3",
