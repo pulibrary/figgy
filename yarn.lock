@@ -8632,9 +8632,9 @@ universalify@^0.2.0:
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.2.0.tgz#6451760566fa857534745ab1dde952d1b1761be0"
   integrity sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg==
 
-"universalviewer@https://pkg.csb.dev/UniversalViewer/universalviewer/commit/4e71ec4d/universalviewer":
+"universalviewer@https://pkg.csb.dev/UniversalViewer/universalviewer/commit/3930eefe/universalviewer":
   version "4.0.25"
-  resolved "https://pkg.csb.dev/UniversalViewer/universalviewer/commit/4e71ec4d/universalviewer#3fb71f4caf4e9c639a9fbfdfbc066b1b135d4074"
+  resolved "https://pkg.csb.dev/UniversalViewer/universalviewer/commit/3930eefe/universalviewer#ea7c1e7ba132f84e464e2e57c9c6cb1998cc7385"
   dependencies:
     "@edsilv/http-status-codes" "1.0.3"
     "@edsilv/key-codes" "1.0.0"
