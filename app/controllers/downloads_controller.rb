@@ -34,7 +34,7 @@ class DownloadsController < ApplicationController
     playlist.items.each do |item|
       item.segment = "#{item.segment}?auth_token=#{params[:auth_token]}"
     end
-    render plain: playlist.to_s
+    send_data(playlist.to_s, type: "application/x-mpegurl", disposition: :inline)
   end
 
   def send_fgdc

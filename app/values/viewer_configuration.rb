@@ -7,7 +7,7 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
     {
       "modules" =>
       {
-        "pagingHeaderPanel" =>
+        "headerPanel" =>
         {
           "options" =>
           {
@@ -15,7 +15,7 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
             "imageSelectionBoxEnabled" => true
           }
         },
-        "contentLeftPanel" =>
+        "leftPanel" =>
         {
           "options" =>
           {
@@ -30,17 +30,11 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
             "shareEnabled" => true
           }
         },
-        "avCenterPanel" =>
+        "centerPanel" =>
         {
           "options" =>
           {
-            "posterImageExpanded" => true
-          }
-        },
-        "seadragonCenterPanel" =>
-        {
-          "options" =>
-          {
+            "posterImageExpanded" => true,
             "immediateRender" => true,
             "maxZoomPixelRatio" => 1.0
           }

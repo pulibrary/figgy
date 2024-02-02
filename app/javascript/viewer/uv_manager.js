@@ -1,4 +1,5 @@
-/* global UV, $, createUV */
+import { init, IIIFURLAdapter } from "universalviewer";
+import "universalviewer/dist/esm/index.css";
 import CDLTimer from '@viewer/cdl_timer'
 import IIIFLogo from '@images/iiif-logo.svg'
 import StatementOnHarmfulContentIcon from '@images/statement.png'
@@ -24,7 +25,7 @@ export default class UVManager {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
       } else if (result.embed.status === 'authorized') {
         this.displayNotice(result)
-        this.createUV(null, null, result)
+        this.createUV(result)
         await this.buildLeafletViewer()
       }
     } else {
@@ -90,25 +91,46 @@ export default class UVManager {
     return this.leafletViewer.loadLeaflet()
   }
 
-  createUV (data, status, graphqlData) {
+  createUV (graphqlData) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
-    this.uv = createUV('#uv', {
-      root: 'uv',
-      iiifResourceUri: this.manifest,
-      configUri: this.configURI,
-      collectionIndex: Number(this.urlDataProvider.get('c', 0)),
-      manifestIndex: Number(this.urlDataProvider.get('m', 0)),
-      sequenceIndex: Number(this.urlDataProvider.get('s', 0)),
-      canvasIndex: Number(this.urlDataProvider.get('cv', 0)),
-      rangeId: this.urlDataProvider.get('rid', 0),
-      rotation: Number(this.urlDataProvider.get('r', 0)),
-      xywh: this.urlDataProvider.get('xywh', ''),
+
+    // const opts = {
+    //   manifest: this.manifest,
+    //   embedded: true,
+    //   collectionIndex:
+    //     this.iiifUrlAdapter.get('c') !== undefined
+    //       ? Number(this.iiifUrlAdapter.get('c'))
+    //       : undefined,
+    //   manifestIndex: Number(this.iiifUrlAdapter.get('m', 0)),
+    //   canvasIndex: Number(this.iiifUrlAdapter.get('cv', 0)),
+    //   rotation: Number(this.iiifUrlAdapter.get('r', 0)),
+    //   rangeId: this.iiifUrlAdapter.get('rid', ''),
+    //   xywh: this.iiifUrlAdapter.get('xywh', ''),
+    //   sequenceIndex: Number(this.iiifUrlAdapter.get('s', 0))
+    // }
+
+    const opts = this.iiifUrlAdapter.getInitialData({
+      manifest: this.manifest,
       embedded: true
-    }, this.urlDataProvider)
+    })
+
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
+
+    let uv = init('uv', opts)
+
+    const configPath = this.configURI
+    uv.on('configure', function ({ config, cb }) {
+      cb(
+        new Promise(function (resolve) {
+          fetch(configPath).then(function (response) {
+            resolve(response.json())
+          })
+        })
+      )
+    })
   }
 
   addViewerIcons () {
@@ -187,7 +209,7 @@ export default class UVManager {
     if (this.isFiggyManifest) {
       return '/viewer/config/' + this.manifest.replace('/manifest', '').replace(/.*\//, '') + '.json'
     } else {
-      return this.urlDataProvider.get('config')
+      return this.iiifUrlAdapter.get('config')
     }
   }
 
@@ -213,7 +235,8 @@ export default class UVManager {
     this.uvElement.width(windowWidth)
     this.uvElement.height(windowHeight - titleHeight - tabHeight)
     this.uvElement.children('div').height(windowHeight - titleHeight - tabHeight)
-    this.waitForElementToDisplay('button.share', 1000, this.addViewerIcons.bind(this))
+    // TODO: Viewer icons method not working
+    // this.waitForElementToDisplay('button.share', 1000, this.addViewerIcons.bind(this))
     if (this.uv) { this.uv.resize() }
   }
 
@@ -237,12 +260,12 @@ export default class UVManager {
     })
   }
 
-  get urlDataProvider () {
-    return new UV.URLDataProvider(false)
+  get iiifUrlAdapter () {
+    return new IIIFURLAdapter()
   }
 
   get manifest () {
-    return this.urlDataProvider.get('manifest')
+    return this.iiifUrlAdapter.get('manifest')
   }
 
   get uvElement () {

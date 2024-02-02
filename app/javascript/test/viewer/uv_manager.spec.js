@@ -1,6 +1,21 @@
+import { init, IIIFURLAdapter } from 'universalviewer';
 import UVManager from '@viewer/uv_manager'
 import jQ from 'jquery'
 vi.mock('viewer/cdl_timer')
+vi.mock('universalviewer', () => ({
+    init: vi.fn().mockImplementation(() => {
+      return { on: vi.fn() }
+    }),
+    IIIFURLAdapter: vi.fn().mockImplementation(() => {
+      return {
+        get: global.getResult,
+        getInitialData: vi.fn().mockImplementation(() => {
+          return {}
+        })
+      }
+    })
+}))
+
 describe('UVManager', () => {
   const initialHTML =
     '<h1 id="title" class="lux-heading h1" style="display: none;"></h1>' +
@@ -72,13 +87,7 @@ describe('UVManager', () => {
         return 'https://figgy.princeton.edu/uv/uv_config.json'
       } else { return null }
     })
-
-    // This makes it so global.UV.URLDataProvider.get returns our mock data
-    const provider = vi.fn().mockImplementation(() => {
-      return { get: getResult }
-    })
-    global.UV = { URLDataProvider: provider }
-    global.createUV = vi.fn()
+    global.getResult = getResult
     // Allow window location assign
     const location = window.location
     vi.spyOn(location, 'assign').mockImplementation(() => true)

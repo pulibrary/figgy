@@ -34,7 +34,7 @@ RSpec.feature "Scanned Resource" do
     visit solr_document_path(id: resource.id)
 
     within_frame(find(".uv-container > iframe")) do
-      expect(page).to have_selector(".uv.en-gb")
+      expect(page).to have_selector(".uv-iiif-extension-host.en-gb")
     end
   end
 
