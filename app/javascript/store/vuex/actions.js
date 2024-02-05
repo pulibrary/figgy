@@ -84,6 +84,7 @@ const actions = {
         query, variables
       })
       context.commit('SET_RESOURCE', response.data.resource)
+      context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADED')
     } catch (err) {
       context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
       context.commit('ERROR_MESSAGE', err)

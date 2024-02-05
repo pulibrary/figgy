@@ -1,7 +1,7 @@
 export const treeState = {
   selected: null,
   cut: null,
-  structure: {},
+  structure: { label: "Table of Contents", id: "123", folders: [] },
   modified: false,
   loadState: "NOT_LOADED",
   saveState: "NOT_SAVED",
