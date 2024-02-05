@@ -65,10 +65,10 @@ export default {
     /**
      * The structure object in json format.
      */
-    // structureObject: {
-    //  type: Object,
-    //  default: null
-    // },
+    structure: {
+     type: Object,
+     default: null
+    },
     /**
      * The resource id. Requires host app to have async lookup of resource.
      */
@@ -83,36 +83,37 @@ export default {
   },
   data: function () {
     return {
+      end_nodes: [],
       cardPixelWidth: 300,
       captionPixelPadding: 9,
-      structureObject: {
-        "id": "C0614",
-        "folders": [
-          {
-            "id": "C0614_c00001",
-            "folders": [
-              {
-                "id": "C0614_c00002",
-                "folders": [
-                  {
-                    "id": "C0614_c00003",
-                    "folders": [],
-                    "label": "General Writings 1"
-                  },
-                  {
-                    "id": "C0614_c00004",
-                    "folders": [],
-                    "label": "General Writings 2"
-                  }
-                ],
-                "label": "Writings"
-              }
-            ],
-            "label": "Papers of Francis Preston Blair"
-          }
-        ],
-        "label": "Table of Contents"
-      }
+      // structureObject: {
+      //   "id": "C0614",
+      //   "folders": [
+      //     {
+      //       "id": "C0614_c00001",
+      //       "folders": [
+      //         {
+      //           "id": "C0614_c00002",
+      //           "folders": [
+      //             {
+      //               "id": "C0614_c00003",
+      //               "folders": [],
+      //               "label": "General Writings 1"
+      //             },
+      //             {
+      //               "id": "C0614_c00004",
+      //               "folders": [],
+      //               "label": "General Writings 2"
+      //             }
+      //           ],
+      //           "label": "Writings"
+      //         }
+      //       ],
+      //       "label": "Papers of Francis Preston Blair"
+      //     }
+      //   ],
+      //   "label": "Table of Contents"
+      // }
     }
   },
   computed: {
@@ -131,6 +132,11 @@ export default {
         viewingHint: member.viewingHint
       }))
     },
+    convertFromFiggyStructure: function(structure) {
+      let nodes = structure.nodes
+      this.generateUniqueIds(nodes)
+      console.log(nodes)
+    },
     selectedTotal () {
       return this.gallery.selected.length
     },
@@ -146,6 +152,9 @@ export default {
     zoomed: function () {
       return this.zoom.zoomed
     },
+    loaded: function () {
+      return this.resource.loadState === 'LOADED'
+    },
     loading: function () {
       return this.resource.loadState !== 'LOADED'
     },
@@ -159,6 +168,11 @@ export default {
       return this.resource.saveState === 'SAVING'
     },
   },
+  watch: {
+    loaded (newVal) {
+      this.filterGallery(newVal)
+    }
+  },
   beforeMount: function () {
     if (this.resourceObject) {
       // if props are passed in set the resource on mount
@@ -168,12 +182,82 @@ export default {
       this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING')
       this.$store.dispatch('loadImageCollectionGql', resource)
     }
-    if (this.structureObject) {
-      // if props are passed in set the structure on mount
-      this.$store.commit('SET_STRUCTURE', this.structureObject)
+    if (this.structure) {
+      // if props are passed in
+      // convert to figgy-friendly structure
+      // let s = JSON.parse(JSON.stringify(this.structure))
+      let structureFolders = this.renamePropertiesForLoad(this.structure.nodes)
+
+      // loop through and copy over this.gallery.items that appear in this structure
+
+      let s = {
+        id: this.resourceId,
+        folders: structureFolders,
+        label: this.structure.label[0],
+      }
+      console.log(s)
+      // this.$nextTick(() => {
+      //   console.log('gallery_items: ' + this.galleryItems)
+      // });
+      console.log('gallery_items: ' + this.galleryItems)
+
+      // reconcile unstructured_objects with structured
+
+      // set the structure on mount
+      // this.$store.commit('SET_STRUCTURE', this.structureObject)
+    } else {
+      // load empty structure
     }
   },
   methods: {
+    filterGallery: function (newVal) {
+      console.log('loaded: ' + newVal)
+    },
+    replaceObjectById: function(root, idToReplace, replacementObject) {
+      if (root.id === idToReplace) {
+          return replacementObject;
+      }
+
+      if (root.folders && root.folders.length > 0) {
+          root.folders = root.folders.map(folder =>
+              this.replaceObjectById(folder, idToReplace, replacementObject)
+          );
+      }
+
+      return root;
+    },
+    generateId: function () {
+      return Math.floor(Math.random() * 10000000).toString()
+    },
+    getUnstructuredItemById: function () {
+      return null
+    },
+    renamePropertiesForLoad: function (arr) {
+      const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file']
+      return arr.map(obj => {
+        const newObj = {};
+        for (const key in obj) {
+          if (key === "nodes") {
+            if (obj.proxy.length) {
+              newObj["id"] = obj.proxy[0].id
+              newObj["file"] = true
+            } else {
+              newObj["id"] = this.generateId()
+              newObj["file"] = false
+              newObj["label"] = obj.label[0]
+            }
+            newObj["folders"] = this.renamePropertiesForLoad(obj[key])
+          } else {
+            if (!allowedProperties.includes(key)) {
+              delete obj[key];
+            } else {
+              newObj[key] = obj[key]
+            }
+          }
+        }
+        return newObj
+      });
+    },
     galleryClicked() {
       this.$store.commit('SELECT_TREEITEM', null)
     },
