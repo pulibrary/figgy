@@ -1,3 +1,9 @@
 <%= structure_page_header %>
 
-<struct-manager resource-id="<%= @change_set.id %>"></struct-manager>
+<struct-manager
+  resource-id="<%= @change_set.id %>"
+  data-id="<%= @change_set.id %>"
+  data-class-name="<%= @change_set.model_name.plural %>"
+  data-singular-class-name="<%= @change_set.model_name.singular %>"
+  :structure="<%= @logical_order.to_json %>"
+  ></struct-manager>
