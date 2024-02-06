@@ -12,4 +12,33 @@ RSpec.describe "bulk_ingest/show.html.erb" do
     expect(rendered).to have_selector "input[type='checkbox'][name='preserve_file_names'][value='1']"
     expect(rendered).to have_selector "select[name='rights_statement'] option[value='http://rightsstatements.org/vocab/CNE/1.0/']"
   end
+
+  describe "the page heading" do
+    context "when bulk ingesting a scanned resource" do
+      it "displays all kinds of things you could ingest" do
+        assign :resource_class, ScannedResource
+        assign :visibility, []
+        assign :states, []
+        assign :collections, []
+        render
+
+        # rendered is full of awkward line breaks and large spaces
+        xml = Nokogiri.parse(rendered)
+        heading_text = xml.css("h2").text.split(" ").join(" ")
+        expect(heading_text).to eq "Bulk Ingest Scanned Resources, Videos, or Vendor Bags"
+      end
+    end
+
+    context "when bulk ingesting a scanned map" do
+      it "only displays the resource type" do
+        assign :resource_class, ScannedMap
+        assign :visibility, []
+        assign :states, []
+        assign :collections, []
+        render
+
+        expect(rendered).to have_content "Bulk Ingest Scanned Maps"
+      end
+    end
+  end
 end

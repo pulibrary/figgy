@@ -114,6 +114,11 @@ en:
           label: "Weight (g)"
         size:
           label: "Size (mm)"
+  bulk_ingest:
+    show:
+      heading:
+        default: "Bulk Ingest %{resource}"
+        scanned_resource: "Bulk Ingest Scanned Resources, Videos, or Vendor Bags"
   search:
     form:
       q:
