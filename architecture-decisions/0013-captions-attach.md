@@ -35,4 +35,4 @@ FileSets will have an extra FileMetadata users can upload which contains the cap
 ## Consequences
 
 1. We have to develop functionality to upload and delete user-defined FileMetadata.
-1. Users will have to upload two files (the original file and the caption) if they delete a FileSet to re-upload it.
+1. If a user deletes a FileSet they will have to upload two files (the original file and the caption) to re-create it.
