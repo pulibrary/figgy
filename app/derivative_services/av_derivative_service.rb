@@ -41,7 +41,7 @@ class AvDerivativeService
   end
 
   def valid?
-    target_file && ["audio/x-wav", "audio/vnd.wave", "video/mp4"].include?(mime_type.first)
+    target_file && MediainfoCharacterizationService.supported_formats.include?(mime_type.first)
   end
 
   def create_derivatives
@@ -92,7 +92,7 @@ class AvDerivativeService
 
   def cleanup_derivatives
     deleted_files = []
-    av_derivatives = resource.file_metadata.select { |file| (file.derivative? || file.derivative_partial?) && av_mime_types.include?(file.mime_type.first) }
+    av_derivatives = resource.file_metadata.select(&:av_derivative?)
     av_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
@@ -101,14 +101,6 @@ class AvDerivativeService
   end
 
   private
-
-    def av_mime_types
-      [
-        "application/x-mpegURL",
-        "audio/mp3",
-        "video/MP2T"
-      ]
-    end
 
     def build_file(file, filename:, partial: false)
       IngestableFile.new(
