@@ -104,11 +104,11 @@ class FileMetadata < Valkyrie::Resource
   end
 
   def audio?
-    mime_type.first.include?("audio")
+    mime_type&.first&.include?("audio")
   end
 
   def video?
-    mime_type.first.include?("video")
+    mime_type&.first&.include?("video")
   end
 
   def preserve?

@@ -172,5 +172,24 @@ RSpec.describe FacetIndexer do
         expect(output[:file_type_ssim]).to contain_exactly("Audio")
       end
     end
+
+    context "when a MapSet resource has raster mosaic files" do
+      it "indexes a Raster Mosaic file type" do
+        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_multiple_clipped_raster_children)
+        map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map.id], id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
+
+        output = described_class.new(resource: map_set).to_solr
+        expect(output[:file_type_ssim]).to contain_exactly("Raster Mosaic")
+      end
+    end
+
+    context "when a Raster resource has raster mosaic files" do
+      it "indexes a Raster Mosaic file type" do
+        raster_set = FactoryBot.create_for_repository(:raster_set_with_files)
+
+        output = described_class.new(resource: raster_set).to_solr
+        expect(output[:file_type_ssim]).to contain_exactly("Raster Mosaic")
+      end
+    end
   end
 end

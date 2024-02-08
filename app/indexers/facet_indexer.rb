@@ -79,11 +79,18 @@ class FacetIndexer
   end
 
   def file_types
-    file_sets = Wayfinder.for(resource).file_sets
-    file_sets.map do |file_set|
+    file_sets = Wayfinder.for(resource).try(:file_sets)
+    return unless file_sets
+    types = file_sets.map do |file_set|
       file_metadata = file_set.original_file || file_set.intermediate_file
       file_type(file_metadata: file_metadata) if file_metadata
     end.compact.uniq
+
+    if mosaic?
+      types << "Raster Mosaic"
+    else
+      types
+    end
   end
 
   def file_type(file_metadata:)
@@ -92,5 +99,10 @@ class FacetIndexer
     elsif file_metadata.audio?
       "Audio"
     end
+  end
+
+  def mosaic?
+    return false unless resource.is_a?(RasterResource) || resource.is_a?(ScannedMap)
+    resource.decorate.mosaic_file_count > 1
   end
 end
