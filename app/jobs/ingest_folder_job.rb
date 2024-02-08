@@ -22,6 +22,7 @@ class IngestFolderJob < ApplicationJob
     # @return [String]
     def typed_file_filter(class_name)
       case class_name
+      # TODO Update to allow video (need a test)
       when "ScannedResource"
         [".tif", ".wav", ".pdf", ".zip", ".jpg"]
       else

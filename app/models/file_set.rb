@@ -30,6 +30,7 @@ class FileSet < Resource
            :error_message,
            :mime_type,
            :av?,
+           :video?,
            to: :primary_file,
            allow_nil: true
 

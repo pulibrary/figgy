@@ -115,6 +115,8 @@ class BulkIngestService::BulkFilePathConverter
       parent_resource.is_a?(RasterResource)
     end
 
+    # this isn't about preservation, it's just types for which we want to use
+    # the filename as the title
     def preserved_file_name_mime_types
       ["audio/x-wav", "application/json"]
     end
