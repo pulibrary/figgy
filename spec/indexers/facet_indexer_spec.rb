@@ -159,5 +159,18 @@ RSpec.describe FacetIndexer do
         expect(output[:file_type_ssim]).to contain_exactly("Video")
       end
     end
+
+    context "when the resource has an audio file" do
+      it "indexes an Audio file type" do
+        file_set = FactoryBot.create_for_repository(:audio_file_set)
+        scanned_resource = FactoryBot.create_for_repository(
+          :scanned_resource,
+          member_ids: file_set.id
+        )
+
+        output = described_class.new(resource: scanned_resource).to_solr
+        expect(output[:file_type_ssim]).to contain_exactly("Audio")
+      end
+    end
   end
 end

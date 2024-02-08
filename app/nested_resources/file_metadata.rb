@@ -92,7 +92,7 @@ class FileMetadata < Valkyrie::Resource
   end
 
   def av?
-    mime_type.first.include?("audio") || video?
+    audio? || video?
   end
 
   def hls_manifest?
@@ -101,6 +101,10 @@ class FileMetadata < Valkyrie::Resource
 
   def av_derivative?
     (derivative? || derivative_partial?) && (av? || hls_manifest?)
+  end
+
+  def audio?
+    mime_type.first.include?("audio")
   end
 
   def video?

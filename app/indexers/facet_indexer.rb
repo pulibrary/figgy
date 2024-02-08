@@ -87,7 +87,10 @@ class FacetIndexer
   end
 
   def file_type(file_metadata:)
-    return unless file_metadata.video?
-    "Video"
+    if file_metadata.video?
+      "Video"
+    elsif file_metadata.audio?
+      "Audio"
+    end
   end
 end
