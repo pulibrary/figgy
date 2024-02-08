@@ -2,7 +2,7 @@
 # Generates MP3s from uploaded WAV files.
 # @note This will not generate files for any Resource that stores its primary
 # file as a PreservationFile instead of an original file.
-class AudioDerivativeService
+class AvDerivativeService
   class Factory
     attr_reader :change_set_persister
     delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
@@ -12,7 +12,7 @@ class AudioDerivativeService
     end
 
     def new(id:)
-      AudioDerivativeService.new(id: id, change_set_persister: change_set_persister)
+      AvDerivativeService.new(id: id, change_set_persister: change_set_persister)
     end
   end
 
@@ -41,7 +41,7 @@ class AudioDerivativeService
   end
 
   def valid?
-    target_file && ["audio/x-wav", "audio/vnd.wave"].include?(mime_type.first)
+    target_file && MediainfoCharacterizationService.supported_formats.include?(mime_type.first)
   end
 
   def create_derivatives
@@ -92,8 +92,8 @@ class AudioDerivativeService
 
   def cleanup_derivatives
     deleted_files = []
-    audio_derivatives = resource.file_metadata.select { |file| (file.derivative? || file.derivative_partial?) && audio_mime_types.include?(file.mime_type.first) }
-    audio_derivatives.each do |file|
+    av_derivatives = resource.file_metadata.select(&:av_derivative?)
+    av_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
@@ -101,14 +101,6 @@ class AudioDerivativeService
   end
 
   private
-
-    def audio_mime_types
-      [
-        "application/x-mpegURL",
-        "audio/mp3",
-        "video/MP2T"
-      ]
-    end
 
     def build_file(file, filename:, partial: false)
       IngestableFile.new(

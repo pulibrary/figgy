@@ -23,7 +23,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :date_of_digitization, Valkyrie::Types::Set # Encoded_date
   attribute :producer, Valkyrie::Types::Set # Producer
   attribute :source_media_type, Valkyrie::Types::Set # OriginalSourceForm
-  attribute :duration, Valkyrie::Types::Set # Duration
+  attribute :duration, Valkyrie::Types::Set # Duration in seconds
 
   # PDF Metadata
   attribute :page_count, Valkyrie::Types::Integer
@@ -89,6 +89,22 @@ class FileMetadata < Valkyrie::Resource
 
   def pdf?
     mime_type.first == "application/pdf"
+  end
+
+  def av?
+    mime_type.first.include?("audio") || video?
+  end
+
+  def hls_manifest?
+    mime_type.first.include?("application/x-mpegURL")
+  end
+
+  def av_derivative?
+    (derivative? || derivative_partial?) && (av? || hls_manifest?)
+  end
+
+  def video?
+    mime_type.first.include?("video")
   end
 
   def preserve?

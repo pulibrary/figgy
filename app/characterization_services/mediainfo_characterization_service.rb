@@ -40,13 +40,9 @@ class MediainfoCharacterizationService
     @file_set
   end
 
+  # MediaInfo returns duration in milliseconds, we want to store seconds.
   def duration
-    if media.model.video?
-      media.duration
-    elsif media.model.audio?
-      # MediaInfo returns audio duration in milliseconds
-      media.duration.to_f / 1000
-    end
+    media.duration.to_f / 1000
   end
 
   def file_characterization_attributes
@@ -78,7 +74,11 @@ class MediainfoCharacterizationService
     # Determine if the media type for the FileSet is supported
     # @return [TrueClass, FalseClass]
     def supported_format?
-      !(@file_set.mime_type & self.class.supported_formats).empty? || preservation_file&.original_filename&.first&.downcase&.include?(".wav")
+      (@file_set.mime_type & self.class.supported_formats).present? || extension&.include?(".wav") || extension&.include?(".mp4")
+    end
+
+    def extension
+      preservation_file&.original_filename&.first&.downcase
     end
 
     # Retrieve the parent resource of the FileSet

@@ -29,6 +29,7 @@ class FileSet < Resource
            :processing_note,
            :error_message,
            :mime_type,
+           :av?,
            to: :primary_file,
            allow_nil: true
 
@@ -102,10 +103,6 @@ class FileSet < Resource
 
   def fixity_checked_file_ids
     [original_file&.id, preservation_file&.id, intermediate_file&.id].compact
-  end
-
-  def audio?
-    Array.wrap(mime_type).first.to_s.include?("audio/")
   end
 
   def image?

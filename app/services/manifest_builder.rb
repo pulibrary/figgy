@@ -25,8 +25,8 @@ class ManifestBuilder
       volumes = decorated.volumes
       volume_file_sets = volumes.map(&:file_sets)
       volume_file_sets.flatten!
-      audio_file_sets = volume_file_sets.select(&:audio?)
-      !audio_file_sets.empty?
+      av_file_sets = volume_file_sets.select(&:av?)
+      !av_file_sets.empty?
     end
 
     def self.for(resource, auth_token = nil, current_ability = nil)
@@ -125,25 +125,25 @@ class ManifestBuilder
     # Retrieves the presenter for each Range (sc:Range) instance
     # @return [TopStructure]
     def ranges
-      return audio_ranges if audio_manifest?
+      return av_ranges if av_manifest?
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure, resource)
       end
     end
 
-    def audio_manifest?
-      audio_file_sets = file_set_presenters.select do |fs_presenter|
+    def av_manifest?
+      av_file_sets = file_set_presenters.select do |fs_presenter|
         fs_presenter.display_content.present?
       end
 
       work_presenter_nodes = Array.wrap(work_presenters)
-      work_presenters = work_presenter_nodes.select(&:audio_manifest?)
+      work_presenters = work_presenter_nodes.select(&:av_manifest?)
 
-      !audio_file_sets.empty? || !work_presenters.empty?
+      !av_file_sets.empty? || !work_presenters.empty?
     end
 
-    def audio_ranges
-      return default_audio_ranges if logical_structure.blank? || logical_structure.flat_map(&:nodes).blank?
+    def av_ranges
+      return default_av_ranges if logical_structure.blank? || logical_structure.flat_map(&:nodes).blank?
       logical_structure.flat_map do |top_structure|
         top_structure.nodes.map do |node|
           TopStructure.new(wrap_proxies(node))
@@ -171,7 +171,7 @@ class ManifestBuilder
       end
     end
 
-    def default_audio_ranges
+    def default_av_ranges
       file_set_presenters.map do |file_set|
         TopStructure.new(
           Structure.new(
@@ -230,7 +230,7 @@ class ManifestBuilder
     end
 
     def sequence_rendering
-      return [] if audio_manifest?
+      return [] if av_manifest?
       [
         {
           "@id" => helper.pdf_url(resource),
@@ -277,6 +277,8 @@ class ManifestBuilder
           "application/xml; schema=pbcore",
           "application/json; charset=ISO-8859-1"
         ]
+        # TODO-video: Remove this when Video's released to production.
+        ignore_list << "video/mp4" unless Figgy.video_manifests_enabled?
         (ignore_list & Array.wrap(mime_type)).empty?
       end
 
@@ -404,10 +406,10 @@ class ManifestBuilder
       @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
     end
 
-    def default_audio_ranges
+    def default_av_ranges
       members.map do |member|
-        audio_file_sets = member.decorate.file_sets.select(&:audio?)
-        nodes = audio_file_sets.map do |file_set|
+        av_file_sets = member.decorate.file_sets.select(&:av?)
+        nodes = av_file_sets.map do |file_set|
           Structure.new(
             label: file_set.title,
             nodes: [
@@ -466,7 +468,7 @@ class ManifestBuilder
 
   class RecordingNode < RootNode
     def leaf_nodes
-      @leaf_nodes ||= super.select { |x| x.mime_type.first.include?("audio/") }
+      @leaf_nodes ||= super.select(&:av?)
     end
 
     def sequence_rendering
@@ -480,7 +482,7 @@ class ManifestBuilder
       return @file_set_presenters unless @file_set_presenters.nil?
 
       values = leaf_nodes.map do |node|
-        next unless node.decorate.audio?
+        next unless node.decorate.av?
 
         LeafNode.new(node, self)
       end
@@ -608,7 +610,7 @@ class ManifestBuilder
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
     def display_image
-      return if file.mime_type.first.include?("audio")
+      return if file.av?
       @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
                                                         width: width.to_i,
                                                         height: height.to_i,
@@ -630,14 +632,14 @@ class ManifestBuilder
     end
 
     def display_content
-      return unless file.mime_type.first.include?("audio")
+      return unless file.av?
 
       @display_content ||= IIIFManifest::V3::DisplayContent.new(
         download_url,
         format: "application/vnd.apple.mpegurl",
         label: resource.title.first,
         duration: file.duration.first.to_f,
-        type: "Audio" # required for the viewer to play audio correctly
+        type: file.video? ? "Video" : "Audio" # required for the viewer to play audio correctly
       )
     end
 
@@ -801,7 +803,7 @@ class ManifestBuilder
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= if audio_collection? || recording?
+      @manifest ||= if av_collection? || recording?
                       IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
                     # If not multi-part and a collection, it's not a MVW
                     elsif @resource.viewing_hint.blank? && @resource.collection?
@@ -815,18 +817,16 @@ class ManifestBuilder
     def recording?
       # Skip check if it's a Collection node, for performance.
       return false if resource.collection?
-      audio_presenters = resource.work_presenters.select(&:audio_manifest?)
-      return true unless audio_presenters.empty?
+      av_presenters = resource.work_presenters.select(&:av_manifest?)
+      return true unless av_presenters.empty?
 
       file_sets = Array.wrap(resource.try(:leaf_nodes))
-      audio_file_sets = file_sets.select do |fs|
-        fs.mime_type.any? { |str| str.starts_with? "audio" }
-      end
+      av_file_sets = file_sets.select(&:av?)
 
-      !audio_file_sets.empty?
+      !av_file_sets.empty?
     end
 
-    def audio_collection?
+    def av_collection?
       return false unless @resource.resource.respond_to?(:change_set)
 
       ChangeSet.for(@resource.resource).is_a?(ArchivalMediaCollectionChangeSet)

@@ -228,8 +228,11 @@ defaults: &defaults
     mediainfo:
       supported_mime_types:
         - 'audio/x-wav'
+        - 'audio/vnd.wave'
         - 'audio/mpeg'
+        - 'video/mp4'
   pulfalight_unpublished_token: <%= ENV["PULFALIGHT_UNPUBLISHED_TOKEN"] %>
+  video_manifests_enabled: true # TODO-video: Remove this when Video's released to production.
 
 development:
   <<: *defaults
@@ -301,6 +304,7 @@ production:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
       orangelight: "orangelight_events"
+  video_manifests_enabled: false # TODO-video: Remove this when Video's released to production.
 
 staging:
   <<: *defaults
