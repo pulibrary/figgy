@@ -7,19 +7,29 @@ class FacetIndexer
 
   def to_solr
     if resource.try(:imported_metadata)&.first
-      {
-        display_subject_ssim: resource.imported_metadata.first.subject,
-        display_language_ssim: imported_language,
-        has_structure_bsi: structure?,
-        pub_date_start_itsi: pub_date_start
-      }
+      imported_metadata_solr_fields
     else
-      {
-        display_subject_ssim: subject_terms,
-        display_language_ssim: language_terms,
-        has_structure_bsi: structure?
-      }
+      solr_fields
     end
+  end
+
+  def imported_metadata_solr_fields
+    {
+      display_subject_ssim: resource.imported_metadata.first.subject,
+      display_language_ssim: imported_language,
+      has_structure_bsi: structure?,
+      pub_date_start_itsi: pub_date_start,
+      file_type_ssim: file_types
+    }
+  end
+
+  def solr_fields
+    {
+      display_subject_ssim: subject_terms,
+      display_language_ssim: language_terms,
+      has_structure_bsi: structure?,
+      file_type_ssim: file_types
+    }
   end
 
   def imported_language
@@ -66,5 +76,18 @@ class FacetIndexer
 
   def decorated_resource
     @decorated_resource ||= resource.decorate
+  end
+
+  def file_types
+    file_sets = Wayfinder.for(resource).file_sets
+    file_sets.map do |file_set|
+      file_metadata = file_set.original_file || file_set.intermediate_file
+      file_type(file_metadata: file_metadata) if file_metadata
+    end.compact.uniq
+  end
+
+  def file_type(file_metadata:)
+    return unless file_metadata.video?
+    "Video"
   end
 end

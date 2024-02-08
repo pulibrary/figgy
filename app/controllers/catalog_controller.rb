@@ -157,6 +157,7 @@ class CatalogController < ApplicationController
       assumed_boundaries: [1100, Time.current.year + 1],
       segments: true
     }
+    config.add_facet_field "file_type_ssim", label: "File Type"
     config.add_facet_fields_to_solr_request!
 
     config.add_results_collection_tool(:sort_widget)
