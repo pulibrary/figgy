@@ -46,6 +46,7 @@ class FileAppender
     file_sets
   end
 
+  # TODO if we can get it to use append on the fileset things will work.
   # A use case: adding derivatives to file sets
   def file_set_append
     # Append the array of file metadata values to any FileSets with new FileNodes being appended
@@ -98,6 +99,7 @@ class FileAppender
       change_set_persister.save(change_set: change_set)
     end
 
+    # TODO this is where it creates one fileset per file provided
     # Constructs FileSet Objects using the files being uploaded
     # Does *not* construct new Objects if derivatives are being processed
     # @return [Array<FileSet>]

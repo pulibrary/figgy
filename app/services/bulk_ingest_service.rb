@@ -118,11 +118,34 @@ class BulkIngestService
           preserve_file_names: preserve_file_names
         )
       end
+      # TODO here is where they get added as individual file sets. Need to get
+      # them added as 2 files on the same file set
       child_files = files(path: path, file_filters: file_filters, parent_resource: resource, preserve_file_names: preserve_file_names)
 
       change_set = ChangeSet.for(resource, change_set_param: change_set_param)
       change_set.validate(member_ids: child_resources.map(&:id), files: child_files)
-      change_set_persister.save(change_set: change_set)
+      change_set_persister.save(change_set: change_set).tap do |output|
+        add_video_captions(output, path)
+      end
+    end
+
+    # ensure the vtt filename starts with the video's original filename
+    # add the vtt to the file set
+    def add_video_captions(resource, path)
+      video_file_sets = Wayfinder.for(resource).file_sets.select(&:video?)
+      vtt_files = files(path: path, file_filters: [".vtt"], parent_resource: resource)
+      vtt_files.each do |vtt_file|
+        matching_file_set = video_file_sets.find do |file_set|
+          vtt_file.file_path.basename.to_s.starts_with?(
+            Pathname(file_set.primary_file.original_filename.first).sub_ext("").to_s
+          )
+        end
+        next unless matching_file_set
+        vtt_file.use = Valkyrie::Vocab::PCDMUse.Caption
+        change_set = ChangeSet.for(matching_file_set)
+        change_set.validate(files: [vtt_file])
+        change_set_persister.save(change_set: change_set)
+      end
     end
 
     # Accesses the query service for finding repository resources using a metadata property
