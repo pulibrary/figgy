@@ -734,6 +734,15 @@ RSpec.describe ManifestBuilder do
       expect(canvases.first["items"][0]["items"][0]["body"]["type"]).to eq "Video"
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
     end
+
+    # TODO-video: Remove this when Video's released to production.
+    context "and video manifests are disabled", run_real_characterization: true, run_real_derivatives: true do
+      it "doesn't return videos in manifests" do
+        allow(Figgy).to receive(:video_manifests_enabled?).and_return(false)
+        output = manifest_builder.build
+        expect(output["items"]).to be_blank
+      end
+    end
   end
   context "when given a scanned resource with audio files" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
