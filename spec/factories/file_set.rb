@@ -70,6 +70,16 @@ FactoryBot.define do
       end
     end
 
+    factory :video_file_set do
+      file_metadata do
+        [
+          FileMetadata.new(mime_type: "video/mp4", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: "original"),
+          FileMetadata.new(mime_type: "application/x-mpegURL", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
+          FileMetadata.new(mime_type: "video/MP2T", use: Valkyrie::Vocab::PCDMUse.ServiceFilePartial, id: "derivative-partial")
+        ]
+      end
+    end
+
     factory :pdf_file_set do
       file_metadata do
         [
