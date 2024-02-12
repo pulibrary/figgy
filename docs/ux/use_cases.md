@@ -196,3 +196,17 @@ file, but don't need to create derivatives from it.
 So, the gigantic file is ingested as a PreservationFile, and the compressed file
 is ingested as an IntermediateFile. FileSet#primary_file returns the
 PreservationFile, and both are preserved.
+
+## Videos
+
+We have the following use cases for video:
+
+As Princeton University I should only allow the public to view videos that have subtitles which can render in the viewer both to legally protect ourselves and more importantly to meet our goals of accessibility. We want (.VTT) files for transcription subtitles so that we can standardize and migrate if need be.
+
+As a Figgy staff member I should be able to bulk ingest several videos, each with their own resource along with their captions so that I can have a vendor mass digitize materials and then ingest them later.
+
+As a Figgy staff member I should be able to ingest several videos to one resource, each with their own captions, and the viewer should render them with a table of contents so that I can display multiple videos in a single "box" of content in the archives.
+
+As Princeton University I want to preserve the captions along with the video so that if Figgy's data is ever lost I can restore them.
+
+As a researcher I want to have multiple captions each in their own language and users should be able to switch between them so that I can provide translations in addition to transcription. The default caption should be the first one uploaded.
