@@ -86,34 +86,6 @@ export default {
       end_nodes: [],
       cardPixelWidth: 300,
       captionPixelPadding: 9,
-      // structureObject: {
-      //   "id": "C0614",
-      //   "folders": [
-      //     {
-      //       "id": "C0614_c00001",
-      //       "folders": [
-      //         {
-      //           "id": "C0614_c00002",
-      //           "folders": [
-      //             {
-      //               "id": "C0614_c00003",
-      //               "folders": [],
-      //               "label": "General Writings 1"
-      //             },
-      //             {
-      //               "id": "C0614_c00004",
-      //               "folders": [],
-      //               "label": "General Writings 2"
-      //             }
-      //           ],
-      //           "label": "Writings"
-      //         }
-      //       ],
-      //       "label": "Papers of Francis Preston Blair"
-      //     }
-      //   ],
-      //   "label": "Table of Contents"
-      // }
     }
   },
   computed: {
@@ -182,55 +154,71 @@ export default {
       this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING')
       this.$store.dispatch('loadImageCollectionGql', resource)
     }
-    if (this.structure) {
-      // if props are passed in
-      // convert to figgy-friendly structure
-      // let s = JSON.parse(JSON.stringify(this.structure))
-      let structureFolders = this.renamePropertiesForLoad(this.structure.nodes)
-
-      // loop through and copy over this.gallery.items that appear in this structure
-
-      let s = {
-        id: this.resourceId,
-        folders: structureFolders,
-        label: this.structure.label[0],
-      }
-      console.log(s)
-      // this.$nextTick(() => {
-      //   console.log('gallery_items: ' + this.galleryItems)
-      // });
-      console.log('gallery_items: ' + this.galleryItems)
-
-      // reconcile unstructured_objects with structured
-
-      // set the structure on mount
-      // this.$store.commit('SET_STRUCTURE', this.structureObject)
-    } else {
-      // load empty structure
-    }
   },
   methods: {
     filterGallery: function (newVal) {
-      console.log('loaded: ' + newVal)
-    },
-    replaceObjectById: function(root, idToReplace, replacementObject) {
-      if (root.id === idToReplace) {
-          return replacementObject;
-      }
+      if (this.structure) {
+        // if props are passed in
+        // convert to figgy-friendly structure
+        let structureFolders = this.renamePropertiesForLoad(this.structure.nodes)
 
-      if (root.folders && root.folders.length > 0) {
-          root.folders = root.folders.map(folder =>
-              this.replaceObjectById(folder, idToReplace, replacementObject)
-          );
-      }
+        // reconcile unstructured_objects with structured
+        // Loop through each galleryItem object and
+        // If found, replace the object that has the same id in structure_folders,
+        // Then remove it from the galleryItems list and update the state
+        // For both the Tree and the Gallery
+        let ga = JSON.parse(JSON.stringify(this.galleryItems))
 
-      return root;
+        function replaceObjects() {
+          for (let i = 0; i < ga.length; i++) {
+            for (let j = 0; j < structureFolders.length; j++) {
+              if (replaceObjectRecursively(ga[i], structureFolders[j])) {
+                // Remove the object from gallery_items after replacing in structure_folders
+                ga.splice(i, 1);
+                i--;  // Decrement i to account for the removed item
+                break;  // break inner loop if a match is found
+              }
+            }
+          }
+        }
+
+        function replaceObjectRecursively(galleryItem, structureFolder) {
+          if (galleryItem.id === structureFolder.id) {
+            // Change "caption" key to "label" before replacing the object
+            galleryItem.label = galleryItem.caption
+            delete galleryItem.caption
+            delete structureFolder.proxy
+            // Replace the object in structure_folders with the galleryItem
+            Object.assign(structureFolder, galleryItem);
+            return true  // Indicate that a match is found
+          } else {
+            // Continue searching in nested folders
+            for (let i = 0; i < structureFolder.folders.length; i++) {
+              if (replaceObjectRecursively(galleryItem, structureFolder.folders[i])) {
+                return true  // Stop searching if a match is found in nested folders
+              }
+            }
+          }
+          return false;  // No match found in this folder or its nested folders
+        }
+
+        // Call the function to replace matching objects
+        replaceObjects();
+
+        let s = {
+          id: this.resourceId,
+          folders: structureFolders,
+          label: this.structure.label[0],
+        }
+
+        this.$store.commit('SET_STRUCTURE', s)
+        this.$store.commit('SET_GALLERY', ga)
+      } else {
+        // load empty structure
+      }
     },
     generateId: function () {
       return Math.floor(Math.random() * 10000000).toString()
-    },
-    getUnstructuredItemById: function () {
-      return null
     },
     renamePropertiesForLoad: function (arr) {
       const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file']
