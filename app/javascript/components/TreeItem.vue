@@ -287,8 +287,22 @@ export default {
         this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
+    changeKeyToCaption: function(array) {
+      // Iterate through each object in the array
+      for (let i = 0; i < array.length; i++) {
+        // Check if the object has a "label" key
+        if (array[i].hasOwnProperty('label')) {
+          // Create a new key "caption" with the value of the current "label" key
+          array[i].caption = array[i].label;
+          // Remove the old "label" key
+          delete array[i].label;
+        }
+      }
+
+      return array;
+    },
     addGalleryItems: function() {
-      let galleryItems = JSON.parse(JSON.stringify(this.gallery.items)).concat(this.end_nodes)
+      let galleryItems = JSON.parse(JSON.stringify(this.gallery.items)).concat(this.changeKeyToCaption(this.end_nodes))
       this.$store.commit("UPDATE_ITEMS", galleryItems)
       this.end_nodes = []
     },
