@@ -139,7 +139,7 @@ const actions = {
         } else {
           // Handle errors here
           console.error('Error:', xhr.status, xhr.statusText);
-          context.commit('SAVED_STATE', 'ERROR')
+          context.commit('SAVED_STRUCTURE_STATE', 'ERROR')
         }
       }
     };
