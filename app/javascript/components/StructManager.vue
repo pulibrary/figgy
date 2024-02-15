@@ -1,5 +1,31 @@
 <template>
   <div class="lux-structManager">
+    <transition name="fade">
+      <div
+        v-if="loading"
+        class="lux-overlay"
+      >
+        <loader size="medium" />
+      </div>
+    </transition>
+    <alert
+      v-if="saved"
+      status="success"
+      type="alert"
+      autoclear
+      dismissible
+    >
+      Your work has been saved!
+    </alert>
+    <alert
+      v-if="saveError"
+      status="error"
+      type="alert"
+      autoclear
+      dismissible
+    >
+      Sorry, there was a problem saving your work!
+    </alert>
     <toolbar @cards-resized="resizeCards($event)" />
     <deep-zoom v-if="zoomed" resource-id="6d9555cb-4d31-4509-a3a7-29c5aba42d8d" viewer-id="viewer" class="deep-zoom"></deep-zoom>
     <div
@@ -131,10 +157,10 @@ export default {
       return this.resource.loadState !== 'LOADED'
     },
     saved () {
-      return this.resource.saveState === 'SAVED'
+      return this.tree.saveState === 'SAVED'
     },
     saveError () {
-      return this.resource.saveState === 'ERROR'
+      return this.tree.saveState === 'ERROR'
     },
     isLoading () {
       return this.resource.saveState === 'SAVING'
