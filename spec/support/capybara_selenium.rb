@@ -2,20 +2,12 @@
 require "capybara/rspec"
 require "selenium-webdriver"
 
-# there's a bug in capybara-screenshot that requires us to name
-#   the driver ":selenium" so we changed it from :headless_chrome"
-selenium_url = nil
-browser = :chrome
-# If we're not in CI then run Selenium from Lando. Makes it much easier to
-# upgrade versions of Chrome.
 Capybara.server_host = '0.0.0.0'
 Capybara.always_include_port = true
-browser = :remote
 if !ENV["CI"]
-  selenium_url = "http://127.0.0.1:4445/wd/hub"
   Capybara.app_host = "http://host.docker.internal:#{Capybara.server_port}"
 else
-  selenium_url = "http://127.0.0.1:4444/wd/hub"
+  # In CI all the ports from containers are on localhost.
   Capybara.app_host = "http://127.0.0.1:#{Capybara.server_port}"
 end
 
@@ -30,10 +22,10 @@ Capybara.register_driver(:selenium) do |app|
   http_client.read_timeout = 120
   http_client.open_timeout = 120
   Capybara::Selenium::Driver.new(app,
-                                 browser: browser,
+                                 browser: :remote,
                                  options: browser_options,
                                  http_client: http_client,
-                                 url: selenium_url)
+                                 url: "http://127.0.0.1:4444/wd/hub")
 end
 
 Capybara.javascript_driver = :selenium

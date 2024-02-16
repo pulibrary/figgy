@@ -31,7 +31,7 @@ services:
         driver: none
       shm_size: 2G
       ports:
-        - "4445:4444"
+        - "4444:4444"
         - "5900:5900"
         - "7900:7900"
       volumes:
