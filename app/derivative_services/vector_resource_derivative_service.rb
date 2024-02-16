@@ -30,11 +30,6 @@ class VectorResourceDerivativeService
     @change_set ||= ChangeSet.for(resource)
   end
 
-  def build_display_file
-    IngestableFile.new(file_path: temporary_display_output.path, mime_type: 'application/zip; ogr-format="ESRI Shapefile"', original_filename: "display_vector.zip", use: use_display,
-                       copy_before_ingest: false)
-  end
-
   def build_cloud_file
     IngestableFile.new(file_path: temporary_cloud_output.path, mime_type: "application/vnd.pmtiles", original_filename: "display_vector.pmtiles", use: use_cloud_derivative,
                        copy_before_ingest: false)
@@ -62,9 +57,7 @@ class VectorResourceDerivativeService
   def create_derivatives
     run_derivatives
     create_local_derivatives
-    # Persist a second copy of the display file to the cloud.
     create_cloud_derivatives
-    unzip_display
     update_cloud_acl
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
@@ -84,17 +77,6 @@ class VectorResourceDerivativeService
 
   def filename
     return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
-  end
-
-  def instructions_for_display
-    {
-      input_format: primary_file.mime_type.first,
-      label: :display_vector,
-      id: prefixed_id,
-      format: "zip",
-      srid: "EPSG:4326",
-      url: URI("file://#{temporary_display_output.path}")
-    }
   end
 
   def instructions_for_cloud
@@ -132,12 +114,8 @@ class VectorResourceDerivativeService
 
   def run_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_display, instructions_for_cloud, instructions_for_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
     )
-  end
-
-  def temporary_display_output
-    @temporary_display_output ||= Tempfile.new
   end
 
   def temporary_cloud_output
@@ -148,23 +126,11 @@ class VectorResourceDerivativeService
     @temporary_thumbnail_output ||= Tempfile.new
   end
 
-  # Unzip display raster so it can be read by GeoServer
-  def unzip_display
-    derivative_file = change_set.model.derivative_file
-    derivative_path = Valkyrie::StorageAdapter.find_by(id: derivative_file.file_identifiers.first).io.path
-    shapefile_dir = "#{File.dirname(derivative_path)}/#{File.basename(derivative_path, '.zip')}"
-    system "unzip -qq -o #{derivative_path} -d #{shapefile_dir}"
-  end
-
   def update_cloud_acl
     parent = Wayfinder.for(change_set.model).parent
     cloud_file = change_set.model.cloud_derivative_files.first
     key = cloud_file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "")
     CloudFilePermissionsService.new(resource: parent, key: key).run
-  end
-
-  def use_display
-    [Valkyrie::Vocab::PCDMUse.ServiceFile]
   end
 
   def use_cloud_derivative
@@ -209,16 +175,17 @@ class VectorResourceDerivativeService
     end
 
     def create_local_derivatives
-      return unless missing_local_display? && missing_thumbnail?
+      return unless missing_thumbnail?
       @resource = query_service.find_by(id: id)
       @change_set = ChangeSet.for(resource)
-      change_set.files = [build_display_file, build_thumbnail_file]
+      change_set.files = [build_thumbnail_file]
       change_set_persister.buffer_into_index do |buffered_persister|
         @resource = buffered_persister.save(change_set: change_set)
       end
     end
 
     def create_cloud_derivatives
+      return unless missing_cloud_derivative?
       @change_set = ChangeSet.for(resource)
       change_set.files = [build_cloud_file]
       change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
@@ -228,8 +195,8 @@ class VectorResourceDerivativeService
       end
     end
 
-    def missing_local_display?
-      resource.file_metadata.find_all { |fm| fm.use == use_display }.empty?
+    def missing_cloud_derivative?
+      resource.file_metadata.find_all { |fm| fm.use == use_cloud_derivative }.empty?
     end
 
     def missing_thumbnail?

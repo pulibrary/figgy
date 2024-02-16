@@ -40,21 +40,18 @@ RSpec.describe RasterResourceDerivativeService do
   end
 
   context "with a valid geotiff" do
-    it "creates a display raster intermediate file and a thumbnail in the geo derivatives directory, and also stores to the cloud" do
+    it "creates a thumbnail in the geo derivatives directory, and also stores to the cloud" do
       cloud_file_service = instance_double(CloudFilePermissionsService)
       allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
       allow(cloud_file_service).to receive(:run)
 
       resource = query_service.find_by(id: valid_resource.id)
-      rasters = resource.file_metadata.find_all { |f| f.label == ["display_raster.tif"] }
       thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
-      raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.first.file_identifiers.first)
       thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
       cloud_raster_file_set = resource.file_metadata.find(&:cloud_derivative?)
       cloud_raster_file = Valkyrie::StorageAdapter.find_by(id: cloud_raster_file_set.file_identifiers.first)
 
       expect(cloud_raster_file_set.use).to eq([Valkyrie::Vocab::PCDMUse.CloudDerivative])
-      expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
@@ -65,10 +62,10 @@ RSpec.describe RasterResourceDerivativeService do
     let(:file) { fixture_file_upload("files/raster/geotiff_&_unsafe.tif", "image/tif") }
     it "generates derivates without erroring" do
       resource = query_service.find_by(id: valid_resource.id)
-      rasters = resource.file_metadata.find_all { |f| f.label == ["display_raster.tif"] }
-      raster_file = Valkyrie::StorageAdapter.find_by(id: rasters.first.file_identifiers.first)
+      cloud_raster_file_set = resource.file_metadata.find(&:cloud_derivative?)
+      cloud_raster_file = Valkyrie::StorageAdapter.find_by(id: cloud_raster_file_set.file_identifiers.first)
 
-      expect(raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+      expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
     end
   end
 
@@ -113,7 +110,6 @@ RSpec.describe RasterResourceDerivativeService do
     it "deletes the attached fileset when the resource is deleted" do
       derivative_service.new(id: valid_change_set.id).cleanup_derivatives
       reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
       expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
       expect(reloaded.file_metadata.select(&:cloud_derivative?)).to be_empty
     end
@@ -138,16 +134,16 @@ RSpec.describe RasterResourceDerivativeService do
   end
 
   # In production, the cloud derivative generation sometimes fails with a
-  # network error, the job re-runs, and the display and thumbnail derivatives are
+  # network error, the job re-runs, and the cloud derivative and thumbnail derivatives are
   # duplicated.
   context "when the service runs twice" do
     it "doesn't duplicate derivatives" do
       raster_resource
       derivative_service.new(id: Wayfinder.for(raster_resource).members.first.id).create_derivatives
       file_set = Wayfinder.for(raster_resource).members.first
-      display_rasters = file_set.file_metadata.find_all { |f| f.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] }
+      cloud_derivatives = file_set.file_metadata.find_all { |f| f.use == [Valkyrie::Vocab::PCDMUse.CloudDerivative] }
       thumbnails = file_set.file_metadata.find_all { |f| f.use == [Valkyrie::Vocab::PCDMUse.ThumbnailImage] }
-      expect(display_rasters.count).to eq 1
+      expect(cloud_derivatives.count).to eq 1
       expect(thumbnails.count).to eq 1
     end
   end
