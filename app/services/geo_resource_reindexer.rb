@@ -7,13 +7,6 @@ class GeoResourceReindexer
     new(logger: logger, ogm_repo_path: nil).reindex_geoblacklight
   end
 
-  # Reindexes GeoServer by sending derivative created messages
-  # for all complete geo resources.
-  # @param optional logger [Logger] instance of logger class
-  def self.reindex_geoserver(logger: Logger.new(STDOUT))
-    new(logger: logger, ogm_repo_path: nil).reindex_geoserver
-  end
-
   # Builds an open geo metadata repository with all complete geo resources.
   # The repository contains geoblacklight documents and a layers.json file
   # that matches document identifiers with their location in the directory structure.
@@ -35,20 +28,6 @@ class GeoResourceReindexer
         decorator = resource.decorate
         messenger.record_updated(decorator)
         logger.info("Indexed into GeoBlacklight: #{resource.id}")
-      rescue StandardError => e
-        logger.warn("Error: #{e.message}")
-      end
-    end
-  end
-
-  def reindex_geoserver
-    all_geo_resources.each do |resources|
-      resources.each do |resource|
-        wayfinder = Wayfinder.for(resource)
-        file_set = wayfinder.geo_members.try(:first)
-        next unless file_set
-        messenger.derivatives_created(file_set)
-        logger.info("Indexed into GeoServer: #{file_set.id}")
       rescue StandardError => e
         logger.warn("Error: #{e.message}")
       end

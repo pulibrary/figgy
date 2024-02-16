@@ -49,35 +49,6 @@ RSpec.describe GeoResourceReindexer do
     end
   end
 
-  describe "#reindex_geoserver" do
-    let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
-    let(:change_set) { VectorResourceChangeSet.new(geo_work, files: [file]) }
-    let(:messenger) { instance_double(EventGenerator) }
-
-    before do
-      allow(EventGenerator).to receive(:new).and_return(messenger)
-      allow(messenger).to receive(:derivatives_created)
-    end
-
-    context "with a valid geo resource and geo member" do
-      it "sends a derivatives created message" do
-        described_class.reindex_geoserver(logger: logger)
-        expect(messenger).to have_received(:derivatives_created)
-      end
-    end
-
-    context "with a geo resource that throws an exception" do
-      before do
-        allow(EventGenerator).to receive(:new).and_raise("error")
-      end
-
-      it "does not send a derivatives created message" do
-        described_class.reindex_geoserver(logger: logger)
-        expect(messenger).not_to have_received(:derivatives_created)
-      end
-    end
-  end
-
   describe "#reindex_ogm" do
     let(:ogm_repo_path) { "./tmp/edu.princeton.arks" }
 

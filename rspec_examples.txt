@@ -404,7 +404,6 @@ example_id                                                                      
 ./spec/change_set_persisters/change_set_persister/generate_mosaic_spec.rb[1:1:3:1]                | passed  | 0.63223 seconds       |
 ./spec/change_set_persisters/change_set_persister/generate_mosaic_spec.rb[1:1:4:1]                | passed  | 0.8897 seconds        |
 ./spec/change_set_persisters/change_set_persister/generate_mosaic_spec.rb[1:1:5:1]                | passed  | 0.4075 seconds        |
-./spec/change_set_persisters/change_set_persister/geoserver_publish_spec.rb[1:1:1]                | passed  | 0.03001 seconds       |
 ./spec/change_set_persisters/change_set_persister/mint_identifier_spec.rb[1:1:1]                  | passed  | 0.09874 seconds       |
 ./spec/change_set_persisters/change_set_persister/mint_identifier_spec.rb[1:1:2:1]                | passed  | 0.09412 seconds       |
 ./spec/change_set_persisters/change_set_persister/mint_identifier_spec.rb[1:1:3:1]                | passed  | 0.09819 seconds       |
@@ -2549,10 +2548,6 @@ example_id                                                                      
 ./spec/jobs/generate_checksum_job_spec.rb[1:1:1]                                                  | passed  | 0.24925 seconds       |
 ./spec/jobs/generate_pyramidal_tiff_job_spec.rb[1:1:1:1]                                          | passed  | 0.68781 seconds       |
 ./spec/jobs/generate_pyramidal_tiff_job_spec.rb[1:1:2:1]                                          | passed  | 0.03471 seconds       |
-./spec/jobs/geoserver_publish_job_spec.rb[1:1:1:1]                                                | passed  | 1.59 seconds          |
-./spec/jobs/geoserver_publish_job_spec.rb[1:1:2:1]                                                | passed  | 0.04737 seconds       |
-./spec/jobs/geoserver_publish_job_spec.rb[1:1:3:1]                                                | passed  | 0.03861 seconds       |
-./spec/jobs/geoserver_publish_job_spec.rb[1:1:4:1]                                                | passed  | 1.61 seconds          |
 ./spec/jobs/import_bag_job_spec.rb[1:1:1]                                                         | passed  | 0.45354 seconds       |
 ./spec/jobs/ingest_archival_media_bag_job_spec.rb[1:1:1]                                          | passed  | 3.01 seconds          |
 ./spec/jobs/ingest_archival_media_bag_job_spec.rb[1:1:2]                                          | passed  | 2.97 seconds          |
@@ -4024,10 +4019,6 @@ example_id                                                                      
 ./spec/services/geo_resource_reindexer_spec.rb[1:3:2:1]                                           | passed  | 0.05704 seconds       |
 ./spec/services/geo_resource_reindexer_spec.rb[1:3:3:1]                                           | passed  | 0.05513 seconds       |
 ./spec/services/geoblacklight_messaging_client_spec.rb[1:1:1:1]                                   | passed  | 0.05985 seconds       |
-./spec/services/geoserver_publish_service_spec.rb[1:1:1]                                          | passed  | 1.39 seconds          |
-./spec/services/geoserver_publish_service_spec.rb[1:2:1]                                          | passed  | 1.37 seconds          |
-./spec/services/geoserver_publish_service_spec.rb[1:3:1]                                          | passed  | 1.36 seconds          |
-./spec/services/geoserver_publish_service_spec.rb[1:3:2:1]                                        | passed  | 1.43 seconds          |
 ./spec/services/identifier_service_spec.rb[1:1:1]                                                 | passed  | 0.09441 seconds       |
 ./spec/services/identifier_service_spec.rb[1:1:2:1]                                               | passed  | 0.11763 seconds       |
 ./spec/services/identifier_service_spec.rb[1:2:1]                                                 | passed  | 0.21973 seconds       |

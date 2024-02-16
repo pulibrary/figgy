@@ -206,13 +206,6 @@ defaults: &defaults
       - australia-southeast-princeto.gpogn2y5gg2j.gw.gpcloudservice.com 
       - new-zealand-princeto.gpogn2y5gg2j.gw.gpcloudservice.com 
       - australia-east-princeto.gpogn2y5gg2j.gw.gpcloudservice.com 
-  geoserver:
-    url: <%= ENV['GEOSERVER_BASE_URL'] || "http://localhost:8080/geoserver" %>
-    derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "geo_derivatives") %>
-    open:
-      workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
-    authenticated:
-      workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
   tileserver:
     url: <%= ENV['TILESERVER_URL'] %>
   geodata:
@@ -271,13 +264,6 @@ test:
       cas:
         host: <%= ENV.fetch('CAS_HOST', 'localhost.localdomain') %>
         url: <%= ENV.fetch('CAS_URL', 'https://localhost.localdomain/cas') %>
-  geoserver:
-    url: <%= ENV['GEOSERVER_BASE_URL'] || "http://localhost:8080/geoserver" %>
-    derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "test_geo_derivatives") %>
-    open:
-      workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy" %>
-    authenticated:
-      workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy" %>
   tileserver:
     url: "https://map-tiles-test.example.com"
 
@@ -321,10 +307,3 @@ staging:
       figgy: "figgy_events"
       geoblacklight: "gbl_events"
       orangelight: "orangelight_events"
-  geoserver:
-    url: <%= ENV['GEOSERVER_BASE_URL'] || "http://localhost:8080/geoserver" %>
-    derivatives_path: <%= ENV['GEOSERVER_DERIVATIVES_PATH'] || Rails.root.join("tmp", "geo_derivatives") %>
-    open:
-      workspace: <%= ENV['PUBLIC_GEOSERVER_WS'] || "public-figgy-staging" %>
-    authenticated:
-      workspace: <%= ENV['RESTRICTED_GEOSERVER_WS'] || "restricted-figgy-staging" %>
