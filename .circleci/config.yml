@@ -21,7 +21,6 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
     resource_class: large
     steps:
-      - browser-tools/install-chrome
       - checkout
       - node/install:
           install-yarn: true
@@ -75,13 +74,18 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: solr:7.7-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
+      - image: seleniarm/standalone-chromium:114.0
+        environment:
+          START_XVFB: "true"
+          SE_NODE_MAX_SESSIONS: 20
+          SE_NODE_OVERRIDE_MAX_SESSIONS: "true"
     resource_class: large
     parallelism: 4
     environment:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       COVERALLS_PARALLEL: true
     steps:
-      - browser-tools/install-chrome
+      # - browser-tools/install-chrome
       - attach_workspace:
           at: '~/figgy'
       - node/install:
@@ -92,6 +96,8 @@ jobs:
           command: node -v
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      # Wait for chrome
+      - run: dockerize -wait tcp://localhost:4444 -timeout 1m
       # Install Bundler
       - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
@@ -162,7 +168,6 @@ jobs:
           PSQL_PAGER: ''
     resource_class: large
     steps:
-      - browser-tools/install-chrome
       - attach_workspace:
           at: '~/figgy'
       - node/install:
