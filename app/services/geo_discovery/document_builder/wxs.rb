@@ -5,17 +5,13 @@ module GeoDiscovery
       attr_reader :resource_decorator
       def initialize(resource_decorator)
         @resource_decorator = resource_decorator
-        @geoserver_config = Figgy.config["geoserver"].try(:with_indifferent_access)
         @geodata_config = Figgy.config["geodata"].try(:with_indifferent_access)
       end
 
-      # Returns the identifier to use with WMS/WFS/WCS services.
       # @return [String] wxs indentifier
       def identifier
-        return resource_decorator.layer_name if resource_decorator.layer_name&.first&.present?
         return unless file_set
-        return file_set.id.to_s unless @geoserver_config && visibility
-        "#{@geoserver_config[visibility][:workspace]}:p-#{file_set.id}" if @geoserver_config[visibility][:workspace]
+        file_set.id.to_s
       end
 
       # Returns the cloud optimized geotiff data url.
@@ -30,24 +26,6 @@ module GeoDiscovery
       def pmtiles_path
         return unless generate_pmtiles_path?
         "#{@geodata_config[visibility][:url]}/#{cloud_file_path}"
-      end
-
-      # Returns the wms server url.
-      # @return [String] wms server url
-      def wms_path
-        url = Array.wrap(resource_decorator.wms_url)
-        return url.first if url.try(:first).present?
-        return unless generate_wms_path?
-        "#{path}/#{@geoserver_config[visibility][:workspace]}/wms"
-      end
-
-      # Returns the wfs server url.
-      # @return [String] wfs server url
-      def wfs_path
-        url = Array.wrap(resource_decorator.wfs_url)
-        return url.first if url.try(:first).present?
-        return unless @geoserver_config && visibility && file_set && vector_file_set?
-        "#{path}/#{@geoserver_config[visibility][:workspace]}/wfs"
       end
 
       # Returns the wmts server url.
@@ -95,18 +73,6 @@ module GeoDiscovery
         # @return [Boolean]
         def generate_pmtiles_path?
           @geodata_config && visibility && file_set && vector_file_set? && cloud_file_path
-        end
-
-        # Determines if the wms path should be generated
-        # @return [Boolean]
-        def generate_wms_path?
-          @geoserver_config && visibility && file_set && vector_file_set?
-        end
-
-        # Geoserver base url.
-        # @return [String] geoserver base url
-        def path
-          @geoserver_config[:url].chomp("/rest")
         end
 
         # Tests if the file set is a valid vector format.

@@ -66,10 +66,6 @@ class RasterResourceChangeSet < ChangeSet
         :coverage,
         :held_by,
         :embargo_date
-      ],
-      "Geospatial Web Service Overrides" => [
-        :wms_url,
-        :layer_name
       ]
     }
   end

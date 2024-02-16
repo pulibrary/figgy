@@ -17,8 +17,5 @@ module GeoChangeSetProperties
     property :temporal, multiple: true, required: false, default: []
     property :cartographic_scale, multiple: false, required: false
     property :cartographic_projection, multiple: false, required: false
-    property :wms_url, multiple: false, required: false
-    property :wfs_url, multiple: false, required: false
-    property :layer_name, multiple: false, required: false
   end
 end

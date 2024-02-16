@@ -36,21 +36,18 @@ RSpec.describe VectorResourceDerivativeService do
   end
 
   context "with a valid shapefile" do
-    it "creates a zipped display vector intermediate file and a thumbnail in the geo derivatives directory, and also stores to the cloud" do
+    it "creates a thumbnail in the geo derivatives directory and also stores to the cloud" do
       cloud_file_service = instance_double(CloudFilePermissionsService)
       allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
       allow(cloud_file_service).to receive(:run)
 
       resource = query_service.find_by(id: valid_resource.id)
-      shapefiles = resource.file_metadata.find_all { |f| f.label == ["display_vector.zip"] }
       thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
-      shapefile_file = Valkyrie::StorageAdapter.find_by(id: shapefiles.first.file_identifiers.first)
       thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
       cloud_vector_file_set = resource.file_metadata.find(&:cloud_derivative?)
       cloud_vector_file = Valkyrie::StorageAdapter.find_by(id: cloud_vector_file_set.file_identifiers.first)
 
       expect(cloud_vector_file_set.use).to eq([Valkyrie::Vocab::PCDMUse.CloudDerivative])
-      expect(shapefile_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
       expect(cloud_vector_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
@@ -71,7 +68,6 @@ RSpec.describe VectorResourceDerivativeService do
     it "deletes the attached fileset when the resource is deleted" do
       derivative_service.new(id: valid_change_set.id).cleanup_derivatives
       reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select(&:derivative?)).to be_empty
       expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
       expect(reloaded.file_metadata.select(&:cloud_derivative?)).to be_empty
     end

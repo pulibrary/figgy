@@ -66,11 +66,6 @@ class VectorResourceChangeSet < ChangeSet
         :coverage,
         :held_by,
         :embargo_date
-      ],
-      "Geospatial Web Service Overrides" => [
-        :wms_url,
-        :wfs_url,
-        :layer_name
       ]
     }
   end

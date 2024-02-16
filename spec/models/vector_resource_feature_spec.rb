@@ -27,9 +27,6 @@ RSpec.feature "VectorResources" do
     expect(page).to have_field "Issued"
     expect(page).to have_field "Creator"
     expect(page).to have_field "Language"
-    expect(page).to have_field "Wms url"
-    expect(page).to have_field "Wfs url"
-    expect(page).to have_field "Layer name"
   end
 
   context "when a user creates a new vector resource" do
