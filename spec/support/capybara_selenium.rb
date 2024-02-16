@@ -10,12 +10,13 @@ browser = :chrome
 # upgrade versions of Chrome.
 Capybara.server_host = '0.0.0.0'
 Capybara.always_include_port = true
-Capybara.app_host = "http://host.docker.internal:#{Capybara.server_port}"
 browser = :remote
 if !ENV["CI"]
   selenium_url = "http://127.0.0.1:4445/wd/hub"
+  Capybara.app_host = "http://host.docker.internal:#{Capybara.server_port}"
 else
   selenium_url = "http://127.0.0.1:4444/wd/hub"
+  Capybara.app_host = "http://127.0.0.1:#{Capybara.server_port}"
 end
 
 Capybara.register_driver(:selenium) do |app|
