@@ -22,7 +22,6 @@ jobs:
     resource_class: large
     steps:
       - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
       - checkout
       - node/install:
           install-yarn: true
@@ -83,7 +82,6 @@ jobs:
       COVERALLS_PARALLEL: true
     steps:
       - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'
       - node/install:
@@ -165,7 +163,6 @@ jobs:
     resource_class: large
     steps:
       - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
       - attach_workspace:
           at: '~/figgy'
       - node/install:
