@@ -30,7 +30,6 @@ gem "faker"
 gem "filewatcher"
 gem "flutie"
 gem "font-awesome-rails"
-gem "geoserver-publish"
 gem "google-cloud-pubsub"
 # This breaks PreserveResourceJob somewhere between 1.39 and 1.44.
 gem "google-cloud-storage", "1.38.0"

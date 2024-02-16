@@ -24,10 +24,6 @@ RSpec.describe VectorResourceDerivativeService do
   let(:tika_output) { tika_shapefile_output }
   let(:valid_id) { valid_change_set.id }
 
-  before do
-    allow(GeoserverPublishJob).to receive(:perform_later)
-  end
-
   describe "#valid?" do
     let(:valid_file) { derivative_service.new(id: valid_change_set.id) }
 

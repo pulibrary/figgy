@@ -13,12 +13,7 @@ module Schema
       Common.typed_attributes.merge(
         {
           # Can be used to override business logic about whether a record is discoverable in GeoBlacklight
-          gbl_suppressed_override: Valkyrie::Types::Bool,
-          # Custom values for overriding auto-generated OGC Web Service properties.
-          # Used to build records for manually created GeoServer raster mosaics, for example.
-          wms_url: Valkyrie::Types::String,
-          wfs_url: Valkyrie::Types::String,
-          layer_name: Valkyrie::Types::String
+          gbl_suppressed_override: Valkyrie::Types::Bool
         }
       )
     end

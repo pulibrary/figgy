@@ -16,8 +16,6 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
   let(:tika_output) { tika_shapefile_output }
 
   before do
-    allow(GeoserverPublishJob).to receive(:perform_later)
-    allow(MosaicJob).to receive(:perform_later)
     change_set_persister.save(change_set: change_set)
   end
 
