@@ -121,6 +121,7 @@ Metrics/ClassLength:
     - 'app/services/geo_metadata_extractor/iso19139.rb'
     - 'app/services/dao_updater.rb'
     - 'app/derivative_services/image_derivative_service.rb'
+    - 'app/models/file_set.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
