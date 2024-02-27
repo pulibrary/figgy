@@ -92,8 +92,9 @@ class FileAppender
       }.merge(
         file.try(:container_attributes) || {}
       )
-      file_set = FileSet.new(attributes)
+      file_set = FileSet.new
       change_set = ChangeSet.for(file_set)
+      change_set.validate(attributes)
       change_set_persister.save(change_set: change_set)
     end
 
