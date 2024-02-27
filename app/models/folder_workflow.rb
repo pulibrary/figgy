@@ -25,10 +25,9 @@ class FolderWorkflow < BaseWorkflow
   end
 
   # States in which the record can be publicly viewable
-  # All states must be included here because any state is viewable if its container allows it
   # @return array of strings
   def self.public_read_states
-    [:needs_qa, :complete].map(&:to_s)
+    [:complete].map(&:to_s)
   end
 
   # States in which read groups for the record are indexable
