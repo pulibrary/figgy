@@ -91,6 +91,10 @@ class FileSet < Resource
     file_metadata.select(&:intermediate_file?)
   end
 
+  def transcripts
+    file_metadata.select(&:transcript?)
+  end
+
   def primary_file
     if original_file
       original_file
@@ -107,6 +111,10 @@ class FileSet < Resource
 
   def image?
     Array.wrap(mime_type).first.to_s.include?("image/")
+  end
+
+  def captions?
+    av? && transcripts.present?
   end
 
   def preservation_targets
