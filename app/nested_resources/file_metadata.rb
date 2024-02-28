@@ -28,6 +28,9 @@ class FileMetadata < Valkyrie::Resource
   # PDF Metadata
   attribute :page_count, Valkyrie::Types::Integer
 
+  # Caption Metadata
+  attribute :caption_language, Valkyrie::Types::String.default("eng")
+
   # preservation attributes
   # ID of the object this node is a preservation copy of. A PreservationObject's
   # binary_node (which is a FileMetadata object) uses this value to point to a
