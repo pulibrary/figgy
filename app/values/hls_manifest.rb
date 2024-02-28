@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 class HlsManifest
-  def self.for(file_set:, file_metadata:, auth_token: nil)
-    if file_metadata.mime_type.first.to_s == "application/x-mpegURL"
+  def self.for(file_set:, file_metadata:, as: nil, auth_token: nil)
+    return unless file_metadata.mime_type.first.to_s == "application/x-mpegURL"
+    if as == "stream"
+      Primary.new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token)
+    else
       new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token)
     end
   end
@@ -13,6 +16,7 @@ class HlsManifest
     @file_set = file_set
     @file_metadata = file_metadata
     @auth_token = auth_token
+    playlist.target = file_set.primary_file.duration.first.to_i + 1
     apply_auth_token if auth_token.present?
   end
 

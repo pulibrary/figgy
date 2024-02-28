@@ -30,8 +30,7 @@ class DownloadsController < ApplicationController
   end
 
   def send_hls
-    return send_primary_hls_manifest if params[:as] == "stream"
-    manifest = HlsManifest.for(file_set: resource, file_metadata: file_desc, auth_token: params[:auth_token])
+    manifest = HlsManifest.for(file_set: resource, file_metadata: file_desc, as: params[:as], auth_token: params[:auth_token])
     render plain: manifest.to_s
   end
 
