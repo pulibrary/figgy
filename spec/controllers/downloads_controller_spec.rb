@@ -130,6 +130,25 @@ RSpec.describe DownloadsController do
       end
     end
 
+    context "with an HLS playlist FileSet and ?as=stream" do
+      xit "creates a primary playlist with the auth token" do
+        token = AuthToken.create!(group: ["admin"], label: "admin_token")
+        change_set_persister = ChangeSetPersister.default
+        file_set = FactoryBot.create_for_repository(:file_set)
+        file = fixture_file_upload("files/hls_playlist.m3u8", "application/x-mpegURL")
+        change_set = ChangeSet.for(file_set)
+        change_set.files = [file]
+        output = change_set_persister.save(change_set: change_set)
+
+        get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s, as: "stream", auth_token: token.token, format: "m3u8" }
+
+        expect(response).to be_successful
+        playlist = M3u8::Playlist.read(response.body)
+        expect(playlist.items.length).to eq 1
+        expect(playlist.items[0].uri).to eq "/downloads/#{output.id}/file/#{output.file_metadata.first.id}?auth_token=#{token.token}"
+      end
+    end
+
     context "with an HLS playlist FileSet and an auth token" do
       it "modifies the playlist to include auth tokens" do
         token = AuthToken.create!(group: ["admin"], label: "admin_token")

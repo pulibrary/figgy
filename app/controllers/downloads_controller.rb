@@ -14,7 +14,7 @@ class DownloadsController < ApplicationController
   def send_content
     # Only append auth tokens to HLS if necessary, otherwise let normal behavior
     # take care of sending it.
-    return send_hls if file_desc.mime_type.first.to_s == "application/x-mpegURL" && params[:auth_token].present?
+    return send_hls if params[:as] == "stream" || file_desc.mime_type.first.to_s == "application/x-mpegURL"
     # Necessary until a Rack version is released which allows for multiple
     # HTTP_X_ACCEL_MAPPING. When this commit is in a released version:
     # https://github.com/rack/rack/commit/f2361997623e5141e6baa907d79f1212b36fbb8b
@@ -30,11 +30,9 @@ class DownloadsController < ApplicationController
   end
 
   def send_hls
-    playlist = M3u8::Playlist.read(File.open(binary_file.disk_path))
-    playlist.items.each do |item|
-      item.segment = "#{item.segment}?auth_token=#{params[:auth_token]}"
-    end
-    render plain: playlist.to_s
+    return send_primary_hls_manifest if params[:as] == "stream"
+    manifest = HlsManifest.for(file_set: resource, file_metadata: file_desc, auth_token: params[:auth_token])
+    render plain: manifest.to_s
   end
 
   def send_fgdc
