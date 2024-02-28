@@ -12,8 +12,7 @@ class DownloadsController < ApplicationController
   end
 
   def send_content
-    # Only append auth tokens to HLS if necessary, otherwise let normal behavior
-    # take care of sending it.
+    # HLS manifests are created dynamically, don't send the file directly.
     return send_hls if params[:as] == "stream" || file_desc.mime_type.first.to_s == "application/x-mpegURL"
     # Necessary until a Rack version is released which allows for multiple
     # HTTP_X_ACCEL_MAPPING. When this commit is in a released version:
