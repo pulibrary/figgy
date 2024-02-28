@@ -91,8 +91,8 @@ class FileSet < Resource
     file_metadata.select(&:intermediate_file?)
   end
 
-  def transcripts
-    file_metadata.select(&:transcript?)
+  def captions
+    file_metadata.select(&:caption?)
   end
 
   def primary_file
@@ -114,7 +114,7 @@ class FileSet < Resource
   end
 
   def captions?
-    av? && transcripts.present?
+    av? && captions.present?
   end
 
   def preservation_targets
