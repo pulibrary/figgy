@@ -130,6 +130,23 @@ RSpec.describe DownloadsController do
       end
     end
 
+    context "with a VTT file" do
+      with_queue_adapter :inline
+      it "can generate an HLS manifest for it", run_real_characterization: true do
+        stub_ezid
+        output = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete")
+        file_set = Wayfinder.for(output).file_sets.first
+        file_metadata = file_set.file_metadata.find(&:caption?)
+
+        get :show, params: { resource_id: file_set.id.to_s, id: file_metadata.id.to_s, as: "stream", format: "m3u8" }
+
+        expect(response).to be_successful
+        playlist = M3u8::Playlist.read(response.body)
+        expect(playlist.target).to eq 6
+        expect(playlist.items.length).to eq 1
+        expect(playlist.items[0].segment).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}"
+      end
+    end
     context "with an HLS playlist FileSet and ?as=stream" do
       context "with no auth token given" do
         with_queue_adapter :inline

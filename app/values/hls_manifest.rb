@@ -7,11 +7,12 @@ class HlsManifest
   # returns the manifest referenced by file_metadata, mutated if needed.
   # @return [#to_s] Object whose #to_s method returns an HLS Manifest.
   def self.for(file_set:, file_metadata:, as: nil, auth_token: nil)
-    return unless file_metadata.hls_manifest?
-    if as == "stream"
+    return unless file_metadata.hls_manifest? || file_metadata.caption?
+    return new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token) unless as == "stream"
+    if file_metadata.hls_manifest?
       Primary.new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token)
     else
-      new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token)
+      Caption.new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token)
     end
   end
 
