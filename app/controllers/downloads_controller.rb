@@ -14,7 +14,7 @@ class DownloadsController < ApplicationController
   def send_content
     # Only append auth tokens to HLS if necessary, otherwise let normal behavior
     # take care of sending it.
-    return send_hls if file_desc.mime_type.first.to_s == "application/x-mpegURL" && params[:auth_token].present?
+    return send_hls if params[:type] == "stream" || file_desc.mime_type.first.to_s == "application/x-mpegURL"# && params[:auth_token].present?
     # Necessary until a Rack version is released which allows for multiple
     # HTTP_X_ACCEL_MAPPING. When this commit is in a released version:
     # https://github.com/rack/rack/commit/f2361997623e5141e6baa907d79f1212b36fbb8b
@@ -30,9 +30,39 @@ class DownloadsController < ApplicationController
   end
 
   def send_hls
+    return send_primary_manifest if params[:type] == "stream" && file_desc.hls_manifest?
+    return send_transcript_manifest if params[:type] == "stream" && file_desc.transcript?
     playlist = M3u8::Playlist.read(File.open(binary_file.disk_path))
-    playlist.items.each do |item|
-      item.segment = "#{item.segment}?auth_token=#{params[:auth_token]}"
+    if params[:auth_token].present?
+      playlist.items.each do |item|
+        item.segment = "#{item.segment}?auth_token=#{params[:auth_token]}"
+      end
+    end
+    render plain: playlist.to_s
+  end
+
+  def send_transcript_manifest
+    duration = resource.primary_file.duration.first.to_i + 1
+    playlist = M3u8::Playlist.new(target: duration, version: 3, sequence: 0)
+    item = M3u8::SegmentItem.new(duration: duration, segment: download_path(resource.id, file_desc.id))
+    playlist.items << item
+    render plain: playlist.to_s
+  end
+
+  def send_primary_manifest
+    playlist = M3u8::Playlist.new
+    options = { profile: "high",
+                bandwidth: 540, subtitles: "subs", uri: download_path(resource.id, resource.file_metadata.find(&:hls_manifest?).id) }
+    item = M3u8::PlaylistItem.new(options)
+    playlist.items << item
+    if resource.captions?
+      resource.transcripts.each do |transcription|
+        item = {
+          type: "SUBTITLES", group_id: "subs", name: "English", default: true, autoselect: true, language: "eng", uri: download_url(resource.id, transcription.id, type: :stream)
+        }
+        item = M3u8::MediaItem.new(item)
+        playlist.items.unshift(item)
+      end
     end
     render plain: playlist.to_s
   end

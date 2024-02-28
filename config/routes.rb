@@ -56,7 +56,7 @@ Rails.application.routes.draw do
     concerns :iiif_search
   end
 
-  get "/downloads/:resource_id/file/:id", to: "downloads#show", as: :download
+  get "/downloads/:resource_id/file/:id(/:type)", to: "downloads#show", as: :download
   get "/manifests/:id/v3", to: "manifests#v3", as: :manifest_v3, defaults: { format: :json }
   get "/tilemetadata/:id", to: "tile_metadata#metadata", as: :tile_metadata, defaults: { format: :json }
   get "/tilemetadata/:id/tilejson", to: "tile_metadata#tilejson", as: :tile_metadata_tilejson, defaults: { format: :json }
