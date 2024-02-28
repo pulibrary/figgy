@@ -1,7 +1,13 @@
 # frozen_string_literal: true
+# Class responsible for converting an HLS manifest (.m3u8) file from ffmpeg to
+# include an auth token in its file references, if appropriate.
 class HlsManifest
+  # Factory method for returning the different kinds of manifests. If asked for
+  # a "stream" then it generates a manifest dynamically, otherwise it simply
+  # returns the manifest referenced by file_metadata, mutated if needed.
+  # @return [#to_s] Object whose #to_s method returns an HLS Manifest.
   def self.for(file_set:, file_metadata:, as: nil, auth_token: nil)
-    return unless file_metadata.mime_type.first.to_s == "application/x-mpegURL"
+    return unless file_metadata.hls_manifest?
     if as == "stream"
       Primary.new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token)
     else
