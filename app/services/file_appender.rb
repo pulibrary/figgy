@@ -94,6 +94,7 @@ class FileAppender
       )
       file_set = FileSet.new(attributes)
       change_set = ChangeSet.for(file_set)
+      change_set.validate(attributes)
       change_set_persister.save(change_set: change_set)
     end
 

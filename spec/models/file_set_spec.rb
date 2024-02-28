@@ -46,4 +46,13 @@ RSpec.describe FileSet do
       expect(described_class.schema.key?(:processing_status)).to eq true
     end
   end
+
+  describe "#captions?", run_real_derivatives: true, run_real_characterization: true do
+    it "returns true if there's an attached caption file" do
+      resource = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions)
+      file_set = Wayfinder.for(resource).file_sets.first
+
+      expect(file_set.captions?).to eq true
+    end
+  end
 end

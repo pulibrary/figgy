@@ -83,6 +83,10 @@ class FileMetadata < Valkyrie::Resource
     use.include?(Valkyrie::Vocab::PCDMUse.CloudDerivative)
   end
 
+  def transcript?
+    use.include?(Valkyrie::Vocab::PCDMUse.Transcript)
+  end
+
   def image?
     mime_type.first.include?("image")
   end
