@@ -75,6 +75,7 @@ RSpec.feature "FileSet" do
       caption = Wayfinder.for(resource).file_sets.first.captions.first
       expect(caption.caption_language).to eq "eng"
       expect(caption.file_identifiers.length).to eq 1
+      expect(page).to have_content "caption.vtt"
     end
   end
 end
