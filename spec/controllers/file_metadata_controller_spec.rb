@@ -31,6 +31,8 @@ RSpec.describe FileMetadataController do
         }
 
         expect(response).to redirect_to solr_document_path(file_set.id.to_s)
+        file_set = ChangeSetPersister.default.query_service.find_by(id: file_set.id)
+        expect(file_set.captions.length).to eq 1
       end
     end
   end

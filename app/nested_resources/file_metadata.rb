@@ -30,6 +30,7 @@ class FileMetadata < Valkyrie::Resource
 
   # Caption Metadata
   attribute :caption_language, Valkyrie::Types::String.optional
+  attribute :change_set, Valkyrie::Types::String
 
   # preservation attributes
   # ID of the object this node is a preservation copy of. A PreservationObject's
