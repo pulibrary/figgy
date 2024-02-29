@@ -185,15 +185,17 @@ class BulkIngestService
           results.reduce(:|)
         end
       end
-      # Include figgy_metadata if it exists.
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
       file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
+
       file_paths.sort!
+      # Include figgy_metadata if it exists.
       if path.join("figgy_metadata.json").exist?
         file_paths = [path.join("figgy_metadata.json")] + file_paths
       end
 
-      BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource, preserve_file_names: preserve_file_names).to_a
+      caption_files = Dir[path.join("*.vtt")]
+      BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource, preserve_file_names: preserve_file_names, caption_files: caption_files).to_a
     end
 
     def ignored_file_names

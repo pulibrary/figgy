@@ -1,7 +1,8 @@
 <h2>
-  Bulk Ingest <%= @resource_class.human_readable_type.pluralize %>
   <% if @resource_class == ScannedResource %>
-     or Vendor Bags
+    <%= t("bulk_ingest.show.heading.scanned_resource") %>
+  <% else %>
+    <%= t("bulk_ingest.show.heading.default", resource: @resource_class.human_readable_type.pluralize) %>
   <% end %>
 </h2>
 

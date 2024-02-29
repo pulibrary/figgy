@@ -82,7 +82,7 @@ RSpec.describe IngestFolderJob do
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
           property: nil,
-          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg"],
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id],
@@ -123,10 +123,33 @@ RSpec.describe IngestFolderJob do
         expect(ingest_service).to have_received(:attach_dir).with(
           base_directory: single_dir,
           property: nil,
-          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg"],
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
           member_of_collection_ids: [coll.id]
+        )
+      end
+    end
+
+    context "with a video and caption file" do
+      let(:ingest_dir) { Rails.root.join("spec", "fixtures", "av", "bulk_ingest", "video_with_captions") }
+      it "ingests" do
+        ingest_service = instance_double(BulkIngestService)
+        allow(ingest_service).to receive(:attach_dir)
+        allow(BulkIngestService).to receive(:new).and_return(ingest_service)
+
+        described_class.perform_now(
+          directory: ingest_dir,
+          title: "Interview"
+        )
+
+        expect(BulkIngestService).to have_received(:new).with(hash_including(klass: ScannedResource))
+
+        expect(ingest_service).to have_received(:attach_dir).with(
+          base_directory: ingest_dir,
+          property: nil,
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
+          title: "Interview"
         )
       end
     end

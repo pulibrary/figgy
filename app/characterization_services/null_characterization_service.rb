@@ -18,10 +18,14 @@ class NullCharacterizationService
   end
 
   def valid?
-    target_file.mime_type == ["application/xml; schema=mets"] || target_file.mime_type == ["application/xml; schema=pbcore"]
+    (target_file.mime_type & valid_mime_types).present?
   end
 
   def target_file
     @file_set.primary_file
+  end
+
+  def valid_mime_types
+    ["application/xml; schema=mets", "application/xml; schema=pbcore", "text/vtt"]
   end
 end

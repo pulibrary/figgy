@@ -23,7 +23,7 @@ class IngestFolderJob < ApplicationJob
     def typed_file_filter(class_name)
       case class_name
       when "ScannedResource"
-        [".tif", ".wav", ".pdf", ".zip", ".jpg"]
+        [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"]
       else
         Rails.logger.warn "Ingesting a folder with an unsupported class: #{class_name}"
         []
