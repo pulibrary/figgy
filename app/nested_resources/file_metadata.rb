@@ -34,6 +34,7 @@ class FileMetadata < Valkyrie::Resource
 
   # Caption Metadata
   attribute :caption_language, Valkyrie::Types::String.optional
+  attribute :original_language_caption, Valkyrie::Types::Bool.optional
   attribute :change_set, Valkyrie::Types::String
 
   # preservation attributes

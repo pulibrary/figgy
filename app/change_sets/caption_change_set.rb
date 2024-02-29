@@ -2,6 +2,7 @@
 class CaptionChangeSet < Valkyrie::ChangeSet
   property :caption_language, multiple: false, type: Valkyrie::Types::String.optional, required: true
   property :change_set, required: true, default: "caption"
+  property :original_language_caption, required: false, type: Dry::Types["params.bool"], default: false
   # VTT file uploaded from form.
   property :file, virtual: true, multiple: false, required: true
 
@@ -11,7 +12,8 @@ class CaptionChangeSet < Valkyrie::ChangeSet
     [
       :file,
       :caption_language,
-      :change_set
+      :change_set,
+      :original_language_caption
     ]
   end
 
@@ -21,10 +23,7 @@ class CaptionChangeSet < Valkyrie::ChangeSet
       mime_type: file.content_type,
       original_filename: file.original_filename,
       use: Valkyrie::Vocab::PCDMUse.Caption,
-      node_attributes: {
-        caption_language: caption_language,
-        change_set: change_set
-      }
+      node_attributes: fields.except("file").symbolize_keys
     )
   end
 end
