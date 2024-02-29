@@ -300,13 +300,12 @@ RSpec.describe BulkIngestService do
     context "when ingesting video and vtt caption file" do
       let(:single_dir) { Rails.root.join("spec", "fixtures", "av", "bulk_ingest", "video_with_captions") }
       with_queue_adapter :inline
-      let(:bib) { "9946093213506421" }
       let(:coll) { FactoryBot.create_for_repository(:collection) }
       it "ingests them as file_metadatas on the same FileSet" do
         ingester.attach_dir(
           base_directory: single_dir,
           file_filters: [".mp4"],
-          source_metadata_identifier: bib,
+          title: "Interview",
           member_of_collection_ids: [coll.id.to_s],
           visibility: "open",
           depositor: "tpend"

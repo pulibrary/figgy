@@ -22,9 +22,8 @@ class IngestFolderJob < ApplicationJob
     # @return [String]
     def typed_file_filter(class_name)
       case class_name
-      # TODO Update to allow video (need a test)
       when "ScannedResource"
-        [".tif", ".wav", ".pdf", ".zip", ".jpg"]
+        [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"]
       else
         Rails.logger.warn "Ingesting a folder with an unsupported class: #{class_name}"
         []
