@@ -136,4 +136,8 @@ class FileMetadata < Valkyrie::Resource
       file_id.gsub("disk:/", "")
     end
   end
+
+  def caption_language_label
+    ControlledVocabulary.for(:language).label(caption_language)
+  end
 end
