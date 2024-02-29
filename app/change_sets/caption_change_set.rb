@@ -5,6 +5,8 @@ class CaptionChangeSet < Valkyrie::ChangeSet
   # VTT file uploaded from form.
   property :file, virtual: true, multiple: false, required: true
 
+  validates :file, presence: true
+
   def to_ingestable_file
     IngestableFile.new(
       file_path: file.path,

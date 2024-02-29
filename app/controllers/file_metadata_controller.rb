@@ -6,12 +6,15 @@ class FileMetadataController < ApplicationController
     authorize! :update, @file_set
     @change_set = ChangeSet.for(FileMetadata.new, change_set_param: change_set_param)
     @change_set.validate(resource_params)
-    # TODO: Add validation check here, re-render form.
-    ingestable_file = @change_set.to_ingestable_file
-    file_set_change_set = ChangeSet.for(file_set)
-    file_set_change_set.files = [ingestable_file]
-    change_set_persister.save(change_set: file_set_change_set)
-    redirect_to solr_document_path(file_set.id.to_s)
+    if @change_set.valid?
+      ingestable_file = @change_set.to_ingestable_file
+      file_set_change_set = ChangeSet.for(file_set)
+      file_set_change_set.files = [ingestable_file]
+      change_set_persister.save(change_set: file_set_change_set)
+      redirect_to solr_document_path(file_set.id.to_s)
+    else
+      render :new
+    end
   end
 
   def file_set
