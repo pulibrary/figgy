@@ -17,6 +17,7 @@ RSpec.feature "FileSet" do
 
     visit solr_document_path(id: file_set.id)
     expect(page).to have_selector("#health-status")
+    expect(page).not_to have_link "Attach Caption"
   end
 
   scenario "with a cloud fixity failure, file set show page has a needs attention health status" do
@@ -66,8 +67,10 @@ RSpec.feature "FileSet" do
       resource = FactoryBot.create_for_repository(:scanned_resource_with_video)
       file_set = Wayfinder.for(resource).file_sets.first
 
-      visit new_caption_file_set_file_metadata_path(file_set_id: file_set.id)
-      page.attach_file(Rails.root.join("spec", "fixtures", "files", "caption.vtt"))
+      visit solr_document_path(id: file_set.id)
+      click_link "Attach Caption"
+
+      attach_file(Rails.root.join("spec", "fixtures", "files", "caption.vtt"))
       select "English", from: "file_metadata[caption_language]"
       check "Is this caption in the original language of the audio?"
       click_button "Save"
