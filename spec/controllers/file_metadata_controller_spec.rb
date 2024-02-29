@@ -30,7 +30,7 @@ RSpec.describe FileMetadataController do
           }
         }
 
-        expect(response).to render_template "new"
+        expect(response).to render_template "base/new"
       end
       it "creates a caption given valid parameters" do
         file_set = FactoryBot.create_for_repository(:video_file_set)

@@ -13,7 +13,7 @@ class FileMetadataController < ApplicationController
       change_set_persister.save(change_set: file_set_change_set)
       redirect_to solr_document_path(file_set.id.to_s)
     else
-      render :new
+      render "base/new"
     end
   end
 
