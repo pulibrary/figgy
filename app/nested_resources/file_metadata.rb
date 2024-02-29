@@ -29,7 +29,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :page_count, Valkyrie::Types::Integer
 
   # Caption Metadata
-  attribute :caption_language, Valkyrie::Types::String.default("eng")
+  attribute :caption_language, Valkyrie::Types::String.optional
 
   # preservation attributes
   # ID of the object this node is a preservation copy of. A PreservationObject's
