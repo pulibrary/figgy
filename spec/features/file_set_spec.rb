@@ -79,7 +79,7 @@ RSpec.feature "FileSet" do
       expect(caption.original_language_caption).to eq true
       expect(page).to have_content "caption.vtt"
       expect(page).to have_css(".badge-dark", text: "Caption")
-      expect(page).to have_css(".badge-dark", text: "English")
+      expect(page).to have_css(".badge-dark", text: "English (Original)")
     end
   end
 end

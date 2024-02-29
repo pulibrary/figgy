@@ -139,6 +139,8 @@ class FileMetadata < Valkyrie::Resource
   end
 
   def caption_language_label
-    ControlledVocabulary.for(:language).label(caption_language)
+    label = ControlledVocabulary.for(:language).label(caption_language)
+    return label unless original_language_caption
+    "#{label} (Original)"
   end
 end
