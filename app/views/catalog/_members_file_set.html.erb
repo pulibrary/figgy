@@ -18,7 +18,7 @@
   <% end %>
   <% resource.captions.each do |file| %>
     <tr>
-      <td><span class="badge badge-info">caption</span>&nbsp;<%= file.label.first %></td>
+      <td><span class="badge badge-dark">Caption</span>&nbsp;<span class="badge badge-dark"><%= file.caption_language_label %></span>&nbsp;<%= file.label.first %></td>
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
