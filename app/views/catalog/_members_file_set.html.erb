@@ -2,9 +2,11 @@
   <div class="col-md-8">
     <h2>Files</h2>
   </div>
-  <div class="col-md-4 d-flex flex-row-reverse">
-    <%= link_to "Attach Caption", new_caption_file_set_file_metadata_path(file_set_id: resource.id), class: "btn btn-primary align-self-end mt-auto mb-auto" %>
-  </div>
+  <% if resource.av? %>
+    <div class="col-md-4 d-flex flex-row-reverse">
+      <%= link_to "Attach Caption", new_caption_file_set_file_metadata_path(file_set_id: resource.id), class: "btn btn-primary align-self-end mt-auto mb-auto" %>
+    </div>
+  <% end %>
 </div>
 <table class="table table-striped files">
   <thead>
