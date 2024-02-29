@@ -59,4 +59,22 @@ RSpec.feature "FileSet" do
       expect(page).to have_css ".not_preserved", text: "Derivative files are not preserved."
     end
   end
+
+  context "when creating a caption" do
+    with_queue_adapter :inline
+    it "can attach a caption via a form" do
+      resource = FactoryBot.create_for_repository(:scanned_resource_with_video)
+      file_set = Wayfinder.for(resource).file_sets.first
+
+      visit new_caption_file_set_file_metadata_path(file_set_id: file_set.id)
+      page.attach_file(Rails.root.join("spec", "fixtures", "files", "caption.vtt"))
+      select "English", from: "file_metadata[caption_language]"
+      click_button "Save"
+
+      expect(page).to have_content file_set.title.first
+      caption = Wayfinder.for(resource).file_sets.first.captions.first
+      expect(caption.caption_language).to eq "eng"
+      expect(caption.file_identifiers.length).to eq 1
+    end
+  end
 end

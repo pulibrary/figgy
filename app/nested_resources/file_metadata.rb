@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class FileMetadata < Valkyrie::Resource
+  def self.supports_save_and_duplicate?
+    false
+  end
+
   include Valkyrie::Resource::AccessControls
   attribute :label, Valkyrie::Types::Set
   attribute :mime_type, Valkyrie::Types::Set
