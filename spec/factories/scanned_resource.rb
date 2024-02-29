@@ -52,7 +52,10 @@ FactoryBot.define do
                   file_path: Rails.root.join("spec", "fixtures", "files", "caption.vtt"),
                   mime_type: "text/vtt",
                   original_filename: "caption.vtt",
-                  use: Valkyrie::Vocab::PCDMUse.Caption
+                  use: Valkyrie::Vocab::PCDMUse.Caption,
+                  node_attributes: {
+                    caption_language: "eng"
+                  }
                 )
               ]
             }

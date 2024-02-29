@@ -11,6 +11,7 @@ class HlsManifest::Primary
     @file_metadata = file_metadata
     @auth_token = auth_token
     attach_av_track
+    attach_captions
   end
 
   def playlist
@@ -22,8 +23,28 @@ class HlsManifest::Primary
       profile: "high",
       subtitles: "subs",
       bandwidth: 540,
-      uri: helper.download_path(file_set.id, file_metadata.id, auth_token: auth_token)
+      uri: helper.download_path(file_set.id, file_metadata.id, auth_token: auth_token, format: "m3u8")
     )
+  end
+
+  def attach_captions
+    file_set.captions.each do |caption_metadata|
+      playlist.items << M3u8::MediaItem.new(
+        type: "SUBTITLES",
+        group_id: "subs",
+        name: "Caption",
+        default: true,
+        autoselect: true,
+        characteristics: accessibility_characteristics,
+        language: caption_metadata.caption_language,
+        uri: helper.download_path(file_set.id, caption_metadata.id, as: "stream", auth_token: auth_token, format: "m3u8")
+      )
+    end
+  end
+
+  # Says via HLS that the subtitles should be treated as captions in HLS.
+  def accessibility_characteristics
+    "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
   end
 
   def helper

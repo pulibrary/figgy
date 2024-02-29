@@ -130,6 +130,23 @@ RSpec.describe DownloadsController do
       end
     end
 
+    context "with a VTT file" do
+      with_queue_adapter :inline
+      it "can generate an HLS manifest for it", run_real_characterization: true do
+        stub_ezid
+        output = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete")
+        file_set = Wayfinder.for(output).file_sets.first
+        file_metadata = file_set.file_metadata.find(&:caption?)
+
+        get :show, params: { resource_id: file_set.id.to_s, id: file_metadata.id.to_s, as: "stream", format: "m3u8" }
+
+        expect(response).to be_successful
+        playlist = M3u8::Playlist.read(response.body)
+        expect(playlist.target).to eq 6
+        expect(playlist.items.length).to eq 1
+        expect(playlist.items[0].segment).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}"
+      end
+    end
     context "with an HLS playlist FileSet and ?as=stream" do
       context "with no auth token given" do
         with_queue_adapter :inline
@@ -138,13 +155,18 @@ RSpec.describe DownloadsController do
           output = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete")
           file_set = Wayfinder.for(output).file_sets.first
           file_metadata = file_set.file_metadata.find(&:hls_manifest?)
+          caption_metadata = file_set.captions.first
 
           get :show, params: { resource_id: file_set.id.to_s, id: file_metadata.id.to_s, as: "stream", format: "m3u8" }
 
           expect(response).to be_successful
           playlist = M3u8::Playlist.read(response.body)
-          expect(playlist.items.length).to eq 1
-          expect(playlist.items[0].uri).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}"
+          expect(playlist.items.length).to eq 2
+          expect(playlist.items[0].uri).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}.m3u8"
+          expect(playlist.items[0].subtitles).to eq "subs"
+          expect(playlist.items[1].uri).to eq "/downloads/#{file_set.id}/file/#{caption_metadata.id}/stream.m3u8"
+          expect(playlist.items[1].language).to eq "eng"
+          expect(playlist.items[1].characteristics).to eq "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
         end
       end
       it "creates a primary playlist with the auth token" do
@@ -161,7 +183,7 @@ RSpec.describe DownloadsController do
         expect(response).to be_successful
         playlist = M3u8::Playlist.read(response.body)
         expect(playlist.items.length).to eq 1
-        expect(playlist.items[0].uri).to eq "/downloads/#{output.id}/file/#{output.file_metadata.first.id}?auth_token=#{token.token}"
+        expect(playlist.items[0].uri).to eq "/downloads/#{output.id}/file/#{output.file_metadata.first.id}.m3u8?auth_token=#{token.token}"
       end
     end
 
