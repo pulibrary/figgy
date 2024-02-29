@@ -122,6 +122,7 @@ Metrics/ClassLength:
     - 'app/services/dao_updater.rb'
     - 'app/derivative_services/image_derivative_service.rb'
     - 'app/models/file_set.rb'
+    - 'app/nested_resources/file_metadata.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:

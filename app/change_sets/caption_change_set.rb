@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 class CaptionChangeSet < Valkyrie::ChangeSet
-  property :caption_language, multiple: false, type: Valkyrie::Types::String.optional
+  property :caption_language, multiple: false, type: Valkyrie::Types::String.optional, required: true
   property :change_set, required: true, default: "caption"
   # VTT file uploaded from form.
   property :file, virtual: true, multiple: false, required: true
 
-  validates :file, presence: true
+  validates :file, :caption_language, presence: true
 
   def primary_terms
     [

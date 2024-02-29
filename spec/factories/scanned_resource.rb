@@ -38,6 +38,19 @@ FactoryBot.define do
       end
     end
 
+    factory :scanned_resource_with_video do
+      files do
+        [
+          IngestableFile.new(
+            file_path: Rails.root.join("spec", "fixtures", "files", "city.mp4"),
+            mime_type: "video/mp4",
+            original_filename: "city.mp4",
+            use: Valkyrie::Vocab::PCDMUse.OriginalFile
+          )
+        ]
+      end
+    end
+
     factory :scanned_resource_with_video_and_captions do
       files do
         [
