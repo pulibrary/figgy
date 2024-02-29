@@ -17,7 +17,7 @@ class HlsManifest
     else
       # If not asked for the primary manifest, just render the video HLS manifest
       # ffmpeg created (with auth_tokens if appropriate)
-      new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token) unless as == "stream"
+      new(file_set: file_set, file_metadata: file_metadata, auth_token: auth_token)
     end
   end
 
