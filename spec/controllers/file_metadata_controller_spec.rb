@@ -62,7 +62,7 @@ RSpec.describe FileMetadataController do
         post :create, params: {
           file_set_id: file_set.id.to_s,
           file_metadata: {
-            change_set: "Caption",
+            change_set: "caption",
             file: fixture_file_upload("files/caption.vtt", "text/vtt"),
             caption_language: "eng"
           }
@@ -72,6 +72,7 @@ RSpec.describe FileMetadataController do
         file_set = ChangeSetPersister.default.query_service.find_by(id: file_set.id)
         expect(file_set.captions.length).to eq 1
         expect(file_set.captions.first.file_identifiers).to be_present
+        expect(file_set.captions.first.change_set).to eq "caption"
       end
     end
   end

@@ -5,7 +5,6 @@ class FileMetadataController < ApplicationController
   def new
     authorize! :update, file_set_change_set.resource
     @change_set = ChangeSet.for(FileMetadata.new, change_set_param: change_set_param)
-    render "new"
   end
 
   def create

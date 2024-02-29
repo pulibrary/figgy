@@ -22,7 +22,8 @@ class CaptionChangeSet < Valkyrie::ChangeSet
       original_filename: file.original_filename,
       use: Valkyrie::Vocab::PCDMUse.Caption,
       node_attributes: {
-        caption_language: caption_language
+        caption_language: caption_language,
+        change_set: change_set
       }
     )
   end
