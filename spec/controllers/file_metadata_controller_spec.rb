@@ -6,6 +6,29 @@ RSpec.describe FileMetadataController do
   before do
     sign_in user if user
   end
+
+  describe "#new" do
+    context "when not logged in" do
+      it "redirects to login" do
+        file_set = FactoryBot.create_for_repository(:video_file_set)
+
+        get :new, params: { change_set: "caption", file_set_id: file_set.id.to_s }
+
+        expect(response).to redirect_to "http://test.host/users/auth/cas"
+      end
+    end
+    context "when logged in" do
+      let(:user) { FactoryBot.create(:admin) }
+      render_views
+      it "renders a form" do
+        file_set = FactoryBot.create_for_repository(:video_file_set)
+
+        get :new, params: { change_set: "caption", file_set_id: file_set.id.to_s }
+
+        expect(response.body).to have_content "Attach Caption"
+      end
+    end
+  end
   describe "#create" do
     context "when not logged in" do
       it "redirects to login" do
@@ -18,6 +41,7 @@ RSpec.describe FileMetadataController do
     end
     context "when logged in" do
       let(:user) { FactoryBot.create(:admin) }
+      render_views
       it "renders new if given invalid parameters" do
         file_set = FactoryBot.create_for_repository(:video_file_set)
 

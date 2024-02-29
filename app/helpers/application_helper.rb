@@ -246,7 +246,7 @@ module ApplicationHelper
   # @param resource [Resource]
   # @return [Boolean]
   def support_save_and_duplicate?(resource:)
-    resource.class.supports_save_and_duplicate? && params[:controller] == resource.class.name.underscore.pluralize
+    resource.class.try(:supports_save_and_duplicate?) && params[:controller] == resource.class.name.underscore.pluralize
   end
 
   private
