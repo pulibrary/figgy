@@ -7,6 +7,14 @@ class CaptionChangeSet < Valkyrie::ChangeSet
 
   validates :file, presence: true
 
+  def primary_terms
+    [
+      :file,
+      :caption_language,
+      :change_set
+    ]
+  end
+
   def to_ingestable_file
     IngestableFile.new(
       file_path: file.path,
