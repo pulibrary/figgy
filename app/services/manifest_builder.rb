@@ -621,9 +621,9 @@ class ManifestBuilder
     def download_url
       return if derivative.nil?
       if helper.token_authorizable?(parent_node.resource)
-        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, auth_token: parent_node.resource.auth_token)
+        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, auth_token: parent_node.resource.auth_token, as: "stream", format: "m3u8")
       else
-        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id)
+        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, as: "stream", format: "m3u8")
       end
     end
 
