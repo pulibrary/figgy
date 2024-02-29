@@ -67,6 +67,11 @@ Rails.application.routes.draw do
         put :derivatives
         get :text
       end
+      resources :file_metadata, only: [:create] do
+        collection do
+          get "new/caption", action: :new, change_set: "caption", as: :new_caption
+        end
+      end
     end
     resources :scanned_resources do
       member do
