@@ -22,6 +22,7 @@ class ChangeSetPersister
       before_save: [
         AppendToCollection,
         RemoveFromCollection,
+        RemoveFileMetadata,
         SyncResource,
         MintIdentifier,
         ApplyRemoteMetadata,
@@ -52,7 +53,8 @@ class ChangeSetPersister
         IngestBag,
         PreserveResource,
         ReorganizeCollection,
-        UpdateAspaceDao
+        UpdateAspaceDao,
+        CleanupDeletedFiles
       ],
       after_update_commit: [
         ReindexCollectionMembers,
