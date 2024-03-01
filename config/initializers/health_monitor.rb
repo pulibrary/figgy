@@ -2,7 +2,7 @@
 Rails.application.config.after_initialize do
   HealthMonitor.configure do |config|
     config.cache
-    config.redis
+    config.redis unless Rails.env.test?
 
     config.add_custom_provider(SolrStatus)
     config.add_custom_provider(AspaceStatus)
