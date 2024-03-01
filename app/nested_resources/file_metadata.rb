@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class FileMetadata < Valkyrie::Resource
+  def self.supports_save_and_duplicate?
+    false
+  end
+
   include Valkyrie::Resource::AccessControls
   attribute :label, Valkyrie::Types::Set
   attribute :mime_type, Valkyrie::Types::Set
@@ -30,6 +34,7 @@ class FileMetadata < Valkyrie::Resource
 
   # Caption Metadata
   attribute :caption_language, Valkyrie::Types::String.optional
+  attribute :change_set, Valkyrie::Types::String
 
   # preservation attributes
   # ID of the object this node is a preservation copy of. A PreservationObject's

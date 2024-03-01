@@ -16,6 +16,12 @@
       <%= render partial: 'file_detail', locals: { file: file } %>
     </tr>
   <% end %>
+  <% resource.captions.each do |file| %>
+    <tr>
+      <td><span class="badge badge-info">caption</span>&nbsp;<%= file.label.first %></td>
+      <%= render partial: 'file_detail', locals: { file: file } %>
+    </tr>
+  <% end %>
   <% resource.derivative_files.each do |file| %>
     <tr>
       <% if resource.derivative_partial_files.length > 0 && file.mime_type.include?("application/x-mpegURL") %>
