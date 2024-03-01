@@ -2,6 +2,7 @@
 require "rails_helper"
 
 RSpec.describe FileMetadataController do
+  include ActiveJob::TestHelper
   let(:user) {}
   before do
     sign_in user if user
@@ -18,6 +19,9 @@ RSpec.describe FileMetadataController do
       end
     end
     context "when logged in" do
+      after do
+        clear_enqueued_jobs
+      end
       let(:user) { FactoryBot.create(:admin) }
       it "deletes the FileMetadata and cleans the file from the repository" do
         file_set = FactoryBot.create_for_repository(:video_file_set_with_caption)
