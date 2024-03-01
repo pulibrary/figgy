@@ -55,4 +55,35 @@ RSpec.describe FileSet do
       expect(file_set.captions?).to eq true
     end
   end
+
+  describe "#missing_captions?" do
+    context "for a file set with just audio" do
+      it "returns false" do
+        resource = FactoryBot.create_for_repository(:audio_file_set)
+
+        expect(resource.missing_captions?).to eq false
+      end
+    end
+    context "for a file set with video and captions" do
+      it "returns false" do
+        resource = FactoryBot.create_for_repository(:video_file_set_with_caption)
+
+        expect(resource.missing_captions?).to eq false
+      end
+    end
+    context "for a file set and non-language captions" do
+      it "returns true" do
+        resource = FactoryBot.create_for_repository(:video_file_set_with_other_language_caption)
+
+        expect(resource.missing_captions?).to eq true
+      end
+    end
+    context "for a file set with video and no captions" do
+      it "returns true" do
+        resource = FactoryBot.create_for_repository(:video_file_set)
+
+        expect(resource.missing_captions?).to eq true
+      end
+    end
+  end
 end

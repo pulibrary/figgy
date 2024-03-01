@@ -118,6 +118,12 @@ class FileSet < Resource
     av? && captions.present?
   end
 
+  # True if it's a video fileset and has no original language caption.
+  def missing_captions?
+    return false unless video?
+    captions.select(&:original_language_caption).blank?
+  end
+
   def preservation_targets
     original_files + intermediate_files + preservation_files
   end
