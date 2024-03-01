@@ -69,12 +69,14 @@ RSpec.feature "FileSet" do
       visit new_caption_file_set_file_metadata_path(file_set_id: file_set.id)
       page.attach_file(Rails.root.join("spec", "fixtures", "files", "caption.vtt"))
       select "English", from: "file_metadata[caption_language]"
+      check "Is this caption in the original language of the audio?"
       click_button "Save"
 
       expect(page).to have_content file_set.title.first
       caption = Wayfinder.for(resource).file_sets.first.captions.first
       expect(caption.caption_language).to eq "eng"
       expect(caption.file_identifiers.length).to eq 1
+      expect(caption.original_language_caption).to eq true
       expect(page).to have_content "caption.vtt"
       expect(page).to have_css(".badge-dark", text: "Caption")
       expect(page).to have_css(".badge-dark", text: "English")
