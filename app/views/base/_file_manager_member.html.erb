@@ -55,11 +55,21 @@
     <% end %>
     <% if cloud_fixity_failure_ids.include?(f.object.id) %>
       <div class="fm_error err">
-        <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
+        <lux-icon-base width="24" height="24" icon-name="error" icon-color="red">
           <lux-icon-denied></lux-icon-denied>
         </lux-icon-base>
         <span>
           Cloud Fixity Failed
+        </span>
+      </div>
+    <% end %>
+    <% if f.object.resource.missing_captions? %>
+      <div class="fm_error err">
+        <lux-icon-base width="24" height="24" icon-name="error" icon-color="red">
+          <lux-icon-denied></lux-icon-denied>
+        </lux-icon-base>
+        <span>
+          <%= link_to "Attach Missing Captions", new_caption_file_set_file_metadata_path(file_set_id: f.object.id) %>
         </span>
       </div>
     <% end %>
