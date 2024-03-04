@@ -120,7 +120,8 @@ describe('UVManager', () => {
       stubQuery({
         "type": "html",
         "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
-        "status": "authorized"
+        "status": "authorized",
+        "mediaType": "Image"
       },
         null,
         "Test Playlist",
@@ -143,7 +144,8 @@ describe('UVManager', () => {
       stubQuery({
         'type': 'html',
         'content': '<iframe src="https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest"></iframe>',
-        'status': 'authorized'
+        'status': 'authorized',
+        "mediaType": "Image"
       },
         null,
         'Test Playlist',
@@ -167,6 +169,7 @@ describe('UVManager', () => {
         "type": "html",
         "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
         "status": "authorized",
+        "mediaType": "Image"
       },
         { "heading": "Terms and Conditions for Using Princeton University Senior Theses", "acceptLabel": "Accept", "textHtml": "<p>The Princeton University Senior Theses" }
       )
@@ -189,7 +192,8 @@ describe('UVManager', () => {
       stubQuery({
         "type": null,
         "content": null,
-        "status": "unauthenticated"
+        "status": "unauthenticated",
+        "mediaType": "Image"
       })
 
       // Initialize
@@ -208,6 +212,25 @@ describe('UVManager', () => {
       // Initialize
       const uvManager = new UVManager()
       expect(uvManager.configURI).toEqual('https://figgy.princeton.edu/uv/uv_config.json')
+    })
+
+    it('loads a clover viewer for a video', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      mockManifests(200)
+      stubQuery({
+        "type": "html",
+        "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        "status": "authorized",
+        "mediaType": "Video"
+      })
+
+      // Initialize
+      const uvManager = new UVManager()
+      let spy = vi.spyOn(uvManager, "createClover")
+      await uvManager.initialize()
+      expect(spy).toHaveBeenCalled()
     })
   })
 })

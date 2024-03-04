@@ -5,6 +5,9 @@ import StatementOnHarmfulContentIcon from '@images/statement.png'
 import TakedownLogo from '@images/copyright.svg'
 import LeafletViewer from '@viewer/leaflet_viewer'
 import TabManager from '@viewer/tab_manager'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Viewer from '@samvera/clover-iiif/viewer'
 
 export default class UVManager {
   async initialize () {
@@ -24,11 +27,21 @@ export default class UVManager {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
       } else if (result.embed.status === 'authorized') {
         this.displayNotice(result)
-        this.createUV(null, null, result)
+        this.renderViewer(result)
         await this.buildLeafletViewer()
       }
     } else {
       return this.createUV()
+    }
+  }
+
+  // Determine which viewer to render based on the media type
+  renderViewer (graphqlData) {
+    const mediaType = graphqlData.embed.mediaType
+    if (mediaType === 'Video') {
+      this.createClover()
+    } else {
+      this.createUV(graphqlData)
     }
   }
 
@@ -45,7 +58,8 @@ export default class UVManager {
           embed {
             type,
             content,
-            status
+            status,
+            mediaType
           },
           notice {
             heading,
@@ -90,7 +104,7 @@ export default class UVManager {
     return this.leafletViewer.loadLeaflet()
   }
 
-  createUV (data, status, graphqlData) {
+  createUV (graphqlData) {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
@@ -109,6 +123,12 @@ export default class UVManager {
     }, this.urlDataProvider)
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
+  }
+
+  createClover () {
+    this.uvElement.show()
+    const root = ReactDOM.createRoot(document.getElementById('uv'))
+    root.render(React.createElement(Viewer, { iiifContent: this.manifest, options: { informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false } }))
   }
 
   addViewerIcons () {
