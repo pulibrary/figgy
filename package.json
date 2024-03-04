@@ -8,6 +8,7 @@
   "dependencies": {
     "@google-cloud/pubsub": "^0.31.0",
     "@google-cloud/storage": "^5.8.4",
+    "@samvera/clover-iiif": "^2.3.2",
     "@vitejs/plugin-vue2": "^2.2.0",
     "ajv": "^6.12.3",
     "apollo-boost": "^0.1.10",
@@ -47,8 +48,8 @@
     "eslint": "^8.56",
     "eslint-config-standard": "^17.1",
     "eslint-plugin-import": "^2.29",
-    "eslint-plugin-node": "^11.1",
     "eslint-plugin-n": "^16.4",
+    "eslint-plugin-node": "^11.1",
     "eslint-plugin-promise": "^6.1",
     "eslint-plugin-vitest": "^0.3",
     "eslint-plugin-vitest-globals": "^1.4",
