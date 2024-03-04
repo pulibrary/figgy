@@ -49,3 +49,8 @@
       <% else %>
         <td></td>
       <% end %>
+      <% if file.caption? %>
+        <td><%= link_to "Delete", file_set_file_metadatum_path(resource.id, file.id), method: :delete %></td>
+      <% else %>
+        <td></td>
+      <% end %>

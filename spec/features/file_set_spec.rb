@@ -63,7 +63,7 @@ RSpec.feature "FileSet" do
 
   context "when creating a caption" do
     with_queue_adapter :inline
-    it "can attach a caption via a form" do
+    it "can attach and delete a caption via a form" do
       resource = FactoryBot.create_for_repository(:scanned_resource_with_video)
       file_set = Wayfinder.for(resource).file_sets.first
 
@@ -83,6 +83,10 @@ RSpec.feature "FileSet" do
       expect(page).to have_content "caption.vtt"
       expect(page).to have_css(".badge-dark", text: "Caption")
       expect(page).to have_css(".badge-dark", text: "English (Original)")
+      within(".files") do
+        click_link "Delete"
+      end
+      expect(page).not_to have_content "caption.vtt"
     end
   end
 end

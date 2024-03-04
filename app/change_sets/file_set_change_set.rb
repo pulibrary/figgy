@@ -9,6 +9,12 @@ class FileSetChangeSet < ChangeSet
   property :file_metadata
   property :service_targets, multiple: true, required: false
 
+  property :delete_file_metadata_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID), virtual: true
+  # Virtual property to stash which file identifiers got deleted, so we can clean them up
+  property :deleted_file_identifiers, multiple: true, required: false, virtual: true
+
+  validates_with DeletedFileMetadataValidator
+
   delegate :thumbnail_id, to: :model
 
   def primary_terms

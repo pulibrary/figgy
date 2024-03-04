@@ -2,9 +2,48 @@
 require "rails_helper"
 
 RSpec.describe FileMetadataController do
+  include ActiveJob::TestHelper
   let(:user) {}
   before do
     sign_in user if user
+  end
+
+  describe "#destroy" do
+    context "when not logged in" do
+      it "redirects to login" do
+        file_set = FactoryBot.create_for_repository(:video_file_set_with_caption)
+
+        delete :destroy, params: { file_set_id: file_set.id, id: file_set.captions.first.id }
+
+        expect(response).to redirect_to "http://test.host/users/auth/cas"
+      end
+    end
+    context "when logged in", run_real_derivatives: true, run_real_characterization: true do
+      with_queue_adapter :inline
+      let(:user) { FactoryBot.create(:admin) }
+      it "deletes the FileMetadata and cleans the file from the repository" do
+        resource = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions)
+        file_set = Wayfinder.for(resource).file_sets.first
+        caption = file_set.captions.first
+
+        delete :destroy, params: { file_set_id: file_set.id, id: caption.id }
+
+        resource = ChangeSetPersister.default.query_service.find_by(id: file_set.id)
+        expect(resource.captions.length).to eq 0
+        expect { Valkyrie::StorageAdapter.find_by(id: caption.file_identifiers.first) }.to raise_error Valkyrie::StorageAdapter::FileNotFound
+      end
+      it "fails to delete a FileMetadata that's not a caption" do
+        resource = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions)
+        file_set = Wayfinder.for(resource).file_sets.first
+        primary_file = file_set.primary_file
+
+        delete :destroy, params: { file_set_id: file_set.id, id: primary_file }
+
+        resource = ChangeSetPersister.default.query_service.find_by(id: file_set.id)
+        expect(resource.primary_file).to be_present
+        expect { Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers.first) }.not_to raise_error
+      end
+    end
   end
 
   describe "#new" do

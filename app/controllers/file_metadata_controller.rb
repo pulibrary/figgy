@@ -2,6 +2,17 @@
 class FileMetadataController < ApplicationController
   delegate :query_service, to: :change_set_persister
 
+  def destroy
+    authorize! :update, file_set_change_set.resource
+    file_set_change_set.validate(delete_file_metadata_ids: [params[:id]])
+    if file_set_change_set.valid?
+      change_set_persister.save(change_set: file_set_change_set)
+    else
+      flash[:error] = "Only caption files can be deleted"
+    end
+    redirect_to solr_document_path(file_set_change_set.id.to_s)
+  end
+
   def new
     authorize! :update, file_set_change_set.resource
     @change_set = ChangeSet.for(FileMetadata.new, change_set_param: change_set_param)
