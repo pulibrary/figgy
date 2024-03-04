@@ -5,6 +5,9 @@ import StatementOnHarmfulContentIcon from '@images/statement.png'
 import TakedownLogo from '@images/copyright.svg'
 import LeafletViewer from '@viewer/leaflet_viewer'
 import TabManager from '@viewer/tab_manager'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Viewer from '@samvera/clover-iiif/viewer'
 
 export default class UVManager {
   async initialize () {
@@ -94,21 +97,23 @@ export default class UVManager {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
-    this.uv = createUV('#uv', {
-      root: 'uv',
-      iiifResourceUri: this.manifest,
-      configUri: this.configURI,
-      collectionIndex: Number(this.urlDataProvider.get('c', 0)),
-      manifestIndex: Number(this.urlDataProvider.get('m', 0)),
-      sequenceIndex: Number(this.urlDataProvider.get('s', 0)),
-      canvasIndex: Number(this.urlDataProvider.get('cv', 0)),
-      rangeId: this.urlDataProvider.get('rid', 0),
-      rotation: Number(this.urlDataProvider.get('r', 0)),
-      xywh: this.urlDataProvider.get('xywh', ''),
-      embedded: true
-    }, this.urlDataProvider)
-    this.cdlTimer = new CDLTimer(this.figgyId)
-    this.cdlTimer.initializeTimer()
+    // this.uv = createUV('#uv', {
+    //   root: 'uv',
+    //   iiifResourceUri: this.manifest,
+    //   configUri: this.configURI,
+    //   collectionIndex: Number(this.urlDataProvider.get('c', 0)),
+    //   manifestIndex: Number(this.urlDataProvider.get('m', 0)),
+    //   sequenceIndex: Number(this.urlDataProvider.get('s', 0)),
+    //   canvasIndex: Number(this.urlDataProvider.get('cv', 0)),
+    //   rangeId: this.urlDataProvider.get('rid', 0),
+    //   rotation: Number(this.urlDataProvider.get('r', 0)),
+    //   xywh: this.urlDataProvider.get('xywh', ''),
+    //   embedded: true
+    // }, this.urlDataProvider)
+    // this.cdlTimer = new CDLTimer(this.figgyId)
+    // this.cdlTimer.initializeTimer()
+    const root = ReactDOM.createRoot(document.getElementById('uv'))
+    root.render(React.createElement(Viewer, { iiifContent: this.manifest, options: { informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false }}))
   }
 
   addViewerIcons () {
