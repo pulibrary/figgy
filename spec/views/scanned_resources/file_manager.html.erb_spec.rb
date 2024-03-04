@@ -76,6 +76,14 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
     end
   end
 
+  context "when a FileSet is a video and is missing captions" do
+    let(:file_set) { FactoryBot.create_for_repository(:video_file_set) }
+    let(:member) { FileSetChangeSet.new(file_set) }
+    it "renders an error" do
+      expect(rendered).to have_link "Attach Missing Captions"
+    end
+  end
+
   context "when a FileSet has Cloud Fixity Errors" do
     with_queue_adapter :inline
     let(:event) { FactoryBot.create(:cloud_fixity_failure, resource_id: Wayfinder.for(member).preservation_object.id, child_id: member.resource.primary_file.id) }

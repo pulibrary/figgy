@@ -86,6 +86,17 @@ FactoryBot.define do
           FileMetadata.new(mime_type: "video/mp4", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: "original"),
           FileMetadata.new(mime_type: "application/x-mpegURL", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
           FileMetadata.new(mime_type: "video/MP2T", use: Valkyrie::Vocab::PCDMUse.ServiceFilePartial, id: "derivative-partial"),
+          FileMetadata.new(mime_type: "text/vtt", use: Valkyrie::Vocab::PCDMUse.Caption, id: "caption", original_language_caption: true, file_identifiers: [Valkyrie::ID.new("storageid")])
+        ]
+      end
+    end
+
+    factory :video_file_set_with_other_language_caption do
+      file_metadata do
+        [
+          FileMetadata.new(mime_type: "video/mp4", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: "original"),
+          FileMetadata.new(mime_type: "application/x-mpegURL", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
+          FileMetadata.new(mime_type: "video/MP2T", use: Valkyrie::Vocab::PCDMUse.ServiceFilePartial, id: "derivative-partial"),
           FileMetadata.new(mime_type: "text/vtt", use: Valkyrie::Vocab::PCDMUse.Caption, id: "caption", file_identifiers: [Valkyrie::ID.new("storageid")])
         ]
       end
