@@ -8,7 +8,7 @@ class FileMetadataController < ApplicationController
     if file_set_change_set.valid?
       change_set_persister.save(change_set: file_set_change_set)
     else
-      flash[:error] = "Unable to delete non-captions"
+      flash[:error] = "Only caption files can be deleted"
     end
     redirect_to solr_document_path(file_set_change_set.id.to_s)
   end
