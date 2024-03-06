@@ -6,7 +6,8 @@ consult the manifest of all Figgy collections at:
 
     https://figgy.princeton.edu/iiif/collections/
 
-This manifest includes an entry for each Figgy collection, including a label, and the collection manifest URL. In the `collections` array, each collection will have an entry that looks like this:
+This manifest includes an entry for each Figgy collection, including a label, and the collection
+manifest URL. In the `collections` array, each collection will have an entry that looks like this:
 
 ```json
 {
@@ -17,7 +18,22 @@ This manifest includes an entry for each Figgy collection, including a label, an
     "Princeton Digital Library of Islamic Manuscripts"
   ],
   "description": [
-    "As a result of generous support from the David A. Gardner '69 Magic Project, the Princeton University Library created Voyager cataloging records for most of the approximately 9,500 Islamic manuscripts in the Manuscripts Division, which are from Robert Garrett (Class of 1897) and other sources. This is the premier collection of Arabic, Persian, Ottoman Turkish, and other Islamic manuscripts in the Western Hemisphere. Initially, more than 200 of these manuscripts were digitized as the core of the Princeton Digital Library of Islamic Manuscripts. Separate support from the the Virginia and Richard Stewart Memorial Fund, through the Princeton University Council of the Humanities, has supported digitization of an additional 1,400 other Islamic manuscripts from existing black-and-white microfilm, produced in the 1970s with funding from the U.S. Department of Education, Title II-C. The manuscripts digitized from microfilm include all texts (chiefly New Series) on Shia law and theology; texts related to other non-Sunni sects, such as the Druze and Kharijites; and more than 750 other manuscripts (Garrett Yahuda Series) on a variety of subjects. Also added are PDFs of Islamic manuscripts digitized in response to photoduplication requests. In all, approximately a sixth of the Library's Islamic manuscripts have now been digitized and put online for the benefit of scholars worldwide."
+    "As a result of generous support from the David A. Gardner '69 Magic Project, the Princeton
+     University Library created Voyager cataloging records for most of the approximately 9,500
+     Islamic manuscripts in the Manuscripts Division, which are from Robert Garrett (Class of 1897)
+     and other sources. This is the premier collection of Arabic, Persian, Ottoman Turkish, and
+     other Islamic manuscripts in the Western Hemisphere. Initially, more than 200 of these
+     manuscripts were digitized as the core of the Princeton Digital Library of Islamic Manuscripts.
+     Separate support from the the Virginia and Richard Stewart Memorial Fund, through the Princeton
+     University Council of the Humanities, has supported digitization of an additional 1,400 other
+     Islamic manuscripts from existing black-and-white microfilm, produced in the 1970s with funding
+     from the U.S. Department of Education, Title II-C. The manuscripts digitized from microfilm
+     include all texts (chiefly New Series) on Shia law and theology; texts related to other
+     non-Sunni sects, such as the Druze and Kharijites; and more than 750 other manuscripts (Garrett
+     Yahuda Series) on a variety of subjects. Also added are PDFs of Islamic manuscripts digitized
+     in response to photoduplication requests. In all, approximately a sixth of the Library's
+     Islamic manuscripts have now been digitized and put online for the benefit of scholars
+     worldwide."
   ],
   "metadata": [
     {
@@ -40,7 +56,9 @@ format, and their might be rich metadata in EAD XML format.
 
 # Item Discovery
 
-Each collection manifest includes an entry for each item in the collection, including a label, thumbnail, and the item manifest URL. The `manifests` array will include an entry for each item that looks like this:
+Each collection manifest includes an entry for each item in the collection, including a label,
+thumbnail, and the item manifest URL. The `manifests` array will include an entry for each item that
+looks like this:
 
 ```json
 {
@@ -54,12 +72,15 @@ Each collection manifest includes an entry for each item in the collection, incl
   "description": [
     "Ms. codex.",
     "Title from title page (fol. 1a).",
-    "A few marginal notes. Title page note that it is copied from a text in the author's hand. Folio 10b has three lines of verse by al-ʻInāyātī and nine lines of verse by Abī al-Mawāhib al-Bakrī in praise of coffee.",
+    "A few marginal notes. Title page note that it is copied from a text in the author's hand. Folio
+     10b has three lines of verse by al-ʻInāyātī and nine lines of verse by Abī al-Mawāhib al-Bakrī in
+     praise of coffee.",
     "Collation: Paper ; fol. i + 11 ; catchwords ; modern foliation in pencil using Western numerals.",
     "Layout: 19 lines per page in two columns.",
     "Description: Rubricated ; watermarks (shield with three stars) ; MS in good condition.",
     "Origin: According to colophon copy completed 8 Dhū al-Qaʻdah 1283 by Muḥammad ibn Ḥasanayn (fol. 10a).",
-    "Incipit: بسم الله الرحمن الرحيم وبه ثقتى الحمد لله رب العالمين ... وبعد فهذه نبذة انتقيتها من قطعة جمعها بعض الافاضل فيما يتعلق بالقهوة البنيه المجلوبة الى الاقطار من البلاد اليمنية ...",
+    "Incipit: بسم الله الرحمن الرحيم وبه ثقتى الحمد لله رب العالمين ... وبعد فهذه نبذة انتقيتها من قطعة جمعها 
+     بعض الافاضل فيما يتعلق بالقهوة البنيه المجلوبة الى الاقطار من البلاد اليمنية ...",
     "Colophon: نجزت کتابته في ثمان خلت من ذي القعدة الحرام سنة ثلاث وثمانين ومائتين والف. کتبه الفقير لرحمة ربه محمد حسنين"
   ]
 }
