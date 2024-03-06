@@ -376,5 +376,13 @@ namespace :figgy do
       amc_wayfinder = Wayfinder.for(amc)
       amc_wayfinder.members.each { |member| change_set_persister.delete(change_set: ChangeSet.for(member)) }
     end
+
+    desc "Migrate Finding Aid IDs to MMS IDs from CSV"
+    task migrate_finding_aid_ids: :environment do
+      csv_path = ENV["CSV"]
+      abort "usage: rake figgy:bulk:migrate_finding_aid_ids CSV=<path_to_csv>" unless csv_path
+      FindingAidIdMigrator.new(csv_path: csv_path).run!
+      logger.info "Migrated"
+    end
   end
 end
