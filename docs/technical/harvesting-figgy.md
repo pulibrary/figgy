@@ -1,15 +1,84 @@
 # Collection Discovery
 
-We publish a collection manifest of all Figgy collections at:
+Collections in Figgy vary in scope, from archival collections, to the set of items selected for an
+exhibition, to a group created by staff for workflow purposes. To identify a collection of interest,
+consult the manifest of all Figgy collections at:
 
     https://figgy.princeton.edu/iiif/collections/
 
-This manifest includes an entry for each Figgy collection, including a label, and the collection manifest URL.
+This manifest includes an entry for each Figgy collection, including a label, and the collection manifest URL. In the `collections` array, each collection will have an entry that looks like this:
+
+```json
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@type": "sc:Collection",
+  "@id": "https://figgy.princeton.edu/collections/52abe8f7-e2a1-46e9-9d13-3dc4fbc0bf0a/manifest",
+  "label": [
+    "Princeton Digital Library of Islamic Manuscripts"
+  ],
+  "description": [
+    "As a result of generous support from the David A. Gardner '69 Magic Project, the Princeton University Library created Voyager cataloging records for most of the approximately 9,500 Islamic manuscripts in the Manuscripts Division, which are from Robert Garrett (Class of 1897) and other sources. This is the premier collection of Arabic, Persian, Ottoman Turkish, and other Islamic manuscripts in the Western Hemisphere. Initially, more than 200 of these manuscripts were digitized as the core of the Princeton Digital Library of Islamic Manuscripts. Separate support from the the Virginia and Richard Stewart Memorial Fund, through the Princeton University Council of the Humanities, has supported digitization of an additional 1,400 other Islamic manuscripts from existing black-and-white microfilm, produced in the 1970s with funding from the U.S. Department of Education, Title II-C. The manuscripts digitized from microfilm include all texts (chiefly New Series) on Shia law and theology; texts related to other non-Sunni sects, such as the Druze and Kharijites; and more than 750 other manuscripts (Garrett Yahuda Series) on a variety of subjects. Also added are PDFs of Islamic manuscripts digitized in response to photoduplication requests. In all, approximately a sixth of the Library's Islamic manuscripts have now been digitized and put online for the benefit of scholars worldwide."
+  ],
+  "metadata": [
+    {
+      "label": "Exhibit",
+      "value": [
+        "islamicmss"
+      ]
+    }
+  ],
+  "seeAlso": {
+    "@id": "https://figgy.princeton.edu/catalog/52abe8f7-e2a1-46e9-9d13-3dc4fbc0bf0a.jsonld",
+    "format": "application/ld+json"
+  }
+}
+```
+
+The `@id` property contains the URI to retrieve the collection manifest, and `seeAlso` includes metadata
+about the collection. Depending on the kind of collection, it might have very minimal metadata in JSON
+format, and their might be rich metadata in EAD XML format.
 
 # Item Discovery
 
-Each collection manifest includes an entry for each item in the collection, including a label, thumbnail, and the item manifest URL.
+Each collection manifest includes an entry for each item in the collection, including a label, thumbnail, and the item manifest URL. The `manifests` array will include an entry for each item that looks like this:
+
+```json
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@type": "sc:Manifest",
+  "@id": "https://figgy.princeton.edu/concern/scanned_resources/3c608517-145c-4270-965f-f44a86c0457c/manifest",
+  "label": [
+    "حسن الدعوة للاجابة الى القهوة / جمع عبد الله الادكاوي.",
+    "Ḥusn al-daʻwah lil-ijābah ilá al-qahwah / jamʻ ʻAbd Allāh al-Udkāwī."
+  ],
+  "description": [
+    "Ms. codex.",
+    "Title from title page (fol. 1a).",
+    "A few marginal notes. Title page note that it is copied from a text in the author's hand. Folio 10b has three lines of verse by al-ʻInāyātī and nine lines of verse by Abī al-Mawāhib al-Bakrī in praise of coffee.",
+    "Collation: Paper ; fol. i + 11 ; catchwords ; modern foliation in pencil using Western numerals.",
+    "Layout: 19 lines per page in two columns.",
+    "Description: Rubricated ; watermarks (shield with three stars) ; MS in good condition.",
+    "Origin: According to colophon copy completed 8 Dhū al-Qaʻdah 1283 by Muḥammad ibn Ḥasanayn (fol. 10a).",
+    "Incipit: بسم الله الرحمن الرحيم وبه ثقتى الحمد لله رب العالمين ... وبعد فهذه نبذة انتقيتها من قطعة جمعها بعض الافاضل فيما يتعلق بالقهوة البنيه المجلوبة الى الاقطار من البلاد اليمنية ...",
+    "Colophon: نجزت کتابته في ثمان خلت من ذي القعدة الحرام سنة ثلاث وثمانين ومائتين والف. کتبه الفقير لرحمة ربه محمد حسنين"
+  ]
+}
+```
 
 # Item Information
 
 Each item manifest contains metadata (both a `metadata` hash, and JSON-LD and typically either EAD or MARC XML in `seeAlso`), images or other media, a thumbnail, and a license statement.  Most objects also include links to download each page image, and to download the entire object as a PDF.
+
+## Metadata
+
+Basic information about the item is provided in the `label` and `description` properties. Extended info
+is included in the `metadata` hash, `license` property, and in the metadata linked to in `seeAlso`.
+Additional properties include information about how to display the item, such as `viewingHint`,
+`viewingDirection`, and `thumbnail`.
+
+## Content
+
+The main content of the object is included in `sequences`. The `rendering` object will include the URI
+to access a PDF version of the object (if available), and the `canvases` array will include information
+about each page. Each canvas will include a label, and a IIIF image service for the main content. The
+`rendering` object will include the URI to download the image and/or page text (if available).
