@@ -36,6 +36,7 @@ gem "google-cloud-pubsub"
 gem "google-cloud-storage", "1.38.0"
 gem "graphiql-rails", "1.4.10", group: :development
 gem "graphql", "~> 1.13.19"
+gem "health-monitor-rails"
 gem "honeybadger"
 gem "hydra-access-controls"
 gem "hydra-head"
