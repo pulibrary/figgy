@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'input-path-selector': InputPathSelector,
         'embedded-file-browser': EmbeddedFileBrowser,
         'local-uploader': LocalUploader,
-        'struct-manager': StructManager
+        'struct-manager': StructManager,
       },
       data: {
         options: []

@@ -7,7 +7,7 @@
 <script>
 import store from "../store"
 import { mapState, mapGetters } from "vuex"
-import TreeItem from './TreeItem'
+import TreeItem from '@components/TreeItem.vue'
 
 /**
  * Trees are used to display and navigate hierarchical data.

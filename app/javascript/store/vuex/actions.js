@@ -118,7 +118,7 @@ const actions = {
     let resource_type = resource.resourceClassName.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
 
     let xhr = new XMLHttpRequest()
-    let url = `/concern/${resource_type}s/${resource.id}`
+    let url = `/concern/${resource_type}s/${resource.id}.json`
     let data = JSON.stringify({[resource_type]: {'logical_structure': [resource.structure] }})
     let token = document.querySelector('meta[name="csrf-token"]').content
     console.log(token)
