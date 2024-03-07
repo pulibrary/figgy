@@ -117,7 +117,7 @@
 <script>
 import store from "../store"
 import { mapState, mapGetters } from "vuex"
-import IconEndNode from './IconEndNode'
+import IconEndNode from '@components/IconEndNode.vue'
 /**
  * TreeItems are the building blocks of hierarchical navigation.
  */

@@ -57,10 +57,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import Toolbar from './StructManagerToolbar'
-import Tree from './Tree'
-import StructGallery from './StructGallery'
-import DeepZoom from './DeepZoom'
+import Toolbar from '@components/StructManagerToolbar.vue'
+import Tree from '@components/Tree.vue'
+import StructGallery from '@components/StructGallery.vue'
+import DeepZoom from '@components/DeepZoom.vue'
 
 /**
  * StructureManager is a tool for giving structure to a complex object (a book, CD, multi-volume work, etc.).
