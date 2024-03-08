@@ -323,8 +323,17 @@ RSpec.describe BulkIngestService do
           Valkyrie::Vocab::PCDMUse.Caption
         )
         vtt_file_metadata = file_set.captions.first
-        expect(vtt_file_metadata.original_filename).to eq(["city-eng-English (Original Language).vtt"])
+        expect(vtt_file_metadata.original_filename).to eq(["city--original-language--eng.vtt"])
+        expect(vtt_file_metadata.caption_language).to eq("eng")
       end
+    end
+
+    context "when the vtt file does not have a recognized language" do
+      it "uses the ISO 639 code 'und' for undetermined" do
+      end
+    end
+
+    context "when ingesting video and two caption files" do
     end
 
     context "when ingesting a RasterSet" do

@@ -37,7 +37,10 @@ class BulkIngestService
             file_path: vtt_path,
             mime_type: "text/vtt",
             original_filename: vtt_path.basename.to_s,
-            use: Valkyrie::Vocab::PCDMUse.Caption
+            use: Valkyrie::Vocab::PCDMUse.Caption,
+            node_attributes: {
+              caption_language: infer_language(vtt_path)
+            }
           )
         ]
         f
@@ -48,6 +51,10 @@ class BulkIngestService
       caption_files.find do |cf|
         cf.starts_with?(file.file_path.sub_ext("").to_s)
       end
+    end
+
+    def infer_language(vtt_path)
+      vtt_path.basename.sub_ext("").to_s.split("--")[-1]
     end
   end
 end
