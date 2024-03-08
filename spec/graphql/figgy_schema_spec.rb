@@ -51,6 +51,19 @@ RSpec.describe FiggySchema do
           }
         )
       end
+      context "for a video item" do
+        with_queue_adapter :inline
+        let(:resource) { FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions) }
+        let(:query_string) { %|{ resource(id: "#{id}") { embed { mediaType } } }| }
+        it "returns the media_type as a video" do
+          expect(result["errors"]).to be_blank
+          expect(result["data"]["resource"]["embed"]).to eq(
+            {
+              "mediaType" => "Video"
+            }
+          )
+        end
+      end
     end
 
     context "when requesting a notice" do

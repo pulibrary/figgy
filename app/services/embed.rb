@@ -21,12 +21,14 @@ class Embed
       {
         type: build_type,
         content: build_content,
+        media_type: build_media_type,
         status: "authorized"
       }
     else
       {
         type: nil,
         content: nil,
+        media_type: nil,
         status: unauthorized_status
       }
     end
@@ -60,6 +62,16 @@ class Embed
         "html"
       else
         "link"
+      end
+    end
+
+    def build_media_type
+      if !viewer_enabled?
+        "Download"
+      elsif file_set&.video?
+        "Video"
+      else
+        "Image"
       end
     end
 

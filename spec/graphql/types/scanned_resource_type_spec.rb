@@ -204,9 +204,31 @@ RSpec.describe Types::ScannedResourceType do
           {
             type: "html",
             content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
-            status: "authorized"
+            status: "authorized",
+            media_type: "Image"
           }
         )
+      end
+      context "and it's a video" do
+        with_queue_adapter :inline
+        let(:scanned_resource) do
+          FactoryBot.create_for_repository(
+            :scanned_resource_with_video_and_captions,
+            state: "complete"
+          )
+        end
+        it "returns media_type Video" do
+          stub_ezid
+          manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
+          expect(type.embed).to eq(
+            {
+              type: "html",
+              content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              status: "authorized",
+              media_type: "Video"
+            }
+          )
+        end
       end
     end
 
@@ -237,6 +259,7 @@ RSpec.describe Types::ScannedResourceType do
             {
               type: nil,
               content: nil,
+              media_type: nil,
               status: "unauthenticated"
             }
           )
@@ -250,7 +273,8 @@ RSpec.describe Types::ScannedResourceType do
             {
               type: "link",
               content: "http://www.example.com/downloads/#{zip_file_set.id}/file/#{zip_file_set.primary_file.id}",
-              status: "authorized"
+              status: "authorized",
+              media_type: "Download"
             }
           )
         end
@@ -263,6 +287,7 @@ RSpec.describe Types::ScannedResourceType do
             {
               type: nil,
               content: nil,
+              media_type: nil,
               status: "unauthorized"
             }
           )
@@ -284,7 +309,8 @@ RSpec.describe Types::ScannedResourceType do
             {
               type: "html",
               content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
-              status: "authorized"
+              status: "authorized",
+              media_type: "Image"
             }
           )
         end
@@ -303,7 +329,8 @@ RSpec.describe Types::ScannedResourceType do
             {
               type: "html",
               content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
-              status: "authorized"
+              status: "authorized",
+              media_type: "Image"
             }
           )
         end
