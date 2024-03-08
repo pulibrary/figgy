@@ -22,5 +22,5 @@ Rails.application.configure do
   config.force_ssl = true
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.active_storage.service = :local
-  config.cache_store = :mem_cache_store, "figgy1.princeton.edu"
+  config.cache_store = :mem_cache_store, "figgy-web-prod1.princeton.edu"
 end
