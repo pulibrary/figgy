@@ -31,6 +31,7 @@ class FileSet < Resource
            :mime_type,
            :av?,
            :video?,
+           :audio?,
            to: :primary_file,
            allow_nil: true
 

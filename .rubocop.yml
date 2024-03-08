@@ -123,6 +123,7 @@ Metrics/ClassLength:
     - 'app/derivative_services/image_derivative_service.rb'
     - 'app/models/file_set.rb'
     - 'app/nested_resources/file_metadata.rb'
+    - 'app/services/embed.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
@@ -209,6 +210,7 @@ Metrics/MethodLength:
     - 'app/services/cdl/charge_manager.rb'
     - 'app/services/preserver/blind_importer.rb'
     - 'app/change_set_persisters/change_set_persister.rb'
+    - 'app/services/embed.rb'
 Metrics/ModuleLength:
   Exclude:
     - 'app/models/schema/marc_relators.rb'
