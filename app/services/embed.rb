@@ -70,6 +70,8 @@ class Embed
         "Download"
       elsif file_set&.video?
         "Video"
+      elsif file_set&.audio?
+        "Audio"
       else
         "Image"
       end

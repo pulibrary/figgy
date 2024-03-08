@@ -230,6 +230,26 @@ RSpec.describe Types::ScannedResourceType do
           )
         end
       end
+      context "and it's audio" do
+        let(:scanned_resource) do
+          FactoryBot.create_for_repository(
+            :recording_with_audio_file,
+            state: "complete"
+          )
+        end
+        it "returns media_type Audio" do
+          stub_ezid
+          manifest_url = "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
+          expect(type.embed).to eq(
+            {
+              type: "html",
+              content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              status: "authorized",
+              media_type: "Audio"
+            }
+          )
+        end
+      end
     end
 
     context "when resource is a VPN-only resource" do
