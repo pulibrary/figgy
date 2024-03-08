@@ -15,7 +15,7 @@ class ManifestBuilder
     end
 
     def apply(manifest)
-      manifest["logo"] = [ActionController::Base.helpers.image_url(logo, host: @host)]
+      manifest["logo"] = [logo]
       manifest
     end
 
@@ -25,12 +25,22 @@ class ManifestBuilder
         Array.wrap(@record.resource.rights_statement)
       end
 
-      def logo
+      def logo_url
         if @record.resource.respond_to?(:rights_statement) && resource_logo.include?(RDF::URI("http://cicognara.org/microfiche_copyright"))
           "vatican.png"
         else
           "pul_logo_icon.png"
         end
+      end
+
+      def logo
+        {
+          "id" => ActionController::Base.helpers.image_url(logo_url, host: @host),
+          "type" => "Image",
+          "format" => "image/png",
+          "height" => 100,
+          "width" => 120
+        }
       end
   end
 end

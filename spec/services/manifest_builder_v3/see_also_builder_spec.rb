@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe ManifestBuilder::SeeAlsoBuilder do
+RSpec.describe ManifestBuilderV3::SeeAlsoBuilder do
   describe "#apply" do
     let(:builder) { described_class.new(scanned_resource) }
     let(:manifest) { ManifestBuilder::ManifestServiceLocator.iiif_manifest_factory.new }
@@ -27,8 +27,8 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
       it "appends the transformed metadata to the Manifest" do
         expect(manifest["seeAlso"]).to be_a Array
         expect(manifest["seeAlso"].length).to eq(2)
-        expect(manifest["seeAlso"].first).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
-        expect(manifest["seeAlso"].last).to include "@id" => "https://bibdata.princeton.edu/bibliographic/4609321", "format" => "text/xml"
+        expect(manifest["seeAlso"].first).to include "id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+        expect(manifest["seeAlso"].last).to include "id" => "https://bibdata.princeton.edu/bibliographic/4609321", "format" => "text/xml"
       end
     end
 
@@ -37,9 +37,10 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
         FactoryBot.create_for_repository(:scanned_resource)
       end
 
-      it "appends the transformed metadata to the Manifest as a hash" do
-        expect(manifest["seeAlso"]).to be_a Hash
-        expect(manifest["seeAlso"]).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+      it "appends the transformed metadata to the Manifest as an array" do
+        expect(manifest["seeAlso"]).to be_a Array
+        expect(manifest["seeAlso"].length).to eq(1)
+        expect(manifest["seeAlso"].first).to include "id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
       end
     end
 
@@ -52,8 +53,8 @@ RSpec.describe ManifestBuilder::SeeAlsoBuilder do
       it "appends the transformed metadata to the Manifest" do
         expect(manifest["seeAlso"]).to be_a Array
         expect(manifest["seeAlso"].length).to eq(2)
-        expect(manifest["seeAlso"].first).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
-        expect(manifest["seeAlso"].last).to include "@id" => "https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record", "format" => "text/xml"
+        expect(manifest["seeAlso"].first).to include "id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
+        expect(manifest["seeAlso"].last).to include "id" => "https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record", "format" => "text/xml"
       end
     end
   end
