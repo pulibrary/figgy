@@ -147,6 +147,7 @@ RSpec.describe DownloadsController do
         expect(playlist.items[0].segment).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}"
       end
     end
+
     context "with an HLS playlist FileSet and ?as=stream" do
       context "with no auth token given" do
         with_queue_adapter :inline
@@ -161,14 +162,21 @@ RSpec.describe DownloadsController do
 
           expect(response).to be_successful
           playlist = M3u8::Playlist.read(response.body)
-          expect(playlist.items.length).to eq 2
+          expect(playlist.items.length).to eq 3
           expect(playlist.items[0].uri).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}.m3u8"
           expect(playlist.items[0].subtitles).to eq "subs"
           expect(playlist.items[1].uri).to eq "/downloads/#{file_set.id}/file/#{caption_metadata.id}/stream.m3u8"
           expect(playlist.items[1].language).to eq "eng"
           expect(playlist.items[1].characteristics).to eq "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
+          expect(playlist.items[1].name).to eq "English (Original)"
+          expect(playlist.items[1].default).to be true
+          expect(playlist.items[2].language).to eq "und"
+          expect(playlist.items[2].characteristics).to eq "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
+          expect(playlist.items[2].name).to eq "Undetermined"
+          expect(playlist.items[2].default).to be false
         end
       end
+
       it "creates a primary playlist with the auth token" do
         token = AuthToken.create!(group: ["admin"], label: "admin_token")
         change_set_persister = ChangeSetPersister.default
@@ -219,6 +227,7 @@ RSpec.describe DownloadsController do
 
         expect(response).to be_successful
       end
+
       it "disallows download of the original file", run_real_derivatives: true, run_real_characterization: true do
         sign_in user
         file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
