@@ -803,7 +803,7 @@ class ManifestBuilder
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= if av_collection? || recording?
+      @manifest ||= if av_collection? || av?
                       IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
                     # If not multi-part and a collection, it's not a MVW
                     elsif @resource.viewing_hint.blank? && @resource.collection?
@@ -814,7 +814,7 @@ class ManifestBuilder
                     end
     end
 
-    def recording?
+    def av?
       # Skip check if it's a Collection node, for performance.
       return false if resource.collection?
       av_presenters = resource.work_presenters.select(&:av_manifest?)
