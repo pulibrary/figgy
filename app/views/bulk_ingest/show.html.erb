@@ -176,6 +176,16 @@
         </ul>
         </div>
         </p>
+        <p>Video and caption files can be ingested together if their filenames are structured correctly. Multiple caption files in different languages can be ingested for the same video. They should all be in the same directory with corresponding filenames according to the following format (note the double dashes), where language values correspond to ISO 639 codes and the string "original-language" indicates which caption file corresponds to the original language of the video:
+          <ul>
+            <li>video_filename1.mp4</li>
+            <li>video_filename1--original-language--language.vtt</li>
+            <li>video_filename1--language.vtt</li>
+            <li>video_filename2.mp4</li>
+            <li>video_filename2--original-language--language.vtt</li>
+            <li>video_filename2--language.vtt</li>
+          </ul>
+        </p>
       </div>
     </div>
   </div>
