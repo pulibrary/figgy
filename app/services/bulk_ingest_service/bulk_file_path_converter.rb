@@ -32,9 +32,8 @@ class BulkIngestService
       ingestable_files.map do |f|
         vtts = matching_vtts(f)
         next if vtts.blank?
-        vtt_paths = vtts.map { |vtt| Pathname(vtt) }
-        f.container_attributes[:files] = vtt_paths.map do |vtt_path|
-          build_ingestable_vtt(vtt_path)
+        f.container_attributes[:files] = vtts.map do |vtt|
+          build_ingestable_vtt(Pathname(vtt))
         end
         f
       end
