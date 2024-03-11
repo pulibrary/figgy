@@ -31,7 +31,7 @@ class ManifestBuilder
       # Class accessor for the "see also" builder
       # @return [Class]
       def see_also_builder
-        ManifestBuilder::SeeAlsoBuilder
+        ManifestBuilderV3::SeeAlsoBuilder
       end
 
       ##

@@ -728,6 +728,7 @@ RSpec.describe ManifestBuilder do
     it "builds a manifest for playing video back", run_real_characterization: true, run_real_derivatives: true do
       output = manifest_builder.build
       expect(output).to include "items"
+      expect(output["seeAlso"]).to be_a Array
       canvases = output["items"]
       expect(canvases.length).to eq 1
       expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 5.312
