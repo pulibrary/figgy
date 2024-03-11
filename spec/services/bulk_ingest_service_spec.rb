@@ -325,6 +325,7 @@ RSpec.describe BulkIngestService do
         vtt_file_metadata = file_set.captions.first
         expect(vtt_file_metadata.original_filename).to eq(["city--original-language--eng.vtt"])
         expect(vtt_file_metadata.caption_language).to eq("eng")
+        expect(vtt_file_metadata.original_language_caption).to eq(true)
       end
     end
 

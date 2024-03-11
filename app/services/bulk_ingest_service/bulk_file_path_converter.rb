@@ -38,9 +38,7 @@ class BulkIngestService
             mime_type: "text/vtt",
             original_filename: vtt_path.basename.to_s,
             use: Valkyrie::Vocab::PCDMUse.Caption,
-            node_attributes: {
-              caption_language: infer_language(vtt_path)
-            }
+            node_attributes: caption_file_attributes(vtt_path)
           )
         ]
         f
@@ -53,8 +51,22 @@ class BulkIngestService
       end
     end
 
+    def caption_file_attributes(vtt_path)
+      {
+        caption_language: infer_language(vtt_path),
+        original_language_caption: infer_original_language(vtt_path)
+      }
+    end
+
     def infer_language(vtt_path)
       vtt_path.basename.sub_ext("").to_s.split("--")[-1]
+    end
+
+    # @return [boolean] true if the second to last section of the filename
+    # matches the original-language flag
+    def infer_original_language(vtt_path)
+      flag = vtt_path.basename.sub_ext("").to_s.split("--")[-2]
+      flag == "original-language"
     end
   end
 end
