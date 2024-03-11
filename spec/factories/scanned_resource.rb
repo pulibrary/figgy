@@ -67,7 +67,18 @@ FactoryBot.define do
                   original_filename: "caption.vtt",
                   use: Valkyrie::Vocab::PCDMUse.Caption,
                   node_attributes: {
-                    caption_language: "eng"
+                    caption_language: "eng",
+                    original_language_caption: true
+                  }
+                ),
+                IngestableFile.new(
+                  file_path: Rails.root.join("spec", "fixtures", "files", "caption.vtt"),
+                  mime_type: "text/vtt",
+                  original_filename: "caption.vtt",
+                  use: Valkyrie::Vocab::PCDMUse.Caption,
+                  node_attributes: {
+                    caption_language: "und",
+                    original_language_caption: false
                   }
                 )
               ]
