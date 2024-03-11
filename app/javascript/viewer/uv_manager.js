@@ -16,22 +16,32 @@ export default class UVManager {
     this.tabManager = new TabManager()
     this.tabManager.initialize()
     this.uvElement.hide()
-    await this.loadUV()
+    await this.loadViewer()
     this.resize()
   }
 
-  async loadUV () {
-    if (this.isFiggyManifest) {
+  async loadViewer() {
+    if (this.isFiggy) {
       const result = await this.checkFiggyStatus()
-      if (result.embed.status === 'unauthenticated') {
+      const status = result.embed.status
+      if (status === 'unauthenticated') {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
-      } else if (result.embed.status === 'authorized') {
+      } else if (status === 'authorized') {
         this.displayNotice(result)
-        this.createUV(null, null, result)
+        this.renderViewer(result)
         await this.buildLeafletViewer()
       }
     } else {
       return this.createUV()
+    }
+  }
+
+  renderViewer (result) {
+    const mediaType = result.embed.mediaType
+    if (mediaType === 'Video') {
+      this.createClover()
+    } else {
+      this.createUV(null, null, result)
     }
   }
 
@@ -48,7 +58,8 @@ export default class UVManager {
           embed {
             type,
             content,
-            status
+            status,
+            mediaType
           },
           notice {
             heading,
@@ -97,21 +108,25 @@ export default class UVManager {
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
-    // this.uv = createUV('#uv', {
-    //   root: 'uv',
-    //   iiifResourceUri: this.manifest,
-    //   configUri: this.configURI,
-    //   collectionIndex: Number(this.urlDataProvider.get('c', 0)),
-    //   manifestIndex: Number(this.urlDataProvider.get('m', 0)),
-    //   sequenceIndex: Number(this.urlDataProvider.get('s', 0)),
-    //   canvasIndex: Number(this.urlDataProvider.get('cv', 0)),
-    //   rangeId: this.urlDataProvider.get('rid', 0),
-    //   rotation: Number(this.urlDataProvider.get('r', 0)),
-    //   xywh: this.urlDataProvider.get('xywh', ''),
-    //   embedded: true
-    // }, this.urlDataProvider)
-    // this.cdlTimer = new CDLTimer(this.figgyId)
-    // this.cdlTimer.initializeTimer()
+    this.uv = createUV('#uv', {
+      root: 'uv',
+      iiifResourceUri: this.manifest,
+      configUri: this.configURI,
+      collectionIndex: Number(this.urlDataProvider.get('c', 0)),
+      manifestIndex: Number(this.urlDataProvider.get('m', 0)),
+      sequenceIndex: Number(this.urlDataProvider.get('s', 0)),
+      canvasIndex: Number(this.urlDataProvider.get('cv', 0)),
+      rangeId: this.urlDataProvider.get('rid', 0),
+      rotation: Number(this.urlDataProvider.get('r', 0)),
+      xywh: this.urlDataProvider.get('xywh', ''),
+      embedded: true
+    }, this.urlDataProvider)
+    this.cdlTimer = new CDLTimer(this.figgyId)
+    this.cdlTimer.initializeTimer()
+  }
+
+  createClover () {
+    this.uvElement.show()
     const root = ReactDOM.createRoot(document.getElementById('uv'))
     root.render(React.createElement(Viewer, { iiifContent: this.manifest, options: { informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false }}))
   }
@@ -175,7 +190,8 @@ export default class UVManager {
   }
 
   get figgyId () {
-    return this.manifest.replace('/manifest', '').replace(/.*\//, '').replace(/\?.*/, '')
+    const id = this.viewerSourceUrl.pathname.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
+    return id[0]
   }
 
   get authToken () {
@@ -184,8 +200,31 @@ export default class UVManager {
     return authToken
   }
 
-  get isFiggyManifest () {
-    return this.manifest.includes('concern') && this.manifest.includes('/manifest')
+  get viewerSourceUrl () {
+    const source = new URL(this.hashParams[this.viewerSourceParam])
+    return source
+  }
+
+  get isFiggy () {
+    return this.viewerSourceUrl.hostname.includes('localhost', 'figgy')
+  }
+
+  get hashParams () {
+    const params = new URLSearchParams(window.location.hash.substring(1))
+    let outParams = {}
+    params.forEach((value, key) => {
+      outParams[key] = value
+    })
+
+    return outParams
+  }
+
+  get viewerSourceParam () {
+    return 'manifest'
+  }
+
+  get isManifest () {
+    return this.viewerSourceParam === 'manifest'
   }
 
   get configURI () {
