@@ -15,7 +15,7 @@ class FileSetChangeSet < ChangeSet
 
   validates_with DeletedFileMetadataValidator
 
-  delegate :thumbnail_id, to: :model
+  delegate :thumbnail_id, :video?, to: :model
 
   def primary_terms
     [

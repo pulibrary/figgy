@@ -1,0 +1,6 @@
+<label class="form-control-label">Does this video legally require captions?</label>
+<%= f.input key,
+  as: :radio_buttons,
+  collection: ["Yes", "No"],
+  checked: f.object.captions_required ? "Yes" : "No",
+  required: f.object.required?(key) %>

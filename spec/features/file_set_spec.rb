@@ -89,4 +89,33 @@ RSpec.feature "FileSet" do
       expect(page).not_to have_content "caption.vtt"
     end
   end
+
+  context "in the edit form" do
+    with_queue_adapter :inline
+    it "can mark a video fileset as not requiring captions" do
+      resource = FactoryBot.create_for_repository(:scanned_resource_with_video)
+      file_set = Wayfinder.for(resource).file_sets.first
+      expect(file_set.captions_required).to be true
+
+      visit edit_file_set_path(id: file_set.id)
+
+      expect(find_field("file_set_captions_required_yes")).to be_checked
+      choose("file_set_captions_required_no")
+      click_button "Save"
+
+      file_set = ChangeSetPersister.default.query_service.find_by(id: file_set.id)
+      expect(file_set.captions_required).to be false
+    end
+
+    it "does not ask if captions are required for an image fileset" do
+      file = fixture_file_upload("files/example.tif", "image/tiff")
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+      file_set = Wayfinder.for(resource).file_sets.first
+      expect(file_set.captions_required).to be_nil
+
+      visit edit_file_set_path(id: file_set.id)
+
+      expect(page).not_to have_field "file_set_captions_required_yes"
+    end
+  end
 end
