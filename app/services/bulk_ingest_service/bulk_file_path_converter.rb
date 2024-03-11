@@ -50,22 +50,19 @@ class BulkIngestService
       change_set = ChangeSet.for(
         FileMetadata.new,
         change_set_param: "caption",
-        file: uploaded_file_struct(vtt_path)
+        # change set expects to pull values from an UploadedFile;
+        # IngestableFile has the same duck type so used here to pass values
+        file: IngestableFile.new(
+          file_path: vtt_path,
+          mime_type: "text/vtt",
+          original_filename: vtt_path.basename.to_s
+        )
       )
       change_set.validate(
         caption_language: infer_language(vtt_path),
         original_language_caption: infer_original_language(vtt_path)
       )
       change_set.to_ingestable_file
-    end
-
-    # mimic the UploadedFile expected by CaptionChangeSet
-    def uploaded_file_struct(vtt_path)
-      Struct.new(
-        :path, :content_type, :original_filename
-      ).new(
-        vtt_path, "text/vtt", vtt_path.basename.to_s
-      )
     end
 
     def infer_language(vtt_path)
