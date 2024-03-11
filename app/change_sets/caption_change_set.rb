@@ -8,6 +8,16 @@ class CaptionChangeSet < Valkyrie::ChangeSet
 
   validates :file, :caption_language, presence: true
 
+  def caption_language=(value)
+    entry = ISO_639.find_by_code(value)
+    @fields["caption_language"] =
+      if entry
+        value
+      else
+        "und"
+      end
+  end
+
   def primary_terms
     [
       :file,
