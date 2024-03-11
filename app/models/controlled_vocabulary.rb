@@ -36,7 +36,7 @@ class ControlledVocabulary
 
   # Accesses a Term Object matching a specific value
   # @param value [String] the value for the Term being searched for
-  # @return [Term] the Term Object within the vocabulary
+  # @return [Term] the Term Object within the vocabulary or nil if not found
   def find(value)
     all.find { |x| x.value == value }
   end
@@ -287,8 +287,11 @@ class ControlledVocabulary
 
     # Retrieve a Term with a specific ISO language code as a value
     # @param value [String] the ISO language code
-    # @return [Term] the Term Object modeling the language code
+    # @return [Term] the Term Object modeling the language code or nil if not
+    # found
     def find(value)
+      entry = ISO_639.find_by_code(value)
+      return unless entry
       Term.new(label: label(value), value: value)
     end
 
