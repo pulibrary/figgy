@@ -32,7 +32,7 @@ class HlsManifest::Primary
       playlist.items << M3u8::MediaItem.new(
         type: "SUBTITLES",
         group_id: "subs",
-        name: CaptionDecorator.new(caption_metadata).caption_label,
+        name: caption_metadata.caption_language_label,
         default: caption_metadata.original_language_caption,
         autoselect: true,
         characteristics: accessibility_characteristics,
