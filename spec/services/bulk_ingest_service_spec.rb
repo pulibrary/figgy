@@ -323,7 +323,45 @@ RSpec.describe BulkIngestService do
           Valkyrie::Vocab::PCDMUse.Caption
         )
         vtt_file_metadata = file_set.captions.first
-        expect(vtt_file_metadata.original_filename).to eq(["city-eng-English (Original Language).vtt"])
+        expect(vtt_file_metadata.original_filename).to eq(["city--original-language--eng.vtt"])
+        expect(vtt_file_metadata.caption_language).to eq("eng")
+        expect(vtt_file_metadata.original_language_caption).to eq(true)
+      end
+    end
+
+    context "when ingesting video and two caption files, where one has a nonexistent ISO 639 code" do
+      let(:single_dir) { Rails.root.join("spec", "fixtures", "av", "bulk_ingest", "video_with_multiple_captions") }
+      with_queue_adapter :inline
+      let(:coll) { FactoryBot.create_for_repository(:collection) }
+      it "ingests them as file_metadatas on the same FileSet, using ISO 639 code 'und' for undetermined" do
+        ingester.attach_dir(
+          base_directory: single_dir,
+          file_filters: [".mp4"],
+          title: "Interview",
+          member_of_collection_ids: [coll.id.to_s],
+          visibility: "open",
+          depositor: "tpend"
+        )
+        resources = Wayfinder.for(coll).members
+        expect(resources.length).to eq 1
+        expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 1
+        expect(query_service.find_all_of_model(model: FileSet).size).to eq 1
+        file_set = query_service.find_all_of_model(model: FileSet).first
+        expect(file_set.file_metadata.size).to eq 5
+        expect(file_set.file_metadata.flat_map(&:use)).to contain_exactly(
+          Valkyrie::Vocab::PCDMUse.OriginalFile,
+          Valkyrie::Vocab::PCDMUse.ServiceFile,
+          Valkyrie::Vocab::PCDMUse.ServiceFilePartial,
+          Valkyrie::Vocab::PCDMUse.Caption,
+          Valkyrie::Vocab::PCDMUse.Caption
+        )
+        vtt_file_metadatas = file_set.captions
+        original_vtt = vtt_file_metadatas.find { |fm| fm.original_filename == ["city--original-language--engg.vtt"] }
+        spa_vtt = vtt_file_metadatas.find { |fm| fm.original_filename == ["city--spa.vtt"] }
+        expect(spa_vtt.caption_language).to eq("spa")
+        expect(spa_vtt.original_language_caption).to eq(false)
+        expect(original_vtt.caption_language).to eq("und")
+        expect(original_vtt.original_language_caption).to eq(true)
       end
     end
 

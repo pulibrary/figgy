@@ -30,24 +30,50 @@ class BulkIngestService
 
     def ingestable_files_with_captions
       ingestable_files.map do |f|
-        next unless (vtt = matching_vtt(f))
-        vtt_path = Pathname(vtt)
-        f.container_attributes[:files] = [
-          IngestableFile.new(
-            file_path: vtt_path,
-            mime_type: "text/vtt",
-            original_filename: vtt_path.basename.to_s,
-            use: Valkyrie::Vocab::PCDMUse.Caption
-          )
-        ]
+        vtts = matching_vtts(f)
+        next if vtts.blank?
+        vtt_paths = vtts.map { |vtt| Pathname(vtt) }
+        f.container_attributes[:files] = vtt_paths.map do |vtt_path|
+          build_ingestable_vtt(vtt_path)
+        end
         f
       end
     end
 
-    def matching_vtt(file)
-      caption_files.find do |cf|
+    def matching_vtts(file)
+      caption_files.select do |cf|
         cf.starts_with?(file.file_path.sub_ext("").to_s)
       end
+    end
+
+    def build_ingestable_vtt(vtt_path)
+      change_set = ChangeSet.for(
+        FileMetadata.new,
+        change_set_param: "caption",
+        # change set expects to pull values from an UploadedFile;
+        # IngestableFile has the same duck type so used here to pass values
+        file: IngestableFile.new(
+          file_path: vtt_path,
+          mime_type: "text/vtt",
+          original_filename: vtt_path.basename.to_s
+        )
+      )
+      change_set.validate(
+        caption_language: infer_language(vtt_path),
+        original_language_caption: infer_original_language(vtt_path)
+      )
+      change_set.to_ingestable_file
+    end
+
+    def infer_language(vtt_path)
+      vtt_path.basename.sub_ext("").to_s.split("--")[-1]
+    end
+
+    # @return [boolean] true if the second to last section of the filename
+    # matches the original-language flag
+    def infer_original_language(vtt_path)
+      flag = vtt_path.basename.sub_ext("").to_s.split("--")[-2]
+      flag == "original-language"
     end
   end
 end
