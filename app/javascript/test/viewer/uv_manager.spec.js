@@ -226,6 +226,9 @@ describe('UVManager', () => {
         mediaType: 'Video'
       })
 
+      // Mock ResizeObserver
+      global.ResizeObserver = vi.fn().mockImplementation(() => ({ observe: vi.fn() }))
+
       // Initialize
       const uvManager = new UVManager()
       const spy = vi.spyOn(uvManager, 'createClover')
