@@ -173,6 +173,12 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
       end
   end
 
+  # Returns true if the resource has videos that need captions added to them. If
+  # so, they're hidden no matter their state.
+  def needs_captions?
+    query_service.custom_queries.find_uncaptioned_members(resource: model, count: true).positive?
+  end
+
   # Should this simple resource have an ARK minted?
   # @return [TrueClass, FalseClass]
   def ark_mintable_state?

@@ -391,6 +391,6 @@ class Ability
     end
 
     def hidden?(obj)
-      obj.decorate.embargoed? || query_service.custom_queries.find_uncaptioned_members(resource: obj, count: true).positive?
+      obj.decorate.embargoed? || obj.decorate.needs_captions?
     end
 end
