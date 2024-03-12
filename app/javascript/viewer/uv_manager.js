@@ -45,12 +45,13 @@ export default class UVManager {
     }
   }
 
-  async checkFiggyStatus() {
-    let url = "/graphql";
+  async checkFiggyStatus () {
+    let url = '/graphql'
     if (this.authToken) {
       url = `${url}?auth_token=${this.authToken}`
     }
-    var data = JSON.stringify({ query:`{
+    const data = JSON.stringify({
+      query: `{
         resource(id: "` + this.figgyId + `"){
           id,
           __typename,
@@ -71,11 +72,11 @@ export default class UVManager {
     })
     return fetch(url,
       {
-        method: "POST",
+        method: 'POST',
         credentials: 'include',
         body: data,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       }
     )
@@ -215,8 +216,8 @@ export default class UVManager {
     if (graphqlData === undefined || graphqlData.__typename !== 'Playlist') {
       return
     }
-    var title = graphqlData.label
-    var titleElement = document.getElementById('title')
+    const title = graphqlData.label
+    const titleElement = document.getElementById('title')
     titleElement.textContent = title
     titleElement.style.display = 'block'
     this.resize()
@@ -245,8 +246,8 @@ export default class UVManager {
   bindLogin () {
     $('#login').click(function (e) {
       e.preventDefault()
-      var child = window.open('/users/auth/cas?login_popup=true')
-      var timer = setInterval(checkChild, 200)
+      const child = window.open('/users/auth/cas?login_popup=true')
+      const timer = setInterval(checkChild, 200)
 
       function checkChild () {
         if (child.closed) {

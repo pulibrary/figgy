@@ -49,7 +49,7 @@ describe('UVManager', () => {
 
   function mockManifests (status) {
     // Mock $.ajax
-    const data = { status: status }
+    const data = { status }
     const jqxhr = { getResponseHeader: () => null }
     global.$.ajax = vi.fn().mockImplementation(() => {
       if (status !== 200) { return jQ.Deferred().reject(data, status, jqxhr) } else { return jQ.Deferred().resolve(data, status, jqxhr) }
@@ -84,21 +84,21 @@ describe('UVManager', () => {
     vi.spyOn(location, 'assign').mockImplementation(() => true)
   }
 
-  let figgy_id = "12345"
-  function stubQuery(embedHash, noticeHash=null,label='Test', type='ScannedResource') {
+  const figgyId = '12345'
+  function stubQuery (embedHash, noticeHash = null, label = 'Test', type = 'ScannedResource') {
     global.fetch = vi.fn(() =>
       Promise.resolve({
         status: 200,
         json: () => Promise.resolve(
           {
-            "data": {
-              "resource":
+            data: {
+              resource:
                 {
-                  "id": figgy_id,
-                  "__typename": type,
-                  "embed": embedHash,
-                  "label": label,
-                  "notice": noticeHash
+                  id: figgyId,
+                  __typename: type,
+                  embed: embedHash,
+                  label,
+                  notice: noticeHash
                 }
             }
           }
@@ -118,19 +118,19 @@ describe('UVManager', () => {
       mockUvProvider()
       mockManifests(200)
       stubQuery({
-        "type": "html",
-        "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
-        "status": "authorized",
-        "mediaType": "Image"
+        type: 'html',
+        content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        status: 'authorized',
+        mediaType: 'Image'
       },
-        null,
-        "Test Playlist",
-        "Playlist"
+      null,
+      'Test Playlist',
+      'Playlist'
       )
 
       // Initialize
       const uvManager = new UVManager()
-      let spy = vi.spyOn(uvManager, "buildLeafletViewer")
+      const spy = vi.spyOn(uvManager, 'buildLeafletViewer')
       await uvManager.initialize()
       expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
       expect(spy).toHaveBeenCalled()
@@ -142,14 +142,14 @@ describe('UVManager', () => {
       mockUvProvider(false, '12')
       mockManifests(200)
       stubQuery({
-        'type': 'html',
-        'content': '<iframe src="https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest"></iframe>',
-        'status': 'authorized',
-        "mediaType": "Image"
+        type: 'html',
+        content: '<iframe src="https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest"></iframe>',
+        status: 'authorized',
+        mediaType: 'Image'
       },
-        null,
-        'Test Playlist',
-        'Playlist'
+      null,
+      'Test Playlist',
+      'Playlist'
       )
 
       // Initialize
@@ -166,12 +166,12 @@ describe('UVManager', () => {
       mockUvProvider()
       mockManifests(200)
       stubQuery({
-        "type": "html",
-        "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
-        "status": "authorized",
-        "mediaType": "Image"
+        type: 'html',
+        content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        status: 'authorized',
+        mediaType: 'Image'
       },
-        { "heading": "Terms and Conditions for Using Princeton University Senior Theses", "acceptLabel": "Accept", "textHtml": "<p>The Princeton University Senior Theses" }
+      { heading: 'Terms and Conditions for Using Princeton University Senior Theses', acceptLabel: 'Accept', textHtml: '<p>The Princeton University Senior Theses' }
       )
 
       // Initialize
@@ -180,7 +180,7 @@ describe('UVManager', () => {
       expect(document.getElementById('notice-heading').innerHTML).toBe('Terms and Conditions for Using Princeton University Senior Theses')
       expect(document.getElementById('notice-text').innerHTML).toMatch('<p>The Princeton University Senior Theses')
       expect(document.getElementById('notice-modal').classList.contains('d-none')).toBe(false)
-      expect(document.getElementById('notice-accept').value).toBe("Accept")
+      expect(document.getElementById('notice-accept').value).toBe('Accept')
       document.getElementById('notice-accept').click()
       expect(document.getElementById('notice-modal').classList.contains('d-none')).toBe(true)
     })
@@ -190,15 +190,15 @@ describe('UVManager', () => {
       mockJquery()
       mockUvProvider()
       stubQuery({
-        "type": null,
-        "content": null,
-        "status": "unauthenticated",
-        "mediaType": "Image"
+        type: null,
+        content: null,
+        status: 'unauthenticated',
+        mediaType: 'Image'
       })
 
       // Initialize
       const uvManager = new UVManager()
-      let spy = vi.spyOn(uvManager, "buildLeafletViewer")
+      const spy = vi.spyOn(uvManager, 'buildLeafletViewer')
       await uvManager.initialize()
       expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
       expect(spy).not.toHaveBeenCalled()
@@ -220,15 +220,15 @@ describe('UVManager', () => {
       mockUvProvider()
       mockManifests(200)
       stubQuery({
-        "type": "html",
-        "content": "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
-        "status": "authorized",
-        "mediaType": "Video"
+        type: 'html',
+        content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        status: 'authorized',
+        mediaType: 'Video'
       })
 
       // Initialize
       const uvManager = new UVManager()
-      let spy = vi.spyOn(uvManager, "createClover")
+      const spy = vi.spyOn(uvManager, 'createClover')
       await uvManager.initialize()
       expect(spy).toHaveBeenCalled()
     })
