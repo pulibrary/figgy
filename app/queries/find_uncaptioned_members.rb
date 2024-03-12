@@ -11,7 +11,12 @@ class FindUncaptionedMembers
     @query_service = query_service
   end
 
-  def find_uncaptioned_members(resource:)
-    query_service.custom_queries.find_video_members(resource: resource).select(&:missing_captions?)
+  def find_uncaptioned_members(resource:, count: false)
+    members = query_service.custom_queries.find_video_members(resource: resource).select(&:missing_captions?)
+    if count
+      members.length
+    else
+      members
+    end
   end
 end

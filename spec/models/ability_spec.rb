@@ -153,6 +153,18 @@ describe Ability do
     FactoryBot.create_for_repository(:complete_open_scanned_resource, embargo_date: date, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"])
   end
 
+  let(:scanned_resource_with_video) do
+    FactoryBot.create_for_repository(:scanned_resource_with_video, state: "complete", user: other_staff_user)
+  end
+
+  let(:scanned_resource_with_video_and_captions) do
+    FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete", user: other_staff_user)
+  end
+
+  let(:scanned_resource_with_silent_video) do
+    FactoryBot.create_for_repository(:scanned_resource_with_silent_video, state: "complete", user: other_staff_user)
+  end
+
   let(:complete_recording) do
     FactoryBot.create_for_repository(:complete_recording, user: creating_user, files: [audio_file])
   end
@@ -333,6 +345,17 @@ describe Ability do
       is_expected.to be_able_to(:read, embargoed_mvw_child)
       is_expected.to be_able_to(:manifest, embargoed_mvw_child)
       is_expected.to be_able_to(:discover, embargoed_mvw_child)
+
+      # Video resources.
+      is_expected.to be_able_to(:read, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:read, scanned_resource_with_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video)
+      is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
     }
 
     context "when index read-only mode is on" do
@@ -485,6 +508,17 @@ describe Ability do
       is_expected.to be_able_to(:read, embargoed_mvw_child)
       is_expected.to be_able_to(:manifest, embargoed_mvw_child)
       is_expected.to be_able_to(:discover, embargoed_mvw_child)
+
+      # Video resources.
+      is_expected.to be_able_to(:read, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:read, scanned_resource_with_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video)
+      is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
     }
 
     context "when read-only mode is on" do
@@ -680,6 +714,17 @@ describe Ability do
       is_expected.not_to be_able_to(:read, embargoed_mvw_child)
       is_expected.not_to be_able_to(:manifest, embargoed_mvw_child)
       is_expected.not_to be_able_to(:discover, embargoed_mvw_child)
+
+      # Video resources.
+      is_expected.to be_able_to(:read, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video_and_captions)
+      is_expected.not_to be_able_to(:read, scanned_resource_with_video)
+      is_expected.not_to be_able_to(:manifest, scanned_resource_with_video)
+      is_expected.not_to be_able_to(:discover, scanned_resource_with_video)
+      is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
     }
 
     context "when index read-only mode is on" do
@@ -961,6 +1006,17 @@ describe Ability do
       is_expected.not_to be_able_to(:read, embargoed_scanned_resource)
       is_expected.not_to be_able_to(:manifest, embargoed_scanned_resource)
       is_expected.not_to be_able_to(:discover, embargoed_scanned_resource)
+
+      # Video resources.
+      is_expected.to be_able_to(:read, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video_and_captions)
+      is_expected.not_to be_able_to(:read, scanned_resource_with_video)
+      is_expected.not_to be_able_to(:manifest, scanned_resource_with_video)
+      is_expected.not_to be_able_to(:discover, scanned_resource_with_video)
+      is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
     }
 
     context "when accessing figgy via a campus IP" do
