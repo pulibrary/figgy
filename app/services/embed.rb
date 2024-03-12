@@ -68,6 +68,8 @@ class Embed
     def build_media_type
       if !viewer_enabled?
         "Download"
+      elsif mosaic?
+        "Mosaic"
       elsif file_set&.video?
         "Video"
       elsif file_set&.audio?
@@ -130,5 +132,10 @@ class Embed
 
     def file_set
       @file_set ||= Wayfinder.for(resource).file_sets.first
+    end
+
+    def mosaic?
+      return false unless resource.is_a?(RasterResource) || resource.is_a?(ScannedMap)
+      resource.decorate.mosaic_file_count > 1
     end
 end
