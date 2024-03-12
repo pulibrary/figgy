@@ -45,7 +45,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
 
   def visibility
     Array(super).map do |visibility|
-      h.visibility_badge(visibility, public_readable_state?, embargoed?)
+      h.visibility_badge(visibility, public_readable_state?, embargoed?, needs_captions?)
     end
   end
 

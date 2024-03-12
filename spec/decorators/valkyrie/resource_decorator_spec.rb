@@ -309,10 +309,10 @@ RSpec.describe Valkyrie::ResourceDecorator do
     end
 
     context "complete video resource without captions" do
-      let(:resource) { FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions) }
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource_with_video) }
       it "has a warning that the resource isn't viewable until captions are provided" do
         expect(decorator.visibility.first).to have_selector(
-          "div.alert-warning", text: "This resource will not be viewable until captions are provided for video files. Review the files in the File Manager."
+          "div.alert-danger", text: "This resource will not be viewable until captions are provided for video files. Review the files in the File Manager."
         )
       end
     end
