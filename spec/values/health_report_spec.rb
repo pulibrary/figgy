@@ -269,6 +269,52 @@ RSpec.describe HealthReport do
       end
     end
 
+    context "for a video" do
+      with_queue_adapter :inline
+      context "with captions" do
+        it "returns healthy" do
+          stub_ezid
+
+          resource = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete")
+          report = described_class.for(resource)
+          expect(report.checks.length).to eq 4
+
+          expect(report.status).to eq :healthy
+          caption_check = report.checks.find { |check| check.is_a?(HealthReport::VideoCaptionCheck) }
+          expect(caption_check.summary).to eq "Required Captions are present."
+        end
+        it "returns healthy for the file set" do
+          stub_ezid
+
+          resource = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete")
+          report = described_class.for(Wayfinder.for(resource).file_sets.first)
+          expect(report.checks.length).to eq 4
+
+          expect(report.status).to eq :healthy
+        end
+      end
+      context "without captions" do
+        it "returns :needs_attention" do
+          stub_ezid
+
+          resource = FactoryBot.create_for_repository(:scanned_resource_with_video, state: "complete")
+          report = described_class.for(resource)
+          expect(report.checks.length).to eq 4
+
+          expect(report.status).to eq :needs_attention
+        end
+        it "returns :needs_attention for the file set" do
+          stub_ezid
+
+          resource = FactoryBot.create_for_repository(:scanned_resource_with_video, state: "complete")
+          report = described_class.for(Wayfinder.for(resource).file_sets.first)
+          expect(report.checks.length).to eq 4
+
+          expect(report.status).to eq :needs_attention
+        end
+      end
+    end
+
     # rubocop:disable Metrics/MethodLength
     def create_file_set(cloud_fixity_status:)
       file_set = FactoryBot.create_for_repository(:file_set)

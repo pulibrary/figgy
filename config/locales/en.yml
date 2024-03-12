@@ -194,6 +194,14 @@ en:
         in_progress: "Derivatives are being processed. If this does not resolve itself contact DLS with a link to this resource via #digital-library."
         healthy: 'Derivatives are processed and healthy.'
         needs_attention: 'There was a problem generating derivatives. Contact DLS in #digital-library if you need assistance.'
+    video_caption_check:
+      type: 'Accessibility'
+      summary:
+        self:
+          healthy: 'Required Captions are present.'
+          needs_attention: 'The resource associated with this file will not be viewable until a caption file is attached to this FileSet.'
+        healthy: 'Required Captions are present.'
+        needs_attention: 'A video file attached to this resource is missing a caption file. This resource will not be viewable until one is added. Use the File Manager to identify and add missing captions.'
     local_fixity_check:
       type: 'Local Fixity'
       summary:
