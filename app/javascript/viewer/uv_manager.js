@@ -26,7 +26,7 @@ export default class UVManager {
       } else if (result.embed.status === 'authorized') {
         this.displayNotice(result)
         this.renderViewer(result)
-        await this.buildLeafletViewer()
+        await this.buildLeafletViewer(result)
       }
     } else {
       return this.createUV()
@@ -98,7 +98,8 @@ export default class UVManager {
   }
 
   // Adds a tabbed viewer for Leaflet to show rasters, especially for mosaics.
-  async buildLeafletViewer () {
+  async buildLeafletViewer (graphqlData) {
+    if (graphqlData.embed.mediaType !== 'Mosaic') { return }
     this.leafletViewer = new LeafletViewer(this.figgyId, this.tabManager)
     return this.leafletViewer.loadLeaflet()
   }
