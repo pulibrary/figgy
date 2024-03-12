@@ -12,7 +12,8 @@ class HealthReport
     [
       LocalFixityCheck,
       CloudFixityCheck,
-      DerivativeCheck
+      DerivativeCheck,
+      VideoCaptionCheck
     ]
   end
 

@@ -123,6 +123,7 @@ class FileSet < Resource
   # True if it's a video fileset and has no original language caption.
   def missing_captions?
     return false unless video?
+    return false if captions_required == false
     captions.select(&:original_language_caption).blank?
   end
 
