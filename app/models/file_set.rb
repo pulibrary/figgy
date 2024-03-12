@@ -121,9 +121,9 @@ class FileSet < Resource
   end
 
   # True if it's a video fileset and has no original language caption.
-  # TODO: Return true if captions aren't required, e.g. a silent film.
   def missing_captions?
     return false unless video?
+    return false if captions_required == false
     captions.select(&:original_language_caption).blank?
   end
 

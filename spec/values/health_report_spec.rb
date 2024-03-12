@@ -303,6 +303,15 @@ RSpec.describe HealthReport do
 
           expect(report.status).to eq :needs_attention
         end
+        it "returns :healthy if the file set's marked as not requiring captions" do
+          stub_ezid
+
+          resource = FactoryBot.create_for_repository(:scanned_resource_with_silent_video, state: "complete")
+          report = described_class.for(resource)
+          expect(report.checks.length).to eq 4
+
+          expect(report.status).to eq :healthy
+        end
         it "returns :needs_attention for the file set" do
           stub_ezid
 
