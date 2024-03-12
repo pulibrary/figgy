@@ -12,6 +12,8 @@ class ChangeSet < Valkyrie::ChangeSet
         class_from_param(record.change_set)
       elsif change_set_param
         class_from_param(change_set_param)
+      elsif record.internal_resource == "FileSet" && record.video?
+        class_from_param("VideoFileSet")
       else
         class_from_param(record.internal_resource)
       end
