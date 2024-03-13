@@ -37,4 +37,12 @@ RSpec.describe FindUncaptionedMembers do
 
     expect(uncaptioned_members.length).to eq 0
   end
+
+  it "doesn't return child members that are uncaptioned but captions_required is false" do
+    resource = FactoryBot.create_for_repository(:scanned_resource_with_silent_video)
+
+    uncaptioned_members = query_service.custom_queries.find_uncaptioned_members(resource: resource)
+
+    expect(uncaptioned_members.length).to eq 0
+  end
 end
