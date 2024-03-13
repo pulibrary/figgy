@@ -307,6 +307,15 @@ RSpec.describe Valkyrie::ResourceDecorator do
         expect(decorator.visibility.first).to have_selector("div.alert-warning", text: "Users will not be able to view this digital object on discovery sites because the resource is embargoed.")
       end
     end
+
+    context "complete video resource without captions" do
+      let(:resource) { FactoryBot.create_for_repository(:scanned_resource_with_video) }
+      it "has a warning that the resource isn't viewable until captions are provided" do
+        expect(decorator.visibility.first).to have_selector(
+          "div.alert-danger", text: "This resource will not be viewable until captions are provided for video files. Review the files in the File Manager."
+        )
+      end
+    end
   end
   describe "#visibility_badge" do
     let(:resource) { FactoryBot.build(:complete_scanned_resource) }

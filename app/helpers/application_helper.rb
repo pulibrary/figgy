@@ -119,8 +119,8 @@ module ApplicationHelper
   # @param [String] visibility value
   # @param [Boolean] whether the workflow state is publicly readable
   # @return [String]
-  def visibility_badge(value, public_readable_state = nil, embargoed = nil)
-    PermissionBadge.new(value, public_readable_state, embargoed).render
+  def visibility_badge(value, public_readable_state = nil, embargoed = nil, needs_captions = nil)
+    PermissionBadge.new(value, public_readable_state, embargoed, needs_captions).render
   end
 
   # Retrieve the authorization token from the request parameters

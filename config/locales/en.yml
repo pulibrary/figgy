@@ -40,6 +40,9 @@ en:
     embargoed:
       class: "alert-warning"
       note_html: "Users will not be able to view this digital object on discovery sites because the resource is embargoed."
+    needs_captions:
+      class: "alert-danger"
+      note_html: "This resource will not be viewable until captions are provided for video files. Review the files in the File Manager."
   base:
     form_progress:
       requirements: 'Requirements'
