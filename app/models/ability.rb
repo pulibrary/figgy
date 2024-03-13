@@ -158,7 +158,7 @@ class Ability
   end
 
   def valkyrie_test_manifest(obj)
-    return false if embargoed?(obj)
+    return false if hidden?(obj)
     return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj) || restricted_collection_viewer?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
@@ -210,7 +210,7 @@ class Ability
   end
 
   def valkyrie_test_read(obj)
-    return false if embargoed?(obj)
+    return false if hidden?(obj)
     return false unless token_readable?(obj) || group_readable?(obj) || user_readable?(obj) || universal_reader? || ip_readable?(obj) || cdl_readable?(obj) || restricted_collection_viewer?(obj)
     # any group with :all permissions never hits this method
     #   other groups can only read published manifests, even if they have permissions indexed
@@ -373,7 +373,7 @@ class Ability
     # @param obj [Resource]
     # @return [Boolean]
     def private?(obj)
-      embargoed?(obj) || obj.decorate.try(:private_visibility?)
+      hidden?(obj) || obj.decorate.try(:private_visibility?)
     end
 
     # Determines whether a resource's parent is readable because of an auth token
@@ -390,7 +390,7 @@ class Ability
       can?(:read, resource.decorate.parent&.object)
     end
 
-    def embargoed?(obj)
-      obj.decorate.embargoed?
+    def hidden?(obj)
+      obj.decorate.embargoed? || obj.decorate.needs_captions?
     end
 end
