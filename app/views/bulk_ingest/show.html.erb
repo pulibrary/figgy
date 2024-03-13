@@ -15,7 +15,11 @@
             <div class="card-header">Metadata</div>
             <div class="card-body">
               <div class="form-group">
-                <label for="ingest_directory">Ingest Folder&nbsp;<a href="#" data-toggle="modal" data-target="#bulk-structure-example-modal">?</a></label>
+                <label for="ingest_directory">Ingest Folder&nbsp;<a href="#" data-toggle="modal" data-target="#bulk-structure-example-modal" aria-label="Ingest Folder Info">
+                    <lux-icon-base width="18" height="18" icon-name="alert" icon-color="blue">
+                      <lux-icon-alert></lux-icon-alert>
+                    </lux-icon-base>
+                  </a></label>
                 <div class="input-group mb-2">
                   <%= text_field_tag :ingest_directory, nil, class: 'form-control', readonly: true, id: 'ingest_directory_field' %>
                   <div class="input-group-append">
