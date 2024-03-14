@@ -128,7 +128,7 @@ class FileSet < Resource
   end
 
   def preservation_targets
-    original_files + intermediate_files + preservation_files
+    original_files + intermediate_files + preservation_files + captions
   end
 
   private

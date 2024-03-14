@@ -1372,6 +1372,19 @@ RSpec.describe ChangeSetPersister do
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.preservation_file.id}.tif"))).to eq true
       end
     end
+    context "when preserving a FileSet with a caption" do
+      it "preserves it" do
+        resource = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions)
+
+        change_set = ChangeSet.for(change_set_persister.query_service.find_by(id: resource.id))
+        change_set.validate(state: "complete")
+        output = change_set_persister.save(change_set: change_set)
+        file_set = Wayfinder.for(output).members.first
+
+        expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", output.member_ids.first.to_s, "city-#{file_set.primary_file.id}.mp4"))).to eq true
+        expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", output.member_ids.first.to_s, "caption-#{file_set.captions.first.id}.vtt"))).to eq true
+      end
+    end
 
     context "when deleting a preserved FileSet" do
       it "Deletes FileSet PreservationObjects, moves file set PreservationObjects into deletion_markers" do
