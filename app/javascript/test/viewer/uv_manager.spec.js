@@ -1,4 +1,5 @@
 import UVManager from '@viewer/uv_manager'
+import LeafletViewer from '@viewer/leaflet_viewer'
 import jQ from 'jquery'
 vi.mock('viewer/cdl_timer')
 describe('UVManager', () => {
@@ -130,10 +131,11 @@ describe('UVManager', () => {
 
       // Initialize
       const uvManager = new UVManager()
-      const spy = vi.spyOn(uvManager, 'buildLeafletViewer')
+      const leafletSpy = vi.spyOn(LeafletViewer.prototype, 'loadLeaflet')
       await uvManager.initialize()
       expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
-      expect(spy).toHaveBeenCalled()
+      // buildLeaflet viewer is not called when media type is Image
+      expect(leafletSpy).not.toHaveBeenCalled()
     })
 
     it('passes on an auth token to graphql', async () => {
@@ -234,6 +236,27 @@ describe('UVManager', () => {
       const spy = vi.spyOn(uvManager, 'createClover')
       await uvManager.initialize()
       expect(spy).toHaveBeenCalled()
+    })
+
+    it('loads a UV and Leafet viewer for a mosiac', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      mockManifests(200)
+      stubQuery({
+        type: 'html',
+        content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        status: 'authorized',
+        mediaType: 'Mosaic'
+      })
+
+      // Initialize
+      const uvManager = new UVManager()
+      const uvSpy = vi.spyOn(uvManager, 'createUV')
+      const leafletSpy = vi.spyOn(LeafletViewer.prototype, 'loadLeaflet')
+      await uvManager.initialize()
+      expect(uvSpy).toHaveBeenCalled()
+      expect(leafletSpy).toHaveBeenCalled()
     })
   })
 })

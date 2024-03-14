@@ -250,6 +250,50 @@ RSpec.describe Types::ScannedResourceType do
           )
         end
       end
+
+      context "and it's a scanned map with raster children" do
+        subject(:type) { make_graphql_object(described_class, scanned_map, { ability: ability }) }
+        let(:scanned_map) do
+          FactoryBot.create_for_repository(
+            :scanned_map_with_multiple_clipped_raster_children,
+            state: "complete"
+          )
+        end
+        it "returns media_type Mosaic" do
+          stub_ezid
+          manifest_url = "http://www.example.com/concern/scanned_maps/#{scanned_map.id}/manifest"
+          expect(type.embed).to eq(
+            {
+              type: "html",
+              content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              status: "authorized",
+              media_type: "Mosaic"
+            }
+          )
+        end
+      end
+
+      context "and it's a raster set" do
+        subject(:type) { make_graphql_object(described_class, raster_resource, { ability: ability }) }
+        let(:raster_resource) do
+          FactoryBot.create_for_repository(
+            :raster_set_with_files,
+            state: "complete"
+          )
+        end
+        it "returns media_type Mosaic" do
+          stub_ezid
+          manifest_url = "http://www.example.com/concern/raster_resources/#{raster_resource.id}/manifest"
+          expect(type.embed).to eq(
+            {
+              type: "html",
+              content: "<iframe allowfullscreen=\"true\" id=\"uv_iframe\" src=\"http://www.example.com/viewer#?manifest=#{manifest_url}\"></iframe>",
+              status: "authorized",
+              media_type: "Mosaic"
+            }
+          )
+        end
+      end
     end
 
     context "when resource is a VPN-only resource" do
