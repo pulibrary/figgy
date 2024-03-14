@@ -725,6 +725,17 @@ RSpec.describe ManifestBuilder do
       change_set_persister.save(change_set: change_set)
     end
 
+    context "and the scanned resource has VTT files" do
+      let(:change_set) { ChangeSet.for(query_service.find_by(id: scanned_resource.id)) }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions) }
+      it "adds a rendering for the canvas to download the caption", run_real_characterization: true, run_real_derivatives: true do
+        output = manifest_builder.build
+        rendering = output["items"][0]["rendering"]
+        vtt_rendering = rendering.find { |x| x["format"] == "text/vtt" }
+        expect(vtt_rendering["label"]).to eq "Download Caption - English (Original)"
+      end
+    end
+
     it "builds a manifest for playing video back", run_real_characterization: true, run_real_derivatives: true do
       output = manifest_builder.build
       expect(output).to include "items"

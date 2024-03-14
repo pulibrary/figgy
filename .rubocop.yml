@@ -124,6 +124,7 @@ Metrics/ClassLength:
     - 'app/models/file_set.rb'
     - 'app/nested_resources/file_metadata.rb'
     - 'app/services/embed.rb'
+    - 'app/services/manifest_builder/canvas_rendering_builder.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
