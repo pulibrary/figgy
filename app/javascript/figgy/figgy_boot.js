@@ -14,6 +14,7 @@ import BulkLabeler from '@figgy/bulk_labeler/bulk_label'
 import BoundingBoxSelector from '@figgy/bounding_box_selector'
 import FieldManager from '@figgy/field_manager'
 import Confetti from 'canvas-confetti'
+import DownloadNotifier from '@figgy/download_notifier'
 
 export default class Initializer {
   constructor() {
@@ -40,6 +41,7 @@ export default class Initializer {
 
     this.initialize_datatables()
     this.do_confetti()
+    this.initialize_download_notifier()
   }
 
   initialize_timepicker() {
@@ -233,5 +235,9 @@ export default class Initializer {
         Confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
       }, 250);
     }
+  }
+
+  initialize_download_notifier () {
+    new DownloadNotifier
   }
 }

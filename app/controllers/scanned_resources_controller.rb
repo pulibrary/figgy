@@ -49,9 +49,13 @@ class ScannedResourcesController < ResourcesController
     authorize! :pdf, change_set.resource
     pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
 
-    redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
-    redirect_path_args[:auth_token] = auth_token_param if auth_token_param
-    redirect_to download_path(redirect_path_args)
+    if pdf_file
+      redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
+      redirect_path_args[:auth_token] = auth_token_param if auth_token_param
+      redirect_to download_path(redirect_path_args)
+    else
+      render :pdf, layout: "download"
+    end
   end
 
   # API endpoint for asking where a folder to save and ingest from is located.

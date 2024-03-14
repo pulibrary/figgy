@@ -13,9 +13,10 @@ class PDFGenerator
   # @return [FileMetadata] the FileMetadata Object node linked to the PDF
   # @raise [PDFGenerator::Error]
   def render
+    max_pages = resource.member_ids.length
     CoverPageGenerator.new(self).apply(prawn_document)
 
-    canvas_downloaders.each_with_index do |downloader, _index|
+    canvas_downloaders.each_with_index do |downloader, index|
       prawn_document.start_new_page layout: downloader.layout
       page_size = [Canvas::LETTER_WIDTH, Canvas::LETTER_HEIGHT]
       page_size.reverse! unless downloader.portrait?
@@ -33,6 +34,10 @@ class PDFGenerator
         download_attempts += 1
         retry unless download_attempts > 4
         raise Error
+      end
+      if (index % 5).zero?
+        pct = ((index / max_pages * 100) - 1).abs
+        ActionCable.server.broadcast("pdf_download_#{resource.id}", { pct_complete: pct })
       end
     end
 
