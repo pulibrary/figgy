@@ -106,7 +106,7 @@ export default class UVManager {
 
   createUV (graphqlData) {
     this.bindResizeUV()
-    this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
+    this.tabManager.onTabSelect(() => setTimeout(() => this.resizeUV(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
     this.uv = createUV('#uv', {
@@ -156,7 +156,7 @@ export default class UVManager {
 
     shareButton.parentNode.insertBefore(this.createIIIFDragElement(), shareButton.nextSibling)
     mobileShareButton.parentNode.insertBefore(this.createIIIFDragElement(), mobileShareButton.nextSibling)
-    this.resize()
+    this.resizeUV()
   }
 
   createIIIFDragElement () {
