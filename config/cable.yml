@@ -1,5 +1,8 @@
 development:
-  adapter: async
+  adapter: redis
+  host: <%= ENV["lando_redis_conn_host"] || "localhost" %>
+  port: <%= ENV["lando_redis_conn_port"] || 6379 %>
+  db: 0
 
 test:
   adapter: async
