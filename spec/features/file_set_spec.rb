@@ -103,6 +103,7 @@ RSpec.feature "FileSet" do
       expect(page).not_to have_content "Princeton University Library has a legal obligation"
       click_link("caption-requirement-info")
       expect(page).to have_content "Princeton University Library has a legal obligation"
+      sleep(0.5) # ensure the click event is bound to the button before we click it
       click_button("close-caption-requirement-modal")
 
       choose("file_set_captions_required_no")
