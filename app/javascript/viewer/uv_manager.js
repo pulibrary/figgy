@@ -5,26 +5,27 @@ import StatementOnHarmfulContentIcon from '@images/statement.png'
 import TakedownLogo from '@images/copyright.svg'
 import LeafletViewer from '@viewer/leaflet_viewer'
 import TabManager from '@viewer/tab_manager'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Viewer from '@samvera/clover-iiif/viewer'
 
 export default class UVManager {
   async initialize () {
     this.bindLogin()
-    this.bindResize()
     this.tabManager = new TabManager()
     this.tabManager.initialize()
     this.uvElement.hide()
-    await this.loadUV()
-    this.resize()
+    await this.loadViewer()
   }
 
-  async loadUV () {
+  async loadViewer () {
     if (this.isFiggyManifest) {
       const result = await this.checkFiggyStatus()
       if (result.embed.status === 'unauthenticated') {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
       } else if (result.embed.status === 'authorized') {
         this.displayNotice(result)
-        this.createUV(null, null, result)
+        this.renderViewer(result)
         await this.buildLeafletViewer()
       }
     } else {
@@ -32,12 +33,23 @@ export default class UVManager {
     }
   }
 
-  async checkFiggyStatus() {
-    let url = "/graphql";
+  // Determine which viewer to render based on the media type
+  renderViewer (graphqlData) {
+    const mediaType = graphqlData.embed.mediaType
+    if (mediaType === 'Video') {
+      this.createClover()
+    } else {
+      this.createUV(graphqlData)
+    }
+  }
+
+  async checkFiggyStatus () {
+    let url = '/graphql'
     if (this.authToken) {
       url = `${url}?auth_token=${this.authToken}`
     }
-    var data = JSON.stringify({ query:`{
+    const data = JSON.stringify({
+      query: `{
         resource(id: "` + this.figgyId + `"){
           id,
           __typename,
@@ -45,7 +57,8 @@ export default class UVManager {
           embed {
             type,
             content,
-            status
+            status,
+            mediaType
           },
           notice {
             heading,
@@ -57,11 +70,11 @@ export default class UVManager {
     })
     return fetch(url,
       {
-        method: "POST",
+        method: 'POST',
         credentials: 'include',
         body: data,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       }
     )
@@ -90,7 +103,8 @@ export default class UVManager {
     return this.leafletViewer.loadLeaflet()
   }
 
-  createUV (data, status, graphqlData) {
+  createUV (graphqlData) {
+    this.bindResizeUV()
     this.tabManager.onTabSelect(() => setTimeout(() => this.resize(), 100))
     this.processTitle(graphqlData)
     this.uvElement.show()
@@ -109,6 +123,19 @@ export default class UVManager {
     }, this.urlDataProvider)
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
+  }
+
+  createClover () {
+    const uvElement = document.getElementById('uv')
+    // Show hidden viewer element
+    uvElement.style.display = 'block'
+    const root = ReactDOM.createRoot(uvElement)
+    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false, showIIIFBadge: false } })
+
+    root.render(clover)
+    // TODO: The resize logic can be removed in the future if Clover is
+    // updated to better scale to containing element size.
+    this.bindResizeClover()
   }
 
   addViewerIcons () {
@@ -195,14 +222,14 @@ export default class UVManager {
     if (graphqlData === undefined || graphqlData.__typename !== 'Playlist') {
       return
     }
-    var title = graphqlData.label
-    var titleElement = document.getElementById('title')
+    const title = graphqlData.label
+    const titleElement = document.getElementById('title')
     titleElement.textContent = title
     titleElement.style.display = 'block'
-    this.resize()
+    this.resizeUV()
   }
 
-  resize () {
+  resizeUV () {
     const windowWidth = window.innerWidth
     const windowHeight = window.innerHeight
     const titleHeight = $('#title').outerHeight($('#title').is(':visible'))
@@ -217,16 +244,62 @@ export default class UVManager {
     if (this.uv) { this.uv.resize() }
   }
 
-  bindResize () {
-    $(window).on('resize', () => this.resize())
-    this.resize()
+  bindResizeUV () {
+    $(window).on('resize', () => this.resizeUV())
+    this.resizeUV()
+  }
+
+  resizeClover () {
+    let height = window.innerHeight
+    const tocElement = document.getElementsByClassName('clover-viewer-media-wrapper')[0]
+    const headerElement = document.getElementsByClassName('clover-viewer-header')[0]
+    if (typeof tocElement !== 'undefined') { height = height - tocElement.clientHeight }
+    if (typeof headerElement !== 'undefined') { height = height - headerElement.clientHeight }
+    const playerWrapper = $('.clover-viewer-player-wrapper')
+    const video = $('#clover-iiif-video')
+    const painting = $('.clover-viewer-painting')
+    playerWrapper.height(height)
+    video.height(height)
+    playerWrapper.css({ maxHeight: `${height}px` })
+    video.css({ maxHeight: `${height}px` })
+    painting.css({ maxHeight: `${height}px` })
+    painting.children().css({ maxHeight: `${height}px` })
+  }
+
+  useMediaQuery (mediaQuery) {
+    if (!window.matchMedia) {
+      return false
+    }
+    return window.matchMedia(mediaQuery).matches
+  }
+
+  bindResizeClover () {
+    const ro = new ResizeObserver(entries => {
+      const header = document.getElementsByClassName('clover-viewer-header')[0]
+      const button = document.getElementsByClassName('c-crBlHK')[0]
+      // Clover small viewport size
+      // https://github.com/samvera-labs/clover-iiif/blob/main/src/styles/stitches.config.tsx#L98
+      const smallViewportQuery = '(max-width: 767px)'
+
+      if (this.useMediaQuery(smallViewportQuery)) {
+        // Hide header and more info button when in a small viewport
+        if (typeof header !== 'undefined') { header.style.display = 'none' }
+        if (typeof button !== 'undefined') { button.style.display = 'none' }
+      } else {
+        // Ensure header is displayed when not in a small viewport
+        if (typeof header !== 'undefined') { header.style.display = 'flex' }
+      }
+
+      this.resizeClover()
+    })
+    ro.observe(document.getElementById('uv'))
   }
 
   bindLogin () {
     $('#login').click(function (e) {
       e.preventDefault()
-      var child = window.open('/users/auth/cas?login_popup=true')
-      var timer = setInterval(checkChild, 200)
+      const child = window.open('/users/auth/cas?login_popup=true')
+      const timer = setInterval(checkChild, 200)
 
       function checkChild () {
         if (child.closed) {
