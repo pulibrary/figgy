@@ -6,7 +6,6 @@ RSpec.feature "FileSet" do
 
   before do
     stub_ezid
-
     sign_in user
   end
 
@@ -92,7 +91,7 @@ RSpec.feature "FileSet" do
 
   context "in the edit form" do
     with_queue_adapter :inline
-    it "can mark a video fileset as not requiring captions" do
+    it "can mark a video fileset as not requiring captions", js: true do
       resource = FactoryBot.create_for_repository(:scanned_resource_with_video)
       file_set = Wayfinder.for(resource).file_sets.first
       expect(file_set.captions_required).to be true
@@ -100,6 +99,13 @@ RSpec.feature "FileSet" do
       visit edit_file_set_path(id: file_set.id)
 
       expect(find_field("file_set_captions_required_yes")).to be_checked
+
+      expect(page).not_to have_content "Princeton University Library has a legal obligation"
+      click_link("caption-requirement-info")
+      expect(page).to have_content "Princeton University Library has a legal obligation"
+      sleep(0.5) # ensure the click event is bound to the button before we click it
+      click_button("close-caption-requirement-modal")
+
       choose("file_set_captions_required_no")
       click_button "Save"
 
