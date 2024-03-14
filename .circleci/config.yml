@@ -75,6 +75,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: solr:7.7-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
+      - image: redis:7
     resource_class: large
     parallelism: 4
     environment:
