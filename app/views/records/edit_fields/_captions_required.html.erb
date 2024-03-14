@@ -1,6 +1,6 @@
 <label class="form-control-label">Does this video legally require captions?&nbsp;<a id="caption-requirement-info" href="#" data-toggle="modal" data-target="#caption-requirement-modal" aria-label="Caption Requirement Info">
   <lux-icon-base width="18" height="18" icon-name="alert" icon-color="blue">
-    <lux-icon-alert></lux-icon-alert>
+    <lux-icon-info></lux-icon-info>
   </lux-icon-base>
 </a></label>
 <%= f.input key,
@@ -13,7 +13,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Video Caption Requirement</h4>
+        <h4 class="modal-title"><lux-icon-base width="24" height="24" icon-name="alert" icon-color="blue"><lux-icon-info></lux-icon-info></lux-icon-base> Video Caption Requirement</h4>
         <button id="close-caption-requirement-modal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
       </div>
       <div class="modal-body">
