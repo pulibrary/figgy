@@ -10,6 +10,7 @@ import PlaylistMembers from '@components/playlist_members.vue'
 import IssueMonograms from '@components/issue_monograms.vue'
 import axios from 'axios'
 import OrderManager from '@components/OrderManager.vue'
+import StructManager from '@components/StructManager.vue'
 import setupAuthLinkClipboard from '@figgy/auth_link_clipboard'
 import AjaxSelect from '@components/ajax-select.vue'
 import { setupAjaxSelect, setupCocoonLinks } from '@helpers/setup_ajax_select'
@@ -39,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'file-uploader': FileUploader,
         'input-path-selector': InputPathSelector,
         'embedded-file-browser': EmbeddedFileBrowser,
-        'local-uploader': LocalUploader
+        'local-uploader': LocalUploader,
+        'struct-manager': StructManager,
       },
       data: {
         options: []
