@@ -5,5 +5,5 @@
               value_method: :value,
               hint: "Set this field to trigger OCR generation",
               include_blank: true,
-              input_html: { class: 'form-control' },
+              input_html: { class: 'form-control', multiple: f.object.multiple?(key) },
               required: f.object.required?(key) %>
