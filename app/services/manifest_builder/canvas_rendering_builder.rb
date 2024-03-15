@@ -23,6 +23,7 @@ class ManifestBuilder
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
+      manifest["rendering"] += caption_downloads
       apply_geotiff_downloads(manifest)
     end
 
@@ -137,6 +138,21 @@ class ManifestBuilder
           "label" => "Download the mp3",
           "format" => mp3_file.mime_type.first
         }
+      end
+
+      def caption_downloads
+        resource.captions.map do |caption|
+          download_url_args = { resource_id: resource.id.to_s,
+                                id: caption.id.to_s,
+                                protocol: protocol,
+                                host: host }
+          download_url = url_helpers.download_url(download_url_args)
+          {
+            "id" => download_url,
+            "label" => "Download Caption - #{caption.caption_language_label}",
+            "format" => caption.mime_type.first
+          }
+        end
       end
 
       def original_file
