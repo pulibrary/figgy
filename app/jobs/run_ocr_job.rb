@@ -4,7 +4,9 @@ class RunOCRJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
   def perform(file_set_id)
-    derivative_service_factory.new(id: file_set_id).create_derivatives
+    derivative_service = derivative_service_factory.new(id: file_set_id)
+    return unless derivative_service.valid?
+    derivative_service.create_derivatives
   rescue Valkyrie::Persistence::ObjectNotFoundError, Valkyrie::StorageAdapter::FileNotFound => error
     Valkyrie.logger.warn "#{self.class}: #{error}: Failed to find the resource #{file_set_id}"
   end

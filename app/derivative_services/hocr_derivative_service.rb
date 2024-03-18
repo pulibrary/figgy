@@ -27,7 +27,7 @@ class HocrDerivativeService
   end
 
   def valid?
-    ["image/tiff", "image/jpeg", "image/png"].include?(mime_type.first)
+    ["image/tiff", "image/jpeg", "image/png"].include?(mime_type.first) && parent.ocr_language.present?
   end
 
   def resource
