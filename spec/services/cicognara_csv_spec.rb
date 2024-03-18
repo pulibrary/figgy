@@ -17,8 +17,8 @@ RSpec.describe CicognaraCSV do
 
   describe "#values" do
     before do
-      stub_catalog(bib_id: "2068747")
-      stub_ezid(shoulder: "99999/fk4", blade: "4609321")
+      stub_catalog(bib_id: "9920687473506421")
+      stub_ezid(shoulder: "99999/fk4", blade: "9946093213506421")
     end
 
     let(:col) { FactoryBot.create_for_repository :collection }
@@ -27,13 +27,13 @@ RSpec.describe CicognaraCSV do
     context "with a non-Vatican/Cicognara rights statement" do
       let(:values) do
         [["cico:qgb", "Princeton University Library", manifest_url, "Princeton University Library",
-          "Oversize NA2810 .H75f", "2068747", "ark:/99999/fk44609321", nil, "Amsterdam: J. Jeansson, 1620",
+          "Oversize NA2810 .H75f", "9920687473506421", "ark:/99999/fk49946093213506421", nil, "Amsterdam: J. Jeansson, 1620",
           "1620", nil, nil, "39 . 30 plates. 30 x 40 cm.", RightsStatements.no_known_copyright.to_s,
           false]]
       end
       let(:obj) do
         FactoryBot.create_for_repository :complete_scanned_resource,
-                                         source_metadata_identifier: ["2068747"],
+                                         source_metadata_identifier: ["9920687473506421"],
                                          member_of_collection_ids: [col.id], import_metadata: true
       end
       before do
@@ -47,13 +47,13 @@ RSpec.describe CicognaraCSV do
     context "with a Vatican/Cicognara rights statement" do
       let(:obj) do
         FactoryBot.create_for_repository :complete_scanned_resource,
-                                         source_metadata_identifier: ["2068747"],
+                                         source_metadata_identifier: ["9920687473506421"],
                                          rights_statement: ["http://cicognara.org/microfiche_copyright"],
                                          member_of_collection_ids: [col.id], import_metadata: true
       end
       let(:values) do
         [["cico:qgb", "Microfiche", manifest_url, "Bibliotheca Apostolica Vaticana", "Oversize NA2810 .H75f",
-          "cico:qgb", "ark:/99999/fk44609321", nil, "Amsterdam: J. Jeansson, 1620", "1620", nil, nil,
+          "cico:qgb", "ark:/99999/fk49946093213506421", nil, "Amsterdam: J. Jeansson, 1620", "1620", nil, nil,
           "39 . 30 plates. 30 x 40 cm.", "http://cicognara.org/microfiche_copyright", true]]
       end
       before do

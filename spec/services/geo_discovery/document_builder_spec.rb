@@ -100,7 +100,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
     let(:change_set) { ScannedMapChangeSet.new(geo_work, files: []) }
 
     before do
-      stub_catalog(bib_id: "5144620")
+      stub_catalog(bib_id: "9951446203506421")
       change_set_persister.save(change_set: change_set)
     end
 
@@ -110,7 +110,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         FactoryBot.create_for_repository(
           :scanned_map,
           title: [],
-          source_metadata_identifier: "5144620",
+          source_metadata_identifier: "9951446203506421",
           coverage: coverage.to_s,
           subject: ["Sanborn", "Mount Holly (N.J.)—Maps"],
           visibility: visibility,
@@ -137,7 +137,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
       it "has url reference to the catalog record and a call number field" do
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs["http://schema.org/url"]).to match(/catalog\/5144620/)
+        expect(refs["http://schema.org/url"]).to match(/catalog\/9951446203506421/)
         expect(document["call_number_s"]).to eq("HMC04 (Mount Holly)")
       end
 
@@ -150,7 +150,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       let(:geo_work) do
         FactoryBot.create_for_repository(
           :scanned_map,
-          source_metadata_identifier: "5144620",
+          source_metadata_identifier: "9951446203506421",
           coverage: coverage.to_s,
           visibility: visibility,
           imported_metadata: [{
@@ -256,7 +256,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       let(:geo_work) do
         FactoryBot.create_for_repository(
           :scanned_map,
-          source_metadata_identifier: "5144620",
+          source_metadata_identifier: "9951446203506421",
           coverage: coverage.to_s,
           visibility: visibility,
           imported_metadata: [{

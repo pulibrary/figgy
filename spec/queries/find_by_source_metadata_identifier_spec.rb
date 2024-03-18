@@ -16,7 +16,7 @@ RSpec.describe FindBySourceMetadataIdentifier do
       # with the longer bibid and then force the short id back in.
       stub_catalog(bib_id: "991234563506421")
       resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["991234563506421"])
-      resource.source_metadata_identifier = ["123456"]
+      resource.source_metadata_identifier = ["991234563506421"]
       ChangeSetPersister.default.metadata_adapter.persister.save(resource: resource)
       expect(query_service.custom_queries.find_by_source_metadata_identifier(source_metadata_identifier: "991234563506421").map(&:id)).to eq [resource.id]
     end

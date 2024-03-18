@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Types::RasterResourceType do
   subject(:type) { make_graphql_object(described_class, raster_resource, {}) }
-  let(:bibid) { "123456" }
+  let(:bibid) { "991234563506421" }
   let(:raster_resource) do
     FactoryBot.create_for_repository(
       :raster_resource,

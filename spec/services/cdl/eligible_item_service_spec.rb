@@ -9,14 +9,14 @@ RSpec.describe CDL::EligibleItemService do
       end
     end
 
-    context "voyager is down" do
+    context "alma is down" do
       before do
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{bib_id}/items")
           .to_return(status: 500,
                      body: "500", headers: { "Content-Type" => "application/json" })
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
-      let(:bib_id) { "7214786" }
+      let(:bib_id) { "9972147863506421" }
       it "will return an empty array" do
         expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
       end
@@ -29,7 +29,7 @@ RSpec.describe CDL::EligibleItemService do
                      body: file_fixture("files/catalog/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
         stub_request(:get, "https://bibdata.princeton.edu/bibliographic/99#{bib_id}3506421/items").to_return(status: 500, body: "500", headers: { "Content-Type" => "application/json" })
       end
-      let(:bib_id) { "7214787" }
+      let(:bib_id) { "9972147873506421" }
 
       it "will return an empty array" do
         expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq []
@@ -69,7 +69,7 @@ RSpec.describe CDL::EligibleItemService do
           .to_return(status: 200,
                      body: file_fixture("files/catalog/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
       end
-      let(:bib_id) { "1377084" }
+      let(:bib_id) { "9913770843506421" }
       it "returns only the cdl charged items" do
         expect(described_class.item_ids(source_metadata_identifier: bib_id)).to eq [1_666_779, 1_666_780, 1_666_781]
       end
@@ -81,9 +81,9 @@ RSpec.describe CDL::EligibleItemService do
           .to_return(status: 200,
                      body: file_fixture("files/catalog/#{bib_id}.json").read, headers: { "Content-Type" => "application/json" })
       end
-      let(:bib_id) { "922720" }
+      let(:bib_id) { "999227203506421" }
       it "returns the CDL charged items" do
-        expect(described_class.item_ids(source_metadata_identifier: "922720")).not_to be_blank
+        expect(described_class.item_ids(source_metadata_identifier: "999227203506421")).not_to be_blank
       end
     end
 
@@ -105,20 +105,6 @@ RSpec.describe CDL::EligibleItemService do
         expect(described_class.item_ids(source_metadata_identifier: bib_id)).to be_present
 
         expect(Rails.cache).to have_received(:fetch).with("cdl_item_ids_#{bib_id}", expires_in: 5.minutes)
-      end
-    end
-
-    context "a non-alma ID has no items, but an alma one does" do
-      it "returns the alma item PIDs" do
-        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/9965126093506421/items")
-          .to_return(status: 200,
-                     body: file_fixture("files/catalog/9965126093506421.json").read, headers: { "Content-Type" => "application/json" })
-        html_body = "Record 6512609 not found or suppressed"
-        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/6512609/items")
-          .to_return(status: 404,
-                     body: html_body, headers: { "Content-Type" => "application/json" })
-
-        expect(described_class.item_ids(source_metadata_identifier: "6512609")).to eq ["23202918780006421"]
       end
     end
 

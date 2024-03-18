@@ -47,7 +47,7 @@ describe("OrderManagerToolbar.vue", () => {
         resource: {
           id: "",
           resourceClassName: "",
-          bibId: "4609321",
+          bibId: "9946093213506421",
           label: "Resource not available.",
           thumbnail: "",
           startCanvas: "",

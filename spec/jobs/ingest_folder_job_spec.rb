@@ -33,8 +33,8 @@ RSpec.describe IngestFolderJob do
 
     context "when using an unsupported class for ingesting files" do
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-      let(:bib) { "4609321" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:bib) { "9946093213506421" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       before do
@@ -66,9 +66,9 @@ RSpec.describe IngestFolderJob do
     context "with a directory of Scanned TIFFs" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:local_id) { "cico:xyz" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
 
@@ -102,9 +102,9 @@ RSpec.describe IngestFolderJob do
     context "with a SimpleChangeSet" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:local_id) { "cico:xyz" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       let(:class_name) { "ScannedResource" }

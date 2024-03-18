@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/5m60qr98htest" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OBJID="ark:/88435/5m60qr98h" TYPE="CompiledDigitalObject" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
   <mets:metsHdr CREATEDATE="2016-03-14T15:21:34.002-04:00" LASTMODDATE="2016-03-14T15:21:34.002-04:00">
     <mets:metsDocumentID TYPE="PUDL">pudl0001/4612596.mets</mets:metsDocumentID>
   </mets:metsHdr>
   <mets:dmdSec ID="p7p3g">
-    <mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/4612596"/>
+    <mets:mdRef LOCTYPE="URL" MDTYPE="MARC" xlink:href="https://bibdata.princeton.edu/bibliographic/9946125963506421"/>
   </mets:dmdSec>
   <mets:dmdSec ID="mfyt6">
     <mets:mdWrap MDTYPE="MODS">
@@ -113,7 +113,6 @@
   </mets:fileSec>
   <mets:structMap TYPE="RelatedObjects">
     <mets:div DMDID="p7p3g mfyt6" ID="kxpde">
-      <mets:div CONTENTIDS="pudl0001" TYPE="IsPartOf"/>
       <mets:div ID="aggregates" TYPE="OrderedList">
         <mets:div ID="a6ubs" LABEL="recto" ORDER="1" TYPE="Static">
           <mets:fptr FILEID="pkc90"/>

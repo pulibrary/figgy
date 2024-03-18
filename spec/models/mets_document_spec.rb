@@ -2,14 +2,14 @@
 require "rails_helper"
 
 RSpec.describe METSDocument do
-  let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
+  let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946125963506421.mets") }
   let(:mets_file_rtl) { Rails.root.join("spec", "fixtures", "mets", "pudl0032-ns73.mets") }
-  let(:mets_file_multi) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
-  let(:mets_file_multi2) { Rails.root.join("spec", "fixtures", "mets", "pudl0058-616086.mets") }
-  let(:mets_file_multi3) { Rails.root.join("spec", "fixtures", "mets", "pudl0134-170151.mets") }
-  let(:mets_file_multi4) { Rails.root.join("spec", "fixtures", "mets", "pudl0058-3013164.mets") }
-  let(:tight_bound_mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0075-6971526.mets") }
-  let(:no_logical_order_mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0076-2538011.mets") }
+  let(:mets_file_multi) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946093213506421-s42.mets") }
+  let(:mets_file_multi2) { Rails.root.join("spec", "fixtures", "mets", "pudl0058-996160863506421.mets") }
+  let(:mets_file_multi3) { Rails.root.join("spec", "fixtures", "mets", "pudl0134-991701513506421.mets") }
+  let(:mets_file_multi4) { Rails.root.join("spec", "fixtures", "mets", "pudl0058-9930131643506421.mets") }
+  let(:tight_bound_mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0075-9969715263506421.mets") }
+  let(:no_logical_order_mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0076-9925380113506421.mets") }
   let(:tiff_file) { Rails.root.join("spec", "fixtures", "files", "example.tif") }
   let(:structure) do
     {
@@ -59,11 +59,11 @@ RSpec.describe METSDocument do
     end
 
     it "has a bib id" do
-      expect(mets_document.bib_id).to eq("4612596")
+      expect(mets_document.bib_id).to eq("9946125963506421")
     end
 
     it "has a pudl id" do
-      expect(mets_document.pudl_id).to eq("pudl0001/4612596")
+      expect(mets_document.pudl_id).to eq("pudl0001/9946125963506421")
     end
 
     it "has a collection slug" do

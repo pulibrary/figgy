@@ -9,7 +9,7 @@ RSpec.describe VectorResourceChangeSet do
   let(:form_resource) { vector_resource }
 
   before do
-    stub_catalog(bib_id: "6592452")
+    stub_catalog(bib_id: "9965924523506421")
   end
 
   it_behaves_like "a ChangeSet with EmbargoDate"
@@ -37,7 +37,7 @@ RSpec.describe VectorResourceChangeSet do
       end
     end
     context "when only metadata_identifier is set" do
-      let(:form_resource) { vector_resource.new(title: "", source_metadata_identifier: "6592452") }
+      let(:form_resource) { vector_resource.new(title: "", source_metadata_identifier: "9965924523506421") }
       it "is valid" do
         expect(change_set).to be_valid
       end

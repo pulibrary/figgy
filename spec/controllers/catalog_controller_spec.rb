@@ -110,7 +110,7 @@ RSpec.describe CatalogController, type: :controller do
       get :index, params: { q: "p3b593k91p" }
       expect(assigns(:response).documents.length).to eq 1
     end
-    context "with metadata imported from voyager" do
+    context "with metadata imported from alma" do
       it "can search by imported local identifiers" do
         stub_catalog(bib_id: "9985434293506421")
         stub_ezid

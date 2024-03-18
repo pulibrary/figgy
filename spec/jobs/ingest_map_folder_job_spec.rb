@@ -6,7 +6,7 @@ RSpec.describe IngestMapFolderJob do
     context "with a directory of Scanned TIFFs" do
       let(:logger) { Logger.new(nil) }
       let(:scanned_maps_dir) { Rails.root.join("spec", "fixtures", "ingest_scanned_maps") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
 

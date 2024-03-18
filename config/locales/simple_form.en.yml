@@ -61,7 +61,7 @@ en:
         title: "Template Name"
     hints:
       scanned_resource:
-        source_metadata_identifier: 'Bib ID (1234567) or PULFA ID (C123 or C123_c456)'
+        source_metadata_identifier: 'Bib ID (9912345673506421) or PULFA ID (C123 or C123_c456)'
         title: 'Required if Source Metadata ID is blank'
       collection:
         slug: 'Used if this collection is synced to DPUL.'

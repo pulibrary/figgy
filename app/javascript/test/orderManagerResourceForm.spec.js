@@ -46,7 +46,7 @@ describe("OrderManagerResourceForm.vue", () => {
         resource: {
           id: "",
           resourceClassName: "",
-          bibId: "4609321",
+          bibId: "9946093213506421",
           label: "Resource not available.",
           thumbnail: "",
           startCanvas: "",
@@ -113,7 +113,7 @@ describe("OrderManagerResourceForm.vue", () => {
   it('displays the bibid, if it has one', () => {
     const expanded = wrapper.find('.lux-bibid')
     const bibid = expanded.text()
-    expect(bibid).toEqual('| BibId: 4609321')
+    expect(bibid).toEqual('| BibId: 9946093213506421')
   })
 
   it("has the expected html structure", () => {

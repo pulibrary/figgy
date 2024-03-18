@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Types::VectorResourceType do
   subject(:type) { make_graphql_object(described_class, vector_resource, {}) }
-  let(:bibid) { "123456" }
+  let(:bibid) { "991234563506421" }
   let(:vector_resource) do
     FactoryBot.create_for_repository(
       :vector_resource,

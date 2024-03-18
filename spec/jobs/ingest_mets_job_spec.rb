@@ -5,7 +5,7 @@ RSpec.describe IngestMETSJob do
   with_queue_adapter :inline
   let(:adapter) { Valkyrie.config.metadata_adapter }
   let(:user) { FactoryBot.build(:admin) }
-  let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
+  let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946125963506421.mets") }
   let(:tiff_file) { Rails.root.join("spec", "fixtures", "files", "example.tif") }
   let(:mime_type) { "image/tiff" }
   let(:file) { IoDecorator.new(File.new(tiff_file), mime_type, File.basename(tiff_file)) }
@@ -32,7 +32,7 @@ RSpec.describe IngestMETSJob do
     #   it looks like this could also be achieved by having :copy_before_ingest return false
     #   if something more general is needed
     allow_any_instance_of(IngestableFile).to receive(:path).and_return(tiff_file)
-    stub_catalog(bib_id: "4612596")
+    stub_catalog(bib_id: "9946125963506421")
     stub_catalog(bib_id: "9946093213506421")
   end
 
@@ -45,7 +45,7 @@ RSpec.describe IngestMETSJob do
 
       book = adapter.query_service.find_all_of_model(model: ScannedResource).first
       expect(book).not_to be_nil
-      expect(book.source_metadata_identifier).to eq ["4612596"]
+      expect(book.source_metadata_identifier).to eq ["9946125963506421"]
       expect(book.identifier.first).to eq "ark:/88435/5m60qr98h"
       expect(book.logical_structure[0].nodes.length).to eq 1
       expect(book.logical_structure[0].nodes[0].label).to contain_exactly "leaf 1"
@@ -57,7 +57,7 @@ RSpec.describe IngestMETSJob do
       expect(file_sets.first.derivative_file).not_to be_blank
       expect(FileUtils).not_to have_received(:mv)
       expect(book.member_of_collection_ids).to eq [pudl0001.id]
-      expect(file_sets.map(&:title).to_a).to include ["pudl0001-4612596.mets"]
+      expect(file_sets.map(&:title).to_a).to include ["pudl0001-9946125963506421.mets"]
       expect(file_sets.map(&:mime_type).to_a).to include ["application/xml; schema=mets"]
     end
   end
@@ -128,7 +128,7 @@ RSpec.describe IngestMETSJob do
   end
 
   context "when given a work with volumes" do
-    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946093213506421-s42.mets") }
     it "ingests it" do
       described_class.perform_now(mets_file, user)
 
@@ -141,9 +141,9 @@ RSpec.describe IngestMETSJob do
       expect(child_books[0].title).to eq ["first volume"]
       expect(child_books[1].title).to eq ["second volume"]
       file_sets = adapter.query_service.find_members(resource: child_books[0])
-      expect(file_sets.map(&:title)).not_to include "pudl0001-4609321-s42.mets"
+      expect(file_sets.map(&:title)).not_to include "pudl0001-9946093213506421-s42.mets"
       file_sets = adapter.query_service.find_members(resource: child_books[1])
-      expect(file_sets.map(&:title)).not_to include "pudl0001-4609321-s42.mets"
+      expect(file_sets.map(&:title)).not_to include "pudl0001-9946093213506421-s42.mets"
     end
   end
 
@@ -166,7 +166,7 @@ RSpec.describe IngestMETSJob do
   end
 
   context "when given a work with volumes" do
-    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946093213506421-s42.mets") }
     it "ingests it" do
       described_class.perform_now(mets_file, user)
 

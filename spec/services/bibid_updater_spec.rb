@@ -6,15 +6,15 @@ describe BibidUpdater do
 
   describe ".update" do
     it "updates voyager bibids" do
-      stub_catalog(bib_id: "123456")
       stub_catalog(bib_id: "991234563506421")
-      stub_catalog(bib_id: "7214786")
+      stub_catalog(bib_id: "991234563506421")
+      stub_catalog(bib_id: "9972147863506421")
       stub_catalog(bib_id: "99125378001906421")
       stub_findingaid(pulfa_id: "C0652_c0383")
       # Don't stub the call for the Alma version of this bibid to ensure it
       # doesn't refresh metadata.
-      r1 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["123456"])
-      r2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["7214786"])
+      r1 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["991234563506421"])
+      r2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["9972147863506421"])
       r3 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["991234563506421"])
       r4 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: ["C0652_c0383"])
       r5 = FactoryBot.create_for_repository(:scanned_resource)

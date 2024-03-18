@@ -4,14 +4,14 @@ require "rails_helper"
 describe PulMetadataServices::BibRecord do
   subject(:record) { described_class.new(source) }
 
-  let(:bib_id) { "1160682" }
+  let(:bib_id) { "9911606823506421" }
   let(:source) { file_fixture("files/catalog/#{bib_id}.mrx").read }
 
   before do
-    stub_catalog(bib_id: "1160682")
-    stub_catalog(bib_id: "7214786")
-    stub_catalog(bib_id: "345682")
-    stub_catalog(bib_id: "10068705")
+    stub_catalog(bib_id: "9911606823506421")
+    stub_catalog(bib_id: "9972147863506421")
+    stub_catalog(bib_id: "993456823506421")
+    stub_catalog(bib_id: "99100687053506421")
   end
 
   describe "#formatted_fields_as_array" do
@@ -36,7 +36,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "using the 650 field" do
-      let(:bib_id) { "345682" }
+      let(:bib_id) { "993456823506421" }
 
       it "respects the separator option" do
         fields = ["650"]
@@ -52,7 +52,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with linked fields" do
-      let(:bib_id) { "1160682b" }
+      let(:bib_id) { "9911606823506421b" }
 
       it "extracts the values from the linked fields" do
         expect(record.formatted_fields_as_array(fields)).to include "test uniform title"
@@ -83,7 +83,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with linked fields" do
-      let(:bib_id) { "1160682b" }
+      let(:bib_id) { "9911606823506421b" }
 
       it "gets the other titles" do
         expect(record.alternative_titles).to include "פסין, אהרן יהושע."
@@ -110,14 +110,14 @@ describe PulMetadataServices::BibRecord do
   end
 
   describe "#contributors" do
-    let(:bib_id) { "345682" }
+    let(:bib_id) { "993456823506421" }
 
     it "extracts the contributor names for the resource" do
       expect(record.contributors).to eq ["White, Michael M.", "Smith, Bob F."]
     end
 
     context "when the field is linked" do
-      let(:bib_id) { "345682b" }
+      let(:bib_id) { "993456823506421b" }
 
       it "extracts the values from the linked field" do
         expect(record.contributors).to include "test linked contributor"
@@ -131,7 +131,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with non-latin characters" do
-      let(:bib_id) { "7214786" }
+      let(:bib_id) { "9972147863506421" }
       it "includes the 880 version if there is one" do
         expect(record.creator).to eq ["Pesin, Aharon Yehoshuʻa.", "פסין, אהרן יהושע."]
       end
@@ -157,14 +157,14 @@ describe PulMetadataServices::BibRecord do
   end
 
   describe "#parts" do
-    let(:bib_id) { "345682" }
+    let(:bib_id) { "993456823506421" }
 
     it "retrieves 7xxs with ts" do
       expect(record.parts).to include "Jones, Martha. The doctor's daughter."
     end
 
     context "with a 740 field" do
-      let(:bib_id) { "10068705" }
+      let(:bib_id) { "99100687053506421" }
 
       it "retrieves 740 field values" do
         expect(record.parts).to eq ["Price list 1943"]
@@ -184,7 +184,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with a non-English language code" do
-      let(:bib_id) { "7214786" }
+      let(:bib_id) { "9972147863506421" }
 
       it "extracts the language code" do
         expect(record.language_codes).to eq ["heb"]
@@ -192,7 +192,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with multiple language codes" do
-      let(:bib_id) { "345682" }
+      let(:bib_id) { "993456823506421" }
 
       it "extracts the language codes" do
         expect(record.language_codes).to eq ["eng", "dut"]
@@ -200,7 +200,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with three-character language codes" do
-      let(:bib_id) { "345682c" }
+      let(:bib_id) { "993456823506421c" }
 
       it "extracts each language code" do
         expect(record.language_codes).to eq ["eng", "dut", "lat", "ave", "eus", "bre"]
@@ -209,14 +209,14 @@ describe PulMetadataServices::BibRecord do
   end
 
   describe "#provenance" do
-    let(:bib_id) { "1160682" }
+    let(:bib_id) { "9911606823506421" }
     it "extracts the provenance" do
       expect(record.provenance).to eq ["test provenance"]
     end
   end
 
   describe "#rights" do
-    let(:bib_id) { "345682" }
+    let(:bib_id) { "993456823506421" }
     it "extracts the rights" do
       expect(record.rights).to eq ["test rights"]
     end
@@ -229,7 +229,7 @@ describe PulMetadataServices::BibRecord do
   end
 
   describe "#series" do
-    let(:bib_id) { "10068705" }
+    let(:bib_id) { "99100687053506421" }
     it "extracts the series" do
       expect(record.series).to eq ["volume"]
     end
@@ -241,7 +241,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with multiple titles" do
-      let(:bib_id) { "7214786" }
+      let(:bib_id) { "9972147863506421" }
 
       it "extracts the values" do
         expect(record.title).to eq [
@@ -252,7 +252,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with a linked field" do
-      let(:bib_id) { "7214786" }
+      let(:bib_id) { "9972147863506421" }
       let(:include_initial_article) { false }
 
       it "extracts the values without an initial article" do
@@ -264,7 +264,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with only a 246 field" do
-      let(:bib_id) { "4609321b" }
+      let(:bib_id) { "9946093213506421b" }
 
       it "extracts the values" do
         expect(record.title).to eq ["Bible. Latin. Vulgate. 1456."]
@@ -272,7 +272,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with only a linked 246 field" do
-      let(:bib_id) { "4609321c" }
+      let(:bib_id) { "9946093213506421c" }
 
       it "extracts the values" do
         expect(record.title).to eq ["Bible. Latin. Vulgate. 1456.", "פסין, אהרן יהושע."]
@@ -292,7 +292,7 @@ describe PulMetadataServices::BibRecord do
     end
 
     context "with a linked field" do
-      let(:bib_id) { "1160682b" }
+      let(:bib_id) { "9911606823506421b" }
       it "also extracts any fields linked to 505 fields" do
         expect(record.contents).to include "= test linked contents"
       end
