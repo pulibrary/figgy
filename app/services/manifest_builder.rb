@@ -277,8 +277,6 @@ class ManifestBuilder
           "application/xml; schema=pbcore",
           "application/json; charset=ISO-8859-1"
         ]
-        # TODO-video: Remove this when Video's released to production.
-        ignore_list << "video/mp4" unless Figgy.video_manifests_enabled?
         (ignore_list & Array.wrap(mime_type)).empty?
       end
 
