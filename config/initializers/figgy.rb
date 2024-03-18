@@ -49,11 +49,6 @@ module Figgy
     config["pulfalight_unpublished_token"]
   end
 
-  # TODO-video: Remove this when Video's released to production.
-  def video_manifests_enabled?
-    config["video_manifests_enabled"]
-  end
-
   private
 
     def config_yaml
@@ -61,5 +56,5 @@ module Figgy
     end
 
     module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
-    module_function :global_protect_ips, :all_environment_config, :index_read_only?, :pulfalight_unpublished_token, :video_manifests_enabled?
+    module_function :global_protect_ips, :all_environment_config, :index_read_only?, :pulfalight_unpublished_token
 end

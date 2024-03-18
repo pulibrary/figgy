@@ -15,18 +15,4 @@ RSpec.describe Figgy do
       end
     end
   end
-
-  # TODO-video: Remove this when Video's released to production.
-  describe ".video_manifests_enabled?" do
-    context "when configured to be true" do
-      it "returns true" do
-        allow(described_class.config).to receive(:[]).with("video_manifests_enabled").and_return(false)
-
-        expect(described_class.video_manifests_enabled?).to eq false
-      end
-      it "is true in test by default" do
-        expect(described_class.video_manifests_enabled?).to eq true
-      end
-    end
-  end
 end
