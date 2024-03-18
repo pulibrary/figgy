@@ -71,7 +71,7 @@ class AvDerivativeService
 
   def generate_hls_derivatives(dir)
     _stdout, _stderr, status =
-      Open3.capture3("ffmpeg", "-y", "-i", file_object.disk_path.to_s, "-hls_list_size", "0", "-hls_time", "10", "-f", "hls", "-codec:a", "libmp3lame", dir.join("hls.m3u8").to_s)
+      Open3.capture3("ffmpeg", "-y", "-i", file_object.disk_path.to_s, "-hls_list_size", "0", "-hls_time", "10", "-f", "hls", "-codec:a", "libmp3lame", "-muxdelay", "0", dir.join("hls.m3u8").to_s)
     return unless status.success?
     change_set.files = Dir[dir.join("*.ts")].map do |file|
       build_file(file, filename: Pathname.new(file).basename, partial: true)
