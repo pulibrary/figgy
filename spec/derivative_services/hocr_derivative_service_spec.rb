@@ -27,6 +27,15 @@ RSpec.describe HocrDerivativeService do
   describe "#valid?" do
     subject(:valid_file) { derivative_service.new(id: valid_change_set.id) }
 
+    context "when given a parent without an hocr_language set" do
+      let(:scanned_resource) do
+        change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new(ocr_language: []), files: [file]))
+      end
+      it "is invalid" do
+        is_expected.not_to be_valid
+      end
+    end
+
     context "when given a tiff mime_type" do
       it { is_expected.to be_valid }
     end
