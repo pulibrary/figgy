@@ -13,6 +13,14 @@ RSpec.describe IngestFolderJob do
       end
     end
 
+    context "when given a multi-volume work root with id-looking children" do
+      it "ingests as a mvw" do
+        stub_catalog(bib_id: "991234563506421")
+        stub_catalog(bib_id: "10296", status: 404)
+        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "mvw_small_ids", "991234563506421"))
+      end
+    end
+
     context "when given a single folder with TIFFs and a JPEG to ingest into" do
       it "ingests" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
