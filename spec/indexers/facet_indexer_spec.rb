@@ -35,7 +35,7 @@ RSpec.describe FacetIndexer do
       end
 
       it "handles an empty date created" do
-        bib_id = "00100017903506421"
+        bib_id = "99001000179035064213506421"
         stub_catalog(bib_id: bib_id)
         scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: bib_id, import_metadata: true)
 

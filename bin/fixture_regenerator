@@ -28,10 +28,10 @@ end
 # functionality.
 def skipped_records
   [
-    "1160682", # Example for custom titles/authors
-    "345682", # Example for custom rights.
-    "10068705", # Example for 'parts' in 740 field.
-    "2068747" # Example for Cicognara CSV ingest - has since changed from cico: to dcl: since it's done in production.
+    "9911606823506421", # Example for custom titles/authors
+    "993456823506421", # Example for custom rights.
+    "99100687053506421", # Example for 'parts' in 740 field.
+    "9920687473506421" # Example for Cicognara CSV ingest - has since changed from cico: to dcl: since it's done in production.
   ]
 end
 

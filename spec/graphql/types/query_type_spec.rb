@@ -48,24 +48,24 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return a resource by its bibid" do
-        stub_catalog(bib_id: "7214786")
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [scanned_resource.id]
+        expect(type.resources_by_bibid(bib_id: "9972147863506421").map(&:id)).to eq [scanned_resource.id]
       end
 
       it "can return a raster resource by its bibid" do
-        stub_catalog(bib_id: "7214786")
-        raster_resource = FactoryBot.create_for_repository(:raster_resource, source_metadata_identifier: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
+        raster_resource = FactoryBot.create_for_repository(:raster_resource, source_metadata_identifier: "9972147863506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [raster_resource.id]
+        expect(type.resources_by_bibid(bib_id: "9972147863506421").map(&:id)).to eq [raster_resource.id]
       end
 
       it "can return a vector resource by its bibid" do
-        stub_catalog(bib_id: "7214786")
-        vector_resource = FactoryBot.create_for_repository(:vector_resource, source_metadata_identifier: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
+        vector_resource = FactoryBot.create_for_repository(:vector_resource, source_metadata_identifier: "9972147863506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_bibid(bib_id: "7214786").map(&:id)).to eq [vector_resource.id]
+        expect(type.resources_by_bibid(bib_id: "9972147863506421").map(&:id)).to eq [vector_resource.id]
       end
     end
 
@@ -75,10 +75,10 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_catalog(bib_id: "7214786")
-        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_bibid(bib_id: "7214786")).to eq []
+        expect(type.resources_by_bibid(bib_id: "9972147863506421")).to eq []
       end
     end
   end
@@ -93,12 +93,12 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return resources by its bibid" do
-        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
         stub_catalog(bib_id: "9985434293506421")
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_bibids(bib_ids: ["7214786", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
+        expect(type.resources_by_bibids(bib_ids: ["9972147863506421", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
       end
     end
 
@@ -108,12 +108,12 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
         stub_catalog(bib_id: "9985434293506421")
-        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_bibids(bib_ids: ["7214786", "9985434293506421"])).to eq []
+        expect(type.resources_by_bibids(bib_ids: ["9972147863506421", "9985434293506421"])).to eq []
       end
     end
   end
@@ -164,7 +164,7 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
         FactoryBot.create_for_repository(:coin, coin_number: 1)
         FactoryBot.create_for_repository(:coin, coin_number: 2)
         type = make_graphql_object(described_class, nil, context)
@@ -183,17 +183,17 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return a resource by its bibid" do
-        stub_catalog(bib_id: "7214786")
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_orangelight_id(id: "7214786").map(&:id)).to eq [scanned_resource.id]
+        expect(type.resources_by_orangelight_id(id: "9972147863506421").map(&:id)).to eq [scanned_resource.id]
       end
 
       # See the other alma spec in this file to convert this example to
       # using alma-style IDs but maintain the utility of the spec
       it "can return a resource by its alma ID" do
-        stub_catalog(bib_id: "7214786")
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         type = make_graphql_object(described_class, nil, context)
         expect(type.resources_by_orangelight_id(id: "9972147863506421").map(&:id)).to eq [scanned_resource.id]
       end
@@ -245,27 +245,12 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return resources by bibids" do
-        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
         stub_catalog(bib_id: "9985434293506421")
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_orangelight_ids(ids: ["7214786", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
-      end
-
-      it "can return resources by BibIDs even if some are ingested without alma IDs" do
-        stub_catalog(bib_id: "991234563506421")
-        stub_catalog(bib_id: "9985434293506421")
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421")
-        scanned_resource2 = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
-        # since the shorter bibid is no longer valid, we have to create the object
-        # with the longer bibid and then force the short id back in.
-        scanned_resource2.source_metadata_identifier = ["8543429"]
-        ChangeSetPersister.default.metadata_adapter.persister.save(resource: scanned_resource2)
-
-        type = make_graphql_object(described_class, nil, context)
-
-        expect(type.resources_by_orangelight_ids(ids: ["991234563506421", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
+        expect(type.resources_by_orangelight_ids(ids: ["9972147863506421", "9985434293506421"]).map(&:id)).to contain_exactly(scanned_resource.id, scanned_resource2.id)
       end
 
       it "can return resources by coin_ids" do
@@ -276,11 +261,11 @@ RSpec.describe Types::QueryType do
       end
 
       it "can return resources by bibid and coin_id" do
-        stub_catalog(bib_id: "7214786")
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         coin = FactoryBot.create_for_repository(:coin, coin_number: 45)
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_orangelight_ids(ids: ["7214786", "coin-45"]).map(&:id)).to contain_exactly(scanned_resource.id, coin.id)
+        expect(type.resources_by_orangelight_ids(ids: ["9972147863506421", "coin-45"]).map(&:id)).to contain_exactly(scanned_resource.id, coin.id)
       end
     end
 
@@ -290,12 +275,12 @@ RSpec.describe Types::QueryType do
       end
 
       it "returns nothing" do
-        stub_catalog(bib_id: "7214786")
+        stub_catalog(bib_id: "9972147863506421")
         stub_catalog(bib_id: "9985434293506421")
-        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "7214786")
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9972147863506421")
         FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
         type = make_graphql_object(described_class, nil, context)
-        expect(type.resources_by_orangelight_ids(ids: ["7214786", "9985434293506421"])).to eq []
+        expect(type.resources_by_orangelight_ids(ids: ["9972147863506421", "9985434293506421"])).to eq []
       end
     end
   end

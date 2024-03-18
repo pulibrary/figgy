@@ -319,14 +319,14 @@ RSpec.describe MarcRecordEnhancer do
       ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter)
     end
     let(:resource) do
-      r = FactoryBot.build(:scanned_resource, source_metadata_identifier: "2085282")
+      r = FactoryBot.build(:scanned_resource, source_metadata_identifier: "9920852823506421")
       change_set_persister.save(change_set: ScannedResourceChangeSet.new(r))
     end
     let(:marc_record) { MARC::Record.new }
     let(:enhancer) { described_class.new(marc: marc_record, resource: resource) }
     before do
-      stub_catalog(bib_id: "2085282")
-      stub_catalog(bib_id: "2085282", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
+      stub_catalog(bib_id: "9920852823506421")
+      stub_catalog(bib_id: "9920852823506421", content_type: CatalogStubbing::CONTENT_TYPE_MARC_XML)
     end
 
     context "when the record had the cico number in a 510 but with a suffix" do

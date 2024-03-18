@@ -26,7 +26,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
       it "returns only items that are a member of that set" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
         create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id)
-        create_scanned_resource(source_metadata_identifier: "123456", collection_id: nil)
+        create_scanned_resource(source_metadata_identifier: "991234563506421", collection_id: nil)
 
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")
 
@@ -36,7 +36,7 @@ RSpec.describe OAI::Figgy::ValkyrieProviderModel do
 
       it "doesn't return volumes" do
         collection = FactoryBot.create_for_repository(:collection, slug: "cico")
-        parent = create_scanned_resource(source_metadata_identifier: "123456", collection_id: collection.id)
+        parent = create_scanned_resource(source_metadata_identifier: "991234563506421", collection_id: collection.id)
         create_scanned_resource(source_metadata_identifier: "9985434293506421", collection_id: collection.id, append_id: parent.id)
 
         output = described_class.new.find_all(set: "cico", metadata_prefix: "marc21")

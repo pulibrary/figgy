@@ -95,7 +95,7 @@ RSpec.describe OaiController do
     context "when requesting oai_dc" do
       context "for a multi-volume work / bibliographic record" do
         it "returns the record with desired fields populated" do
-          bib_id = "123456"
+          bib_id = "991234563506421"
           collection = FactoryBot.create_for_repository(:collection, slug: "C0022")
           file1 = fixture_file_upload("files/abstract.tiff", "image/tiff")
           file2 = fixture_file_upload("files/abstract.tiff", "image/tiff")

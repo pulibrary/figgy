@@ -14,23 +14,13 @@ class FindBySourceMetadataIdentifier
   # @param source_metadata_identifier [String]
   # @return [Array<Valkyrie::Resource>] Resources which have the identifier.
   def find_by_source_metadata_identifier(source_metadata_identifier:)
-    result = query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: source_metadata_identifier)
-    # If given a BibID which is for Alma, see if there's a non-Alma input.
-    if result.blank?
-      non_alma_id = source_metadata_identifier.match(/^99([\d]*)3506421/)&.[](1)
-      return result if non_alma_id.nil?
-      return query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: non_alma_id)
-    end
-    result
+    query_service.custom_queries.find_by_property(property: :source_metadata_identifier, value: source_metadata_identifier)
   end
 
   # @param source_metadata_identifiers [Array<String>]
   # @return [Array<Valkyrie::Resource>] Resources which match the given
   #   identifiers.
   def find_by_source_metadata_identifiers(source_metadata_identifiers:)
-    source_metadata_identifiers = source_metadata_identifiers.flat_map do |alma_id|
-      [alma_id, alma_id.match(/^99([\d]*)3506421/)&.[](1)]
-    end.select(&:present?)
     query_service.custom_queries.find_many_by_property(property: :source_metadata_identifier, values: source_metadata_identifiers).sort_by do |resource|
       source_metadata_identifiers.index(resource.source_metadata_identifier&.first)
     end

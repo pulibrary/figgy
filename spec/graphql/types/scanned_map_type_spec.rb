@@ -9,7 +9,7 @@ RSpec.describe Types::ScannedMapType do
   end
 
   subject(:type) { make_graphql_object(described_class, scanned_map, { ability: ability }) }
-  let(:bibid) { "5144620" }
+  let(:bibid) { "9951446203506421" }
   let(:scanned_map) do
     FactoryBot.create_for_repository(
       :scanned_map,

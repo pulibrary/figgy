@@ -13,6 +13,14 @@ RSpec.describe IngestFolderJob do
       end
     end
 
+    context "when given a multi-volume work root with id-looking children" do
+      it "ingests as a mvw" do
+        stub_catalog(bib_id: "991234563506421")
+        stub_catalog(bib_id: "10296", status: 404)
+        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "mvw_small_ids", "991234563506421"))
+      end
+    end
+
     context "when given a single folder with TIFFs and a JPEG to ingest into" do
       it "ingests" do
         resource = FactoryBot.create_for_repository(:scanned_resource)
@@ -25,8 +33,8 @@ RSpec.describe IngestFolderJob do
 
     context "when using an unsupported class for ingesting files" do
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-      let(:bib) { "4609321" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:bib) { "9946093213506421" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       before do
@@ -58,9 +66,9 @@ RSpec.describe IngestFolderJob do
     context "with a directory of Scanned TIFFs" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:local_id) { "cico:xyz" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
 
@@ -94,9 +102,9 @@ RSpec.describe IngestFolderJob do
     context "with a SimpleChangeSet" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
-      let(:bib) { "4609321" }
+      let(:bib) { "9946093213506421" }
       let(:local_id) { "cico:xyz" }
-      let(:replaces) { "pudl0001/4609321/331" }
+      let(:replaces) { "pudl0001/9946093213506421/331" }
       let(:query_service) { metadata_adapter.query_service }
       let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
       let(:class_name) { "ScannedResource" }

@@ -3,9 +3,9 @@ require "rails_helper"
 
 RSpec.describe RemoteRecord, type: :model do
   describe ".retrieve" do
-    context "with a Voyager record ID" do
+    context "with an Alma record ID" do
       it "constructs a RemoteRecord instance" do
-        expect(described_class.retrieve("4609321")).to be_a described_class
+        expect(described_class.retrieve("9946093213506421")).to be_a described_class
       end
     end
 
@@ -17,12 +17,6 @@ RSpec.describe RemoteRecord, type: :model do
   end
 
   describe ".catalog?" do
-    context "with a Voyager record ID" do
-      it "validates that this is a bib. ID" do
-        expect(described_class.catalog?("4609321")).to be_truthy
-      end
-    end
-
     context "with an Alma ID" do
       it "is true" do
         expect(described_class.catalog?("994241263506421")).to be_truthy
@@ -57,7 +51,7 @@ RSpec.describe RemoteRecord, type: :model do
     end
 
     it "is false for bib ids" do
-      expect(described_class.pulfa?("123456")).to be false
+      expect(described_class.pulfa?("991234563506421")).to be false
     end
   end
 
@@ -96,7 +90,7 @@ RSpec.describe RemoteRecord, type: :model do
   describe ".source_metadata_url" do
     context "with a Voyager record ID" do
       it "provides a link to the catalog record" do
-        expect(described_class.source_metadata_url("4609321")).to eq "https://catalog.princeton.edu/catalog/4609321.marcxml"
+        expect(described_class.source_metadata_url("9946093213506421")).to eq "https://catalog.princeton.edu/catalog/9946093213506421.marcxml"
       end
     end
 
@@ -110,7 +104,7 @@ RSpec.describe RemoteRecord, type: :model do
   describe ".record_url" do
     context "with a Voyager record ID" do
       it "validates that this is not a bib. ID" do
-        expect(described_class.record_url("4609321")).to eq "https://catalog.princeton.edu/catalog/4609321"
+        expect(described_class.record_url("9946093213506421")).to eq "https://catalog.princeton.edu/catalog/9946093213506421"
       end
     end
 

@@ -130,7 +130,7 @@ RSpec.describe ScannedMapsController, type: :controller do
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       let(:params) do
         {
-          source_metadata_identifier: "5144620",
+          source_metadata_identifier: "9951446203506421",
           coverage: coverage.to_s,
           rights_statement: rights_statement,
           visibility: visibility
@@ -138,7 +138,7 @@ RSpec.describe ScannedMapsController, type: :controller do
       end
 
       before do
-        stub_catalog(bib_id: "5144620")
+        stub_catalog(bib_id: "9951446203506421")
       end
 
       it "generates a resource with a valid geoblacklight document" do

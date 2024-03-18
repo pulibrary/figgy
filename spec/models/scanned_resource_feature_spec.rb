@@ -16,9 +16,9 @@ RSpec.feature "Scanned Resources" do
   end
 
   before do
-    stub_catalog(bib_id: "4612596")
+    stub_catalog(bib_id: "9946125963506421")
     stub_catalog(bib_id: "9985434293506421")
-    change_set.source_metadata_identifier = "4612596"
+    change_set.source_metadata_identifier = "9946125963506421"
     change_set_persister.save(change_set: change_set)
     sign_in user
   end
@@ -27,7 +27,7 @@ RSpec.feature "Scanned Resources" do
     context "with scanned resources already created" do
       scenario "users see a warning if they try to use duplicate barcodes", js: true do
         visit new_scanned_resource_path
-        page.fill_in "scanned_resource_source_metadata_identifier", with: "4612596"
+        page.fill_in "scanned_resource_source_metadata_identifier", with: "9946125963506421"
         find("#scanned_resource_portion_note").click
         expect(page).to have_content "This ID is already in use"
 

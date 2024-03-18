@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe METSDocument::MODSDocument do
   subject(:mods_document) { described_class.from(mets: mets, xpath: xpath) }
 
-  let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
+  let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946093213506421-s42.mets") }
   let(:mets) { File.open(mets_file) { |f| Nokogiri::XML(f) } }
   let(:xpath) { "/mets:mets/mets:dmdSec/mets:mdWrap/mets:xmlData/mods:mods" }
 
@@ -79,7 +79,7 @@ RSpec.describe METSDocument::MODSDocument do
   end
 
   context "pudl0001" do
-    let("mets_file") { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
+    let("mets_file") { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946125963506421.mets") }
     it "returns date issued" do
       expect(mods_document.date_issued).to eq "1470,1475"
     end
@@ -219,7 +219,7 @@ RSpec.describe METSDocument::MODSDocument do
   end
 
   context "when the URIs are encoded for access conditions and restrictions" do
-    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4609321-s42.mets") }
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946093213506421-s42.mets") }
 
     describe "#access_condition" do
       it "accesses the access conditions within the MODS-encoded metadata" do
@@ -249,7 +249,7 @@ RSpec.describe METSDocument::MODSDocument do
   end
 
   describe "#abstract" do
-    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-4612596.mets") }
+    let(:mets_file) { Rails.root.join("spec", "fixtures", "mets", "pudl0001-9946125963506421.mets") }
 
     it "accesses the abstract within the MODS-encoded metadata" do
       expect(mods_document.abstract).not_to be_empty

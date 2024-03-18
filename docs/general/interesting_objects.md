@@ -10,5 +10,5 @@ Multi-volume work with lots of volumes (36 vols):
 
 Physical structure structmap:
 * Title: Biblia Latina (Gutenberg Bible)
-* Source Metadata Identifier: 4609321
+* Source Metadata Identifier: 994609321
 * https://figgy.princeton.edu/catalog/d446107a-bdfd-4a5d-803c-f315b7905bf4

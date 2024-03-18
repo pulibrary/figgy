@@ -11,7 +11,7 @@ RSpec.describe NullCharacterizationService do
   end
 
   context "with a mets file" do
-    let(:mets_file) { fixture_file_upload("mets/pudl0001-4612596.mets", "application/xml; schema=mets") }
+    let(:mets_file) { fixture_file_upload("mets/pudl0001-9946125963506421.mets", "application/xml; schema=mets") }
     describe "#valid?" do
       it "is valid" do
         resource = FactoryBot.create_for_repository(:scanned_resource, files: [mets_file])

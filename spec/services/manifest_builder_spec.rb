@@ -674,7 +674,7 @@ RSpec.describe ManifestBuilder do
     end
   end
   context "when given a scanned resource which was ingested with its mets file as an attached member" do
-    let(:file) { fixture_file_upload("mets/pudl0001-4612596.mets", "application/xml; schema=mets") }
+    let(:file) { fixture_file_upload("mets/pudl0001-9946125963506421.mets", "application/xml; schema=mets") }
     before do
       stub_catalog(bib_id: "991234563506421")
       # attach the file set

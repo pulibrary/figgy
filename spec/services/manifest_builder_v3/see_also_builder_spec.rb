@@ -10,7 +10,7 @@ RSpec.describe ManifestBuilderV3::SeeAlsoBuilder do
     let(:remote_record_response) { instance_double(Faraday::Response) }
 
     before do
-      allow(remote_record_class).to receive(:source_metadata_url).with("4609321").and_return("https://bibdata.princeton.edu/bibliographic/4609321")
+      allow(remote_record_class).to receive(:source_metadata_url).with("9946093213506421").and_return("https://bibdata.princeton.edu/bibliographic/9946093213506421")
       allow(remote_record_class).to receive(:source_metadata_url).with("AC044_c0003").and_return("https://findingaids.princeton.edu/collections/AC044/c0003.xml?scope=record")
       allow(remote_record_class).to receive(:valid?).and_return(true)
       allow(remote_record_class).to receive(:retrieve).and_return(remote_record_response)
@@ -18,17 +18,17 @@ RSpec.describe ManifestBuilderV3::SeeAlsoBuilder do
       builder.apply(manifest)
     end
 
-    context "when viewing a Scanned Resource with Voyager source ID" do
+    context "when viewing a Scanned Resource with Alma source ID" do
       let(:scanned_resource) do
         FactoryBot.create_for_repository(:scanned_resource,
-                                         source_metadata_identifier: "4609321")
+                                         source_metadata_identifier: "9946093213506421")
       end
 
       it "appends the transformed metadata to the Manifest" do
         expect(manifest["seeAlso"]).to be_a Array
         expect(manifest["seeAlso"].length).to eq(2)
         expect(manifest["seeAlso"].first).to include "id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
-        expect(manifest["seeAlso"].last).to include "id" => "https://bibdata.princeton.edu/bibliographic/4609321", "format" => "text/xml"
+        expect(manifest["seeAlso"].last).to include "id" => "https://bibdata.princeton.edu/bibliographic/9946093213506421", "format" => "text/xml"
       end
     end
 
