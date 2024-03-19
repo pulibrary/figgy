@@ -4,8 +4,11 @@ class GenerateChecksumJob < ApplicationJob
 
   def perform(file_set_id)
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
-    file_set.primary_file.checksum = file_set.primary_file.file_identifiers.map do |id|
-      MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: id))
+    file_set.preservation_targets.each do |target|
+      next if target.checksum.present?
+      target.checksum = target.file_identifiers.map do |id|
+        MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: id))
+      end
     end
     persister.save(resource: file_set)
   end

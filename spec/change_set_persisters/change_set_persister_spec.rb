@@ -1383,6 +1383,7 @@ RSpec.describe ChangeSetPersister do
 
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", output.member_ids.first.to_s, "city-#{file_set.primary_file.id}.mp4"))).to eq true
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", output.member_ids.first.to_s, "caption-#{file_set.captions.first.id}.vtt"))).to eq true
+        expect(file_set.captions.first.checksum).not_to be_blank
       end
     end
 

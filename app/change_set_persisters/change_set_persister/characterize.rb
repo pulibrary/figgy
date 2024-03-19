@@ -12,8 +12,14 @@ class ChangeSetPersister
     def run
       return if created_file_sets.blank?
       created_file_sets.each do |file_set|
-        next unless file_set.instance_of?(FileSet) && characterize?
-        ::CharacterizationJob.set(queue: change_set_persister.queue).perform_later(file_set.id.to_s)
+        next unless characterize?
+        if file_set.instance_of?(FileSet)
+          ::CharacterizationJob.set(queue: change_set_persister.queue).perform_later(file_set.id.to_s)
+        elsif change_set.resource.try(:preservation_targets)&.include?(file_set) && file_set.checksum.blank?
+          # Attaching a resource that we need to preserve, so generate
+          # checksums.
+          GenerateChecksumJob.perform_later(post_save_resource.id.to_s)
+        end
       end
     end
 
