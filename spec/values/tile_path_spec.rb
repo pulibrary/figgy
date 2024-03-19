@@ -8,25 +8,16 @@ describe TilePath do
         scanned_map1 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
         scanned_map2 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
         map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map1.id, scanned_map2.id], id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        expect(described_class.new(map_set).tilejson).to eq "https://map-tiles-test.example.com/mosaicjson/tilejson.json?id=331d70a54bd94a6580e4763c8f6b34fd"
-      end
-    end
 
-    context "in development" do
-      it "returns the direct S3 URL, bypassing redirect logic" do
-        allow(Rails.env).to receive(:development?).and_return(true)
-        allow(TileMetadataService).to receive(:new).and_return(instance_double(TileMetadataService, path: "s3://bla"))
-        scanned_map1 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
-        scanned_map2 = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
-        map_set = FactoryBot.create_for_repository(:scanned_map, member_ids: [scanned_map1.id, scanned_map2.id], id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        expect(described_class.new(map_set).tilejson).to eq "https://map-tiles-test.example.com/mosaicjson/tilejson.json?url=s3://bla"
+        expect(described_class.new(map_set).tilejson).to eq "https://map-tiles-test.example.com/331d70a54bd94a6580e4763c8f6b34fd/mosaicjson/tilejson.json"
       end
     end
 
     context "with a ScannedMap that has a child RasterResource" do
       it "returns a cog tilejson path" do
-        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children, id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        expect(described_class.new(scanned_map).tilejson).to eq "https://map-tiles-test.example.com/cog/tilejson.json?id=331d70a54bd94a6580e4763c8f6b34fd"
+        scanned_map = FactoryBot.create_for_repository(:scanned_map_with_raster_children)
+
+        expect(described_class.new(scanned_map).tilejson).to eq "https://map-tiles-test.example.com/testgeo/cog/tilejson.json"
       end
     end
 
@@ -34,7 +25,8 @@ describe TilePath do
       it "returns a cog tilejson path" do
         file_set = FactoryBot.create_for_repository(:geo_raster_cloud_file)
         raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id], id: "331d70a5-4bd9-4a65-80e4-763c8f6b34fd")
-        expect(described_class.new(raster).tilejson).to eq "https://map-tiles-test.example.com/cog/tilejson.json?id=331d70a54bd94a6580e4763c8f6b34fd"
+
+        expect(described_class.new(raster).tilejson).to eq "https://map-tiles-test.example.com/testgeo/cog/tilejson.json"
       end
     end
   end

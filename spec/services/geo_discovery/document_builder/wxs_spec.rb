@@ -17,6 +17,7 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
 
   before do
     allow(GeoserverPublishJob).to receive(:perform_later)
+    allow(MosaicJob).to receive(:perform_later)
     change_set_persister.save(change_set: change_set)
   end
 

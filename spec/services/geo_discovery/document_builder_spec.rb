@@ -29,6 +29,10 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
   let(:file) { fixture_file_upload("files/vector/shapefile.zip") }
   let(:metadata_file) { fixture_file_upload("files/geo_metadata/iso.xml") }
 
+  before do
+    allow(MosaicJob).to receive(:perform_later)
+  end
+
   describe "vector resource", run_real_characterization: true do
     before do
       allow(GeoserverPublishJob).to receive(:perform_later)
@@ -459,8 +463,8 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
         geo_work
         id = geo_work.id.to_s.delete("-")
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/mosaicjson/WMTSCapabilities.xml?id=#{id}"
-        expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to eq "https://map-tiles-test.example.com/mosaicjson/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png?id=#{id}"
+        expect(refs["http://www.opengis.net/def/serviceType/ogc/wmts"]).to eq "https://map-tiles-test.example.com/#{id}/mosaicjson/WMTSCapabilities.xml"
+        expect(refs["https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames"]).to eq "https://map-tiles-test.example.com/#{id}/mosaicjson/tiles/WebMercatorQuad/{z}/{x}/{y}@1x.png"
       end
 
       context "with a child resource" do

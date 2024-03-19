@@ -16,6 +16,7 @@ RSpec.describe GeoserverPublishService do
 
   before do
     allow(GeoserverPublishJob).to receive(:perform_later)
+    allow(MosaicJob).to receive(:perform_later)
   end
 
   describe "#delete" do

@@ -185,12 +185,25 @@ class RasterResourceDerivativeService
       end
     end
 
+    # The mosaic needs to be regenerated if any part of a MapSet's hierarchy changes, so
+    # for any map resource look up in its hierarchy for the root node and regenerate the Mosaic
+    # if it should have one.
     def generate_mosaic
-      parent = resource.decorate.parent
-      grandparent = parent.parents.first
-      return unless grandparent.is_a? RasterResource
-      return unless grandparent.decorate.public_readable_state?
-      MosaicJob.perform_later(grandparent.id.to_s)
+      ancestor_resource = find_ancestor(resource)
+      return unless ancestor_resource.is_a?(RasterResource) || ancestor_resource.is_a?(ScannedMap)
+      fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: ancestor_resource.id)
+      MosaicJob.perform_later(resource_id: ancestor_resource.id.to_s, fingerprint: fingerprint)
+    end
+
+    # Recursively find a resource's base ancestor
+    # E.g. Finds the MapSet in this chain: FileSet -> RasterResource -> ScannedMap -> ScannedMap*
+    def find_ancestor(resource)
+      parent = resource.decorate.parents&.first
+      if parent
+        find_ancestor(parent)
+      else
+        resource
+      end
     end
 
     def create_local_derivatives

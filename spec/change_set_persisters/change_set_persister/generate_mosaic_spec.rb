@@ -3,6 +3,7 @@ require "rails_helper"
 
 RSpec.describe ChangeSetPersister::GenerateMosaic do
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:query_service) { adapter.query_service }
   let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
 
@@ -42,19 +43,8 @@ RSpec.describe ChangeSetPersister::GenerateMosaic do
         change_set = ChangeSet.for(raster_set)
         change_set.validate(state: "complete")
         change_set_persister.save(change_set: change_set)
-
-        expect(MosaicJob).to have_received(:perform_later).with(raster_set.id.to_s)
-      end
-    end
-
-    context "with a completed RasterSet with raster files" do
-      it "does not run a MosaicJob" do
-        raster_set = FactoryBot.create_for_repository(:raster_set_with_files, state: "complete")
-        change_set = ChangeSet.for(raster_set)
-        change_set.validate(title: "new title")
-        change_set_persister.save(change_set: change_set)
-
-        expect(MosaicJob).not_to have_received(:perform_later)
+        fingerprint = query_service.custom_queries.mosaic_fingerprint_for(id: raster_set.id)
+        expect(MosaicJob).to have_received(:perform_later).with(resource_id: raster_set.id.to_s, fingerprint: fingerprint)
       end
     end
 
