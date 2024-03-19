@@ -185,6 +185,9 @@ class RasterResourceDerivativeService
       end
     end
 
+    # The mosaic needs to be regenerated if any part of a MapSet's hierarchy changes, so
+    # for any map resource look up in its hierarchy for the root node and regenerate the Mosaic
+    # if it should have one.
     def generate_mosaic
       ancestor_resource = find_ancestor(resource)
       return unless ancestor_resource.is_a?(RasterResource) || ancestor_resource.is_a?(ScannedMap)
