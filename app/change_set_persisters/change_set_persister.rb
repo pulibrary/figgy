@@ -54,7 +54,8 @@ class ChangeSetPersister
         PreserveResource,
         ReorganizeCollection,
         UpdateAspaceDao,
-        CleanupDeletedFiles
+        CleanupDeletedFiles,
+        Characterize
       ],
       after_update_commit: [
         ReindexCollectionMembers,
@@ -82,7 +83,6 @@ class ChangeSetPersister
         CleanupPreservation
       ],
       after_commit: [
-        Characterize,
         PublishMessage::Factory.new(operation: :create)
       ]
     }
