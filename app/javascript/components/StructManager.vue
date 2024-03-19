@@ -112,6 +112,8 @@ export default {
       end_nodes: [],
       cardPixelWidth: 300,
       captionPixelPadding: 9,
+      ga: null,
+      s: null,
     }
   },
   computed: {
@@ -130,16 +132,8 @@ export default {
         viewingHint: member.viewingHint
       }))
     },
-    convertFromFiggyStructure: function(structure) {
-      let nodes = structure.nodes
-      this.generateUniqueIds(nodes)
-      console.log(nodes)
-    },
     selectedTotal () {
       return this.gallery.selected.length
-    },
-    isMultiVolume () {
-      return this.$store.getters.isMultiVolume
     },
     ...mapState({
       resource: state => state.ordermanager.resource,
@@ -174,7 +168,9 @@ export default {
   beforeMount: function () {
     if (this.resourceObject) {
       // if props are passed in set the resource on mount
+      this.resourceId = this.resourceObject.id
       this.$store.commit('SET_RESOURCE', this.resourceObject)
+      this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADED')
     } else {
       let resource = { id: this.resourceId }
       this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING')
@@ -184,11 +180,11 @@ export default {
   methods: {
     filterGallery: function (newVal) {
       if (this.structure) {
-        // if props are passed in
+        // If structure prop is provided,
         // convert to figgy-friendly structure
         let structureFolders = this.renamePropertiesForLoad(this.structure.nodes)
 
-        // reconcile unstructured_objects with structured
+        // Reconcile unstructured_objects with structured
         // Loop through each galleryItem object and
         // If found, replace the object that has the same id in structure_folders,
         // Then remove it from the galleryItems list and update the state
@@ -196,6 +192,7 @@ export default {
         let ga = JSON.parse(JSON.stringify(this.galleryItems))
 
         function replaceObjects() {
+
           for (let i = 0; i < ga.length; i++) {
             for (let j = 0; j < structureFolders.length; j++) {
               if (replaceObjectRecursively(ga[i], structureFolders[j])) {
@@ -231,16 +228,19 @@ export default {
         // Call the function to replace matching objects
         replaceObjects();
 
-        let s = {
+        // setting the newly filtered values as component data properties makes this
+        // function much easier to test
+        this.ga = ga;
+        this.s = {
           id: this.resourceId,
           folders: structureFolders,
           label: this.structure.label[0],
         }
 
-        this.$store.commit('SET_STRUCTURE', s)
-        this.$store.commit('SET_GALLERY', ga)
+        this.$store.commit('SET_STRUCTURE', this.s)
+        this.$store.commit('SET_GALLERY', this.ga)
       } else {
-        // load empty structure
+        // load empty/default structure
       }
     },
     generateId: function () {

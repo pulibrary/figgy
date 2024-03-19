@@ -1,0 +1,66 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StructManager.vue > has the expected html structure 1`] = `
+<div
+  class="lux-structManager"
+  data-v-5aca45d1=""
+>
+  <transition-stub
+    data-v-5aca45d1=""
+    name="fade"
+  >
+    <!---->
+  </transition-stub>
+  <!---->
+  <!---->
+  <toolbar-stub
+    data-v-5aca45d1=""
+    type="div"
+  />
+  <!---->
+  <div
+    class="lux-sidePanel"
+    data-v-5aca45d1=""
+  >
+    <div
+      class="panelHeader"
+      data-v-5aca45d1=""
+    >
+      <h2
+        class="lux-heading h6"
+        data-v-5aca45d1=""
+      >
+        Logical Structure
+      </h2>
+    </div>
+    <tree-stub
+      data-v-5aca45d1=""
+      id=""
+      jsondata="[object Object]"
+      selected="C0614_c00002"
+    />
+  </div>
+  <div
+    class="lux-galleryPanel"
+    data-v-5aca45d1=""
+  >
+    <div
+      class="panelHeader"
+      data-v-5aca45d1=""
+    >
+      <h2
+        class="lux-heading h6"
+        data-v-5aca45d1=""
+      >
+        Unstructured Files
+      </h2>
+    </div>
+    <struct-gallery-stub
+      cardpixelwidth="300"
+      class="lux-galleryWrapper"
+      data-v-5aca45d1=""
+      galleryitems="[object Object],[object Object],[object Object]"
+    />
+  </div>
+</div>
+`;
