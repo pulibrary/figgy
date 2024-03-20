@@ -135,7 +135,7 @@ const actions = {
           // Successful response
           console.log('Successful Save!')
           context.commit('SAVED_STRUCTURE_STATE', 'SAVED');
-          context.commit('APPLY_TREE_STATE');
+          // context.commit('APPLY_TREE_STATE');
         } else {
           // Handle errors here
           console.error('Error:', xhr.status, xhr.statusText);

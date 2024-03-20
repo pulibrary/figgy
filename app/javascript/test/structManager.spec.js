@@ -241,8 +241,6 @@ let store = new Vuex.Store({
   },
 })
 
-const generateIdStub = vi.fn(() => '1234567')
-
 describe("StructManager.vue", () => {
   beforeEach(() => {
 
@@ -332,8 +330,13 @@ describe("StructManager.vue", () => {
     expect(wrapper.vm.galleryItems[0]['mediaUrl']).toEqual('a1_service/full/300,/0/default.jpg')
   })
 
+  it("generates a 7-digit random id for tree nodes", () => {
+    const id = wrapper.vm.generateId()
+    expect(id.length).toEqual(7)
+  })
+
   it("updates the state of the tree and gallery after resource data is loaded", () => {
-    //
+    const generateIdStub = vi.fn(() => '1234567')
     wrapper.setMethods({ generateId: generateIdStub })
     // the loading of data should trigger the watcher which calls wrapper.vm.filterGallery(true),
     // but we can test the function
@@ -343,13 +346,20 @@ describe("StructManager.vue", () => {
     expect(wrapper.vm.s).toEqual(tree_structure)
   })
 
-  // it("generates an 8-digit random id for tree nodes", () => {
-  //   expect(wrapper.vm.generateId).toBe(null)
-  // })
-  //
-  // it("renames figgy object properties for use in tree component", () => {
-  //   expect(wrapper.vm.generateId).toBe(null)
-  // })
+  it("displays an alert with a success message when the structure is SAVED", () => {
+    const savedStub = vi.fn(() => true)
+    wrapper.setMethods({ saved: savedStub })
+    wrapper.vm.saved
+    expect(wrapper.text()).toContain('Your work has been saved!')
+  })
+
+  it("does not display an alert with an error message when the state is NOT SAVED", () => {
+    const saveErrorStub = vi.fn(() => true)
+    wrapper.setMethods({ saveError: saveErrorStub })
+    wrapper.vm.saveError
+    expect(wrapper.text()).not.toContain('Sorry, there was a problem saving your work!')
+  })
+
   //
   // it("deselects tree items when gallery item is clicked", () => {
   //   expect(wrapper.vm.galleryClicked).toBe(null)
