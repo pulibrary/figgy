@@ -2,7 +2,7 @@
   <div class="lux-structManager">
     <transition name="fade">
       <div
-        v-if="loading"
+        v-if="saving"
         class="lux-overlay"
       >
         <loader size="medium" />
@@ -14,6 +14,7 @@
       type="alert"
       autoclear
       dismissible
+      class="alert"
     >
       Your work has been saved!
     </alert>
@@ -23,6 +24,7 @@
       type="alert"
       autoclear
       dismissible
+      class="alert"
     >
       Sorry, there was a problem saving your work!
     </alert>
@@ -156,8 +158,8 @@ export default {
     saveError () {
       return this.tree.saveState === 'ERROR'
     },
-    isLoading () {
-      return this.resource.saveState === 'SAVING'
+    saving () {
+      return this.tree.saveState === 'SAVING'
     },
   },
   watch: {
@@ -247,6 +249,8 @@ export default {
       return Math.floor(Math.random() * 10000000).toString()
     },
     removeProxyProperty: function (arr) {
+      // we are not able to recursively remove the proxy property from the figgy structure
+      // so we pass the tree structure through this function before storing it
       return arr.map(obj => {
         const newObj = {};
         for (const key in obj) {
@@ -303,6 +307,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
+.lux-toolbar {
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+
+.lux-alert {
+  position: fixed;
+  top: 100px;
+}
 
 .deep-zoom {
   // position: absolute;
