@@ -233,7 +233,7 @@ export default {
         this.ga = ga;
         this.s = {
           id: this.resourceId,
-          folders: structureFolders,
+          folders: this.removeProxyProperty(structureFolders),
           label: this.structure.label[0],
         }
 
@@ -245,6 +245,22 @@ export default {
     },
     generateId: function () {
       return Math.floor(Math.random() * 10000000).toString()
+    },
+    removeProxyProperty: function (arr) {
+      return arr.map(obj => {
+        const newObj = {};
+        for (const key in obj) {
+          if (key === "proxy") {
+            delete obj.proxy
+          }
+          if (key === "folders") {
+            newObj["folders"] = this.removeProxyProperty(obj[key])
+          } else {
+            newObj[key] = obj[key]
+          }
+        }
+        return newObj
+      })
     },
     renamePropertiesForLoad: function (arr) {
       const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file']
@@ -258,19 +274,19 @@ export default {
             } else {
               newObj["id"] = this.generateId()
               newObj["file"] = false
-              newObj["label"] = obj.label[0]
             }
+            newObj["label"] = obj.label[0]
             newObj["folders"] = this.renamePropertiesForLoad(obj[key])
           } else {
             if (!allowedProperties.includes(key)) {
-              delete obj[key];
+              delete obj[key]
             } else {
               newObj[key] = obj[key]
             }
           }
         }
         return newObj
-      });
+      })
     },
     galleryClicked() {
       this.$store.commit('SELECT_TREEITEM', null)
