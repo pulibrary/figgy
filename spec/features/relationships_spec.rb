@@ -64,10 +64,6 @@ RSpec.feature "Related Resources", js: true do
   end
 
   context "on a vector resource show page" do
-    before do
-      allow(GeoserverPublishJob).to receive(:perform_later)
-    end
-
     it "can attach and detach a child vector" do
       parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
       child = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))

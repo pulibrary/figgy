@@ -55,7 +55,6 @@ module GeoDiscovery
           dct_temporal_sm: temporal,
           solr_year_i: layer_year,
           layer_modified_dt: layer_modified,
-          layer_id_s: layer_id,
           dct_references_s: clean_document(references).to_json.to_s,
           layer_geom_type_s: geom_types.first,
           layer_geom_type_sm: geom_types,
@@ -80,12 +79,6 @@ module GeoDiscovery
           dct_provenance_s: held_by.first,
           dc_rights_s: rights
         }
-      end
-
-      # Use identifier as layer_id id when there is no wxs_identifier.
-      # Causes errors in Geoblacklight views.
-      def layer_id
-        wxs_identifier || identifier
       end
 
       def private_document
@@ -133,8 +126,6 @@ module GeoDiscovery
           "http://www.loc.gov/mods/v3" => mods,
           "http://schema.org/downloadUrl" => download,
           "http://schema.org/thumbnailUrl" => thumbnail,
-          "http://www.opengis.net/def/serviceType/ogc/wms" => wms_path,
-          "http://www.opengis.net/def/serviceType/ogc/wfs" => wfs_path,
           "http://iiif.io/api/image" => iiif,
           "http://iiif.io/api/presentation#manifest" => iiif_manifest,
           "http://www.opengis.net/def/serviceType/ogc/wmts" => wmts_path,

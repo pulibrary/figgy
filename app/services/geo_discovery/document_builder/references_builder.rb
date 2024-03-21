@@ -12,7 +12,6 @@ module GeoDiscovery
       # Builds service reference fields such as thumbnail and download url.
       # @param [AbstractDocument] discovery document
       def build(document)
-        document.wxs_identifier = wxs_identifier
         build_metadata_refs(document)
         build_download_refs(document)
       end
@@ -27,10 +26,7 @@ module GeoDiscovery
           document.pmtiles_path = pmtiles_path
           document.thumbnail = thumbnail
           document.url = url
-          document.wxs_identifier = wxs_identifier
-          document.wms_path = wms_path
           document.wmts_path = wmts_path
-          document.wfs_path = wfs_path
           document.xyz_path = xyz_path
         end
 
@@ -92,24 +88,6 @@ module GeoDiscovery
         # @return [String] pmtiles data url
         def pmtiles_path
           wxs.pmtiles_path
-        end
-
-        # Returns the identifier to use with WMS/WFS/WCS services.
-        # @return [String] wxs indentifier
-        def wxs_identifier
-          wxs.identifier
-        end
-
-        # Returns the wms server url.
-        # @return [String] wms server url
-        def wms_path
-          wxs.wms_path
-        end
-
-        # Returns the wfs server url.
-        # @return [String] wfs server url
-        def wfs_path
-          wxs.wfs_path
         end
 
         # Returns the wmts server url.

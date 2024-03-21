@@ -30,10 +30,6 @@ class RasterResourceDerivativeService
     @change_set ||= ChangeSet.for(resource)
   end
 
-  def build_display_file
-    IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_display, copy_before_ingest: false)
-  end
-
   def build_cloud_file
     IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_cloud_derivative,
                        copy_before_ingest: false)
@@ -60,7 +56,6 @@ class RasterResourceDerivativeService
   def create_derivatives
     run_derivatives
     create_local_derivatives
-    # Persist a second copy of the display file to the cloud.
     create_cloud_derivatives
     update_cloud_acl
     generate_mosaic
@@ -84,7 +79,7 @@ class RasterResourceDerivativeService
     return Pathname.new(file_object.disk_path) if file_object.respond_to?(:disk_path) && File.exist?(file_object.disk_path)
   end
 
-  def instructions_for_display
+  def instructions_for_cloud
     {
       input_format: primary_file.mime_type.first,
       label: :display_raster,
@@ -120,7 +115,7 @@ class RasterResourceDerivativeService
   # generates the derivatives used for local/cloud display and thumbnail files
   def run_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
-      filename, outputs: [instructions_for_display, instructions_for_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
     )
   end
 
@@ -137,10 +132,6 @@ class RasterResourceDerivativeService
     cloud_file = change_set.model.cloud_derivative_files.first
     key = cloud_file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "")
     CloudFilePermissionsService.new(resource: parent, key: key).run
-  end
-
-  def use_display
-    [Valkyrie::Vocab::PCDMUse.ServiceFile]
   end
 
   def use_thumbnail
@@ -207,16 +198,17 @@ class RasterResourceDerivativeService
     end
 
     def create_local_derivatives
-      return unless missing_local_display? && missing_thumbnail?
+      return unless missing_thumbnail?
       @resource = query_service.find_by(id: id)
       @change_set = ChangeSet.for(resource)
-      change_set.files = [build_display_file, build_thumbnail_file]
+      change_set.files = [build_thumbnail_file]
       change_set_persister.buffer_into_index do |buffered_persister|
         @resource = buffered_persister.save(change_set: change_set)
       end
     end
 
     def create_cloud_derivatives
+      return unless missing_cloud_derivative?
       @change_set = ChangeSet.for(resource)
       change_set.files = [build_cloud_file]
       change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
@@ -226,8 +218,8 @@ class RasterResourceDerivativeService
       end
     end
 
-    def missing_local_display?
-      resource.file_metadata.find_all { |fm| fm.use == use_display }.empty?
+    def missing_cloud_derivative?
+      resource.file_metadata.find_all { |fm| fm.use == use_cloud_derivative }.empty?
     end
 
     def missing_thumbnail?

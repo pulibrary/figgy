@@ -33,9 +33,9 @@ RSpec.describe ImportedMetadataIndexer do
 
     it "indexes string imported metadata" do
       resource = FactoryBot.build(:scanned_resource)
-      resource.imported_metadata = [ImportedMetadata.new(layer_name: "layer")]
+      resource.imported_metadata = [ImportedMetadata.new(creator: "creator")]
       output = described_class.new(resource: resource).to_solr
-      expect(output["imported_layer_name_tesim"]).to eq "layer"
+      expect(output["imported_creator_tesim"]).to eq ["creator"]
     end
   end
 end
