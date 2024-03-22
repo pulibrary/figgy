@@ -32,6 +32,7 @@ RSpec.describe BulkIngestController do
   end
 
   describe "GET #show" do
+    render_views
     let(:persister) { adapter.persister }
 
     context "when logged in" do
@@ -44,6 +45,15 @@ RSpec.describe BulkIngestController do
         collection = persister.save(resource: FactoryBot.build(:collection))
         get :show, params: { resource_type: "scanned_maps" }
         expect(assigns(:collections)).to eq [[collection.title.first, collection.id.to_s]]
+      end
+      it "doesn't display extra options for ephemera folders" do
+        get :show, params: { resource_type: "ephemera_folder" }
+
+        expect(response.body).not_to have_select "workflow_state"
+        expect(response.body).not_to have_select "collections"
+        expect(response.body).not_to have_select "rights-statement"
+        expect(response.body).not_to have_select "holding-location"
+        expect(response.body).not_to have_content "Visibility"
       end
     end
 
@@ -278,6 +288,39 @@ RSpec.describe BulkIngestController do
           expect(response).to redirect_to(bulk_ingest_show_path)
         end
       end
+    end
+  end
+
+  describe "full unstubbed ingest of an LAE ingest" do
+    with_queue_adapter :inline
+    let(:barcode1) { "32101075851400" }
+    let(:barcode2) { "32101075851418" }
+    let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
+    let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
+    let(:query_service) { metadata_adapter.query_service }
+    let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+    before do
+      folder1
+      folder2
+      stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851400/jsonld").and_return(status: 404)
+      stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851418/jsonld").and_return(status: 404)
+    end
+    it "ingests images into the existing ephemera resources" do
+      attributes =
+        {
+          resource_type: "ephemera_folder",
+          ingest_directory: "examples/lae"
+        }
+
+      post :bulk_ingest, params: { resource_type: "ephemera_folder", **attributes }
+      reloaded1 = query_service.find_by(id: folder1.id)
+      reloaded2 = query_service.find_by(id: folder2.id)
+
+      expect(reloaded1.member_ids.length).to eq 1
+      expect(reloaded2.member_ids.length).to eq 2
+
+      file_sets = query_service.find_members(resource: reloaded2)
+      expect(file_sets.flat_map(&:title).to_a).to eq ["1", "2"]
     end
   end
 
