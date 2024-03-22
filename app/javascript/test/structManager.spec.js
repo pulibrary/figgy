@@ -173,7 +173,7 @@ let unstructured_items = [
 ]
 const tree = {
   state: {
-    selected: null,
+    selected: "3",
     cut: null,
     structure: { label: "Table of Contents", id: "123", folders: [] },
     modified: false,
@@ -194,7 +194,7 @@ const zoom = {
 const gallery = {
   state: {
     items: items,
-    selected: [items[0]],
+    selected: [],
     cut: [],
     changeList: ["2"],
     ogItems: items,
@@ -273,20 +273,21 @@ describe("StructManager.vue", () => {
     expect(items[1].mediaUrl).toBe("b2_service/full/300,/0/default.jpg")
   })
 
-  it("has the right selectedTotal", () => {
-    expect(wrapper.vm.selectedTotal).toBe(1)
-  })
-
   it("returns whether or not the resource is Loading", () => {
     expect(wrapper.vm.loading).toBe(false)
   })
 
-  it("returns whether or not the structure is saved", () => {
-    expect(wrapper.vm.saved).toBe(false)
-  })
-
   it("returns whether or not the structure has a saveError", () => {
     expect(wrapper.vm.saveError).toBe(false)
+  })
+
+  it("has the right selectedTotal", () => {
+    expect(wrapper.vm.selectedTotal).toBe(0)
+  })
+
+  it("deselects the tree when a gallery is clicked", () => {
+    wrapper.vm.galleryClicked()
+    expect(wrapper.vm.selectedTreeNode).toBe(null)
   })
 
   it("resizes cards properly", () => {
@@ -330,9 +331,10 @@ describe("StructManager.vue", () => {
     expect(wrapper.vm.galleryItems[0]['mediaUrl']).toEqual('a1_service/full/300,/0/default.jpg')
   })
 
-  it("generates a 7-digit random id for tree nodes", () => {
-    const id = wrapper.vm.generateId()
-    expect(id.length).toEqual(7)
+  it("generates a random id for tree nodes", () => {
+    const id1 = wrapper.vm.generateId()
+    const id2 = wrapper.vm.generateId()
+    expect(id1).not.toEqual(id2)
   })
 
   it("updates the state of the tree and gallery after resource data is loaded", () => {
@@ -345,165 +347,106 @@ describe("StructManager.vue", () => {
     console.log(wrapper.vm.resourceId)
     expect(wrapper.vm.s).toEqual(tree_structure)
   })
+})
 
-  it("displays an alert with a success message when the structure is SAVED", () => {
-    const savedStub = vi.fn(() => true)
-    wrapper.setMethods({ saved: savedStub })
-    wrapper.vm.saved
-    expect(wrapper.text()).toContain('Your work has been saved!')
+describe('when the tree structure errors on Save', () => {
+
+  const error_tree = {
+    state: {
+      selected: null,
+      cut: null,
+      structure: { label: "Table of Contents", id: "123", folders: [] },
+      modified: false,
+      loadState: "NOT_LOADED",
+      saveState: "ERROR",
+    },
+    mutations: treeMutations,
+  }
+
+  store = new Vuex.Store({
+    modules: {
+      ordermanager: resource,
+      gallery: gallery,
+      zoom: zoom,
+      tree: error_tree,
+    },
   })
 
-  it("does not display an alert with an error message when the state is NOT SAVED", () => {
-    const saveErrorStub = vi.fn(() => true)
-    wrapper.setMethods({ saveError: saveErrorStub })
-    wrapper.vm.saveError
-    expect(wrapper.text()).not.toContain('Sorry, there was a problem saving your work!')
+  let wrapper3 = mount(StructManager, {
+    localVue,
+    store,
+    propsData: {
+      resourceObject: resourceObject,
+      structure: figgy_structure,
+    },
+    stubs: [
+      "toolbar",
+      "struct-gallery",
+      "deep-zoom",
+      "tree",
+      "wrapper",
+      "alert",
+      "controls",
+      "loader",
+    ],
   })
 
-  //
-  // it("deselects tree items when gallery item is clicked", () => {
-  //   expect(wrapper.vm.galleryClicked).toBe(null)
-  // })
-  //
-  // describe('when the resources do not have IIIF service URLs', () => {
-  //
-  //   let resourceObject = {
-  //     id: "example2-id",
-  //     label: "Resource with 1 files",
-  //     viewingHint: "individuals",
-  //     viewingDirection: "LEFTTORIGHT",
-  //     startPage: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
-  //     thumbnail: null,
-  //     __typename: "ScannedResource",
-  //     members: [
-  //       {
-  //     	  id: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
-  //     	  label: "a",
-  //     	  viewingHint: null,
-  //     	  thumbnail: null,
-  //     	  __typename: "FileSet",
-  //     	}
-  //     ],
-  //     loadState: "LOADED",
-  //     saveState: "NOT_SAVED",
-  //     ogState: {}
-  //   }
-  //
-  //   resource = {
-  //     state: {
-  //       resource: resourceObject
-  //     },
-  //     mutations: resourceMutations,
-  //     getters: resourceGetters,
-  //     actions: actions,
-  //     modules: {
-  //       gallery: gallery,
-  //     }
-  //   }
-  //
-  //   let store = new Vuex.Store({
-  //     modules: {
-  //       ordermanager: resource,
-	//       gallery: gallery,
-  //       zoom: zoom,
-  //       tree: tree,
-  //     }
-  //   })
-  //
-  //   let wrapper = mount(StructManager, {
-  //     localVue,
-  //     store: store,
-  //     propsData: {
-  //       resourceObject: resourceObject,
-	//       defaultThumbnail: Global.figgy.resource.defaultThumbnail
-  //     },
-  //     stubs: [
-  //       "toolbar",
-  //       "struct-gallery",
-  //       "deep-zoom",
-  //       "tree",
-  //       "wrapper",
-  //       "alert",
-  //       "controls",
-  //       "loader",
-  //     ],
-  //   })
-  //
-  //   it("renders the default Figgy thumbnail", () => {
-  //     expect(wrapper.vm.defaultThumbnail).toEqual(Global.figgy.resource.defaultThumbnail)
-  //     expect(wrapper.vm.galleryItems.length).toEqual(1)
-  //     expect(wrapper.vm.galleryItems[0]['mediaUrl']).toEqual("https://institution.edu/repository/assets/random.png")
-  //   })
-  //
-  //   it("does not display an alert with an error message when the state is NOT SAVED", () => {
-  //     expect(wrapper.text()).not.toContain('Sorry, there was a problem saving your work!')
-  //   })
-  // })
-  //
-  // describe('when the resources errors on Save', () => {
-  //
-  //   let resourceObject = {
-  //     id: "example3-id",
-  //     label: "Resource with 1 files",
-  //     viewingHint: "individuals",
-  //     viewingDirection: "LEFTTORIGHT",
-  //     startPage: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
-  //     thumbnail: null,
-  //     __typename: "ScannedResource",
-  //     members: [
-  //       {
-  //     	  id: "8ffd7a03-ec0e-46c1-a347-e4b19cb7839f",
-  //     	  label: "a",
-  //     	  viewingHint: null,
-  //     	  thumbnail: null,
-  //     	  __typename: "FileSet",
-  //     	}
-  //     ],
-  //     loadState: "LOADED",
-  //     saveState: "ERROR",
-  //     ogState: {}
-  //   }
-  //
-  //   resource = {
-  //     state: {
-  //       resource: resourceObject
-  //     },
-  //     mutations: resourceMutations,
-  //     getters: resourceGetters,
-  //     actions: actions,
-  //     modules: {
-  //       gallery: gallery,
-  //     }
-  //   }
-  //
-  //   let store = new Vuex.Store({
-  //     modules: {
-  //       ordermanager: resource,
-	//       gallery: gallery,
-  //     }
-  //   })
-  //
-  //   let wrapper = mount(StructManager, {
-  //     localVue,
-  //     store: store,
-  //     propsData: {
-  //       resourceObject: resourceObject,
-	//       defaultThumbnail: Global.figgy.resource.defaultThumbnail
-  //     },
-  //     stubs: [
-  //       "toolbar",
-  //       "struct-gallery",
-  //       "deep-zoom",
-  //       "tree",
-  //       "wrapper",
-  //       "alert",
-  //       "controls",
-  //       "loader",
-  //     ],
-  //   })
-  //
-  //   it("displays an alert with an error message", () => {
-  //     expect(wrapper.text()).toContain('Sorry, there was a problem saving your work!')
-  //   })
-  // })
+  it("returns whether or not there was an error on save", () => {
+    expect(wrapper3.vm.saveError).toBe(true)
+  })
+
+  it("displays an alert with an error message", () => {
+    expect(wrapper3.text()).toContain('Sorry, there was a problem saving your work!')
+  })
+})
+
+describe('when the tree structure is Saved', () => {
+
+  const saved_tree = {
+    state: {
+      selected: null,
+      cut: null,
+      structure: { label: "Table of Contents", id: "123", folders: [] },
+      modified: false,
+      loadState: "NOT_LOADED",
+      saveState: "SAVED",
+    },
+    mutations: treeMutations,
+  }
+
+  store = new Vuex.Store({
+    modules: {
+      ordermanager: resource,
+      gallery: gallery,
+      zoom: zoom,
+      tree: saved_tree,
+    },
+  })
+
+  let wrapper4 = mount(StructManager, {
+    localVue,
+    store,
+    propsData: {
+      resourceObject: resourceObject,
+      structure: figgy_structure,
+    },
+    stubs: [
+      "toolbar",
+      "struct-gallery",
+      "deep-zoom",
+      "tree",
+      "wrapper",
+      "alert",
+      "controls",
+      "loader",
+    ],
+  })
+
+  it("returns whether or not the structure is saved", () => {
+    expect(wrapper4.vm.saved).toBe(true)
+  })
+
+  it("displays an alert with a success message", () => {
+    expect(wrapper4.text()).toContain('Your work has been saved!')
+  })
 })
