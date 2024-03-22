@@ -29,7 +29,11 @@
       Sorry, there was a problem saving your work!
     </alert>
     <toolbar @cards-resized="resizeCards($event)" />
-    <deep-zoom v-if="zoomed" resource-id="6d9555cb-4d31-4509-a3a7-29c5aba42d8d" viewer-id="viewer" class="deep-zoom"></deep-zoom>
+    <deep-zoom
+      v-if="zoomed"
+      viewer-id="viewer"
+      class="deep-zoom">
+    </deep-zoom>
     <div
       class="lux-sidePanel"
     >

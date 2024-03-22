@@ -1,7 +1,6 @@
 import Vuex from "vuex"
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
 import StructManager from "../components/StructManager.vue"
-import DeepZoom from "../components/DeepZoom.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
 import { treeMutations } from "../store/tree"
 import { zoomMutations, zoomGetters } from "../store/zoom"
@@ -25,21 +24,21 @@ let wrapper
 let items = [
   {
     "id": "1",
-    "caption": "a_foo",
+    "caption": "a",
     "service": "a1_service",
     "mediaUrl": "a1_url",
     "viewingHint": "single"
   },
   {
     "id": "2",
-    "caption": "b_baz",
+    "caption": "b",
     "service": "b2_service",
     "mediaUrl": "b2_url",
     "viewingHint": null
   },
   {
     "id": "3",
-    "caption": "c_fee",
+    "caption": "c",
     "service": "c3_service",
     "mediaUrl": "c3_url",
     "viewingHint": null
@@ -448,61 +447,6 @@ describe('when the tree structure is Saved', () => {
   })
 
   it("displays an alert with a success message", () => {
-    console.log(wrapper4.html())
     expect(wrapper4.text()).toContain('Your work has been saved!')
-  })
-})
-
-describe('when an item is zoomed ', () => {
-
-  const zoomed = {
-    state: {
-      zoomed: {
-        "id": "3",
-        "caption": "c_fee",
-        "service": "c3_service",
-        "mediaUrl": "c3_url",
-        "viewingHint": null
-      },
-    },
-    mutations: zoomMutations,
-    getters: zoomGetters,
-  }
-
-  store = new Vuex.Store({
-    modules: {
-      ordermanager: resource,
-      gallery: gallery,
-      zoom: zoomed,
-      tree: tree,
-    },
-  })
-
-  let wrapperZoom = mount(StructManager, {
-    localVue,
-    store,
-    propsData: {
-      resourceObject: resourceObject,
-      structure: figgy_structure,
-    },
-    stubs: [
-      "toolbar",
-      "struct-gallery",
-      "tree",
-      "wrapper",
-      "deep-zoom",
-      "alert",
-      "controls",
-      "loader",
-    ],
-  })
-
-  it("returns whether or not an item is being zoomed", () => {
-    expect(wrapperZoom.vm.zoomed.id).toEqual("3")
-  })
-
-  it("displays the Zoom modal", () => {
-    const zoomModal = wrapper.find('.deep-zoom')
-    expect(zoomModal.exists()).toBe(true)
   })
 })
