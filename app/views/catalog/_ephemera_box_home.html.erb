@@ -6,6 +6,13 @@
         <div class="card-header">Ephemera</div>
         <div class="card-body">
           <div class="row">
+            <div class="col-md-12 pb-3">
+              <%= link_to 'Bulk Ingest',
+                bulk_ingest_show_path(EphemeraFolder.to_s.underscore),
+                class: "add-button btn btn-primary #{dom_class(EphemeraFolder)}" %>
+            </div>
+          </div>
+          <div class="row">
             <% projects.to_a.sort_by(&:title).each do |project| %>
               <div class="work-type-card-col">
                 <div class="card work-type work-type-<%= project.title %>">
