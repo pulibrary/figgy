@@ -9,11 +9,7 @@ class ContextualPath
   end
 
   def show
-    if parent_id.present?
-      polymorphic_path([:parent, :solr_document], parent_id: parent_id, id: child.id.to_s)
-    else
-      polymorphic_path([:solr_document], id: child.id.to_s)
-    end
+    polymorphic_path([:solr_document], id: child.id.to_s)
   end
 
   def file_manager
