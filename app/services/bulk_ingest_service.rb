@@ -109,7 +109,7 @@ class BulkIngestService
     # @param file_filters [Array] the filter used for matching against the filename extension
     def attach_children(path:, resource:, file_filters: [], preserve_file_names: false, **attributes)
       child_attributes = attributes.except(:member_of_collection_ids)
-      child_resources = dirs(path: path).map do |subdir_path|
+      child_resources = dirs(path: path, resource: resource).map do |subdir_path|
         child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
         attach_children(
           path: subdir_path,
@@ -167,8 +167,13 @@ class BulkIngestService
     # Retrieve the files within a given directory
     # @param path [Pathname] the path to the directory containing the child directories
     # @return [Array<Pathname>] the paths to any subdirectories
-    def dirs(path:)
+    def dirs(path:, resource: nil)
+      return [] unless supports_child_resources?(resource)
       path.children.select(&:directory?).sort
+    end
+
+    def supports_child_resources?(resource)
+      resource.class != Numismatics::Coin
     end
 
     # Retrieve the files within a given directory
