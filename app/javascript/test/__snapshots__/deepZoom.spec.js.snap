@@ -11,19 +11,22 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
   >
     <!---->
   </transition-stub>
-  <!---->
+  <alert-stub
+    autoclear="true"
+    class="alert"
+    data-v-5aca45d1=""
+    dismissible="true"
+    status="success"
+    type="alert"
+  >
+     Your work has been saved! 
+  </alert-stub>
   <!---->
   <toolbar-stub
     data-v-5aca45d1=""
     type="div"
   />
-  <deep-zoom-stub
-    class="deep-zoom"
-    data-v-5aca45d1=""
-    resourceid=""
-    type="div"
-    viewerid="viewer"
-  />
+  <!---->
   <div
     class="lux-sidePanel"
     data-v-5aca45d1=""
