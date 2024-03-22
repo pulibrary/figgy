@@ -11,14 +11,6 @@ namespace :figgy do
       IngestEphemeraJob.set(queue: :low).perform_later(folder_dir, state, project)
     end
 
-    desc "Ingest LAE folders"
-    task ingest_disk_files: :environment do
-      folder_dir = ARGV[1]
-      abort "usage: rake lae:ingest_disk_files /path/to/lae/folder" unless folder_dir
-      abort "Error: No such file or directory: #{folder_dir}" unless Dir.exist?(folder_dir)
-      IngestLaeFolderJob.set(queue: :low).perform_later(folder_dir)
-    end
-
     desc "Ingest LAE poster"
     task ingest_posters: :environment do
       file = ARGV[1]
