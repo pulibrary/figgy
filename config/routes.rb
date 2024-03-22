@@ -249,7 +249,6 @@ Rails.application.routes.draw do
   get "/iiif/collections", defaults: { format: :json }, to: "collections#index_manifest", as: :index_manifest
   get "collections/:id/ark_report", to: "collections#ark_report", as: :collections_ark_report
 
-  get "/catalog/parent/:parent_id/:id", to: "catalog#show", as: :parent_solr_document
   get "/iiif/lookup/:prefix/:naan/:arkid", to: "catalog#lookup_manifest", as: :lookup_manifest
 
   get "/reports/pulfa_ark_report/(:since_date)", to: "reports#pulfa_ark_report", as: :pulfa_ark_report
