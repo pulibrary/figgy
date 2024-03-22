@@ -11,7 +11,15 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
   >
     <!---->
   </transition-stub>
-  <!---->
+  <alert-stub
+    class="alert"
+    data-v-5aca45d1=""
+    dismissible="true"
+    status="success"
+    type="alert"
+  >
+     Your work has been saved! 
+  </alert-stub>
   <!---->
   <toolbar-stub
     data-v-5aca45d1=""

@@ -137,6 +137,9 @@ export default {
     selectedTotal () {
       return this.gallery.selected.length
     },
+    selectedTreeNode () {
+      return this.tree.selected
+    },
     ...mapState({
       resource: state => state.ordermanager.resource,
       tree: state => state.tree,
