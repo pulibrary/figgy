@@ -99,6 +99,18 @@ RSpec.describe IngestFolderJob do
       end
     end
 
+    context "with a Numismatics::Coin" do
+      it "can attach files, ignoring sub-directories" do
+        coin = FactoryBot.create_for_repository(:coin)
+        FactoryBot.create_for_repository(:numismatic_issue, member_ids: [coin.id])
+
+        IngestFolderJob.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_numismatic_coin").to_s, property: :id, id: coin.id.to_s)
+
+        reloaded = ChangeSetPersister.default.query_service.find_by(id: coin.id)
+        expect(reloaded.member_ids.length).to eq 1
+      end
+    end
+
     context "with a SimpleChangeSet" do
       let(:logger) { Logger.new(nil) }
       let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single") }
