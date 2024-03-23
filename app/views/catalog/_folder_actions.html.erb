@@ -1,5 +1,5 @@
           <td>
-            <% folder_url = parent_solr_document_path("#{resource.id}", "#{folder.id}") %>
+            <% folder_url = solr_document_path("#{folder.id}") %>
             <%= link_to 'View', folder_url, class: 'btn btn-secondary' %>
             <%= link_to 'Edit', main_app.polymorphic_path([:edit, folder]), class: 'btn btn-secondary' %>
           </td>

@@ -12,8 +12,8 @@
       <% resource = event.affected_resource %>
       <% if resource %>
         <tr>
-          <td><%= link_to resource.title.first, ContextualPath.new(child: resource, parent_id: resource.parent&.id).show %></td>
-          <td><%= link_to(resource.parent.title.first, ContextualPath.new(child: resource.parent).show) if resource.parent %></td>
+          <td><%= link_to resource.title.first, solr_document_path(resource) %></td>
+          <td><%= link_to(resource.parent.title.first, solr_document_path(resource.parent)) if resource.parent %></td>
           <td><%= event.status %></td>
           <td><%= event.updated_at %></td>
         </tr>

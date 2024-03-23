@@ -21,7 +21,7 @@
           <tbody>
             <% unless decorated_resource.file_sets.empty? %>
               <% decorated_resource.file_sets.each do |file_set| %>
-                <% file_set_url = parent_solr_document_path(parent_id: resource.id, id: file_set.id) %>
+                <% file_set_url = solr_document_path(id: file_set.id) %>
                 <tr data-resource-id="<%= file_set.id.to_s %>">
                   <td><%= link_to file_set.first_title, file_set_url %></td>
                   <td><%= file_set.created_at %></td>

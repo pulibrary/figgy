@@ -4,7 +4,7 @@
 
 <ul>
   <% @ephemera_projects.each do |ephemera_project| %>
-      <li><%= link_to ephemera_project.title, ContextualPath.new(child: ephemera_project, parent_id: nil).show %></li>
+      <li><%= link_to ephemera_project.title, solr_document_path(ephemera_project) %></li>
   <% end %>
 </ul>
 

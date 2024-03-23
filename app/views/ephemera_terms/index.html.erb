@@ -17,10 +17,10 @@
   <tbody>
     <% @terms.each do |term| %>
       <tr>
-        <td class="vocab"><%= link_to term.label, ContextualPath.new(child: term).show %></td>
+        <td class="vocab"><%= link_to term.label, solr_document_path(term) %></td>
         <td class="vocab"><%= link_to term.uri.to_s, term.uri.to_s %></td>
-        <td class="vocab"><%= link_to term.vocabulary.label, ContextualPath.new(child: term.vocabulary).show %></td>
-        <td class="vocab"><%= link_to 'Show', ContextualPath.new(child: term).show %></td>
+        <td class="vocab"><%= link_to term.vocabulary.label, solr_document_path(term.vocabulary) %></td>
+        <td class="vocab"><%= link_to 'Show', solr_document_path(term) %></td>
         <td class="vocab"><%= link_to 'Edit', edit_ephemera_term_path(term) %></td>
         <td class="vocab"><%= link_to 'Destroy', term, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

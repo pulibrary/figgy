@@ -1,6 +1,6 @@
 <h2>Terms</h2>
 <ul>
   <% decorated_resource.terms.each do |term| %>
-    <li><%= link_to term.label, ContextualPath.new(child: term).show %></li>
+    <li><%= link_to term.label, solr_document_path(term) %></li>
   <% end %>
 </ul>
