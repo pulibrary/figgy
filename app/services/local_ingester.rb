@@ -11,8 +11,13 @@ class LocalIngester
 
   def ingest
     ingest_paths.each do |path|
-      IngestFolderJob.perform_later(directory: path.to_s, file_filters: file_filters, class_name: resource_class_name, source_metadata_identifier: source_metadata_id_from_path(path),
-                                    **attributes.merge(find_attributes))
+      IngestFolderJob.perform_later(
+        directory: path.to_s,
+        file_filters: file_filters,
+        class_name: resource_class_name,
+        source_metadata_identifier: source_metadata_id_from_path(path),
+        **attributes.merge(find_attributes)
+      )
     end
   end
 

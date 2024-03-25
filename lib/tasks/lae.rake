@@ -11,6 +11,11 @@ namespace :figgy do
       IngestEphemeraJob.set(queue: :low).perform_later(folder_dir, state, project)
     end
 
+    desc "Ingest LAE folders"
+    task ingest_disk_files: :environment do
+      abort "Use 'Bulk Ingest' under Ephemera to select the folder to bulk ingest instead of using this command."
+    end
+
     desc "Ingest LAE poster"
     task ingest_posters: :environment do
       file = ARGV[1]
