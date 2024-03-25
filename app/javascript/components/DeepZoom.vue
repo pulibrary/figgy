@@ -2,7 +2,7 @@
   <wrapper style="max-width:100%;">
     <div class="lux-modal">
       <heading level="h2">
-        Zoom <small>on {{ isZoomed.caption }}</small>
+        Zoom <small>on {{ zoomed.caption }}</small>
         <input-button
           @button-clicked="hideZoom()"
           class="expand-collapse"
@@ -73,7 +73,7 @@ export default {
       zoom: state => state.zoom,
     }),
     ...mapGetters({
-      isZoomed: 'getIsZoomed'
+      zoomed: 'getIsZoomed'
     }),
     resourceClassName: function () {
       return this.resource.resourceClassName
@@ -83,8 +83,7 @@ export default {
     }
   },
   mounted: function () {
-    if (this.isZoomed) {
-      // console.log(this.zoom.zoomed)
+    if (this.zoomed) {
       this.initOSD()
     }
   },
@@ -97,7 +96,7 @@ export default {
       this.viewer = OpenSeadragon({
         id: this.osdId,
         showNavigationControl: false,
-        tileSources: [this.zoom.zoomed.service + '/info.json']
+        tileSources: [this.zoomed.service + '/info.json']
       })
     },
     hideZoom: function () {
