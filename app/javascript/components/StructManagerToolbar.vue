@@ -137,8 +137,9 @@ export default {
         alert('The structure has not changed, nothing to save.')
       } else {
         let structureNodes = this.renamePropertiesForSave(this.tree.structure.folders)
+        console.log('renamePropertiesForSave Output: ' + JSON.stringify(structureNodes))
         structureNodes = this.cleanNestedArrayForSave(structureNodes)
-        console.log(JSON.stringify(structureNodes))
+        console.log('cleanNestedArrayForSave Output: ' + JSON.stringify(structureNodes))
 
         let resourceToSave = {
           id: this.resource.id,
@@ -185,7 +186,6 @@ export default {
       } else if (this.tree.modified) {
         return false
       } else {
-        console.log(this.tree.modified)
         return true
       }
     },
@@ -193,7 +193,7 @@ export default {
       if (this.gallery.selected.length === 1) {
         return false
       } else if (this.tree.selected) {
-        let nodeToBeZoomed = this.findFolderById(this.tree.structure, this.tree.selected)
+        let nodeToBeZoomed = this.findFolderById(this.tree.structure.folders, this.tree.selected)
         let has_service = !!nodeToBeZoomed.service
         if (has_service) {
           return false
@@ -326,11 +326,6 @@ export default {
       }
     },
     createFolder: function () {
-      // let contentsList = JSON.parse(JSON.stringify(this.gallery.selected))
-      // for (let i = 0; i < contentsList.length; i++) {
-      //   contentsList[i].file = true;
-      //   contentsList[i].folders = [];
-      // }
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       const rootId = this.tree.structure.id
 
@@ -344,14 +339,19 @@ export default {
       let structure = {
         id: this.tree.structure.id,
         label: this.tree.structure.label,
+        folders: folderList
       }
       if(parentId === rootId) {
-        folderList.push(newFolder)
-        structure.folders = folderList
+        structure.folders.push(newFolder)
       } else {
         let parentFolderObject = this.findFolderById(folderList, parentId)
-        let newParent = parentFolderObject.folders.push(newFolder)
-        structure.folders = this.addNewNode(folderList, newParent)
+        if(parentFolderObject.file) {
+          alert("Oops, looks like you tried to add a folder to a file. You can only add a new folder to another folder.")
+          return false
+        } else {
+          let newParent = parentFolderObject.folders.push(newFolder)
+          structure.folders = this.addNewNode(folderList, newParent)
+        }
       }
       this.$store.commit("CREATE_FOLDER", structure)
       return newFolder.id
@@ -398,6 +398,8 @@ export default {
       }
     },
     commitRemoveFolder: function(folderList, folderToBeRemoved) {
+      console.log('folderList: ' + JSON.stringify(folderList))
+      console.log('folderToBeRemovedID: ' + folderToBeRemoved.id)
       const structure = {
         id: this.tree.structure.id,
         folders: this.removeNestedObjectById(folderList, folderToBeRemoved.id),
@@ -477,20 +479,20 @@ export default {
       for (const item of array) {
         if (item.file) this.end_nodes.push(item)
         if (item.folders?.length) {
-          const innerResult = this.findAllFilesInStructure(item.folders);
-          if (innerResult) return innerResult;
+          const innerResult = this.findAllFilesInStructure(item.folders)
+          if (innerResult) return innerResult
         }
       }
     },
-    getParentByID: function (array, childFolder) {
-      for (const item of array) {
-        if (item.id === id) return item;
-        if (item.folders?.length) {
-          const innerResult = this.getParentByID(item.folders, childFolder);
-          if (innerResult) return innerResult;
-        }
-      }
-    },
+    // getParentByID: function (array, childFolder) {
+    //   for (const item of array) {
+    //     if (item.id === id) return item;
+    //     if (item.folders?.length) {
+    //       const innerResult = this.getParentByID(item.folders, childFolder)
+    //       if (innerResult) return innerResult
+    //     }
+    //   }
+    // },
     generateId: function () {
       return Math.floor(Math.random() * 10000000).toString()
     },
@@ -518,6 +520,9 @@ export default {
     },
     selectNoneTree: function () {
       this.$store.commit("SELECT_TREEITEM", null)
+    },
+    selectTreeItemById: function (id) {
+      this.$store.commit("SELECT_TREEITEM", id)
     },
     zoomOnItem: function() {
       // if a tree item is selected, make sure it is a file and get the obj

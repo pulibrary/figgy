@@ -399,6 +399,7 @@ export default {
     viewFile: function (id) {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let selected = this.findSelectedFolderById(folderList, id)
+      selected.caption = selected.label 
       this.$store.commit("ZOOM", selected)
     },
   },
