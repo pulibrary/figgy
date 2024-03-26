@@ -192,7 +192,7 @@ export default {
     isZoomDisabled: function () {
       if (this.gallery.selected.length === 1) {
         return false
-      } else if (this.tree.selected) {
+      } else if (this.tree.selected && !this.rootNodeSelected) {
         let nodeToBeZoomed = this.findFolderById(this.tree.structure.folders, this.tree.selected)
         let has_service = !!nodeToBeZoomed.service
         if (has_service) {
@@ -333,6 +333,7 @@ export default {
         id: this.generateId(),
         folders: [],
         label: "Untitled",
+        file: false,
       }
       // need to stringify and parse to drop the observer that comes with Vue reactive data
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
@@ -382,7 +383,7 @@ export default {
       const selectedNode = this.tree.selected
       const rootId = this.tree.structure.id
       if(selectedNode === rootId) {
-        alert("Sorry, you cannot delete the root node.")
+        alert("Sorry, you cannot delete the top-level folder.")
         return false
       }
       // if there are sub-folders, warn the user that they will also be deleted.
@@ -405,6 +406,7 @@ export default {
         folders: this.removeNestedObjectById(folderList, folderToBeRemoved.id),
         label: this.tree.structure.label,
       }
+      console.log('structure with removed folder: ' + JSON.stringify(structure.folders))
       this.$store.commit("DELETE_FOLDER", structure)
       this.$store.commit("SELECT", null)
       if (this.end_nodes.length) {
@@ -452,14 +454,13 @@ export default {
     },
     removeNestedObjectById: function (nestedArray, idToRemove) {
       return nestedArray.map(item => {
-          if (item.folders && item.folders.length > 0) {
-              // If the current item has folders, recursively call the function
-              item.folders = this.removeNestedObjectById(item.folders, idToRemove);
-          }
-
           // Check if the current item's id matches the id parameter
           if (item.id === idToRemove) {
               return undefined; // Exclude the current item
+          }
+          if (item.folders && item.folders.length > 0) {
+              // If the current item has folders, recursively call the function
+              item.folders = this.removeNestedObjectById(item.folders, idToRemove);
           }
 
           // Otherwise, keep the item in the result array

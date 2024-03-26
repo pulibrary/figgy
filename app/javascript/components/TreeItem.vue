@@ -15,7 +15,7 @@
       </div>
       <div
         class="folder-container"
-        @click.capture="select(jsonData.id, $event)"
+        @click.capture="select(id, $event)"
         :class="[
           'lux-item-label',
           { selected: isSelected },
@@ -173,6 +173,7 @@ export default {
     },
     isSelected: function() {
       if (this.tree.selected === this.id) {
+        console.log('id_selected: ' + this.tree.selected)
         return true
       }
       return false
@@ -399,7 +400,7 @@ export default {
     viewFile: function (id) {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let selected = this.findSelectedFolderById(folderList, id)
-      selected.caption = selected.label 
+      selected.caption = selected.label
       this.$store.commit("ZOOM", selected)
     },
   },

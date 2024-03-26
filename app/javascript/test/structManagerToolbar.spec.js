@@ -2,7 +2,7 @@ import Vuex from "vuex"
 import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
 import StructManagerToolbar from "../components/StructManagerToolbar.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { actions } from "../store/vuex/actions.js"
+import { actions } from "../store/vuex/actions"
 import { treeMutations } from "../store/tree"
 import { zoomMutations, zoomGetters } from "../store/zoom"
 import { modules } from 'lux-design-system'
@@ -126,6 +126,12 @@ let figgy_structure = {
 let tree_structure = {
   "id": "aea40813-e0ed-4307-aae9-aec53b26bdda",
   "folders": [
+    {
+      "id": "abc",
+      "label": "Chapter A",
+      "file": false,
+      "folders": [],
+    },
     {
       "id": "1234567",
       "label": "Chapter 1",
@@ -292,12 +298,19 @@ describe("StructManagerToolbar.vue", () => {
     expect(wrapper.vm.isZoomDisabled()).toBe(true)
   })
 
+  it("Removes a nested object by id", () => {
+    let nested_object = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, 'abc')
+    let nested_removed = wrapper.vm.removeNestedObjectById(JSON.parse(JSON.stringify(wrapper.vm.tree.structure.folders)), 'abc')
+    let does_not_exist = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, 'abc')
+    console.log(JSON.parse(JSON.stringify(wrapper.vm.tree.structure.folders)))
+    expect(does_not_exist).toEqual('undefined')
+  })
+
   it("Deletes a folder that contains a file", () => {
     global.confirm = vi.fn(() => true)
-    // wrapper.setMethods({ global.confirm: confirmStub })
-    expect(wrapper.vm.end_nodes.length).toEqual(0)
 
-    // wrapper.vm.deleteFolder("3")
+    expect(wrapper.vm.end_nodes.length).toEqual(0)
+    wrapper.vm.deleteFolder("1234567")
     // expect(global.confirm).toHaveBeenCalled()
     // expect(wrapper.vm.end_nodes.length).toEqual(1)
 
