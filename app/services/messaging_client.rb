@@ -11,11 +11,11 @@ class MessagingClient
     Rails.logger.warn "Unable to publish message to #{amqp_url}"
   end
 
-  private
+  def bunny_client
+    @bunny_client ||= Bunny.new(amqp_url).tap(&:start)
+  end
 
-    def bunny_client
-      @bunny_client ||= Bunny.new(amqp_url).tap(&:start)
-    end
+  private
 
     def channel
       @channel ||= bunny_client.create_channel
