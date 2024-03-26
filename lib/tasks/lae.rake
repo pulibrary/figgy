@@ -13,7 +13,7 @@ namespace :figgy do
 
     desc "Ingest LAE folders"
     task ingest_disk_files: :environment do
-      abort "Use 'Bulk Ingest' under Ephemera to select the folder to bulk ingest instead of using this command."
+      abort "Ephemera folder ingest has been moved into Figgy! Use 'Bulk Ingest' under Ephemera on the home page to select the folder to bulk ingest instead of using this command."
     end
 
     desc "Ingest LAE poster"
