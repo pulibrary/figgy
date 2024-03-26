@@ -6,6 +6,7 @@ Rails.application.config.after_initialize do
     config.add_custom_provider(CheckOverrides::Redis)
     config.add_custom_provider(SolrStatus)
     config.add_custom_provider(AspaceStatus)
+    config.add_custom_provider(RabbitMqStatus)
 
     # Make this health check available at /health
     config.path = :health

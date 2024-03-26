@@ -2,7 +2,7 @@ RSpec.configure do |config|
   config.before(:each) do |ex|
     unless ex.metadata[:rabbit_stubbed]
       allow(Figgy).to receive(:messaging_client) do
-        instance_double(MessagingClient, publish: true, amqp_url: "http://example.com")
+        instance_double(MessagingClient, bunny_client: double("Bunny Client"), publish: true, amqp_url: "http://example.com")
       end
 
       allow_any_instance_of(CreateDerivativesJob).to receive(:messenger) do
