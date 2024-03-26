@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe "Health Check", type: :request, rabbit_stubbed: true do
+RSpec.describe "Health Check", type: :request do
   describe "GET /health" do
     it "has a health check" do
       stub_aspace_login
+
       get "/health.json"
+
       expect(response).to be_successful
     end
 
@@ -22,7 +24,7 @@ RSpec.describe "Health Check", type: :request, rabbit_stubbed: true do
       expect(solr_response["message"]).to start_with "The solr has an invalid status"
     end
 
-    it "errors when rabbitmq is down" do
+    it "errors when rabbitmq is down", rabbit_stubbed: true do
       stub_aspace_login
 
       allow(Figgy.messaging_client).to receive(:bunny_client).and_raise(Bunny::TCPConnectionFailedForAllHosts, "Could not establish TCP connection to any of the configured hosts")
