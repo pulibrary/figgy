@@ -97,13 +97,18 @@ class BulkIngestController < ApplicationController
     def attributes
       {
         member_of_collection_ids: collection_ids,
-        state: params[:workflow][:state],
+        state: workflow_state,
         visibility: params[:visibility],
         preserve_file_names: params[:preserve_file_names] == "1",
         depositor: current_user&.uid,
         holding_location: params[:holding_location],
         rights_statement: params[:rights_statement]
       }
+    end
+
+    def workflow_state
+      return unless params[:workflow]
+      params[:workflow][:state]
     end
 
     def collections
