@@ -51,7 +51,7 @@ RSpec.describe EphemeraBoxesController, type: :controller do
         expect(json["data"][0]["title"]).to eq folder.title
         expect(json["data"][0]["barcode"]).to eq folder.barcode.first
         expect(json["data"][0]["genre"]).to eq folder.genre.first
-        expect(json["data"][0]["actions"]).to have_link "View", href: "/catalog/parent/#{box.id}/#{folder.id}"
+        expect(json["data"][0]["actions"]).to have_link "View", href: "/catalog/#{folder.id}"
         expect(json["data"][0]["actions"]).to have_link "Edit", href: "/concern/ephemera_folders/#{folder.id}/edit"
         expect(json["data"][0]["actions"]).not_to have_link "Delete"
       end

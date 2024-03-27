@@ -13,8 +13,8 @@
   <tbody>
     <% @vocabularies.each do |vocabulary| %>
       <tr>
-        <td class="vocab"><%= link_to vocabulary.label, ContextualPath.new(child: vocabulary).show %></td>
-        <td class="vocab"><%= link_to 'Show', ContextualPath.new(child: vocabulary).show %></td>
+        <td class="vocab"><%= link_to vocabulary.label, solr_document_path(vocabulary) %></td>
+        <td class="vocab"><%= link_to 'Show', solr_document_path(vocabulary) %></td>
         <td class="vocab"><%= link_to 'Edit', edit_ephemera_vocabulary_path(vocabulary) %></td>
         <td class="vocab"><%= link_to 'Destroy', vocabulary, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

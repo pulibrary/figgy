@@ -21,7 +21,7 @@ class FolderDataSource
   end
 
   def actions(folder)
-    folder_url = helper.parent_solr_document_path(resource.id.to_s, folder.id.to_s)
+    folder_url = helper.solr_document_path(folder.id.to_s)
     helper.tag.td do
       helper.link_to("View", folder_url, class: "btn btn-default") +
         helper.link_to("Edit", helper.polymorphic_path([:edit, folder]), class: "btn btn-secondary")

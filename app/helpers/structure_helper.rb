@@ -30,7 +30,7 @@ module StructureHelper
       tag.li("Structure Manager", class: "breadcrumb-item active")
     end
 
-    def bulk_edit_parent_path(change_set, parent)
-      ContextualPath.new(child: change_set, parent_id: parent.try(:id)).show
+    def bulk_edit_parent_path(change_set, _parent)
+      solr_document_path(change_set)
     end
 end

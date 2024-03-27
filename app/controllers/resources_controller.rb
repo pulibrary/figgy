@@ -67,8 +67,8 @@ class ResourcesController < ApplicationController
     render :new
   end
 
-  def after_create_success(obj, change_set)
-    redirect_to contextual_path(obj, change_set).show
+  def after_create_success(obj, _change_set)
+    redirect_to solr_document_path(obj)
   end
 
   def destroy
@@ -121,10 +121,10 @@ class ResourcesController < ApplicationController
     after_update_failure
   end
 
-  def after_update_success(obj, change_set)
+  def after_update_success(obj, _change_set)
     respond_to do |format|
       format.html do
-        redirect_to contextual_path(obj, change_set).show
+        redirect_to solr_document_path(obj)
       end
       format.json { render json: { status: "ok" } }
     end
@@ -178,7 +178,7 @@ class ResourcesController < ApplicationController
     end
     ServerUploadJob.perform_later(change_set.id.to_s, new_pending_uploads.map(&:id).map(&:to_s))
 
-    redirect_to ContextualPath.new(child: resource, parent_id: nil).file_manager
+    redirect_to polymorphic_path([:file_manager, resource])
   end
 
   # Remove the resource from given parent
@@ -201,10 +201,6 @@ class ResourcesController < ApplicationController
   end
 
   private
-
-    def contextual_path(obj, change_set)
-      ContextualPath.new(child: obj.id, parent_id: change_set.append_id)
-    end
 
     def _prefixes
       @_prefixes ||= super + ["base"]

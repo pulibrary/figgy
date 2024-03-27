@@ -20,8 +20,8 @@ RSpec.describe "catalog/_members_scanned_map" do
     it "shows them" do
       expect(rendered).to have_selector "td", text: "child map"
       expect(rendered).to have_selector "div.badge-success .text", text: "open"
-      expect(rendered).not_to have_link href: solr_document_path(child)
-      expect(rendered).to have_link "View", href: parent_solr_document_path(parent, child.id)
+      expect(rendered).not_to have_link href: solr_document_path(parent)
+      expect(rendered).to have_link "View", href: solr_document_path(child.id)
       expect(rendered).to have_link "Edit", href: edit_scanned_map_path(child.id)
     end
   end

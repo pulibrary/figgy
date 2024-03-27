@@ -22,7 +22,7 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
   it "renders correctly" do
     expect(rendered).to include "<h1>File Manager</h1>"
     expect(rendered).to include member.title.first.to_s
-    expect(rendered).to have_selector("a[href=\"#{ContextualPath.new(child: member, parent_id: parent.id).show}\"]")
+    expect(rendered).to have_selector("a[href=\"#{solr_document_path(member)}\"]")
     expect(rendered).to have_link "Test Title", href: "/catalog/#{parent.id}"
     expect(rendered).to have_selector(".gallery form", count: 1)
     expect(rendered).to have_selector("img[src='#{ManifestBuilder::ManifestHelper.new.manifest_image_path(member.thumbnail_id)}/full/!200,150/0/default.jpg']")

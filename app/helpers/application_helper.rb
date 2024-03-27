@@ -21,14 +21,6 @@ module ApplicationHelper
     !creatable_works.empty?
   end
 
-  # Returns a polymorphic path for linking to file sets in File Manager
-  # @param child [Resource] child resource
-  # @param parent [ChangeSet] parent change set
-  # @return [String]
-  def contextual_path(child, parent)
-    ContextualPath.new(child: child, parent_id: parent.try(:id))
-  end
-
   # Figgy resource types that the user has permission to create
   # @return [Array<Resource>]
   def creatable_works

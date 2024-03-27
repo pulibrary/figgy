@@ -19,7 +19,7 @@ RSpec.describe "catalog/_members_ephemera_project" do
       expect(rendered).to have_selector "td", text: "1"
       expect(rendered).to have_selector "td", text: "00000000000000"
       expect(rendered).to have_selector "td", text: "11111111111110"
-      expect(rendered).to have_link "View", href: parent_solr_document_path(parent.id, child.id)
+      expect(rendered).to have_link "View", href: solr_document_path(child.id)
       expect(rendered).to have_link "Edit", href: edit_ephemera_box_path(child.id)
 
       expect(rendered).to have_selector "h2", text: "Folders"

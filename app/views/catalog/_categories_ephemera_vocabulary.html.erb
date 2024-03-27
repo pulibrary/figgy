@@ -1,6 +1,6 @@
 <h2>Categories</h2>
 <ul>
   <% decorated_resource.categories.each do |category| %>
-    <li><%= link_to category.label, ContextualPath.new(child: category, parent_id: nil).show %></li>
+    <li><%= link_to category.label, solr_document_path(category) %></li>
   <% end %>
 </ul>

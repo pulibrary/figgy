@@ -7,7 +7,7 @@
     </tr>
     <% unless decorated_resource.members.empty? %>
       <% decorated_resource.members.each do |reference| %>
-        <% reference_url = parent_solr_document_path("#{resource.id}", "#{reference.id}") %>
+        <% reference_url = solr_document_path("#{reference.id}") %>
         <tr>
           <td><%= reference.title&.first %></td>
           <td><%= reference.short_title&.first %></td>

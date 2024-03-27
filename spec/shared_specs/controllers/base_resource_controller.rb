@@ -105,8 +105,8 @@ RSpec.shared_examples "a ResourcesController" do |*flags|
       post :create, params: { param_key => valid_params.merge(append_id: parent.id.to_s) }
 
       expect(response).to be_redirect
-      expect(response.location).to start_with "http://test.host/catalog/parent/#{parent.id}/"
-      id = response.location.gsub("http://test.host/catalog/parent/#{parent.id}/", "")
+      expect(response.location).to start_with "http://test.host/catalog/"
+      id = response.location.gsub("http://test.host/catalog/", "")
       expect(find_resource(id).title).to contain_exactly "Title 1", "Title 2"
       expect(find_resource(parent.id).member_ids).to eq [Valkyrie::ID.new(id)]
       solr_record = Blacklight.default_index.connection.get("select", params: { qt: "document", q: "id:#{id}" })["response"]["docs"][0]

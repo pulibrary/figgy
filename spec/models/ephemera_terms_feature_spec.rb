@@ -28,7 +28,7 @@ RSpec.feature "Ephemera Terms" do
       end
 
       scenario "users can view an existing term" do
-        visit ContextualPath.new(child: ephemera_term).show
+        visit solr_document_path(ephemera_term)
         expect(page).to have_content "test term"
       end
 
@@ -41,7 +41,7 @@ RSpec.feature "Ephemera Terms" do
       end
 
       scenario "users can delete existing terms", js: true do
-        visit ContextualPath.new(child: ephemera_term).show
+        visit solr_document_path(ephemera_term)
 
         page.accept_confirm do
           click_link "Delete This Ephemera Term"
