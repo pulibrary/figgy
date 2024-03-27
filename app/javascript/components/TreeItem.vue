@@ -173,7 +173,6 @@ export default {
     },
     isSelected: function() {
       if (this.tree.selected === this.id) {
-        console.log('id_selected: ' + this.tree.selected)
         return true
       }
       return false

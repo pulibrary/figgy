@@ -199,9 +199,7 @@ const gallery = {
   mutations: modules.galleryModule.mutations,
 }
 
-const axions = {
-  saveStructureAJAX: vi.fn()
-}
+// let saveStructureAJAX: vi.fn();
 
 let resource = {
   state: {
@@ -301,21 +299,42 @@ describe("StructManagerToolbar.vue", () => {
   it("Removes a nested object by id", () => {
     let nested_object = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, 'abc')
     let nested_removed = wrapper.vm.removeNestedObjectById(JSON.parse(JSON.stringify(wrapper.vm.tree.structure.folders)), 'abc')
-    let does_not_exist = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, 'abc')
-    console.log(JSON.parse(JSON.stringify(wrapper.vm.tree.structure.folders)))
-    expect(does_not_exist).toEqual('undefined')
+    let does_not_exist = wrapper.vm.findFolderById(nested_removed, 'abc')
+    expect(does_not_exist).toEqual(undefined)
   })
 
   it("Deletes a folder that contains a file", () => {
     global.confirm = vi.fn(() => true)
-
-    expect(wrapper.vm.end_nodes.length).toEqual(0)
     wrapper.vm.deleteFolder("1234567")
-    // expect(global.confirm).toHaveBeenCalled()
-    // expect(wrapper.vm.end_nodes.length).toEqual(1)
+    expect(global.confirm).toHaveBeenCalled()
+    expect(wrapper.vm.end_nodes.length).toEqual(0)
+    expect(wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "1234567")).toBe(undefined)
+  })
 
-    // console.log('shoud not exist: ' + JSON.stringify(wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "3")))
-    // expect(wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "12t")).toBe(false)
+  it("Cuts Gallery Items", () => {
+    wrapper.vm.selectAll()
+    wrapper.vm.cutSelected()
+    expect(wrapper.vm.isCutDisabled()).toBe(true)
+  })
+
+  it("Selects a Tree Folder", () => {
+    wrapper.vm.selectTreeItemById("abc")
+    expect(wrapper.vm.tree.selected).toEqual("abc")
+  })
+
+  it("Pastes a Gallery Item into a Tree Folder", () => {
+    wrapper.vm.paste(-1)
+    console.log('items: ' + JSON.stringify(wrapper.vm.gallery.items))
+    expect(wrapper.vm.gallery.items.length).toEqual(0)
+    // expect(wrapper.vm.tree.structure).toEqual(0) or expectToFindAllIDs in the tree
+    // expect(saveStructureAJAX).toHaveBeenCalled()
+  })
+
+  it("Saves the structure", () => {
+    wrapper.vm.saveHandler({});
+    // await wrapper.find('#save_btn').trigger('click')
+    // console.log(wrapper.html)
+    // expect(saveStructureAJAX).toHaveBeenCalled()
   })
 
   // test('triggers a click', async () => {

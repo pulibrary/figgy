@@ -131,11 +131,12 @@ export default {
       });
     },
     saveHandler: function (event) {
-      console.log(this.isSaveDisabled())
+      console.log('event: ' + JSON.stringify(event))
       if(this.isSaveDisabled()) {
         // workaround for a bug in LUX that doesn't style disabled buttons properly
         alert('The structure has not changed, nothing to save.')
       } else {
+        console.log('tree_folders: ' + JSON.stringify(this.tree.structure.folders))
         let structureNodes = this.renamePropertiesForSave(this.tree.structure.folders)
         console.log('renamePropertiesForSave Output: ' + JSON.stringify(structureNodes))
         structureNodes = this.cleanNestedArrayForSave(structureNodes)
@@ -175,7 +176,8 @@ export default {
         .indexOf(id)
     },
     isCutDisabled: function () {
-      return !!this.gallery.cut.length || !!this.tree.cut
+      // return !!this.gallery.cut.length || !!this.tree.cut
+      return !(this.gallery.cut.length || this.tree.cut)
     },
     isPasteDisabled: function () {
       return !(this.gallery.cut.length || this.tree.cut)
@@ -244,7 +246,7 @@ export default {
         parentFolderObject.folders = parentFolders
         structure.folders = this.addNewNode(folderList, parentFolderObject)
 
-        this.$store.commit("ADD_RESOURCE", structure)
+        this.$store.commit("ADD_FILES", structure)
 
         this.$store.dispatch('paste', items)
         this.$store.commit("SET_MODIFIED", true)
@@ -399,16 +401,13 @@ export default {
       }
     },
     commitRemoveFolder: function(folderList, folderToBeRemoved) {
-      console.log('folderList: ' + JSON.stringify(folderList))
-      console.log('folderToBeRemovedID: ' + folderToBeRemoved.id)
       const structure = {
         id: this.tree.structure.id,
         folders: this.removeNestedObjectById(folderList, folderToBeRemoved.id),
         label: this.tree.structure.label,
       }
-      console.log('structure with removed folder: ' + JSON.stringify(structure.folders))
       this.$store.commit("DELETE_FOLDER", structure)
-      this.$store.commit("SELECT", null)
+      this.$store.commit("SELECT_TREEITEM", null)
       if (this.end_nodes.length) {
         // add any images deleted from the tree back into the gallery
         this.addGalleryItems()
@@ -524,6 +523,7 @@ export default {
     },
     selectTreeItemById: function (id) {
       this.$store.commit("SELECT_TREEITEM", id)
+      this.selectNoneGallery()
     },
     zoomOnItem: function() {
       // if a tree item is selected, make sure it is a file and get the obj
