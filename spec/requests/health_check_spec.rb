@@ -2,6 +2,12 @@
 require "rails_helper"
 
 RSpec.describe "Health Check", type: :request do
+  before(:all) do
+    # Setup ocr in path in tmp directory
+    ocr_in_path = Figgy.config["ocr_in_path"]
+    FileUtils.mkdir_p(ocr_in_path) unless File.directory?(ocr_in_path)
+  end
+
   describe "GET /health" do
     it "has a health check" do
       stub_aspace_login
@@ -42,6 +48,41 @@ RSpec.describe "Health Check", type: :request do
       expect(response.status).to eq 503
       rabbit_response = JSON.parse(response.body)["results"].find { |x| x["name"] == "RabbitMqStatus" }
       expect(rabbit_response["message"]).not_to be_blank
+    end
+
+    context "when there are files in the ocr in directory" do
+      before do
+        stub_aspace_login
+        allow(Net::SMTP).to receive(:new).and_return(instance_double(Net::SMTP, "open_timeout=": nil, start: true))
+      end
+
+      after do
+        # Cleanup files
+        ocr_in_path = Figgy.config["ocr_in_path"]
+        Dir["#{ocr_in_path}/*"].each { |f| File.delete(f) }
+      end
+
+      it "errors when there are pdfs in the ocr directory older than 12 hours" do
+        thirteen_hours_ago = Time.current.to_time - 13.hours
+        ocr_in_path = Figgy.config["ocr_in_path"]
+        FileUtils.touch("#{ocr_in_path}/file1.pdf", mtime: thirteen_hours_ago)
+
+        get "/health.json"
+
+        expect(response).not_to be_successful
+        expect(response.status).to eq 503
+        file_watcher_response = JSON.parse(response.body)["results"].find { |x| x["name"] == "FileWatcherStatus" }
+        expect(file_watcher_response["message"]).not_to be_blank
+      end
+
+      it "is successful when there are pdfs in the ocr directory younger than 12 hours" do
+        ocr_in_path = Figgy.config["ocr_in_path"]
+        FileUtils.touch("#{ocr_in_path}/file1.pdf")
+
+        get "/health.json"
+
+        expect(response).to be_successful
+      end
     end
   end
 end
