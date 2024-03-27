@@ -63,6 +63,7 @@ class ChangeSetPersister
       before_delete: [
         CreateDeletionMarker,
         CleanupPDFDerivatives,
+        CleanupMosaic,
         CleanupFiles,
         CleanupStructure,
         DeleteReferenced::Factory.new(property: :member_of_vocabulary_id),

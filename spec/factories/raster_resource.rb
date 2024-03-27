@@ -111,5 +111,21 @@ FactoryBot.define do
         ]
       end
     end
+
+    factory :raster_set_with_one_raster_child do
+      state { "complete" }
+      after(:build) do |resource, _evaluator|
+        file = IngestableFile.new(
+          file_path: Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"),
+          mime_type: "image/tif",
+          original_filename: "geotiff.tif",
+          container_attributes: { service_targets: "tiles" }
+        )
+        resource.member_ids ||= []
+        resource.member_ids += [
+          FactoryBot.create_for_repository(:raster_resource, files: [file]).id
+        ]
+      end
+    end
   end
 end

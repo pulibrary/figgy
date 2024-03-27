@@ -79,6 +79,25 @@ FactoryBot.define do
       end
     end
 
+    factory :map_set_with_raster_children do
+      state { "complete" }
+      after(:build) do |resource, _evaluator|
+        raster_file_set1 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        raster_file_set2 = FactoryBot.create_for_repository(:geo_raster_cloud_file)
+        raster1 = FactoryBot.create_for_repository(:raster_resource, member_ids: [raster_file_set1.id])
+        raster2 = FactoryBot.create_for_repository(:raster_resource, member_ids: [raster_file_set2.id])
+        child_scanned_map1 = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster1.id])
+        child_scanned_map2 = FactoryBot.create_for_repository(:scanned_map, member_ids: [raster2.id])
+        scanned_map_file_set = FactoryBot.create_for_repository(:geo_image_file_set)
+        resource.member_ids ||= []
+        resource.member_ids += [
+          child_scanned_map1.id,
+          child_scanned_map2.id,
+          scanned_map_file_set.id
+        ]
+      end
+    end
+
     factory :scanned_map_with_raster_child do
       state { "complete" }
       after(:build) do |resource, _evaluator|
