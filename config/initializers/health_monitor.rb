@@ -7,6 +7,7 @@ Rails.application.config.after_initialize do
     config.add_custom_provider(SolrStatus)
     config.add_custom_provider(AspaceStatus)
     config.add_custom_provider(RabbitMqStatus)
+    config.add_custom_provider(SmtpStatus)
 
     # Make this health check available at /health
     config.path = :health
