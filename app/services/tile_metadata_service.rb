@@ -26,6 +26,13 @@ class TileMetadataService
     full_path.gsub(base_path, "")
   end
 
+  # Returns an ID value that can be passed to a storage adapter to find or
+  # delete. The ID must take the form "s3://{path}" or "disk://{path}".
+  def storage_adapter_id
+    return full_path if cloud_storage_adapter?
+    "disk://#{full_path}"
+  end
+
   def mosaic?
     # A mosaic is single service comprised of multiple raster datasets.
     # This tests if there are multiple child raster FileSets.
@@ -46,7 +53,7 @@ class TileMetadataService
   # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
   #   and make private if possible
   def base_path
-    if storage_adapter.is_a? Valkyrie::Storage::Shrine
+    if cloud_storage_adapter?
       "s3://#{storage_adapter.shrine.bucket.name}"
     else
       storage_adapter.base_path.to_s
@@ -75,6 +82,10 @@ class TileMetadataService
 
     def default_filename
       "mosaic.json"
+    end
+
+    def cloud_storage_adapter?
+      storage_adapter.is_a? Valkyrie::Storage::Shrine
     end
 
     def query_service
