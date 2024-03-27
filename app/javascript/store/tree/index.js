@@ -12,7 +12,7 @@ export const treeMutations = {
     state.modified = false
     state.saveState = "NOT_SAVED"
   },
-  ADD_RESOURCE(state, structure) {
+  ADD_FILES(state, structure) {
     state.structure = structure
   },
   CUT_FOLDER(state, folderId) {

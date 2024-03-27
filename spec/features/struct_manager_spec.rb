@@ -19,7 +19,10 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).to have_css ".lux-structManager"
     find(".folder-container > div:first-child").click
     expect(page).to have_css ".folder-container.selected"
-    # binding.pry
+    #test keyboard shortcuts
+    #page.native.send_keys :control, :shift, 'n'
+    # expect(page).to have_text "Untitled"
+    binding.pry
   end
 
 end
