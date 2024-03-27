@@ -46,17 +46,15 @@ class TileMetadataService
   # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
   #   and make private if possible
   def base_path
-    if storage_adapter.is_a? Valkyrie::Storage::Shrine
+    if cloud_storage_adapter?
       "s3://#{storage_adapter.shrine.bucket.name}"
     else
       storage_adapter.base_path.to_s
     end
   end
 
-  # Refactor once https://github.com/samvera/valkyrie/issues/887 is resolved
-  #   and make private if possible
   def mosaic_file_id
-    if storage_adapter.is_a? Valkyrie::Storage::Shrine
+    if cloud_storage_adapter?
       "#{storage_adapter.send(:protocol_with_prefix)}#{storage_adapter.path_generator.generate(resource: resource, original_filename: default_filename, file: nil)}"
     else
       "disk://#{storage_adapter.path_generator.generate(resource: resource, original_filename: default_filename, file: nil)}"
@@ -75,6 +73,10 @@ class TileMetadataService
 
     def default_filename
       "mosaic.json"
+    end
+
+    def cloud_storage_adapter?
+      storage_adapter.is_a? Valkyrie::Storage::Shrine
     end
 
     def query_service
