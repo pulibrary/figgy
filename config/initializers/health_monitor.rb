@@ -10,6 +10,18 @@ Rails.application.config.after_initialize do
     config.add_custom_provider(SmtpStatus)
     config.add_custom_provider(FileWatcherStatus)
 
+    # monitor all the queues for latency
+    # The gem also comes with some additional default monitoring, including
+    # number of retries on a job (max 20) and ensuring there are running workers
+    config.sidekiq.configure do |sidekiq_config|
+      sidekiq_config.latency = 5.days
+      sidekiq_config.queue_size = 1_000_000
+      sidekiq_config.add_queue_configuration("high", latency: 5.days, queue_size: 1_000_000)
+      sidekiq_config.add_queue_configuration("low", latency: 5.days, queue_size: 1_000_000)
+      sidekiq_config.add_queue_configuration("super_low", latency: 5.days, queue_size: 1_000_000)
+      sidekiq_config.add_queue_configuration("retry", latency: 5.days, queue_size: 1_000_000)
+    end
+
     # Make this health check available at /health
     config.path = :health
 

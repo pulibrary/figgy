@@ -12,6 +12,8 @@ RSpec.describe "Health Check", type: :request do
     it "has a health check" do
       stub_aspace_login
       allow(Net::SMTP).to receive(:new).and_return(instance_double(Net::SMTP, "open_timeout=": nil, start: true))
+      # stub the number of processes since sidekiq doesn't run in test
+      allow(Sidekiq::Stats).to receive(:new).and_return(instance_double(Sidekiq::Stats, processes_size: 1))
 
       get "/health.json"
 
@@ -50,6 +52,19 @@ RSpec.describe "Health Check", type: :request do
       expect(rabbit_response["message"]).not_to be_blank
     end
 
+    it "is configured to monitor all desired Sidekiq queues" do
+      sidekiq_configuration = HealthMonitor.configuration.providers.find { |provider| provider.name == "Sidekiq" }.configuration
+
+      # test that all the queues are checked, and the configuration of each
+      expect(sidekiq_configuration.queues).to match(
+        "high" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "default" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "low" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "super_low" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "retry" => hash_including(latency: 5.days, queue_size: 1_000_000)
+      )
+    end
+
     context "when there are files in the ocr in directory" do
       before do
         stub_aspace_login
@@ -67,7 +82,7 @@ RSpec.describe "Health Check", type: :request do
         ocr_in_path = Figgy.config["ocr_in_path"]
         FileUtils.touch("#{ocr_in_path}/file1.pdf", mtime: thirteen_hours_ago)
 
-        get "/health.json"
+        get "/health.json?providers[]=filewatcherstatus"
 
         expect(response).not_to be_successful
         expect(response.status).to eq 503
@@ -79,7 +94,7 @@ RSpec.describe "Health Check", type: :request do
         ocr_in_path = Figgy.config["ocr_in_path"]
         FileUtils.touch("#{ocr_in_path}/file1.pdf")
 
-        get "/health.json"
+        get "/health.json?providers[]=filewatcherstatus"
 
         expect(response).to be_successful
       end
