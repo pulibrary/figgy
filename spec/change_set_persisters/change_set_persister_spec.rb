@@ -824,6 +824,19 @@ RSpec.describe ChangeSetPersister do
     end
   end
 
+  context "deleting a Raster Set", run_real_characterization: true, run_real_derivatives: true do
+    with_queue_adapter :inline
+    it "cleans up the mosiac.json file" do
+      resource = FactoryBot.create_for_repository(:raster_set_with_files)
+      mosaic_path = TileMetadataService.new(resource: resource, generate: true).full_path
+      change_set = ChangeSet.for(resource)
+
+      expect do
+        change_set_persister.delete(change_set: change_set)
+      end.to change { File.exist?(mosaic_path) }.from(true).to(false)
+    end
+  end
+
   describe "setting visibility" do
     context "when setting to public" do
       it "adds the public read_group" do
