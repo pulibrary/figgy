@@ -12,6 +12,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@figgy': resolve(__dirname, 'app/javascript/figgy'),
+      '@channels': resolve(__dirname, 'app/javascript/channels'),
       '@viewer': resolve(__dirname, 'app/javascript/viewer'),
       '@images': resolve(__dirname, 'app/javascript/images'),
       '@components': resolve(__dirname, 'app/javascript/components'),
