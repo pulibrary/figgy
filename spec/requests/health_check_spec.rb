@@ -12,6 +12,8 @@ RSpec.describe "Health Check", type: :request do
     it "has a health check" do
       stub_aspace_login
       allow(Net::SMTP).to receive(:new).and_return(instance_double(Net::SMTP, "open_timeout=": nil, start: true))
+      # stub the number of processes since sidekiq doesn't run in test
+      allow(Sidekiq::Stats).to receive(:new).and_return(instance_double(Sidekiq::Stats, processes_size: 1))
 
       get "/health.json"
 
@@ -96,5 +98,6 @@ RSpec.describe "Health Check", type: :request do
 
         expect(response).to be_successful
       end
+    end
   end
 end
