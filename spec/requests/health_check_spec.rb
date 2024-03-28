@@ -50,6 +50,19 @@ RSpec.describe "Health Check", type: :request do
       expect(rabbit_response["message"]).not_to be_blank
     end
 
+    it "is configured to monitor all desired Sidekiq queues" do
+      sidekiq_configuration = HealthMonitor.configuration.providers.find { |provider| provider.name == "Sidekiq" }.configuration
+
+      # test that all the queues are checked, and the configuration of each
+      expect(sidekiq_configuration.queues).to match(
+        "high" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "default" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "low" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "super_low" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "retry" => hash_including(latency: 5.days, queue_size: 1_000_000)
+      )
+    end
+
     context "when there are files in the ocr in directory" do
       before do
         stub_aspace_login
@@ -83,6 +96,5 @@ RSpec.describe "Health Check", type: :request do
 
         expect(response).to be_successful
       end
-    end
   end
 end
