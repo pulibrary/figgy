@@ -82,7 +82,7 @@ RSpec.describe "Health Check", type: :request do
         ocr_in_path = Figgy.config["ocr_in_path"]
         FileUtils.touch("#{ocr_in_path}/file1.pdf", mtime: thirteen_hours_ago)
 
-        get "/health.json"
+        get "/health.json?providers[]=filewatcherstatus"
 
         expect(response).not_to be_successful
         expect(response.status).to eq 503
@@ -94,7 +94,7 @@ RSpec.describe "Health Check", type: :request do
         ocr_in_path = Figgy.config["ocr_in_path"]
         FileUtils.touch("#{ocr_in_path}/file1.pdf")
 
-        get "/health.json"
+        get "/health.json?providers[]=filewatcherstatus"
 
         expect(response).to be_successful
       end
