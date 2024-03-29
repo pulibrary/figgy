@@ -17,8 +17,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
   it_behaves_like "a ResourcesController"
 
   describe "#pdf" do
-    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-    let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+    let(:factory) { :scanned_resource }
 
     it_behaves_like "a Pdfable"
   end

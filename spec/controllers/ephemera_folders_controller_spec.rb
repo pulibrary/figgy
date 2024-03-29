@@ -472,10 +472,8 @@ RSpec.describe EphemeraFoldersController, type: :controller do
     end
   end
 
-  describe "pdf" do
-    let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, member_ids: [file_set.id]) }
-    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: file_meta) }
-    let(:file_meta) { FileMetadata.new(mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+  describe "#pdf" do
+    let(:factory) { :ephemera_folder }
 
     it_behaves_like "a Pdfable"
   end

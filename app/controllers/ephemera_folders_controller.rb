@@ -77,10 +77,6 @@ class EphemeraFoldersController < ResourcesController
     redirect_to download_path(redirect_path_args)
   end
 
-  def storage_adapter
-    Valkyrie.config.storage_adapter
-  end
-
   def auth_token_param
     params[:auth_token]
   end

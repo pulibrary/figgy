@@ -5,26 +5,21 @@ RSpec.shared_examples "a Pdfable" do
   with_queue_adapter :inline
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:resource) { FactoryBot.create_for_repository(factory, files: [file], pdf_type: ["gray"]) }
+  let(:file_set_id) { resource.member_ids.first }
 
   before do
-    raise "resource must be set with `let(:resource)`" unless
-      defined? resource
+    raise "factory must be set with `let(:factory)`" unless defined? factory
+    resource
+    stub_request(
+      :any,
+      "http://www.example.com/image-service/#{file_set_id}/full/200,/0/gray.jpg"
+    ).to_return(
+      body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")),
+      status: 200
+    )
     sign_in user
-  end
-
-  let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
-  let(:pdf_file) do
-    file = fixture_file_upload("files/example.tif", "application/pdf")
-    node = FileMetadata.for(file: file).new(id: SecureRandom.uuid)
-    stored_file = storage_adapter.upload(resource: node, file: file, original_filename: "tmp.pdf")
-    node.file_identifiers = stored_file.id
-    node
-  end
-  let(:pdf_generator) { double }
-
-  before do
-    allow(PDFGenerator).to receive(:new).and_return(pdf_generator)
-    allow(pdf_generator).to receive(:render).and_return(pdf_file)
   end
 
   it "generates a pdf, attaches it to the folder, and redirects the user to download it" do

@@ -174,10 +174,8 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
     end
   end
 
-  describe "pdf" do
-    let(:resource) { FactoryBot.create_for_repository(:coin, member_ids: [file_set.id]) }
-    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: file_metadata) }
-    let(:file_metadata) { FileMetadata.new(mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+  describe "#pdf" do
+    let(:factory) { :coin }
 
     it_behaves_like "a Pdfable"
   end
