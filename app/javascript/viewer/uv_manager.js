@@ -7,7 +7,7 @@ import LeafletViewer from '@viewer/leaflet_viewer'
 import TabManager from '@viewer/tab_manager'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Viewer from '@samvera/clover-iiif/viewer'
+import Viewer from '@princeton/clover-iiif-test'
 
 export default class UVManager {
   async initialize () {
@@ -131,12 +131,9 @@ export default class UVManager {
     // Show hidden viewer element
     uvElement.style.display = 'block'
     const root = ReactDOM.createRoot(uvElement)
-    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false, showIIIFBadge: false } })
+    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false, showIIIFBadge: false } })
 
     root.render(clover)
-    // TODO: The resize logic can be removed in the future if Clover is
-    // updated to better scale to containing element size.
-    this.bindResizeClover()
   }
 
   addViewerIcons () {
@@ -248,52 +245,6 @@ export default class UVManager {
   bindResizeUV () {
     $(window).on('resize', () => this.resizeUV())
     this.resizeUV()
-  }
-
-  resizeClover () {
-    let height = window.innerHeight
-    const tocElement = document.getElementsByClassName('clover-viewer-media-wrapper')[0]
-    const headerElement = document.getElementsByClassName('clover-viewer-header')[0]
-    if (typeof tocElement !== 'undefined') { height = height - tocElement.clientHeight }
-    if (typeof headerElement !== 'undefined') { height = height - headerElement.clientHeight }
-    const playerWrapper = $('.clover-viewer-player-wrapper')
-    const video = $('#clover-iiif-video')
-    const painting = $('.clover-viewer-painting')
-    playerWrapper.height(height)
-    video.height(height)
-    playerWrapper.css({ maxHeight: `${height}px` })
-    video.css({ maxHeight: `${height}px` })
-    painting.css({ maxHeight: `${height}px` })
-    painting.children().css({ maxHeight: `${height}px` })
-  }
-
-  useMediaQuery (mediaQuery) {
-    if (!window.matchMedia) {
-      return false
-    }
-    return window.matchMedia(mediaQuery).matches
-  }
-
-  bindResizeClover () {
-    const ro = new ResizeObserver(entries => {
-      const header = document.getElementsByClassName('clover-viewer-header')[0]
-      const button = document.getElementsByClassName('c-crBlHK')[0]
-      // Clover small viewport size
-      // https://github.com/samvera-labs/clover-iiif/blob/main/src/styles/stitches.config.tsx#L98
-      const smallViewportQuery = '(max-width: 767px)'
-
-      if (this.useMediaQuery(smallViewportQuery)) {
-        // Hide header and more info button when in a small viewport
-        if (typeof header !== 'undefined') { header.style.display = 'none' }
-        if (typeof button !== 'undefined') { button.style.display = 'none' }
-      } else {
-        // Ensure header is displayed when not in a small viewport
-        if (typeof header !== 'undefined') { header.style.display = 'flex' }
-      }
-
-      this.resizeClover()
-    })
-    ro.observe(document.getElementById('uv'))
   }
 
   bindLogin () {

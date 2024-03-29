@@ -8,8 +8,8 @@
   "dependencies": {
     "@google-cloud/pubsub": "^0.31.0",
     "@google-cloud/storage": "^5.8.4",
+    "@princeton/clover-iiif-test": "https://pkg.csb.dev/eliotjordan/clover-iiif/commit/5b96608e/@princeton/clover-iiif-test",
     "@rails/actioncable": "^7.1.3-2",
-    "@samvera/clover-iiif": "^2.3.2",
     "@vitejs/plugin-vue2": "^2.2.0",
     "ajv": "^6.12.3",
     "apollo-boost": "^0.1.10",
