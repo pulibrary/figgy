@@ -89,10 +89,6 @@ module Numismatics
       @selected_issue = numismatic_issue&.id.to_s
     end
 
-    def storage_adapter
-      Valkyrie.config.storage_adapter
-    end
-
     def after_create_success(obj, _change_set)
       if params[:commit] == "Save and Duplicate Metadata"
         redirect_to new_numismatics_coin_path(parent_id: resource_params[:append_id], create_another: obj.id.to_s), notice: "Coin #{obj.coin_number} Saved, Creating Another..."

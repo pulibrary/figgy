@@ -16,6 +16,12 @@ RSpec.describe ScannedResourcesController, type: :controller do
 
   it_behaves_like "a ResourcesController"
 
+  describe "#pdf" do
+    let(:factory) { :scanned_resource }
+
+    it_behaves_like "a Pdfable"
+  end
+
   describe "manifest caching" do
     let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }

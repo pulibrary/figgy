@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require_relative "shared_specs/controllers/base_resource_controller.rb"
+require_relative "shared_specs/controllers/concerns/pdfable.rb"
 require_relative "shared_specs/decorators/collection_decorator.rb"
 require_relative "shared_specs/models/linked_data/linked_resource.rb"
 require_relative "shared_specs/models/linked_data/resource/with_date_range.rb"

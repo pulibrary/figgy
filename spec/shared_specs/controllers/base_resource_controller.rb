@@ -382,22 +382,4 @@ RSpec.shared_examples "a ResourcesController" do |*flags|
       end
     end
   end
-
-  describe "#pdf" do
-    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-    let(:resource) { FactoryBot.create_for_repository(factory, files: [file]) }
-    let(:file_set) { resource.member_ids.first }
-    before do
-      stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
-        .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
-    end
-    it "generates a PDF, attaches it to the simple resource, and redirects to download for it" do
-      get :pdf, params: { id: resource.id.to_s }
-      reloaded = adapter.query_service.find_by(id: resource.id)
-
-      expect(reloaded.file_metadata).not_to be_blank
-      expect(reloaded.pdf_file).not_to be_blank
-      expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
-    end
-  end
 end
