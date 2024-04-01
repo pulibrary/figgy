@@ -6,15 +6,16 @@ class PDFService
     @change_set_persister = change_set_persister
   end
 
-  def find_or_generate(change_set)
-    pdf_file = change_set.resource.pdf_file
+  def find_or_generate(resource_id:)
+    resource = query_service.find_by(id: resource_id)
+    pdf_file = resource.pdf_file
 
     unless pdf_file && binary_exists_for?(pdf_file)
-      pdf_file = PDFGenerator.new(resource: change_set.resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
+      pdf_file = PDFGenerator.new(resource: resource, storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)).render
 
       begin
         # Reload the resource and change set to comply with optimistic locking
-        resource = query_service.find_by(id: change_set.id)
+        resource = query_service.find_by(id: resource.id)
         change_set = ChangeSet.for(resource)
         change_set_persister.buffer_into_index do |buffered_changeset_persister|
           change_set.validate(file_metadata: [pdf_file])
