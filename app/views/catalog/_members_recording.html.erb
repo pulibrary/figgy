@@ -9,7 +9,7 @@
      <th>Actions</th>
     </tr>
     <% decorated_resource.volumes.each do |volume| %>
-      <% volume_url = parent_solr_document_path("#{resource.id}", "#{volume.id}") %>
+      <% volume_url = solr_document_path("#{volume.id}") %>
       <tr>
         <td><%= link_to figgy_thumbnail_path(volume, { class: 'thumbnail-inner', onerror: default_icon_fallback }), volume_url %></td>
         <td><%= volume.first_title %></td>

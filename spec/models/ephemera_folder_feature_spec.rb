@@ -137,7 +137,7 @@ RSpec.feature "Ephemera Folders" do
 
   context "when users have added an ephemera folder" do
     scenario "users can view an existing folder" do
-      visit ContextualPath.new(child: ephemera_folder).show
+      visit solr_document_path(ephemera_folder)
       expect(page).to have_content "test folder"
     end
 
@@ -216,7 +216,7 @@ RSpec.feature "Ephemera Folders" do
     end
 
     scenario "users can delete existing folders", js: true do
-      visit ContextualPath.new(child: ephemera_folder).show
+      visit solr_document_path(ephemera_folder)
 
       page.accept_confirm do
         click_link "Delete This Ephemera Folder"

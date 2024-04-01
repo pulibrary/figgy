@@ -12,7 +12,7 @@
   <tbody>
     <% unless decorated_resource.decorated_coins.empty? %>
       <% decorated_resource.decorated_coins.each do |coin| %>
-        <% coin_url = parent_solr_document_path(parent_id: resource.id, id: coin.id) %>
+        <% coin_url = solr_document_path(id: coin.id) %>
         <tr>
           <td style="width: 30%"><%= link_to figgy_thumbnail_path(coin, { class: 'thumbnail-inner', onerror: default_icon_fallback }), coin_url %></td>
           <td><%= coin.first_title %></td>

@@ -21,14 +21,14 @@ RSpec.feature "Ephemera Vocabularies" do
     end
 
     scenario "users can add fields linked to controlled vocabularies" do
-      visit ContextualPath.new(child: ephemera_project).show
+      visit solr_document_path(ephemera_project)
       click_link "Add Field"
 
       page.select "EphemeraFolder.subject", from: "Name"
       page.select ephemera_vocabulary.label.first, from: "Vocabulary"
       page.click_button "Save"
 
-      visit ContextualPath.new(child: ephemera_project).show
+      visit solr_document_path(ephemera_project)
 
       expect(page).to have_content "EphemeraFolder.subject"
     end
@@ -119,7 +119,7 @@ RSpec.feature "Ephemera Vocabularies" do
     end
 
     scenario "users can view existing controlled vocabularies" do
-      visit ContextualPath.new(child: ephemera_vocabulary).show
+      visit solr_document_path(ephemera_vocabulary)
 
       expect(page).to have_content "test vocabulary"
     end
@@ -142,7 +142,7 @@ RSpec.feature "Ephemera Vocabularies" do
     end
 
     scenario "users can delete controlled vocabularies" do
-      visit ContextualPath.new(child: ephemera_vocabulary).show
+      visit solr_document_path(ephemera_vocabulary)
 
       click_link "Delete This Ephemera Vocabulary"
 
@@ -150,7 +150,7 @@ RSpec.feature "Ephemera Vocabularies" do
     end
 
     scenario "users can add categories to controlled vocabularies" do
-      visit ContextualPath.new(child: ephemera_vocabulary).show
+      visit solr_document_path(ephemera_vocabulary)
       click_link "Add Category"
 
       expect(page).to have_selector("h1", text: "New Category")
@@ -158,19 +158,19 @@ RSpec.feature "Ephemera Vocabularies" do
       page.click_button "Save"
 
       expect(page).to have_content "test category"
-      visit ContextualPath.new(child: ephemera_vocabulary).show
+      visit solr_document_path(ephemera_vocabulary)
       expect(page).to have_content "test category"
     end
 
     scenario "users can add terms to controlled vocabularies" do
-      visit ContextualPath.new(child: ephemera_vocabulary).show
+      visit solr_document_path(ephemera_vocabulary)
       click_link "Add Term"
 
       page.fill_in "ephemera_term_label", with: "test term"
       page.click_button "Save"
 
       expect(page).to have_content "test term"
-      visit ContextualPath.new(child: ephemera_vocabulary).show
+      visit solr_document_path(ephemera_vocabulary)
       expect(page).to have_content "test term"
     end
   end

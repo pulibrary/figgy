@@ -11,7 +11,7 @@
     </thead>
     <tbody>
     <% decorated_resource.boxes.each do |box| %>
-      <% box_url = parent_solr_document_path("#{resource.id}", "#{box.id}") %>
+      <% box_url = solr_document_path("#{box.id}") %>
       <tr>
         <td><%= box.rendered_state %></td>
         <td><%= box.box_number.first %></td>
@@ -50,7 +50,7 @@
       <% decorated_resource.fields.each do |ephemera_field| %>
         <tr>
           <td><%= ephemera_field.name_label %></td>
-          <td><%= link_to ephemera_field.vocabulary_label, ContextualPath.new(child: ephemera_field.vocabulary, parent_id: nil).show %></td>
+          <td><%= link_to ephemera_field.vocabulary_label, solr_document_path(ephemera_field.vocabulary) %></td>
           <% if can?(:modify, ephemera_field) %>
             <td><%= link_to 'Edit', edit_ephemera_field_path(ephemera_field) %></td>
           <% end %>
