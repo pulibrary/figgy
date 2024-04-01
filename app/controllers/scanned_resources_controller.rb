@@ -16,7 +16,7 @@ class ScannedResourcesController < ResourcesController
 
   # View the structural metadata for a given repository resource
   def structure
-    @change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param).prepopulate!
+    @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
     authorize! :structure, @change_set.resource
     @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
     members = Wayfinder.for(@change_set.resource).members_with_parents
@@ -45,7 +45,7 @@ class ScannedResourcesController < ResourcesController
   end
 
   def pdf
-    change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param)
+    change_set = ChangeSet.for(find_resource(params[:id]))
     authorize! :pdf, change_set.resource
     resource_id = change_set.resource.id
     GeneratePdfJob.perform_now(resource_id: resource_id)
