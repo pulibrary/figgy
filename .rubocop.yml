@@ -154,6 +154,7 @@ Layout/LineLength:
     - 'spec/decorators/numismatics/accession_decorator_spec.rb'
     - 'config/initializers/simple_form_bootstrap.rb'
 Metrics/MethodLength:
+  Max: 15
   Exclude:
     - 'db/migrate/**/*'
     - 'app/models/schema/common.rb'

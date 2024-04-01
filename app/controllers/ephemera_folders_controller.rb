@@ -10,6 +10,8 @@ class EphemeraFoldersController < ResourcesController
   before_action :load_boxes, only: [:edit]
   before_action :skip_validation, only: [:update, :create]
 
+  include Pdfable
+
   def change_set_param
     parent_resource.is_a?(EphemeraBox) ? "ephemera_folder" : "boxless_ephemera_folder"
   end
@@ -65,16 +67,6 @@ class EphemeraFoldersController < ResourcesController
         render json: ManifestBuilder.new(resource).build
       end
     end
-  end
-
-  def pdf
-    change_set = ChangeSet.for(find_resource(params[:id]))
-    authorize! :pdf, change_set.resource
-    pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
-
-    redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
-    redirect_path_args[:auth_token] = auth_token_param if auth_token_param
-    redirect_to download_path(redirect_path_args)
   end
 
   def auth_token_param

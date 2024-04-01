@@ -54,7 +54,8 @@ acronyms = {
   "iiif_suggest_search" => "IiifSuggestSearch",
   "oai" => "OAI",
   "marc21" => "MARC21",
-  "oai_wrapper" => "OAIWrapper"
+  "oai_wrapper" => "OAIWrapper",
+  "generate_pdf_job" => "GeneratePdfJob"
 }
 
 Rails.autoloaders.main.inflector.inflect(acronyms)

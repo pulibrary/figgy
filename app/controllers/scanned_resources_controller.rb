@@ -3,6 +3,8 @@ class ScannedResourcesController < ResourcesController
   self.resource_class = ScannedResource
   self.change_set_persister = ChangeSetPersister.default
 
+  include Pdfable
+
   def after_create_success(obj, change_set)
     super
     handle_save_and_ingest(obj)
@@ -16,7 +18,7 @@ class ScannedResourcesController < ResourcesController
 
   # View the structural metadata for a given repository resource
   def structure
-    @change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param).prepopulate!
+    @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
     authorize! :structure, @change_set.resource
     @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
     members = Wayfinder.for(@change_set.resource).members_with_parents
@@ -42,16 +44,6 @@ class ScannedResourcesController < ResourcesController
     Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
       ManifestBuilder.new(resource, auth_token_param).build.to_json
     end
-  end
-
-  def pdf
-    change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param)
-    authorize! :pdf, change_set.resource
-    pdf_file = PDFService.new(change_set_persister).find_or_generate(change_set)
-
-    redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
-    redirect_path_args[:auth_token] = auth_token_param if auth_token_param
-    redirect_to download_path(redirect_path_args)
   end
 
   # API endpoint for asking where a folder to save and ingest from is located.

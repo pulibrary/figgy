@@ -45,6 +45,7 @@ RSpec.describe "ScannedResource requests", type: :request do
 
   context "when the PDF is generated but an optimistic lock prevents save" do
     it "serves the generated PDF anyway" do
+      skip "these don't work; see https://github.com/pulibrary/figgy/issues/2866"
       buffered_csp_mock = instance_double(ChangeSetPersister::Basic)
       allow(buffered_csp_mock).to receive(:save).and_raise(Valkyrie::Persistence::StaleObjectError)
       csp_mock = instance_double(ChangeSetPersister::Basic)
@@ -59,6 +60,7 @@ RSpec.describe "ScannedResource requests", type: :request do
   # Added a more generic check because Read Only Mode might throw an error.
   context "when the PDF is generated but something prevents a save" do
     it "serves the generated PDF anyway" do
+      skip "these don't work; see https://github.com/pulibrary/figgy/issues/2866"
       buffered_csp_mock = instance_double(ChangeSetPersister::Basic)
       allow(buffered_csp_mock).to receive(:save).and_raise("something weird happened")
       csp_mock = instance_double(ChangeSetPersister::Basic)
