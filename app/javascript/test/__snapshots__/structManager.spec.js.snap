@@ -43,7 +43,6 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
       data-v-5aca45d1=""
       id=""
       jsondata="[object Object]"
-      selected="C0614_c00002"
     />
   </div>
   <div
