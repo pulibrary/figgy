@@ -157,17 +157,6 @@ Rails.application.config.to_prepare do
   # The file system in the server environment was overriding this, specifically for cases where files were saved to...
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
-  Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["geo_derivative_path"],
-      file_mover: lambda { |old_path, new_path|
-        FileUtils.mv(old_path, new_path)
-        FileUtils.chmod(0o644, new_path)
-      }
-    ),
-    :geo_derivatives
-  )
-
   if Figgy.config["aws_access_key_id"].present? && Figgy.config["cloud_geo_bucket"].present? && !Rails.env.test?
     Shrine.storages = (Shrine.storages || {}).merge(
       cloud_geo_storage: Shrine::Storage::S3.new(
@@ -349,7 +338,7 @@ Rails.application.config.to_prepare do
   Valkyrie::Derivatives::DerivativeService.services << VectorResourceDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
     )
   )
 
@@ -357,13 +346,13 @@ Rails.application.config.to_prepare do
   Valkyrie::Derivatives::DerivativeService.services << RasterResourceDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
     )
   )
   Valkyrie::Derivatives::DerivativeService.services << ExternalMetadataDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:geo_derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
     )
   )
 

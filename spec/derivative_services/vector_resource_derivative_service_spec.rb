@@ -36,7 +36,7 @@ RSpec.describe VectorResourceDerivativeService do
   end
 
   context "with a valid shapefile" do
-    it "creates a thumbnail in the geo derivatives directory and also stores to the cloud" do
+    it "creates a thumbnail in the derivatives directory and also stores to the cloud" do
       cloud_file_service = instance_double(CloudFilePermissionsService)
       allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
       allow(cloud_file_service).to receive(:run)
@@ -48,7 +48,7 @@ RSpec.describe VectorResourceDerivativeService do
       cloud_vector_file = Valkyrie::StorageAdapter.find_by(id: cloud_vector_file_set.file_identifiers.first)
 
       expect(cloud_vector_file_set.use).to eq([Valkyrie::Vocab::PCDMUse.CloudDerivative])
-      expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["geo_derivative_path"]).to_s)
+      expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
       expect(cloud_vector_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
     end
