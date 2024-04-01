@@ -2,8 +2,6 @@
 class RasterResourceDerivativeService
   class Factory
     attr_reader :change_set_persister
-    delegate :metadata_adapter, :storage_adapter, to: :change_set_persister
-    delegate :query_service, to: :metadata_adapter
     def initialize(change_set_persister:)
       @change_set_persister = change_set_persister
     end
@@ -15,7 +13,7 @@ class RasterResourceDerivativeService
 
   attr_reader :id, :change_set_persister
   delegate :mime_type, to: :primary_file
-  delegate :query_service, to: :change_set_persister
+  delegate :query_service, :storage_adapter, to: :change_set_persister
   delegate :primary_file, to: :resource
   def initialize(id:, change_set_persister:)
     @id = id
@@ -159,10 +157,6 @@ class RasterResourceDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
-    end
-
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:geo_derivatives)
     end
 
     # Updates error message property on the original file.
