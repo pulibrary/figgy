@@ -3,6 +3,8 @@ class ScannedResourcesController < ResourcesController
   self.resource_class = ScannedResource
   self.change_set_persister = ChangeSetPersister.default
 
+  include Pdfable
+
   def after_create_success(obj, change_set)
     super
     handle_save_and_ingest(obj)
@@ -42,18 +44,6 @@ class ScannedResourcesController < ResourcesController
     Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
       ManifestBuilder.new(resource, auth_token_param).build.to_json
     end
-  end
-
-  def pdf
-    change_set = ChangeSet.for(find_resource(params[:id]))
-    authorize! :pdf, change_set.resource
-    resource_id = change_set.resource.id
-    GeneratePdfJob.perform_now(resource_id: resource_id)
-
-    pdf_file = query_service.find_by(id: resource_id).decorate.pdf_file
-    redirect_path_args = { resource_id: change_set.id, id: pdf_file.id }
-    redirect_path_args[:auth_token] = auth_token_param if auth_token_param
-    redirect_to download_path(redirect_path_args)
   end
 
   # API endpoint for asking where a folder to save and ingest from is located.
