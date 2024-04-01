@@ -345,7 +345,6 @@ describe("StructManager.vue", () => {
     // but we can test the function
     wrapper.vm.filterGallery(true)
     expect(wrapper.vm.ga).toEqual(unstructured_items)
-    console.log(wrapper.vm.resourceId)
     expect(wrapper.vm.s).toEqual(tree_structure)
   })
 })
@@ -448,7 +447,6 @@ describe('when the tree structure is Saved', () => {
   })
 
   it("displays an alert with a success message", () => {
-    console.log(wrapper4.html())
     expect(wrapper4.text()).toContain('Your work has been saved!')
   })
 })

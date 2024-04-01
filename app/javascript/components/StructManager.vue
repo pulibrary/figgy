@@ -120,6 +120,7 @@ export default {
       captionPixelPadding: 9,
       ga: null,
       s: null,
+      id: this.resourceId,
     }
   },
   computed: {
@@ -177,11 +178,11 @@ export default {
   beforeMount: function () {
     if (this.resourceObject) {
       // if props are passed in set the resource on mount
-      this.resourceId = this.resourceObject.id
+      this.id = this.resourceObject.id
       this.$store.commit('SET_RESOURCE', this.resourceObject)
       this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADED')
     } else {
-      let resource = { id: this.resourceId }
+      let resource = { id: this.id }
       this.$store.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING')
       this.$store.dispatch('loadImageCollectionGql', resource)
     }
@@ -241,7 +242,7 @@ export default {
         // function much easier to test
         this.ga = ga;
         this.s = {
-          id: this.resourceId,
+          id: this.id,
           folders: this.removeProxyProperty(structureFolders),
           label: this.structure.label[0],
         }

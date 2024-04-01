@@ -26,101 +26,36 @@ let items = [
     "service": "b2_service",
     "mediaUrl": "b2_url",
     "viewingHint": null
-  },
-  {
-    "id": "3",
-    "caption": "c_fee",
-    "service": "c3_service",
-    "mediaUrl": "c3_url",
-    "viewingHint": null
   }
 ]
 
-let resourceObject = {
-  id: "aea40813-e0ed-4307-aae9-aec53b26bdda",
-  label: "Resource with 3 files",
-  viewingHint: "individuals",
-  viewingDirection: "LEFTTORIGHT",
-  startPage: "1",
-  thumbnail: {
-    id: "1",
-    thumbnailUrl:
-      "a1_url",
-    iiifServiceUrl: "a1_service",
-  },
-  __typename: "ScannedResource",
-  members: [
-    {
-      id: "1",
-      label: "a",
-      viewingHint: "single",
-      thumbnail: {
-        iiifServiceUrl:
-          "a1_service",
-      },
-      __typename: "FileSet",
-    },
-    {
-      id: "2",
-      label: "b",
-      viewingHint: null,
-      thumbnail: {
-        iiifServiceUrl:
-          "b2_service",
-      },
-      __typename: "FileSet",
-    },
-    {
-      id: "3",
-      label: "c",
-      viewingHint: null,
-      thumbnail: {
-        iiifServiceUrl:
-          "c3_service",
-      },
-      __typename: "FileSet",
-    },
-  ],
-}
 //////////////////////////
 let figgy_structure = {
-  "id": null,
-  "internal_resource": "Structure",
-  "created_at": null,
-  "updated_at": null,
-  "new_record": true,
-  "label": [
-    "Table of Contents"
-  ],
-  "nodes": [
-    {
-      "id": null,
-      "internal_resource": "StructureNode",
-      "created_at": null,
-      "updated_at": null,
-      "new_record": true,
-      "label": [
-        "Chapter 1"
-      ],
-      "proxy": [],
-      "nodes": [
-        {
-          "id": null,
-          "internal_resource": "StructureNode",
-          "created_at": null,
-          "updated_at": null,
-          "new_record": true,
-          "label": ['c'],
-          "proxy": [
-            {
-              "id": "3"
-            }
-          ],
-          "nodes": []
-        }
-      ]
-    }
-  ]
+  "id": "89e28e8f-2025-4ef6-bf10-a7be36cabfbe",
+  "resourceClassName": "ScannedResource",
+  "structure": {
+    "label": "Table of Contents",
+    "nodes": [
+      {
+        "nodes": [],
+        "label": "Chapter 1"
+      },
+      {
+        "nodes": [
+          {
+            "proxy": "1c3e9ca9-7aa0-4f4d-957f-f42cb43c254a"
+          },
+          {
+            "proxy": "ba6731e9-f8a7-4065-a4eb-f422926b3719"
+          },
+          {
+            "proxy": "50be643a-4225-4424-ab3e-964b8edccead"
+          }
+        ],
+        "label": "Chapter 2"
+      }
+    ]
+  }
 }
 //////////////////////////
 let tree_structure = {
@@ -168,6 +103,7 @@ let unstructured_items = [
     "viewingHint": null
   },
 ]
+
 const tree = {
   state: {
     selected: "3",
@@ -188,6 +124,10 @@ const zoom = {
   getters: zoomGetters,
 }
 
+actions = {
+  saveStructureAJAX: vi.fn(),
+}
+
 const gallery = {
   state: {
     items: items,
@@ -204,8 +144,8 @@ const gallery = {
 let resource = {
   state: {
     resource: {
-      id: "",
-      resourceClassName: "",
+      id: "aea40813-e0ed-4307-aae9-aec53b26bdda",
+      resourceClassName: "ScannedResource",
       bibId: "",
       label: "Resource not available.",
       thumbnail: "",
@@ -221,13 +161,13 @@ let resource = {
   },
   mutations: resourceMutations,
   getters: resourceGetters,
-  actions: actions,
   modules: {
     gallery: gallery,
   },
 }
 
 let store = new Vuex.Store({
+  actions: actions,
   modules: {
     ordermanager: resource,
     gallery: gallery,
@@ -309,39 +249,47 @@ describe("StructManagerToolbar.vue", () => {
     expect(global.confirm).toHaveBeenCalled()
     expect(wrapper.vm.end_nodes.length).toEqual(0)
     expect(wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "1234567")).toBe(undefined)
+    // puts the deleted file back in the gallery items list
+    expect(wrapper.vm.gallery.items.length).toEqual(3)
   })
 
   it("Cuts Gallery Items", () => {
+    wrapper.vm.selectNoneGallery()
+    expect(wrapper.vm.isCutDisabled()).toBe(true)
+    expect(wrapper.vm.gallery.selected.length).toEqual(0)
     wrapper.vm.selectAll()
+    expect(wrapper.vm.gallery.selected.length).toEqual(3)
+    expect(wrapper.vm.isCutDisabled()).toBe(false)
     wrapper.vm.cutSelected()
+    expect(wrapper.vm.gallery.selected.length).toEqual(0)
+    expect(wrapper.vm.gallery.cut.length).toEqual(3)
     expect(wrapper.vm.isCutDisabled()).toBe(true)
   })
 
   it("Selects a Tree Folder", () => {
+    let empty_folder = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "abc")
+    expect(empty_folder.folders.length).toEqual(0)
     wrapper.vm.selectTreeItemById("abc")
     expect(wrapper.vm.tree.selected).toEqual("abc")
   })
 
   it("Pastes a Gallery Item into a Tree Folder", () => {
-    wrapper.vm.paste(-1)
-    console.log('items: ' + JSON.stringify(wrapper.vm.gallery.items))
+    wrapper.vm.paste()
     expect(wrapper.vm.gallery.items.length).toEqual(0)
-    // expect(wrapper.vm.tree.structure).toEqual(0) or expectToFindAllIDs in the tree
-    // expect(saveStructureAJAX).toHaveBeenCalled()
+    let pasted_folder = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "abc")
+    expect(pasted_folder.folders.length).toEqual(3)
   })
 
-  it("Saves the structure", () => {
+  it("Saves the structure in a format that Figgy accepts", () => {
     wrapper.vm.saveHandler({});
-    // await wrapper.find('#save_btn').trigger('click')
-    // console.log(wrapper.html)
-    // expect(saveStructureAJAX).toHaveBeenCalled()
+    expect(wrapper.vm.resourceToSave.id).toEqual("aea40813-e0ed-4307-aae9-aec53b26bdda")
+    expect(wrapper.vm.resourceToSave.resourceClassName).toEqual("ScannedResource")
+    expect(wrapper.vm.resourceToSave.structure.label).toEqual("Table of Contents")
+    expect(wrapper.vm.resourceToSave.structure.nodes[0].label).toEqual("Chapter A")
+    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes.length).toEqual(3)
+    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[0].proxy).toEqual("1")
+    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[1].proxy).toEqual("2")
+    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[2].proxy).toEqual("3")
+    expect(actions.saveStructureAJAX).toHaveBeenCalled()
   })
-
-  // test('triggers a click', async () => {
-  //   await wrapper.find('#save_btn').trigger('click')
-  //   expect(axions.saveStructureAJAX).toHaveBeenCalled()
-  // })
-
-
-
 })

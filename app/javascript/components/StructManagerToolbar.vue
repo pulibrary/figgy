@@ -82,6 +82,7 @@ export default {
   data: function() {
     return {
       end_nodes: [],
+      resourceToSave: null,
     }
   },
   computed: {
@@ -131,18 +132,14 @@ export default {
       });
     },
     saveHandler: function (event) {
-      console.log('event: ' + JSON.stringify(event))
       if(this.isSaveDisabled()) {
         // workaround for a bug in LUX that doesn't style disabled buttons properly
         alert('The structure has not changed, nothing to save.')
       } else {
-        console.log('tree_folders: ' + JSON.stringify(this.tree.structure.folders))
         let structureNodes = this.renamePropertiesForSave(this.tree.structure.folders)
-        console.log('renamePropertiesForSave Output: ' + JSON.stringify(structureNodes))
         structureNodes = this.cleanNestedArrayForSave(structureNodes)
-        console.log('cleanNestedArrayForSave Output: ' + JSON.stringify(structureNodes))
 
-        let resourceToSave = {
+        this.resourceToSave = {
           id: this.resource.id,
           resourceClassName: this.resource.resourceClassName,
           structure: {
@@ -150,13 +147,14 @@ export default {
             nodes: structureNodes,
           }
         }
-        this.$store.dispatch('saveStructureAJAX', resourceToSave)
+        
+        this.$store.dispatch('saveStructureAJAX', this.resourceToSave)
       }
     },
     cutSelected: function () {
       if (this.gallery.selected.length) {
         // if cards are selected, cut gallery items
-        this.$store.dispatch('cut', this.gallery.selected)
+        this.$store.commit("CUT", this.gallery.selected)
         this.selectNoneGallery()
       } else if (this.tree.selected) {
         // if folder is selected, cut tree items
@@ -176,8 +174,13 @@ export default {
         .indexOf(id)
     },
     isCutDisabled: function () {
-      // return !!this.gallery.cut.length || !!this.tree.cut
-      return !(this.gallery.cut.length || this.tree.cut)
+      if (this.gallery.selected.length) {
+        return false
+      }
+      if (this.tree.selected) {
+        return false
+      }
+      return true
     },
     isPasteDisabled: function () {
       return !(this.gallery.cut.length || this.tree.cut)
@@ -203,7 +206,7 @@ export default {
       }
       return true
     },
-    paste: function (indexModifier) {
+    paste: function () {
       // figure out what is currently on the clipboard, a gallery item or a tree item
       if (!this.tree.selected) {
         alert('You must select a tree item to paste into.')
@@ -248,7 +251,8 @@ export default {
 
         this.$store.commit("ADD_FILES", structure)
 
-        this.$store.dispatch('paste', items)
+        this.$store.commit('PASTE', items)
+
         this.$store.commit("SET_MODIFIED", true)
         this.clearClipboard()
         this.selectNoneGallery()
@@ -296,7 +300,7 @@ export default {
       return root;
     },
     clearClipboard: function () {
-      this.$store.dispatch('cut', [])
+      this.$store.commit('CUT', [])
       this.$store.commit("CUT_FOLDER", null)
     },
     resizeCards: function (event) {
@@ -497,7 +501,7 @@ export default {
       return Math.floor(Math.random() * 10000000).toString()
     },
     selectAll: function () {
-      this.$store.dispatch('select', this.gallery.items)
+      this.$store.commit("SELECT", this.gallery.items)
     },
     selectAlternate: function () {
       let selected = []
@@ -505,7 +509,7 @@ export default {
       for (let i = 0; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }
-      this.$store.dispatch('select', selected)
+      this.$store.commit("SELECT", selected)
     },
     selectInverse: function () {
       let selected = []
@@ -513,10 +517,10 @@ export default {
       for (let i = 1; i < itemTotal; i = i + 2) {
         selected.push(this.gallery.items[i])
       }
-      this.$store.dispatch('select', selected)
+      this.$store.commit("SELECT", selected)
     },
     selectNoneGallery: function () {
-      this.$store.dispatch('select', [])
+      this.$store.commit("SELECT", [])
     },
     selectNoneTree: function () {
       this.$store.commit("SELECT_TREEITEM", null)
