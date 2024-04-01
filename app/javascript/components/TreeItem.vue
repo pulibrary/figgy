@@ -92,7 +92,7 @@
             >
             </input-button>
             <input-button
-              @button-clicked="deleteFolder()"
+              @button-clicked="deleteFolder(id)"
               class="expand-collapse"
               type="button"
               variation="icon"
@@ -172,15 +172,19 @@ export default {
       return this.jsonData.folders.length > 0
     },
     isSelected: function() {
-      if (this.tree.selected === this.id) {
-        return true
+      if (this.tree.selected) {
+        let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        let selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
+        let selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
+        // return true if id matches any of the ids in selectedTreeItems array
+        return selectedTreeItems.includes(this.id)
       }
       return false
     },
     isDisabled: function() {
       if (this.tree.cut) {
         let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        let cutTreeStructure = this.findSelectedFolderById(folderList, this.tree.cut)
+        let cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
         let disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
         // return true if id matches any of the ids in cutItemIDs_array
         return disabledTreeItems.includes(this.id)
@@ -212,45 +216,53 @@ export default {
       traverse(structure)
       return result
     },
-    addNewFolder: function (array, newParent) {
+    addNewNode: function (array, newParent) {
       for (let item of array) {
         if (item.id === newParent.id) {
           item = newParent
         } else if (item.folders?.length) {
-          const innerResult = this.addNewFolder(item.folders, newParent)
+          const innerResult = this.addNewNode(item.folders, newParent)
         }
       }
       return array
     },
-    createFolder: function(id) {
+    createFolder: function() {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       const rootId = this.tree.structure.id
+
       const newFolder = {
         id: this.generateId(),
         folders: [],
         label: "Untitled",
+        file: false,
       }
       // need to stringify and parse to drop the observer that comes with Vue reactive data
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       let structure = {
         id: this.tree.structure.id,
         label: this.tree.structure.label,
+        folders: folderList
       }
       if(parentId === rootId) {
-        folderList.push(newFolder)
-        structure.folders = folderList
+        structure.folders.push(newFolder)
       } else {
-        let parentFolderObject = this.findSelectedFolderById(folderList, parentId)
-        let newParent = parentFolderObject.folders.push(newFolder)
-        structure.folders = this.addNewFolder(folderList, newParent)
+        let parentFolderObject = this.findFolderById(folderList, parentId)
+        if(parentFolderObject.file) {
+          alert("Oops, looks like you tried to add a folder to a file. You can only add a new folder to another folder.")
+          return false
+        } else {
+          let newParent = parentFolderObject.folders.push(newFolder)
+          structure.folders = this.addNewNode(folderList, newParent)
+        }
       }
       this.$store.commit("CREATE_FOLDER", structure)
+      return newFolder.id
     },
-    findSelectedFolderById: function (array, id) {
+    findFolderById: function (array, id) {
       for (const item of array) {
         if (item.id === id) return item;
         if (item.folders?.length) {
-          const innerResult = this.findSelectedFolderById(item.folders, id);
+          const innerResult = this.findFolderById(item.folders, id);
           if (innerResult) return innerResult;
         }
       }
@@ -266,13 +278,13 @@ export default {
         }
       }
     },
-    deleteFolder: function () {
+    deleteFolder: function (folder_id) {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let folderToBeRemoved = this.findSelectedFolderById(folderList, this.tree.selected)
+      let folderToBeRemoved = this.findFolderById(folderList, folder_id)
       const selectedNode = this.tree.selected
       const rootId = this.tree.structure.id
       if(selectedNode === rootId) {
-        alert("Sorry, you cannot delete the root node.")
+        alert("Sorry, you cannot delete the top-level folder.")
         return false
       }
       // if there are sub-folders, warn the user that they will also be deleted.
@@ -307,13 +319,9 @@ export default {
       this.end_nodes = []
     },
     commitRemoveFolder: function(folderList, folderToBeRemoved) {
-      let folders = []
-      if(folderList[0] !== folderToBeRemoved){
-        folders = this.removeFolder(folderList, folderToBeRemoved)
-      }
       const structure = {
         id: this.tree.structure.id,
-        folders: folders,
+        folders: this.removeNestedObjectById(folderList, folderToBeRemoved.id),
         label: this.tree.structure.label,
       }
       this.$store.commit("DELETE_FOLDER", structure)
@@ -323,17 +331,20 @@ export default {
         this.addGalleryItems()
       }
     },
-    removeFolder: function (array, folderToBeRemoved) {
-      for (const item of array) {
-        if (item.folders.includes(folderToBeRemoved)) {
-          const index = item.folders.indexOf(folderToBeRemoved)
-          item.folders.splice(index, 1)
-        }
-        if (item.folders?.length) {
-          const innerResult = this.removeFolder(item.folders, folderToBeRemoved)
-        }
-      }
-      return array
+    removeNestedObjectById: function (nestedArray, idToRemove) {
+      return nestedArray.map(item => {
+          // Check if the current item's id matches the id parameter
+          if (item.id === idToRemove) {
+              return undefined; // Exclude the current item
+          }
+          if (item.folders && item.folders.length > 0) {
+              // If the current item has folders, recursively call the function
+              item.folders = this.removeNestedObjectById(item.folders, idToRemove);
+          }
+
+          // Otherwise, keep the item in the result array
+          return item;
+      }).filter(item => item !== undefined);
     },
     generateId: function () {
       return Math.floor(Math.random() * 10000000).toString()
@@ -342,8 +353,6 @@ export default {
       if (!this.isOpen) {
         this.isOpen = !this.isOpen
       }
-      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let selected = this.findSelectedFolderById(folderList, id)
       store.commit("SELECT_TREEITEM", id)
       // tree and gallery items cannot be selected simultaneously, so deselect the gallery
       store.commit("SELECT", [])
@@ -360,14 +369,13 @@ export default {
       }
 
       if (id !== this.tree.structure.id) {
-        let selectedFolder = this.findSelectedFolderById(folderList, parentId)
+        let selectedFolder = this.findFolderById(folderList, parentId)
         structure = {
           id: this.tree.structure.id,
           folders: this.updateFolderLabel(folderList, selectedFolder),
           label: this.tree.structure.label,
         }
       }
-
       store.commit("SAVE_LABEL", structure)
       this.editedFieldId = null;
     },
@@ -398,7 +406,7 @@ export default {
     },
     viewFile: function (id) {
       let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      let selected = this.findSelectedFolderById(folderList, id)
+      let selected = this.findFolderById(folderList, id)
       selected.caption = selected.label
       this.$store.commit("ZOOM", selected)
     },

@@ -9,7 +9,7 @@
       :menu-items="[
         {name: 'Create New Folder (Ctrl-n)', component: 'FolderCreate'},
         {name: 'Group Selected into New Folder (Ctrl-g)', component: 'SelectedCreate', disabled: isCutDisabled()},
-        {name: 'Delete Folder', component: 'FolderDelete', disabled: this.rootNodeSelected},
+        {name: 'Delete Folder (Ctrl-d)', component: 'FolderDelete', disabled: this.rootNodeSelected},
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
         {name: 'Paste (Ctrl-v)', component: 'Paste', disabled: isPasteDisabled()},
@@ -147,7 +147,7 @@ export default {
             nodes: structureNodes,
           }
         }
-        
+
         this.$store.dispatch('saveStructureAJAX', this.resourceToSave)
       }
     },
@@ -314,7 +314,7 @@ export default {
         case 'Group Selected into New Folder (Ctrl-g)':
           this.groupSelectedIntoFolder()
           break
-        case 'Delete Folder':
+        case 'Delete Folder (Ctrl-d)':
           this.deleteFolder(this.tree.selected)
           break
         case 'Undo Cut (Ctrl-z)':
@@ -488,15 +488,6 @@ export default {
         }
       }
     },
-    // getParentByID: function (array, childFolder) {
-    //   for (const item of array) {
-    //     if (item.id === id) return item;
-    //     if (item.folders?.length) {
-    //       const innerResult = this.getParentByID(item.folders, childFolder)
-    //       if (innerResult) return innerResult
-    //     }
-    //   }
-    // },
     generateId: function () {
       return Math.floor(Math.random() * 10000000).toString()
     },
@@ -555,22 +546,22 @@ export default {
       this._keyListener = function(e) {
           if (e.key === "x" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
-
               this.cutSelected()
           }
           if (e.key === "v" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
-
-              this.paste(-1)
+              this.paste()
+          }
+          if (e.key === "d" && (e.ctrlKey || e.metaKey)) {
+              e.preventDefault();
+              this.deleteFolder(this.tree.selected)
           }
           if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
-
               this.clearClipboard()
           }
           if (e.key === "n" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
-
               this.createFolder([])
           }
           if (e.key === "g" && (e.ctrlKey || e.metaKey)) {
@@ -579,7 +570,6 @@ export default {
           }
           if (e.key === "o" && (e.ctrlKey || e.metaKey)) {
               e.preventDefault();
-
               this.zoomOnItem()
           }
       };

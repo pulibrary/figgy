@@ -28,7 +28,9 @@
     >
       Sorry, there was a problem saving your work!
     </alert>
-    <toolbar @cards-resized="resizeCards($event)" />
+    <toolbar
+      @cards-resized="resizeCards($event)"
+    />
     <deep-zoom
       v-if="zoomed"
       viewer-id="viewer"
@@ -37,13 +39,10 @@
     <div
       class="lux-sidePanel"
     >
-    <div class="panelHeader">
-      <heading level="h2" size="h6">Logical Structure</heading>
-    </div>
-    <tree
-      selected="C0614_c00002"
-      :json-data="tree.structure">
-      </tree>
+      <div class="panelHeader">
+        <heading level="h2" size="h6">Logical Structure</heading>
+      </div>
+      <tree :json-data="tree.structure"></tree>
     </div>
     <div
       class="lux-galleryPanel"
@@ -188,6 +187,9 @@ export default {
     }
   },
   methods: {
+    handleDeleteFolder: function (data) {
+      console.log(data)
+    },
     filterGallery: function (newVal) {
       if (this.structure) {
         // If structure prop is provided,
