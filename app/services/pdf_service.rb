@@ -22,12 +22,12 @@ class PDFService
           buffered_changeset_persister.save(change_set: change_set)
           # rubocop:disable Lint/SuppressedException
         rescue
-          # If a user initiatves PDF generation, waits, then gives up and tries again,
-          # the second one may fail because the first one successfully generated the PDF
-          # and then saved before the second one did. Just serve the generated PDF.
-          # This might also fail because of Read Only - we never want to prevent
-          # the user getting the PDF even if we can't cache it, so just always
-          # serve it.
+          # TODO: This behavior needs to be udpated; just suppressing the
+          # exception isn't enough. see
+          # https://github.com/pulibrary/figgy/issues/2866#issuecomment-2030505256
+          #
+          # We want to serve the generated PDF whether or not it saved, e.g. if
+          # there's an OptimisticLockError or we're in Read Only mode
         end
         # rubocop:enable Lint/SuppressedException
       end
