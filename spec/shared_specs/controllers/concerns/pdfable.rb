@@ -2,6 +2,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "a Pdfable" do
+  include ActiveJob::TestHelper
   with_queue_adapter :inline
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
@@ -29,5 +30,22 @@ RSpec.shared_examples "a Pdfable" do
 
     expect(reloaded.file_metadata).not_to be_blank
     expect(reloaded.pdf_file).not_to be_blank
+  end
+
+  context "when background_pdf_generating is true" do
+    with_queue_adapter :test
+    it "backgrounds PDFs by rendering a PDF" do
+      perform_enqueued_jobs
+      allow(Figgy).to receive(:background_pdf_generating?).and_return(true)
+
+      get :pdf, params: { id: resource.id.to_s }
+
+      expect(response).to render_template "base/pdf"
+      expect(GeneratePdfJob).to have_been_enqueued
+    end
+    after do
+      clear_enqueued_jobs
+      clear_performed_jobs
+    end
   end
 end
