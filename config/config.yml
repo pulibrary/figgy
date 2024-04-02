@@ -291,6 +291,7 @@ production:
 
 staging:
   <<: *defaults
+  background_pdf_generating: true
   index_read_only: false # set to true if doing a long reindex process.
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
