@@ -34,8 +34,7 @@ RSpec.shared_examples "a Pdfable" do
 
   context "when background_pdf_generating is true" do
     with_queue_adapter :test
-    it "backgrounds PDFs by rendering a PDF" do
-      perform_enqueued_jobs
+    it "backgrounds PDF generation and renders a loading page" do
       allow(Figgy).to receive(:background_pdf_generating?).and_return(true)
 
       get :pdf, params: { id: resource.id.to_s }
