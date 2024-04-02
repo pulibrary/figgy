@@ -21,7 +21,6 @@ defaults: &defaults
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "pyramidal_derivatives") %>
-  geo_derivative_path: <%= Rails.root.join("tmp", "geo_derivatives") %>
   stream_derivatives_path: <%= Rails.root.join("tmp", "stream_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
   pyramidal_url: <%= ENV.fetch('PYRAMIDAL_URL', 'http://localhost:8182/iiif/2/') %>
@@ -250,7 +249,6 @@ test:
   repository_path: <%= Rails.root.join("tmp", "test_files#{ENV["TEST_ENV_NUMBER"]}") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
-  geo_derivative_path: <%= Rails.root.join("tmp", "test_geo_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   bag_path: <%= Rails.root.join("tmp", "test_bags#{ENV["TEST_ENV_NUMBER"]}") %>
   export_base: <%= Rails.root.join("tmp", "test_export#{ENV["TEST_ENV_NUMBER"]}") %>
   pudl_root: <%= Rails.root.join("spec", "fixtures", "test_pudl_root") %>
@@ -273,7 +271,6 @@ production:
   archivespace_url: <%= ENV["ASPACE_URL"] || "https://aspace.princeton.edu/staff/api" %>
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
-  geo_derivative_path: "/opt/repository/geo_derivatives"
   stream_derivatives_path: "/opt/repository/stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
@@ -297,7 +294,6 @@ staging:
   derivative_path: "/opt/repository/derivatives"
   cloud_geo_bucket: "figgy-geo-staging"
   pyramidal_derivative_path: "/opt/repository/derivatives/pyramidals"
-  geo_derivative_path: "/opt/repository/geo_derivatives"
   stream_derivatives_path: "/opt/repository/stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>

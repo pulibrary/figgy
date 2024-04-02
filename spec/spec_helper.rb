@@ -18,7 +18,6 @@ RSpec.configure do |config|
   config.after(:suite) do
     break unless Rails.env.test?
     FileUtils.rm_rf(Figgy.config["derivative_path"])
-    FileUtils.rm_rf(Figgy.config["geo_derivative_path"])
     FileUtils.rm_rf(Figgy.config["repository_path"])
   end
 end
