@@ -206,4 +206,3 @@ RSpec.describe ManifestBuilder do
     end
   end
 end
-

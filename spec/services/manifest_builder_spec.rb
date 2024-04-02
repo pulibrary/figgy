@@ -195,7 +195,7 @@ RSpec.describe ManifestBuilder do
         expect(output["logo"]).to eq("https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png")
       end
     end
-    
+
     context "when there's no derivative_file" do
       it "doesn't generate a IIIF endpoint" do
         allow_any_instance_of(FileSet).to receive(:derivative_file).and_return(nil)
