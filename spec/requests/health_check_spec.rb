@@ -61,7 +61,7 @@ RSpec.describe "Health Check", type: :request do
         "default" => hash_including(latency: 5.days, queue_size: 1_000_000),
         "low" => hash_including(latency: 5.days, queue_size: 1_000_000),
         "super_low" => hash_including(latency: 5.days, queue_size: 1_000_000),
-        "retry" => hash_including(latency: 5.days, queue_size: 1_000_000)
+        "realtime" => hash_including(latency: 30.seconds, queue_size: 100)
       )
     end
 
