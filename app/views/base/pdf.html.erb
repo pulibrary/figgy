@@ -1,0 +1,17 @@
+<div id="pdf-loading-bar">
+  <div>
+    <div class="preview">
+      <div class="box">
+        <%= figgy_thumbnail_path(@decorated_resource) %>
+      </div>
+      <h2><%= @decorated_resource.header %></h2>
+    </div>
+    <div class="loading-bar">
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+      </div>
+    </div>
+    <div class="info">Generating PDF. You will be redirected on completion.</div>
+    <div class="info">Generation will still proceed if you close this tab and return later.</div>
+  </div>
+</div>

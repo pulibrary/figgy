@@ -34,6 +34,7 @@ RSpec.shared_examples "a Pdfable" do
 
   context "when background_pdf_generating is true" do
     with_queue_adapter :test
+    render_views
     it "backgrounds PDF generation and renders a loading page" do
       allow(Figgy).to receive(:background_pdf_generating?).and_return(true)
 
@@ -41,6 +42,9 @@ RSpec.shared_examples "a Pdfable" do
 
       expect(response).to render_template "base/pdf"
       expect(GeneratePdfJob).to have_been_enqueued
+      expect(response.body).to have_content resource.title.first.to_s
+      expect(response.body).to have_content "0%"
+      expect(response.body).to have_selector "img[src='http://www.example.com/image-service/#{resource.member_ids.first}/full/!200,150/0/default.jpg']"
     end
     after do
       clear_enqueued_jobs

@@ -1,0 +1,28 @@
+#pdf-loading-bar {
+  background: #F5F4F1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: top;
+  padding: 100px;
+  padding-top: 200px;
+  font-size: 1.4rem;
+  .preview {
+    margin-bottom: 25px;
+    h2 {
+      margin-top: 25px;
+      margin-bottom: 0;
+    }
+  }
+  .progress {
+    height: 25px;
+    margin-bottom: 25px;
+  }
+  .info {
+  }
+}
+html, body {
+  height: 100%;
+}
