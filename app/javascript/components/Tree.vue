@@ -4,6 +4,9 @@
       :id="structure.id"
       :json-data="tree.structure"
       :selected="selected"
+      :delete-folder="handleDeleteFolder"
+      :create-folder="handleCreateFolder"
+      :zoom-file="handleZoomFile"
       >
     </tree-item>
   </ul>
@@ -49,6 +52,17 @@ export default {
     ...mapState({
       tree: state => store.state.tree,
     }),
+  },
+  methods: {
+    handleCreateFolder: function(folder_id) {
+      this.$emit('create-folder', folder_id);
+    },
+    handleDeleteFolder: function(folder_id) {
+      this.$emit('delete-folder', folder_id);
+    },
+    handleZoomFile: function(file_id) {
+      this.$emit('zoom-file', file_id);
+    },
   },
   beforeMount: function() {
     if (this.selected) {

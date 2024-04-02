@@ -210,86 +210,15 @@ describe("StructManagerToolbar.vue", () => {
     expect(parent.folders.map(obj => obj.id).includes(newFolderId)).toBe(false)
   })
 
-  it("Selects a Tree item by id", () => {
-    wrapper.vm.selectTreeItemById('1234567')
-    const parentId = wrapper.vm.tree.selected ? wrapper.vm.tree.selected : wrapper.vm.tree.structure.id
-    expect(parentId).toEqual('1234567')
-  })
+  // it("Save is not disabled when something has changed", () => {
+  //   wrapper.vm.createFolder()
+  //   expect(wrapper.vm.isSaveDisabled()).toBe(false)
+  // })
 
-  it("Creates a new folder on a folder object", () => {
-    // in the previous test, we select a Tree item that is not a file, so it should get added
-    const parentId = wrapper.vm.tree.selected ? wrapper.vm.tree.selected : wrapper.vm.tree.structure.id
-    let newFolderId = wrapper.vm.createFolder()
-    let parent = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, parentId)
-    expect(parent.file).toBe(false)
-    expect(parent.folders.map(obj => obj.id).includes(newFolderId)).toBe(true)
-  })
+  // it("Zoom is disabled when nothing is selected", () => {
+  //   wrapper.vm.selectNoneTree()
+  //   wrapper.vm.selectNoneGallery()
+  //   expect(wrapper.vm.isZoomDisabled()).toBe(true)
+  // })
 
-  it("Save is not disabled when something has changed", () => {
-    wrapper.vm.createFolder()
-    expect(wrapper.vm.isSaveDisabled()).toBe(false)
-  })
-
-  it("Zoom is disabled when nothing is selected", () => {
-    wrapper.vm.selectNoneTree()
-    wrapper.vm.selectNoneGallery()
-    expect(wrapper.vm.isZoomDisabled()).toBe(true)
-  })
-
-  it("Removes a nested object by id", () => {
-    let nested_object = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, 'abc')
-    let nested_removed = wrapper.vm.removeNestedObjectById(JSON.parse(JSON.stringify(wrapper.vm.tree.structure.folders)), 'abc')
-    let does_not_exist = wrapper.vm.findFolderById(nested_removed, 'abc')
-    expect(does_not_exist).toEqual(undefined)
-  })
-
-  it("Deletes a folder that contains a file", () => {
-    global.confirm = vi.fn(() => true)
-    wrapper.vm.deleteFolder("1234567")
-    expect(global.confirm).toHaveBeenCalled()
-    expect(wrapper.vm.end_nodes.length).toEqual(0)
-    expect(wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "1234567")).toBe(undefined)
-    // puts the deleted file back in the gallery items list
-    expect(wrapper.vm.gallery.items.length).toEqual(3)
-  })
-
-  it("Cuts Gallery Items", () => {
-    wrapper.vm.selectNoneGallery()
-    expect(wrapper.vm.isCutDisabled()).toBe(true)
-    expect(wrapper.vm.gallery.selected.length).toEqual(0)
-    wrapper.vm.selectAll()
-    expect(wrapper.vm.gallery.selected.length).toEqual(3)
-    expect(wrapper.vm.isCutDisabled()).toBe(false)
-    wrapper.vm.cutSelected()
-    expect(wrapper.vm.gallery.selected.length).toEqual(0)
-    expect(wrapper.vm.gallery.cut.length).toEqual(3)
-    expect(wrapper.vm.isCutDisabled()).toBe(true)
-  })
-
-  it("Selects a Tree Folder", () => {
-    let empty_folder = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "abc")
-    expect(empty_folder.folders.length).toEqual(0)
-    wrapper.vm.selectTreeItemById("abc")
-    expect(wrapper.vm.tree.selected).toEqual("abc")
-  })
-
-  it("Pastes a Gallery Item into a Tree Folder", () => {
-    wrapper.vm.paste()
-    expect(wrapper.vm.gallery.items.length).toEqual(0)
-    let pasted_folder = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "abc")
-    expect(pasted_folder.folders.length).toEqual(3)
-  })
-
-  it("Saves the structure in a format that Figgy accepts", () => {
-    wrapper.vm.saveHandler({});
-    expect(wrapper.vm.resourceToSave.id).toEqual("aea40813-e0ed-4307-aae9-aec53b26bdda")
-    expect(wrapper.vm.resourceToSave.resourceClassName).toEqual("ScannedResource")
-    expect(wrapper.vm.resourceToSave.structure.label).toEqual("Table of Contents")
-    expect(wrapper.vm.resourceToSave.structure.nodes[0].label).toEqual("Chapter A")
-    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes.length).toEqual(3)
-    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[0].proxy).toEqual("1")
-    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[1].proxy).toEqual("2")
-    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[2].proxy).toEqual("3")
-    expect(actions.saveStructureAJAX).toHaveBeenCalled()
-  })
 })

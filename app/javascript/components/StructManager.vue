@@ -30,6 +30,14 @@
     </alert>
     <toolbar
       @cards-resized="resizeCards($event)"
+      @clear-clipboard="clearClipboard"
+      @cut-selected="cutSelected"
+      @delete-folder="deleteFolder"
+      @create-folder="createFolder"
+      @group-selected="groupSelectedIntoFolder"
+      @paste-items="paste"
+      @save-structure="saveHandler"
+      @zoom-on-item="zoomOnItem"
     />
     <deep-zoom
       v-if="zoomed"
@@ -42,7 +50,13 @@
       <div class="panelHeader">
         <heading level="h2" size="h6">Logical Structure</heading>
       </div>
-      <tree :json-data="tree.structure"></tree>
+      <tree
+        :json-data="tree.structure"
+        @delete-folder="deleteFolder"
+        @create-folder="createFolder"
+        @zoom-file="zoomFile"
+      >
+      </tree>
     </div>
     <div
       class="lux-galleryPanel"
@@ -66,6 +80,7 @@ import Toolbar from '@components/StructManagerToolbar.vue'
 import Tree from '@components/Tree.vue'
 import StructGallery from '@components/StructGallery.vue'
 import DeepZoom from '@components/DeepZoom.vue'
+import mixin from "./structMixins.js";
 
 /**
  * StructureManager is a tool for giving structure to a complex object (a book, CD, multi-volume work, etc.).
@@ -79,6 +94,7 @@ export default {
   status: 'ready',
   release: '1.0.0',
   type: 'Pattern',
+  mixins: [mixin],
   components: {
     'toolbar': Toolbar,
     'tree': Tree,
@@ -187,8 +203,129 @@ export default {
     }
   },
   methods: {
-    handleDeleteFolder: function (data) {
-      console.log(data)
+    addGalleryItems: function() {
+      let galleryItems = JSON.parse(JSON.stringify(this.gallery.items)).concat(this.changeKeyToCaption(this.end_nodes))
+      this.$store.commit("UPDATE_ITEMS", galleryItems)
+      this.end_nodes = []
+    },
+    addNewNode: function (array, newParent) {
+      for (let item of array) {
+        if (item.id === newParent.id) {
+          item = newParent
+        } else if (item.folders?.length) {
+          const innerResult = this.addNewNode(item.folders, newParent)
+        }
+      }
+      return array
+    },
+    changeKeyToCaption: function(array) {
+      // Iterate through each object in the array
+      // and change "label" property (used by tree) to "caption" (used by gallery)
+      for (let i = 0; i < array.length; i++) {
+        // Check if the object has a "label" key
+        if (array[i].hasOwnProperty('label')) {
+          // Create a new key "caption" with the value of the current "label" key
+          array[i].caption = array[i].label;
+          // Remove the old "label" key
+          delete array[i].label;
+        }
+      }
+
+      return array;
+    },
+    clearClipboard: function () {
+      this.$store.commit('CUT', [])
+      this.$store.commit("CUT_FOLDER", null)
+    },
+    commitRemoveFolder: function(folderList, folderToBeRemoved) {
+      const structure = {
+        id: this.tree.structure.id,
+        folders: this.removeNestedObjectById(folderList, folderToBeRemoved.id),
+        label: this.tree.structure.label,
+      }
+      this.$store.commit("DELETE_FOLDER", structure)
+      this.$store.commit("SELECT_TREEITEM", null)
+      if (this.end_nodes.length) {
+        // add any images deleted from the tree back into the gallery
+        this.addGalleryItems()
+      }
+    },
+    createFolder: function (parentId) {
+      // const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+
+      const newFolder = {
+        id: this.generateId(),
+        folders: [],
+        label: "Untitled",
+        file: false,
+      }
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label,
+        folders: folderList
+      }
+      if(parentId === rootId) {
+        structure.folders.push(newFolder)
+      } else {
+        let parentFolderObject = this.findFolderById(folderList, parentId)
+        if(parentFolderObject.file) {
+          alert("Oops, looks like you tried to add a folder to a file. You can only add a new folder to another folder.")
+          return false
+        } else {
+          let newParent = parentFolderObject.folders.push(newFolder)
+          structure.folders = this.addNewNode(folderList, newParent)
+        }
+      }
+      this.$store.commit("CREATE_FOLDER", structure)
+      return newFolder.id
+    },
+    cutSelected: function () {
+      if (this.gallery.selected.length) {
+        // if cards are selected, cut gallery items
+        this.$store.commit("CUT", this.gallery.selected)
+        this.selectNoneGallery()
+      } else if (this.tree.selected) {
+        // if folder is selected, cut tree items
+        if(this.rootNodeSelected) {
+          alert('Sorry, you can\'t cut the root node.')
+        } else {
+          this.$store.commit("CUT_FOLDER", this.tree.selected)
+          this.selectNoneTree()
+        }
+      }
+    },
+    deleteFolder: function (folder_id) {
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let folderToBeRemoved = this.findFolderById(folderList, folder_id)
+      const selectedNode = this.tree.selected
+      const rootId = this.tree.structure.id
+      if(selectedNode === rootId) {
+        alert("Sorry, you cannot delete the top-level folder.")
+        return false
+      }
+      // if there are sub-folders, warn the user that they will also be deleted.
+      if (folderToBeRemoved.folders.length) {
+        this.findAllFilesInStructure(folderToBeRemoved.folders)
+        let text = "This folder contains subfolders, which will be removed by this action. Do you still want to proceed?";
+        if (confirm(text) == true) {
+          this.commitRemoveFolder(folderList, folderToBeRemoved)
+        }
+      } else {
+        this.findAllFilesInStructure([folderToBeRemoved])
+        this.commitRemoveFolder(folderList, folderToBeRemoved)
+      }
+    },
+    findAllFilesInStructure: function (array) {
+      for (const item of array) {
+        if (!!item.file) this.end_nodes.push(item)
+        if (item.folders?.length) {
+          const innerResult = this.findAllFilesInStructure(item.folders)
+          if (innerResult) return innerResult
+        }
+      }
     },
     filterGallery: function (newVal) {
       if (this.structure) {
@@ -255,8 +392,110 @@ export default {
         // load empty/default structure
       }
     },
-    generateId: function () {
-      return Math.floor(Math.random() * 10000000).toString()
+    groupSelectedIntoFolder: function() {
+      this.cutSelected()
+      this.$nextTick(() => {
+        let folderId = this.createFolder(this.tree.structure.id)
+        this.$store.commit("SELECT_TREEITEM", folderId)
+        this.$nextTick(() => {
+          this.pasteGalleryItem()
+        })
+      })
+    },
+    paste: function () {
+      // figure out what is currently on the clipboard, a gallery item or a tree item
+      if (!this.tree.selected) {
+        alert('You must select a tree item to paste into.')
+        return false
+      } else {
+        if (this.gallery.cut.length) {
+          this.pasteGalleryItem()
+        } else if (this.tree.cut) {
+          this.pasteTreeItem()
+        }
+      }
+    },
+    pasteGalleryItem: function() {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+      let items = this.gallery.items
+      items = items.filter(val => !this.gallery.cut.includes(val))
+      let resources = JSON.parse(JSON.stringify(this.gallery.cut))
+
+      // we will need to loop this to convert multiple cut gallery items into tree items
+      let newItems = resources.map((resource, index) => {
+        resource.label = resource.caption
+        resource.file = true
+        resource.folders = []
+        return resource
+      });
+
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label,
+      }
+
+      if(parentId === rootId) {
+        alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
+      } else {
+        let parentFolderObject = this.findFolderById(folderList, parentId)
+        let parentFolders = parentFolderObject.folders.concat(newItems)
+        parentFolderObject.folders = parentFolders
+        structure.folders = this.addNewNode(folderList, parentFolderObject)
+
+        this.$store.commit("ADD_FILES", structure)
+
+        this.$store.commit('PASTE', items)
+
+        this.$store.commit("SET_MODIFIED", true)
+        this.clearClipboard()
+        this.selectNoneGallery()
+      }
+    },
+    pasteTreeItem: function() {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+      const rootId = this.tree.structure.id
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
+
+      let structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label,
+      }
+
+      // remove the folder if it currently exists
+      let selectedFolderObject = this.findFolderById(folderList, this.tree.selected)
+      let folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
+
+      if(this.tree.selected === rootId) {
+        folders.push(cutTreeStructure)
+        structure.folders = folders
+      } else {
+        selectedFolderObject.folders.push(cutTreeStructure)
+        structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject);
+      }
+
+      this.$store.commit("SET_STRUCTURE", structure)
+      this.$store.commit("SET_MODIFIED", true)
+      this.selectNoneTree()
+      this.clearClipboard()
+    },
+    removeNestedObjectById: function (nestedArray, idToRemove) {
+      return nestedArray.map(item => {
+          // Check if the current item's id matches the id parameter
+          if (item.id === idToRemove) {
+              return undefined; // Exclude the current item
+          }
+          if (item.folders && item.folders.length > 0) {
+              // If the current item has folders, recursively call the function
+              item.folders = this.removeNestedObjectById(item.folders, idToRemove);
+          }
+
+          // Otherwise, keep the item in the result array
+          return item;
+      }).filter(item => item !== undefined);
     },
     removeProxyProperty: function (arr) {
       // we are not able to recursively remove the proxy property from the figgy structure
@@ -302,6 +541,19 @@ export default {
         return newObj
       })
     },
+    replaceObjectById: function(root, idToReplace, replacementObject) {
+      if (root.id === idToReplace) {
+          return replacementObject;
+      }
+
+      if (root.folders && root.folders.length > 0) {
+          root.folders = root.folders.map(folder =>
+              this.replaceObjectById(folder, idToReplace, replacementObject)
+          );
+      }
+
+      return root;
+    },
     galleryClicked() {
       this.$store.commit('SELECT_TREEITEM', null)
     },
@@ -311,6 +563,91 @@ export default {
         this.captionPixelPadding = 0
       } else {
         this.captionPixelPadding = 9
+      }
+    },
+    renamePropertiesForSave: function (arr) {
+      return arr.map(obj => {
+        const newObj = {};
+        for (const key in obj) {
+          if (key === "folders") {
+            if (obj.file === true) {
+              newObj["proxy"] = obj.id;
+            }
+            newObj["nodes"] = this.renamePropertiesForSave(obj[key]);
+          } else {
+            newObj[key] = obj[key];
+          }
+        }
+        return newObj;
+      });
+    },
+    cleanNestedArrayForSave: function (arr) {
+      return arr.map(obj => {
+        let cleanedObj = {}
+        if (obj.proxy !== undefined) {
+          cleanedObj.proxy = obj.proxy
+        } else {
+          cleanedObj.nodes = this.cleanNestedArrayForSave(obj.nodes)
+          cleanedObj.label = obj.label
+        }
+
+        return cleanedObj;
+      });
+    },
+    saveHandler: function (event) {
+      let structureNodes = this.renamePropertiesForSave(this.tree.structure.folders)
+      structureNodes = this.cleanNestedArrayForSave(structureNodes)
+
+      this.resourceToSave = {
+        id: this.resource.id,
+        resourceClassName: this.resource.resourceClassName,
+        structure: {
+          label: this.tree.structure.label,
+          nodes: structureNodes,
+        }
+      }
+
+      this.$store.dispatch('saveStructureAJAX', this.resourceToSave)
+    },
+    selectAllGallery: function () {
+      this.$store.commit("SELECT", this.gallery.items)
+    },
+    selectNoneGallery: function () {
+      this.$store.commit("SELECT", [])
+    },
+    selectNoneTree: function () {
+      this.$store.commit("SELECT_TREEITEM", null)
+    },
+    selectTreeItemById: function (id) {
+      this.$store.commit("SELECT_TREEITEM", id)
+      this.selectNoneGallery()
+    },
+    zoomFile: function (file_id) {
+      let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      let selected = this.findFolderById(folderList, file_id)
+      selected.caption = selected.label
+      this.$store.commit("ZOOM", selected)
+    },
+    zoomOnItem: function() {
+      // if a tree item is selected, make sure it is a file and get the obj
+      if (this.tree.selected) {
+        let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        let nodeToBeZoomed = this.findFolderById(folderList, this.tree.selected)
+        let has_service = !!nodeToBeZoomed.service
+        if(has_service) {
+          nodeToBeZoomed.caption = nodeToBeZoomed.label
+          this.$store.commit("ZOOM", nodeToBeZoomed)
+        } else {
+          alert('You may have tried to zoom on a folder. You can only zoom on files that have a service.')
+        }
+      } else if (this.gallery.selected.length){
+        if (this.gallery.selected.length > 1) {
+          alert('Please select only one item to zoom in on.')
+        } else {
+          this.$store.commit("ZOOM", this.gallery.selected[0])
+        }
+      } else {
+        alert('You need to select an item to zoom in on it.')
       }
     },
   }

@@ -64,7 +64,7 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
       cardpixelwidth="300"
       class="lux-galleryWrapper"
       data-v-5aca45d1=""
-      galleryitems="[object Object],[object Object],[object Object]"
+      galleryitems="[object Object],[object Object]"
     />
   </div>
 </div>

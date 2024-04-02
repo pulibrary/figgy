@@ -72,11 +72,11 @@ export default {
       if (
         event.target.className === "lux-gallery lux-galleryWrapper lux-wrapper"
       ) {
-        this.selectNone()
+        this.selectNoneGallery()
       }
     },
-    selectNone: function() {
-      store.commit("SELECT", [])
+    selectNoneGallery: function () {
+      this.$store.commit("SELECT", [])
     },
     getItemById: function(id) {
       var elementPos = this.getItemIndexById(id)
