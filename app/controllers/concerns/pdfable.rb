@@ -8,6 +8,7 @@ module Pdfable
       resource_id = change_set.resource.id.to_s
       return redirect_to_download(resource_id) if change_set.resource.decorate.pdf_file
       if Figgy.background_pdf_generating?
+        @decorated_resource = change_set.resource.decorate
         GeneratePdfJob.perform_later(resource_id: resource_id)
         render :pdf, layout: "download"
       else
