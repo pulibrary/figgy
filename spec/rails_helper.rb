@@ -23,6 +23,7 @@ end
 
 RSpec.configure do |config|
   config.include Features, type: :feature
+  config.include ActionCable::TestHelper
   # Use local fixture_file_with_use method
   config.include FixtureFileWithUse
   config.infer_base_class_for_anonymous_controllers = false
