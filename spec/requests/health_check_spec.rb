@@ -58,6 +58,7 @@ RSpec.describe "Health Check", type: :request do
       # test that all the queues are checked, and the configuration of each
       expect(sidekiq_configuration.queues).to match(
         "high" => hash_including(latency: 5.days, queue_size: 1_000_000),
+        "mailers" => hash_including(latency: 5.days, queue_size: 1_000_000),
         "default" => hash_including(latency: 5.days, queue_size: 1_000_000),
         "low" => hash_including(latency: 5.days, queue_size: 1_000_000),
         "super_low" => hash_including(latency: 5.days, queue_size: 1_000_000),

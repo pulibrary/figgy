@@ -17,6 +17,7 @@ Rails.application.config.after_initialize do
       sidekiq_config.latency = 5.days
       sidekiq_config.queue_size = 1_000_000
       sidekiq_config.add_queue_configuration("high", latency: 5.days, queue_size: 1_000_000)
+      sidekiq_config.add_queue_configuration("mailers", latency: 5.days, queue_size: 1_000_000)
       sidekiq_config.add_queue_configuration("low", latency: 5.days, queue_size: 1_000_000)
       sidekiq_config.add_queue_configuration("super_low", latency: 5.days, queue_size: 1_000_000)
       sidekiq_config.add_queue_configuration("realtime", latency: 30.seconds, queue_size: 100)
