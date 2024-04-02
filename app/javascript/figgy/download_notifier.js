@@ -1,6 +1,7 @@
 import consumer from '@channels/consumer'
 export default class DownloadNotifier {
   constructor () {
+    ActionCable.logger.enabled = true
     if (!this.element) {
       return
     }
