@@ -131,7 +131,7 @@ export default {
   data: function () {
     return {
       end_nodes: [],
-      cardPixelWidth: 300,
+      cardPixelWidth: 150,
       captionPixelPadding: 9,
       ga: null,
       s: null,

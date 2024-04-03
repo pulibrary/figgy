@@ -43,8 +43,8 @@
         id="img_zoom"
         type="range"
         min="40"
-        max="500"
-        value="300"
+        max="300"
+        value="150"
         @input="resizeCards($event)"
       >
       <lux-icon-base

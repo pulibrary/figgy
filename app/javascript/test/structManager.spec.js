@@ -289,7 +289,7 @@ describe("StructManager.vue", () => {
   })
 
   it("resizes cards properly", () => {
-    expect(wrapper.vm.cardPixelWidth).toBe(300)
+    expect(wrapper.vm.cardPixelWidth).toBe(150)
     expect(wrapper.vm.captionPixelPadding).toBe(9)
     wrapper.vm.resizeCards({ target: { value: 70 } })
     expect(wrapper.vm.cardPixelWidth).toBe(70)
