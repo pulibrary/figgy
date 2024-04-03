@@ -1,7 +1,7 @@
 <template>
   <li>
     <div class="container">
-      <div class="lux-item" v-if="!isFile">
+      <div class="lux-item" v-if="!jsonData.file">
         <input-button
           @button-clicked="toggleFolder($event)"
           class="expand-collapse"
@@ -25,7 +25,7 @@
         ]"
       >
         <lux-icon-base
-          v-if="isFile && !thumbnail"
+          v-if="jsonData.file && !thumbnail"
           width="30"
           height="30"
           icon-name="End Node"
@@ -153,7 +153,7 @@ export default {
     return {
       isOpen: true,
       editedFieldId: null,
-      isFile: !!this.jsonData.file,
+      isFile: this.jsonData.file,
     }
   },
   computed: {
