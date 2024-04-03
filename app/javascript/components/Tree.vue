@@ -1,7 +1,7 @@
 <template>
   <ul class="lux-tree">
     <tree-item
-      :id="structure.id"
+      :id="tree.structure.id"
       :json-data="tree.structure"
       :selected="selected"
       :delete-folder="handleDeleteFolder"
