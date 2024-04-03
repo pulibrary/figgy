@@ -273,7 +273,6 @@ describe("StructManager.vue", () => {
   })
 
   it("Selects a Tree Folder", () => {
-    console.log("folders: " + JSON.stringify(wrapper.vm.tree.structure.folders))
     let empty_folder = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "abc")
     expect(empty_folder.folders.length).toEqual(0)
     wrapper.vm.selectTreeItemById("abc")
@@ -284,7 +283,6 @@ describe("StructManager.vue", () => {
     // in the previous test, we select a Tree item that is not a file, so it should get added
     const parentId = wrapper.vm.tree.selected ? wrapper.vm.tree.selected : wrapper.vm.tree.structure.id
     let newFolderId = wrapper.vm.createFolder(parentId)
-    console.log("parent id: " + parentId)
     let parent = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, parentId)
     expect(parent.file).toBe(false)
     expect(parent.folders.map(obj => obj.id).includes(newFolderId)).toBe(true)
