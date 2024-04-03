@@ -37,7 +37,8 @@
           v-if="thumbnail"
           :alt="jsonData.label"
           :src="thumbnail" height="30px"
-          style="margin-top: .5em;margin-right: .5em;"></media-image>
+          style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
+        ></media-image>
         <template v-if="editedFieldId === id">
           <div class="folder-label">
             <input
@@ -294,13 +295,15 @@ ul.lux-tree li {
 }
 
 ul.lux-tree li div.lux-item-label {
-  background: rgb(186, 175, 130);
+  // background: rgb(186, 175, 130);
+  background: rgb(245, 245, 245);
   width: 100%;
   padding: 0.5em 0.5em .5em 1em;
 }
 
 ul.lux-tree li div.lux-item-label.selected {
-  background: rgb(210, 202, 173);
+  // background: rgb(210, 202, 173);
+  background: rgb(250, 249, 245);
 }
 
 ul.lux-tree li div.lux-item-label.disabled {
@@ -322,7 +325,8 @@ ul.lux-tree .lux-item {
   // position: absolute;
   // top: -2px;
   // left: -7px;
-  background: rgb(186, 175, 130);
+  // background: rgb(186, 175, 130);
+  background: rgb(245, 245, 245);
   width: 36px;
   height: 36px;
   border-radius: 0;
