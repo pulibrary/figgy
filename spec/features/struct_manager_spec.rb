@@ -22,7 +22,7 @@ RSpec.feature "Structure Manager", js: true do
     #test keyboard shortcuts
     #page.native.send_keys :control, :shift, 'n'
     # expect(page).to have_text "Untitled"
-    binding.pry
+    # binding.pry
   end
 
 end
