@@ -17,6 +17,8 @@ RSpec.describe "ScannedResource requests", type: :request do
 
   it "serves derivatives in the PDF" do
     get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
+    # Run a second time, so we get past the loading page.
+    get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
 
     reloaded = adapter.query_service.find_by(id: scanned_resource.id)
     expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: scanned_resource.id.to_s, id: reloaded.pdf_file.id.to_s)
@@ -108,6 +110,8 @@ RSpec.describe "ScannedResource requests", type: :request do
 
     it "redirects the client to be authenticated" do
       get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
+      # Run a second time to get past the loading page.
+      get "/concern/scanned_resources/#{scanned_resource.id}/pdf"
 
       # it has to be reloaded to get the pdf_file because hitting this route
       # generates the file
@@ -122,6 +126,8 @@ RSpec.describe "ScannedResource requests", type: :request do
       let(:auth_token) { AuthToken.create!(group: ["admin"], label: "Admin Token").token }
 
       it "is granted read-only access to the PDF derivatives for the resource" do
+        # Pre-generate PDF so we don't hit the generating page.
+        GeneratePdfJob.perform_now(resource_id: scanned_resource.id.to_s)
         get "/concern/scanned_resources/#{scanned_resource.id}/pdf?auth_token=#{auth_token}"
 
         expect(response.status).to eq 302 # This redirects to the downloads controller

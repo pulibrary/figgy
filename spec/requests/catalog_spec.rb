@@ -87,6 +87,8 @@ RSpec.describe "Catalog requests", type: :request do
         let(:scanned_resource) { FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [sample_file]) }
 
         it "redirects the client to be authenticated" do
+          # Pre-generate the PDF, so we don't hit the loading page.
+          GeneratePdfJob.perform_now(resource_id: scanned_resource.id)
           get "/catalog/#{scanned_resource.id}/pdf"
 
           expect(response).to redirect_to "/concern/scanned_resources/#{scanned_resource.id}/pdf"
@@ -103,6 +105,7 @@ RSpec.describe "Catalog requests", type: :request do
 
         it "can download the generated pdf with a token" do
           auth_token = AuthToken.create!(group: ["admin"], label: "Admin Token").token
+          GeneratePdfJob.perform_now(resource_id: scanned_resource.id.to_s)
           get "/catalog/#{scanned_resource.id}/pdf?auth_token=#{auth_token}"
 
           expect(response.status).to eq 302 # Redirects to the concerns pdf route
