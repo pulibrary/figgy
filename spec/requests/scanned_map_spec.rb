@@ -17,6 +17,8 @@ RSpec.describe "ScannedMap requests", type: :request do
 
   it "serves derivatives in the PDF" do
     get "/concern/scanned_maps/#{scanned_map.id}/pdf"
+    # Run a second time, as the first time generates the PDF loading page.
+    get "/concern/scanned_maps/#{scanned_map.id}/pdf"
 
     reloaded = adapter.query_service.find_by(id: scanned_map.id)
     expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: scanned_map.id.to_s, id: reloaded.pdf_file.id.to_s)
