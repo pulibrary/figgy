@@ -11,12 +11,12 @@ server "figgy-web-prod1", user: "deploy", roles: %w[app db production_db web]
 server "figgy-web-prod2", user: "deploy", roles: %w[app web]
 server "figgy-web-prod3", user: "deploy", roles: %w[app web]
 server "figgy-web-prod4", user: "deploy", roles: %w[app web]
-server "figgy-worker-prod1", user: "deploy", roles: %w[worker]
-server "figgy-worker-prod2", user: "deploy", roles: %w[worker]
-server "figgy-worker-prod3", user: "deploy", roles: %w[worker]
-server "figgy-worker-prod4", user: "deploy", roles: %w[worker]
-server "figgy-worker-prod5", user: "deploy", roles: %w[worker]
-server "figgy-worker-prod6", user: "deploy", roles: %w[worker]
+server "figgy-worker-prod1", user: "deploy", roles: %w[worker web]
+server "figgy-worker-prod2", user: "deploy", roles: %w[worker web]
+server "figgy-worker-prod3", user: "deploy", roles: %w[worker web]
+server "figgy-worker-prod4", user: "deploy", roles: %w[worker web]
+server "figgy-worker-prod5", user: "deploy", roles: %w[worker web]
+server "figgy-worker-prod6", user: "deploy", roles: %w[worker web]
 
 set :google_fixity_request_topic, "figgy-production-fixity-request"
 set :google_service_account, "figgy-preservation-production@pulibrary-figgy-storage-1.iam.gserviceaccount.com"
