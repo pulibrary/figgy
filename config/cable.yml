@@ -7,6 +7,11 @@ development:
 test:
   adapter: async
 
-production:
+production: &production
   adapter: redis
-  url: redis://localhost:6379/1
+  host: <%= ENV['FIGGY_REDIS_URL'] || 'localhost' %>
+  port: <%= ENV['FIGGY_REDIS_PORT'] || '6379' %>
+  db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
+
+staging:
+  <<: *production
