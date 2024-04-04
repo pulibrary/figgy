@@ -9,7 +9,9 @@ module Pdfable
       return redirect_to_download(resource_id) if change_set.resource.decorate.pdf_file
       if Figgy.background_pdf_generating?
         @decorated_resource = change_set.resource.decorate
-        GeneratePdfJob.perform_later(resource_id: resource_id)
+        Rails.cache.fetch("pdf_generate_#{resource_id}", expires_in: 30.minutes) do
+          GeneratePdfJob.perform_later(resource_id: resource_id)
+        end
         render :pdf, layout: "download"
       else
         GeneratePdfJob.perform_now(resource_id: resource_id)

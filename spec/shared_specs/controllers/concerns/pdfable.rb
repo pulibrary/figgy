@@ -46,7 +46,19 @@ RSpec.shared_examples "a Pdfable" do
       expect(response.body).to have_content "0%"
       expect(response.body).to have_selector "img[src='http://www.example.com/image-service/#{resource.member_ids.first}/full/!200,150/0/default.jpg']"
     end
+    it "doesn't queue twice if called twice" do
+      memory_store = ActiveSupport::Cache.lookup_store(:memory_store)
+      allow(Rails).to receive(:cache).and_return(memory_store)
+      allow(Figgy).to receive(:background_pdf_generating?).and_return(true)
+
+      get :pdf, params: { id: resource.id.to_s }
+      get :pdf, params: { id: resource.id.to_s }
+
+      expect(response).to render_template "base/pdf"
+      expect(GeneratePdfJob).to have_been_enqueued.exactly(1).times
+    end
     after do
+      Rails.cache.clear
       clear_enqueued_jobs
       clear_performed_jobs
     end
