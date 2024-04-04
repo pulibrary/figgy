@@ -24,6 +24,9 @@ RSpec.shared_examples "a Pdfable" do
   end
 
   it "generates a pdf, attaches it to the folder, and redirects the user to download it" do
+    # Call once to generate it.
+    get :pdf, params: { id: resource.id.to_s }
+    # Call again to be redirected.
     get :pdf, params: { id: resource.id.to_s }
     reloaded = adapter.query_service.find_by(id: resource.id)
     expect(response).to redirect_to Rails.application.routes.url_helpers.download_path(resource_id: resource.id.to_s, id: reloaded.pdf_file.id.to_s)
@@ -32,12 +35,10 @@ RSpec.shared_examples "a Pdfable" do
     expect(reloaded.pdf_file).not_to be_blank
   end
 
-  context "when background_pdf_generating is true" do
+  context "when the job is backgrounded" do
     with_queue_adapter :test
     render_views
     it "backgrounds PDF generation and renders a loading page" do
-      allow(Figgy).to receive(:background_pdf_generating?).and_return(true)
-
       get :pdf, params: { id: resource.id.to_s }
 
       expect(response).to render_template "base/pdf"
@@ -49,7 +50,6 @@ RSpec.shared_examples "a Pdfable" do
     it "doesn't queue twice if called twice" do
       memory_store = ActiveSupport::Cache.lookup_store(:memory_store)
       allow(Rails).to receive(:cache).and_return(memory_store)
-      allow(Figgy).to receive(:background_pdf_generating?).and_return(true)
 
       get :pdf, params: { id: resource.id.to_s }
       get :pdf, params: { id: resource.id.to_s }

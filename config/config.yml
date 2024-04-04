@@ -224,7 +224,6 @@ defaults: &defaults
         - 'audio/mpeg'
         - 'video/mp4'
   pulfalight_unpublished_token: <%= ENV["PULFALIGHT_UNPUBLISHED_TOKEN"] %>
-  background_pdf_generating: false
 
 development:
   <<: *defaults
@@ -236,7 +235,6 @@ development:
   cloud_geo_bucket: "figgy-geo-staging"
   tileserver:
     url: "https://map-tiles-staging.princeton.edu"
-  background_pdf_generating: true
 
 test:
   <<: *defaults
@@ -291,7 +289,6 @@ production:
 
 staging:
   <<: *defaults
-  background_pdf_generating: true
   index_read_only: false # set to true if doing a long reindex process.
   repository_path: "/opt/repository/files"
   derivative_path: "/opt/repository/derivatives"
