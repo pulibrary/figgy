@@ -8,6 +8,6 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.raise_delivery_errors = true
   config.active_storage.service = :local
-  config.cache_store = :mem_cache_store
+  config.cache_store = :mem_cache_store, "figgy-web-staging1.princeton.edu"
   config.action_cable.allowed_request_origins = ["https://figgy-staging.princeton.edu"]
 end
