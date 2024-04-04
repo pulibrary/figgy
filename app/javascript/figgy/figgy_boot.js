@@ -14,6 +14,7 @@ import BulkLabeler from '@figgy/bulk_labeler/bulk_label'
 import BoundingBoxSelector from '@figgy/bounding_box_selector'
 import FieldManager from '@figgy/field_manager'
 import Confetti from 'canvas-confetti'
+import DownloadNotifier from '@figgy/download_notifier'
 
 export default class Initializer {
   constructor() {
@@ -31,6 +32,7 @@ export default class Initializer {
     this.sortable_placeholder()
     this.initialize_multi_fields()
     this.initialize_embargo_date_select()
+    this.download_notifier = new DownloadNotifier()
 
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
     // causing this to not run. Manually calling it so facet more links work.
