@@ -5,7 +5,7 @@
         Zoom <small>on {{ zoomed.caption }}</small>
         <input-button
           @button-clicked="hideZoom()"
-          class="expand-collapse"
+          class="close-zoom"
           type="button"
           variation="icon"
           size="small"
@@ -86,6 +86,18 @@ export default {
     if (this.zoomed) {
       this.initOSD()
     }
+
+    this._keyListener = function(e) {
+        if (e.key === "Escape") {
+            e.preventDefault()
+            this.hideZoom()
+        }
+    };
+
+    document.addEventListener('keydown', this._keyListener.bind(this))
+  },
+  beforeDestroy: function () {
+      document.removeEventListener('keydown', this._keyListener)
   },
   methods: {
     initOSD: function () {

@@ -37,12 +37,14 @@
           v-if="thumbnail"
           :alt="jsonData.label"
           :src="thumbnail" height="30px"
+          class="file"
           style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
         ></media-image>
         <template v-if="editedFieldId === id">
           <div class="folder-label">
             <input
               type="text"
+              class="folder-label-input"
               v-on:keyup.enter="saveLabel(id)"
               v-model="jsonData.label"
               :ref="`field${id}`" />
@@ -50,7 +52,7 @@
           <div class="folder-edit">
             <input-button
               @button-clicked="saveLabel(id)"
-              class="expand-collapse"
+              class="save-label"
               type="button"
               variation="icon"
               size="small"
@@ -66,7 +68,7 @@
           <div class="folder-edit">
             <input-button
               @button-clicked="toggleEdit(id)"
-              class="expand-collapse"
+              class="toggle-edit"
               type="button"
               variation="icon"
               size="small"
@@ -76,7 +78,7 @@
 
             <input-button v-if="!isFile"
               @button-clicked="createFolder(id)"
-              class="expand-collapse"
+              class="create-folder"
               type="button"
               variation="icon"
               size="small"
@@ -85,7 +87,7 @@
             </input-button>
             <input-button v-else
               @button-clicked="zoomFile(id)"
-              class="expand-collapse"
+              class="zoom-file"
               type="button"
               variation="icon"
               size="small"
@@ -94,7 +96,7 @@
             </input-button>
             <input-button
               @button-clicked="deleteFolder(id)"
-              class="expand-collapse"
+              class="delete-folder"
               type="button"
               variation="icon"
               size="small"
@@ -105,7 +107,7 @@
         </template>
       </div>
     </div>
-    <ul v-show="isOpen && hasChildren">
+    <ul class="lux-tree-sub" v-show="isOpen && hasChildren">
       <tree-item
         v-for="(folder, index) in this.jsonData.folders"
         :json-data="folder"

@@ -1,5 +1,5 @@
 <template>
-  <ul class="lux-tree">
+  <ul class="lux-tree root">
     <tree-item
       :id="tree.structure.id"
       :json-data="tree.structure"
