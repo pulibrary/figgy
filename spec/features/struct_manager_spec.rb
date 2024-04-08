@@ -54,11 +54,14 @@ RSpec.feature "Structure Manager", js: true do
     page.send_keys [:control, "n"]
     expect(page).to have_css("div.folder-label", text: "Untitled")
 
-    #test paste of folder into another folder using keyboard commands
+    #test cutting a folder using keyboard commands
     first_node = find("ul.lux-tree-sub", match: :first)
     expect(first_node).to have_css(".folder-label", text: "Chapter Foo")
     find("div.folder-label", :text=> "Chapter Foo").click
     page.send_keys [:control, "x"]
+    expect(page).to have_selector('.folder-container.disabled', count: 2)
+
+    #test paste of a cut folder into another folder using keyboard commands
     find("div.folder-label", :text=> "Untitled").click
     page.send_keys [:control, "v"]
     first_node = find("ul.lux-tree-sub", match: :first)
@@ -76,6 +79,16 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).to have_css ".lux-modal"
     page.send_keys [:escape]
     expect(page).not_to have_css ".lux-modal"
+
+    #test select all nodes by clicking on the root
+    find(".folder-container > div:first-child", match: :first).click
+    expect(page).to have_selector('.folder-container.selected', count: 4)
+
+    #test expand and collapse of the tree
+    find("button.expand-collapse", match: :first).click
+    expect(page).to have_selector('.lux-tree-sub', visible: false)
+    find("button.expand-collapse", match: :first).click
+    expect(page).to have_selector('.lux-tree-sub', visible: true)
 
     #test delete folder with subfolders/items
     expect(page).to have_selector('.lux-card', count: 1)

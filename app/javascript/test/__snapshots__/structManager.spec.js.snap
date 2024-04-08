@@ -41,8 +41,9 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
     </div>
     <tree-stub
       data-v-5aca45d1=""
-      id=""
+      id="aea40813-e0ed-4307-aae9-aec53b26bdda"
       jsondata="[object Object]"
+      root="true"
     />
   </div>
   <div

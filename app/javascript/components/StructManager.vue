@@ -51,6 +51,7 @@
         <heading level="h2" size="h6">Logical Structure</heading>
       </div>
       <tree
+        :id="tree.structure.id"
         :json-data="tree.structure"
         @delete-folder="deleteFolder"
         @create-folder="createFolder"
