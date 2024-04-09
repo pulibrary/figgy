@@ -9,7 +9,7 @@
       :menu-items="[
         {name: 'Create New Folder (Ctrl-n)', component: 'FolderCreate'},
         {name: 'Group Selected into New Folder (Ctrl-g)', component: 'SelectedCreate', disabled: isCutDisabled()},
-        {name: 'Delete Folder (Ctrl-d)', component: 'FolderDelete', disabled: this.rootNodeSelected},
+        {name: 'Delete Folder (Ctrl-d)', component: 'FolderDelete', disabled: rootNodeSelected},
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
         {name: 'Paste (Ctrl-v)', component: 'Paste', disabled: isPasteDisabled()},
@@ -62,7 +62,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import mixin from "./structMixins.js";
+import mixin from './structMixins.js'
 /**
  * Toolbars allows a user to select a value from a series of options.
  */
@@ -81,10 +81,10 @@ export default {
       default: 'div'
     }
   },
-  data: function() {
+  data: function () {
     return {
       end_nodes: [],
-      resourceToSave: null,
+      resourceToSave: null
     }
   },
   computed: {
@@ -92,20 +92,61 @@ export default {
       resource: state => state.ordermanager.resource,
       tree: state => state.tree,
       gallery: state => state.gallery,
-      zoom: state => store.state.zoom,
+      zoom: state => state.zoom
     }),
     cut: {
       get () {
         return this.gallery.cut
       }
     },
-    rootNodeSelected: function() {
+    rootNodeSelected: function () {
       return this.tree.selected === this.tree.structure.id
-    },
+    }
+  },
+  mounted: function () {
+    this._keyListener = function (e) {
+      if (e.key === 'x' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.cutSelected()
+      }
+      if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.paste()
+      }
+      if (e.key === 'd' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.deleteFolder(this.tree.selected)
+      }
+      if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.clearClipboard()
+      }
+      if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.createFolder()
+      }
+      if (e.key === 'g' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.groupSelectedIntoFolder()
+      }
+      if (e.key === 'o' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.zoomOnItem()
+      }
+      if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        this.saveHandler(e)
+      }
+    }
+
+    document.addEventListener('keydown', this._keyListener.bind(this))
+  },
+  beforeDestroy: function () {
+    document.removeEventListener('keydown', this._keyListener)
   },
   methods: {
     saveHandler: function (event) {
-      if(this.isSaveDisabled()) {
+      if (this.isSaveDisabled()) {
         // workaround for a bug in LUX that doesn't style disabled buttons properly
         alert('The structure has not changed, nothing to save.')
       } else {
@@ -140,9 +181,9 @@ export default {
       if (this.gallery.selected.length === 1) {
         return false
       } else if (this.tree.selected && !this.rootNodeSelected) {
-        let nodeToBeZoomed = this.findFolderById(this.tree.structure.folders, this.tree.selected)
-        let has_service = !!nodeToBeZoomed.service
-        if (has_service) {
+        const nodeToBeZoomed = this.findFolderById(this.tree.structure.folders, this.tree.selected)
+        const hasService = !!nodeToBeZoomed.service
+        if (hasService) {
           return false
         }
       }
@@ -184,58 +225,17 @@ export default {
     },
     createFolder: function () {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
-      this.$emit('create-folder', parentId )
+      this.$emit('create-folder', parentId)
     },
-    groupSelectedIntoFolder: function() {
+    groupSelectedIntoFolder: function () {
       this.$emit('group-selected')
     },
-    deleteFolder: function (folder_id) {
-      this.$emit('delete-folder', folder_id);
+    deleteFolder: function (folderId) {
+      this.$emit('delete-folder', folderId)
     },
-    zoomOnItem: function() {
+    zoomOnItem: function () {
       this.$emit('zoom-on-item')
-    },
-  },
-  mounted: function () {
-      this._keyListener = function(e) {
-          if (e.key === "x" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.cutSelected()
-          }
-          if (e.key === "v" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.paste()
-          }
-          if (e.key === "d" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.deleteFolder(this.tree.selected)
-          }
-          if (e.key === "z" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.clearClipboard()
-          }
-          if (e.key === "n" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.createFolder()
-          }
-          if (e.key === "g" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.groupSelectedIntoFolder()
-          }
-          if (e.key === "o" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.zoomOnItem()
-          }
-          if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
-              e.preventDefault();
-              this.saveHandler(e)
-          }
-      };
-
-      document.addEventListener('keydown', this._keyListener.bind(this));
-  },
-  beforeDestroy: function () {
-      document.removeEventListener('keydown', this._keyListener);
+    }
   }
 }
 </script>

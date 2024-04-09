@@ -11,9 +11,9 @@
  * To add additional icons, please consult [the instructions](/#/Adding%20Icons).
  */
 export default {
-  name: "IconEndNode",
-  status: "ready",
-  release: "1.0.0",
-  type: "Element",
+  name: 'IconEndNode',
+  status: 'ready',
+  release: '1.0.0',
+  type: 'Element'
 }
 </script>

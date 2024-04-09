@@ -36,7 +36,7 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
         class="lux-heading h6"
         data-v-5aca45d1=""
       >
-        Logical Structure
+         Logical Structure 
       </h2>
     </div>
     <tree-stub
@@ -58,7 +58,7 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
         class="lux-heading h6"
         data-v-5aca45d1=""
       >
-        Unstructured Files
+         Unstructured Files 
       </h2>
     </div>
     <struct-gallery-stub

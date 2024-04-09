@@ -2,26 +2,28 @@
   <ul :class="root ? 'lux-tree root' : 'lux-tree-sub'">
     <li>
       <div class="container">
-        <div class="lux-item" v-if="!jsonData.file">
+        <div
+          v-if="!jsonData.file"
+          class="lux-item"
+        >
           <input-button
-            @button-clicked="toggleFolder($event)"
             class="expand-collapse"
             type="button"
             variation="icon"
             size="small"
             :icon="expandCollapseIcon"
             block
-          >
-          </input-button>
+            @button-clicked="toggleFolder($event)"
+          />
         </div>
         <div
           class="folder-container"
-          @click.capture="select(id, $event)"
           :class="[
             'lux-item-label', 'branchnode',
             { selected: isSelected },
             { disabled: isDisabled },
           ]"
+          @click.capture="select(id, $event)"
         >
           <lux-icon-base
             v-if="jsonData.file && !thumbnail"
@@ -30,125 +32,129 @@
             icon-name="End Node"
             icon-color="gray"
           >
-            <lux-icon-end-node></lux-icon-end-node>
+            <lux-icon-end-node />
           </lux-icon-base>
           <media-image
             v-if="thumbnail"
-            :alt="jsonData.label"
-            :src="thumbnail" height="30px"
+            :alt="structureData.label"
+            :src="thumbnail"
+            height="30px"
             class="file"
             style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
-          ></media-image>
+          />
           <template v-if="editedFieldId === id">
             <div class="folder-label">
               <input
+                :ref="`field${id}`"
+                v-model="structureData.label"
                 type="text"
                 class="folder-label-input"
-                v-on:keyup.enter="saveLabel(id)"
-                v-model="jsonData.label"
-                :ref="`field${id}`" />
+                @keyup.enter="saveLabel(id)"
+              >
             </div>
             <div class="folder-edit">
               <input-button
-                @button-clicked="saveLabel(id)"
                 class="save-label"
                 type="button"
                 variation="icon"
                 size="small"
                 icon="approved"
-              >
-              </input-button>
+                @button-clicked="saveLabel(id)"
+              />
             </div>
           </template>
           <template v-else>
             <div class="folder-label">
-              {{ this.jsonData.label }}
+              {{ structureData.label }}
             </div>
             <div class="folder-edit">
               <input-button
-                @button-clicked="toggleEdit(id)"
                 class="toggle-edit"
                 type="button"
                 variation="icon"
                 size="small"
                 icon="edit"
-              >
-              </input-button>
+                @button-clicked="toggleEdit(id)"
+              />
 
-              <input-button v-if="!isFile"
-                @button-clicked="createFolder(id)"
+              <input-button
+                v-if="!isFile"
                 class="create-folder"
                 type="button"
                 variation="icon"
                 size="small"
                 icon="add"
-              >
-              </input-button>
-              <input-button v-else
-                @button-clicked="zoomFile(id)"
+                @button-clicked="createFolder(id)"
+              />
+              <input-button
+                v-else
                 class="zoom-file"
                 type="button"
                 variation="icon"
                 size="small"
                 icon="search"
-              >
-              </input-button>
+                @button-clicked="zoomFile(id)"
+              />
               <input-button
-                @button-clicked="deleteFolder(id)"
                 class="delete-folder"
                 type="button"
                 variation="icon"
                 size="small"
                 icon="denied"
-              >
-              </input-button>
+                @button-clicked="deleteFolder(id)"
+              />
             </div>
           </template>
         </div>
       </div>
-      <ul class="lux-tree-sub" v-show="isOpen">
+      <ul
+        v-show="isOpen"
+        class="lux-tree-sub"
+      >
         <tree
-          v-for="(folder, index) in this.jsonData.folders"
-          :json-data="folder"
+          v-for="(folder) in jsonData.folders"
           :id="folder.id"
+          :key="folder.id"
+          :json-data="folder"
+          :root="false"
           @delete-folder="deleteFolder"
           @create-folder="createFolder"
           @zoom-file="zoomFile"
-          :root="false"
-        ></tree>
+        />
       </ul>
     </li>
   </ul>
 </template>
 
 <script>
-import store from "../store"
-import { mapState, mapGetters } from "vuex"
+import store from '../store'
+import { mapState } from 'vuex'
 import IconEndNode from '@components/IconEndNode.vue'
-import mixin from "./structMixins.js";
+import mixin from './structMixins.js'
 /**
  * TreeItems are the building blocks of hierarchical navigation.
  */
 export default {
-  name: "Tree",
-  status: "prototype",
-  release: "1.0.0",
-  type: "Element",
-  mixins: [mixin],
+  name: 'Tree',
+  status: 'prototype',
+  release: '1.0.0',
+  type: 'Element',
   components: {
-    'lux-icon-end-node': IconEndNode,
+    'lux-icon-end-node': IconEndNode
   },
+  mixins: [mixin],
   props: {
     /**
      * id identifies the node in the tree.
      */
     id: {
-      default: "",
+      type: String,
+      default: ''
     },
     jsonData: {
       type: Object,
       required: true,
-      default() {
+      default () {
         return {}
       }
     },
@@ -156,51 +162,52 @@ export default {
     root: {
       type: Boolean,
       default: true
-    },
+    }
   },
-  data: function() {
+  data: function () {
     return {
       isOpen: true,
       editedFieldId: null,
       isFile: this.jsonData.file,
+      structureData: this.jsonData
     }
   },
   computed: {
-    rootNodeSelected: function() {
+    rootNodeSelected: function () {
       return this.tree.selected === this.tree.structure.id
     },
-    thumbnail: function() {
-      let has_service = !!this.jsonData.service
-      if (has_service) {
+    thumbnail: function () {
+      const hasService = !!this.jsonData.service
+      if (hasService) {
         return this.jsonData.service + '/full/30,/0/default.jpg'
       } else {
         return false
       }
     },
-    expandCollapseIcon: function() {
+    expandCollapseIcon: function () {
       if (this.isOpen) {
-        return "arrow-down"
+        return 'arrow-down'
       }
-      return "arrow-right"
+      return 'arrow-right'
     },
-    isSelected: function() {
-      if (this.rootNodeSelected){
+    isSelected: function () {
+      if (this.rootNodeSelected) {
         return true
       }
       if (this.tree.selected) {
-        let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        let selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
-        let selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
+        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        const selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
+        const selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
         // return true if id matches any of the ids in selectedTreeItems array
         return selectedTreeItems.includes(this.id)
       }
       return false
     },
-    isDisabled: function() {
+    isDisabled: function () {
       if (this.tree.cut) {
-        let folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        let cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
-        let disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
+        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
+        const disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
         // return true if id matches any of the ids in cutTreeStructure
         return disabledTreeItems.includes(this.id)
       }
@@ -209,23 +216,23 @@ export default {
     ...mapState({
       tree: state => store.state.tree,
       gallery: state => store.state.gallery,
-      zoom: state => store.state.zoom,
-    }),
+      zoom: state => store.state.zoom
+    })
   },
   methods: {
-    createFolder: function(folder_id) {
-      this.$emit('create-folder', folder_id);
+    createFolder: function (folderId) {
+      this.$emit('create-folder', folderId)
     },
-    deleteFolder: function(folder_id) {
-      this.$emit('delete-folder', folder_id);
+    deleteFolder: function (folderId) {
+      this.$emit('delete-folder', folderId)
     },
-    zoomFile: function(file_id) {
-      this.$emit('zoom-file', file_id);
+    zoomFile: function (fileId) {
+      this.$emit('zoom-file', fileId)
     },
-    extractIdsInStructure: function(structure) {
+    extractIdsInStructure: function (structure) {
       const result = []
 
-      function traverse(node) {
+      function traverse (node) {
         if (node && node.id) {
           result.push(node.id)
         }
@@ -240,62 +247,62 @@ export default {
       traverse(structure)
       return result
     },
-    select: function(id, event) {
+    select: function (id, event) {
       if (!this.isOpen) {
         this.isOpen = !this.isOpen
       }
-      store.commit("SELECT_TREEITEM", id)
+      store.commit('SELECT_TREEITEM', id)
       // tree and gallery items cannot be selected simultaneously, so deselect the gallery
-      store.commit("SELECT", [])
+      store.commit('SELECT', [])
     },
-    saveLabel: function(id) {
-      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id;
+    saveLabel: function (id) {
+      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       // need to stringify and parse to drop the observer that comes with Vue reactive data
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
 
       let structure = {
         id: this.tree.structure.id,
         folders: folderList,
-        label: this.jsonData.label,
+        label: this.jsonData.label
       }
 
       if (id !== this.tree.structure.id) {
-        let selectedFolder = this.findFolderById(folderList, parentId)
+        const selectedFolder = this.findFolderById(folderList, parentId)
         structure = {
           id: this.tree.structure.id,
           folders: this.updateFolderLabel(folderList, selectedFolder),
-          label: this.tree.structure.label,
+          label: this.tree.structure.label
         }
       }
-      store.commit("SAVE_LABEL", structure)
-      this.editedFieldId = null;
+      store.commit('SAVE_LABEL', structure)
+      this.editedFieldId = null
     },
     updateFolderLabel: function (array, selectedFolder) {
-      for (let item of array) {
+      for (const item of array) {
         if (item.id === selectedFolder.id) {
           item.label = this.jsonData.label
         } else if (item.folders?.length) {
-          const innerResult = this.updateFolderLabel(item.folders, selectedFolder)
+          this.updateFolderLabel(item.folders, selectedFolder)
         }
       }
       return array
     },
-    toggleFolder: function() {
+    toggleFolder: function () {
       this.isOpen = !this.isOpen
     },
-    toggleEdit: function(id) {
+    toggleEdit: function (id) {
       if (id) {
-        this.editedFieldId = id;
+        this.editedFieldId = id
         this.$nextTick(() => {
-          if (this.$refs["field" + id]) {
-            this.$refs["field" + id].focus();
+          if (this.$refs['field' + id]) {
+            this.$refs['field' + id].focus()
           }
-        });
+        })
       } else {
-        this.editedFieldId = null;
+        this.editedFieldId = null
       }
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -307,7 +314,6 @@ export default {
 .lux-tree.lux-button.icon.small {
   padding: 0px;
 }
-
 
 ul.lux-tree li {
   list-style-type: none;

@@ -4,12 +4,12 @@
       <heading level="h2">
         Zoom <small>on {{ zoomed.caption }}</small>
         <input-button
-          @button-clicked="hideZoom()"
           class="close-zoom"
           type="button"
           variation="icon"
           size="small"
           icon="denied"
+          @button-clicked="hideZoom()"
         />
       </heading>
       <div class="lux-osd-wrapper">
@@ -57,12 +57,12 @@ export default {
     resourceId: {
       type: String,
       default: ''
-    },
+    }
   },
   data: function () {
     return {
       viewer: null,
-      osdId: this.viewerId,
+      osdId: this.viewerId
     }
   },
   computed: {
@@ -70,7 +70,7 @@ export default {
       resource: state => state.ordermanager.resource,
       tree: state => state.tree,
       gallery: state => state.gallery,
-      zoom: state => state.zoom,
+      zoom: state => state.zoom
     }),
     ...mapGetters({
       zoomed: 'getIsZoomed'
@@ -87,17 +87,17 @@ export default {
       this.initOSD()
     }
 
-    this._keyListener = function(e) {
-        if (e.key === "Escape") {
-            e.preventDefault()
-            this.hideZoom()
-        }
-    };
+    this._keyListener = function (e) {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        this.hideZoom()
+      }
+    }
 
     document.addEventListener('keydown', this._keyListener.bind(this))
   },
   beforeDestroy: function () {
-      document.removeEventListener('keydown', this._keyListener)
+    document.removeEventListener('keydown', this._keyListener)
   },
   methods: {
     initOSD: function () {
@@ -112,7 +112,7 @@ export default {
       })
     },
     hideZoom: function () {
-      this.$store.commit("RESET_ZOOM")
+      this.$store.commit('RESET_ZOOM')
     },
     hidden: function () {
       if (this.selectedTotal !== 1) {
@@ -120,7 +120,7 @@ export default {
       } else {
         return false
       }
-    },
+    }
   }
 }
 </script>
