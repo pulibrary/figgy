@@ -402,6 +402,7 @@ ul.lux-tree .lux-item-label {
 
 .folder-label {
   flex: 1;
+  line-height: 1.4em;
 }
 
 .folder-label input[type=text]  {

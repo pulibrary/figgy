@@ -115,6 +115,9 @@ const actions = {
   async saveStructureAJAX (context, resource) {
     context.commit('SAVED_STRUCTURE_STATE', 'SAVING')
 
+    const delay = ms => new Promise(res => setTimeout(res, ms))
+    await delay(1000);
+
     let resource_type = resource.resourceClassName.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
 
     let xhr = new XMLHttpRequest()

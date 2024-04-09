@@ -1,8 +1,10 @@
 <%= structure_page_header %>
-<a id="struct_manager_link" href="struct_manager"
-  onclick="return confirm('Any unsaved changes will be lost. Are you sure?')">
-  Having trouble? Switch to the Old Structure Manager (Legacy Version)
-</a>
+<div id="struct_manager_link">
+  <a href="struct_manager"
+    onclick="return confirm('Any unsaved changes will be lost. Are you sure?')">
+    Having trouble? Switch to the Old Structure Manager (Legacy Version)
+  </a>
+</div>
 <struct-manager
   resource-id="<%= @change_set.id %>"
   data-id="<%= @change_set.id %>"
