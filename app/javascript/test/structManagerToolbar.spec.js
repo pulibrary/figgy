@@ -184,7 +184,6 @@ describe("StructManagerToolbar.vue", () => {
       store,
       stubs: [
         "dropdown-menu",
-        "input-button",
         "spacer",
         "lux-icon-base",
         "lux-icon-picture",
@@ -210,15 +209,12 @@ describe("StructManagerToolbar.vue", () => {
     expect(parent.folders.map(obj => obj.id).includes(newFolderId)).toBe(false)
   })
 
-  // it("Save is not disabled when something has changed", () => {
-  //   wrapper.vm.createFolder()
-  //   expect(wrapper.vm.isSaveDisabled()).toBe(false)
-  // })
-
-  // it("Zoom is disabled when nothing is selected", () => {
-  //   wrapper.vm.selectNoneTree()
-  //   wrapper.vm.selectNoneGallery()
-  //   expect(wrapper.vm.isZoomDisabled()).toBe(true)
-  // })
+  it('Emits a save-structure custom event when Save Structure is clicked', async () => {
+    // we need to modify the structure to disable Save
+    store.commit('SET_MODIFIED', true)
+    expect(wrapper.vm.isSaveDisabled()).toBe(false)
+    await wrapper.findAll('#save_btn').trigger('click')
+    expect(wrapper.emitted()).toHaveProperty('save-structure')
+  })
 
 })

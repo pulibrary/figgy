@@ -329,9 +329,9 @@ export default {
       }
     },
     filterGallery: function (newVal) {
-      if (this.structure) {
+      if (this.structure.nodes) {
         // If structure prop is provided,
-        // convert to figgy-friendly structure
+        // convert to tree-friendly structure
         let structureFolders = this.renamePropertiesForLoad(this.structure.nodes)
 
         // Reconcile unstructured_objects with structured

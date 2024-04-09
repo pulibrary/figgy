@@ -121,7 +121,6 @@ const actions = {
     let url = `/concern/${resource_type}s/${resource.id}.json`
     let data = JSON.stringify({[resource_type]: {'logical_structure': [resource.structure] }})
     let token = document.querySelector('meta[name="csrf-token"]').content
-    console.log(token)
     xhr.open('PUT', url, true)
     xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.setRequestHeader('dataType', 'json')
@@ -130,15 +129,12 @@ const actions = {
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4) {
         // Request completed
-        console.log('Request Completed!')
         if (xhr.status === 200 || xhr.status === 201) {
           // Successful response
-          console.log('Successful Save!')
           context.commit('SAVED_STRUCTURE_STATE', 'SAVED');
-          // context.commit('APPLY_TREE_STATE');
         } else {
           // Handle errors here
-          console.error('Error:', xhr.status, xhr.statusText);
+          // console.error('Error:', xhr.status, xhr.statusText);
           context.commit('SAVED_STRUCTURE_STATE', 'ERROR')
         }
       }

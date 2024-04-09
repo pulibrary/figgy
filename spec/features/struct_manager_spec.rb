@@ -106,10 +106,11 @@ RSpec.feature "Structure Manager", js: true do
     #test paste group of selected gallery items into new folder
     find(".lux-card", match: :first).click
     all(".lux-card").last.click(:shift)
-    expect(page).to have_selector('.lux-card-selected', count: 2)
+    expect(page).to have_selector(".lux-card-selected", count: 2)
     page.send_keys [:control, "g"]
-    expect(page).to have_selector('.lux-card', count: 0)
-    expect(page).to have_selector('.lux-structManager .file', count: 2)
+    expect(page).to have_selector(".lux-card", count: 0)
+    expect(page).to have_selector(".lux-structManager .file", count: 2)
+
   end
 
 end
