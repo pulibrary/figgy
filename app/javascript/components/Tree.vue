@@ -324,6 +324,10 @@ ul.lux-tree li {
   font-size: 12px;
 }
 
+ul.lux-tree-sub li {
+  margin-left: -40px;
+}
+
 ul.lux-tree li div.lux-item-label {
   // background: rgb(186, 175, 130);
   background: rgb(245, 245, 245);
