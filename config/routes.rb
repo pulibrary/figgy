@@ -105,6 +105,7 @@ Rails.application.routes.draw do
       member do
         get :order_manager
         get :structure
+        get :struct_manager
         get :file_manager
         get :manifest, defaults: { format: :json }
       end

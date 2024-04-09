@@ -409,6 +409,50 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
   end
 
+  # legacy structure manager, temporarily kept around
+  describe "struct_manager" do
+    let(:user) { FactoryBot.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "redirects to login or root" do
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+
+        get :struct_manager, params: { id: scanned_resource.id.to_s }
+        expect(response).to be_redirect
+      end
+    end
+    context "when a scanned resource doesn't exist" do
+      it "raises an error" do
+        get :struct_manager, params: { id: "banana" }
+        expect(response).to have_http_status(404)
+      end
+    end
+    context "when it does exist" do
+      render_views
+      it "renders a structure editor form" do
+        file_set = FactoryBot.create_for_repository(:file_set)
+        scanned_resource = FactoryBot.create_for_repository(
+          :scanned_resource,
+          member_ids: file_set.id,
+          thumbnail_id: file_set.id,
+          logical_structure: [
+            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set.id }] }] }
+          ]
+        )
+
+        query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+        allow(query_service).to receive(:find_by).with(id: scanned_resource.id).and_call_original
+        allow(query_service).to receive(:find_inverse_references_by)
+        get :struct_manager, params: { id: scanned_resource.id.to_s }
+
+        expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
+        expect(response.body).to have_field("label", with: "Chapter 1")
+        expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: scanned_resource.id)
+        expect(query_service).not_to have_received(:find_inverse_references_by)
+      end
+    end
+  end
+
   describe "structure" do
     let(:user) { FactoryBot.create(:admin) }
     context "when not logged in" do
@@ -444,8 +488,6 @@ RSpec.describe ScannedResourcesController, type: :controller do
         allow(query_service).to receive(:find_inverse_references_by)
         get :structure, params: { id: scanned_resource.id.to_s }
 
-        expect(response.body).to have_selector "li[data-proxy='#{file_set.id}']"
-        expect(response.body).to have_field("label", with: "Chapter 1")
         expect(response.body).to have_link scanned_resource.title.first, href: solr_document_path(id: scanned_resource.id)
         expect(query_service).not_to have_received(:find_inverse_references_by)
       end

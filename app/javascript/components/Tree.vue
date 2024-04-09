@@ -17,6 +17,7 @@
           />
         </div>
         <div
+          :id="id"
           class="folder-container"
           :class="[
             'lux-item-label', 'branchnode',
@@ -263,7 +264,7 @@ export default {
       let structure = {
         id: this.tree.structure.id,
         folders: folderList,
-        label: this.jsonData.label
+        label: this.structureData.label
       }
 
       if (id !== this.tree.structure.id) {
@@ -280,7 +281,7 @@ export default {
     updateFolderLabel: function (array, selectedFolder) {
       for (const item of array) {
         if (item.id === selectedFolder.id) {
-          item.label = this.jsonData.label
+          item.label = this.structureData.label
         } else if (item.folders?.length) {
           this.updateFolderLabel(item.folders, selectedFolder)
         }

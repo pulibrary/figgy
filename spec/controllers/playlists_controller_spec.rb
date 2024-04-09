@@ -321,6 +321,54 @@ RSpec.describe PlaylistsController, type: :controller do
     end
   end
 
+  # Legacy Structure Manager will temporarily stay in Figgy
+  describe "struct_manager" do
+    let(:user) { FactoryBot.create(:admin) }
+
+    context "when not logged in" do
+      let(:user) { nil }
+      it "redirects to login or root" do
+        resource = FactoryBot.create_for_repository(:playlist)
+
+        get :struct_manager, params: { id: resource.id.to_s }
+        expect(response).to be_redirect
+      end
+    end
+
+    context "when a playlist doesn't exist" do
+      it "raises an error" do
+        get :struct_manager, params: { id: "banana" }
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    context "when it does exist" do
+      render_views
+      it "renders a structure editor form" do
+        file_set = FactoryBot.create_for_repository(:file_set)
+        proxy_file_set = FactoryBot.create_for_repository(:proxy_file_set, proxied_file_id: file_set.id)
+        resource = FactoryBot.create_for_repository(
+          :playlist,
+          member_ids: proxy_file_set.id,
+          logical_structure: [
+            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: proxy_file_set.id }] }] }
+          ]
+        )
+
+        query_service = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service
+        allow(query_service).to receive(:find_by).and_call_original
+        allow(query_service).to receive(:find_inverse_references_by)
+        get :struct_manager, params: { id: resource.id.to_s }
+
+        expect(response.body).to have_selector "li[data-proxy='#{proxy_file_set.id}']"
+        expect(response.body).to have_field("label", with: "Chapter 1")
+        expect(response.body).to have_link resource.title.first, href: solr_document_path(id: resource.id)
+        expect(query_service).not_to have_received(:find_inverse_references_by)
+        expect(query_service).to have_received(:find_by).with(id: resource.id)
+      end
+    end
+  end
+
   describe "structure" do
     let(:user) { FactoryBot.create(:admin) }
 
@@ -359,8 +407,6 @@ RSpec.describe PlaylistsController, type: :controller do
         allow(query_service).to receive(:find_inverse_references_by)
         get :structure, params: { id: resource.id.to_s }
 
-        expect(response.body).to have_selector "li[data-proxy='#{proxy_file_set.id}']"
-        expect(response.body).to have_field("label", with: "Chapter 1")
         expect(response.body).to have_link resource.title.first, href: solr_document_path(id: resource.id)
         expect(query_service).not_to have_received(:find_inverse_references_by)
         expect(query_service).to have_received(:find_by).with(id: resource.id)
