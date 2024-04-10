@@ -243,20 +243,20 @@ RSpec.describe ScannedMapsController, type: :controller do
     end
   end
 
-  describe "structure" do
+  describe "struct_manager" do
     let(:user) { FactoryBot.create(:admin) }
     context "when not logged in" do
       let(:user) { nil }
       it "redirects to login or root" do
         scanned_map = FactoryBot.create_for_repository(:scanned_map)
 
-        get :structure, params: { id: scanned_map.id.to_s }
+        get :struct_manager, params: { id: scanned_map.id.to_s }
         expect(response).to be_redirect
       end
     end
     context "when a map image doesn't exist" do
       it "raises an error" do
-        get :structure, params: { id: "banana" }
+        get :struct_manager, params: { id: "banana" }
         expect(response).to have_http_status(404)
       end
     end
@@ -277,7 +277,7 @@ RSpec.describe ScannedMapsController, type: :controller do
           ]
         )
 
-        get :structure, params: { id: scanned_map.id.to_s }
+        get :struct_manager, params: { id: scanned_map.id.to_s }
 
         expect(response.body).to have_selector "li[data-proxy='#{file_set1.id}']"
         expect(response.body).to have_selector "li[data-proxy='#{file_set2.id}']"

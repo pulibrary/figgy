@@ -209,6 +209,7 @@ Rails.application.routes.draw do
         get :manifest, defaults: { format: :json }
         get :order_manager
         get :pdf
+        get :struct_manager
         get :structure
         post :server_upload
       end
