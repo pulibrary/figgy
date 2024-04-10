@@ -88,6 +88,12 @@ describe("Tree.vue", () => {
     expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(true)
   })
 
+  test('Viewing direction is implemented by the viewingDirection prop', async () => {
+    expect(wrapper.findAll('.folder-label').at(1).attributes('dir')).toEqual('ltr')
+    await wrapper.setProps({ viewingDirection: 'RIGHTTOLEFT' })
+    expect(wrapper.findAll('.folder-label').at(1).attributes('dir')).toEqual('rtl')
+  })
+
   ///////////////////////////////////////////////////////////////////////////
   // Tree node selection works in the UI due to the reliance on the tree store,
   // but not in this isolated test case. Testing selection features in capybara instead.

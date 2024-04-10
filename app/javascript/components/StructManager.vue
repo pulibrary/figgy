@@ -58,6 +58,7 @@
       <tree
         :id="tree.structure.id"
         :json-data="tree.structure"
+        :viewing-direction="viewingDirection"
         @delete-folder="deleteFolder"
         @create-folder="createFolder"
         @zoom-file="zoomFile"
@@ -76,6 +77,7 @@
       </div>
       <struct-gallery
         class="lux-galleryWrapper"
+        :viewing-direction="viewingDirection"
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
         @card-clicked="galleryClicked()"
@@ -176,6 +178,9 @@ export default {
       gallery: state => state.gallery,
       zoom: state => state.zoom
     }),
+    viewingDirection: function () {
+      return this.resource.viewingDirection
+    },
     zoomed: function () {
       return this.zoom.zoomed
     },

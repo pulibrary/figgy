@@ -44,7 +44,7 @@
             style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
           />
           <template v-if="editedFieldId === id">
-            <div class="folder-label">
+            <div class="folder-label" :dir="viewDir">
               <input
                 :ref="`field${id}`"
                 v-model="structureData.label"
@@ -65,7 +65,7 @@
             </div>
           </template>
           <template v-else>
-            <div class="folder-label">
+            <div class="folder-label" :dir="viewDir">
               {{ structureData.label }}
             </div>
             <div class="folder-edit">
@@ -118,6 +118,7 @@
           :key="folder.id"
           :json-data="folder"
           :root="false"
+          :viewing-direction="viewingDirection"
           @delete-folder="deleteFolder"
           @create-folder="createFolder"
           @zoom-file="zoomFile"
@@ -163,6 +164,11 @@ export default {
     root: {
       type: Boolean,
       default: true
+    },
+    // Whether text should be displayed Left-to-Right or Right-to-Left
+    viewingDirection: {
+      type: String,
+      default: "LEFTTORIGHT"
     }
   },
   data: function () {
@@ -213,6 +219,12 @@ export default {
         return disabledTreeItems.includes(this.id)
       }
       return false
+    },
+    viewDir: function () {
+      if (this.viewingDirection === "RIGHTTOLEFT") {
+        return 'rtl'
+      }
+      return 'ltr'
     },
     ...mapState({
       tree: state => store.state.tree,
@@ -421,6 +433,16 @@ ul.lux-tree .lux-item-label {
   border: none;
   width: 80%;
   line-height: 22px;
+}
+
+.folder-label[dir='rtl'] {
+    text-align: right;
+    list-style-type: none;
+    font-family: sans-serif;
+    margin: 0px;
+    padding-right: 1em;
+    line-height: 25px;
+    font-size: 12px;
 }
 
 .folder-edit .lux-button.icon.small {
