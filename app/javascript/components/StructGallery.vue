@@ -80,7 +80,6 @@ export default {
   beforeMount: function () {
     if (this.galleryItems) {
       // if props are passed in set the cards on mount
-      // window.app = this
       store.commit('SET_GALLERY', this.galleryItems)
     } else {
       // retrieve the data via an asyn action
