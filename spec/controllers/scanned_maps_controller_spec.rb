@@ -278,10 +278,50 @@ RSpec.describe ScannedMapsController, type: :controller do
         )
 
         get :struct_manager, params: { id: scanned_map.id.to_s }
-
         expect(response.body).to have_selector "li[data-proxy='#{file_set1.id}']"
         expect(response.body).to have_selector "li[data-proxy='#{file_set2.id}']"
         expect(response.body).to have_field("label", with: "Chapter 1")
+        expect(response.body).to have_link scanned_map.title.first, href: solr_document_path(id: scanned_map.id)
+      end
+    end
+  end
+
+  describe "structure" do
+    let(:user) { FactoryBot.create(:admin) }
+    context "when not logged in" do
+      let(:user) { nil }
+      it "redirects to login or root" do
+        scanned_map = FactoryBot.create_for_repository(:scanned_map)
+
+        get :structure, params: { id: scanned_map.id.to_s }
+        expect(response).to be_redirect
+      end
+    end
+    context "when a map image doesn't exist" do
+      it "raises an error" do
+        get :structure, params: { id: "banana" }
+        expect(response).to have_http_status(404)
+      end
+    end
+    context "when it does exist" do
+      render_views
+      it "renders a structure editor form" do
+        file_set1 = FactoryBot.create_for_repository(:file_set)
+        file_set2 = FactoryBot.create_for_repository(:geo_image_file_set)
+        child_scanned_map = FactoryBot.create_for_repository(
+          :scanned_map,
+          member_ids: file_set2.id
+        )
+        scanned_map = FactoryBot.create_for_repository(
+          :scanned_map,
+          member_ids: [file_set1.id, child_scanned_map.id],
+          logical_structure: [
+            { label: "testing", nodes: [{ label: "Chapter 1", nodes: [{ proxy: file_set1.id }] }] }
+          ]
+        )
+
+        get :structure, params: { id: scanned_map.id.to_s }
+        expect(response.body).to have_selector "struct-manager"
         expect(response.body).to have_link scanned_map.title.first, href: solr_document_path(id: scanned_map.id)
       end
     end

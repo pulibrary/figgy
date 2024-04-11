@@ -44,7 +44,10 @@
             style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
           />
           <template v-if="editedFieldId === id">
-            <div class="folder-label" :dir="viewDir">
+            <div
+              class="folder-label"
+              :dir="viewDir"
+            >
               <input
                 :ref="`field${id}`"
                 v-model="structureData.label"
@@ -65,7 +68,10 @@
             </div>
           </template>
           <template v-else>
-            <div class="folder-label" :dir="viewDir">
+            <div
+              class="folder-label"
+              :dir="viewDir"
+            >
               {{ structureData.label }}
             </div>
             <div class="folder-edit">
@@ -168,7 +174,7 @@ export default {
     // Whether text should be displayed Left-to-Right or Right-to-Left
     viewingDirection: {
       type: String,
-      default: "LEFTTORIGHT"
+      default: 'LEFTTORIGHT'
     }
   },
   data: function () {
@@ -221,7 +227,7 @@ export default {
       return false
     },
     viewDir: function () {
-      if (this.viewingDirection === "RIGHTTOLEFT") {
+      if (this.viewingDirection === 'RIGHTTOLEFT') {
         return 'rtl'
       }
       return 'ltr'

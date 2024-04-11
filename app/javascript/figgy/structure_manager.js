@@ -76,7 +76,6 @@ export default class StructureManager {
       let button = $(this)
       button.text("Saving..")
       button.addClass("disabled")
-      console.log(JSON.stringify({[singular_klass]: {'logical_structure': [serializer.serialize]}}))
       $.ajax({
         type: "PUT",
         url: url,
