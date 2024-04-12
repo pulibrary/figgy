@@ -133,7 +133,7 @@ namespace :figgy do
 
       collections.each do |collection|
         logger.info "Removing collection from child members in #{collection.id}..."
-        Migrations::ChildResourceCollectionMigrator.new(collection_id: collection_id, logger: logger).run
+        Migrations::ChildResourceCollectionMigrator.new(collection_id: collection.id, logger: logger).run
       end
     end
 
