@@ -122,31 +122,18 @@ namespace :figgy do
       IngestGnibMODSJob.set(queue: :low).perform_now(project, mods, dir)
     end
 
-    desc "Migrates Collection members with children who have values in the member_of_collection_ids attribute"
-    task collection_members_with_children: :environment do
+    desc "Removes collections from collection members that are children"
+    task child_collection_members: :environment do
       collections =
         if ENV["COLLECTION_ID"]
           Array.wrap(query_service.find_by(id: ENV["COLLECTION_ID"]))
         else
           resources(model: Collection)
         end
+
       collections.each do |collection|
-        logger.info "Migrating Collection members for #{collection.id}..."
-
-        change_set_persister.buffer_into_index do |buffered_change_set_persister|
-          collection.decorate.members.each do |collection_member|
-            collection_member.decorate.members.each do |child|
-              next if !child.respond_to?(:member_of_collection_ids) || child.member_of_collection_ids.blank?
-
-              logger.info "Migrating the collections for member resource #{child.id}..."
-
-              child_change_set = ChangeSet.for(child)
-              child_change_set.validate(member_of_collection_ids: [])
-
-              buffered_change_set_persister.save(change_set: child_change_set)
-            end
-          end
-        end
+        logger.info "Removing collection from child members in #{collection.id}..."
+        Migrations::ChildResourceCollectionMigrator.new(collection_id: collection_id, logger: logger).run
       end
     end
 
