@@ -75,7 +75,6 @@ describe("OrderManagerControls.vue", () => {
         selected: [items[0]],
         cut: [],
         changeList: [],
-        // changeList: ["2"],
         ogItems: items,
       },
       mutations: modules.galleryModule.mutations,
@@ -252,7 +251,7 @@ describe("OrderManagerControls.vue", () => {
 
     // displays an alert when page order has changed
     expect(wrapper.find('alert-stub').exists()).toBe(true)
-    
+
     // Disable the button while saving.
     expect(wrapper.vm.isDisabled).toBeTruthy()
 

@@ -42,6 +42,15 @@ class PlaylistsController < ResourcesController
     @logical_order = WithProxyForObject.new(@logical_order, members)
   end
 
+  # Legacy Structure Manager will temporarily stay in Figgy
+  def struct_manager
+    @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
+    authorize! :structure, @change_set.resource
+    @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
+    members = Wayfinder.for(@change_set.resource).members_with_parents
+    @logical_order = WithProxyForObject.new(@logical_order, members)
+  end
+
   def around_delete_action
     # Only allow deleting empty playlists. Avoids difficulty of restoring a
     # full playlist from preservation and supporting restoring accidentally

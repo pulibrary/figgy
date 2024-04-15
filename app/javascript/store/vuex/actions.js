@@ -84,6 +84,7 @@ const actions = {
         query, variables
       })
       context.commit('SET_RESOURCE', response.data.resource)
+      context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADED')
     } catch (err) {
       context.commit('CHANGE_RESOURCE_LOAD_STATE', 'LOADING_ERROR')
       context.commit('ERROR_MESSAGE', err)
@@ -110,6 +111,40 @@ const actions = {
         context.commit('ERROR_MESSAGE', err)
         context.commit('SAVED_STATE', 'ERROR')
       })
+  },
+  async saveStructureAJAX (context, resource) {
+    context.commit('SAVED_STRUCTURE_STATE', 'SAVING')
+
+    const delay = ms => new Promise(res => setTimeout(res, ms))
+    await delay(1000);
+
+    let resource_type = resource.resourceClassName.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
+
+    let xhr = new XMLHttpRequest()
+    let url = `/concern/${resource_type}s/${resource.id}.json`
+    let data = JSON.stringify({[resource_type]: {'logical_structure': [resource.structure] }})
+    let token = document.querySelector('meta[name="csrf-token"]').content
+    xhr.open('PUT', url, true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.setRequestHeader('dataType', 'json')
+    xhr.setRequestHeader('X-CSRF-Token', token)
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        // Request completed
+        if (xhr.status === 200 || xhr.status === 201) {
+          // Successful response
+          context.commit('SAVED_STRUCTURE_STATE', 'SAVED');
+        } else {
+          // Handle errors here
+          // console.error('Error:', xhr.status, xhr.statusText);
+          context.commit('SAVED_STRUCTURE_STATE', 'ERROR')
+        }
+      }
+    };
+
+    xhr.send(data);
+
   }
 }
 

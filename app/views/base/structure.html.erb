@@ -1,25 +1,14 @@
 <%= structure_page_header %>
-
-<div id="list-toolbar">
-  <a href="" data-action="add-to-list">
-    <button class="btn btn-secondary">
-      <span class="glyphicon glyphicon-plus"></span>
-      Add a Section
-    </button>
+<div id="struct_manager_link">
+  <a href="struct_manager"
+    onclick="return confirm('Any unsaved changes will be lost. Are you sure?')">
+    Having trouble? Switch to the Old Structure Manager (Legacy Version)
   </a>
-  <button data-action="submit-list" class="btn btn-primary">Save</button>
 </div>
-<ul class="sortable" data-id="<%= @change_set.id %>" data-class-name="<%= @change_set.model_name.plural %>" data-singular-class-name="<%= @change_set.model_name.singular %>">
-  <form class="form-inline">
-    <div class="form-group">
-      <label for="structure_label">Structure Label</label>
-      <%= text_field_tag "label", @logical_order.form_label, id: "structure_label", class: "form-control" %>
-    </div>
-  </form>
-  <% @logical_order.nodes.each do |node| %>
-    <%= render "structure_node", node: node %>
-  <% end %>
-  <% @logical_order.unstructured_objects.nodes.each do |node| %>
-    <%= render "structure_node", node: node %>
-  <% end %>
-</ul>
+<struct-manager
+  resource-id="<%= @change_set.id %>"
+  data-id="<%= @change_set.id %>"
+  data-class-name="<%= @change_set.model_name.plural %>"
+  data-singular-class-name="<%= @change_set.model_name.singular %>"
+  :structure="<%= @logical_order.to_json %>"
+  ></struct-manager>

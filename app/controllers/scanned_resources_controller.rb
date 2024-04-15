@@ -16,6 +16,14 @@ class ScannedResourcesController < ResourcesController
     IngestFolderJob.perform_later(directory: locator.root_path.join(params[:save_and_ingest_path]).to_s, property: "id", id: obj.id.to_s)
   end
 
+  def struct_manager
+    @change_set = ChangeSet.for(find_resource(params[:id]), change_set_param: change_set_param).prepopulate!
+    authorize! :structure, @change_set.resource
+    @logical_order = (Array(@change_set.logical_structure).first || Structure.new).decorate
+    members = Wayfinder.for(@change_set.resource).members_with_parents
+    @logical_order = WithProxyForObject.new(@logical_order, members)
+  end
+
   # View the structural metadata for a given repository resource
   def structure
     @change_set = ChangeSet.for(find_resource(params[:id])).prepopulate!
