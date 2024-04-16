@@ -13,23 +13,27 @@ Rails.application.config.to_prepare do
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["repository_path"],
-      file_mover: lambda { |old_path, new_path|
-        FileUtils.mv(old_path, new_path)
-        FileUtils.chmod(0o644, new_path)
-      }
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["repository_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
     ),
     :disk
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["stream_derivatives_path"],
-      file_mover: lambda { |old_path, new_path|
-        FileUtils.mv(old_path, new_path)
-        FileUtils.chmod(0o644, new_path)
-      }
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["stream_derivatives_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
     ),
     :stream_derivatives
   )
@@ -41,17 +45,21 @@ Rails.application.config.to_prepare do
   # is deployed on the same file system as the one storing the files being uploaded
   # NOTE: Separate inodes are created
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["repository_path"],
-      file_mover: FileUtils.method(:cp)
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["repository_path"],
+        file_mover: FileUtils.method(:cp)
+      )
     ),
     :disk_via_copy
   )
 
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["ingest_folder_path"],
-      file_mover: FileUtils.method(:cp)
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["ingest_folder_path"],
+        file_mover: FileUtils.method(:cp)
+      )
     ),
     :ingest_adapter
   )
@@ -105,12 +113,14 @@ Rails.application.config.to_prepare do
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["derivative_path"],
-      file_mover: lambda { |old_path, new_path|
-        FileUtils.mv(old_path, new_path)
-        FileUtils.chmod(0o644, new_path)
-      }
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
     ),
     :derivatives
   )
@@ -137,12 +147,14 @@ Rails.application.config.to_prepare do
     # Fall back to disk storage for development/test or if S3 is not
     # configured.
     Valkyrie::StorageAdapter.register(
-      Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["pyramidal_derivative_path"],
-        file_mover: lambda { |old_path, new_path|
-          FileUtils.mv(old_path, new_path)
-          FileUtils.chmod(0o644, new_path)
-        }
+      RetryingDiskAdapter.new(
+        Valkyrie::Storage::Disk.new(
+          base_path: Figgy.config["pyramidal_derivative_path"],
+          file_mover: lambda { |old_path, new_path|
+            FileUtils.mv(old_path, new_path)
+            FileUtils.chmod(0o644, new_path)
+          }
+        )
       ),
       :pyramidal_derivatives
     )
