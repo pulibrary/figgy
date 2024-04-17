@@ -84,7 +84,7 @@ module Bagit
         end
 
         def render_template_to_file(template:, file:)
-          output = ERB.new(File.read(template_path.join(template)), nil, "-").result(binding)
+          output = ERB.new(File.read(template_path.join(template)), trim_mode: "-").result(binding)
           File.open(file, "w") { |f| f.write(output) }
         end
 
