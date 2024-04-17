@@ -1248,8 +1248,8 @@ DEPENDENCIES
   net-smtp
   normalize-rails
   oai
-  omniauth
-  omniauth-cas
+  omniauth (= 1.9.2)
+  omniauth-cas (= 2.0.0)
   openseadragon
   parallel_tests
   pdf-reader!
