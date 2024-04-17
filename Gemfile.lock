@@ -21,13 +21,6 @@ GIT
       open4
 
 GIT
-  remote: https://github.com/samvera-labs/iiif_manifest
-  revision: 67bfa302dbfef665ace4a5f1ac5d952591661dbf
-  specs:
-    iiif_manifest (1.5.0)
-      activesupport (>= 4)
-
-GIT
   remote: https://github.com/samvera-labs/valkyrie-derivatives.git
   revision: bd13eb88452a14fe78e5e52621fff915060b2e25
   specs:
@@ -526,6 +519,8 @@ GEM
       faraday (~> 2.7)
       geo_coord
       json
+    iiif_manifest (1.1.1)
+      activesupport (>= 4)
     io-console (0.7.2)
     irb (1.12.0)
       rdoc
@@ -1227,7 +1222,7 @@ DEPENDENCIES
   hydra-access-controls
   hydra-head
   hydra-role-management
-  iiif_manifest!
+  iiif_manifest (= 1.1.1)
   iso-639
   jbuilder
   jquery-datatables
