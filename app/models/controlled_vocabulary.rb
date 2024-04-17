@@ -156,7 +156,7 @@ class ControlledVocabulary
     # Accessor for the class attribute storing the visibility options within an authorities YAML file
     # @return [Hash] the parsed visibility authority files
     def self.authority_config
-      @authority_config ||= YAML.safe_load(ERB.new(File.read(Rails.root.join("config", "authorities", "visibility.yml"))).result, [Symbol])
+      @authority_config ||= YAML.safe_load(ERB.new(File.read(Rails.root.join("config", "authorities", "visibility.yml"))).result, permitted_classes: [Symbol])
     end
 
     # Accesses all Terms specified within the YAML config. files
@@ -176,7 +176,7 @@ class ControlledVocabulary
     # Accessor for the class attribute storing the rights statements within an authorities YAML file
     # @return [Hash] the parsed rights statement authorities files
     def self.authority_config
-      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "rights_statement.yml")), [Symbol])
+      @authority_config ||= YAML.safe_load_file(Rails.root.join("config", "authorities", "rights_statement.yml"), permitted_classes: [Symbol])
     end
 
     # Accesses all Terms specified within the YAML config. files
@@ -205,7 +205,7 @@ class ControlledVocabulary
     ControlledVocabulary.register(:geo_image_format, self)
     # Accessor for the class attribute storing the media types within an authorities YAML file
     def self.authority_config
-      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_image_formats.yml")), [Symbol])
+      @authority_config ||= YAML.safe_load_file(Rails.root.join("config", "authorities", "geo_image_formats.yml"), permitted_classes: [Symbol])
     end
 
     # Accesses all Terms specified within the YAML config. files
@@ -223,7 +223,7 @@ class ControlledVocabulary
     ControlledVocabulary.register(:geo_metadata_format, self)
     # Accessor for the class attribute storing the geospatial metadata media types within an authorities YAML file
     def self.authority_config
-      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_metadata_formats.yml")), [Symbol])
+      @authority_config ||= YAML.safe_load_file(Rails.root.join("config", "authorities", "geo_metadata_formats.yml"), permitted_classes: [Symbol])
     end
 
     # Accesses all Terms specified within the YAML config. files
@@ -241,7 +241,7 @@ class ControlledVocabulary
     ControlledVocabulary.register(:geo_vector_format, self)
     # Accessor for the class attribute storing the media types within an authorities YAML file
     def self.authority_config
-      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_vector_formats.yml")), [Symbol])
+      @authority_config ||= YAML.safe_load_file(Rails.root.join("config", "authorities", "geo_vector_formats.yml"), permitted_classes: [Symbol])
     end
 
     # Accesses all Terms specified within the YAML config. files
@@ -259,7 +259,7 @@ class ControlledVocabulary
     ControlledVocabulary.register(:geo_raster_format, self)
     # Accessor for the class attribute storing the media types within an authorities YAML file
     def self.authority_config
-      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "geo_raster_formats.yml")), [Symbol])
+      @authority_config ||= YAML.safe_load_file(Rails.root.join("config", "authorities", "geo_raster_formats.yml"), permitted_classes: [Symbol])
     end
 
     # Accesses all Terms specified within the YAML config. files
@@ -322,7 +322,7 @@ class ControlledVocabulary
   class NoticeType < ControlledVocabulary
     ControlledVocabulary.register(:notice_type, self)
     def self.authority_config
-      @notice_authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "notices.yml")), [Symbol])
+      @notice_authority_config ||= YAML.safe_load_file(Rails.root.join("config", "authorities", "notices.yml"), permitted_classes: [Symbol])
     end
 
     # Return the notice for a given resource.
@@ -415,7 +415,7 @@ class ControlledVocabulary
     # Parse the YAML file containing the authorities for each Ephemera Field name
     # @return [Hash] values for the configuration
     def self.authority_config
-      @authority_config ||= YAML.safe_load(File.read(Rails.root.join("config", "authorities", "ephemera_field_name.yml")), [Symbol])
+      @authority_config ||= YAML.safe_load_file(Rails.root.join("config", "authorities", "ephemera_field_name.yml"), permitted_classes: [Symbol])
     end
 
     # Retrieve all Terms within the vocabulary
