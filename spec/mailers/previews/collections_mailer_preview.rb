@@ -3,6 +3,6 @@
 class CollectionsMailerPreview < ActionMailer::Preview
   def owner_report
     collection = Valkyrie.config.metadata_adapter.query_service.find_all_of_model(model: Collection).first
-    CollectionsMailer.with(collection: collection).owner_report
+    CollectionsMailer.with(collection_id: collection.id.to_s).owner_report
   end
 end

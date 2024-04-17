@@ -9,13 +9,13 @@ class BulkUpdateJob < ApplicationJob
         change_set.validate(build_attributes(resource, args))
         next unless change_set.changed?
         unless change_set.valid?
-          BulkUpdateMailer.with(email: email, ids: ids, resource_id: id, time: time, search_params: search_params).update_status.deliver_now
+          BulkUpdateMailer.with(email: email, ids: ids, resource_id: id.to_s, time: time, search_params: search_params).update_status.deliver_later
           return
         end
         buffered_change_set_persister.save(change_set: change_set)
       end
     end
-    BulkUpdateMailer.with(email: email, ids: ids, time: time, search_params: search_params).update_status.deliver_now
+    BulkUpdateMailer.with(email: email, ids: ids, time: time, search_params: search_params).update_status.deliver_later
   end
   # rubocop:enable Lint/NonLocalExitFromIterator
 

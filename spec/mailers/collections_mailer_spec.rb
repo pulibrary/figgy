@@ -13,7 +13,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
       FactoryBot.create(:scanned_resource, title: "Curious Resource", state: "complete", member_of_collection_ids: [collection.id])
 
       # Create the email and store it for further assertions
-      email = described_class.with(collection: collection).owner_report
+      email = described_class.with(collection_id: collection.id.to_s).owner_report
 
       # Test the body of the sent email contains what we expect it to
       expect(email.from).to contain_exactly "no-reply@www.example.com"
@@ -28,6 +28,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
       expect(email.body.to_s).to include expected_pending(resource: r1)
       expect(email.body.to_s).to include expected_pending(resource: r2)
       expect(email.body.to_s).to include expected_collection(collection: collection)
+
       email.deliver
       expect(ActionMailer::Base.deliveries).not_to be_empty
     end
@@ -36,7 +37,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
       it "does nothing" do
         collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [])
         FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "pending", member_of_collection_ids: [collection.id])
-        email = described_class.with(collection: collection).owner_report
+        email = described_class.with(collection_id: collection.id.to_s).owner_report
         email.deliver
         expect(ActionMailer::Base.deliveries).to be_empty
       end
@@ -46,7 +47,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
       it "does nothing" do
         collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [user.uid, user2.uid])
         FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "complete", member_of_collection_ids: [collection.id])
-        email = described_class.with(collection: collection).owner_report
+        email = described_class.with(collection_id: collection.id.to_s).owner_report
         email.deliver
         expect(ActionMailer::Base.deliveries).to be_empty
       end
@@ -57,7 +58,7 @@ RSpec.describe CollectionsMailer, type: :mailer do
       it "sends the report to the owner it could find" do
         collection = FactoryBot.create_for_repository(:collection, title: "The Important Person's Things", slug: "important-persons-things", owners: [user.uid, user2])
         FactoryBot.create_for_repository(:scanned_resource, title: "Historically Significant Resource", state: "pending", member_of_collection_ids: [collection.id])
-        email = described_class.with(collection: collection).owner_report
+        email = described_class.with(collection_id: collection.id.to_s).owner_report
         expect(email.to).to contain_exactly user.email
       end
     end

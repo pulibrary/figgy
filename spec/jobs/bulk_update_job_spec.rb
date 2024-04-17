@@ -9,7 +9,7 @@ describe BulkUpdateJob do
   let(:user) { FactoryBot.create(:staff) }
   let(:resource1) { FactoryBot.create_for_repository(:scanned_resource, state: "pending") }
   let(:resource2) { FactoryBot.create_for_repository(:scanned_resource, state: "pending") }
-  let(:ids) { [resource1.id, resource2.id] }
+  let(:ids) { [resource1.id.to_s, resource2.id.to_s] }
   let(:args) { { mark_complete: true } }
   let(:more_args) { { mark_complete: true, ocr_language: "eng" } }
   let(:all_args) do
