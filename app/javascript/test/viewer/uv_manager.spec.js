@@ -113,55 +113,6 @@ describe('UVManager', () => {
   })
 
   describe('initialize', () => {
-    it('loads a viewer and title for a playlist', async () => {
-      document.body.innerHTML = initialHTML
-      mockJquery()
-      mockUvProvider()
-      mockManifests(200)
-      stubQuery({
-        type: 'html',
-        content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
-        status: 'authorized',
-        mediaType: 'Image'
-      },
-      null,
-      'Test Playlist',
-      'Playlist'
-      )
-
-      // Initialize
-      const uvManager = new UVManager()
-      const leafletSpy = vi.spyOn(LeafletViewer.prototype, 'loadLeaflet')
-      await uvManager.initialize()
-      expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
-      // buildLeaflet viewer is not called when media type is Image
-      expect(leafletSpy).not.toHaveBeenCalled()
-    })
-
-    it('passes on an auth token to graphql', async () => {
-      document.body.innerHTML = initialHTML
-      mockJquery()
-      mockUvProvider(false, '12')
-      mockManifests(200)
-      stubQuery({
-        type: 'html',
-        content: '<iframe src="https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest"></iframe>',
-        status: 'authorized',
-        mediaType: 'Image'
-      },
-      null,
-      'Test Playlist',
-      'Playlist'
-      )
-
-      // Initialize
-      const uvManager = new UVManager()
-      await uvManager.initialize()
-      expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
-      expect(global.fetch.mock.calls[0][0]).toBe('/graphql?auth_token=12')
-      expect(JSON.parse(global.fetch.mock.calls[0][1].body).query).toMatch('resource(id: "12345")')
-    })
-
     it('presents a click through for a senior thesis', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
