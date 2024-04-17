@@ -37,7 +37,9 @@ export default class UVManager {
   renderViewer (graphqlData) {
     const mediaType = graphqlData.embed.mediaType
     if (mediaType === 'Video' || mediaType === 'Audio') {
-      this.createClover(mediaType === 'Audio')
+      // Display the title if it's a Playlist - that's rendered outside the
+      // context of a page.
+      this.createClover(graphqlData.__typename === 'Playlist')
     } else {
       this.createUV(graphqlData)
     }
@@ -107,7 +109,6 @@ export default class UVManager {
   createUV (graphqlData) {
     this.bindResizeUV()
     this.tabManager.onTabSelect(() => setTimeout(() => this.resizeUV(), 100))
-    this.processTitle(graphqlData)
     this.uvElement.show()
     this.uv = createUV('#uv', {
       root: 'uv',
@@ -214,17 +215,6 @@ export default class UVManager {
     } else {
       return this.urlDataProvider.get('config')
     }
-  }
-
-  processTitle (graphqlData) {
-    if (graphqlData === undefined || graphqlData.__typename !== 'Playlist') {
-      return
-    }
-    const title = graphqlData.label
-    const titleElement = document.getElementById('title')
-    titleElement.textContent = title
-    titleElement.style.display = 'block'
-    this.resizeUV()
   }
 
   resizeUV () {
