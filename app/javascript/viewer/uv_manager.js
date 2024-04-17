@@ -37,7 +37,7 @@ export default class UVManager {
   renderViewer (graphqlData) {
     const mediaType = graphqlData.embed.mediaType
     if (mediaType === 'Video' || mediaType === 'Audio') {
-      this.createClover()
+      this.createClover(mediaType === 'Audio')
     } else {
       this.createUV(graphqlData)
     }
@@ -126,12 +126,12 @@ export default class UVManager {
     this.cdlTimer.initializeTimer()
   }
 
-  createClover () {
+  createClover (showTitle = false) {
     const uvElement = document.getElementById('uv')
     // Show hidden viewer element
     uvElement.style.display = 'block'
     const root = ReactDOM.createRoot(uvElement)
-    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false, showIIIFBadge: false } })
+    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle, showIIIFBadge: false } })
 
     root.render(clover)
   }
