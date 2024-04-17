@@ -42,7 +42,7 @@ module Figgy
   end
 
   def all_environment_config
-    YAML.safe_load(ERB.new(File.read(Rails.root.join("config", "config.yml"))).result, [], [], true)
+    @all_environment_config ||= YAML.safe_load(yaml, aliases: true).with_indifferent_access
   end
 
   def pulfalight_unpublished_token
@@ -55,6 +55,10 @@ module Figgy
       all_environment_config[Rails.env]
     end
 
+    def yaml
+      ERB.new(File.read(Rails.root.join("config", "config.yml"))).result
+    end
+
     module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
-    module_function :global_protect_ips, :all_environment_config, :index_read_only?, :pulfalight_unpublished_token
+    module_function :global_protect_ips, :yaml, :all_environment_config, :index_read_only?, :pulfalight_unpublished_token
 end
