@@ -238,6 +238,28 @@ describe('UVManager', () => {
       expect(spy).toHaveBeenCalled()
     })
 
+    it('loads a clover viewer for audio', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      mockManifests(200)
+      stubQuery({
+        type: 'html',
+        content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        status: 'authorized',
+        mediaType: 'Audio'
+      })
+
+      // Mock ResizeObserver
+      global.ResizeObserver = vi.fn().mockImplementation(() => ({ observe: vi.fn() }))
+
+      // Initialize
+      const uvManager = new UVManager()
+      const spy = vi.spyOn(uvManager, 'createClover')
+      await uvManager.initialize()
+      expect(spy).toHaveBeenCalled()
+    })
+
     it('loads a UV and Leafet viewer for a mosiac', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()

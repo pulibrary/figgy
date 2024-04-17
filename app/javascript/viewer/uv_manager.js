@@ -36,7 +36,7 @@ export default class UVManager {
   // Determine which viewer to render based on the media type
   renderViewer (graphqlData) {
     const mediaType = graphqlData.embed.mediaType
-    if (mediaType === 'Video') {
+    if (mediaType === 'Video' || mediaType === 'Audio') {
       this.createClover()
     } else {
       this.createUV(graphqlData)
