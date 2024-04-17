@@ -855,7 +855,7 @@ GEM
     rdf-xsd (3.2.1)
       rdf (~> 3.2)
       rexml (~> 3.2)
-    rdoc (6.3.3)
+    rdoc (6.3.4.1)
     recipient_interceptor (0.3.1)
       mail
     redis (4.8.1)
