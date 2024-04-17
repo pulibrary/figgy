@@ -76,8 +76,11 @@ h1 {
 
 .intrinsic-container {
   position: relative;
-  // height: 0;
   overflow: hidden;
+}
+
+#viewer-container {
+  position: initial;
 }
 
 .intrinsic-container iframe {
