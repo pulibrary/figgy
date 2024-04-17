@@ -18,6 +18,6 @@
     <%= link_to "View All", Rails.application.routes.url_helpers.search_catalog_url(f: { member_of_collection_titles_ssim: [@collection_title], state_ssim: [Array.wrap(state).first] }, host: Figgy.default_url_options[:host]) %>
     <% end %>
 
-    <p>You received this email because you are a collection owner of <%= link_to @collection_title.html_safe, Rails.application.routes.url_helpers.solr_document_url(params[:collection], host: Figgy.default_url_options[:host]) %>
+    <p>You received this email because you are a collection owner of <%= link_to @collection_title.html_safe, Rails.application.routes.url_helpers.solr_document_url(@collection, host: Figgy.default_url_options[:host]) %>
   </body>
 </html>
