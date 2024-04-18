@@ -9,8 +9,7 @@ class FindBySourceMetadataIdentifier
     @query_service = query_service
   end
 
-  # Find resources by their source metadata identifier. Has logic to handle that
-  # identifier potentially being an Alma ID on input.
+  # Find resources by their source metadata identifier.
   # @param source_metadata_identifier [String]
   # @return [Array<Valkyrie::Resource>] Resources which have the identifier.
   def find_by_source_metadata_identifier(source_metadata_identifier:)
