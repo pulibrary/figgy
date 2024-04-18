@@ -3,6 +3,11 @@ require "csv"
 
 namespace :figgy do
   namespace :report do
+    desc "Write a CSV report of resources with MMS ids but findingaid ark targets"
+    task ark_mismatches: :environment do
+      ArkMismatchReporter.write
+    end
+
     desc "Write a CSV of LAE Subject terms"
     task lae_subjects: :environment do
       output = ENV["OUTPUT"]
