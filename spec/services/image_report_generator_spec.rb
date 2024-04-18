@@ -2,6 +2,10 @@
 require "rails_helper"
 
 RSpec.describe ImageReportGenerator do
+  after do
+    FileUtils.rm(Rails.root.join("tmp", "output.csv"), force: true)
+  end
+
   context "when given a collection with a variety of resources and visibilities" do
     it "outputs a CSV with a row per collection, and a column per visibility" do
       collection = FactoryBot.create_for_repository(:collection)
