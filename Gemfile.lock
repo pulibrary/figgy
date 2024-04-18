@@ -437,6 +437,7 @@ GEM
       google-cloud-errors (~> 1.0)
       grpc-google-iam-v1 (~> 1.1)
     google-protobuf (3.25.3-arm64-darwin)
+    google-protobuf (3.25.3-x86_64-linux)
     googleapis-common-protos (1.5.0)
       google-protobuf (~> 3.18)
       googleapis-common-protos-types (~> 1.7)
@@ -456,6 +457,9 @@ GEM
     graphql (1.13.23)
       base64
     grpc (1.62.0-arm64-darwin)
+      google-protobuf (~> 3.25)
+      googleapis-common-protos-types (~> 1.0)
+    grpc (1.62.0-x86_64-linux)
       google-protobuf (~> 3.25)
       googleapis-common-protos-types (~> 1.0)
     grpc-google-iam-v1 (1.7.0)
@@ -596,7 +600,10 @@ GEM
       actionpack (>= 4.2.0)
       railties (>= 4.2.0)
     libdatadog (7.0.0.1.0)
+    libdatadog (7.0.0.1.0-x86_64-linux)
     libddwaf (1.14.0.0.0-arm64-darwin)
+      ffi (~> 1.0)
+    libddwaf (1.14.0.0.0-x86_64-linux)
       ffi (~> 1.0)
     link_header (0.0.8)
     linkeddata (3.3.1)
@@ -670,7 +677,6 @@ GEM
     multipart-post (2.4.0)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
-    mutex_m (0.2.0)
     net-http (0.4.1)
       uri
     net-http-persistent (4.0.2)
@@ -688,9 +694,11 @@ GEM
       net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
-    net-ssh (7.2.3)
+    net-ssh (7.1.0)
     nio4r (2.7.1)
     nokogiri (1.16.4-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.16.4-x86_64-linux)
       racc (~> 1.4)
     normalize-rails (8.0.1)
     oai (1.2.1)
@@ -1167,6 +1175,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   aasm
@@ -1246,6 +1255,7 @@ DEPENDENCIES
   net-imap
   net-pop
   net-smtp
+  net-ssh (~> 7.1.0)
   normalize-rails
   oai
   omniauth (= 1.9.2)
