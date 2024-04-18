@@ -1,5 +1,4 @@
 // resource-store-config.spec.js
-import { modules } from 'lux-design-system'
 import { resourceState, resourceMutations, resourceGetters } from "@store/resource"
 
 export default {
@@ -7,6 +6,6 @@ export default {
   mutations: resourceMutations,
   getters: resourceGetters,
   modules: {
-    gallery: modules.galleryModule,
+    gallery: galleryModule,
   },
 }
