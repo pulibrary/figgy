@@ -24,9 +24,8 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="member in members">
+            <template v-for="member in members" :key="member.id.id">
               <playlist-member
-                :key="member.id.id"
                 :resource="member"
                 @update="detach"
                 @idSelected="addId"

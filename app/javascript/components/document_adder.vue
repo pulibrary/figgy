@@ -29,10 +29,9 @@
         <tbody>
           <template
             v-for="recording in recordings"
+            :key="recording.id"
           >
-            <tr
-              :key="recording.id"
-            >
+            <tr>
               <td>
                 <a :href="'/catalog/' + recording.id">
                   {{ recording.title }}

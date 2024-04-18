@@ -88,10 +88,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import Toolbar from '@components/StructManagerToolbar.vue'
-import Tree from '@components/Tree.vue'
-import StructGallery from '@components/StructGallery.vue'
-import DeepZoom from '@components/DeepZoom.vue'
+import Toolbar from './StructManagerToolbar.vue'
+import Tree from './Tree.vue'
+import StructGallery from './StructGallery.vue'
+import DeepZoom from './DeepZoom.vue'
 import mixin from './structMixins.js'
 
 /**

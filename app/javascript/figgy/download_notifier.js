@@ -1,4 +1,4 @@
-import consumer from '@channels/consumer'
+import consumer from '../channels/consumer'
 export default class DownloadNotifier {
   constructor () {
     if (!this.element) {

@@ -137,7 +137,7 @@
 <script>
 import store from '../store'
 import { mapState } from 'vuex'
-import IconEndNode from '@components/IconEndNode.vue'
+import IconEndNode from './IconEndNode.vue'
 import mixin from './structMixins.js'
 /**
  * TreeItems are the building blocks of hierarchical navigation.

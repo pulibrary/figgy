@@ -1,4 +1,5 @@
-import Vue from 'vue/dist/vue.esm'
+import Vue from 'vue'
+import { compile } from 'vue'
 import Vuex from 'vuex'
 import actions from './vuex/actions'
 import { resourceState, resourceMutations, resourceGetters } from "./resource"

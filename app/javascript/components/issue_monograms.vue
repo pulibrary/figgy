@@ -11,8 +11,8 @@
 
     <tbody>
       <tr>
-        <template v-for="monogram in members">
-          <td :key="monogram.id">
+        <template v-for="monogram in members" :key="monogram.id">
+          <td>
             <issue-monogram
               :key="monogram.id"
               :resource="monogram"
@@ -25,8 +25,8 @@
       </tr>
 
       <tr class="d-none">
-        <template v-for="monogram in attachedMembers">
-          <td :key="monogram.id">
+        <template v-for="monogram in attachedMembers" :key="monogram.id">
+          <td>
             <input
               type="hidden"
               name="numismatics_issue[numismatic_monogram_ids][]"
