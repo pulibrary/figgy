@@ -61,6 +61,8 @@ gem "mediainfo", "~> 1.0", github: "pulibrary/mediainfo", branch: "further_sanit
 gem "mime-types"
 gem "mini_magick"
 gem "modernizr-rails"
+# Pin because capistrano raises an error at >= 7.2
+gem "net-ssh", "~> 7.1.0"
 gem "normalize-rails"
 gem "oai"
 gem "omniauth", "1.9.2"
