@@ -168,7 +168,7 @@ GEM
     bagit (0.4.6)
       docopt (~> 0.5.0)
       validatable (~> 1.6)
-    base64 (0.2.0)
+    base64 (0.1.1)
     bcp47_spec (0.2.1)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.0)
@@ -980,8 +980,7 @@ GEM
       tilt
     scanf (1.0.0)
     scrub_rb (1.0.1)
-    selenium-webdriver (4.19.0)
-      base64 (~> 0.2)
+    selenium-webdriver (4.15.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -1185,6 +1184,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk-s3
   bagit (~> 0.4)
+  base64 (= 0.1.1)
   bcrypt_pbkdf
   benchmark-ips
   bixby (~> 5.0)
