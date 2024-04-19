@@ -1,5 +1,5 @@
-import UVManager from '@viewer/uv_manager'
-import LeafletViewer from '@viewer/leaflet_viewer'
+import UVManager from '../../viewer/uv_manager'
+import LeafletViewer from '../../viewer/leaflet_viewer'
 import jQ from 'jquery'
 vi.mock('viewer/cdl_timer')
 describe('UVManager', () => {
