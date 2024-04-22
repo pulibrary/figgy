@@ -3,7 +3,7 @@
     :is="type"
     :class="['lux-toolbar']"
   >
-    <dropdown-menu
+    <lux-dropdown-menu
       class="dropdown"
       button-label="Actions"
       :menu-items="[
@@ -17,15 +17,15 @@
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
-    <input-button
+    <lux-input-button
       id="save_btn"
       variation="solid"
       size="medium"
       @button-clicked="saveHandler($event)"
     >
       Save Structure (Ctrl-s)
-    </input-button>
-    <spacer />
+    </lux-input-button>
+    <lux-spacer />
     <div class="lux-zoom-slider">
       <lux-icon-base
         class="lux-svg-icon"

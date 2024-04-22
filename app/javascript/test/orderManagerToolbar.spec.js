@@ -1,12 +1,8 @@
 import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerToolbar from "../components/OrderManagerToolbar.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 let wrapper
 let getters
@@ -35,7 +31,7 @@ describe("OrderManagerToolbar.vue", () => {
         changeList: [],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const getters = {
@@ -88,7 +84,6 @@ describe("OrderManagerToolbar.vue", () => {
 
     wrapper = mount(OrderManagerToolbar, {
       options,
-      localVue,
       store,
       stubs: ["dropdown-menu","lux-icon-base","lux-icon-picture","spacer"],
     })

@@ -5,10 +5,10 @@
         v-if="saving"
         class="lux-overlay"
       >
-        <loader size="medium" />
+        <lux-loader size="medium" />
       </div>
     </transition>
-    <alert
+    <lux-alert
       v-if="saved"
       status="success"
       type="alert"
@@ -17,8 +17,8 @@
       class="alert"
     >
       Your work has been saved!
-    </alert>
-    <alert
+    </lux-alert>
+    <lux-alert
       v-if="saveError"
       status="error"
       type="alert"
@@ -27,7 +27,7 @@
       class="alert"
     >
       Sorry, there was a problem saving your work!
-    </alert>
+    </lux-alert>
     <toolbar
       @cards-resized="resizeCards($event)"
       @clear-clipboard="clearClipboard"

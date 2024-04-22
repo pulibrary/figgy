@@ -3,7 +3,7 @@
     :is="type"
     :class="['lux-toolbar']"
   >
-    <dropdown-menu
+    <lux-dropdown-menu
       button-label="Selection Options"
       :menu-items="[
         {name: 'All', component: 'All'},
@@ -13,7 +13,7 @@
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
-    <dropdown-menu
+    <lux-dropdown-menu
       button-label="With Selected..."
       :menu-items="[
         {name: 'Cut', component: 'Cut', disabled: isCutDisabled()},
@@ -22,7 +22,7 @@
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
-    <spacer />
+    <lux-spacer />
     <div class="lux-zoom-slider">
       <lux-icon-base
         class="lux-svg-icon"

@@ -8,7 +8,7 @@
         <loader size="medium" />
       </div>
     </transition>
-    <alert
+    <lux-alert
       v-if="saved"
       status="success"
       type="alert"
@@ -16,8 +16,8 @@
       dismissible
     >
       Your work has been saved!
-    </alert>
-    <alert
+    </lux-alert>
+    <lux-alert
       v-if="saveError"
       status="error"
       type="alert"
@@ -26,8 +26,8 @@
       <h1>Sorry, there was a problem saving your work!</h1>
       <p>The following error message may help IT staff debug the problem:</p>
       <p><em>{{ errMsg }}</em></p>
-    </alert>
-    <wrapper
+    </lux-alert>
+    <lux-wrapper
       :full-width="false"
       class="lux-galleryPanel"
       type="div"
@@ -37,18 +37,18 @@
         v-if="isLoading"
         class="loader"
       >
-        <loader
+        <lux-loader
           size="medium"
           class="galleryLoader"
         />
       </div>
-      <gallery
+      <lux-gallery
         class="lux-galleryWrapper"
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
       />
-    </wrapper>
-    <wrapper
+    </lux-wrapper>
+    <lux-wrapper
       class="lux-sidePanel"
       type="div"
       :full-width="false"
@@ -60,7 +60,7 @@
       <!-- Single Selected Form-->
       <fileset-form v-if="selectedTotal === 1" />
       <controls viewer-id="viewer" />
-    </wrapper>
+    </lux-wrapper>
   </div>
 </template>
 

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <heading level="h2">
+    <lux-heading level="h2">
       Generate Labels <small class="text-muted">for selected items</small>
-    </heading>
+    </lux-heading>
     <form
       id="app"
       novalidate="true"
     >
-      <input-text
+      <lux-input-text
         id="unitLabel"
         v-model="unitLabel"
         name="unitLabel"
@@ -15,7 +15,7 @@
         placeholder="e.g., p."
         @input="updateMultiLabels()"
       />
-      <input-text
+      <lux-input-text
         id="startNum"
         v-model="start"
         name="startNum"
@@ -23,14 +23,14 @@
         placeholder="e.g., 10"
         @input="updateMultiLabels()"
       />
-      <input-checkbox
+      <lux-input-checkbox
         v-if="!isMultiVolume"
         v-model="bracket"
         :options="addBracketOpts"
         @change="updateMultiLabels()"
       />
 
-      <input-select
+      <lux-input-select
         v-if="bracket"
         id="bracketLocation"
         v-model="bracketLocation"
@@ -40,7 +40,7 @@
         @change="updateMultiLabels()"
       />
 
-      <input-select
+      <lux-input-select
         v-if="!isMultiVolume"
         id="labelMethod"
         v-model="method"
@@ -50,7 +50,7 @@
         @change="updateUnitLabel"
       />
 
-      <input-select
+      <lux-input-select
         id="twoUp"
         v-model="twoUp"
         name="twoUp"
@@ -59,7 +59,7 @@
         @change="updateMultiLabels()"
       />
 
-      <input-text
+      <lux-input-text
         v-if="twoUp"
         id="twoUpSeparator"
         v-model="twoUpSeparator"
@@ -72,7 +72,7 @@
         v-if="method === 'foliate'"
         class="lux-row"
       >
-        <input-text
+        <lux-input-text
           id="frontLabel"
           v-model="frontLabel"
           name="frontLabel"
@@ -80,7 +80,7 @@
           placeholder="(recto)"
           @input="updateMultiLabels()"
         />
-        <input-text
+        <lux-input-text
           id="backLabel"
           v-model="backLabel"
           name="backLabel"
@@ -88,7 +88,7 @@
           placeholder="(verso)"
           @input="updateMultiLabels()"
         />
-        <input-select
+        <lux-input-select
           v-if="!isMultiVolume"
           id="startWith"
           v-model="startWith"

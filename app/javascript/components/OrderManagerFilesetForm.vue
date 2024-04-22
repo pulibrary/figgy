@@ -1,13 +1,13 @@
 <template>
   <div>
-    <heading level="h2">
+    <lux-heading level="h2">
       Edit <small class="text-muted">the selected item</small>
-    </heading>
+    </lux-heading>
     <form
       id="app"
       novalidate="true"
     >
-      <input-text
+      <lux-input-text
         id="itemLabel"
         v-model="singleForm.caption"
         name="itemLabel"
@@ -16,7 +16,7 @@
         @input="updateSingle()"
       />
 
-      <input-select
+      <lux-input-select
         v-if="!isMultiVolume"
         id="pageType"
         label="Page Type"
@@ -26,13 +26,13 @@
         @change="updateViewHint($event)"
       />
 
-      <input-checkbox
+      <lux-input-checkbox
         v-if="!isMultiVolume"
         id="startCanvasCheckbox"
         :options="startCanvasOpts"
         @change="updateStartCanvas($event)"
       />
-      <input-checkbox
+      <lux-input-checkbox
         id="thumbnailCheckbox"
         :options="thumbnailOpts"
         @change="updateThumbnail($event)"

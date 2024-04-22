@@ -1,12 +1,8 @@
 import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerControls from "../components/OrderManagerControls.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 let wrapper
 let getters
@@ -77,7 +73,7 @@ describe("OrderManagerControls.vue", () => {
         changeList: [],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const getters = {
@@ -135,7 +131,6 @@ describe("OrderManagerControls.vue", () => {
 
     wrapper = mount(OrderManagerControls, {
       options,
-      localVue,
       store,
       stubs: ["heading", "input-button", "wrapper"],
     })
@@ -188,7 +183,7 @@ describe("OrderManagerControls.vue", () => {
         // changeList: ["2"],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const changedResource = {
@@ -241,7 +236,6 @@ describe("OrderManagerControls.vue", () => {
 
     wrapper = mount(OrderManagerControls, {
       options,
-      localVue,
       store,
       stubs: ["alert", "heading", "input-button", "wrapper"],
     })
@@ -286,7 +280,7 @@ describe("OrderManagerControls.vue", () => {
         // changeList: ["2"],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const changedResource = {
@@ -339,7 +333,6 @@ describe("OrderManagerControls.vue", () => {
 
     wrapper = mount(OrderManagerControls, {
       options,
-      localVue,
       store,
       stubs: ["alert", "heading", "input-button", "wrapper"],
     })

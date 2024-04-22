@@ -1,12 +1,8 @@
 import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { mount, shallowMount } from "@vue/test-utils"
 import OrderManager from "../components/OrderManager.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 // Work-around in order to ensure that the Global object is accessible from the component
 const Global = {
@@ -76,7 +72,7 @@ const gallery = {
     changeList: ["2"],
     ogItems: items,
   },
-  mutations: modules.galleryModule.mutations,
+  mutations: galleryModule.mutations,
 }
 
 const actions = {
@@ -120,7 +116,6 @@ describe("OrderManager.vue", () => {
   beforeEach(() => {
 
     wrapper = mount(OrderManager, {
-      localVue,
       store,
       propsData: {
         resourceObject: resourceObject,
@@ -171,7 +166,6 @@ describe("OrderManager.vue", () => {
   it("calls the right action when no resourceObject is passed in", () => {
     // need to remount since the action only fires before mounting
     const wrapper2 = mount(OrderManager, {
-      localVue,
       store,
       propsData: {
         resourceId: "foo",
@@ -234,7 +228,6 @@ describe("OrderManager.vue", () => {
     })
 
     let wrapper = mount(OrderManager, {
-      localVue,
       store: store,
       propsData: {
         resourceObject: resourceObject,

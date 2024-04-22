@@ -6,11 +6,7 @@ import DeepZoom from "../components/DeepZoom.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
 import { treeMutations } from "../store/tree"
 import { zoomMutations, zoomGetters } from "../store/zoom"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 // Work-around in order to ensure that the Global object is accessible from the component
 const Global = {
@@ -179,7 +175,7 @@ const gallery = {
     changeList: ["2"],
     ogItems: items,
   },
-  mutations: modules.galleryModule.mutations,
+  mutations: galleryModule.mutations,
 }
 
 const actions = {
@@ -226,7 +222,6 @@ describe("StructManager.vue", () => {
   beforeEach(() => {
 
     wrapper = mount(StructManager, {
-      localVue,
       store,
       mixins: [mixin],
       propsData: {
@@ -301,7 +296,6 @@ describe("StructManager.vue", () => {
   it("calls the right action when no resourceObject is passed in", () => {
     // need to remount since the action only fires before mounting
     const wrapper2 = mount(StructManager, {
-      localVue,
       store,
       mixins: [mixin],
       propsData: {
@@ -432,7 +426,6 @@ describe('when the tree structure errors on Save', () => {
   })
 
   let wrapper3 = mount(StructManager, {
-    localVue,
     store,
     mixins: [mixin],
     propsData: {
@@ -484,7 +477,6 @@ describe('when the tree structure is Saved', () => {
   })
 
   let wrapper4 = mount(StructManager, {
-    localVue,
     store,
     mixins: [mixin],
     propsData: {
@@ -538,7 +530,6 @@ describe('when an item is zoomed ', () => {
   })
 
   let wrapperZoom = mount(StructManager, {
-    localVue,
     store,
     mixins: [mixin],
     propsData: {

@@ -1,12 +1,8 @@
 import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerFilesetsForm from "../components/OrderManagerFilesetsForm.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 let wrapper
 let getters
@@ -34,7 +30,7 @@ describe("OrderManagerFilesetsForm.vue", () => {
         changeList: [],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const getters = {
@@ -91,7 +87,6 @@ describe("OrderManagerFilesetsForm.vue", () => {
 
     wrapper = mount(OrderManagerFilesetsForm, {
       options,
-      localVue,
       store,
       stubs: ["heading","input-select", "input-text", "input-checkbox"],
     })

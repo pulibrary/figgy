@@ -5,11 +5,7 @@ import { resourceMutations, resourceGetters } from "../store/resource"
 import { actions } from "../store/vuex/actions"
 import { treeMutations } from "../store/tree"
 import { zoomMutations, zoomGetters } from "../store/zoom"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 let wrapper
 let items = [
@@ -136,7 +132,7 @@ const gallery = {
     changeList: ["2"],
     ogItems: items,
   },
-  mutations: modules.galleryModule.mutations,
+  mutations: galleryModule.mutations,
 }
 
 // let saveStructureAJAX: vi.fn();
@@ -180,7 +176,6 @@ describe("StructManagerToolbar.vue", () => {
   beforeEach(() => {
 
     wrapper = mount(StructManagerToolbar, {
-      localVue,
       store,
       stubs: [
         "dropdown-menu",
