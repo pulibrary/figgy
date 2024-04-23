@@ -113,15 +113,16 @@ class ScannedMapDecorator < Valkyrie::ResourceDecorator
   end
 
   def coverage
-    super&.first ||
-      imported_metadata&.first&.coverage&.first ||
-      coverage_from_parent
+    super&.first || imported_coverage
   end
 
-  def coverage_from_parent
+  def imported_coverage
     parent = parents.first
-    return unless parent
-    parent.decorate.coverage
+    if parent&.source_metadata_identifier && parent.source_metadata_identifier == source_metadata_identifier
+      return nil
+    end
+
+    imported_metadata&.first&.coverage&.first
   end
 
   def rendered_coverage

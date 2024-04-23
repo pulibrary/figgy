@@ -5,7 +5,7 @@ RSpec.describe ScannedMapDecorator do
   subject(:decorator) { described_class.new(resource) }
   let(:imported_coverage) { "northlimit=07.033333; eastlimit=011.583333; southlimit=03.917778; westlimit=008.497222; units=degrees; projection=EPSG:4326" }
   let(:resource) do
-    FactoryBot.build(:scanned_map,
+    FactoryBot.create_for_repository(:scanned_map,
                      title: "test title",
                      coverage: [],
                      author: "test author",
@@ -193,7 +193,7 @@ RSpec.describe ScannedMapDecorator do
 
     context "with imported coverage" do
       let(:resource) do
-        FactoryBot.build(:scanned_map,
+        FactoryBot.create_for_repository(:scanned_map,
                         title: "test title",
                         coverage: [],
                         imported_metadata: [{
@@ -206,21 +206,90 @@ RSpec.describe ScannedMapDecorator do
       end
     end
 
-    context "with no non-imported or imported coverage" do
-      let(:parent) do
-        FactoryBot.create_for_repository(
-          :map_set,
-          title: "test title",
-          coverage: [],
-          imported_metadata: [{
-            coverage: imported_coverage
-          }]
-        )
+    context "when parent and child resources have the same source metadata id and imported coverage" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234567893506421",
+                        coverage: [],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
       end
 
-      let(:resource) { parent.decorate.members.first }
+      let(:parent) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234567893506421",
+                        coverage: [],
+                        member_ids: [resource.id],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
 
-      it "returns the coverage from the parent" do
+      it "returns nil" do
+        stub_catalog(bib_id: "991234567893506421")
+        parent
+        expect(decorator.coverage).to be_nil
+      end
+    end
+
+    context "when parent and child resources have the same source metadata id and non-imported coverage" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234567893506421",
+                        coverage: coverage,
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      let(:parent) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234567893506421",
+                        coverage: [],
+                        member_ids: [resource.id],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      it "returns nil" do
+        stub_catalog(bib_id: "991234567893506421")
+        parent
+        expect(decorator.coverage).to eq(coverage)
+      end
+    end
+
+    context "when parent and child resources have different source metadata ids and imported coverage" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234567893506421",
+                        coverage: [],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      let(:parent) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234563506421",
+                        coverage: [],
+                        member_ids: [resource.id],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      it "returns the imported coverage" do
+        stub_catalog(bib_id: "991234567893506421")
+        stub_catalog(bib_id: "991234563506421")
+        resource
         expect(decorator.coverage).to eq(imported_coverage)
       end
     end
