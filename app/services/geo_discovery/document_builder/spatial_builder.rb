@@ -19,10 +19,7 @@ module GeoDiscovery
         # Parses coverage field from geo resource and instantiates a coverage object.
         # @return [GeoCoverage] coverage object
         def coverage
-          @coverage ||= begin
-                          valid_coverages = resource_decorator.coverage.map { |c| GeoCoverage.parse(c) }.compact
-                          valid_coverages.first
-                        end
+          @coverage ||= Array.wrap(resource_decorator.decorate.coverage).map { |c| GeoCoverage.parse(c) }.first
         end
 
         # Returns the coverage in solr format. For example:

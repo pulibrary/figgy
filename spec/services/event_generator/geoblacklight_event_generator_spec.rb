@@ -168,5 +168,36 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
         expect(event_generator.valid?(record)).to be true
       end
     end
+
+    context "when parent and child resources have the same source metadata id and imported coverage" do
+      let(:imported_coverage) { "northlimit=07.033333; eastlimit=011.583333; southlimit=03.917778; westlimit=008.497222; units=degrees; projection=EPSG:4326" }
+
+      let(:record) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234567893506421",
+                        coverage: [],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      let(:parent) do
+        FactoryBot.create_for_repository(:scanned_map,
+                        title: "test title",
+                        source_metadata_identifier: "991234567893506421",
+                        coverage: [],
+                        member_ids: [record.id],
+                        imported_metadata: [{
+                          coverage: imported_coverage
+                        }])
+      end
+
+      it "will not index the child record" do
+        stub_catalog(bib_id: "991234567893506421")
+        parent
+        expect(event_generator.valid?(record)).to be false
+      end
+    end
   end
 end
