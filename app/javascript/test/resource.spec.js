@@ -1,4 +1,3 @@
-import { createLocalVue } from "@vue/test-utils"
 import Vuex from "vuex"
 import storeConfig from "../helpers/resource-store-config.js"
 import { cloneDeep } from "lodash"
@@ -72,8 +71,6 @@ const reordered = [
 ]
 
 it("updates state when CHANGE_RESOURCE_LOAD_STATE is commited", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   expect(store.state.resource.loadState).toBe("NOT_LOADED")
   store.commit("CHANGE_RESOURCE_LOAD_STATE", "LOADED")
@@ -81,8 +78,6 @@ it("updates state when CHANGE_RESOURCE_LOAD_STATE is commited", () => {
 })
 
 it("updates state when SAVED_STATE is commited", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   expect(store.state.resource.saveState).toBe("NOT_SAVED")
   store.commit("SAVED_STATE", "SAVED")
@@ -90,8 +85,6 @@ it("updates state when SAVED_STATE is commited", () => {
 })
 
 it("updates state appropriately when SET_RESOURCE is commited", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   expect(store.state.resource.startCanvas).toBe("")
   expect(store.state.resource.members.length).toBe(0)
@@ -105,8 +98,6 @@ it("updates state appropriately when SET_RESOURCE is commited", () => {
 })
 
 it("updates start canvas when UPDATE_STARTCANVAS is commited", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   expect(store.state.resource.startCanvas).toBe("")
   store.commit("UPDATE_STARTCANVAS", "foo")
@@ -114,8 +105,6 @@ it("updates start canvas when UPDATE_STARTCANVAS is commited", () => {
 })
 
 it("updates thumbnail when UPDATE_THUMBNAIL is committed", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   store.commit("SET_RESOURCE", resourceObject)
   expect(store.state.resource.thumbnail).toBe("8ffd7a03-ec0e-46c1-a347-e4b19cb7839f")
@@ -126,8 +115,6 @@ it("updates thumbnail when UPDATE_THUMBNAIL is committed", () => {
 })
 
 it("nullifies the thumbnail when UPDATE_THUMBNAIL is committed without an ID", () => {
-    const localVue = createLocalVue()
-    localVue.use(Vuex)
     const store = new Vuex.Store(cloneDeep(storeConfig))
     store.commit("SET_RESOURCE", resourceObject)
     expect(store.state.resource.thumbnail).toBe("8ffd7a03-ec0e-46c1-a347-e4b19cb7839f")
@@ -139,8 +126,6 @@ it("nullifies the thumbnail when UPDATE_THUMBNAIL is committed without an ID", (
 
 
 it("updates viewing direction when UPDATE_VIEWDIR is commited", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   expect(store.state.resource.viewingDirection).toBe(null)
   store.commit("UPDATE_VIEWDIR", "foo")
@@ -148,8 +133,6 @@ it("updates viewing direction when UPDATE_VIEWDIR is commited", () => {
 })
 
 it("updates viewing direction when UPDATE_VIEWHINT is commited", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   expect(store.state.resource.viewingHint).toBe(null)
   store.commit("UPDATE_VIEWHINT", "baz")
@@ -158,8 +141,6 @@ it("updates viewing direction when UPDATE_VIEWHINT is commited", () => {
 
 // getters
 it("gets the right member count from getMemberCount", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   expect(store.getters.getMemberCount).toBe(0)
   store.commit("SET_RESOURCE", resourceObject)
@@ -167,16 +148,12 @@ it("gets the right member count from getMemberCount", () => {
 })
 
 it("returns whether or not the resource has multiple volumes from isMultiVolume", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   store.commit("SET_RESOURCE", resourceObject)
   expect(store.getters.isMultiVolume).toBe(false)
 })
 
 it("should return true if item order changes from orderChanged", () => {
-  const localVue = createLocalVue()
-  localVue.use(Vuex)
   const store = new Vuex.Store(cloneDeep(storeConfig))
   store.commit("SET_RESOURCE", resourceObject)
   expect(store.state.gallery.items[0].id).toBe("8ffd7a03-ec0e-46c1-a347-e4b19cb7839f")

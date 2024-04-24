@@ -5,7 +5,7 @@ import { galleryModule } from "../store/gallery"
 export default {
   state: resourceState,
   mutations: resourceMutations,
-  getters: resourceGetters
+  getters: resourceGetters,
   modules: {
     gallery: galleryModule,
   },
