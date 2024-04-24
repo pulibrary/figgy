@@ -82,7 +82,7 @@ RSpec.describe "Health Check", type: :request do
       it "errors when there are pdfs in the ocr directory older than 12 hours" do
         thirteen_hours_ago = Time.current.to_time - 13.hours
         ocr_in_path = Figgy.config["ocr_in_path"]
-        FileUtils.touch("#{ocr_in_path}/file1.pdf", mtime: thirteen_hours_ago)
+        FileUtils.touch("#{ocr_in_path}/12345.pdf", mtime: thirteen_hours_ago)
 
         get "/health.json?providers[]=filewatcherstatus"
 
@@ -94,7 +94,17 @@ RSpec.describe "Health Check", type: :request do
 
       it "is successful when there are pdfs in the ocr directory younger than 12 hours" do
         ocr_in_path = Figgy.config["ocr_in_path"]
-        FileUtils.touch("#{ocr_in_path}/file1.pdf")
+        FileUtils.touch("#{ocr_in_path}/12345.pdf")
+
+        get "/health.json?providers[]=filewatcherstatus"
+
+        expect(response).to be_successful
+      end
+
+      it "is successful when there are pdfs with non-digit titles in the ocr directory older than 12 hours" do
+        thirteen_hours_ago = Time.current.to_time - 13.hours
+        ocr_in_path = Figgy.config["ocr_in_path"]
+        FileUtils.touch("#{ocr_in_path}/file1.pdf", mtime: thirteen_hours_ago)
 
         get "/health.json?providers[]=filewatcherstatus"
 
