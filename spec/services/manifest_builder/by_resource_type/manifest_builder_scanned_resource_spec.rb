@@ -26,8 +26,7 @@ RSpec.describe ManifestBuilder do
     )
   end
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
-  let(:logical_structure) do
-  end
+  let(:logical_structure) {}
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
@@ -57,40 +56,7 @@ RSpec.describe ManifestBuilder do
     ]
   end
 
-  context "when there's no ocr_language set" do
-    before do
-      stub_catalog(bib_id: "991234563506421")
-    end
-    it "doesn't add a search-within service" do
-      change_set
-
-      output = manifest_builder.build
-      expect(output["service"]).to eq nil
-    end
-  end
-
-  context "when it's a cicognara item" do
-    let(:scanned_resource) do
-      FactoryBot.create_for_repository(:scanned_resource,
-                                       rights_statement: RDF::URI("http://cicognara.org/microfiche_copyright"))
-    end
-    it "provides the vatican logo" do
-      output = manifest_builder.build
-      expect(output["logo"]).to eq("https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png")
-    end
-  end
-
-  context "when the resource has multiple titles" do
-    let(:scanned_resource) do
-      FactoryBot.create_for_repository(:scanned_resource, title: ["title1", "title2"])
-    end
-    it "uses an array" do
-      output = manifest_builder.build
-      expect(output["label"]).to eq ["title1", "title2"]
-    end
-  end
-
-  describe "#build" do
+  context "with a standard scanned resource that has a logical structure" do
     let(:ocr_language) { "eng" }
     before do
       stub_catalog(bib_id: "991234563506421")
@@ -175,15 +141,26 @@ RSpec.describe ManifestBuilder do
 
       expect(output["service"]["label"]).to eq "Search within this item"
     end
+  end
 
-    context "when in staging" do
-      it "generates pyramidal links" do
-        allow(Rails.env).to receive(:development?).and_return(false)
-        allow(Rails.env).to receive(:test?).and_return(false)
+  context "when it's a cicognara item" do
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(:scanned_resource,
+                                       rights_statement: RDF::URI("http://cicognara.org/microfiche_copyright"))
+    end
+    it "provides the vatican logo" do
+      output = manifest_builder.build
+      expect(output["logo"]).to eq("https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png")
+    end
+  end
 
-        output = manifest_builder.build
-        expect(output["sequences"][0]["canvases"][0]["images"][0]["resource"]["service"]["@id"]).to start_with "http://localhost:8182/pyramidals/iiif/2/"
-      end
+  context "when the resource has multiple titles" do
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(:scanned_resource, title: ["title1", "title2"])
+    end
+    it "uses an array" do
+      output = manifest_builder.build
+      expect(output["label"]).to eq ["title1", "title2"]
     end
   end
 
@@ -323,6 +300,18 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when there's no ocr_language set" do
+    before do
+      stub_catalog(bib_id: "991234563506421")
+    end
+    it "doesn't add a search-within service" do
+      change_set
+
+      output = manifest_builder.build
+      expect(output["service"]).to eq nil
+    end
+  end
+
   context "with missing or nil values" do
     before do
       stub_catalog(bib_id: "991234563506421")
@@ -344,6 +333,16 @@ RSpec.describe ManifestBuilder do
       it "doesn't error" do
         output = manifest_builder.build
         expect(output["thumbnail"]).to be_blank
+      end
+    end
+
+    context "when in staging" do
+      it "generates pyramidal links" do
+        allow(Rails.env).to receive(:development?).and_return(false)
+        allow(Rails.env).to receive(:test?).and_return(false)
+
+        output = manifest_builder.build
+        expect(output["sequences"][0]["canvases"][0]["images"][0]["resource"]["service"]["@id"]).to start_with "http://localhost:8182/pyramidals/iiif/2/"
       end
     end
 
