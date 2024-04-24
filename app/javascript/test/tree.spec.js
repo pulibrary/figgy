@@ -42,7 +42,7 @@ describe("Tree.vue", () => {
       global: {
         plugins: [store],
         stubs: [
-          "media-image",
+          "lux-media-image",
           "lux-icon-base",
           "lux-icon-end-node",
         ],
@@ -62,24 +62,24 @@ describe("Tree.vue", () => {
   })
 
   test('clicking createFolder emits a create-folder event', () => {
-    wrapper.findAll('.create-folder')[0].trigger('click')
+    wrapper.findAll('lux-input-button.create-folder')[0].trigger('button-clicked')
     expect(wrapper.emitted()).toHaveProperty('create-folder')
   })
 
   test('clicking deleteFolder emits a delete-folder event', () => {
-    wrapper.findAll('.delete-folder')[0].trigger('click')
+    wrapper.findAll('.delete-folder')[0].trigger('button-clicked')
     expect(wrapper.emitted()).toHaveProperty('delete-folder')
   })
 
   test('clicking zoomFile emits a zoom-file event', () => {
-    wrapper.findAll('.zoom-file')[0].trigger('click')
+    wrapper.findAll('.zoom-file')[0].trigger('button-clicked')
     expect(wrapper.emitted()).toHaveProperty('zoom-file')
   })
 
   test('toggling the expand-collapse button shows and hides the children', async () => {
-    await wrapper.findAll('button.expand-collapse')[0].trigger('click')
+    await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
     expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(false)
-    await wrapper.findAll('button.expand-collapse')[0].trigger('click')
+    await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
     expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(true)
   })
 

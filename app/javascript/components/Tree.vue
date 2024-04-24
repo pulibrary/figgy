@@ -93,7 +93,7 @@
                 icon="add"
                 @button-clicked="createFolder(id)"
               />
-              <lux-input-button
+              <input-button
                 v-else
                 class="zoom-file"
                 type="button"
@@ -151,6 +151,7 @@ export default {
     'lux-icon-end-node': IconEndNode
   },
   mixins: [mixin],
+  emits: ["create-folder", "delete-folder", "zoom-file"],
   props: {
     /**
      * id identifies the node in the tree.
