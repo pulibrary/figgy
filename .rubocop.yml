@@ -17,9 +17,6 @@ AllCops:
     - 'db/migrate/20220727213332_add_service_name_to_active_storage_blobs.active_storage.rb'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true
-Lint/ParenthesesAsGroupedExpression:
-  Exclude:
-    - 'spec/services/manifest_builder_spec.rb'
 Metrics/AbcSize:
   Exclude:
     - 'app/services/ingest_ephemera_mods.rb'
@@ -159,7 +156,7 @@ Metrics/MethodLength:
     - 'db/migrate/**/*'
     - 'app/models/schema/common.rb'
     - 'app/models/schema/marc_relators.rb'
-    - 'spec/services/manifest_builder_spec.rb'
+    - 'spec/services/manifest_builder/by_resource_type/manifest_builder_scanned_resource_spec.rb'
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/change_sets/ephemera_folder_change_set_base.rb'
     - 'app/models/concerns/linked_data/linked_ephemera_folder.rb'
@@ -208,7 +205,7 @@ Metrics/MethodLength:
     - 'app/controllers/numismatics/issues_controller.rb'
     - 'app/services/manifest_builder_v3/nav_place_builder.rb'
     - 'spec/support/stub_aspace.rb'
-    - 'spec/services/manifest_builder_v3_spec.rb'
+    - 'spec/services/manifest_builder_v3/by_resource_type/manifest_builder_v3_scanned_map_spec.rb'
     - 'app/services/cdl/charge_manager.rb'
     - 'app/services/preserver/blind_importer.rb'
     - 'app/change_set_persisters/change_set_persister.rb'
@@ -253,7 +250,6 @@ Rails/OutputSafety:
 RSpec/AnyInstance:
   Exclude:
     - 'spec/jobs/ingest_mets_job_spec.rb'
-    - 'spec/services/manifest_builder_spec.rb'
     - 'spec/services/geoblacklight_messaging_client_spec.rb'
     - 'spec/services/geoserver_messaging_client_spec.rb'
     - 'spec/services/messaging_client_spec.rb'
@@ -299,7 +295,6 @@ RSpec/NestedGroups:
     - 'spec/controllers/catalog_controller_spec.rb'
     - 'spec/controllers/simple_resources_controller_spec.rb'
     - 'spec/jobs/ingest_folders_job_spec.rb'
-    - 'spec/services/manifest_builder_spec.rb'
     - 'spec/controllers/playlists_controller_spec.rb'
     - 'spec/change_set_persisters/change_set_persister_spec.rb'
     - 'spec/requests/scanned_resource_spec.rb'
