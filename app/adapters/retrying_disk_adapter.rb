@@ -7,7 +7,7 @@ class RetryingDiskAdapter
   end
 
   def upload(...)
-    with_rescue([Errno::EPIPE, Errno::EAGAIN], retries: 5) do
+    with_rescue([Errno::EPIPE, Errno::EAGAIN, Errno::EIO], retries: 5) do
       inner_storage_adapter.upload(...)
     end
   end
