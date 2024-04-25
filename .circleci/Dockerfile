@@ -6,7 +6,7 @@ RUN git clone https://github.com/pulibrary/figgy.git \
   && wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null \
   && sudo apt update -y \
   && sudo sh ./bin/ci_mediainfo_install.sh \
-  && sudo apt-get install gdal-bin libgdal-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client-15 ocrmypdf lsof python3-pip python-is-python3 imagemagick build-essential pkg-config glib2.0-dev libexpat1-dev \
+  && sudo apt-get install gdal-bin libgdal-dev tesseract-ocr tesseract-ocr-ita tesseract-ocr-eng mediainfo ffmpeg postgresql-client-15 ocrmypdf lsof python3-pip python-is-python3 imagemagick libmagickwand-dev build-essential pkg-config glib2.0-dev libexpat1-dev \
   && sudo sh ./bin/ci_tippecanoe_install.sh \
   && sudo sh ./bin/ci_free_tds_install.sh \
   && sudo sh ./bin/ci_openjpeg_install.sh \
