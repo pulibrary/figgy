@@ -13,6 +13,7 @@ RUN git clone https://github.com/pulibrary/figgy.git \
   && sudo sh ./bin/ci_vips_install.sh \
   && sudo pip3 install pip -U \
   && sudo pip3 install setuptools -U \
+  && sudo pip3 install -U numpy \
   && sudo pip3 install cogeo-mosaic \
   && cd .. \
   && sudo rm -rf figgy

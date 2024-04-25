@@ -179,7 +179,7 @@ RSpec.describe VIPSDerivativeService do
     it "stores an error message on the fileset" do
       expect { derivative_service.new(id: valid_change_set.id).create_derivatives }.to raise_error(::Vips::Error)
       file_set = query_service.find_all_of_model(model: FileSet).first
-      expect(file_set.original_file.error_message).to include(/not a known file format/)
+      expect(file_set.original_file.error_message).to include(/Not a TIFF/)
     end
 
     it "deletes the error_message" do
