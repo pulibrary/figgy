@@ -241,7 +241,7 @@ the following steps (be sure to increment the version):
 ```
 cd .circleci/
 docker login # login to docker hub
-docker buildx build --push --platform linux/arm64,linux/amd64 -t pulibrary/ci-figgy:{version} .
+docker buildx build --push --platform linux/arm64,linux/amd64 -t pulibrary/ci-figgy:{version} . -f ./.circleci/Dockerfile
 docker push pulibrary/ci-figgy:{version}
 ```
 
