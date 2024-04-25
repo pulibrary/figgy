@@ -6,13 +6,13 @@ describe Ability do
   include ActiveJob::TestHelper
   with_queue_adapter :test
   subject { described_class.new(current_user) }
-  let(:zip_file) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
-  let(:zip_file_2) { fixture_file_upload("files/vector/shapefile.zip", "application/zip") }
-  let(:page_file) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:page_file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:page_file_3) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:audio_file) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
-  let(:audio_file_2) { fixture_file_upload("files/audio_file.wav", "audio/x-wav") }
+  def zip_file = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+  def zip_file2 = fixture_file_upload("files/vector/shapefile.zip", "application/zip")
+  def page_file = fixture_file_upload("files/example.tif", "image/tiff")
+  def page_file2 = fixture_file_upload("files/example.tif", "image/tiff")
+  def page_file3 = fixture_file_upload("files/example.tif", "image/tiff")
+  def audio_file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
+  def audio_file2 = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
 
   before do
     stub_ezid
@@ -30,7 +30,7 @@ describe Ability do
   end
 
   let(:no_public_download_open_scanned_resource) do
-    FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, title: "Open", downloadable: "none", files: [page_file_3])
+    FactoryBot.create_for_repository(:complete_open_scanned_resource, user: creating_user, title: "Open", downloadable: "none", files: [page_file3])
   end
 
   let(:no_public_download_open_file) { no_public_download_open_scanned_resource.decorate.members.first }
@@ -40,12 +40,12 @@ describe Ability do
   end
 
   let(:private_scanned_resource) do
-    FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", user: creating_user, files: [page_file_2])
+    FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", user: creating_user, files: [page_file2])
   end
 
   let(:private_cdl_scanned_resource) do
     stub_catalog(bib_id: "991234563506421")
-    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "991234563506421", user: creating_user, files: [page_file_2])
+    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "991234563506421", user: creating_user, files: [page_file2])
     FactoryBot.create_for_repository(
       :resource_charge_list,
       resource_id: resource.id,
@@ -59,7 +59,7 @@ describe Ability do
 
   let(:private_cdl_mvw_scanned_resource) do
     stub_catalog(bib_id: "991234563506421")
-    volume = FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2])
+    volume = FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file2])
     mvw_resource = FactoryBot.create_for_repository(:complete_private_scanned_resource,
                                                     title: "Private",
                                                     source_metadata_identifier: "991234563506421",
@@ -79,7 +79,7 @@ describe Ability do
 
   let(:expired_private_cdl_scanned_resource) do
     stub_catalog(bib_id: "991234563506421")
-    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "991234563506421", user: creating_user, files: [page_file_2])
+    resource = FactoryBot.create_for_repository(:complete_private_scanned_resource, title: "Private", source_metadata_identifier: "991234563506421", user: creating_user, files: [page_file2])
     FactoryBot.create_for_repository(
       :resource_charge_list,
       resource_id: resource.id,
@@ -171,7 +171,7 @@ describe Ability do
 
   let(:token_downloadable_audio_file) { complete_playlist.decorate.file_sets.first }
 
-  let(:file) { fixture_file_upload("files/example.tif") }
+  def file = fixture_file_upload("files/example.tif")
   let(:other_staff_scanned_resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource, user: other_staff_user, identifier: ["ark:/99999/fk4445wg45"], files: [file])
   end
@@ -205,13 +205,13 @@ describe Ability do
     FactoryBot.create_for_repository(:collection, restricted_viewers: ["rando"])
   end
   let(:ineligible_restricted_viewer_scanned_resource) do
-    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: ineligible_restricted_viewer_collection.id)
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file2], member_of_collection_ids: ineligible_restricted_viewer_collection.id)
   end
   let(:reading_room_collection_restricted_viewer_scanned_resource) do
-    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: [restricted_viewer_collection.id])
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file2], member_of_collection_ids: [restricted_viewer_collection.id])
   end
   let(:reading_room_collection_restricted_viewer_scanned_resource_no_users) do
-    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file_2], member_of_collection_ids: [restricted_viewer_collection_no_users.id])
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [page_file2], member_of_collection_ids: [restricted_viewer_collection_no_users.id])
   end
   let(:reading_room_collection_restricted_viewer_zip_file) do
     FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [zip_file], member_of_collection_ids: [restricted_viewer_collection.id])
@@ -230,7 +230,7 @@ describe Ability do
     )
   end
   let(:reading_room_ineligible_collection_restricted_viewer_zip_file) do
-    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [zip_file_2], member_of_collection_ids: [ineligible_restricted_viewer_collection.id])
+    FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [zip_file2], member_of_collection_ids: [ineligible_restricted_viewer_collection.id])
   end
   let(:reading_room_ineligible_zip_file) do
     Wayfinder.for(reading_room_ineligible_collection_restricted_viewer_zip_file).file_sets.first
@@ -248,7 +248,7 @@ describe Ability do
   let(:reading_room_collection_restricted_viewer_recording) do
     parent = FactoryBot.create_for_repository(:reading_room_scanned_resource, member_of_collection_ids: [restricted_viewer_collection.id])
     perform_enqueued_jobs do
-      FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [audio_file_2], append_id: parent.id)
+      FactoryBot.create_for_repository(:reading_room_scanned_resource, files: [audio_file2], append_id: parent.id)
     end
   end
   let(:reading_room_audio_file) do
@@ -265,7 +265,7 @@ describe Ability do
     )
   end
   let(:private_collection_restricted_viewer_scanned_resource) do
-    FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file_2], member_of_collection_ids: restricted_viewer_collection.id)
+    FactoryBot.create_for_repository(:complete_private_scanned_resource, files: [page_file2], member_of_collection_ids: restricted_viewer_collection.id)
   end
 
   let(:ocr_request) { FactoryBot.create(:ocr_request) }

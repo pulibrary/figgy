@@ -30,7 +30,7 @@ RSpec.describe ManifestBuilder do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
-  let(:file) { fixture_file_upload("files/abstract.tiff", "image/tiff") }
+  def file = fixture_file_upload("files/abstract.tiff", "image/tiff")
   let(:start_canvas) { nil }
 
   def logical_structure(file_set_id)
@@ -182,7 +182,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to be_kind_of Hash
       expect(output["@type"]).to eq "sc:Manifest"
       expect(output["manifests"]).to eq nil
-      expect(output["sequences"].first["canvases"].length).to eq 1
+      expect(output["sequences"].first["canvases"].length).to eq 2
     end
   end
 

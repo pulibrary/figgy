@@ -126,7 +126,7 @@ class FileAppender
       node.file_identifiers = node.file_identifiers + [stored_file.id]
       node
     rescue StandardError => error
-      # RRise the error, with extra info added to the message
+      # Raise the error, with extra info added to the message
       # We may end up with orphan files on disk, but it's better than
       # half-ingested resources
       message = "#{self.class}: Failed to append the new file #{original_filename} for #{node.id} to resource #{parent.id}: #{error}"

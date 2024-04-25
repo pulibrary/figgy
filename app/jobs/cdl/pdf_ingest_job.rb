@@ -14,8 +14,9 @@ module CDL
       change_set = CDL::ResourceChangeSet.new(ScannedResource.new)
       change_set.validate(files: [ingestable_file], source_metadata_identifier: source_metadata_identifier, depositor: "cdl_auto_ingest", member_of_collection_ids: [collection_id].compact)
       change_set_persister.buffer_into_index do |buffered_change_set_persister|
-        output = buffered_change_set_persister.save(change_set: change_set)
-        raise "No PDF Found: #{file_name}" if output.member_ids.empty?
+        buffered_change_set_persister.save(change_set: change_set)
+      rescue FileAppender::FileUploadFailed
+        raise "No PDF Found: #{file_name}"
       end
       FileUtils.rm(file_path)
     end

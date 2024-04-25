@@ -182,8 +182,8 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
 
     before do
       sign_in user
-      file = fixture_file_upload("files/example.tif", "image/tiff")
       5.times do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
         FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, files: [file])
       end
     end
