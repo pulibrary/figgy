@@ -604,7 +604,6 @@ GEM
       actionpack (>= 4.2.0)
       railties (>= 4.2.0)
     libdatadog (7.0.0.1.0)
-    libdatadog (7.0.0.1.0-x86_64-linux)
     libddwaf (1.14.0.0.0-arm64-darwin)
       ffi (~> 1.0)
     libddwaf (1.14.0.0.0-x86_64-darwin)
@@ -887,8 +886,7 @@ GEM
     rdoc (6.3.4.1)
     recipient_interceptor (0.3.1)
       mail
-    redis (5.2.0)
-      redis-client (>= 0.22.0)
+    redis (4.8.1)
     redis-client (0.22.1)
       connection_pool
     redis-namespace (1.11.0)
@@ -1181,6 +1179,7 @@ GEM
     zeitwerk (2.6.13)
 
 PLATFORMS
+  arm64-darwin-21
   arm64-darwin-22
   x86_64-darwin-20
   x86_64-linux
@@ -1283,6 +1282,7 @@ DEPENDENCIES
   rails (~> 6.1.0)
   rails-controller-testing
   recipient_interceptor
+  redis (>= 3, < 5)
   redis-namespace
   reform
   riiif
