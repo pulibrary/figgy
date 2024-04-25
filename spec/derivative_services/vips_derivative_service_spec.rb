@@ -73,6 +73,21 @@ RSpec.describe VIPSDerivativeService do
     end
   end
 
+  context "fractional byte value source", run_real_derivatives: true do
+    let(:file) { fixture_file_upload("files/small_fractional_tif.tif", "image/tiff") }
+
+    it "creates a tiff and attaches it to the fileset" do
+      derivative_service.new(id: valid_change_set.id).create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      derivative = reloaded.derivative_file
+
+      expect(derivative).to be_present
+      derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+      expect(derivative_file.read).not_to be_blank
+    end
+  end
+
   context "with an existing TIFF intermediate file", run_real_derivatives: true do
     let(:storage_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
