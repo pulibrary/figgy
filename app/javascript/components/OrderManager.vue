@@ -42,7 +42,7 @@
           class="galleryLoader"
         />
       </div>
-      <lux-gallery
+      <gallery
         class="lux-galleryWrapper"
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
@@ -68,6 +68,7 @@
 import { mapState } from 'vuex'
 import Controls from './OrderManagerControls.vue'
 import Toolbar from './OrderManagerToolbar.vue'
+import Gallery from './OrderManagerGallery.vue'
 import FilesetForm from './OrderManagerFilesetForm.vue'
 import FilesetsForm from './OrderManagerFilesetsForm.vue'
 import ResourceForm from './OrderManagerResourceForm.vue'
@@ -88,6 +89,7 @@ export default {
   type: 'Pattern',
   components: {
     toolbar: Toolbar,
+    gallery: Gallery,
     'resource-form': ResourceForm,
     'filesets-form': FilesetsForm,
     'fileset-form': FilesetForm,

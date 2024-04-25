@@ -1,3 +1,4 @@
+import { nextTick } from 'vue'
 import { createStore } from 'vuex'
 import { mount, shallowMount } from "@vue/test-utils"
 import Tree from "../components/Tree.vue"
@@ -39,6 +40,7 @@ describe("Tree.vue", () => {
   beforeEach( async () => {
     store.commit('SET_STRUCTURE', tree_structure)
     wrapper =  mount(Tree, {
+      attachTo: document.body,
       global: {
         plugins: [store],
         stubs: [
@@ -80,6 +82,7 @@ describe("Tree.vue", () => {
     await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
     expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(false)
     await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
+    await nextTick()
     expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(true)
   })
 
