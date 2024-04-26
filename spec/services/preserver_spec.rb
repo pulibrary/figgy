@@ -6,13 +6,14 @@ describe Preserver do
 
   subject(:preserver) { described_class.new(change_set: change_set, change_set_persister: change_set_persister, storage_adapter: storage_adapter) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:resource) do
     FactoryBot.create_for_repository(:complete_scanned_resource,
                                      source_metadata_identifier: "991234563506421",
                                      files: [file])
   end
   let(:unpreserved_resource) do
-    FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "991234563506421", files: [file])
+    FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "991234563506421", files: [file2])
   end
   let(:preservation_objects) { Wayfinder.for(resource).preservation_objects }
   let(:preservation_object) { preservation_objects.first }

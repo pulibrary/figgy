@@ -168,9 +168,9 @@ RSpec.describe CollectionsController, type: :controller do
         expect(manifest_response[:manifests][0][:@id]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
       end
       it "doesn't run a query for every member of the collection" do
-        file = fixture_file_upload("files/example.tif", "image/tiff")
         collection = FactoryBot.create_for_repository(:collection)
         5.times do
+          file = fixture_file_upload("files/example.tif", "image/tiff")
           FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, files: [file])
         end
         metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
