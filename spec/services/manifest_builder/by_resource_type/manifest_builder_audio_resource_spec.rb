@@ -64,7 +64,9 @@ RSpec.describe ManifestBuilder do
       canvases = output["items"]
       expect(canvases.length).to eq 2
       expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
-      expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 0.256
+      # This value rounds up/down based on mediainfo compilation, 0.255 vs 0.256
+      # is close enough for our purpose
+      expect(canvases.first["items"][0]["items"][0]["body"]["duration"].to_s).to start_with "0.25"
       expect(output["logo"].first).to include("id" => "https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png",
                                               "format" => "image/png",
                                               "height" => 100,

@@ -107,7 +107,15 @@ class VIPSDerivativeService
   end
 
   def image_from_file(filename)
-    image = Vips::Image.new_from_file(filename.to_s)
+    image =
+      begin
+        Vips::Image.new_from_file(filename.to_s)
+        # If we fail to load a file via VIPS for some reason, load it into vips
+        # via imagemagick. This will be slower, but fixes images with sub-byte
+        # byte values. See https://github.com/libvips/libvips/issues/3948
+      rescue Vips::Error
+        Vips::Image.magickload(filename.to_s)
+      end
     # Adjust color profile to be srgb. Unfortunately we were unable to find a
     # good way to unit test that this is working, but manual testing shows that
     # this results in the proper colors.
