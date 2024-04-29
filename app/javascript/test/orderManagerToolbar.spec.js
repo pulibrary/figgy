@@ -1,4 +1,4 @@
-import Vuex from "vuex"
+import { createStore } from "vuex"
 import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerToolbar from "../components/OrderManagerToolbar.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
@@ -64,7 +64,7 @@ describe("OrderManagerToolbar.vue", () => {
       },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: resource,
         gallery: gallery,
@@ -82,10 +82,12 @@ describe("OrderManagerToolbar.vue", () => {
       }
     }
 
-    wrapper = mount(OrderManagerToolbar, {
-      options,
-      store,
-      stubs: ["dropdown-menu","lux-icon-base","lux-icon-picture","spacer"],
+    wrapper = mount(OrderManagerToolbar, { 
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["dropdown-menu","lux-icon-base","lux-icon-picture","spacer"],
+      }
     })
   })
 

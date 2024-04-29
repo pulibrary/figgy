@@ -1,4 +1,4 @@
-import Vuex from "vuex"
+import { createStore } from "vuex"
 import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerResourceForm from "../components/OrderManagerResourceForm.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
@@ -63,7 +63,7 @@ describe("OrderManagerResourceForm.vue", () => {
       },
     }
 
-    store = new Vuex.Store({
+    store = createStore ({
       modules: {
         ordermanager: resource,
         gallery: gallery,
@@ -82,9 +82,11 @@ describe("OrderManagerResourceForm.vue", () => {
     }
 
     wrapper = mount(OrderManagerResourceForm, {
-      options,
-      store,
-      stubs: ["heading","input-radio","text-style"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["heading","input-radio","text-style"],
+      }
     })
   })
 

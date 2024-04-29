@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OrderManagerResourceForm.vue > has the expected html structure 1`] = `
+<div
+  data-v-e62d4199=""
+>
+  <lux-heading
+    data-v-e62d4199=""
+    level="h2"
+  >
+     Set Properties 
+    <small
+      class="text-muted"
+      data-v-e62d4199=""
+    >
+       for this 
+      <!--v-if-->
+       resource 
+    </small>
+  </lux-heading>
+  <span
+    class="lux-file_count"
+    data-v-e62d4199=""
+  >
+    <lux-text-style
+      data-v-e62d4199=""
+      variation="emphasis"
+    >
+       Total files: 3
+    </lux-text-style>
+    <!--v-if-->
+  </span>
+  <span
+    class="lux-bibid"
+    data-v-e62d4199=""
+  >
+     | BibId: 9946093213506421
+  </span>
+  <form
+    data-v-e62d4199=""
+    id="app"
+    novalidate=""
+  >
+    <lux-input-radio
+      data-v-e62d4199=""
+      group-label="Viewing Direction"
+      id="viewDir"
+      options="[object Object],[object Object],[object Object],[object Object]"
+      vertical=""
+    />
+    <lux-input-radio
+      data-v-e62d4199=""
+      group-label="Viewing Hint"
+      id="viewHint"
+      options="[object Object],[object Object],[object Object]"
+      vertical=""
+    />
+  </form>
+</div>
+`;
