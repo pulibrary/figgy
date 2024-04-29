@@ -15,7 +15,7 @@ brew install --cask lando
 echo "Enter lastpass username:" 
 read USERNAME
 lpass login $USERNAME
-./bin/setup_keys
+./bin/setup_credentials
 bundle install
 yarn install
 
