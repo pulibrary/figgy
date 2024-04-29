@@ -51,14 +51,16 @@ Other dependencies:
     * Used for publishing create/update/delete events for systems such as
       [Pomegranate](https://github.com/pulibrary/pomegranate)
 
-## Automatically pull vault password from lastpass
+## Populate sidekiq-pro credentials from lastpass
 
-These steps are performed by `./bin/setup`.
+These steps are performed by `./bin/setup`; if that worked you don't have to do
+this separately.
 
 More information about lastpass-cli can be found here: https://lastpass.github.io/lastpass-cli/lpass.1.html
 ```
 brew install lastpass-cli
 lpass login <email@email.com>
+bin/setup_credentials
 ```
 
 ## Initial Setup
