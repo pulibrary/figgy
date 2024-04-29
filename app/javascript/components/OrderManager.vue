@@ -5,7 +5,7 @@
         v-if="loading"
         class="lux-overlay"
       >
-        <loader size="medium" />
+        <lux-loader size="medium" />
       </div>
     </transition>
     <lux-alert

@@ -1,4 +1,4 @@
-import Vuex from "vuex"
+import { createStore } from "vuex"
 import { mount, shallowMount } from "@vue/test-utils"
 import OrderManager from "../components/OrderManager.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
@@ -100,12 +100,9 @@ let resource = {
   mutations: resourceMutations,
   getters: resourceGetters,
   actions: actions,
-  modules: {
-    gallery: gallery,
-  },
 }
 
-let store = new Vuex.Store({
+let store = createStore({
   modules: {
     ordermanager: resource,
     gallery: gallery,
@@ -116,15 +113,27 @@ describe("OrderManager.vue", () => {
   beforeEach(() => {
 
     wrapper = mount(OrderManager, {
-      store,
-      propsData: {
-        resourceObject: resourceObject,
-      },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+      global: {
+        plugins: [store],
+        propsData: {
+          resourceObject: resourceObject,
+        },
+        stubs: [
+          "toolbar",
+          "gallery",
+          "text-style",
+          "wrapper",
+          "fileset-form",
+          "controls",
+          "lux-loader",
+          "resource-form"],
+      }
     })
   })
 
   it("has the right gallery items", () => {
+    console.log('HTMLLLLLLLLLLLLLLLLLL')
+    console.log(wrapper.vm.galleryItems)
     const items = wrapper.vm.galleryItems
     expect(items[0].caption).toBe("a")
     expect(items[0].mediaUrl).toBe(
@@ -166,11 +175,13 @@ describe("OrderManager.vue", () => {
   it("calls the right action when no resourceObject is passed in", () => {
     // need to remount since the action only fires before mounting
     const wrapper2 = mount(OrderManager, {
-      store,
-      propsData: {
-        resourceId: "foo",
-      },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+      global: {
+        plugins: [store],
+        propsData: {
+          resourceId: "foo",
+        },
+        stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "lux-loader", "resource-form"],
+      }
     })
     expect(actions.loadImageCollectionGql).toHaveBeenCalled()
   })
@@ -215,12 +226,9 @@ describe("OrderManager.vue", () => {
       mutations: resourceMutations,
       getters: resourceGetters,
       actions: actions,
-      modules: {
-        gallery: gallery,
-      }
     }
 
-    let store = new Vuex.Store({
+    let store = createStore({
       modules: {
         ordermanager: resource,
 	      gallery: gallery,
@@ -228,12 +236,14 @@ describe("OrderManager.vue", () => {
     })
 
     let wrapper = mount(OrderManager, {
-      store: store,
-      propsData: {
-        resourceObject: resourceObject,
-	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
-      },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+      global: {
+        plugins: [store],
+        props: {
+          resourceObject: resourceObject,
+  	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
+        },
+        stubs: ["toolbar", "gallery", "lux-text-style", "lux-wrapper", "fileset-form", "controls", "lux-loader", "resource-form"],
+      }
     })
 
     it("renders the default Figgy thumbnail", () => {
@@ -278,12 +288,9 @@ describe("OrderManager.vue", () => {
       mutations: resourceMutations,
       getters: resourceGetters,
       actions: actions,
-      modules: {
-        gallery: gallery,
-      }
     }
 
-    let store = new Vuex.Store({
+    let store = createStore({
       modules: {
         ordermanager: resource,
 	      gallery: gallery,
@@ -291,13 +298,14 @@ describe("OrderManager.vue", () => {
     })
 
     let wrapper = mount(OrderManager, {
-      localVue,
-      store: store,
-      propsData: {
-        resourceObject: resourceObject,
-	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
-      },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+      global: {
+        plugins: [store],
+        propsData: {
+          resourceObject: resourceObject,
+  	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
+        },
+        stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+      }
     })
 
     it("displays an alert with an error message", () => {

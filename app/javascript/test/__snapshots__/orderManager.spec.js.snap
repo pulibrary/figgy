@@ -5,36 +5,46 @@ exports[`OrderManager.vue > has the expected html structure 1`] = `
   class="lux-orderManager"
 >
   <transition-stub
+    appear="false"
+    css="true"
     name="fade"
+    persisted="false"
   >
-    <!---->
+    <div
+      class="lux-overlay"
+    >
+      <lux-loader-stub
+        size="medium"
+      />
+    </div>
   </transition-stub>
-  <!---->
-  <!---->
-  <wrapper-stub
+  <!--v-if-->
+  <!--v-if-->
+  <lux-wrapper
     class="lux-galleryPanel"
-    horizontal=""
-    maxwidth="1170"
+    full-width="false"
     type="div"
   >
     <toolbar-stub
       type="div"
     />
-    <!---->
+    <!--v-if-->
     <gallery-stub
       cardpixelwidth="300"
       class="lux-galleryWrapper"
-      galleryitems="[object Object],[object Object],[object Object]"
+      galleryitems=""
     />
-  </wrapper-stub>
-  <wrapper-stub
+  </lux-wrapper>
+  <lux-wrapper
     class="lux-sidePanel"
-    horizontal=""
-    maxwidth="1170"
+    full-width="false"
     type="div"
   >
-    <!---->
-    <!---->
+    <!-- Resource Form-->
+    <!--v-if-->
+    <!-- Multiple Selected Form-->
+    <!--v-if-->
+    <!-- Single Selected Form-->
     <fileset-form-stub
       type="div"
     />
@@ -42,6 +52,6 @@ exports[`OrderManager.vue > has the expected html structure 1`] = `
       type="div"
       viewerid="viewer"
     />
-  </wrapper-stub>
+  </lux-wrapper>
 </div>
 `;

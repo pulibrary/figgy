@@ -6,13 +6,16 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
   data-v-5aca45d1=""
 >
   <transition-stub
+    appear="false"
+    css="true"
     data-v-5aca45d1=""
     name="fade"
+    persisted="false"
   >
-    <!---->
+    <!--v-if-->
   </transition-stub>
-  <!---->
-  <!---->
+  <!--v-if-->
+  <!--v-if-->
   <toolbar-stub
     data-v-5aca45d1=""
     type="div"
@@ -32,19 +35,19 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
       class="panelHeader"
       data-v-5aca45d1=""
     >
-      <h2
-        class="lux-heading h6"
+      <heading
         data-v-5aca45d1=""
+        level="h2"
+        size="h6"
       >
          Logical Structure 
-      </h2>
+      </heading>
     </div>
     <tree-stub
       data-v-5aca45d1=""
       id="aea40813-e0ed-4307-aae9-aec53b26bdda"
       jsondata="[object Object]"
       root="true"
-      viewingdirection="LEFTTORIGHT"
     />
   </div>
   <div
@@ -55,19 +58,19 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
       class="panelHeader"
       data-v-5aca45d1=""
     >
-      <h2
-        class="lux-heading h6"
+      <heading
         data-v-5aca45d1=""
+        level="h2"
+        size="h6"
       >
          Unstructured Files 
-      </h2>
+      </heading>
     </div>
     <struct-gallery-stub
       cardpixelwidth="150"
       class="lux-galleryWrapper"
       data-v-5aca45d1=""
-      galleryitems="[object Object],[object Object]"
-      viewing-direction="LEFTTORIGHT"
+      galleryitems=""
     />
   </div>
 </div>
