@@ -1,0 +1,66 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OrderManagerFilesetsForm.vue > has the expected html structure 1`] = `
+<div
+  data-v-6f9610f0=""
+>
+  <lux-heading
+    data-v-6f9610f0=""
+    level="h2"
+  >
+     Generate Labels 
+    <small
+      class="text-muted"
+      data-v-6f9610f0=""
+    >
+      for selected items
+    </small>
+  </lux-heading>
+  <form
+    data-v-6f9610f0=""
+    id="app"
+    novalidate=""
+  >
+    <lux-input-text
+      data-v-6f9610f0=""
+      id="unitLabel"
+      label="Label"
+      modelvalue="p. "
+      name="unitLabel"
+      placeholder="e.g., p."
+    />
+    <lux-input-text
+      data-v-6f9610f0=""
+      id="startNum"
+      label="Starting Numeral"
+      modelvalue="1"
+      name="startNum"
+      placeholder="e.g., 10"
+    />
+    <lux-input-checkbox
+      data-v-6f9610f0=""
+      modelvalue="false"
+      options="[object Object]"
+    />
+    <!--v-if-->
+    <lux-input-select
+      data-v-6f9610f0=""
+      id="labelMethod"
+      label="Labeling Method"
+      modelvalue="paginate"
+      name="labelMethod"
+      options="[object Object],[object Object]"
+    />
+    <lux-input-select
+      data-v-6f9610f0=""
+      id="twoUp"
+      label="Two Up"
+      modelvalue="false"
+      name="twoUp"
+      options="[object Object],[object Object]"
+    />
+    <!--v-if-->
+    <!--v-if-->
+  </form>
+</div>
+`;

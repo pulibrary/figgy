@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OrderManagerControls.vue > has the expected html structure 1`] = `
+<lux-wrapper
+  class="lux-bg"
+  data-v-eccb99cf=""
+>
+  <div
+    class="lux-controls"
+    data-v-eccb99cf=""
+  >
+    <!--v-if-->
+    <lux-input-button-stub
+      data-v-eccb99cf=""
+      disabled="true"
+      id="save_btn"
+      size="medium"
+      variation="solid"
+    />
+    <!--v-if-->
+  </div>
+  <lux-heading-stub
+    data-v-eccb99cf=""
+    level="h2"
+  />
+  <div
+    class="lux-osd-wrapper"
+    data-v-eccb99cf=""
+  >
+    <div
+      class="lux-osd"
+      data-v-eccb99cf=""
+    >
+      <div
+        class="lux-viewport"
+        data-v-eccb99cf=""
+        id="viewer"
+      />
+    </div>
+  </div>
+</lux-wrapper>
+`;

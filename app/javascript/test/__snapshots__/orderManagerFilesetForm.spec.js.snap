@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OrderManagerFilesetForm.vue > has the expected html structure 1`] = `
+<div
+  data-v-09416229=""
+>
+  <lux-heading
+    data-v-09416229=""
+    level="h2"
+  >
+     Edit 
+    <small
+      class="text-muted"
+      data-v-09416229=""
+    >
+      the selected item
+    </small>
+  </lux-heading>
+  <form
+    data-v-09416229=""
+    id="app"
+    novalidate=""
+  >
+    <lux-input-text
+      data-v-09416229=""
+      id="itemLabel"
+      label="Label"
+      name="itemLabel"
+      placeholder="e.g., example.tif"
+    />
+    <lux-input-select
+      data-v-09416229=""
+      id="pageType"
+      label="Page Type"
+      name="pageType"
+      options="[object Object],[object Object],[object Object]"
+      value="single"
+    />
+    <lux-input-checkbox
+      data-v-09416229=""
+      id="startCanvasCheckbox"
+      options="[object Object]"
+    />
+    <lux-input-checkbox
+      data-v-09416229=""
+      id="thumbnailCheckbox"
+      options="[object Object]"
+    />
+  </form>
+</div>
+`;

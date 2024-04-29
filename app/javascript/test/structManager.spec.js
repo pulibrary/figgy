@@ -1,5 +1,5 @@
-import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { createStore } from "vuex"
+import { mount, shallowMount } from "@vue/test-utils"
 import StructManager from "../components/StructManager.vue"
 import mixin from "../components/structMixins"
 import DeepZoom from "../components/DeepZoom.vue"
@@ -7,16 +7,6 @@ import { resourceMutations, resourceGetters } from "../store/resource"
 import { treeMutations } from "../store/tree"
 import { zoomMutations, zoomGetters } from "../store/zoom"
 import { galleryModule } from '../store/gallery'
-
-// Work-around in order to ensure that the Global object is accessible from the component
-const Global = {
-  figgy: {
-    resource: {
-      defaultThumbnail: "https://institution.edu/repository/assets/random.png"
-    }
-  }
-}
-window.Global = Global
 
 let wrapper
 let items = [
@@ -150,7 +140,6 @@ const tree = {
   state: {
     selected: "3",
     cut: null,
-    // structure: { label: "Table of Contents", id: "123", folders: [] },
     structure: tree_structure,
     modified: false,
     loadState: "NOT_LOADED",
@@ -204,12 +193,9 @@ let resource = {
   mutations: resourceMutations,
   getters: resourceGetters,
   actions: actions,
-  modules: {
-    gallery: gallery,
-  },
 }
 
-let store = new Vuex.Store({
+let store = createStore({
   modules: {
     ordermanager: resource,
     gallery: gallery,
@@ -220,24 +206,28 @@ let store = new Vuex.Store({
 
 describe("StructManager.vue", () => {
   beforeEach(() => {
-
+    // store.commit('SET_STRUCTURE', figgy_structure)
+    // store.commit('SET_RESOURCE', resourceObject)
     wrapper = mount(StructManager, {
-      store,
-      mixins: [mixin],
-      propsData: {
-        resourceObject: resourceObject,
-        structure: figgy_structure,
-      },
-      stubs: [
-        "toolbar",
-        "struct-gallery",
-        "deep-zoom",
-        "tree",
-        "wrapper",
-        "alert",
-        "controls",
-        "loader",
-      ],
+      global: {
+        plugins: [store],
+        mixins: [mixin],
+        props: {
+          resourceObject: resourceObject,
+          structure: figgy_structure,
+        },
+        stubs: [
+          "toolbar",
+          "struct-gallery",
+          "tree",
+          "lux-wrapper",
+          "deep-zoom",
+          "lux-alert",
+          "controls",
+          "lux-loader",
+          "lux-heading",
+        ],
+      }
     })
   })
 
@@ -296,22 +286,25 @@ describe("StructManager.vue", () => {
   it("calls the right action when no resourceObject is passed in", () => {
     // need to remount since the action only fires before mounting
     const wrapper2 = mount(StructManager, {
-      store,
-      mixins: [mixin],
-      propsData: {
-        resourceId: "foo",
-        structure: figgy_structure,
-      },
-      stubs: [
-        "toolbar",
-        "struct-gallery",
-        "deep-zoom",
-        "tree",
-        "wrapper",
-        "alert",
-        "controls",
-        "loader",
-      ],
+      global: {
+        plugins: [store],
+        mixins: [mixin],
+        props: {
+          resourceId: "foo",
+          structure: figgy_structure,
+        },
+        stubs: [
+          "toolbar",
+          "struct-gallery",
+          "tree",
+          "lux-wrapper",
+          "deep-zoom",
+          "lux-alert",
+          "controls",
+          "lux-loader",
+          "lux-heading",
+        ],
+      }
     })
     expect(actions.loadImageCollectionGql).toHaveBeenCalled()
   })
@@ -416,7 +409,7 @@ describe('when the tree structure errors on Save', () => {
     mutations: treeMutations,
   }
 
-  store = new Vuex.Store({
+  store = createStore({
     modules: {
       ordermanager: resource,
       gallery: gallery,
@@ -426,22 +419,24 @@ describe('when the tree structure errors on Save', () => {
   })
 
   let wrapper3 = mount(StructManager, {
-    store,
-    mixins: [mixin],
-    propsData: {
-      resourceObject: resourceObject,
-      structure: figgy_structure,
-    },
-    stubs: [
-      "toolbar",
-      "struct-gallery",
-      "deep-zoom",
-      "tree",
-      "wrapper",
-      "alert",
-      "controls",
-      "loader",
-    ],
+    global: {
+      plugins: [store],
+      mixins: [mixin],
+      props: {
+        resourceObject: resourceObject,
+        structure: figgy_structure,
+      },
+      stubs: [
+        "toolbar",
+        "struct-gallery",
+        "tree",
+        "lux-wrapper",
+        "deep-zoom",
+        "lux-alert",
+        "controls",
+        "lux-loader",
+      ],
+    }
   })
 
   it("returns whether or not there was an error on save", () => {
@@ -467,7 +462,7 @@ describe('when the tree structure is Saved', () => {
     mutations: treeMutations,
   }
 
-  store = new Vuex.Store({
+  store = createStore({
     modules: {
       ordermanager: resource,
       gallery: gallery,
@@ -477,22 +472,25 @@ describe('when the tree structure is Saved', () => {
   })
 
   let wrapper4 = mount(StructManager, {
-    store,
-    mixins: [mixin],
-    propsData: {
-      resourceObject: resourceObject,
-      structure: figgy_structure,
-    },
-    stubs: [
-      "toolbar",
-      "struct-gallery",
-      "deep-zoom",
-      "tree",
-      "wrapper",
-      "alert",
-      "controls",
-      "loader",
-    ],
+    global: {
+      plugins: [store],
+      mixins: [mixin],
+      props: {
+        resourceObject: resourceObject,
+        structure: figgy_structure,
+      },
+      stubs: [
+        "toolbar",
+        "struct-gallery",
+        "tree",
+        "lux-wrapper",
+        "deep-zoom",
+        "lux-alert",
+        "controls",
+        "lux-loader",
+        "lux-heading",
+      ],
+    }
   })
 
   it("returns whether or not the structure is saved", () => {
@@ -520,7 +518,7 @@ describe('when an item is zoomed ', () => {
     getters: zoomGetters,
   }
 
-  store = new Vuex.Store({
+  store = createStore({
     modules: {
       ordermanager: resource,
       gallery: gallery,
@@ -530,22 +528,25 @@ describe('when an item is zoomed ', () => {
   })
 
   let wrapperZoom = mount(StructManager, {
-    store,
-    mixins: [mixin],
-    propsData: {
-      resourceObject: resourceObject,
-      structure: figgy_structure,
-    },
-    stubs: [
-      "toolbar",
-      "struct-gallery",
-      "tree",
-      "wrapper",
-      "deep-zoom",
-      "alert",
-      "controls",
-      "loader",
-    ],
+    global: {
+      plugins: [store],
+      mixins: [mixin],
+      props: {
+        resourceObject: resourceObject,
+        structure: figgy_structure,
+      },
+      stubs: [
+        "toolbar",
+        "struct-gallery",
+        "tree",
+        "lux-wrapper",
+        "deep-zoom",
+        "lux-alert",
+        "controls",
+        "lux-loader",
+        "lux-heading",
+      ],
+    }
   })
 
   it("returns whether or not an item is being zoomed", () => {

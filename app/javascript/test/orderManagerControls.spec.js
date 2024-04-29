@@ -1,4 +1,4 @@
-import Vuex from "vuex"
+import { createStore } from "vuex"
 import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerControls from "../components/OrderManagerControls.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
@@ -102,12 +102,9 @@ describe("OrderManagerControls.vue", () => {
       mutations: resourceMutations,
       getters: getters,
       actions: actions,
-      modules: {
-        gallery: gallery,
-      },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: resource,
         gallery: gallery,
@@ -130,9 +127,11 @@ describe("OrderManagerControls.vue", () => {
     }
 
     wrapper = mount(OrderManagerControls, {
-      options,
-      store,
-      stubs: ["heading", "input-button", "wrapper"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["lux-alert", "lux-heading", "lux-input-button"],
+      }
     })
   })
 
@@ -141,7 +140,7 @@ describe("OrderManagerControls.vue", () => {
   })
 
   it('shows the openseadragon div when a single fileset is selected', () => {
-    expect(wrapper.find('heading-stub').exists()).toBe(true)
+    expect(wrapper.find('lux-heading-stub').exists()).toBe(true)
     expect(wrapper.find('.lux-osd-wrapper').exists()).toBe(true)
   })
 
@@ -207,12 +206,9 @@ describe("OrderManagerControls.vue", () => {
       mutations: resourceMutations,
       getters: changedGetters,
       actions: actions,
-      modules: {
-        gallery: changedGallery,
-      },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: changedResource,
         gallery: changedGallery,
@@ -235,16 +231,18 @@ describe("OrderManagerControls.vue", () => {
     }
 
     wrapper = mount(OrderManagerControls, {
-      options,
-      store,
-      stubs: ["alert", "heading", "input-button", "wrapper"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["lux-heading", "lux-input-button"],
+      }
     })
 
     // orderChanged should be true when items and ogItems don't match
     expect(wrapper.vm.orderChanged).toBe(true)
 
     // displays an alert when page order has changed
-    expect(wrapper.find('alert-stub').exists()).toBe(true)
+    expect(wrapper.find('lux-alert').exists()).toBe(true)
 
     // Disable the button while saving.
     expect(wrapper.vm.isDisabled).toBeTruthy()
@@ -304,12 +302,9 @@ describe("OrderManagerControls.vue", () => {
       mutations: resourceMutations,
       getters: changedGetters,
       actions: actions,
-      modules: {
-        gallery: changedGallery,
-      },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: changedResource,
         gallery: changedGallery,
@@ -332,9 +327,11 @@ describe("OrderManagerControls.vue", () => {
     }
 
     wrapper = mount(OrderManagerControls, {
-      options,
-      store,
-      stubs: ["alert", "heading", "input-button", "wrapper"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["lux-alert", "lux-heading", "lux-input-button", "lux-wrapper"],
+      }
     })
 
     // calls the appropriate action on save

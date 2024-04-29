@@ -1,4 +1,4 @@
-import Vuex from "vuex"
+import { createStore } from "vuex"
 import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerFilesetForm from "../components/OrderManagerFilesetForm.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
@@ -65,7 +65,7 @@ describe("OrderManagerFilesetForm.vue", () => {
       },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: resource,
         gallery: gallery,
@@ -88,9 +88,11 @@ describe("OrderManagerFilesetForm.vue", () => {
     }
 
     wrapper = mount(OrderManagerFilesetForm, {
-      options,
-      store,
-      stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      }
     })
   })
 
@@ -163,7 +165,7 @@ describe("OrderManagerFilesetForm.vue", () => {
       },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: mvwResource,
         gallery: gallery,
@@ -179,9 +181,11 @@ describe("OrderManagerFilesetForm.vue", () => {
     }
 
     wrapper = mount(OrderManagerFilesetForm, {
-      options,
-      store,
-      stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      }
     })
     expect(wrapper.find('#pageType').exists()).toBe(false)
     expect(wrapper.find('#startCanvasCheckbox').exists()).toBe(false)

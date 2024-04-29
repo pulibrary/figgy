@@ -1,4 +1,4 @@
-import Vuex from "vuex"
+import { createStore } from "vuex"
 import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerFilesetsForm from "../components/OrderManagerFilesetsForm.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
@@ -63,7 +63,7 @@ describe("OrderManagerFilesetsForm.vue", () => {
       },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: resource,
         gallery: gallery,
@@ -86,9 +86,11 @@ describe("OrderManagerFilesetsForm.vue", () => {
     }
 
     wrapper = mount(OrderManagerFilesetsForm, {
-      options,
-      store,
-      stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      }
     })
   })
 

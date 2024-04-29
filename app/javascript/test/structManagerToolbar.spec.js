@@ -162,16 +162,6 @@ let resource = {
   },
 }
 
-// let store = new Vuex.Store({
-  // actions: actions,
-  // modules: {
-  //   ordermanager: resource,
-  //   gallery: gallery,
-  //   zoom: zoom,
-  //   tree: tree,
-  // },
-// })
-
 const store = createStore({
   actions: actions,
   modules: {
