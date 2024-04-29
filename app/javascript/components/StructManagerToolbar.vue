@@ -72,6 +72,17 @@ export default {
   release: '1.0.0',
   type: 'Pattern',
   mixins: [mixin],
+  emits: [
+    "save-structure",
+    "cut-selected",
+    "paste-items",
+    "clear-clipboard",
+    "cards-resized",
+    "create-folder",
+    "delete-folder",
+    "group-selected",
+    "zoom-on-item",
+  ],
   props: {
     /**
      * The html element name used for the container
