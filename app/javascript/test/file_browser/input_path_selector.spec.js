@@ -115,7 +115,7 @@ test('populates a target input', async () => {
 
   await wrapper.get('button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
-  await wrapper.findAll('summary span').at(1).trigger('click')
+  await wrapper.findAll('.item-label span').at(1).trigger('click')
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(0)
   expect(document.getElementById('test').value).toEqual('/bla/Dir1/Subdir1')
@@ -127,7 +127,7 @@ test('populates a summary field', async () => {
 
   await wrapper.get('button').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(1)
-  await wrapper.findAll('summary span').at(1).trigger('click')
+  await wrapper.findAll('.item-label span').at(1).trigger('click')
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.findAll('ul.tree').length).toEqual(0)
   expect(document.getElementById('test').value).toEqual('Dir1/Subdir1')
