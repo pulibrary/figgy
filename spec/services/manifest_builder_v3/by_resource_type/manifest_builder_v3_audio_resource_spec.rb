@@ -47,6 +47,26 @@ RSpec.describe ManifestBuilderV3 do
         expect(output["service"]).to be_nil
       end
     end
+    
+    it "builds a presentation 3 manifest", run_real_characterization: true do
+      output = change_set_persister.save(change_set: change_set)
+      output.logical_structure = [
+        { label: "Logical", nodes: [{ proxy: output.member_ids.last }, { label: "Bla", nodes: [{ proxy: output.member_ids.first }] }] }
+      ]
+
+      change_set_persister.persister.save(resource: output)
+      output = manifest_builder.build
+      # pres 3 context is always an array
+      expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
+      # logo is always an array
+      expect(output["logo"].first).to include("id" => "https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png")
+      # Logical structure should be able to have nested and un-nested members.
+      expect(output["structures"][0]["items"][0]["id"]).to include "#t="
+      expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
+      expect(output["behavior"]).to eq ["auto-advance"]
+      # downloading is blocked
+      expect(output["service"][0]).to eq({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
+    end
 
     it "builds a manifest for an ArchivalMediaBag ingested Recording", run_real_characterization: true, run_real_derivatives: true do
       bag_path = Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag")
@@ -190,25 +210,7 @@ RSpec.describe ManifestBuilderV3 do
       end
     end
 
-    it "builds a presentation 3 manifest", run_real_characterization: true do
-      output = change_set_persister.save(change_set: change_set)
-      output.logical_structure = [
-        { label: "Logical", nodes: [{ proxy: output.member_ids.last }, { label: "Bla", nodes: [{ proxy: output.member_ids.first }] }] }
-      ]
-
-      change_set_persister.persister.save(resource: output)
-      output = manifest_builder.build
-      # pres 3 context is always an array
-      expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
-      # logo is always an array
-      expect(output["logo"].first).to include("id" => "https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png")
-      # Logical structure should be able to have nested and un-nested members.
-      expect(output["structures"][0]["items"][0]["id"]).to include "#t="
-      expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
-      expect(output["behavior"]).to eq ["auto-advance"]
-      # downloading is blocked
-      expect(output["service"][0]).to eq({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
-    end
+    
     context "with no logical structure", run_real_characterization: true do
       let(:logical_structure) { nil }
       it "builds a presentation 3 manifest with a default table of contents" do

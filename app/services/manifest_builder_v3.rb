@@ -22,6 +22,19 @@ class ManifestBuilderV3
       case resource
       when ScannedMap
         ScannedMapNode.new(resource)
+      else
+        case ChangeSet.for(resource)
+        when RecordingChangeSet
+          # if multi_volume_recording?(resource)
+          #   MultiVolumeRecordingNode.new(resource)
+          # else
+            RecordingNode.new(resource)
+        #   end
+        else
+          new(resource, auth_token)
+        end
+
+
       end
     end
     attr_reader :resource, :auth_token, :current_ability
