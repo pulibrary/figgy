@@ -36,10 +36,8 @@ class ArkMismatchReporter
     end
 
     def target(resource)
-      id = Ezid::Identifier.find(resource.identifier.first)
-      id.target
-    rescue Net::HTTPClientException
-      logger.info("Http Error prevented fetching target for id: #{resource.id} alma id: #{resource.source_metadata_identifier.first} ark: #{resource.identifier.first}")
+      ark = resource.identifier.first
+      Faraday.head("https://n2t.net/#{ark}").headers["location"]
     end
 
     def findingaid_url?(url)

@@ -11,6 +11,7 @@ RSpec.describe ArkMismatchReporter do
 
   describe ".write" do
     it "writes a csv containing items that have an mms id but an ark that points to findingaids" do
+      # create known arks
       shoulder = "99999/fk4"
       blade1 = "123456"
       blade2 = "234567"
@@ -21,20 +22,27 @@ RSpec.describe ArkMismatchReporter do
           { status: 200, body: "success: ark:/#{shoulder}#{blade2}", headers: {} },
           { status: 200, body: "success: ark:/#{shoulder}#{blade3}", headers: {} }
         )
+
+      # create the resources
       stub_catalog(bib_id: "9946093213506421")
-      stub_catalog(bib_id: "9985434293506421")
       stub_findingaid(pulfa_id: "AC044_c0003")
+      stub_catalog(bib_id: "9985434293506421")
       mismatched_resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "9946093213506421")
       component_resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "AC044_c0003")
       mms_resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "9985434293506421")
-      fa_url = "http://findingaids.princeton.edu/collections/RBD1.1/c4768"
       change_set_persister = ChangeSetPersister.default
       change_set_persister.save(change_set: ChangeSet.for(mismatched_resource))
       change_set_persister.save(change_set: ChangeSet.for(component_resource))
       change_set_persister.save(change_set: ChangeSet.for(mms_resource))
 
-      allow(Ezid::Identifier).to receive(:find).and_return(Ezid::Identifier.new(target: "http://www.example.com"))
-      allow(Ezid::Identifier).to receive(:find).with(mismatched_resource.identifier.first).and_return(Ezid::Identifier.new(target: fa_url))
+      # stub ark targets
+      fa_url = "http://findingaids.princeton.edu/collections/RBD1.1/c4768"
+      stub_request(:head, "https://n2t.net/ark:/99999/fk4#{blade1}")
+        .to_return(status: 200, headers: { "location": fa_url })
+      stub_request(:head, "https://n2t.net/ark:/99999/fk4#{blade2}")
+        .to_return(status: 200, headers: { "location": "http://www.example.com" })
+      stub_request(:head, "https://n2t.net/ark:/99999/fk4#{blade3}")
+        .to_return(status: 200, headers: { "location": "http://www.example.com" })
 
       described_class.write(output_path: Rails.root.join("tmp", "output.csv"))
       csv = CSV.read(Rails.root.join("tmp", "output.csv"), headers: true, header_converters: :symbol)
@@ -47,32 +55,6 @@ RSpec.describe ArkMismatchReporter do
       expect(resource[:mmsid]).to eq mismatched_resource.source_metadata_identifier.first
       expect(resource[:ark]).to eq mismatched_resource.identifier.first
       expect(resource[:url]).to eq fa_url
-    end
-
-    # Net::HTTPClientException: 400 "Bad Request"
-    context "when an ark target can't be fetched" do
-      it "logs the ark as nil" do
-        stub_ezid
-        stub_catalog(bib_id: "9946093213506421")
-        resource = FactoryBot.create_for_repository(:complete_scanned_resource, source_metadata_identifier: "9946093213506421")
-        change_set_persister = ChangeSetPersister.default
-        change_set_persister.save(change_set: ChangeSet.for(resource))
-
-        ezid_double = instance_double(Ezid::Identifier)
-        # #target is implemented via method_missing by calling out to a metadata object
-        allow(ezid_double).to receive(:method_missing).with(:target).and_raise(Net::HTTPClientException.new('400 "Bad Request"', nil))
-        allow(Ezid::Identifier).to receive(:find).and_return(ezid_double)
-        allow(logger).to receive(:info)
-
-        reporter.write
-
-        expect(logger).to have_received(:info).with(
-          "Http Error prevented fetching target for id: #{resource.id} alma id: #{resource.source_metadata_identifier.first} ark: #{resource.identifier.first}"
-        )
-
-        csv = CSV.read(Rails.root.join("tmp", "output.csv"), headers: true, header_converters: :symbol)
-        expect(csv.length).to eq 0
-      end
     end
 
     context "when there is no ark" do
