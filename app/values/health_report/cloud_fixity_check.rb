@@ -35,6 +35,10 @@ class HealthReport::CloudFixityCheck
     I18n.t("health_status.cloud_fixity_check.type")
   end
 
+  def unhealthy_resources
+    []
+  end
+
   private
 
     # shallow_status only checks the resource itself.

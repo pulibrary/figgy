@@ -41,13 +41,10 @@ class HealthReport::DerivativeCheck
   end
 
   # @return [Array<Hash>] Array of unique parent resource ids, labels, and counts of errored file sets
-  def unhealthy_resource_list
-    parents = unhealthy_file_sets.map do |file_set|
-      parent = file_set.decorate.parent
-      { id: parent.id, label: parent.title.first }
-    end.tally
-
-    parents.map { |k, v| k.merge!(count: v) }
+  def unhealthy_resources
+    unhealthy_file_sets.map do |file_set|
+      file_set.decorate.parent
+    end.uniq(&:id)
   end
 
   def summary

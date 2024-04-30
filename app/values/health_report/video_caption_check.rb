@@ -63,4 +63,8 @@ class HealthReport::VideoCaptionCheck
   def file_set?
     resource.is_a?(FileSet)
   end
+
+  def unhealthy_resources
+    []
+  end
 end

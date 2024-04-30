@@ -1,0 +1,7 @@
+<ul>
+  <% check.unhealthy_resources.each do |resource| %>
+    <li>
+      <%= link_to resource.title.first, main_app.polymorphic_path([:file_manager, resource]) %>
+    </li>
+  <% end %>
+</ul>

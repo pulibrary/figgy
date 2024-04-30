@@ -37,6 +37,10 @@ class HealthReport::LocalFixityCheck
     end
   end
 
+  def unhealthy_resources
+    []
+  end
+
   private
 
     def deep_status

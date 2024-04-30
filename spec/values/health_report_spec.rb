@@ -239,14 +239,10 @@ RSpec.describe HealthReport do
         expect(file_set_report.status).to eq :needs_attention
 
         derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
-        list = derivative_check.unhealthy_resource_list
+        list = derivative_check.unhealthy_resources
         expect(list.count).to eq 1
         # Parent resource
-        expect(list[0][:id]).to eq resource.id
-        # Label
-        expect(list[0][:label]).to eq resource.title.first
-        # Number of unhealthy file sets for each parent
-        expect(list[0][:count]).to eq 1
+        expect(list[0].id).to eq resource.id
       end
     end
 
@@ -280,14 +276,11 @@ RSpec.describe HealthReport do
         expect(report.status).to eq :needs_attention
 
         derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
-        list = derivative_check.unhealthy_resource_list
+        list = derivative_check.unhealthy_resources
         expect(list.count).to eq 2
         # Parent resources
-        expect(list[0][:id]).to eq resource1.id
-        expect(list[1][:id]).to eq resource2.id
-        # Number of unhealthy file sets for each parent
-        expect(list[0][:count]).to eq 2
-        expect(list[1][:count]).to eq 1
+        expect(list[0].id).to eq resource1.id
+        expect(list[1].id).to eq resource2.id
       end
     end
 
@@ -301,7 +294,7 @@ RSpec.describe HealthReport do
 
         expect(report.status).to eq :healthy
         derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
-        list = derivative_check.unhealthy_resource_list
+        list = derivative_check.unhealthy_resources
         expect(list.count).to eq 0
       end
     end
@@ -322,7 +315,7 @@ RSpec.describe HealthReport do
         expect(file_set_report.status).to eq :in_progress
 
         derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
-        list = derivative_check.unhealthy_resource_list
+        list = derivative_check.unhealthy_resources
         expect(list.count).to eq 1
       end
     end
