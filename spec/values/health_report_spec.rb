@@ -225,7 +225,7 @@ RSpec.describe HealthReport do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     context "for a resource with a derivative that failed to process" do
       with_queue_adapter :inline
-      it "returns :needs_attention" do
+      it "returns :needs_attention with one unhealthy resource" do
         stub_ezid
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).file_sets.first
@@ -237,24 +237,78 @@ RSpec.describe HealthReport do
 
         expect(report.status).to eq :needs_attention
         expect(file_set_report.status).to eq :needs_attention
+
+        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
+        list = derivative_check.unhealthy_resource_list
+        expect(list.count).to eq 1
+        # Parent resource
+        expect(list[0][:id]).to eq resource.id
+        # Label
+        expect(list[0][:label]).to eq resource.title.first
+        # Number of unhealthy file sets for each parent
+        expect(list[0][:count]).to eq 1
+      end
+    end
+
+    context "for a multivolume work with two derivatives that failed to process" do
+      with_queue_adapter :inline
+      it "returns :needs_attention with two unhealthy resources" do
+        stub_ezid
+        file1 = fixture_file_upload("files/example.tif", "image/tiff")
+        file2 = fixture_file_upload("files/example.tif", "image/tiff")
+        file3 = fixture_file_upload("files/example.tif", "image/tiff")
+        file4 = fixture_file_upload("files/example.tif", "image/tiff")
+
+        # Child resource with two broken files
+        resource1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file1, file2])
+        file_set = Wayfinder.for(resource1).file_sets.first
+        file_set.primary_file.error_message = "Broken!"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+        file_set = Wayfinder.for(resource1).file_sets.last
+        file_set.primary_file.error_message = "Broken!"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+
+        # Child resource with one broken file and one unbroken file
+        resource2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file3, file4])
+        file_set = Wayfinder.for(resource2).file_sets.first
+        file_set.primary_file.error_message = "Broken!"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+        parent = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [resource1.id, resource2.id])
+
+        report = described_class.for(parent)
+
+        expect(report.status).to eq :needs_attention
+
+        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
+        list = derivative_check.unhealthy_resource_list
+        expect(list.count).to eq 2
+        # Parent resources
+        expect(list[0][:id]).to eq resource1.id
+        expect(list[1][:id]).to eq resource2.id
+        # Number of unhealthy file sets for each parent
+        expect(list[0][:count]).to eq 2
+        expect(list[1][:count]).to eq 1
       end
     end
 
     context "for a resource with a derivative that worked" do
       with_queue_adapter :inline
-      it "returns :healthy" do
+      it "returns :healthy with no unhealthy resources" do
         stub_ezid
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
 
         report = described_class.for(resource)
 
         expect(report.status).to eq :healthy
+        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
+        list = derivative_check.unhealthy_resource_list
+        expect(list.count).to eq 0
       end
     end
 
     context "for a resource with a derivative that hasn't processed yet" do
       with_queue_adapter :inline
-      it "returns :in_progress" do
+      it "returns :in_progress with one unhealthy resource" do
         stub_ezid
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).file_sets.first
@@ -266,6 +320,10 @@ RSpec.describe HealthReport do
 
         expect(report.status).to eq :in_progress
         expect(file_set_report.status).to eq :in_progress
+
+        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
+        list = derivative_check.unhealthy_resource_list
+        expect(list.count).to eq 1
       end
     end
 

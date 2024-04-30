@@ -11,8 +11,12 @@ class FindDeepErroredFileSets
     @query_service = query_service
   end
 
+  # def find_deep_errored_file_sets(resource:)
+  #   query_service.connection[relationship_query, id: resource.id.to_s].first[:count]
+  # end
+
   def find_deep_errored_file_sets(resource:)
-    query_service.connection[relationship_query, id: resource.id.to_s].first[:count]
+    run_query(relationship_query, id: resource.id.to_s)
   end
 
   def relationship_query
@@ -30,7 +34,7 @@ class FindDeepErroredFileSets
           JOIN orm_resources mem ON (g.member->>'id')::UUID = mem.id
           WHERE f.metadata @> '{"member_ids": [{}]}'
         )
-        select COUNT(*) AS count from deep_members,
+        select * from deep_members,
         jsonb_array_elements(deep_members.metadata->'file_metadata') AS g(file_metadata)
         WHERE internal_resource = 'FileSet'
         AND metadata @> '{ "file_metadata": [ { "error_message": [] } ] }'
