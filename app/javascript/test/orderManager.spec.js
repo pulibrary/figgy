@@ -132,7 +132,7 @@ describe("OrderManager.vue", () => {
   })
 
   it("has the right gallery items", () => {
-    console.log('HTMLLLLLLLLLLLLLLLLLL')
+    store.commit('SET_RESOURCE', resourceObject)
     console.log(wrapper.vm.galleryItems)
     const items = wrapper.vm.galleryItems
     expect(items[0].caption).toBe("a")
@@ -140,6 +140,8 @@ describe("OrderManager.vue", () => {
       "https://libimages1.princeton.edu/loris/figgy_prod/f7%2F67%2Ffe%2Ff767fe4247524c5f96e16eba2ff93301%2Fintermediate_file.jp2/full/300,/0/default.jpg"
     )
     expect(items[1].mediaUrl).toBe("https://picsum.photos/600/300/?random")
+    // returns whether or not the resource is LOADING, should be LOADED
+    expect(wrapper.vm.loading).toBe(false)
   })
 
   it("has the right selectedTotal", () => {
@@ -148,10 +150,6 @@ describe("OrderManager.vue", () => {
 
   it("returns whether or not the resource isMultiVolume", () => {
     expect(wrapper.vm.isMultiVolume).toBe(false)
-  })
-
-  it("returns whether or not the resource is Loading", () => {
-    expect(wrapper.vm.loading).toBe(false)
   })
 
   it("returns whether or not the resource is Saved", () => {
@@ -231,7 +229,7 @@ describe("OrderManager.vue", () => {
     let store = createStore({
       modules: {
         ordermanager: resource,
-	      gallery: gallery,
+        gallery: gallery,
       }
     })
 
@@ -293,7 +291,7 @@ describe("OrderManager.vue", () => {
     let store = createStore({
       modules: {
         ordermanager: resource,
-	      gallery: gallery,
+        gallery: gallery,
       }
     })
 

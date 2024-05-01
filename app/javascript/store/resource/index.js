@@ -19,8 +19,8 @@ export const resourceState = {
 
 export const resourceMutations = {
   APPLY_STATE(state) {
-    state.gallery.ogItems = state.gallery.items
-    state.gallery.changeList = []
+    this.state.gallery.ogItems = state.gallery.items
+    this.state.gallery.changeList = []
     state.resource.saveState = "NOT_SAVED"
   },
   CHANGE_RESOURCE_LOAD_STATE(state, loadState) {
@@ -55,9 +55,11 @@ export const resourceMutations = {
           ? member.thumbnail.iiifServiceUrl + "/full/300,/0/default.jpg"
           : Global.figgy.resource.defaultThumbnail,
     }))
-    state.gallery.items = items
-    state.gallery.ogItems = items
+
+    this.state.gallery.items = items
+    this.state.gallery.ogItems = items
     state.resource.loadState = "LOADED"
+    console.log("loadState from storeeeeeeeeee: " + state.resource.loadState)
     state.resource.ogState = {
       startCanvas: resource.startPage,
       thumbnail: resource.thumbnail != null ? resource.thumbnail.id : null,
@@ -78,7 +80,7 @@ export const resourceMutations = {
     state.resource.viewingHint = viewHint
   },
   UPDATE_GALLERYITEMS(state, items) {
-    state.gallery.items = items
+    this.state.gallery.items = items
   },
 }
 
