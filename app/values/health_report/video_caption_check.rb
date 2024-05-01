@@ -21,6 +21,10 @@ class HealthReport::VideoCaptionCheck
     I18n.t("health_status.video_caption_check.type")
   end
 
+  def check_name
+    type.parameterize(separator: "-")
+  end
+
   def status
     @status ||=
       if file_set?

@@ -1104,6 +1104,10 @@ GEM
     trailblazer-option (0.1.2)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
+    turbo-rails (2.0.5)
+      actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
+      railties (>= 6.0.0)
     tus-server (2.3.0)
       content_disposition (~> 1.0)
       roda (>= 2.27, < 4)
@@ -1306,6 +1310,7 @@ DEPENDENCIES
   string_rtl
   timecop
   title
+  turbo-rails
   tus-server (~> 2.3)
   valkyrie (~> 3.0.0)
   valkyrie-derivatives!

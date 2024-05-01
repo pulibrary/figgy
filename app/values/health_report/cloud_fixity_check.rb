@@ -35,6 +35,10 @@ class HealthReport::CloudFixityCheck
     I18n.t("health_status.cloud_fixity_check.type")
   end
 
+  def check_name
+    type.parameterize(separator: "-")
+  end
+
   def unhealthy_resources
     []
   end

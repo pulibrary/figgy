@@ -18,6 +18,10 @@ class HealthReport::LocalFixityCheck
     I18n.t("health_status.local_fixity_check.type")
   end
 
+  def check_name
+    type.parameterize(separator: "-")
+  end
+
   def status
     @status ||=
       if resource.is_a?(EphemeraProject)

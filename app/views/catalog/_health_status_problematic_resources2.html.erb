@@ -1,0 +1,5 @@
+<turbo-frame id=<%= "problematic-resources-list-#{check.check_name}" %> loading="lazy" src=<%= "#{solr_document_path}/health_report/#{check.check_name}" %> >
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</turbo-frame>
