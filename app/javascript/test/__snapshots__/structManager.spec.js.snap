@@ -35,20 +35,412 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
       class="panelHeader"
       data-v-5aca45d1=""
     >
-      <heading
+      <lux-heading-stub
         data-v-5aca45d1=""
         level="h2"
         size="h6"
-      >
-         Logical Structure 
-      </heading>
+      />
     </div>
-    <tree-stub
+    <ul
+      class="lux-tree root"
       data-v-5aca45d1=""
-      id="aea40813-e0ed-4307-aae9-aec53b26bdda"
-      jsondata="[object Object]"
-      root="true"
-    />
+      data-v-c9b319c7=""
+    >
+      <li
+        data-v-c9b319c7=""
+      >
+        <div
+          class="container"
+          data-v-c9b319c7=""
+        >
+          <div
+            class="lux-item"
+            data-v-c9b319c7=""
+          >
+            <lux-input-button-stub
+              block=""
+              class="expand-collapse"
+              data-v-c9b319c7=""
+              icon="arrow-down"
+              size="small"
+              type="button"
+              variation="icon"
+            />
+          </div>
+          <div
+            class="folder-container lux-item-label branchnode"
+            data-v-c9b319c7=""
+            id="aea40813-e0ed-4307-aae9-aec53b26bdda"
+          >
+            <!--v-if-->
+            <!--v-if-->
+            
+            <div
+              class="folder-label"
+              data-v-c9b319c7=""
+              dir="ltr"
+            >
+              Table of Contents
+            </div>
+            <div
+              class="folder-edit"
+              data-v-c9b319c7=""
+            >
+              <lux-input-button-stub
+                class="toggle-edit"
+                data-v-c9b319c7=""
+                icon="edit"
+                size="small"
+                type="button"
+                variation="icon"
+              />
+              <lux-input-button-stub
+                class="create-folder"
+                data-v-c9b319c7=""
+                icon="add"
+                size="small"
+                type="button"
+                variation="icon"
+              />
+              <lux-input-button-stub
+                class="delete-folder"
+                data-v-c9b319c7=""
+                icon="denied"
+                size="small"
+                type="button"
+                variation="icon"
+              />
+            </div>
+            
+          </div>
+        </div>
+        <ul
+          class="lux-tree-sub"
+          data-v-c9b319c7=""
+        >
+          
+          <ul
+            class="lux-tree-sub"
+            data-v-c9b319c7=""
+          >
+            <li
+              data-v-c9b319c7=""
+            >
+              <div
+                class="container"
+                data-v-c9b319c7=""
+              >
+                <div
+                  class="lux-item"
+                  data-v-c9b319c7=""
+                >
+                  <lux-input-button-stub
+                    block=""
+                    class="expand-collapse"
+                    data-v-c9b319c7=""
+                    icon="arrow-down"
+                    size="small"
+                    type="button"
+                    variation="icon"
+                  />
+                </div>
+                <div
+                  class="folder-container lux-item-label branchnode"
+                  data-v-c9b319c7=""
+                  id="abc"
+                >
+                  <!--v-if-->
+                  <!--v-if-->
+                  
+                  <div
+                    class="folder-label"
+                    data-v-c9b319c7=""
+                    dir="ltr"
+                  >
+                    Chapter A
+                  </div>
+                  <div
+                    class="folder-edit"
+                    data-v-c9b319c7=""
+                  >
+                    <lux-input-button-stub
+                      class="toggle-edit"
+                      data-v-c9b319c7=""
+                      icon="edit"
+                      size="small"
+                      type="button"
+                      variation="icon"
+                    />
+                    <lux-input-button-stub
+                      class="create-folder"
+                      data-v-c9b319c7=""
+                      icon="add"
+                      size="small"
+                      type="button"
+                      variation="icon"
+                    />
+                    <lux-input-button-stub
+                      class="delete-folder"
+                      data-v-c9b319c7=""
+                      icon="denied"
+                      size="small"
+                      type="button"
+                      variation="icon"
+                    />
+                  </div>
+                  
+                </div>
+              </div>
+              <ul
+                class="lux-tree-sub"
+                data-v-c9b319c7=""
+              >
+                
+                <ul
+                  class="lux-tree-sub"
+                  data-v-c9b319c7=""
+                >
+                  <li
+                    data-v-c9b319c7=""
+                  >
+                    <div
+                      class="container"
+                      data-v-c9b319c7=""
+                    >
+                      <div
+                        class="lux-item"
+                        data-v-c9b319c7=""
+                      >
+                        <lux-input-button-stub
+                          block=""
+                          class="expand-collapse"
+                          data-v-c9b319c7=""
+                          icon="arrow-down"
+                          size="small"
+                          type="button"
+                          variation="icon"
+                        />
+                      </div>
+                      <div
+                        class="folder-container lux-item-label branchnode"
+                        data-v-c9b319c7=""
+                        id="1778626"
+                      >
+                        <!--v-if-->
+                        <!--v-if-->
+                        
+                        <div
+                          class="folder-label"
+                          data-v-c9b319c7=""
+                          dir="ltr"
+                        >
+                          Untitled
+                        </div>
+                        <div
+                          class="folder-edit"
+                          data-v-c9b319c7=""
+                        >
+                          <lux-input-button-stub
+                            class="toggle-edit"
+                            data-v-c9b319c7=""
+                            icon="edit"
+                            size="small"
+                            type="button"
+                            variation="icon"
+                          />
+                          <lux-input-button-stub
+                            class="create-folder"
+                            data-v-c9b319c7=""
+                            icon="add"
+                            size="small"
+                            type="button"
+                            variation="icon"
+                          />
+                          <lux-input-button-stub
+                            class="delete-folder"
+                            data-v-c9b319c7=""
+                            icon="denied"
+                            size="small"
+                            type="button"
+                            variation="icon"
+                          />
+                        </div>
+                        
+                      </div>
+                    </div>
+                    <ul
+                      class="lux-tree-sub"
+                      data-v-c9b319c7=""
+                    >
+                      
+                      
+                    </ul>
+                  </li>
+                </ul>
+                
+              </ul>
+            </li>
+          </ul>
+          <ul
+            class="lux-tree-sub"
+            data-v-c9b319c7=""
+          >
+            <li
+              data-v-c9b319c7=""
+            >
+              <div
+                class="container"
+                data-v-c9b319c7=""
+              >
+                <div
+                  class="lux-item"
+                  data-v-c9b319c7=""
+                >
+                  <lux-input-button-stub
+                    block=""
+                    class="expand-collapse"
+                    data-v-c9b319c7=""
+                    icon="arrow-down"
+                    size="small"
+                    type="button"
+                    variation="icon"
+                  />
+                </div>
+                <div
+                  class="folder-container lux-item-label branchnode"
+                  data-v-c9b319c7=""
+                  id="1234567"
+                >
+                  <!--v-if-->
+                  <!--v-if-->
+                  
+                  <div
+                    class="folder-label"
+                    data-v-c9b319c7=""
+                    dir="ltr"
+                  >
+                    Chapter 1
+                  </div>
+                  <div
+                    class="folder-edit"
+                    data-v-c9b319c7=""
+                  >
+                    <lux-input-button-stub
+                      class="toggle-edit"
+                      data-v-c9b319c7=""
+                      icon="edit"
+                      size="small"
+                      type="button"
+                      variation="icon"
+                    />
+                    <lux-input-button-stub
+                      class="create-folder"
+                      data-v-c9b319c7=""
+                      icon="add"
+                      size="small"
+                      type="button"
+                      variation="icon"
+                    />
+                    <lux-input-button-stub
+                      class="delete-folder"
+                      data-v-c9b319c7=""
+                      icon="denied"
+                      size="small"
+                      type="button"
+                      variation="icon"
+                    />
+                  </div>
+                  
+                </div>
+              </div>
+              <ul
+                class="lux-tree-sub"
+                data-v-c9b319c7=""
+              >
+                
+                <ul
+                  class="lux-tree-sub"
+                  data-v-c9b319c7=""
+                >
+                  <li
+                    data-v-c9b319c7=""
+                  >
+                    <div
+                      class="container"
+                      data-v-c9b319c7=""
+                    >
+                      <!--v-if-->
+                      <div
+                        class="folder-container lux-item-label branchnode"
+                        data-v-c9b319c7=""
+                        id="3"
+                      >
+                        <!--v-if-->
+                        <lux-media-image-stub
+                          alt="c"
+                          class="file"
+                          data-v-c9b319c7=""
+                          height="30px"
+                          src="c3_service/full/30,/0/default.jpg"
+                          style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
+                        />
+                        
+                        <div
+                          class="folder-label"
+                          data-v-c9b319c7=""
+                          dir="ltr"
+                        >
+                          c
+                        </div>
+                        <div
+                          class="folder-edit"
+                          data-v-c9b319c7=""
+                        >
+                          <lux-input-button-stub
+                            class="toggle-edit"
+                            data-v-c9b319c7=""
+                            icon="edit"
+                            size="small"
+                            type="button"
+                            variation="icon"
+                          />
+                          <lux-input-button-stub
+                            class="zoom-file"
+                            data-v-c9b319c7=""
+                            icon="search"
+                            size="small"
+                            type="button"
+                            variation="icon"
+                          />
+                          <lux-input-button-stub
+                            class="delete-folder"
+                            data-v-c9b319c7=""
+                            icon="denied"
+                            size="small"
+                            type="button"
+                            variation="icon"
+                          />
+                        </div>
+                        
+                      </div>
+                    </div>
+                    <ul
+                      class="lux-tree-sub"
+                      data-v-c9b319c7=""
+                    >
+                      
+                      
+                    </ul>
+                  </li>
+                </ul>
+                
+              </ul>
+            </li>
+          </ul>
+          
+        </ul>
+      </li>
+    </ul>
   </div>
   <div
     class="lux-galleryPanel"
@@ -58,19 +450,16 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
       class="panelHeader"
       data-v-5aca45d1=""
     >
-      <heading
+      <lux-heading-stub
         data-v-5aca45d1=""
         level="h2"
         size="h6"
-      >
-         Unstructured Files 
-      </heading>
+      />
     </div>
-    <struct-gallery-stub
-      cardpixelwidth="150"
-      class="lux-galleryWrapper"
+    <lux-wrapper-stub
+      class="lux-gallery lux-galleryWrapper"
       data-v-5aca45d1=""
-      galleryitems=""
+      type="div"
     />
   </div>
 </div>

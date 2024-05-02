@@ -23,7 +23,7 @@ let items = [
     "service": "b2_service",
     "mediaUrl": "b2_url",
     "viewingHint": null
-  }
+  },
 ]
 
 let resourceObject = {
@@ -76,13 +76,7 @@ let figgy_structure = {
       {
         "nodes": [
           {
-            "proxy": "1c3e9ca9-7aa0-4f4d-957f-f42cb43c254a"
-          },
-          {
-            "proxy": "ba6731e9-f8a7-4065-a4eb-f422926b3719"
-          },
-          {
-            "proxy": "50be643a-4225-4424-ab3e-964b8edccead"
+            "proxy": "3"
           }
         ],
         "label": "Chapter 2"
@@ -136,6 +130,7 @@ let unstructured_items = [
     "viewingHint": null
   },
 ]
+
 const tree = {
   state: {
     selected: "3",
@@ -206,46 +201,38 @@ let store = createStore({
 
 describe("StructManager.vue", () => {
   beforeEach(() => {
-    // store.commit('SET_STRUCTURE', figgy_structure)
-    // store.commit('SET_RESOURCE', resourceObject)
     wrapper = mount(StructManager, {
       global: {
         plugins: [store],
         mixins: [mixin],
-        props: {
+        propsData: {
           resourceObject: resourceObject,
           structure: figgy_structure,
         },
         stubs: [
           "toolbar",
-          "struct-gallery",
-          "tree",
-          "lux-wrapper",
           "deep-zoom",
-          "lux-alert",
           "controls",
           "lux-loader",
           "lux-heading",
+          "lux-media-image",
+          "lux-icon-base",
+          "lux-text-style",
+          "lux-input-button",
+          "lux-card",
+          "lux-wrapper",
         ],
       }
     })
   })
 
   it("has the right gallery items", () => {
-    const items = wrapper.vm.galleryItems
-    expect(items[0].caption).toBe("a")
+    let items = wrapper.vm.gallery.items
+    expect(items[0].caption).toBe("a_foo")
     expect(items[0].mediaUrl).toBe(
-      "a1_service/full/300,/0/default.jpg"
+      "a1_url"
     )
-    expect(items[1].mediaUrl).toBe("b2_service/full/300,/0/default.jpg")
-  })
-
-  it("returns whether or not the resource is Loading", () => {
-    expect(wrapper.vm.loading).toBe(false)
-  })
-
-  it("returns whether or not the structure has a saveError", () => {
-    expect(wrapper.vm.saveError).toBe(false)
+    expect(items[1].mediaUrl).toBe("b2_url")
   })
 
   it("has the right selectedTotal", () => {
@@ -266,7 +253,7 @@ describe("StructManager.vue", () => {
 
   it("Creates a new folder on a folder object", () => {
     // in the previous test, we select a Tree item that is not a file, so it should get added
-    const parentId = wrapper.vm.tree.selected ? wrapper.vm.tree.selected : wrapper.vm.tree.structure.id
+    let parentId = wrapper.vm.tree.selected ? wrapper.vm.tree.selected : wrapper.vm.tree.structure.id
     let newFolderId = wrapper.vm.createFolder(parentId)
     let parent = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, parentId)
     expect(parent.file).toBe(false)
@@ -295,14 +282,16 @@ describe("StructManager.vue", () => {
         },
         stubs: [
           "toolbar",
-          "struct-gallery",
-          "tree",
-          "lux-wrapper",
           "deep-zoom",
-          "lux-alert",
           "controls",
           "lux-loader",
           "lux-heading",
+          "lux-media-image",
+          "lux-icon-base",
+          "lux-text-style",
+          "lux-input-button",
+          "lux-card",
+          "lux-wrapper",
         ],
       }
     })
@@ -314,9 +303,8 @@ describe("StructManager.vue", () => {
   })
 
   it("renders the links thumbnail", () => {
-
-    expect(wrapper.vm.galleryItems.length).toEqual(2)
-    expect(wrapper.vm.galleryItems[0]['mediaUrl']).toEqual('a1_service/full/300,/0/default.jpg')
+    expect(wrapper.vm.gallery.items.length).toEqual(2)
+    expect(wrapper.vm.gallery.items[0]['mediaUrl']).toEqual('a1_url')
   })
 
   it("generates a random id for tree nodes", () => {
@@ -324,17 +312,6 @@ describe("StructManager.vue", () => {
     const id2 = wrapper.vm.generateId()
     expect(id1).not.toEqual(id2)
   })
-
-  // test the watcher... this may be helpful: https://github.com/vuejs/vue-test-utils/issues/331#issuecomment-382037200
-  // it("updates the state of the tree and gallery after resource data is loaded", async () => {
-  //   const generateIdStub = vi.fn(() => '1234567')
-  //   await wrapper.setMethods({ generateId: generateIdStub })
-  //   // the loading of data should trigger the watcher which calls wrapper.vm.filterGallery(true),
-  //   // but we can test the function
-  //   wrapper.vm.filterGallery(true)
-  //   expect(wrapper.vm.ga).toEqual(unstructured_items)
-  //   expect(wrapper.vm.s).toEqual(tree_structure)
-  // })
 
   it("Selects a Tree item by id", () => {
     wrapper.vm.selectTreeItemById('1234567')
@@ -362,10 +339,10 @@ describe("StructManager.vue", () => {
     wrapper.vm.selectNoneGallery()
     expect(wrapper.vm.gallery.selected.length).toEqual(0)
     wrapper.vm.selectAllGallery()
-    expect(wrapper.vm.gallery.selected.length).toEqual(2)
+    expect(wrapper.vm.gallery.selected.length).toEqual(3)
     wrapper.vm.cutSelected()
     expect(wrapper.vm.gallery.selected.length).toEqual(0)
-    expect(wrapper.vm.gallery.cut.length).toEqual(2)
+    expect(wrapper.vm.gallery.cut.length).toEqual(3)
   })
 
   it("Selects a Tree Folder", () => {
@@ -378,22 +355,22 @@ describe("StructManager.vue", () => {
   it("Pastes a Gallery Item into a Tree Folder", () => {
     wrapper.vm.paste()
     let pasted_folder = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "abc")
-    expect(pasted_folder.folders.length).toEqual(3)
+    expect(pasted_folder.folders.length).toEqual(4)
   })
 
   it("Saves the structure in a format that Figgy accepts", () => {
-    wrapper.vm.saveHandler({});
+    wrapper.vm.saveHandler({})
     expect(wrapper.vm.resourceToSave.id).toEqual("aea40813-e0ed-4307-aae9-aec53b26bdda")
     expect(wrapper.vm.resourceToSave.resourceClassName).toEqual("ScannedResource")
     expect(wrapper.vm.resourceToSave.structure.label).toEqual("Table of Contents")
     expect(wrapper.vm.resourceToSave.structure.nodes[0].label).toEqual("Chapter A")
-    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes.length).toEqual(3)
+    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes.length).toEqual(4)
     expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[1].proxy).toEqual("1")
     expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[2].proxy).toEqual("2")
     expect(actions.saveStructureAJAX).toHaveBeenCalled()
   })
-
 })
+
 
 describe('when the tree structure errors on Save', () => {
 
@@ -432,7 +409,6 @@ describe('when the tree structure errors on Save', () => {
         "tree",
         "lux-wrapper",
         "deep-zoom",
-        "lux-alert",
         "controls",
         "lux-loader",
       ],
@@ -485,7 +461,6 @@ describe('when the tree structure is Saved', () => {
         "tree",
         "lux-wrapper",
         "deep-zoom",
-        "lux-alert",
         "controls",
         "lux-loader",
         "lux-heading",

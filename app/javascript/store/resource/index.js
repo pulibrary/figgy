@@ -25,6 +25,7 @@ export const resourceMutations = {
   },
   CHANGE_RESOURCE_LOAD_STATE(state, loadState) {
     state.resource.loadState = loadState
+    console.log("LOAD STATE: " + state.resource.loadState)
   },
   SAVED_STATE(state, saveStatus) {
     state.resource.saveState = saveStatus

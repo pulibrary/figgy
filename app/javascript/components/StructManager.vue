@@ -48,12 +48,12 @@
       class="lux-sidePanel"
     >
       <div class="panelHeader">
-        <heading
+        <lux-heading
           level="h2"
           size="h6"
         >
           Logical Structure
-        </heading>
+        </lux-heading>
       </div>
       <tree
         :id="tree.structure.id"
@@ -68,12 +68,12 @@
       class="lux-galleryPanel"
     >
       <div class="panelHeader">
-        <heading
+        <lux-heading
           level="h2"
           size="h6"
         >
           Unstructured Files
-        </heading>
+        </lux-heading>
       </div>
       <struct-gallery
         class="lux-galleryWrapper"
@@ -343,7 +343,7 @@ export default {
       }
     },
     filterGallery: function (newVal) {
-      console.log('filerGallery Called!!!!!!!!!!!!!!!!!!!!!')
+      console.log('STRUCTURE!!!!!!!!!!!!!!!!!!!!!   ' + JSON.stringify(this.structure))
       if (this.structure.nodes) {
         // If structure prop is provided,
         // convert to tree-friendly structure

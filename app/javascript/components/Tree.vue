@@ -93,7 +93,7 @@
                 icon="add"
                 @button-clicked="createFolder(id)"
               />
-              <input-button
+              <lux-input-button
                 v-else
                 class="zoom-file"
                 type="button"

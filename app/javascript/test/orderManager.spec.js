@@ -133,7 +133,6 @@ describe("OrderManager.vue", () => {
 
   it("has the right gallery items", () => {
     store.commit('SET_RESOURCE', resourceObject)
-    console.log(wrapper.vm.galleryItems)
     const items = wrapper.vm.galleryItems
     expect(items[0].caption).toBe("a")
     expect(items[0].mediaUrl).toBe(
