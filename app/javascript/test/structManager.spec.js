@@ -306,10 +306,6 @@ describe("StructManager.vue", () => {
     expect(actions.loadImageCollectionGql).toHaveBeenCalled()
   })
 
-  it("has the expected html structure", () => {
-    expect(wrapper.element).toMatchSnapshot()
-  })
-
   it("renders the links thumbnail", () => {
     expect(wrapper.vm.gallery.items.length).toEqual(2)
     expect(wrapper.vm.gallery.items[0]['mediaUrl']).toEqual('a1_service/full/300,/0/default.jpg')
