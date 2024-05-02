@@ -149,7 +149,6 @@ export default {
       gallery: state => state.gallery
     }),
     loading: function () {
-      console.log('LOAD STATE: ' + this.resource.loadState)
       return this.resource.loadState !== 'LOADED'
     },
     saved () {

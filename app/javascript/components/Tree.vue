@@ -308,7 +308,6 @@ export default {
       return array
     },
     toggleFolder: function () {
-      console.log("TOGGLED!!!!")
       this.isOpen = !this.isOpen
     },
     toggleEdit: function (id) {

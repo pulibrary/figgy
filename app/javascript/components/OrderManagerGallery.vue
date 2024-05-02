@@ -102,14 +102,12 @@ export default {
         .indexOf(id)
     },
     hasChanged: function (id) {
-      //console.log(this.gallery.changeList.indexOf(id) > -1)
       return this.changeList.indexOf(id) > -1
     },
     isDisabled: function (item) {
       return this.cut.indexOf(item) > -1
     },
     isSelected: function (item) {
-      //console.log(this.gallery.selected.indexOf(item) > -1)
       return this.selected.indexOf(item) > -1
     },
     select: function (id, event) {

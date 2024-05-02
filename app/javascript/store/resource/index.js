@@ -25,7 +25,6 @@ export const resourceMutations = {
   },
   CHANGE_RESOURCE_LOAD_STATE(state, loadState) {
     state.resource.loadState = loadState
-    console.log("LOAD STATE: " + state.resource.loadState)
   },
   SAVED_STATE(state, saveStatus) {
     state.resource.saveState = saveStatus
@@ -60,7 +59,6 @@ export const resourceMutations = {
     this.state.gallery.items = items
     this.state.gallery.ogItems = items
     state.resource.loadState = "LOADED"
-    console.log("loadState from storeeeeeeeeee: " + state.resource.loadState)
     state.resource.ogState = {
       startCanvas: resource.startPage,
       thumbnail: resource.thumbnail != null ? resource.thumbnail.id : null,
