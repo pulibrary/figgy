@@ -7,20 +7,18 @@
     @input="updateValue"
     @search="onSearch"
   >
-    <template slot="no-options">
+    <template v-slot:no-options>
       type to search...
     </template>
     <template
-      slot="option"
-      slot-scope="option"
+      v-slot:option="option"
     >
       <div class="d-center">
         {{ option["title"] }}
       </div>
     </template>
     <template
-      slot="selected-option"
-      slot-scope="option"
+      v-slot:selected-option="option"
     >
       <div class="selected d-center">
         {{ option["title"] }}

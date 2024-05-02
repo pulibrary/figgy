@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test": "vitest run",
-    "lint": "yarn run eslint --ext .vue app/javascript"
+    "lint": "yarn run eslint app/javascript/**/*.vue"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^0.31.0",
@@ -38,9 +38,10 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.1.1",
     "@vue/test-utils": "^2.4.5",
     "dotenv": "^7.0.0",
-    "eslint": "^9.0",
+    "eslint": "^9.1.1",
     "eslint-config-standard": "^17.1",
     "eslint-plugin-import": "^2.29",
     "eslint-plugin-n": "^17.2",
@@ -48,7 +49,8 @@
     "eslint-plugin-promise": "^6.1",
     "eslint-plugin-vitest": "^0.5",
     "eslint-plugin-vitest-globals": "^1.5",
-    "eslint-plugin-vue": "^9.25",
+    "eslint-plugin-vue": "^9.25.0",
+    "globals": "^15.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jquery": "^3.5.0",
     "jsdom": "^22.0.0",

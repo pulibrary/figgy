@@ -152,7 +152,7 @@ export default {
 
     document.addEventListener('keydown', this._keyListener.bind(this))
   },
-  beforeDestroy: function () {
+  beforeUnmount: function () {
     document.removeEventListener('keydown', this._keyListener)
   },
   methods: {

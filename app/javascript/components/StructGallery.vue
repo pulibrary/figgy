@@ -2,7 +2,7 @@
   <lux-wrapper
     type="div"
     class="lux-gallery"
-    @click.native="deselect($event)"
+    @click="deselect($event)"
   >
     <lux-card
       v-for="(item) in items"
