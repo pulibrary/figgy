@@ -205,10 +205,6 @@ describe("StructManager.vue", () => {
       global: {
         plugins: [store],
         mixins: [mixin],
-        propsData: {
-          resourceObject: resourceObject,
-          structure: figgy_structure,
-        },
         stubs: [
           "toolbar",
           "deep-zoom",
@@ -222,12 +218,16 @@ describe("StructManager.vue", () => {
           "lux-card",
           "lux-wrapper",
         ],
-      }
+      },
+      props: {
+        resourceObject: resourceObject,
+        structure: figgy_structure,
+      },
     })
   })
 
   it("has the right gallery items", () => {
-    let items = wrapper.vm.gallery.items
+    let items = wrapper.vm.galleryItems
     expect(items[0].caption).toBe("a_foo")
     expect(items[0].mediaUrl).toBe(
       "a1_url"
@@ -276,10 +276,6 @@ describe("StructManager.vue", () => {
       global: {
         plugins: [store],
         mixins: [mixin],
-        props: {
-          resourceId: "foo",
-          structure: figgy_structure,
-        },
         stubs: [
           "toolbar",
           "deep-zoom",
@@ -293,7 +289,11 @@ describe("StructManager.vue", () => {
           "lux-card",
           "lux-wrapper",
         ],
-      }
+      },
+      props: {
+        resourceId: "foo",
+        structure: figgy_structure,
+      },
     })
     expect(actions.loadImageCollectionGql).toHaveBeenCalled()
   })
@@ -399,10 +399,6 @@ describe('when the tree structure errors on Save', () => {
     global: {
       plugins: [store],
       mixins: [mixin],
-      props: {
-        resourceObject: resourceObject,
-        structure: figgy_structure,
-      },
       stubs: [
         "toolbar",
         "struct-gallery",
@@ -412,7 +408,11 @@ describe('when the tree structure errors on Save', () => {
         "controls",
         "lux-loader",
       ],
-    }
+    },
+    props: {
+      resourceObject: resourceObject,
+      structure: figgy_structure,
+    },
   })
 
   it("returns whether or not there was an error on save", () => {

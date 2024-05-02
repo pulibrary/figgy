@@ -10,13 +10,7 @@ exports[`OrderManager.vue > has the expected html structure 1`] = `
     name="fade"
     persisted="false"
   >
-    <div
-      class="lux-overlay"
-    >
-      <lux-loader-stub
-        size="medium"
-      />
-    </div>
+    <!--v-if-->
   </transition-stub>
   <!--v-if-->
   <!--v-if-->

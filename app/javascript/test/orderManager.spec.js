@@ -115,9 +115,6 @@ describe("OrderManager.vue", () => {
     wrapper = mount(OrderManager, {
       global: {
         plugins: [store],
-        propsData: {
-          resourceObject: resourceObject,
-        },
         stubs: [
           "toolbar",
           "gallery",
@@ -127,7 +124,10 @@ describe("OrderManager.vue", () => {
           "controls",
           "lux-loader",
           "resource-form"],
-      }
+      },
+      props: {
+        resourceObject: resourceObject,
+      },
     })
   })
 
@@ -174,11 +174,11 @@ describe("OrderManager.vue", () => {
     const wrapper2 = mount(OrderManager, {
       global: {
         plugins: [store],
-        propsData: {
-          resourceId: "foo",
-        },
         stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "lux-loader", "resource-form"],
-      }
+      },
+      props: {
+        resourceId: "foo",
+      },
     })
     expect(actions.loadImageCollectionGql).toHaveBeenCalled()
   })
@@ -235,12 +235,12 @@ describe("OrderManager.vue", () => {
     let wrapper = mount(OrderManager, {
       global: {
         plugins: [store],
-        props: {
-          resourceObject: resourceObject,
-  	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
-        },
         stubs: ["toolbar", "gallery", "lux-text-style", "lux-wrapper", "fileset-form", "controls", "lux-loader", "resource-form"],
-      }
+      },
+      props: {
+        resourceObject: resourceObject,
+        defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      },
     })
 
     it("renders the default Figgy thumbnail", () => {
@@ -297,12 +297,12 @@ describe("OrderManager.vue", () => {
     let wrapper = mount(OrderManager, {
       global: {
         plugins: [store],
-        propsData: {
-          resourceObject: resourceObject,
-  	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
-        },
         stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
-      }
+      },
+      props: {
+        resourceObject: resourceObject,
+        defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      },
     })
 
     it("displays an alert with an error message", () => {
