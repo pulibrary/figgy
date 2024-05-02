@@ -224,7 +224,7 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
                       <div
                         class="folder-container lux-item-label branchnode"
                         data-v-c9b319c7=""
-                        id="1778626"
+                        id="6678496"
                       >
                         <!--v-if-->
                         <!--v-if-->
@@ -460,6 +460,7 @@ exports[`StructManager.vue > has the expected html structure 1`] = `
       class="lux-gallery lux-galleryWrapper"
       data-v-5aca45d1=""
       type="div"
+      viewing-direction="LEFTTORIGHT"
     />
   </div>
 </div>

@@ -343,7 +343,6 @@ export default {
       }
     },
     filterGallery: function (newVal) {
-      console.log('STRUCTURE!!!!!!!!!!!!!!!!!!!!!   ' + JSON.stringify(this.structure))
       if (this.structure.nodes) {
         // If structure prop is provided,
         // convert to tree-friendly structure

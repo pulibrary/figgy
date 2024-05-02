@@ -228,11 +228,19 @@ describe("StructManager.vue", () => {
 
   it("has the right gallery items", () => {
     let items = wrapper.vm.galleryItems
-    expect(items[0].caption).toBe("a_foo")
+    expect(items[0].caption).toBe("a")
     expect(items[0].mediaUrl).toBe(
-      "a1_url"
+      "a1_service/full/300,/0/default.jpg"
     )
-    expect(items[1].mediaUrl).toBe("b2_url")
+    expect(items[1].mediaUrl).toBe("b2_service/full/300,/0/default.jpg")
+  })
+
+  it("returns whether or not the resource is Loading", () => {
+    expect(wrapper.vm.loading).toBe(false)
+  })
+
+  it("returns whether or not the structure has a saveError", () => {
+    expect(wrapper.vm.saveError).toBe(false)
   })
 
   it("has the right selectedTotal", () => {
@@ -304,7 +312,7 @@ describe("StructManager.vue", () => {
 
   it("renders the links thumbnail", () => {
     expect(wrapper.vm.gallery.items.length).toEqual(2)
-    expect(wrapper.vm.gallery.items[0]['mediaUrl']).toEqual('a1_url')
+    expect(wrapper.vm.gallery.items[0]['mediaUrl']).toEqual('a1_service/full/300,/0/default.jpg')
   })
 
   it("generates a random id for tree nodes", () => {
@@ -339,10 +347,10 @@ describe("StructManager.vue", () => {
     wrapper.vm.selectNoneGallery()
     expect(wrapper.vm.gallery.selected.length).toEqual(0)
     wrapper.vm.selectAllGallery()
-    expect(wrapper.vm.gallery.selected.length).toEqual(3)
+    expect(wrapper.vm.gallery.selected.length).toEqual(2)
     wrapper.vm.cutSelected()
     expect(wrapper.vm.gallery.selected.length).toEqual(0)
-    expect(wrapper.vm.gallery.cut.length).toEqual(3)
+    expect(wrapper.vm.gallery.cut.length).toEqual(2)
   })
 
   it("Selects a Tree Folder", () => {
@@ -355,7 +363,7 @@ describe("StructManager.vue", () => {
   it("Pastes a Gallery Item into a Tree Folder", () => {
     wrapper.vm.paste()
     let pasted_folder = wrapper.vm.findFolderById(wrapper.vm.tree.structure.folders, "abc")
-    expect(pasted_folder.folders.length).toEqual(4)
+    expect(pasted_folder.folders.length).toEqual(3)
   })
 
   it("Saves the structure in a format that Figgy accepts", () => {
@@ -364,7 +372,7 @@ describe("StructManager.vue", () => {
     expect(wrapper.vm.resourceToSave.resourceClassName).toEqual("ScannedResource")
     expect(wrapper.vm.resourceToSave.structure.label).toEqual("Table of Contents")
     expect(wrapper.vm.resourceToSave.structure.nodes[0].label).toEqual("Chapter A")
-    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes.length).toEqual(4)
+    expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes.length).toEqual(3)
     expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[1].proxy).toEqual("1")
     expect(wrapper.vm.resourceToSave.structure.nodes[0].nodes[2].proxy).toEqual("2")
     expect(actions.saveStructureAJAX).toHaveBeenCalled()
@@ -451,10 +459,6 @@ describe('when the tree structure is Saved', () => {
     global: {
       plugins: [store],
       mixins: [mixin],
-      props: {
-        resourceObject: resourceObject,
-        structure: figgy_structure,
-      },
       stubs: [
         "toolbar",
         "struct-gallery",
@@ -465,7 +469,11 @@ describe('when the tree structure is Saved', () => {
         "lux-loader",
         "lux-heading",
       ],
-    }
+    },
+    props: {
+      resourceObject: resourceObject,
+      structure: figgy_structure,
+    },
   })
 
   it("returns whether or not the structure is saved", () => {
@@ -506,10 +514,6 @@ describe('when an item is zoomed ', () => {
     global: {
       plugins: [store],
       mixins: [mixin],
-      props: {
-        resourceObject: resourceObject,
-        structure: figgy_structure,
-      },
       stubs: [
         "toolbar",
         "struct-gallery",
@@ -521,7 +525,11 @@ describe('when an item is zoomed ', () => {
         "lux-loader",
         "lux-heading",
       ],
-    }
+    },
+    props: {
+      resourceObject: resourceObject,
+      structure: figgy_structure,
+    },
   })
 
   it("returns whether or not an item is being zoomed", () => {
