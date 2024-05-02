@@ -2,41 +2,37 @@
   <div>
     <ul :class="root ? 'tree' : ''">
       <li
-        v-for="child in startChildren"
+        v-for="child in expandableChildren"
         :key="child.path"
+        @click.stop="tryLoading(child)"
       >
-        <v-details
-          v-if="child.expandable"
-          v-model="child.expanded"
-          @change="tryLoading(child)"
+        <div
+          class="item-label"
+          :class="{ 'list-focus': isFocused(child) }"
         >
-          <summary
-            class="item-label"
-            :class="{ 'list-focus': isFocused(child) }"
+          <div class="expander">
+            <svg v-if="child.expanded"><polygon points="5,8 10,13 15,8" /></svg>
+            <svg v-else><polygon points="8,5 13,10 8,15" /></svg>
+          </div>
+          <div
+            class="icon"
           >
-            <div class="expander">
-              <svg v-if="child.expanded"><polygon points="5,8 10,13 15,8" /></svg>
-              <svg v-else><polygon points="8,5 13,10 8,15" /></svg>
-            </div>
-            <div
-              class="icon"
-            >
-              <svg viewBox="0 0 25 25"><path d="M11 5h13v17h-24v-20h8l3 3zm-10-2v18h22v-15h-12.414l-3-3h-6.586z" /></svg>
-            </div>
-            <span
-              @click="listFocused(child, $event)"
-            >
-              {{ child.label }}
-            </span>
-          </summary>
-          <DirectoryPicker
-            :start-children="child.children"
-            :root="false"
-            :list-focus="listFocus"
-            @listFocus="listFocused"
-            @loadChild="tryLoading"
-          />
-        </v-details>
+            <svg viewBox="0 0 25 25"><path d="M11 5h13v17h-24v-20h8l3 3zm-10-2v18h22v-15h-12.414l-3-3h-6.586z" /></svg>
+          </div>
+          <span
+            @click="listFocused(child, $event)"
+          >
+            {{ child.label }}
+          </span>
+        </div>
+        <DirectoryPicker
+          v-if="child.expandable && child.expanded"
+          :start-children="child.children"
+          :root="false"
+          :list-focus="listFocus"
+          @listFocus="listFocused"
+          @loadChild="tryLoading"
+        />
       </li>
     </ul>
   </div>
@@ -62,6 +58,11 @@ export default {
   },
   data () {
     return {
+    }
+  },
+  computed: {
+    expandableChildren () {
+      return this.startChildren.filter((child) => child.expandable)
     }
   },
   methods: {
@@ -103,6 +104,11 @@ export default {
 .tree li{
   display      : block;
   position     : relative;
+  &.item-label {
+    display: flex;
+    align-items: center;
+    margin: 1px;
+  }
 }
 
 .tree ul{

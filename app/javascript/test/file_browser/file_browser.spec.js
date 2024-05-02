@@ -100,7 +100,7 @@ const startChildren = () => {
           'label': 'Subdir2',
           'path': '/Dir2/Subdir2',
           'expandable': true,
-          'expanded': false,
+          'expanded': true,
           'selected': false,
           'selectable': false,
           'loaded': true,
@@ -128,7 +128,7 @@ test('renders a directory picker pane', () => {
 test('propagates folderSelect event up', async () => {
   const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
 
-  await wrapper.findAll('summary span').at(1).trigger('click')
+  await wrapper.findAll('.item-label span').at(1).trigger('click')
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.emitted()).toHaveProperty('folderSelect')
   expect(wrapper.emitted().folderSelect[0]).toEqual([wrapper.vm.tree[0].children[0]])
@@ -137,7 +137,7 @@ test('propagates folderSelect event up', async () => {
 test('propagates filesSelect event up', async () => {
   const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'fileIngest' } })
 
-  await wrapper.findAll('summary span').at(6).trigger('click')
+  await wrapper.findAll('.item-label span').at(4).trigger('click')
   await wrapper.get('li.file').trigger('click')
   await wrapper.get('.actions a').trigger('click')
   expect(wrapper.emitted()).toHaveProperty('filesSelect')
@@ -147,22 +147,22 @@ test('propagates filesSelect event up', async () => {
 test('highlights a list-focused pane', async () => {
   const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
 
-  await wrapper.findAll('summary span').at(0).trigger('click')
+  await wrapper.findAll('.item-label span').at(0).trigger('click')
 
-  expect(wrapper.findAll('summary.list-focus').length).toEqual(1)
+  expect(wrapper.findAll('.item-label.list-focus').length).toEqual(1)
   expect(wrapper.vm.listFocus.path).toEqual('/Dir1')
 
-  await wrapper.findAll('summary span').at(1).trigger('click')
+  await wrapper.findAll('.item-label span').at(1).trigger('click')
   expect(wrapper.vm.listFocus.path).toEqual('/Dir1/Subdir1')
-  expect(wrapper.findAll('summary.list-focus').length).toEqual(1)
+  expect(wrapper.findAll('.item-label.list-focus').length).toEqual(1)
 })
 
 test('can dynamically load child nodes via loadChildrenPath', async () => {
   stubChildLoad()
   const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
 
-  await wrapper.findAll('details').at(1).trigger('toggle')
-  await wrapper.findAll('details').at(2).trigger('toggle')
+  await wrapper.findAll('.item-label').at(1).trigger('click')
+  await wrapper.findAll('.item-label').at(2).trigger('click')
   await flushPromises()
   expect(wrapper.vm.tree[0].children[0].children[0].children.length).toEqual(1)
 })
@@ -170,8 +170,8 @@ test('can dynamically load child nodes via loadChildrenPath', async () => {
 test('dynamically loads child nodes when list-focused', async () => {
   stubChildLoad()
   const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
-  await wrapper.findAll('details').at(1).trigger('toggle')
-  await wrapper.findAll('summary span').at(2).trigger('click')
+  await wrapper.findAll('.item-label').at(1).trigger('click')
+  await wrapper.findAll('.item-label span').at(2).trigger('click')
   await flushPromises()
   expect(wrapper.vm.tree[0].children[0].children[0].children.length).toEqual(1)
 })
@@ -179,8 +179,8 @@ test('dynamically loads child nodes when list-focused', async () => {
 test('handles bad data when loading', async () => {
   stubFailedChildLoad()
   const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
-  await wrapper.findAll('details').at(1).trigger('toggle')
-  await wrapper.findAll('details').at(2).trigger('toggle')
+  await wrapper.findAll('.item-label').at(1).trigger('click')
+  await wrapper.findAll('.item-label').at(2).trigger('click')
   await flushPromises()
   expect(wrapper.vm.tree[0].children[0].children[0].children.length).toEqual(0)
 })

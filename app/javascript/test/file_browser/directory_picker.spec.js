@@ -4,116 +4,87 @@ import DirectoryPicker from '../../components/file_browser/directory_picker.vue'
 const startChildren = () => {
   return [
     {
-      'label': 'Dir1',
-      'path': '/Dir1',
-      'expanded': true,
-      'expandable': true,
-      'selected': false,
-      'selectable': false,
-      'loaded': true,
-      'children': [
+      label: 'Dir1',
+      path: '/Dir1',
+      expanded: true,
+      expandable: true,
+      selected: false,
+      selectable: false,
+      loaded: true,
+      children: [
         {
-          'label': 'Subdir1',
-          'path': '/Dir1/Subdir1',
-          'expanded': false,
-          'expandable': true,
-          'selected': false,
-          'selectable': true,
-          'loaded': true,
-          'children': [
+          label: 'Subdir1',
+          path: '/Dir1/Subdir1',
+          expanded: true,
+          expandable: true,
+          selected: false,
+          selectable: true,
+          loaded: true,
+          children: [
             {
-              'label': 'SubSubdir1',
-              'path': '/Dir1/Subdir1/SubSubdir1',
-              'loadChildrenPath': '/loaders/test',
-              'expanded': false,
-              'expandable': true,
-              'selected': false,
-              'selectable': false,
-              'loaded': false,
-              'children': []
+              label: 'SubSubdir1',
+              path: '/Dir1/Subdir1/SubSubdir1',
+              loadChildrenPath: '/loaders/test',
+              expanded: true,
+              expandable: true,
+              selected: false,
+              selectable: false,
+              loaded: false,
+              children: []
             },
             {
-              'label': 'SubSubdir2',
-              'path': '/Dir1/Subdir1/SubSubdir2',
-              'expanded': false,
-              'expandable': true,
-              'selected': false,
-              'selectable': false,
-              'loaded': true,
-              'children': []
+              label: 'SubSubdir2',
+              path: '/Dir1/Subdir1/SubSubdir2',
+              expanded: true,
+              expandable: true,
+              selected: false,
+              selectable: false,
+              loaded: true,
+              children: []
             }
           ]
         }
       ]
     },
     {
-      'label': 'Dir2',
-      'path': '/Dir2',
-      'expanded': false,
-      'expandable': true,
-      'selected': false,
-      'selectable': true,
-      'loaded': true,
-      'children': [
+      label: 'Dir2',
+      path: '/Dir2',
+      expanded: true,
+      expandable: true,
+      selected: false,
+      selectable: true,
+      loaded: true,
+      children: [
         {
-          'label': 'Subdir1',
-          'path': '/Dir2/Subdir1',
-          'expandable': true,
-          'expanded': false,
-          'selected': false,
-          'selectable': false,
-          'loaded': true,
-          'children': []
+          label: 'Subdir1',
+          path: '/Dir2/Subdir1',
+          expandable: true,
+          expanded: true,
+          selected: false,
+          selectable: false,
+          loaded: true,
+          children: []
         },
         {
-          'label': 'Subdir2',
-          'path': '/Dir2/Subdir2',
-          'expandable': true,
-          'expanded': false,
-          'selected': false,
-          'selectable': false,
-          'loaded': true,
-          'children': [
+          label: 'Subdir2',
+          path: '/Dir2/Subdir2',
+          expandable: true,
+          expanded: true,
+          selected: false,
+          selectable: false,
+          loaded: true,
+          children: [
             {
-              'label': 'File1.jpg',
-              'path': '/Dir2/Subdir2/File1.jpg',
-              'expandable': false,
-              'selectable': true
+              label: 'File1.jpg',
+              path: '/Dir2/Subdir2/File1.jpg',
+              expandable: false,
+              selectable: true
             }
           ]
         }
       ]
     }
   ]
-}
-
-function stubFailedChildLoad () {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      status: 404,
-      json: () => { throw Error('broken') }
-    })
-  )
-}
-function stubChildLoad () {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      status: 200,
-      json: () => Promise.resolve(
-        [
-          {
-            'label': 'SubSubSubdir1',
-            'path': '/Dir1/Subdir1/SubSubdir1/SubSubSubdir1',
-            'expanded': false,
-            'selected': false,
-            'selectable': false,
-            'loaded': true,
-            'children': []
-          }
-        ]
-      )
-    })
-  )
 }
 
 test('renders with a root that has the tree class', () => {
@@ -126,12 +97,12 @@ test('renders with a root that has the tree class', () => {
 test('renders a collapsible detail for every child hierarchy', () => {
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
 
-  expect(wrapper.findAll('details').length).toEqual(7)
+  expect(wrapper.findAll('.expander').length).toEqual(7)
 })
 
 test('clicking a label emits a list-focus event', async () => {
   const wrapper = mount(DirectoryPicker, { propsData: { startChildren: startChildren() } })
-  await wrapper.findAll('summary span').at(0).trigger('click')
+  await wrapper.findAll('.item-label span').at(0).trigger('click')
 
   expect(wrapper.emitted()).toHaveProperty('listFocus')
 })

@@ -63,6 +63,9 @@ export default {
       if (child.loaded === false && child.loadChildrenPath) {
         this.loadChildren(child)
       }
+      if (child.expandable) {
+        child.expanded = !child.expanded
+      }
     },
     loadChildren (child) {
       return fetch(

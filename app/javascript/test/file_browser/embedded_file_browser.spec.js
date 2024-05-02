@@ -49,7 +49,7 @@ const startChildren = () => {
     {
       'label': 'Dir2',
       'path': '/Dir2',
-      'expanded': false,
+      'expanded': true,
       'expandable': true,
       'selected': false,
       'selectable': true,
@@ -69,7 +69,7 @@ const startChildren = () => {
           'label': 'Subdir2',
           'path': '/Dir2/Subdir2',
           'expandable': true,
-          'expanded': false,
+          'expanded': true,
           'selected': false,
           'selectable': false,
           'loaded': true,
@@ -99,7 +99,7 @@ test('populates a hidden input for files selected and fires a formId', async () 
   window.HTMLFormElement.prototype.submit = mockSubmit
   const wrapper = mount(EmbeddedFileBrowser, { propsData: { startTree: startChildren(), formId: 'test' } })
 
-  await wrapper.findAll('summary span').at(6).trigger('click')
+  await wrapper.findAll('.item-label span').at(4).trigger('click')
   await wrapper.get('li.file').trigger('click')
   await wrapper.findAll('li.file').at(1).trigger('click', { ctrlKey: true })
   await wrapper.get('.actions a').trigger('click')
