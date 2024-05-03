@@ -13,4 +13,12 @@ module Types
       input
     end
   end
+
+  EmbargoDate = Dry::Types["params.string"].constructor do |input|
+    if input.is_a?(::String) && input.present?
+      ::Date.strptime(input, "%m/%d/%Y").strftime("%-m/%-d/%Y")
+    else
+      input
+    end
+  end
 end

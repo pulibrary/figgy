@@ -16,7 +16,7 @@ class EphemeraBoxChangeSet < ChangeSet
   property :downloadable, multiple: false, require: true, default: "public"
   property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
   property :rights_note, multiple: false, required: false
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
   delegate :human_readable_type, to: :model
   validates :barcode, :box_number, :visibility, presence: true
   validate :barcode_valid?

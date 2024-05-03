@@ -44,7 +44,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :pending_uploads, multiple: true, required: false
   property :append_id, virtual: true, multiple: false, required: false
   property :keywords, multiple: true, required: false
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
 
   property :start_canvas, required: false
   property :viewing_direction, required: false

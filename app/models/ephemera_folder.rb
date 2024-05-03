@@ -51,7 +51,7 @@ class EphemeraFolder < Resource
   attribute :holding_location
   attribute :claimed_by, Valkyrie::Types::String
   attribute :cached_parent_id, Valkyrie::Types::ID.optional
-  attribute :embargo_date, Valkyrie::Types::String.optional
+  attribute :embargo_date, ::Types::EmbargoDate.optional
   attribute :notice_type
   attribute :content_warning, Valkyrie::Types::String
 

@@ -12,7 +12,7 @@ module Schema
     def self.typed_attributes
       {
         claimed_by: Valkyrie::Types::String,
-        embargo_date: Valkyrie::Types::String.optional
+        embargo_date: ::Types::EmbargoDate.optional
       }
     end
 
