@@ -17,8 +17,8 @@ class HealthReport::DerivativeCheck
     @type ||= I18n.t("health_status.derivative_check.type")
   end
 
-  def check_name
-    type.parameterize(separator: "-")
+  def name
+    type.parameterize(separator: "_")
   end
 
   def status

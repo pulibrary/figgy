@@ -1,4 +1,4 @@
-<turbo-frame id=<%= "problematic-resources-list-#{@check.check_name}" %>>
+<turbo-frame id=<%= "problematic-resources-list-#{@check.name}" %>>
   <ul>
     <% @check.unhealthy_resources.each do |resource| %>
       <li>

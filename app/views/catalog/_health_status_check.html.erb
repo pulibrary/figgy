@@ -6,17 +6,19 @@
               <h6><%= check.type %> Status: <%= t("health_status.status.#{check.status}.label") %></h6>
               <small><%= check.summary %></small>
               <% if check.status == :in_progress || check.status == :needs_attention %>
-                <div class="accordion" id="<%= "problematic-resources-accordion-#{check.check_name}" %>-files">
+                <div class="accordion" id="<%= "problematic-resources-accordion-#{check.name}" %>-files">
                   <div style="display: flex">
                     <lux-icon-base width="20" height="20" icon-color="<%= t("health_status.status.#{check.status}.icon_color") %>">
                       <lux-icon-arrow-right></lux-icon-arrow-right><p1>hello</p1>
                     </lux-icon-base>
-                    <button class="btn btn-link text-left" type="button" data-toggle="collapse" data-target=<%= "#problematic-resources-collapse-#{check.check_name}" %> aria-expanded="true" aria-controls="collapseOne">
+                    <button class="btn btn-link text-left" type="button" data-toggle="collapse" data-target=<%= "#problematic-resources-collapse-#{check.name}" %> aria-expanded="true" aria-controls="collapseOne">
                       Show Problematic Resources
                     </button>
                   </div>
-                  <div id="<%= "problematic-resources-collapse-#{check.check_name}" %>" class="collapse" aria-labelledby="headingOne" data-parent="<%= "#problematic-resources-accordion-#{check.check_name}" %>-files">
-                    <%= render partial: "health_status_problematic_resources2", locals: {check: check } %>
+                  <div id="<%= "problematic-resources-collapse-#{check.name}" %>" class="collapse" aria-labelledby="headingOne" data-parent="<%= "#problematic-resources-accordion-#{check.name}" %>-files">
+                    <turbo-frame id=<%= "problematic-resources-list-#{check.name}" %> loading="lazy" src=<%= "#{solr_document_path}/health_report/#{check.name}" %> >
+                      <loader size="medium"></loader>
+                    </turbo-frame>
                   </div>
                 </div>
               <% end %>

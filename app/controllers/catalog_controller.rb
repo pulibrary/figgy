@@ -306,7 +306,7 @@ class CatalogController < ApplicationController
   end
 
   def health_report
-    @check = @health_report.checks.find { |c| c.check_name == params[:name] }
+    @check = @health_report.checks.find { |c| c.name == params[:name] }
     render "catalog/health_status_problematic_resources"
   end
 
