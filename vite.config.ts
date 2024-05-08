@@ -30,6 +30,11 @@ export default defineConfig({
     gzipPlugin({
       customCompression: (content) => brotliCompressSync(Buffer.from(content)),
       fileName: '.br'
-    })
+    }),
+    {
+      config() {
+        return { define: {  __VUE_PROD_DEVTOOLS__: true }  }
+      },
+    },
   ]
 })

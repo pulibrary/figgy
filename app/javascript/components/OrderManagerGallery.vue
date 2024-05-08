@@ -26,10 +26,8 @@ import { VueDraggable } from "vue-draggable-plus"
  * Gallery is a grid of images with captions.
  */
 export default {
-  name: "LuxGallery",
-  status: "ready",
-  release: "1.0.0",
-  type: "Pattern",
+  name: "OrderManagerGallery",
+  emits: [ "card-clicked" ],
   components: {
     VueDraggable,
   },
