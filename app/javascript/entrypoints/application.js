@@ -18,16 +18,6 @@ import FileUploader from '@components/file-uploader.vue'
 import Initializer from '@figgy/figgy_boot'
 import LocalUploader from '@components/local_uploader.vue'
 
-import '@hotwired/turbo-rails'
-Turbo.session.drive = false
-
-document.addEventListener("turbo:frame-missing", event => {
-  if (event.detail.response.url) {
-    event.preventDefault()
-    window.location = event.detail.response.url
-  }
-})
-
 Vue.use(system)
 
 // mount the filemanager app
