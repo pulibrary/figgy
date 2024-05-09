@@ -14,7 +14,7 @@ The following full audit tasks can be found in `lib/tasks/preservation.rake`:
   * figgy:preservation:full_audit_restart - Use this task to run the initial full audit
   * figgy:preservation:full_audit_resume - Use this task if the full audit process is interrupted
 
-See the tasks in that file for the location to access the reports.
+You will eventually see a progress bar. See the tasks in that file for the location to access the reports.
 
 ## How to repair resources that failed to preserve
 
