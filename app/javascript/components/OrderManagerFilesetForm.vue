@@ -13,7 +13,7 @@
         name="itemLabel"
         label="Label"
         placeholder="e.g., example.tif"
-        @input="updateSingle()"
+        @input="updateLabel($event)"
       />
 
       <lux-input-select
@@ -162,6 +162,14 @@ export default {
       this.singleForm.viewingHint = viewHint
       this.updateSingle()
     },
+    updateLabel (event) {
+      let label = this.gallery.selected[0].caption
+      if (event) {
+        label = event.target.value
+      }
+      this.singleForm.caption = label
+      this.updateSingle()
+    },
     updateSingle: debounce(function () {
       const changeList = this.gallery.changeList
       const items = this.gallery.items
@@ -175,7 +183,6 @@ export default {
       if (changeList.indexOf(this.gallery.selected[0].id) === -1) {
         changeList.push(this.gallery.selected[0].id)
       }
-
       this.$store.dispatch('updateChanges', changeList)
       this.$store.dispatch('updateItems', items)
     }, 300, { leading: false, trailing: true })
