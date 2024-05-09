@@ -18,5 +18,15 @@ RSpec.feature "Order Manager", js: true do
   scenario "users visit the order manager interface" do
     visit polymorphic_path [:order_manager, resource]
     expect(page).to have_css ".lux-orderManager"
+
+    # test for selecting a single resource member card
+    expect(page).not_to have_css ".lux-card-selected"
+    page.all(".lux-card")[0].click
+    expect(page).to have_css(".lux-card-selected", text: "File Set 1")
+
+    # test for updating member label
+    find_field('itemLabel', with: 'File Set 1').set('Page 1')
+    expect(page).to have_css(".lux-card > p", text: "Page 1")
+
   end
 end

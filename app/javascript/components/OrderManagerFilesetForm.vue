@@ -9,7 +9,7 @@
     >
       <lux-input-text
         id="itemLabel"
-        v-model="singleForm.caption"
+        :value="singleForm.caption"
         name="itemLabel"
         label="Label"
         placeholder="e.g., example.tif"
