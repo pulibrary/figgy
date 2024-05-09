@@ -6,6 +6,8 @@ class ManifestBuilderV3
       case resource
       when ScannedMap
         ScannedMapNode.new(resource)
+      else
+        new(resource)
       end
     end
     attr_reader :resource, :auth_token, :current_ability
@@ -69,9 +71,56 @@ class ManifestBuilderV3
     # Retrieves the presenter for each Range (sc:Range) instance
     # @return [TopStructure]
     def ranges
+      return av_ranges if av_manifest?
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure)
       end
+    end
+
+    def av_manifest?
+      av_file_sets = file_set_presenters.select do |fs_presenter|
+        fs_presenter.display_content.present?
+      end
+
+      work_presenter_nodes = Array.wrap(work_presenters)
+      work_presenters = work_presenter_nodes.select(&:av_manifest?)
+
+      !av_file_sets.empty? || !work_presenters.empty?
+    end
+
+    def av_ranges
+      return default_av_ranges if logical_structure.blank? || logical_structure.flat_map(&:nodes).blank?
+      logical_structure.flat_map do |top_structure|
+        top_structure.nodes.map do |node|
+          TopStructure.new(wrap_proxies(node))
+        end
+      end
+    end
+
+    def wrap_proxies(node)
+      if node.proxy.blank?
+        StructureNode.new(
+          id: node.id,
+          label: node.label,
+          nodes: node.nodes.map { |x| wrap_proxies(x) }
+        )
+      else
+        StructureNode.new(
+          id: node.id,
+          label: label(node),
+          nodes: [
+            StructureNode.new(
+              proxy: node.proxy
+            )
+          ]
+        )
+      end
+    end
+
+    def label(structure_node)
+      proxy_id = structure_node.proxy.first
+      file_set_presenter = file_set_presenters.find { |x| x.resource.id == proxy_id }
+      file_set_presenter&.display_content&.label
     end
 
     ##
@@ -119,6 +168,21 @@ class ManifestBuilderV3
       ]
     end
 
+    # Retrieve the child members for the subject resource of the Manifest
+    # @return [Resource]
+    def members
+      @members ||=
+        Wayfinder.for(@resource).members.to_a.select do |member|
+          !current_ability || current_ability.can?(:read, member)
+        end
+    end
+
+    # Retrieve the leaf nodes for the Manifest
+    # @return [FileSet]
+    def leaf_nodes
+      @leaf_nodes ||= members.select { |x| x.instance_of?(FileSet) && leaf_node_mime_type?(x.mime_type) }
+    end
+
     private
 
       ##
@@ -126,6 +190,27 @@ class ManifestBuilderV3
       # @return [ManifestHelper]
       def helper
         @helper ||= ManifestHelper.new
+      end
+
+      ##
+      # Checks a mime_type against an ignore list
+      # @return [TrueClass, FalseClass]
+      def leaf_node_mime_type?(mime_type)
+        ignore_list = [
+          "application/xml",
+          "application/xml; schema=mets",
+          "application/xml; schema=mods",
+          "application/xml; schema=pbcore",
+          "application/json; charset=ISO-8859-1"
+        ]
+        (ignore_list & Array.wrap(mime_type)).empty?
+      end
+
+      ##
+      # Retrieve the TopStructure for the resource manifest
+      # @param [TopStructure]
+      def logical_structure
+        resource.try(:logical_structure) || []
       end
   end
 end
