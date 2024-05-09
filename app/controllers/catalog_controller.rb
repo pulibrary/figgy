@@ -307,7 +307,7 @@ class CatalogController < ApplicationController
 
   def health_report
     @check = @health_report.checks.find { |c| c.name == params[:name] }
-    render "catalog/health_status_problematic_resources"
+    render json: @check.unhealthy_resources.to_json
   end
 
   private

@@ -42,6 +42,7 @@ export default class Initializer {
 
     this.initialize_datatables()
     this.do_confetti()
+    this.initialize_problematic_resources_list()
   }
 
   initialize_timepicker() {
@@ -235,5 +236,42 @@ export default class Initializer {
         Confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
       }, 250);
     }
+  }
+
+  initialize_problematic_resources_list() {
+    $('.problematic-resources').on('hide.bs.collapse', function (event) {
+      // Find related accordion button and change it's text
+      const button = document.querySelectorAll(`[data-target='#${this.id}']`)[0]
+      button.innerText = 'Show Problematic Resources'
+    })
+
+    $('.problematic-resources').on('show.bs.collapse', function (event) {
+      // Find related accordion button and change it's text
+      const button = document.querySelectorAll(`[data-target='#${this.id}']`)[0]
+      button.innerText = 'Hide Problematic Resources'
+    })
+
+    $('.problematic-resources').on('shown.bs.collapse', function (event) {
+      if (event.currentTarget.getAttribute('loaded') === 'true') { return }
+      const element = event.currentTarget.firstChild
+      const src = element.getAttribute('src')
+      fetch(src)
+        .then(function (response) { return response.json() })
+        .then(function (json) {
+          const element = this.firstChild
+          const listElement = element.firstChild
+          this.setAttribute('loaded', true)
+          listElement.removeChild(listElement.firstChild)
+          json.forEach((resource) => {
+            const listItem = document.createElement('li')
+            const link = document.createElement('a')
+            link.text = resource.title
+            link.href = resource.url
+            link.target = '_blank'
+            listItem.appendChild(link)
+            listElement.appendChild(listItem)
+          })
+        }.bind(this))
+    })
   }
 }

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class HealthReport::DerivativeCheck
+  include ActionDispatch::Routing::PolymorphicRoutes
+  include Rails.application.routes.url_helpers
+
   def self.for(resource)
     new(resource: resource)
   end
@@ -46,9 +49,13 @@ class HealthReport::DerivativeCheck
 
   # @return [Array<Hash>] Array of unique parent resource ids, labels, and counts of errored file sets
   def unhealthy_resources
-    unhealthy_file_sets.map do |file_set|
+    # Get failed resources and remove duplicates. We don't want to display
+    # multiple entries for the same resource.
+    resources = unhealthy_file_sets.map do |file_set|
       file_set.decorate.parent
     end.uniq(&:id)
+
+    generate_resources_hash(resources)
   end
 
   def summary
@@ -84,6 +91,16 @@ class HealthReport::DerivativeCheck
         in_process_file_sets
       else
         []
+      end
+    end
+
+    def generate_resources_hash(resources)
+      resources.map do |resource|
+        title = resource.title.first.truncate(40)
+        {
+          title: title,
+          url: polymorphic_path([:file_manager, resource])
+        }
       end
     end
 
