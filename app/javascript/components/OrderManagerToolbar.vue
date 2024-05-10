@@ -8,7 +8,7 @@
       :menu-items="[
         {name: 'All', component: 'All'},
         {name: 'None', component: 'None'},
-        {name: 'Alternate', component: 'Alternate', disabled: true},
+        {name: 'Alternate', component: 'Alternate'},
         {name: 'Inverse', component: 'Inverse'}
       ]"
       @menu-item-clicked="menuSelection($event)"
