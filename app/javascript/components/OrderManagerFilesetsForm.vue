@@ -9,23 +9,24 @@
     >
       <lux-input-text
         id="unitLabel"
-        v-model="unitLabel"
+        :value="unitLabel"
         name="unitLabel"
         label="Label"
         placeholder="e.g., p."
-        @input="updateMultiLabels()"
+        @input="updateUnitLabel($event)"
+        @change="updateUnitLabel($event)"
       />
       <lux-input-text
         id="startNum"
-        v-model="start"
+        :value="start"
         name="startNum"
         label="Starting Numeral"
         placeholder="e.g., 10"
-        @input="updateMultiLabels()"
+        @input="updateStartNum($event)"
       />
       <lux-input-checkbox
         v-if="!isMultiVolume"
-        v-model="bracket"
+        :value="bracket"
         :options="addBracketOpts"
         @change="updateMultiLabels()"
       />
@@ -33,7 +34,7 @@
       <lux-input-select
         v-if="bracket"
         id="bracketLocation"
-        v-model="bracketLocation"
+        :value="bracketLocation"
         name="bracketLocation"
         label="Bracket Location"
         :options="bracketLocationOpts"
@@ -43,29 +44,29 @@
       <lux-input-select
         v-if="!isMultiVolume"
         id="labelMethod"
-        v-model="method"
+        :value="method"
         name="labelMethod"
         label="Labeling Method"
         :options="methodOpts"
-        @change="updateUnitLabel"
+        @change="updateMethod($event)"
       />
 
       <lux-input-select
         id="twoUp"
-        v-model="twoUp"
+        :value="twoUp"
         name="twoUp"
         label="Two Up"
         :options="twoUpOpts"
-        @change="updateMultiLabels()"
+        @change="updateTwoUp($event)"
       />
 
       <lux-input-text
         v-if="twoUp"
         id="twoUpSeparator"
-        v-model="twoUpSeparator"
+        :value="twoUpSeparator"
         name="twoUpSeparator"
         label="Two-Up Separator"
-        @input="updateMultiLabels()"
+        @input="updateTwoUpSeparator($event)"
       />
 
       <div
@@ -74,28 +75,28 @@
       >
         <lux-input-text
           id="frontLabel"
-          v-model="frontLabel"
+          :value="frontLabel"
           name="frontLabel"
           label="Front Label"
           placeholder="(recto)"
-          @input="updateMultiLabels()"
+          @input="updateFrontLabel($event)"
         />
         <lux-input-text
           id="backLabel"
-          v-model="backLabel"
+          :value="backLabel"
           name="backLabel"
           label="Back Label"
           placeholder="(verso)"
-          @input="updateMultiLabels()"
+          @input="updateBackLabel($event)"
         />
         <lux-input-select
           v-if="!isMultiVolume"
           id="startWith"
-          v-model="startWith"
+          :value="startWith"
           name="startWith"
           label="Start With"
           :options="startWithOpts"
-          @change="updateMultiLabels()"
+          @change="updateStartWith($event)"
         />
       </div>
     </form>
@@ -133,8 +134,8 @@ export default {
     return {
       start: '1',
       method: 'paginate',
-      frontLabel: 'r. ',
-      backLabel: 'v. ',
+      frontLabel: 'r.',
+      backLabel: 'v.',
       startsWith: 'front',
       unitLabel: 'p. ',
       bracket: false,
@@ -225,17 +226,51 @@ export default {
   },
   watch: {
     method: function (val) {
-      this.updateUnitLabel()
+      this.overrideUnitLabel()
     }
   },
   methods: {
-    updateUnitLabel () {
+    overrideUnitLabel () {
       // This should be generated with calculate() or watch()
       if (this.method === 'paginate') {
         this.unitLabel = 'p. '
       } else if (this.method === 'foliate') {
         this.unitLabel = 'f. '
       }
+    },
+    updateUnitLabel (event) {
+      const label = event.target.value
+      this.unitLabel = label
+      this.updateMultiLabels()
+    },
+    updateStartNum (event) {
+      const start = event.target.value
+      this.start = start
+      this.updateMultiLabels()
+    },
+    updateMethod (event) {
+      this.method = event
+      this.updateMultiLabels()
+    },
+    updateTwoUp (event) {
+      this.twoUp = event
+      this.updateMultiLabels()
+    },
+    updateTwoUpSeparator (event) {
+      this.twoUpSeparator = event.target.value
+      this.updateMultiLabels()
+    },
+    updateFrontLabel (event) {
+      this.frontLabel = event.target.value
+      this.updateMultiLabels()
+    },
+    updateBackLabel (event) {
+      this.backLabel = event.target.value
+      this.updateMultiLabels()
+    },
+    updateStartWith (event) {
+      this.startsWith = event
+      this.updateMultiLabels()
     },
     labelerOpts () {
       const unitLabel = this.unitLabel

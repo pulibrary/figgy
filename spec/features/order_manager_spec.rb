@@ -36,7 +36,31 @@ RSpec.feature "Order Manager", js: true do
     expect(page).to have_css(".lux-card-selected", text: "Page 1")
     expect(page).to have_css(".lux-card-selected", text: "File Set 2")
 
-    # test generating labels
+    # test generating labels for multiple members
+    find_field('unitLabel').set('p.')
+    find_field('startNum').set('10')
+    # capybara throws error on both of these approaches, saying the element is not clickable at point (1191, 457)
+    # check "#addBrackets"
+    # find("#addBrackets").set(true)
+    expect(page).to have_css(".lux-card-selected", text: "p.10")
+    expect(page).to have_css(".lux-card-selected", text: "p.11")
+    find("#labelMethod option[value='foliate']").select_option
+    expect(page).to have_css(".lux-card-selected", text: "f. 10r.")
+    expect(page).to have_css(".lux-card-selected", text: "f. 10v.")
+    find("#twoUp option[value='true']").select_option
+    expect(page).to have_css(".lux-card-selected", text: "f. 10r./10v.")
+    expect(page).to have_css(".lux-card-selected", text: "f. 11r./11v.")
+    find_field('twoUpSeparator', with: '/').set('-')
+    expect(page).to have_css(".lux-card-selected", text: "f. 10r.-10v.")
+    expect(page).to have_css(".lux-card-selected", text: "f. 11r.-11v.")
+    find_field('frontLabel', with: 'r.').set('(recto)')
+    find_field('backLabel', with: 'v.').set('(verso)')
+    expect(page).to have_css(".lux-card-selected", text: "f. 10(recto)-10(verso)")
+    expect(page).to have_css(".lux-card-selected", text: "f. 11(recto)-11(verso)")
+    # note: startWith has been broken before the vue3 upgrade
+    find("#startWith option[value='back']").select_option
+    expect(page).to have_css(".lux-card-selected", text: "f. 10(verso)-10(recto)")
+    expect(page).to have_css(".lux-card-selected", text: "f. 11(verso)-11(recto)")
 
     # test reorder of members via cut and paste
 
