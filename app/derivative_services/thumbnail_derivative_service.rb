@@ -127,7 +127,7 @@ class ThumbnailDerivativeService
   end
 
   def use
-    [Valkyrie::Vocab::PCDMUse.ThumbnailImage]
+    [::PcdmUse::ThumbnailImage]
   end
 
   def filename

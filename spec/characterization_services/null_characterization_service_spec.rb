@@ -47,7 +47,7 @@ RSpec.describe NullCharacterizationService do
         resource = FactoryBot.create_for_repository(:scanned_resource, files: [pdf_file])
         file_set = resource.decorate.members.first
         pdf_file_metadata = file_set.file_metadata.first
-        pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationFile]
+        pdf_file_metadata.use = [::PcdmUse::PreservationFile]
         file_set.file_metadata = [pdf_file_metadata]
         file_set = adapter.persister.save(resource: file_set)
 

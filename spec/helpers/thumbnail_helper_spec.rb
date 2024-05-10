@@ -34,7 +34,7 @@ RSpec.describe ThumbnailHelper do
 
     context "when given a vector resource" do
       let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
-      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
+      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [::PcdmUse::ThumbnailImage]) }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
       let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
 
@@ -49,7 +49,7 @@ RSpec.describe ThumbnailHelper do
 
     context "when given a fileset with a vector resource parent" do
       let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
-      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
+      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [::PcdmUse::ThumbnailImage]) }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
       let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
 
@@ -80,7 +80,7 @@ RSpec.describe ThumbnailHelper do
 
     context "when encountering an error finding a vector resource derivative" do
       let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
-      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
+      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [::PcdmUse::ThumbnailImage]) }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
       let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
 

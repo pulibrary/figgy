@@ -95,7 +95,7 @@ class IngestIntermediateFileJob < ApplicationJob
     # Generate the use URIs for the intermediate resource
     # @return [Array<RDF::URI>]
     def use
-      [Valkyrie::Vocab::PCDMUse.IntermediateFile]
+      [::PcdmUse::IntermediateFile]
     end
 
     # Accesses the original filename for the file being ingested

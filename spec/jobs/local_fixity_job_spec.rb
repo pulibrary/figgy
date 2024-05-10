@@ -15,7 +15,7 @@ RSpec.describe LocalFixityJob do
 
   let(:file_metadata2) do
     FileMetadata.new(
-      use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
+      use: [::PcdmUse::OriginalFile],
       mime_type: "image/tiff"
     )
   end
@@ -41,7 +41,7 @@ RSpec.describe LocalFixityJob do
     end
 
     context "with a preservation file and an intermediate file" do
-      let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
+      let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", ::PcdmUse::PreservationFile) }
 
       it "creates a local_fixity Event for both files" do
         IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)
@@ -106,7 +106,7 @@ RSpec.describe LocalFixityJob do
     end
 
     context "with a preservation file and an intermediate file and one checksum doesn't match" do
-      let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
+      let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", ::PcdmUse::PreservationFile) }
       before do
         allow(RepairLocalFixityJob).to receive(:perform_later)
       end

@@ -88,7 +88,7 @@ class Preserver
         if file_metadata
           file_metadata.use
         else
-          Valkyrie::Vocab::PCDMUse.OriginalFile
+          ::PcdmUse::OriginalFile
         end
       end
 

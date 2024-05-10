@@ -23,11 +23,11 @@ class IngestableAudioFile
 
   def use
     if preservation_file?
-      Valkyrie::Vocab::PCDMUse.PreservationFile
+      ::PcdmUse::PreservationFile
     elsif intermediate?
-      Valkyrie::Vocab::PCDMUse.IntermediateFile
+      ::PcdmUse::IntermediateFile
     elsif access?
-      Valkyrie::Vocab::PCDMUse.ServiceFile
+      ::PcdmUse::ServiceFile
     end
   end
 

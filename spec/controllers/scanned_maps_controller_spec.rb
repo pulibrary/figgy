@@ -194,7 +194,7 @@ RSpec.describe ScannedMapsController, type: :controller do
       end
     end
     context "when a scanned map has a fileset and a child resource" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff") }
+      let(:file_metadata) { FileMetadata.new(use: [::PcdmUse::OriginalFile], mime_type: "image/tiff") }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, title: "File", file_metadata: [file_metadata]) }
       let(:child_scanned_map) { FactoryBot.create_for_repository(:scanned_map, title: "Child Scanned Map") }
 
@@ -335,7 +335,7 @@ RSpec.describe ScannedMapsController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
 
     context "when an admin and with an image file" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff") }
+      let(:file_metadata) { FileMetadata.new(use: [::PcdmUse::OriginalFile], mime_type: "image/tiff") }
 
       it "sets the record and children variables" do
         child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])

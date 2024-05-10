@@ -2,11 +2,11 @@
 require "rails_helper"
 
 RSpec.describe "catalog/_members_file_set" do
-  let(:original_file) { FileMetadata.new(id: "test-original-file", use: [Valkyrie::Vocab::PCDMUse.OriginalFile]) }
-  let(:derivative_file) { FileMetadata.new(id: "test-derivative-file", use: [Valkyrie::Vocab::PCDMUse.ServiceFile], mime_type: "application/x-mpegURL") }
-  let(:derivative_file_partial) { FileMetadata.new(id: "test-derivative-file-partial", use: [Valkyrie::Vocab::PCDMUse.ServiceFilePartial]) }
-  let(:cloud_derivative_file) { FileMetadata.new(id: "test-cloud-derivative-file", label: "display_raster.tiff", use: [Valkyrie::Vocab::PCDMUse.CloudDerivative], mime_type: "application/x-mpegURL") }
-  let(:thumbnail_file) { FileMetadata.new(id: "test-thumbnail-file", use: [Valkyrie::Vocab::PCDMUse.ThumbnailImage]) }
+  let(:original_file) { FileMetadata.new(id: "test-original-file", use: [::PcdmUse::OriginalFile]) }
+  let(:derivative_file) { FileMetadata.new(id: "test-derivative-file", use: [::PcdmUse::ServiceFile], mime_type: "application/x-mpegURL") }
+  let(:derivative_file_partial) { FileMetadata.new(id: "test-derivative-file-partial", use: [::PcdmUse::ServiceFilePartial]) }
+  let(:cloud_derivative_file) { FileMetadata.new(id: "test-cloud-derivative-file", label: "display_raster.tiff", use: [::PcdmUse::CloudDerivative], mime_type: "application/x-mpegURL") }
+  let(:thumbnail_file) { FileMetadata.new(id: "test-thumbnail-file", use: [::PcdmUse::ThumbnailImage]) }
   let(:file_set) do
     FactoryBot.create_for_repository(:file_set, file_metadata: [original_file, derivative_file, thumbnail_file, derivative_file_partial, cloud_derivative_file])
   end

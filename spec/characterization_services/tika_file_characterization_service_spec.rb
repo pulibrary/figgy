@@ -121,7 +121,7 @@ RSpec.describe TikaFileCharacterizationService do
   context "when a file set contains a preservation file and an intermediate file" do
     let(:tika_output) { tika_shapefile_output }
     it "characterizes both files" do
-      preservation = fixture_file_with_use("files/vector/shapefile.zip", "application/zip", Valkyrie::Vocab::PCDMUse.PreservationFile)
+      preservation = fixture_file_with_use("files/vector/shapefile.zip", "application/zip", ::PcdmUse::PreservationFile)
       resource = FactoryBot.create_for_repository(:simple_resource, files: [preservation])
       file_set = query_service.find_members(resource: resource).first
       IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "vector", "shapefile.zip"), file_set_id: file_set.id)

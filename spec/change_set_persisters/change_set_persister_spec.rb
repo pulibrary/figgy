@@ -272,7 +272,7 @@ RSpec.describe ChangeSetPersister do
       expect(file_metadata_nodes.first.created_at).not_to be nil
       expect(file_metadata_nodes.first.updated_at).not_to be nil
 
-      original_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
+      original_file_node = file_metadata_nodes.find { |x| x.use == [::PcdmUse::OriginalFile] }
 
       expect(original_file_node.file_identifiers.length).to eq 1
       expect(original_file_node.width).to eq ["200"]
@@ -285,14 +285,14 @@ RSpec.describe ChangeSetPersister do
       original_file = Valkyrie::StorageAdapter.find_by(id: original_file_node.file_identifiers.first)
       expect(original_file).to respond_to(:read)
 
-      derivative_file_node = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] }
+      derivative_file_node = file_metadata_nodes.find { |x| x.use == [::PcdmUse::ServiceFile] }
 
       expect(derivative_file_node).not_to be_blank
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative_file_node.file_identifiers.first)
       expect(derivative_file).not_to be_blank
       expect(derivative_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["pyramidal_derivative_path"]).to_s)
 
-      pyramidal_derivative = file_metadata_nodes.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.ServiceFile] && x.mime_type == ["image/tiff"] }
+      pyramidal_derivative = file_metadata_nodes.find { |x| x.use == [::PcdmUse::ServiceFile] && x.mime_type == ["image/tiff"] }
       expect(pyramidal_derivative).not_to be_blank
 
       expect(query_service.find_all.to_a.map(&:class)).to contain_exactly ScannedResource, FileSet, Event
@@ -352,7 +352,7 @@ RSpec.describe ChangeSetPersister do
         change_set = change_set_class.new(resource, characterize: true)
         change_set.files = [file]
 
-        attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationFile] }
+        attributes = { id: SecureRandom.uuid, use: [::PcdmUse::OriginalFile, ::PcdmUse::PreservationFile] }
         file_metadata_node = FileMetadata.for(file: file).new(attributes)
         allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 
@@ -429,7 +429,7 @@ RSpec.describe ChangeSetPersister do
       change_set.files = [file1]
       output = change_set_persister.save(change_set: change_set)
       file_set = query_service.find_members(resource: output).first
-      file_node = file_set.file_metadata.find { |x| x.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
+      file_node = file_set.file_metadata.find { |x| x.use == [::PcdmUse::OriginalFile] }
       file = storage_adapter.find_by(id: file_node.file_identifiers.first)
       expect(file.size).to eq 196_882
     end
@@ -1314,7 +1314,7 @@ RSpec.describe ChangeSetPersister do
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
-        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [::PcdmUse::PreservedMetadata]
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq true
         # Verify we can convert from the JSON back to an object.
         attributes = JSON.parse(File.read(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json")))
@@ -1326,9 +1326,9 @@ RSpec.describe ChangeSetPersister do
         file_set = Wayfinder.for(output).members.first
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "example-#{file_set.original_file.id}.tif"))).to eq true
         file_set_preservation = Wayfinder.for(file_set).preservation_object
-        expect(file_set_preservation.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(file_set_preservation.metadata_node.use).to eq [::PcdmUse::PreservedMetadata]
         expect(file_set_preservation.binary_nodes.length).to eq 1
-        expect(file_set_preservation.binary_nodes[0].use).to eq [Valkyrie::Vocab::PCDMUse.PreservationCopy]
+        expect(file_set_preservation.binary_nodes[0].use).to eq [::PcdmUse::PreservationCopy]
       end
     end
     context "when preserving a parent" do
@@ -1341,7 +1341,7 @@ RSpec.describe ChangeSetPersister do
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
-        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [::PcdmUse::PreservedMetadata]
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq true
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
       end
@@ -1643,7 +1643,7 @@ RSpec.describe ChangeSetPersister do
         change_set.validate(state: "complete")
 
         output = change_set_persister.save(change_set: change_set)
-        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [Valkyrie::Vocab::PCDMUse.PreservedMetadata]
+        expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [::PcdmUse::PreservedMetadata]
         expect(File.exist?(disk_preservation_path.join(parent.id.to_s, "#{parent.id}.json"))).to eq true
         expect(File.exist?(disk_preservation_path.join(parent.id.to_s, "data", parent.member_ids.first.to_s, "#{parent.member_ids.first}.json"))).to eq true
         file_set = Wayfinder.for(volume).members.first

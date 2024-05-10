@@ -11,7 +11,7 @@ describe FileMetadata do
   let(:label) { "Test label" }
   let(:original_filename) { "test_file.txt" }
   let(:mime_type) { "application/octet-stream" }
-  let(:use) { Valkyrie::Vocab::PCDMUse.OriginalFile }
+  let(:use) { ::PcdmUse::OriginalFile }
 
   describe ".for" do
     subject(:file_metadata) { described_class.for(file: file) }
@@ -21,7 +21,7 @@ describe FileMetadata do
       expect(file_metadata.label).to eq [file.original_filename]
       expect(file_metadata.original_filename).to eq [file.original_filename]
       expect(file_metadata.mime_type).to eq [file.content_type]
-      expect(file_metadata.use).to eq [Valkyrie::Vocab::PCDMUse.OriginalFile]
+      expect(file_metadata.use).to eq [::PcdmUse::OriginalFile]
       expect(file_metadata.created_at).to be_a Time
       expect(file_metadata.updated_at).to be_a Time
       expect(file_metadata.id).to be_a Valkyrie::ID
@@ -29,7 +29,7 @@ describe FileMetadata do
   end
 
   describe "#derivative?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.ServiceFile }
+    let(:use) { ::PcdmUse::ServiceFile }
 
     it "determines if the FileMetadata is for a derivative file" do
       expect(file_metadata.derivative?).to be true
@@ -37,7 +37,7 @@ describe FileMetadata do
   end
 
   describe "#derivative_partial?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.ServiceFilePartial }
+    let(:use) { ::PcdmUse::ServiceFilePartial }
 
     it "determines if the FileMetadata is for a part of derivative file" do
       expect(file_metadata.derivative_partial?).to be true
@@ -45,7 +45,7 @@ describe FileMetadata do
   end
 
   describe "#original_file?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.OriginalFile }
+    let(:use) { ::PcdmUse::OriginalFile }
 
     it "determines if the FileMetadata is for an ingested file" do
       expect(file_metadata.original_file?).to be true
@@ -57,7 +57,7 @@ describe FileMetadata do
   end
 
   describe "thumbnail_file?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
+    let(:use) { ::PcdmUse::ThumbnailImage }
 
     it "determines if the FileMetadata is for a thumbnail file" do
       expect(file_metadata.thumbnail_file?).to be true
@@ -70,7 +70,7 @@ describe FileMetadata do
 
   describe "preservation_file?" do
     context "when it has the deprecated use value" do
-      let(:use) { Valkyrie::Vocab::PCDMUse.PreservationMasterFile }
+      let(:use) { ::PcdmUse::PreservationMasterFile }
 
       it "returns true" do
         expect(file_metadata.preservation_file?).to be true
@@ -78,7 +78,7 @@ describe FileMetadata do
     end
 
     context "when it has the new preservation use value" do
-      let(:use) { Valkyrie::Vocab::PCDMUse.PreservationFile }
+      let(:use) { ::PcdmUse::PreservationFile }
 
       it "returns true" do
         expect(file_metadata.preservation_file?).to be true
@@ -97,7 +97,7 @@ describe FileMetadata do
   end
 
   describe "preserved_metadata?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.PreservedMetadata }
+    let(:use) { ::PcdmUse::PreservedMetadata }
 
     it "determines if the FileMetadata is for a preservation (BagIt) metadata file" do
       expect(file_metadata.preserved_metadata?).to be true
@@ -105,7 +105,7 @@ describe FileMetadata do
   end
 
   describe "preservation_copy?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.PreservationCopy }
+    let(:use) { ::PcdmUse::PreservationCopy }
 
     it "determines if the FileMetadata if for a copy of a binary for preservation in a (BagIt)" do
       expect(file_metadata.preservation_copy?).to be true
@@ -117,7 +117,7 @@ describe FileMetadata do
   end
 
   describe "intermediate_file?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.IntermediateFile }
+    let(:use) { ::PcdmUse::IntermediateFile }
 
     it "determines if the FileMetadata is for an intermediate file" do
       expect(file_metadata.intermediate_file?).to be true
@@ -129,7 +129,7 @@ describe FileMetadata do
   end
 
   describe "#cloud_derivative?" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.CloudDerivative }
+    let(:use) { ::PcdmUse::CloudDerivative }
 
     it "determines if the FileMetadata is for a derivative file" do
       expect(file_metadata.cloud_derivative?).to be true
@@ -141,7 +141,7 @@ describe FileMetadata do
   end
 
   describe "#cloud_uri" do
-    let(:use) { Valkyrie::Vocab::PCDMUse.CloudDerivative }
+    let(:use) { ::PcdmUse::CloudDerivative }
 
     context "with a file stored in s3" do
       it "returns the uri" do

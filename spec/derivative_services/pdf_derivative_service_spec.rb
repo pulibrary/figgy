@@ -38,8 +38,8 @@ RSpec.describe PDFDerivativeService do
 
     context "when given a pdf preservation file" do
       it "is valid" do
-        pdf_file_metadata = valid_resource.file_metadata.find { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }
-        pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationFile]
+        pdf_file_metadata = valid_resource.file_metadata.find { |f| f.use == [::PcdmUse::OriginalFile] }
+        pdf_file_metadata.use = [::PcdmUse::PreservationFile]
         valid_resource.file_metadata = [pdf_file_metadata]
         adapter.persister.save(resource: valid_resource)
 

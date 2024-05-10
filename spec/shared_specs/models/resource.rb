@@ -29,7 +29,7 @@ RSpec.shared_examples "a Resource" do
   end
 
   describe "#pdf_file" do
-    let(:file_metadata) { FileMetadata.new mime_type: ["application/pdf"], use: [Valkyrie::Vocab::PCDMUse.OriginalFile] }
+    let(:file_metadata) { FileMetadata.new mime_type: ["application/pdf"], use: [::PcdmUse::OriginalFile] }
 
     it "retrieves only PDF FileSets" do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

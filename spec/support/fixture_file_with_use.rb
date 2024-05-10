@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module FixtureFileWithUse
-  def fixture_file_with_use(file, mime_type = nil, use = Valkyrie::Vocab::PCDMUse.OriginalFile)
+  def fixture_file_with_use(file, mime_type = nil, use = ::PcdmUse::OriginalFile)
     file_path = Rails.root.join("spec", "fixtures", file)
     file = Rack::Test::UploadedFile.new(file_path, mime_type)
     original_filename = File.basename(file_path)

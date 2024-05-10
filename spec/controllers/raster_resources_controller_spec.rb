@@ -138,7 +138,7 @@ RSpec.describe RasterResourcesController, type: :controller do
       end
     end
     context "when a raster resource has a fileset and child resources" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff; gdal-format=GTiff") }
+      let(:file_metadata) { FileMetadata.new(use: [::PcdmUse::OriginalFile], mime_type: "image/tiff; gdal-format=GTiff") }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, title: "File", file_metadata: [file_metadata]) }
       let(:child_raster_resource) { FactoryBot.create_for_repository(:raster_resource, title: "Child Raster") }
       let(:child_vector_resource) { FactoryBot.create_for_repository(:vector_resource, title: "Child Vector") }
@@ -196,7 +196,7 @@ RSpec.describe RasterResourcesController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
 
     context "when an admin and with a geotiff" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: "image/tiff; gdal-format=GTiff") }
+      let(:file_metadata) { FileMetadata.new(use: [::PcdmUse::OriginalFile], mime_type: "image/tiff; gdal-format=GTiff") }
 
       it "sets the record and children variables" do
         child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])

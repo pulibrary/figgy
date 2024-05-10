@@ -34,7 +34,7 @@ RSpec.describe Numismatics::Coin do
   end
 
   describe "#pdf_file" do
-    let(:file_metadata) { FileMetadata.new mime_type: ["application/pdf"], use: [Valkyrie::Vocab::PCDMUse.OriginalFile] }
+    let(:file_metadata) { FileMetadata.new mime_type: ["application/pdf"], use: [::PcdmUse::OriginalFile] }
     it "retrieves only PDF FileSets" do
       adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)
       resource = adapter.persister.save(resource: described_class.new(file_metadata: [file_metadata], state: "complete"))

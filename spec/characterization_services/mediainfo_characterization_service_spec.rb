@@ -11,7 +11,7 @@ RSpec.describe MediainfoCharacterizationService do
   let(:query_service) { adapter.query_service }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:resource) do
-    attributes = { id: SecureRandom.uuid, use: [Valkyrie::Vocab::PCDMUse.OriginalFile, Valkyrie::Vocab::PCDMUse.PreservationFile] }
+    attributes = { id: SecureRandom.uuid, use: [::PcdmUse::OriginalFile, ::PcdmUse::PreservationFile] }
     file_metadata_node = FileMetadata.for(file: file).new(attributes)
     allow(FileMetadata).to receive(:for).and_return(file_metadata_node)
 
@@ -90,7 +90,7 @@ RSpec.describe MediainfoCharacterizationService do
 
     context "when a file set contains a preservation audio file and an intermediate audio file" do
       it "characterizes both files" do
-        preservation = fixture_file_with_use("files/audio_file.wav", "audio/x-wav", Valkyrie::Vocab::PCDMUse.PreservationFile)
+        preservation = fixture_file_with_use("files/audio_file.wav", "audio/x-wav", ::PcdmUse::PreservationFile)
         recording = FactoryBot.create_for_repository(:recording, files: [preservation])
         file_set = query_service.find_members(resource: recording).first
         IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "audio_file.wav"), file_set_id: file_set.id)

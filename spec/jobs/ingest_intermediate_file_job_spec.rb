@@ -22,11 +22,11 @@ RSpec.describe IngestIntermediateFileJob do
 
       expect(updated_file_set.file_metadata).not_to be_empty
 
-      intermed_file_metadata = updated_file_set.file_metadata.find { |metadata| metadata.use.include? Valkyrie::Vocab::PCDMUse.IntermediateFile }
+      intermed_file_metadata = updated_file_set.file_metadata.find { |metadata| metadata.use.include? ::PcdmUse::IntermediateFile }
       expect(intermed_file_metadata).not_to be_nil
 
       expect(intermed_file_metadata.original_filename).to include "abstract.tiff"
-      expect(intermed_file_metadata.use).to eq [Valkyrie::Vocab::PCDMUse.IntermediateFile]
+      expect(intermed_file_metadata.use).to eq [::PcdmUse::IntermediateFile]
       expect(intermed_file_metadata.label).to include "abstract.tiff"
     end
 
@@ -38,7 +38,7 @@ RSpec.describe IngestIntermediateFileJob do
       before do
         allow(second_file).to receive(:original_filename).and_return("example.tif")
         allow(second_file).to receive(:content_type).and_return("image/tiff")
-        allow(second_file).to receive(:use).and_return(Valkyrie::Vocab::PCDMUse.ServiceFile)
+        allow(second_file).to receive(:use).and_return(::PcdmUse::ServiceFile)
         allow(second_file).to receive(:path).and_return(
           Rails.root.join("spec", "fixtures", "files", "example.tif")
         )

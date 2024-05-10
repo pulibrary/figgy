@@ -133,7 +133,7 @@ RSpec.describe VectorResourcesController, type: :controller do
       end
     end
     context "when a vector resource has a fileset and a child resource" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/zip; ogr-format="ESRI Shapefile"') }
+      let(:file_metadata) { FileMetadata.new(use: [::PcdmUse::OriginalFile], mime_type: 'application/zip; ogr-format="ESRI Shapefile"') }
       let(:file_set) { FactoryBot.create_for_repository(:file_set, title: "File", file_metadata: [file_metadata]) }
       let(:child_vector_resource) { FactoryBot.create_for_repository(:vector_resource, title: "Child Vector") }
 
@@ -191,7 +191,7 @@ RSpec.describe VectorResourcesController, type: :controller do
     let(:user) { FactoryBot.create(:admin) }
 
     context "when an admin and with a shapefile" do
-      let(:file_metadata) { FileMetadata.new(use: [Valkyrie::Vocab::PCDMUse.OriginalFile], mime_type: 'application/zip; ogr-format="ESRI Shapefile"') }
+      let(:file_metadata) { FileMetadata.new(use: [::PcdmUse::OriginalFile], mime_type: 'application/zip; ogr-format="ESRI Shapefile"') }
 
       it "sets the record and children variables" do
         child = FactoryBot.create_for_repository(:file_set, file_metadata: [file_metadata])

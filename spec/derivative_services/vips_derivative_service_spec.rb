@@ -5,7 +5,7 @@ require "valkyrie/derivatives/specs/shared_specs"
 RSpec.describe VIPSDerivativeService do
   it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
-  let(:thumbnail) { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
+  let(:thumbnail) { ::PcdmUse::ThumbnailImage }
   let(:derivative_service) do
     VIPSDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
@@ -98,7 +98,7 @@ RSpec.describe VIPSDerivativeService do
     before do
       allow(intermediate_file).to receive(:original_filename).and_return("00000001.tif")
       allow(intermediate_file).to receive(:content_type).and_return("image/tiff")
-      allow(intermediate_file).to receive(:use).and_return(Valkyrie::Vocab::PCDMUse.IntermediateFile)
+      allow(intermediate_file).to receive(:use).and_return(::PcdmUse::IntermediateFile)
       allow(intermediate_file).to receive(:path).and_return(
         Rails.root.join("spec", "fixtures", "files", "abstract.tiff")
       )

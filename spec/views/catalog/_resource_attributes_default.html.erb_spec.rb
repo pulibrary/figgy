@@ -68,7 +68,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
         holding_location: RDF::URI("https://bibdata.princeton.edu/locations/delivery_locations/1")
       )
     end
-    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: Valkyrie::Vocab::PCDMUse.OriginalFile }) }
+    let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: { use: ::PcdmUse::OriginalFile }) }
     let(:original_file) { instance_double FileMetadata }
     let(:document) { Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: scanned_resource) }
     let(:collection) { FactoryBot.create_for_repository(:collection) }

@@ -47,7 +47,7 @@ RSpec.describe VectorResourceDerivativeService do
       cloud_vector_file_set = resource.file_metadata.find(&:cloud_derivative?)
       cloud_vector_file = Valkyrie::StorageAdapter.find_by(id: cloud_vector_file_set.file_identifiers.first)
 
-      expect(cloud_vector_file_set.use).to eq([Valkyrie::Vocab::PCDMUse.CloudDerivative])
+      expect(cloud_vector_file_set.use).to eq([::PcdmUse::CloudDerivative])
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
       expect(cloud_vector_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)

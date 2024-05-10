@@ -16,7 +16,7 @@ describe Preserver::Importer do
   end
   let(:persisted_file_set) do
     file_set.read_groups = []
-    file_set.primary_file.use = [Valkyrie::Vocab::PCDMUse.IntermediateFile]
+    file_set.primary_file.use = [::PcdmUse::IntermediateFile]
     change_set_persister.metadata_adapter.persister.save(resource: file_set)
   end
   let(:preservation_object) do
@@ -62,7 +62,7 @@ describe Preserver::Importer do
       )
 
       expect(imported).to be_a FileSet
-      expect(imported.primary_file.use).to eq [Valkyrie::Vocab::PCDMUse.IntermediateFile]
+      expect(imported.primary_file.use).to eq [::PcdmUse::IntermediateFile]
       expect(imported.optimistic_lock_token).not_to be_empty
       expect(imported.optimistic_lock_token.first).to be_a Valkyrie::Persistence::OptimisticLockToken
       imported_file_metadata = imported.file_metadata
@@ -125,7 +125,7 @@ describe Preserver::Importer do
         expect(imported.optimistic_lock_token.first).to be_a Valkyrie::Persistence::OptimisticLockToken
         imported_file_metadata = imported.file_metadata
         expect(imported_file_metadata).not_to be_empty
-        expect(imported.primary_file.use).to eq [Valkyrie::Vocab::PCDMUse.OriginalFile]
+        expect(imported.primary_file.use).to eq [::PcdmUse::OriginalFile]
         expect(imported.title).to be_empty
       end
     end

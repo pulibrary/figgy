@@ -51,7 +51,7 @@ RSpec.describe RasterResourceDerivativeService do
       cloud_raster_file_set = resource.file_metadata.find(&:cloud_derivative?)
       cloud_raster_file = Valkyrie::StorageAdapter.find_by(id: cloud_raster_file_set.file_identifiers.first)
 
-      expect(cloud_raster_file_set.use).to eq([Valkyrie::Vocab::PCDMUse.CloudDerivative])
+      expect(cloud_raster_file_set.use).to eq([::PcdmUse::CloudDerivative])
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
       expect(cloud_raster_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
@@ -141,8 +141,8 @@ RSpec.describe RasterResourceDerivativeService do
       raster_resource
       derivative_service.new(id: Wayfinder.for(raster_resource).members.first.id).create_derivatives
       file_set = Wayfinder.for(raster_resource).members.first
-      cloud_derivatives = file_set.file_metadata.find_all { |f| f.use == [Valkyrie::Vocab::PCDMUse.CloudDerivative] }
-      thumbnails = file_set.file_metadata.find_all { |f| f.use == [Valkyrie::Vocab::PCDMUse.ThumbnailImage] }
+      cloud_derivatives = file_set.file_metadata.find_all { |f| f.use == [::PcdmUse::CloudDerivative] }
+      thumbnails = file_set.file_metadata.find_all { |f| f.use == [::PcdmUse::ThumbnailImage] }
       expect(cloud_derivatives.count).to eq 1
       expect(thumbnails.count).to eq 1
     end

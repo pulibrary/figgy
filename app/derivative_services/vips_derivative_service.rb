@@ -155,7 +155,7 @@ class VIPSDerivativeService
   end
 
   def use
-    [Valkyrie::Vocab::PCDMUse.ServiceFile]
+    [::PcdmUse::ServiceFile]
   end
 
   def filename
