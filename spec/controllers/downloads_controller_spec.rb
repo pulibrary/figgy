@@ -302,7 +302,7 @@ RSpec.describe DownloadsController do
       let(:vector_file_metadata) do
         FileMetadata.new(
           id: Valkyrie::ID.new(vector_file_id),
-          use: [Valkyrie::Vocab::PCDMUse.OriginalFile],
+          use: [::PcdmUse::OriginalFile],
           mime_type: 'application/zip; ogr-format="ESRI Shapefile"'
         )
       end

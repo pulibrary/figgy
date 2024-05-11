@@ -50,9 +50,9 @@ RSpec.describe FileSetDecorator do
 
   describe "fixity" do
     let(:created_at) { "2023-09-25T17:33:35.013Z" }
-    let(:good_file) { FileMetadata.new(label: "good.jp2", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.PreservationFile) }
-    let(:bad_file) { FileMetadata.new(label: "bad.tif", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.IntermediateFile) }
-    let(:derivative_file) { FileMetadata.new(label: "derivative.tif", id: SecureRandom.uuid, use: Valkyrie::Vocab::PCDMUse.ServiceFile) }
+    let(:good_file) { FileMetadata.new(label: "good.jp2", id: SecureRandom.uuid, use: ::PcdmUse::PreservationFile) }
+    let(:bad_file) { FileMetadata.new(label: "bad.tif", id: SecureRandom.uuid, use: ::PcdmUse::IntermediateFile) }
+    let(:derivative_file) { FileMetadata.new(label: "derivative.tif", id: SecureRandom.uuid, use: ::PcdmUse::ServiceFile) }
     let(:good_file_pres) { FileMetadata.new(preservation_copy_of_id: good_file.id, id: SecureRandom.uuid) }
     let(:bad_file_pres) { FileMetadata.new(preservation_copy_of_id: bad_file.id, id: SecureRandom.uuid) }
     let(:cloud_good_event) { FactoryBot.create_for_repository(:cloud_fixity_event, created_at: created_at, child_id: good_file_pres.id, status: "SUCCESS", current: true) }

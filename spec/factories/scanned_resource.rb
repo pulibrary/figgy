@@ -45,7 +45,7 @@ FactoryBot.define do
             file_path: Rails.root.join("spec", "fixtures", "files", "city.mp4"),
             mime_type: "video/mp4",
             original_filename: "city.mp4",
-            use: Valkyrie::Vocab::PCDMUse.OriginalFile
+            use: ::PcdmUse::OriginalFile
           )
         ]
       end
@@ -58,7 +58,7 @@ FactoryBot.define do
             file_path: Rails.root.join("spec", "fixtures", "files", "city.mp4"),
             mime_type: "video/mp4",
             original_filename: "city.mp4",
-            use: Valkyrie::Vocab::PCDMUse.OriginalFile,
+            use: ::PcdmUse::OriginalFile,
             container_attributes: {
               captions_required: false
             }
@@ -74,14 +74,14 @@ FactoryBot.define do
             file_path: Rails.root.join("spec", "fixtures", "files", "city.mp4"),
             mime_type: "video/mp4",
             original_filename: "city.mp4",
-            use: Valkyrie::Vocab::PCDMUse.OriginalFile,
+            use: ::PcdmUse::OriginalFile,
             container_attributes: {
               files: [
                 IngestableFile.new(
                   file_path: Rails.root.join("spec", "fixtures", "files", "caption.vtt"),
                   mime_type: "text/vtt",
                   original_filename: "caption.vtt",
-                  use: Valkyrie::Vocab::PCDMUse.Caption,
+                  use: ::PcdmUse::Caption,
                   node_attributes: {
                     caption_language: "eng",
                     original_language_caption: true
@@ -91,7 +91,7 @@ FactoryBot.define do
                   file_path: Rails.root.join("spec", "fixtures", "files", "caption.vtt"),
                   mime_type: "text/vtt",
                   original_filename: "caption.vtt",
-                  use: Valkyrie::Vocab::PCDMUse.Caption,
+                  use: ::PcdmUse::Caption,
                   node_attributes: {
                     caption_language: "und",
                     original_language_caption: false
@@ -140,7 +140,7 @@ FactoryBot.define do
               file_path: Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag", "data", "32101047382401_1_pm.wav"),
               mime_type: "audio/x-wav",
               original_filename: "32101047382401_1_pm.wav",
-              use: Valkyrie::Vocab::PCDMUse.PreservationFile
+              use: ::PcdmUse::PreservationFile
             )
           ]
         end

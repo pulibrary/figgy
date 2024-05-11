@@ -78,7 +78,7 @@ RSpec.describe ImagemagickCharacterizationService do
 
   context "when a file set contains a preservation file and an intermediate file" do
     it "characterizes both files" do
-      preservation = fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile)
+      preservation = fixture_file_with_use("files/example.tif", "image/tiff", ::PcdmUse::PreservationFile)
       resource = FactoryBot.create_for_repository(:scanned_resource, files: [preservation])
       file_set = query_service.find_members(resource: resource).first
       IngestIntermediateFileJob.perform_now(file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"), file_set_id: file_set.id)

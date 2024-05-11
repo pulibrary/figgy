@@ -13,31 +13,31 @@ FactoryBot.define do
     end
 
     factory :original_file_file_set do
-      file_metadata { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+      file_metadata { FileMetadata.new(use: ::PcdmUse::OriginalFile) }
     end
 
     factory :original_image_file_set do
-      file_metadata { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "image/tiff") }
+      file_metadata { FileMetadata.new(use: ::PcdmUse::OriginalFile, mime_type: "image/tiff") }
     end
 
     factory :geo_metadata_file_set do
-      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_metadata_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_metadata_format).all.first.value, use: ::PcdmUse::OriginalFile) }
     end
 
     factory :zip_file_set do
-      file_metadata { FileMetadata.new(mime_type: "application/zip", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: SecureRandom.uuid) }
+      file_metadata { FileMetadata.new(mime_type: "application/zip", use: ::PcdmUse::OriginalFile, id: SecureRandom.uuid) }
     end
 
     factory :geo_image_file_set do
-      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_image_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_image_format).all.first.value, use: ::PcdmUse::OriginalFile) }
     end
 
     factory :geo_raster_file_set do
-      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_raster_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_raster_format).all.first.value, use: ::PcdmUse::OriginalFile) }
     end
 
     factory :geo_vector_file_set do
-      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_vector_format).all.first.value, use: Valkyrie::Vocab::PCDMUse.OriginalFile) }
+      file_metadata { FileMetadata.new(mime_type: ControlledVocabulary.for(:geo_vector_format).all.first.value, use: ::PcdmUse::OriginalFile) }
     end
 
     factory :geo_raster_cloud_file do
@@ -46,26 +46,26 @@ FactoryBot.define do
           FileMetadata.new(
             id: Valkyrie::ID.new(SecureRandom.uuid),
             mime_type: "image/tiff; gdal-format=GTiff",
-            use: Valkyrie::Vocab::PCDMUse.CloudDerivative,
+            use: ::PcdmUse::CloudDerivative,
             original_filename: "display_raster.tif",
             file_identifiers: ["cloud-geo-derivatives-shrine://#{Figgy.config['cloud_geo_bucket']}/example.tif"]
           ),
-          FileMetadata.new(id: Valkyrie::ID.new(SecureRandom.uuid), mime_type: "image/tiff; gdal-format=GTiff", use: Valkyrie::Vocab::PCDMUse.OriginalFile)
+          FileMetadata.new(id: Valkyrie::ID.new(SecureRandom.uuid), mime_type: "image/tiff; gdal-format=GTiff", use: ::PcdmUse::OriginalFile)
         ]
       end
       service_targets { "tiles" }
     end
 
     factory :intermediate_image_file_set do
-      file_metadata { FileMetadata.new(mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.IntermediateFile) }
+      file_metadata { FileMetadata.new(mime_type: "image/tiff", use: ::PcdmUse::IntermediateFile) }
     end
 
     factory :audio_file_set do
       file_metadata do
         [
-          FileMetadata.new(mime_type: "audio/x-wav", use: Valkyrie::Vocab::PCDMUse.PreservationFile, id: "original"),
-          FileMetadata.new(mime_type: "audio/mp3", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
-          FileMetadata.new(mime_type: "audio/x-wav", use: Valkyrie::Vocab::PCDMUse.IntermediateFile, id: "intermediate")
+          FileMetadata.new(mime_type: "audio/x-wav", use: ::PcdmUse::PreservationFile, id: "original"),
+          FileMetadata.new(mime_type: "audio/mp3", use: ::PcdmUse::ServiceFile, id: "derivative"),
+          FileMetadata.new(mime_type: "audio/x-wav", use: ::PcdmUse::IntermediateFile, id: "intermediate")
         ]
       end
     end
@@ -73,9 +73,9 @@ FactoryBot.define do
     factory :video_file_set do
       file_metadata do
         [
-          FileMetadata.new(mime_type: "video/mp4", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: "original"),
-          FileMetadata.new(mime_type: "application/x-mpegURL", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
-          FileMetadata.new(mime_type: "video/MP2T", use: Valkyrie::Vocab::PCDMUse.ServiceFilePartial, id: "derivative-partial")
+          FileMetadata.new(mime_type: "video/mp4", use: ::PcdmUse::OriginalFile, id: "original"),
+          FileMetadata.new(mime_type: "application/x-mpegURL", use: ::PcdmUse::ServiceFile, id: "derivative"),
+          FileMetadata.new(mime_type: "video/MP2T", use: ::PcdmUse::ServiceFilePartial, id: "derivative-partial")
         ]
       end
     end
@@ -83,10 +83,10 @@ FactoryBot.define do
     factory :video_file_set_with_caption do
       file_metadata do
         [
-          FileMetadata.new(mime_type: "video/mp4", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: "original"),
-          FileMetadata.new(mime_type: "application/x-mpegURL", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
-          FileMetadata.new(mime_type: "video/MP2T", use: Valkyrie::Vocab::PCDMUse.ServiceFilePartial, id: "derivative-partial"),
-          FileMetadata.new(mime_type: "text/vtt", use: Valkyrie::Vocab::PCDMUse.Caption, id: "caption", original_language_caption: true, file_identifiers: [Valkyrie::ID.new("storageid")])
+          FileMetadata.new(mime_type: "video/mp4", use: ::PcdmUse::OriginalFile, id: "original"),
+          FileMetadata.new(mime_type: "application/x-mpegURL", use: ::PcdmUse::ServiceFile, id: "derivative"),
+          FileMetadata.new(mime_type: "video/MP2T", use: ::PcdmUse::ServiceFilePartial, id: "derivative-partial"),
+          FileMetadata.new(mime_type: "text/vtt", use: ::PcdmUse::Caption, id: "caption", original_language_caption: true, file_identifiers: [Valkyrie::ID.new("storageid")])
         ]
       end
     end
@@ -94,10 +94,10 @@ FactoryBot.define do
     factory :video_file_set_with_other_language_caption do
       file_metadata do
         [
-          FileMetadata.new(mime_type: "video/mp4", use: Valkyrie::Vocab::PCDMUse.OriginalFile, id: "original"),
-          FileMetadata.new(mime_type: "application/x-mpegURL", use: Valkyrie::Vocab::PCDMUse.ServiceFile, id: "derivative"),
-          FileMetadata.new(mime_type: "video/MP2T", use: Valkyrie::Vocab::PCDMUse.ServiceFilePartial, id: "derivative-partial"),
-          FileMetadata.new(mime_type: "text/vtt", use: Valkyrie::Vocab::PCDMUse.Caption, id: "caption", file_identifiers: [Valkyrie::ID.new("storageid")])
+          FileMetadata.new(mime_type: "video/mp4", use: ::PcdmUse::OriginalFile, id: "original"),
+          FileMetadata.new(mime_type: "application/x-mpegURL", use: ::PcdmUse::ServiceFile, id: "derivative"),
+          FileMetadata.new(mime_type: "video/MP2T", use: ::PcdmUse::ServiceFilePartial, id: "derivative-partial"),
+          FileMetadata.new(mime_type: "text/vtt", use: ::PcdmUse::Caption, id: "caption", file_identifiers: [Valkyrie::ID.new("storageid")])
         ]
       end
     end
@@ -105,8 +105,8 @@ FactoryBot.define do
     factory :pdf_file_set do
       file_metadata do
         [
-          FileMetadata.new(mime_type: "application/pdf", use: Valkyrie::Vocab::PCDMUse.PreservationFile, id: "original"),
-          FileMetadata.new(mime_type: "image/tiff", use: Valkyrie::Vocab::PCDMUse.IntermediateFile, id: "intermediate")
+          FileMetadata.new(mime_type: "application/pdf", use: ::PcdmUse::PreservationFile, id: "original"),
+          FileMetadata.new(mime_type: "image/tiff", use: ::PcdmUse::IntermediateFile, id: "intermediate")
         ]
       end
     end

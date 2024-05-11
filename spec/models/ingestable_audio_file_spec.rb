@@ -21,7 +21,7 @@ RSpec.describe IngestableAudioFile do
     end
 
     describe "#use" do
-      it { expect(audio_file.use).to eq Valkyrie::Vocab::PCDMUse.PreservationFile }
+      it { expect(audio_file.use).to eq ::PcdmUse::PreservationFile }
     end
 
     describe "#preservation_file?" do
@@ -77,7 +77,7 @@ RSpec.describe IngestableAudioFile do
     end
 
     describe "#use" do
-      it { expect(audio_file.use).to eq Valkyrie::Vocab::PCDMUse.IntermediateFile }
+      it { expect(audio_file.use).to eq ::PcdmUse::IntermediateFile }
     end
 
     describe "#preservation_file?" do
@@ -112,7 +112,7 @@ RSpec.describe IngestableAudioFile do
     end
 
     describe "#use" do
-      it { expect(audio_file.use).to eq Valkyrie::Vocab::PCDMUse.ServiceFile }
+      it { expect(audio_file.use).to eq ::PcdmUse::ServiceFile }
     end
 
     describe "#preservation_file?" do

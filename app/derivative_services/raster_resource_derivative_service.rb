@@ -133,11 +133,11 @@ class RasterResourceDerivativeService
   end
 
   def use_thumbnail
-    [Valkyrie::Vocab::PCDMUse.ThumbnailImage]
+    [::PcdmUse::ThumbnailImage]
   end
 
   def use_cloud_derivative
-    [Valkyrie::Vocab::PCDMUse.CloudDerivative]
+    [::PcdmUse::CloudDerivative]
   end
 
   def valid?

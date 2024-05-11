@@ -242,7 +242,7 @@ RSpec.describe ManifestBuilder do
           FileMetadata.new(
             id: SecureRandom.uuid,
             mime_type: "application/pdf",
-            use: Valkyrie::Vocab::PCDMUse.OriginalFile,
+            use: ::PcdmUse::OriginalFile,
             file_identifiers: ["disk://bla/bla.pdf"]
           )
         ]

@@ -40,7 +40,7 @@ RSpec.describe ImageDerivativeService do
     before do
       allow(intermediate_file).to receive(:original_filename).and_return("00000001.tif")
       allow(intermediate_file).to receive(:content_type).and_return("image/tiff")
-      allow(intermediate_file).to receive(:use).and_return(Valkyrie::Vocab::PCDMUse.IntermediateFile)
+      allow(intermediate_file).to receive(:use).and_return(::PcdmUse::IntermediateFile)
       allow(intermediate_file).to receive(:path).and_return(
         Rails.root.join("spec", "fixtures", "files", "abstract.tiff")
       )
@@ -115,7 +115,7 @@ RSpec.describe ImageDerivativeService do
         resource = query_service.find_by(id: valid_resource.id)
         resource.original_file.error_message = ["it went poorly"]
         # turn it into an intermediate file
-        resource.original_file.use = [Valkyrie::Vocab::PCDMUse.IntermediateFile]
+        resource.original_file.use = [::PcdmUse::IntermediateFile]
         persisted = persister.save(resource: resource)
         expect(persisted.intermediate_files.first.error_message).not_to be_empty
 

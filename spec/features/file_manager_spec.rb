@@ -92,7 +92,7 @@ RSpec.feature "File Manager" do
   end
 
   context "with a geo metadata file that has an error" do
-    let(:original_file) { FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "application/xml; schema=fgdc", error_message: ["errors"]) }
+    let(:original_file) { FileMetadata.new(use: ::PcdmUse::OriginalFile, mime_type: "application/xml; schema=fgdc", error_message: ["errors"]) }
     let(:extractor) { instance_double(GeoMetadataExtractor) }
     let(:resource) do
       res = FactoryBot.create_for_repository(:scanned_map)

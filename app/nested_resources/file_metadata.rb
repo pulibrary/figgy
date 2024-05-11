@@ -48,52 +48,52 @@ class FileMetadata < Valkyrie::Resource
     new(label: file.original_filename,
         original_filename: file.original_filename,
         mime_type: file.content_type,
-        use: file.try(:use) || [Valkyrie::Vocab::PCDMUse.OriginalFile],
+        use: file.try(:use) || [::PcdmUse::OriginalFile],
         created_at: Time.current,
         updated_at: Time.current,
         id: SecureRandom.uuid)
   end
 
   def derivative?
-    use.include?(Valkyrie::Vocab::PCDMUse.ServiceFile)
+    use.include?(::PcdmUse::ServiceFile)
   end
 
   # ServiceFilePartial isn't part of the PCDMUse vocabulary - this is made up
   def derivative_partial?
-    use.include?(Valkyrie::Vocab::PCDMUse.ServiceFilePartial)
+    use.include?(::PcdmUse::ServiceFilePartial)
   end
 
   def original_file?
-    use.include?(Valkyrie::Vocab::PCDMUse.OriginalFile)
+    use.include?(::PcdmUse::OriginalFile)
   end
 
   def thumbnail_file?
-    use.include?(Valkyrie::Vocab::PCDMUse.ThumbnailImage)
+    use.include?(::PcdmUse::ThumbnailImage)
   end
 
   def preservation_file?
-    use.include?(Valkyrie::Vocab::PCDMUse.PreservationFile) ||
-      use.include?(Valkyrie::Vocab::PCDMUse.PreservationMasterFile)
+    use.include?(::PcdmUse::PreservationFile) ||
+      use.include?(::PcdmUse::PreservationMasterFile)
   end
 
   def preserved_metadata?
-    use.include?(Valkyrie::Vocab::PCDMUse.PreservedMetadata)
+    use.include?(::PcdmUse::PreservedMetadata)
   end
 
   def preservation_copy?
-    use.include?(Valkyrie::Vocab::PCDMUse.PreservationCopy)
+    use.include?(::PcdmUse::PreservationCopy)
   end
 
   def intermediate_file?
-    use.include?(Valkyrie::Vocab::PCDMUse.IntermediateFile)
+    use.include?(::PcdmUse::IntermediateFile)
   end
 
   def cloud_derivative?
-    use.include?(Valkyrie::Vocab::PCDMUse.CloudDerivative)
+    use.include?(::PcdmUse::CloudDerivative)
   end
 
   def caption?
-    use.include?(Valkyrie::Vocab::PCDMUse.Caption)
+    use.include?(::PcdmUse::Caption)
   end
 
   def image?

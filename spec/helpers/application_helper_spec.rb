@@ -134,7 +134,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
   describe "#fileset_download_path" do
     let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [file_meta]) }
-    let(:file_meta) { FileMetadata.new(id: "1234", use: Valkyrie::Vocab::PCDMUse.OriginalFile, mime_type: "application/pdf") }
+    let(:file_meta) { FileMetadata.new(id: "1234", use: ::PcdmUse::OriginalFile, mime_type: "application/pdf") }
 
     it "points to the original pdf" do
       expect(helper.fileset_download_path(file_set)).to eq "/downloads/#{file_set.id}/file/1234"

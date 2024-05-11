@@ -15,9 +15,9 @@ RSpec.describe FileSet do
   describe "#primary_file" do
     context "when there is an original file" do
       it "returns that" do
-        fm = FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.OriginalFile)
-        fm2 = FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.PreservationFile)
-        fm3 = FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.IntermediateFile)
+        fm = FileMetadata.new(use: ::PcdmUse::OriginalFile)
+        fm2 = FileMetadata.new(use: ::PcdmUse::PreservationFile)
+        fm3 = FileMetadata.new(use: ::PcdmUse::IntermediateFile)
         fs = FactoryBot.build(:file_set, file_metadata: [fm, fm2, fm3])
         expect(fs.primary_file).to eq fm
       end
@@ -25,8 +25,8 @@ RSpec.describe FileSet do
 
     context "when there is a preservation file and no original file" do
       it "returns the preservation file" do
-        fm = FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.PreservationFile)
-        fm2 = FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.IntermediateFile)
+        fm = FileMetadata.new(use: ::PcdmUse::PreservationFile)
+        fm2 = FileMetadata.new(use: ::PcdmUse::IntermediateFile)
         fs = FactoryBot.build(:file_set, file_metadata: [fm, fm2])
         expect(fs.primary_file).to eq fm
       end
@@ -34,7 +34,7 @@ RSpec.describe FileSet do
 
     context "when there is only an intermediate file" do
       it "returns that" do
-        fm = FileMetadata.new(use: Valkyrie::Vocab::PCDMUse.IntermediateFile)
+        fm = FileMetadata.new(use: ::PcdmUse::IntermediateFile)
         fs = FactoryBot.build(:file_set, file_metadata: [fm])
         expect(fs.primary_file).to eq fm
       end

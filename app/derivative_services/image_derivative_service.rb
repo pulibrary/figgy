@@ -99,7 +99,7 @@ class ImageDerivativeService
   end
 
   def use
-    [Valkyrie::Vocab::PCDMUse.ThumbnailImage]
+    [::PcdmUse::ThumbnailImage]
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)

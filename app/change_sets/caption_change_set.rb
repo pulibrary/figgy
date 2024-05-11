@@ -32,7 +32,7 @@ class CaptionChangeSet < Valkyrie::ChangeSet
       file_path: file.path,
       mime_type: file.content_type,
       original_filename: file.original_filename,
-      use: Valkyrie::Vocab::PCDMUse.Caption,
+      use: ::PcdmUse::Caption,
       node_attributes: fields.except("file").symbolize_keys
     )
   end

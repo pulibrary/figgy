@@ -17,6 +17,9 @@ AllCops:
     - 'db/migrate/20220727213332_add_service_name_to_active_storage_blobs.active_storage.rb'
 Lint/UnusedMethodArgument:
   AllowUnusedKeywordArguments: true
+Naming/MethodName:
+  Exclude:
+    - 'app/values/pcdm_use.rb'
 Metrics/AbcSize:
   Exclude:
     - 'app/services/ingest_ephemera_mods.rb'

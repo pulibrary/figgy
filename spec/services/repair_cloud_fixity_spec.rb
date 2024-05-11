@@ -109,7 +109,7 @@ RSpec.describe RepairCloudFixity do
 
         # Modify the intermediate or preservation file
         file_metadata = file_set.file_metadata.reverse.find do |r|
-          r.use.include?(Valkyrie::Vocab::PCDMUse.IntermediateFile) || r.use.include?(Valkyrie::Vocab::PCDMUse.PreservationFile)
+          r.use.include?(::PcdmUse::IntermediateFile) || r.use.include?(::PcdmUse::PreservationFile)
         end
         modify_file(file_metadata.file_identifiers.first)
 

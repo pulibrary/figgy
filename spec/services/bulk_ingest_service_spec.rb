@@ -317,10 +317,10 @@ RSpec.describe BulkIngestService do
         file_set = query_service.find_all_of_model(model: FileSet).first
         expect(file_set.file_metadata.size).to eq 4
         expect(file_set.file_metadata.flat_map(&:use)).to contain_exactly(
-          Valkyrie::Vocab::PCDMUse.OriginalFile,
-          Valkyrie::Vocab::PCDMUse.ServiceFile,
-          Valkyrie::Vocab::PCDMUse.ServiceFilePartial,
-          Valkyrie::Vocab::PCDMUse.Caption
+          ::PcdmUse::OriginalFile,
+          ::PcdmUse::ServiceFile,
+          ::PcdmUse::ServiceFilePartial,
+          ::PcdmUse::Caption
         )
         vtt_file_metadata = file_set.captions.first
         expect(vtt_file_metadata.original_filename).to eq(["city--original-language--eng.vtt"])
@@ -349,11 +349,11 @@ RSpec.describe BulkIngestService do
         file_set = query_service.find_all_of_model(model: FileSet).first
         expect(file_set.file_metadata.size).to eq 5
         expect(file_set.file_metadata.flat_map(&:use)).to contain_exactly(
-          Valkyrie::Vocab::PCDMUse.OriginalFile,
-          Valkyrie::Vocab::PCDMUse.ServiceFile,
-          Valkyrie::Vocab::PCDMUse.ServiceFilePartial,
-          Valkyrie::Vocab::PCDMUse.Caption,
-          Valkyrie::Vocab::PCDMUse.Caption
+          ::PcdmUse::OriginalFile,
+          ::PcdmUse::ServiceFile,
+          ::PcdmUse::ServiceFilePartial,
+          ::PcdmUse::Caption,
+          ::PcdmUse::Caption
         )
         vtt_file_metadatas = file_set.captions
         original_vtt = vtt_file_metadatas.find { |fm| fm.original_filename == ["city--original-language--engg.vtt"] }

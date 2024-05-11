@@ -107,7 +107,7 @@ class AvDerivativeService
         file_path: file.to_s,
         mime_type: partial ? "video/MP2T" : "application/x-mpegURL",
         original_filename: filename,
-        use: partial ? Valkyrie::Vocab::PCDMUse.ServiceFilePartial : Valkyrie::Vocab::PCDMUse.ServiceFile,
+        use: partial ? ::PcdmUse::ServiceFilePartial : ::PcdmUse::ServiceFile,
         copy_before_ingest: true
       )
     end

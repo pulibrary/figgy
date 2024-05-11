@@ -16,7 +16,7 @@ module Migrations
     private
 
       def preservation_file_sets
-        query_service.custom_queries.find_by_property(model: FileSet, property: :file_metadata, value: { use: [Valkyrie::Vocab::PCDMUse.PreservationFile] }, lazy: true)
+        query_service.custom_queries.find_by_property(model: FileSet, property: :file_metadata, value: { use: [::PcdmUse::PreservationFile] }, lazy: true)
       end
 
       def query_service

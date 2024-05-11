@@ -57,8 +57,8 @@ RSpec.describe RepairLocalFixity do
   end
 
   context "with an intermediate file and a preservation file" do
-    let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.PreservationFile) }
-    let(:intermediate_file) { fixture_file_with_use("files/example.tif", "image/tiff", Valkyrie::Vocab::PCDMUse.IntermediateFile) }
+    let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", ::PcdmUse::PreservationFile) }
+    let(:intermediate_file) { fixture_file_with_use("files/example.tif", "image/tiff", ::PcdmUse::IntermediateFile) }
 
     context "local checksum matches cloud file checksum" do
       it "replaces the local files with files that have the correct checksum" do

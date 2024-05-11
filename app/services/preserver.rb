@@ -51,7 +51,7 @@ class Preserver
     def build_preservation_node(file_metadata)
       FileMetadata.new(
         label: preservation_label(file_metadata),
-        use: Valkyrie::Vocab::PCDMUse.PreservationCopy,
+        use: ::PcdmUse::PreservationCopy,
         mime_type: file_metadata.mime_type,
         checksum: calculate_checksum(file_metadata),
         preservation_copy_of_id: file_metadata.id,
@@ -173,7 +173,7 @@ class Preserver
             label: "#{resource.id}.json",
             mime_type: "application/json",
             checksum: MultiChecksum.for(temp_metadata_file),
-            use: Valkyrie::Vocab::PCDMUse.PreservedMetadata,
+            use: ::PcdmUse::PreservedMetadata,
             id: SecureRandom.uuid
           )
     end

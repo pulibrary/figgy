@@ -64,7 +64,7 @@ class TileMetadataService
   private
 
     def build_node(file_name)
-      file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: file_name, use: [Valkyrie::Vocab::PCDMUse.CloudDerivative])
+      file = IngestableFile.new(file_path: tmp_file.path, mime_type: "application/json", original_filename: file_name, use: [::PcdmUse::CloudDerivative])
       # the storage adapter will use this id as the storage location
       node = FileMetadata.for(file: file).new(id: resource.id)
       storage_adapter.upload(resource: node, file: file, original_filename: Array.wrap(node.original_filename).first) unless File.zero?(tmp_file.path)

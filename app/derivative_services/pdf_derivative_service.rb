@@ -98,7 +98,7 @@ class PDFDerivativeService
     IngestableFile.new(
       file_path: file_path,
       mime_type: "image/tiff",
-      use: Valkyrie::Vocab::PCDMUse.IntermediateFile,
+      use: ::PcdmUse::IntermediateFile,
       original_filename: "converted_from_pdf_page_#{page}.tiff",
       container_attributes: {
         title: pad_with_zeroes(page)
@@ -132,10 +132,10 @@ class PDFDerivativeService
   end
 
   def update_pdf_use
-    pdf_file_metadata = resource.file_metadata.select { |f| f.use == [Valkyrie::Vocab::PCDMUse.OriginalFile] }.find(&:pdf?)
+    pdf_file_metadata = resource.file_metadata.select { |f| f.use == [::PcdmUse::OriginalFile] }.find(&:pdf?)
     return unless pdf_file_metadata
 
-    pdf_file_metadata.use = [Valkyrie::Vocab::PCDMUse.PreservationFile]
+    pdf_file_metadata.use = [::PcdmUse::PreservationFile]
     resource.file_metadata = resource.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
     persister.save(resource: resource)
   end

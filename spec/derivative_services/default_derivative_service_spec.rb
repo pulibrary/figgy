@@ -5,7 +5,7 @@ require "valkyrie/derivatives/specs/shared_specs"
 RSpec.describe DefaultDerivativeService do
   it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
-  let(:thumbnail) { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
+  let(:thumbnail) { ::PcdmUse::ThumbnailImage }
   let(:derivative_service) do
     DefaultDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end

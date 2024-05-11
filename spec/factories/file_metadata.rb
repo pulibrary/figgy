@@ -6,31 +6,31 @@ FactoryBot.define do
     factory :image_derivative do
       id { Valkyrie::ID.new(SecureRandom.uuid) }
       mime_type { "image/tiff" }
-      use { Valkyrie::Vocab::PCDMUse.ServiceFile }
+      use { ::PcdmUse::ServiceFile }
     end
 
     factory :image_thumbnail do
       id { Valkyrie::ID.new(SecureRandom.uuid) }
       mime_type { "image/tiff" }
-      use { Valkyrie::Vocab::PCDMUse.ThumbnailImage }
+      use { ::PcdmUse::ThumbnailImage }
     end
 
     factory :image_original do
       id { Valkyrie::ID.new(SecureRandom.uuid) }
       mime_type { "image/tiff" }
-      use { Valkyrie::Vocab::PCDMUse.OriginalFile }
+      use { ::PcdmUse::OriginalFile }
     end
 
     factory :vector_original do
       id { Valkyrie::ID.new(SecureRandom.uuid) }
       mime_type { "application/vnd.geo+json" }
-      use { Valkyrie::Vocab::PCDMUse.OriginalFile }
+      use { ::PcdmUse::OriginalFile }
     end
 
     factory :cloud_vector_derivative do
       id { Valkyrie::ID.new(SecureRandom.uuid) }
       mime_type { "application/vnd.pmtiles" }
-      use { Valkyrie::Vocab::PCDMUse.CloudDerivative }
+      use { ::PcdmUse::CloudDerivative }
     end
   end
 end
