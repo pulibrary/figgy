@@ -22,10 +22,12 @@ RSpec.describe IdentifierService do
       allow(minter).to receive(:modify)
     end
 
-    it "updates the ark" do
-      described_class.mint_or_update(resource: obj)
-      expect(minter).to have_received(:modify).with(ark, metadata)
-      expect(obj.identifier.first).to eq(ark)
+    context "and the identifier is an MMSID" do
+      it "updates the ark" do
+        described_class.mint_or_update(resource: obj)
+        expect(minter).to have_received(:modify).with(ark, metadata)
+        expect(obj.identifier.first).to eq(ark)
+      end
     end
 
     context "and the identifier currently points at PULFA" do
@@ -33,6 +35,7 @@ RSpec.describe IdentifierService do
       let(:minter) { class_double(Ezid::Identifier) }
       let(:minted_id) { instance_double(Ezid::Identifier) }
       let(:new_ark) { "ark:/99999/fk4345678" }
+      let(:cid) { "MC016_c9616" }
       let(:metadata) { base_metadata.merge(target: "http://findingaids.princeton.edu/collections/#{cid}") }
       before do
         stub_ezid(shoulder: "88435", blade: "47429918s", location: "https://findingaids.princeton.edu/bla")
@@ -40,9 +43,8 @@ RSpec.describe IdentifierService do
         allow(minter).to receive(:mint).and_return(minted_id)
         described_class.mint_or_update(resource: obj)
       end
-      it "does not update the ARK" do
-        expect(minter).not_to have_received(:modify)
-        expect(minter).not_to have_received(:mint)
+      it "updates the ark" do
+        expect(minter).to have_received(:modify)
         expect(obj.identifier).to eq([ark])
       end
     end

@@ -38,7 +38,7 @@ class IdentifierService
   private_class_method def self.update_metadata(resource)
     return if minter_user == "apitest"
     ark = Array.wrap(resource.identifier).first
-    minter.modify(ark, metadata(resource)) unless get_ark_result(ark: ark).to_s.include?("findingaids")
+    minter.modify(ark, metadata(resource))
   end
 
   private_class_method def self.metadata(resource)
