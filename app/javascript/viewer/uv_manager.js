@@ -105,6 +105,7 @@ export default class UVManager {
   }
 
   createUV (graphqlData) {
+    this.remapWindowOpen()
     this.bindResizeUV()
     this.tabManager.onTabSelect(() => setTimeout(() => this.resizeUV(), 100))
     this.processTitle(graphqlData)
@@ -124,6 +125,16 @@ export default class UVManager {
     }, this.urlDataProvider)
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
+  }
+
+  // Universal Viewer uses window.open for download links, and we want to track
+  // those. We can remap window.open so we can do that.
+  remapWindowOpen () {
+    const cachedOpen = window.open
+    window.open = function (url, target, features) {
+      window.plausible('Download', { props: { url } })
+      cachedOpen(url, target, features)
+    }
   }
 
   createClover () {

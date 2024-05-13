@@ -9,6 +9,10 @@
     <script type="text/javascript" src="/uv/lib/offline.js"></script>
     <script type="text/javascript" src="/uv/lib/offline.js"></script>
     <script type="text/javascript" src="/uv/helpers.js"></script>
+    <% if Rails.env.staging? || Rails.env.production? %>
+      <script defer event-environment="<%= Rails.env.to_s %>" event-embed-host="<%= params[:embed_host] || "unknown" %>" data-domain="dpul.princeton.edu" src="https://plausible.io/js/script.pageview-props.manual.js"></script>
+      <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+    <% end %>
   </head>
   <body>
     <%= yield %>
