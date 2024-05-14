@@ -27,7 +27,7 @@
   <% if f.object.resource.is_a?(ScannedResource) %>
     <div class="card-footer text-center">
       <%= hidden_field_tag "save_and_ingest_path" %>
-      <%= f.submit "Save and Ingest", class: 'btn btn-primary', data: { save_and_ingest: true } %>
+      <%= f.submit "Find Ingest Folder", class: 'btn btn-primary', data: { save_and_ingest: true } %>
       <div id="save-and-ingest-info">
       </div>
     </div>
