@@ -154,6 +154,10 @@ class BaseWayfinder
     ) || []
   end
 
+  def deep_failed_cloud_fixity_resources
+    @deep_failed_cloud_fixity_resources ||= query_service.find_many_by_ids(ids: deep_failed_cloud_fixity_member_ids)
+  end
+
   # This method encodes the assumption that the existence of a preservation
   # object, with no other events, represents a success
   # This is because google checks fixity when a resource is preserved
