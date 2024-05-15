@@ -11,10 +11,6 @@ class FindDeepErroredFileSets
     @query_service = query_service
   end
 
-  # def find_deep_errored_file_sets(resource:)
-  #   query_service.connection[relationship_query, id: resource.id.to_s].first[:count]
-  # end
-
   def find_deep_errored_file_sets(resource:)
     run_query(relationship_query, id: resource.id.to_s)
   end

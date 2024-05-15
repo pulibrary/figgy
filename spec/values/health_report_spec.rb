@@ -122,13 +122,18 @@ RSpec.describe HealthReport do
         expect(local_fixity_report.type).to eq "Local Fixity"
         expect(local_fixity_report.status).to eq :needs_attention
         expect(local_fixity_report.summary).to start_with "One or more files failed Local Fixity Checks."
+
+        list = local_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
     context "for a FileSet with a failed local fixity event" do
       it "returns :needs_attention" do
         fs1 = FactoryBot.create_for_repository(:original_file_file_set)
         FactoryBot.create(:local_fixity_failure, resource_id: fs1.id)
-        FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
         report = described_class.for(fs1)
 
@@ -138,10 +143,36 @@ RSpec.describe HealthReport do
         expect(local_fixity_report.type).to eq "Local Fixity"
         expect(local_fixity_report.status).to eq :needs_attention
         expect(local_fixity_report.summary).to start_with "This resource failed Local Fixity Checks."
+
+        list = local_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
 
-    context "for a resource with a failed cloud fixity event" do
+    context "for a resource with a failed cloud fixity event on it's metadata" do
+      it "returns :needs_attention" do
+        fs1 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
+        create_preservation_object(resource_id: resource.id, event_status: Event::FAILURE, event_type: :cloud_fixity)
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :needs_attention
+        # Second check is cloud fixity
+        cloud_fixity_report = report.checks.second
+        expect(cloud_fixity_report.type).to eq "Cloud Fixity"
+        expect(cloud_fixity_report.status).to eq :needs_attention
+        expect(cloud_fixity_report.summary).to start_with "One or more files failed Cloud Fixity Checks."
+
+        list = cloud_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "catalog/#{resource.id}"
+      end
+    end
+    context "for a resource with a failed cloud fixity event on it's file set" do
       it "returns :needs_attention" do
         fs1 = create_file_set(cloud_fixity_status: Event::FAILURE)
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
@@ -154,6 +185,11 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.type).to eq "Cloud Fixity"
         expect(cloud_fixity_report.status).to eq :needs_attention
         expect(cloud_fixity_report.summary).to start_with "One or more files failed Cloud Fixity Checks."
+
+        list = cloud_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
     context "for a FileSet with a failed cloud fixity event" do
@@ -170,6 +206,11 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.type).to eq "Cloud Fixity"
         expect(cloud_fixity_report.status).to eq :needs_attention
         expect(cloud_fixity_report.summary).to start_with "This resource failed Cloud Fixity Checks."
+
+        list = cloud_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
     context "for a resource that hasn't preserved yet" do
@@ -238,11 +279,11 @@ RSpec.describe HealthReport do
         expect(report.status).to eq :needs_attention
         expect(file_set_report.status).to eq :needs_attention
 
-        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
-        list = derivative_check.unhealthy_resources
+        derivative_report = report.checks.last
+        list = derivative_report.unhealthy_resources
         expect(list.count).to eq 1
-        # Parent resource
-        expect(list[0].id).to eq resource.id
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
 
@@ -275,12 +316,13 @@ RSpec.describe HealthReport do
 
         expect(report.status).to eq :needs_attention
 
-        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
-        list = derivative_check.unhealthy_resources
+        derivative_report = report.checks.last
+        list = derivative_report.unhealthy_resources
         expect(list.count).to eq 2
-        # Parent resources
-        expect(list[0].id).to eq resource1.id
-        expect(list[1].id).to eq resource2.id
+        expect(list[0][:title]).to eq resource1.title.first
+        expect(list[0][:url]).to include "#{resource1.id}/file_manager"
+        expect(list[1][:title]).to eq resource2.title.first
+        expect(list[1][:url]).to include "#{resource2.id}/file_manager"
       end
     end
 
