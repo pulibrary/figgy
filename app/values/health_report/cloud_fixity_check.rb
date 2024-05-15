@@ -42,6 +42,10 @@ class HealthReport::CloudFixityCheck
     type.parameterize(separator: "_")
   end
 
+  def display_unhealthy_resources
+    !resource.is_a?(FileSet) && status == :needs_attention
+  end
+
   def unhealthy_resources
     # Map resources to an array of resource or resource parent and the class of
     # the original resource. The class information is used to generate urls for

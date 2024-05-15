@@ -5,8 +5,7 @@
             <div class="check-status">
               <h6><%= check.type %> Status: <%= t("health_status.status.#{check.status}.label") %></h6>
               <small><%= check.summary %></small>
-              <% #TODO: Test for FileSet %>
-              <% if !check.resource.is_a?(FileSet) && check.status == :needs_attention %>
+              <% if check.display_unhealthy_resources %>
                 <div class="problematic-resources-accordion accordion" id="<%= "problematic-resources-accordion-#{check.name}" %>-files">
                   <span class="problematic-resources-arrow-right">
                     <lux-icon-base width="20" height="20" icon-color="<%= t("health_status.status.#{check.status}.icon_color") %>">

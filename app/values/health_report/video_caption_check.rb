@@ -21,10 +21,6 @@ class HealthReport::VideoCaptionCheck
     I18n.t("health_status.video_caption_check.type")
   end
 
-  def name
-    type.parameterize(separator: "_")
-  end
-
   def status
     @status ||=
       if file_set?
@@ -68,7 +64,7 @@ class HealthReport::VideoCaptionCheck
     resource.is_a?(FileSet)
   end
 
-  def unhealthy_resources
-    []
+  def display_unhealthy_resources
+    false
   end
 end

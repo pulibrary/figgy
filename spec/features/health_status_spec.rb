@@ -79,4 +79,33 @@ RSpec.feature "Heath Status" do
     find("button", text: "Show Problematic Resources").click
     expect(page).to have_link(resource.title.first, href: /catalog\/#{resource.id}/, target: "_blank")
   end
+
+  scenario "video resource with no captions does not display problematic resources", js: true do
+    file = fixture_file_upload("files/city.mp4", "video/mp4")
+    resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+
+    visit solr_document_path(id: resource.id)
+    expect(page).to have_selector("#health-status")
+
+    find('a[data-target="#healthModal"]').click
+    expect(page).to have_selector("div", text: "Accessibility Status: Needs Attention")
+    expect(page).not_to have_button("Show Problematic Resources")
+    expect(page).not_to have_link(resource.title.first, href: /concern\/scanned_resources\/#{resource.id}\/file_manager/, target: "_blank")
+  end
+
+  scenario "errored fileset does not display problematic resources", js: true do
+    file = fixture_file_upload("files/example.tif", "image/tiff")
+    resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
+    file_set = Wayfinder.for(resource).file_sets.first
+    file_set.primary_file.error_message = "Broken!"
+    file_set = ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+
+    visit solr_document_path(id: file_set.id)
+    expect(page).to have_selector("#health-status")
+
+    find('a[data-target="#healthModal"]').click
+    expect(page).to have_selector("div", text: "Derivative Status: Needs Attention")
+    expect(page).not_to have_button("Show Problematic Resources")
+    expect(page).not_to have_link(resource.title.first, href: /concern\/scanned_resources\/#{resource.id}\/file_manager/, target: "_blank")
+  end
 end

@@ -44,6 +44,10 @@ class HealthReport::LocalFixityCheck
     end
   end
 
+  def display_unhealthy_resources
+    !resource.is_a?(FileSet) && status == :needs_attention
+  end
+
   def unhealthy_resources
     # Get failed resources and remove duplicates. We don't want to display
     # multiple entries for the same resource.
