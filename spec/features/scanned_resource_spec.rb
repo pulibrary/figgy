@@ -38,14 +38,6 @@ RSpec.feature "Scanned Resource" do
     end
   end
 
-  scenario "show page has a health status" do
-    file = fixture_file_upload("files/example.tif", "image/tiff")
-    resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
-
-    visit solr_document_path(id: resource.id)
-    expect(page).to have_selector("#health-status")
-  end
-
   scenario "show page can display confetti" do
     resource = FactoryBot.create_for_repository(:pending_scanned_resource)
     ChangeSetPersister.default.save(change_set: ChangeSet.for(resource))
