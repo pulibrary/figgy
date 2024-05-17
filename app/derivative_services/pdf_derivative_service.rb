@@ -27,6 +27,7 @@ class PDFDerivativeService
     update_pdf_use
     tiffs = convert_pages
     add_file_sets(tiffs)
+    update_error_message(message: nil) if target_file.error_message.present?
   rescue StandardError => e
     change_set_persister.after_rollback.add do
       update_error_message(message: e.message)
