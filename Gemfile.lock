@@ -376,8 +376,8 @@ GEM
     faraday-retry (2.2.1)
       faraday (~> 2.0)
     ffi (1.16.3)
-    filewatcher (2.1.0)
-      module_methods (~> 0.1.0)
+    filewatcher (1.1.1)
+      optimist (~> 3.0)
     flutie (2.2.0)
     font-awesome-rails (4.7.0.8)
       railties (>= 3.2, < 8.0)
@@ -604,6 +604,7 @@ GEM
       actionpack (>= 4.2.0)
       railties (>= 4.2.0)
     libdatadog (7.0.0.1.0)
+    libdatadog (7.0.0.1.0-x86_64-linux)
     libddwaf (1.14.0.0.0-arm64-darwin)
       ffi (~> 1.0)
     libddwaf (1.14.0.0.0-x86_64-darwin)
@@ -675,7 +676,6 @@ GEM
     mini_mime (1.1.5)
     minitest (5.22.3)
     modernizr-rails (2.7.1)
-    module_methods (0.1.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
@@ -724,6 +724,7 @@ GEM
     open4 (1.3.4)
     openseadragon (0.6.0)
       rails (> 3.2.0)
+    optimist (3.1.0)
     orm_adapter (0.5.0)
     os (1.1.4)
     ostruct (0.6.0)
@@ -1225,7 +1226,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   ffi (~> 1.16.0)
-  filewatcher
+  filewatcher (~> 1.0)
   flutie
   font-awesome-rails
   foreman
