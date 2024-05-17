@@ -68,7 +68,7 @@ class HealthReport::DerivativeCheck
   private
 
     def children_errored?
-      errored_file_sets.count.positive?
+      query_service.custom_queries.deep_errored_file_sets_count(resource: resource).positive?
     end
 
     def children_processing?
