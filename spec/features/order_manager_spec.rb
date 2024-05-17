@@ -4,8 +4,8 @@ require "rails_helper"
 RSpec.feature "Order Manager", js: true do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
-  let(:file_set1) { FactoryBot.create_for_repository(:file_set) }
-  let(:file_set2) { FactoryBot.create_for_repository(:file_set) }
+  let(:file_set1) { FactoryBot.create_for_repository(:file_set, title: "File Set 1") }
+  let(:file_set2) { FactoryBot.create_for_repository(:file_set, title: "File Set 2") }
   let(:resource) do
     res = FactoryBot.create_for_repository(:scanned_resource)
     res.member_ids = [file_set1.id, file_set2.id]
