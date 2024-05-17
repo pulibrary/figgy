@@ -30,7 +30,7 @@ gem "draper"
 gem "ezid-client", "1.9.4" # v1.9.0 introduces response errors in our tests/stubbing
 gem "faker"
 gem "ffi", "~> 1.16.0"
-gem "filewatcher"
+gem "filewatcher", "~> 1.0"
 gem "flutie"
 gem "font-awesome-rails"
 gem "google-cloud-pubsub"
