@@ -30,8 +30,6 @@
         :options="addBracketOpts"
         @change="updateBracket($event)"
       />
-      <!-- <input v-if="!isMultiVolume" type="checkbox" label="Add Brackets" id="addBrackets" :value="bracket" @change="updateMultiLabels()" /> -->
-
       <lux-input-select
         v-if="bracket"
         id="bracketLocation"
@@ -342,5 +340,9 @@ export default {
 small {
   font-size: 1rem;
   font-weight: 400;
+}
+
+.lux-select:last-child {
+  margin-bottom: 16px;
 }
 </style>

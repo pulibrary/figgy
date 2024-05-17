@@ -187,12 +187,16 @@ export default {
   padding: 0 24px;
 }
 
+.lux-dropdown-menu {
+  margin: 0 .25rem;
+}
+
 .lux-zoom-slider {
   .lux-svg-icon,
   input {
     vertical-align: middle;
     line-height: 1;
-    margin: 0;
+    margin: 5px;
   }
 
   input[type="range"] {

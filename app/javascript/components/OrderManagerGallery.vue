@@ -145,7 +145,7 @@ export default {
   },
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .lux-gallery {
   display: flex;
   flex-wrap: wrap;
@@ -154,9 +154,9 @@ export default {
   align-content: flex-start;
 
   overflow: auto;
-  height: calc(100% - 40px);
+  height: calc(100% - 80px);
   border-radius: 4px;
-  margin-bottom: 40px;
+  margin-bottom: 80px;
   clear: both;
 
   .lux-card {
