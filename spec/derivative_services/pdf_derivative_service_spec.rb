@@ -87,6 +87,28 @@ RSpec.describe PDFDerivativeService do
         expect(file_set.primary_file.error_message).to include(/not the pagerange error/)
       end
     end
+
+    context "when there was a previous error", run_real_derivatives: true, run_real_characterization: true do
+      it "clears the error on a successful retry" do
+        valid_resource
+
+        reloaded_members = query_service.find_members(resource: scanned_resource)
+
+        file_set = reloaded_members.first
+        primary_file = file_set.primary_file
+        primary_file.error_message = ["some kind of error"]
+        file_set.file_metadata = file_set.file_metadata.select { |x| x.id != primary_file.id } + [primary_file]
+        adapter.persister.save(resource: file_set)
+
+        derivative_service.new(id: valid_resource.id).create_derivatives
+
+        # ensure the error was cleared
+        reloaded_members = query_service.find_members(resource: scanned_resource)
+        file_set = reloaded_members.first
+        expect(file_set.id).to eq valid_resource.id
+        expect(file_set.primary_file.error_message).to be_empty
+      end
+    end
   end
 
   describe "#cleanup_derivatives", run_real_derivatives: true, run_real_characterization: true do
