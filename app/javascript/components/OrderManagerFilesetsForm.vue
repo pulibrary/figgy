@@ -28,8 +28,9 @@
         v-if="!isMultiVolume"
         :value="bracket"
         :options="addBracketOpts"
-        @change="updateMultiLabels()"
+        @change="updateBracket($event)"
       />
+      <!-- <input v-if="!isMultiVolume" type="checkbox" label="Add Brackets" id="addBrackets" :value="bracket" @change="updateMultiLabels()" /> -->
 
       <lux-input-select
         v-if="bracket"
@@ -38,7 +39,7 @@
         name="bracketLocation"
         label="Bracket Location"
         :options="bracketLocationOpts"
-        @change="updateMultiLabels()"
+        @change="updateBracketLocation($event)"
       />
 
       <lux-input-select
@@ -248,6 +249,14 @@ export default {
       this.start = start
       this.updateMultiLabels()
     },
+    updateBracket (event) {
+      this.bracket = event
+      this.updateMultiLabels()
+    },
+    updateBracketLocation (event) {
+      this.bracketLocation = event
+      this.updateMultiLabels()
+    },
     updateMethod (event) {
       this.method = event
       this.updateMultiLabels()
@@ -298,20 +307,21 @@ export default {
       return /^\+?(0|[1-9]\d*)$/.test(str)
     },
     updateMultiLabels: debounce(function () {
-      const changeList = this.gallery.changeList
-      const items = this.gallery.items
+      let changeList = this.gallery.changeList
+      let items = this.gallery.items
       this.start = this.isNormalInteger(this.start)
         ? this.start - 0
         : this.start
-      const generator = Lablr.pageLabelGenerator(this.labelerOpts())
+      let generator = Lablr.pageLabelGenerator(this.labelerOpts())
+      window.generator = generator
       for (let i = 0; i < this.selectedTotal; i++) {
-        const index = this.gallery.items
+        let index = this.gallery.items
           .map(function (item) {
             return item.id
           })
           .indexOf(this.gallery.selected[i].id)
         // Allow unnumbered pages / flyleaves
-        const caption = !this.start || this.start.length === 0
+        let caption = !this.start || this.start.length === 0
           ? ''
           : generator.next().value
         items[index].caption = caption
