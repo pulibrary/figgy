@@ -80,6 +80,9 @@ RSpec.feature "Order Manager", js: true do
     expect(last.has_text? ("f. 10(recto)-10(verso)")).to be(true)
 
     # test the deep zoom functionality
+    page.all(".lux-card")[0].click
+    viewer = page.all("#viewer")[0]
+    expect(viewer.has_element? ("canvas")).to be(true)
 
     # test that setting page type, start page, and resource thumbnail and saving will retain changes
 

@@ -59,7 +59,7 @@
       <filesets-form v-if="selectedTotal > 1" />
       <!-- Single Selected Form-->
       <fileset-form v-if="selectedTotal === 1" />
-      <controls viewer-id="viewer" />
+      <controls viewer-id="viewer" :selected="selected"/>
     </lux-wrapper>
   </div>
 </template>
@@ -137,6 +137,9 @@ export default {
             : this.defaultThumbnail,
         viewingHint: member.viewingHint
       }))
+    },
+    selected () {
+      return this.gallery.selected
     },
     selectedTotal () {
       return this.gallery.selected.length

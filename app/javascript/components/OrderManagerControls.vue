@@ -73,6 +73,10 @@ export default {
     viewerId: {
       type: String,
       default: 'viewer'
+    },
+    selected: {
+      type: Array,
+      default: []
     }
   },
   data: function () {
@@ -127,10 +131,10 @@ export default {
     },
     selectedTotal () {
       return this.gallery.selected.length
-    }
+    },
   },
   updated: function () {
-    if (this.selectedTotal === 1) {
+    if (this.selected.length === 1) {
       this.initOSD()
     }
   },
@@ -140,6 +144,7 @@ export default {
         this.viewer.destroy()
         this.viewer = null
       }
+
       this.viewer = OpenSeadragon({
         id: this.osdId,
         showNavigationControl: false,
