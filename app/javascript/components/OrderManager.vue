@@ -1,13 +1,6 @@
 <template>
   <div class="lux-orderManager">
-    <transition name="fade">
-      <div
-        v-if="loading"
-        class="lux-overlay"
-      >
-        <lux-loader size="medium" />
-      </div>
-    </transition>
+
     <lux-alert
       v-if="saved"
       status="success"
@@ -34,7 +27,7 @@
     >
       <toolbar @cards-resized="resizeCards($event)" />
       <div
-        v-if="isLoading"
+        v-if="isLoading || loading"
         class="loader"
       >
         <lux-loader
@@ -119,7 +112,7 @@ export default {
     return {
       cardPixelWidth: 300,
       captionPixelPadding: 9,
-      errMsg: ''
+      errMsg: '',
     }
   },
   computed: {
@@ -155,15 +148,26 @@ export default {
       return this.resource.loadState !== 'LOADED'
     },
     saved () {
-      return this.resource.saveState === 'SAVED'
+      return this.$store.getters.saved
     },
     saveError: function () {
-      return this.saveErrorMsg(this.resource.saveState)
+      if (this.$store.getters.saveError) {
+        return this.saveErrorMsg(this.resource.saveState)
+      }
+      return false
     },
     isLoading () {
       return this.resource.saveState === 'SAVING'
     }
   },
+  // watch: {
+  //   saved (newVal) {
+  //     this.stateSaved == newVal
+  //   },
+  //   saveError (newVal) {
+  //     this.stateSaveError == newVal
+  //   },
+  // },
   beforeMount: function () {
     if (this.resourceObject) {
       // if props are passed in set the resource on mount

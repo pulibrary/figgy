@@ -87,6 +87,12 @@ export const resourceGetters = {
   getMemberCount: state => {
     return state.resource.members.length
   },
+  saved: state => {
+    return state.resource.saveState === 'SAVED'
+  },
+  saveError: state => {
+    return state.resource.saveState === 'ERROR'
+  },
   isMultiVolume: state => {
     const volumes = state.resource.members.filter(member => member.__typename === "ScannedResource")
     return volumes.length > 0 ? true : false

@@ -78,13 +78,20 @@ RSpec.feature "Order Manager", js: true do
     last = page.all(".lux-card").last
     expect(first.has_text? ("f. 11(recto)-11(verso)")).to be(true)
     expect(last.has_text? ("f. 10(recto)-10(verso)")).to be(true)
+    expect(page).to have_css(".lux-alert-info > span", text: "Page order has changed.")
+
 
     # test the deep zoom functionality
     page.all(".lux-card")[0].click
     viewer = page.all("#viewer")[0]
     expect(viewer.has_element? ("canvas")).to be(true)
 
-    # test that setting page type, start page, and resource thumbnail and saving will retain changes
-
+    # test that saving will provide a success notice and preserve changes
+    expect(page).not_to have_css(".lux-alert", text: "Your work has been saved!")
+    page.all("#save_btn")[0].click
+    expect(page).to have_css(".lux-alert", text: "Your work has been saved!")
+    refresh
+    first = page.all(".lux-card")[0]
+    expect(first.has_text? ("f. 11(recto)-11(verso)")).to be(true)
   end
 end
