@@ -48,9 +48,10 @@ class CatalogController < ApplicationController
   end
 
   # enforce hydra access controls
-  before_action :set_id, only: [:iiif_search, :pdf]
+  before_action :set_id, only: [:iiif_search, :pdf, :health_report]
   before_action :enforce_show_permissions, only: [:show, :iiif_search]
   before_action :claimed_by_facet
+  before_action :load_health_report, only: [:show, :health_report]
 
   # CatalogController-scope behavior and configuration for BlacklightIiifSearch
   include BlacklightIiifSearch::Controller
@@ -67,6 +68,11 @@ class CatalogController < ApplicationController
       claimed: { label: "Claimed", fq: "claimed_by_ssim:[* TO *]" },
       claimed_by_me: { label: "Claimed by Me", fq: "claimed_by_ssim:#{current_user.uid}" }
     }, label: "Claimed"
+  end
+
+  def load_health_report
+    _, @document = search_service.fetch(params[:id])
+    @health_report ||= HealthReport.for(resource)
   end
 
   def iiif_search
@@ -297,6 +303,11 @@ class CatalogController < ApplicationController
     else
       redirect_to solr_document_url(resource), notice: "No PDF available for this item"
     end
+  end
+
+  def health_report
+    @check = @health_report.checks.find { |c| c.name == params[:name] }
+    render json: @check.unhealthy_resources.to_json
   end
 
   private

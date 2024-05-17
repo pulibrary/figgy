@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 # Checks that cloud fixity has run for all sub-files and that preservation is complete.
 class HealthReport::CloudFixityCheck
+  include ActionDispatch::Routing::PolymorphicRoutes
+  include Rails.application.routes.url_helpers
+
   def self.for(resource)
     new(resource: resource)
   end
@@ -33,6 +36,32 @@ class HealthReport::CloudFixityCheck
 
   def type
     I18n.t("health_status.cloud_fixity_check.type")
+  end
+
+  def name
+    type.parameterize(separator: "_")
+  end
+
+  def display_unhealthy_resources
+    !resource.is_a?(FileSet) && status == :needs_attention
+  end
+
+  def unhealthy_resources
+    # Map resources to an array of resource or resource parent and the class of
+    # the original resource. The class information is used to generate urls for
+    # the FileManager for FileSets or the show page for other resource types.
+    resources = wayfinder.deep_failed_cloud_fixity_resources.map do |resource|
+      if resource.is_a? FileSet
+        [resource.decorate.parent, resource.class]
+      else
+        [resource, resource.class]
+      end
+    end
+
+    # Remove duplicate resources or resource parents. We don't want to display
+    # multiple entries for the same resource.
+    resources = resources.uniq { |r| r[0].id }
+    generate_resources_hash(resources)
   end
 
   private
@@ -76,6 +105,21 @@ class HealthReport::CloudFixityCheck
       # However, these checks get queued simultaneously so unless one never runs
       # for some reason, the misinformation will be short-lived.
       @unknown_count ||= wayfinder.deep_file_set_count - wayfinder.deep_failed_cloud_fixity_count - wayfinder.deep_succeeded_cloud_fixity_count - wayfinder.deep_repairing_cloud_fixity_count
+    end
+
+    def generate_resources_hash(resources)
+      resources.map do |resource, klass|
+        title = resource.title.first.truncate(40)
+        url = if klass == FileSet
+                polymorphic_path([:file_manager, resource])
+              else
+                solr_document_url(resource)
+              end
+        {
+          title: title,
+          url: url
+        }
+      end
     end
 
     def wayfinder

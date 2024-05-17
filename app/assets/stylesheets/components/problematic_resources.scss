@@ -1,0 +1,41 @@
+.problematic-resources-list {
+  ul {
+    // Align problematic resources list with button
+    margin-left: 28px;
+  }
+
+  .lux-overlay {
+    // Align problematic resource loading spinner in the center of the button
+    margin-left: 42px;
+  }
+
+  .lux-loader {
+    // Set loading spinner color
+    border-left-color: cadetblue !important;
+  }
+}
+
+.problematic-resources-accordion {
+  button {
+    margin-bottom: 0.5em;
+  }
+
+  // On health check modal, flip problematic resources up and down arrow icons based
+  // on the the visibility of the Bootstrap accordion. When collapsed, the
+  // accordion button has the class `collapsed`. The right arrow is displayed when the
+  // accordion is collapsed and the down arrow is displayed when it is not
+  // collapsed. Use the :has psuedo-class.
+  .problematic-resources-arrow-right:has(+ * + .collapsed) {
+    display: inline;
+  }
+  .problematic-resources-arrow-down:has(+ .collapsed) {
+    display: none;
+  }
+
+  .problematic-resources-arrow-right:has(+ * + :not(.collapsed)) {
+    display: none;
+  }
+  .problematic-resources-arrow-down:has(+ :not(.collapsed)) {
+    display: inline;
+  }
+}

@@ -122,13 +122,18 @@ RSpec.describe HealthReport do
         expect(local_fixity_report.type).to eq "Local Fixity"
         expect(local_fixity_report.status).to eq :needs_attention
         expect(local_fixity_report.summary).to start_with "One or more files failed Local Fixity Checks."
+
+        list = local_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
     context "for a FileSet with a failed local fixity event" do
       it "returns :needs_attention" do
         fs1 = FactoryBot.create_for_repository(:original_file_file_set)
         FactoryBot.create(:local_fixity_failure, resource_id: fs1.id)
-        FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
 
         report = described_class.for(fs1)
 
@@ -138,10 +143,36 @@ RSpec.describe HealthReport do
         expect(local_fixity_report.type).to eq "Local Fixity"
         expect(local_fixity_report.status).to eq :needs_attention
         expect(local_fixity_report.summary).to start_with "This resource failed Local Fixity Checks."
+
+        list = local_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
 
-    context "for a resource with a failed cloud fixity event" do
+    context "for a resource with a failed cloud fixity event on it's metadata" do
+      it "returns :needs_attention" do
+        fs1 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
+        create_preservation_object(resource_id: resource.id, event_status: Event::FAILURE, event_type: :cloud_fixity)
+
+        report = described_class.for(resource)
+
+        expect(report.status).to eq :needs_attention
+        # Second check is cloud fixity
+        cloud_fixity_report = report.checks.second
+        expect(cloud_fixity_report.type).to eq "Cloud Fixity"
+        expect(cloud_fixity_report.status).to eq :needs_attention
+        expect(cloud_fixity_report.summary).to start_with "One or more files failed Cloud Fixity Checks."
+
+        list = cloud_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "catalog/#{resource.id}"
+      end
+    end
+    context "for a resource with a failed cloud fixity event on it's file set" do
       it "returns :needs_attention" do
         fs1 = create_file_set(cloud_fixity_status: Event::FAILURE)
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id])
@@ -154,6 +185,11 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.type).to eq "Cloud Fixity"
         expect(cloud_fixity_report.status).to eq :needs_attention
         expect(cloud_fixity_report.summary).to start_with "One or more files failed Cloud Fixity Checks."
+
+        list = cloud_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
     context "for a FileSet with a failed cloud fixity event" do
@@ -170,6 +206,11 @@ RSpec.describe HealthReport do
         expect(cloud_fixity_report.type).to eq "Cloud Fixity"
         expect(cloud_fixity_report.status).to eq :needs_attention
         expect(cloud_fixity_report.summary).to start_with "This resource failed Cloud Fixity Checks."
+
+        list = cloud_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
       end
     end
     context "for a resource that hasn't preserved yet" do
@@ -225,7 +266,7 @@ RSpec.describe HealthReport do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     context "for a resource with a derivative that failed to process" do
       with_queue_adapter :inline
-      it "returns :needs_attention" do
+      it "returns :needs_attention with one unhealthy resource" do
         stub_ezid
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).file_sets.first
@@ -237,24 +278,72 @@ RSpec.describe HealthReport do
 
         expect(report.status).to eq :needs_attention
         expect(file_set_report.status).to eq :needs_attention
+
+        derivative_report = report.checks.last
+        list = derivative_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq resource.title.first
+        expect(list[0][:url]).to include "#{resource.id}/file_manager"
+      end
+    end
+
+    context "for a multivolume work with two derivatives that failed to process" do
+      with_queue_adapter :inline
+      it "returns :needs_attention with two unhealthy resources" do
+        stub_ezid
+        file1 = fixture_file_upload("files/example.tif", "image/tiff")
+        file2 = fixture_file_upload("files/example.tif", "image/tiff")
+        file3 = fixture_file_upload("files/example.tif", "image/tiff")
+        file4 = fixture_file_upload("files/example.tif", "image/tiff")
+
+        # Child resource with two broken files
+        resource1 = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file1, file2])
+        file_set = Wayfinder.for(resource1).file_sets.first
+        file_set.primary_file.error_message = "Broken!"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+        file_set = Wayfinder.for(resource1).file_sets.last
+        file_set.primary_file.error_message = "Broken!"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+
+        # Child resource with one broken file and one unbroken file
+        resource2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file3, file4])
+        file_set = Wayfinder.for(resource2).file_sets.first
+        file_set.primary_file.error_message = "Broken!"
+        ChangeSetPersister.default.metadata_adapter.persister.save(resource: file_set)
+        parent = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [resource1.id, resource2.id])
+
+        report = described_class.for(parent)
+
+        expect(report.status).to eq :needs_attention
+
+        derivative_report = report.checks.last
+        list = derivative_report.unhealthy_resources
+        expect(list.count).to eq 2
+        expect(list[0][:title]).to eq resource1.title.first
+        expect(list[0][:url]).to include "#{resource1.id}/file_manager"
+        expect(list[1][:title]).to eq resource2.title.first
+        expect(list[1][:url]).to include "#{resource2.id}/file_manager"
       end
     end
 
     context "for a resource with a derivative that worked" do
       with_queue_adapter :inline
-      it "returns :healthy" do
+      it "returns :healthy with no unhealthy resources" do
         stub_ezid
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
 
         report = described_class.for(resource)
 
         expect(report.status).to eq :healthy
+        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
+        list = derivative_check.unhealthy_resources
+        expect(list.count).to eq 0
       end
     end
 
     context "for a resource with a derivative that hasn't processed yet" do
       with_queue_adapter :inline
-      it "returns :in_progress" do
+      it "returns :in_progress with one unhealthy resource" do
         stub_ezid
         resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
         file_set = Wayfinder.for(resource).file_sets.first
@@ -266,6 +355,10 @@ RSpec.describe HealthReport do
 
         expect(report.status).to eq :in_progress
         expect(file_set_report.status).to eq :in_progress
+
+        derivative_check = report.checks.find { |check| check.is_a? HealthReport::DerivativeCheck }
+        list = derivative_check.unhealthy_resources
+        expect(list.count).to eq 1
       end
     end
 
@@ -323,27 +416,5 @@ RSpec.describe HealthReport do
         end
       end
     end
-
-    # rubocop:disable Metrics/MethodLength
-    def create_file_set(cloud_fixity_status:)
-      file_set = FactoryBot.create_for_repository(:file_set)
-      create_preservation_object(resource_id: file_set.id, event_status: cloud_fixity_status, event_type: :cloud_fixity)
-      file_set
-    end
-
-    def create_preservation_object(event_status:, resource_id:, event_type:)
-      metadata_node = FileMetadata.new(id: SecureRandom.uuid)
-      preservation_object = FactoryBot.create_for_repository(:preservation_object, preserved_object_id: resource_id, metadata_node: metadata_node)
-      FactoryBot.create_for_repository(
-        :event,
-        type: event_type,
-        status: event_status,
-        resource_id: preservation_object.id,
-        child_id: metadata_node.id,
-        child_property: :metadata_node,
-        current: true
-      )
-    end
-    # rubocop:enable Metrics/MethodLength
   end
 end

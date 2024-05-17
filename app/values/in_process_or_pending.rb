@@ -15,13 +15,16 @@ class InProcessOrPending
 
   def in_process?
     return false unless resource.id
-    query_service.custom_queries.find_deep_children_with_property(
+    in_process_file_sets.count.positive?
+  end
+
+  def in_process_file_sets
+    @in_process_file_sets ||= query_service.custom_queries.find_deep_children_with_property(
       resource: resource,
       model: "FileSet",
       property: :processing_status,
-      value: "in process",
-      count: true
-    ).positive?
+      value: "in process"
+    )
   end
 
   def pending_uploads?
