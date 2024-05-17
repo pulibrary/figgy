@@ -76,7 +76,7 @@ export default {
     },
     selected: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
   data: function () {
