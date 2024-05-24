@@ -111,9 +111,13 @@ defaults: &defaults
   access_control:
     # expects a space-delimited list, e.g. "1.2.3 1.2.4 1.2.5"
     reading_room_ips: <%= ENV.fetch('READING_ROOM_IPS', "").split %>
-    # list from https://www.net.princeton.edu/ip-network-ranges.html and
-    # https://princeton.service-now.com/service?sys_id=KB0012390&id=kb_article
-    campus_ip_ranges: <%= %w[128.112.0.0/16 140.180.0.0/16 204.153.48.0/23 66.180.176.0/24 66.180.177.0/24 66.180.180.0/22 2001:470:10e::/48 2620:c4::/48 2604:4540::/32 172.20.192.0/19 172.20.95.0/24 137.83.217.151/32 128.112.64.96/27 128.112.64.224/27 128.112.65.0/24 128.112.66.0/23 128.112.68.0/22] %>
+    # data sources:
+    # https://www.net.princeton.edu/ip-network-ranges.html (the
+    # globally-routable ranges)
+    # https://princeton.service-now.com/service?id=kb_article&sys_id=KB0013958
+    # (10.* ranges)
+    # https://princeton.service-now.com/service?sys_id=KB0012390&id=kb_article (VPN ranges and domains)
+    campus_ip_ranges: <%= %w[128.112.0.0/16 140.180.0.0/16 204.153.48.0/23 66.180.176.0/24 66.180.177.0/24 66.180.180.0/22 2620:c4::/48 2604:4540::/32 10.8.0.0/15 10.48.0.0/15 10.50.0.0/15 10.16.0.0/15 140.180.232.0/21 172.20.192.0/19 172.20.95.0/24 137.83.217.148/32 128.112.64.96/27 128.112.64.224/27 128.112.65.0/24 128.112.66.0/23 128.112.68.0/22] %>
     # list from https://princeton.service-now.com/service?sys_id=KB0012390&id=kb_article
     global_protect_fqdns:
       # US
