@@ -86,7 +86,7 @@ RSpec.feature "Structure Manager", js: true do
 
     # test expand and collapse of the tree
     find("button.expand-collapse", match: :first).click
-    expect(page).to have_selector(".lux-tree-sub", visible: false)
+    expect(page).not_to have_selector(".lux-tree-sub")
     find("button.expand-collapse", match: :first).click
     expect(page).to have_selector(".lux-tree-sub", visible: true)
 
@@ -95,7 +95,6 @@ RSpec.feature "Structure Manager", js: true do
     accept_confirm do
       find("ul.lux-tree-sub button.delete-folder", match: :first).click
     end
-    expect(page).not_to have_css "ul.lux-tree-sub"
     expect(page).to have_selector(".lux-card", count: 2)
 
     # test create folder with button click

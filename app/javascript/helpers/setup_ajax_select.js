@@ -1,5 +1,5 @@
-import Vue from 'vue/dist/vue.esm'
-import AjaxSelect from '@components/ajax-select.vue'
+import { createApp } from 'vue'
+import AjaxSelect from '../components/ajax-select.vue'
 
 function appendAjaxSelect (ajaxInput) {
   const inputId = ajaxInput.id
@@ -10,19 +10,21 @@ function appendAjaxSelect (ajaxInput) {
 
 function mountVueComponents (rootElement) {
   const $elements = $(rootElement).prev('.nested-fields').find('input[ajax_select_type]')
+  const app = createApp(
+    {
+      data () {
+        return { options: [] }
+      }
+    }
+  )
+  const createMyApp = () => createApp(app)
   $elements.each((i,e) => {
     appendAjaxSelect(e)
     const $ajaxSelect = $(e).prev('ajax-select')
 
-    new Vue({
-      el: $ajaxSelect[0],
-      components: {
-        'ajax-select': AjaxSelect
-      },
-      data: {
-        options: []
-      }
-    })
+    createMyApp()
+      .component('ajax-select', AjaxSelect)
+      .mount($ajaxSelect[0])
   })
 }
 

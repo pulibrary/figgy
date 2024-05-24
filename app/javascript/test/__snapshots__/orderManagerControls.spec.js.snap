@@ -1,43 +1,28 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`OrderManagerControls.vue > has the expected html structure 1`] = `
-<wrapper-stub
+<lux-wrapper
   class="lux-bg"
   data-v-eccb99cf=""
-  horizontal=""
-  maxwidth="1170"
-  type="div"
 >
   <div
     class="lux-controls"
     data-v-eccb99cf=""
   >
-    <!---->
-    <input-button-stub
+    <!--v-if-->
+    <lux-input-button-stub
       data-v-eccb99cf=""
       disabled="true"
-      icon=""
       id="save_btn"
       size="medium"
-      type=""
       variation="solid"
-    >
-       Apply Changes 
-    </input-button-stub>
-    <!---->
+    />
+    <!--v-if-->
   </div>
-  <heading-stub
+  <lux-heading-stub
     data-v-eccb99cf=""
     level="h2"
-    size="h1"
-  >
-     Zoom 
-    <small
-      data-v-eccb99cf=""
-    >
-      on the selected item
-    </small>
-  </heading-stub>
+  />
   <div
     class="lux-osd-wrapper"
     data-v-eccb99cf=""
@@ -53,5 +38,5 @@ exports[`OrderManagerControls.vue > has the expected html structure 1`] = `
       />
     </div>
   </div>
-</wrapper-stub>
+</lux-wrapper>
 `;

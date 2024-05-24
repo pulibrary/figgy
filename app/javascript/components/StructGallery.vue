@@ -1,10 +1,10 @@
 <template>
-  <wrapper
+  <lux-wrapper
     type="div"
     class="lux-gallery"
-    @click.native="deselect($event)"
+    @click="deselect($event)"
   >
-    <card
+    <lux-card
       v-for="(item) in items"
       :id="item.id"
       :key="item.id"
@@ -16,14 +16,14 @@
       :edited="hasChanged(item.id)"
       @click.capture="select(item.id, $event)"
     >
-      <media-image :src="item.mediaUrl" />
-      <heading level="h2">
+      <lux-media-image :src="item.mediaUrl" />
+      <lux-heading level="h2">
         {{ item.title }}
-      </heading>
-      <text-style variation="default">
+      </lux-heading>
+      <lux-text-style variation="default">
         {{ item.caption }}
-      </text-style>
-      <input-button
+      </lux-text-style>
+      <lux-input-button
         class="zoom-icon"
         type="button"
         variation="icon"
@@ -31,8 +31,8 @@
         icon="search"
         @button-clicked="zoomOnItem(item)"
       />
-    </card>
-  </wrapper>
+    </lux-card>
+  </lux-wrapper>
 </template>
 
 <script>

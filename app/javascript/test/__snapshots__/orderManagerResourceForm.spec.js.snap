@@ -4,10 +4,9 @@ exports[`OrderManagerResourceForm.vue > has the expected html structure 1`] = `
 <div
   data-v-e62d4199=""
 >
-  <heading-stub
+  <lux-heading
     data-v-e62d4199=""
     level="h2"
-    size="h1"
   >
      Set Properties 
     <small
@@ -15,49 +14,46 @@ exports[`OrderManagerResourceForm.vue > has the expected html structure 1`] = `
       data-v-e62d4199=""
     >
        for this 
-      <!---->
+      <!--v-if-->
        resource 
     </small>
-  </heading-stub>
+  </lux-heading>
   <span
     class="lux-file_count"
     data-v-e62d4199=""
   >
-    <text-style-stub
+    <lux-text-style
       data-v-e62d4199=""
-      type="p"
       variation="emphasis"
     >
-       Total files: 3 
-    </text-style-stub>
-    <!---->
+       Total files: 3
+    </lux-text-style>
+    <!--v-if-->
   </span>
   <span
     class="lux-bibid"
     data-v-e62d4199=""
   >
-     | BibId: 9946093213506421 
+     | BibId: 9946093213506421
   </span>
   <form
     data-v-e62d4199=""
     id="app"
-    novalidate="novalidate"
+    novalidate=""
   >
-    <input-radio-stub
+    <lux-input-radio
       data-v-e62d4199=""
-      errormessage=""
-      grouplabel="Viewing Direction"
+      group-label="Viewing Direction"
       id="viewDir"
       options="[object Object],[object Object],[object Object],[object Object]"
-      vertical="true"
+      vertical=""
     />
-    <input-radio-stub
+    <lux-input-radio
       data-v-e62d4199=""
-      errormessage=""
-      grouplabel="Viewing Hint"
+      group-label="Viewing Hint"
       id="viewHint"
       options="[object Object],[object Object],[object Object]"
-      vertical="true"
+      vertical=""
     />
   </form>
 </div>

@@ -1,5 +1,5 @@
-import DownloadNotifier from '@figgy/download_notifier.js'
-import consumer from '@channels/consumer'
+import DownloadNotifier from '../figgy/download_notifier.js'
+import consumer from '../channels/consumer'
 
 describe('DownloadNotifier', () => {
   // Stub window.location with a spy.

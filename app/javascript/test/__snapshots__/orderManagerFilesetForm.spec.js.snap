@@ -4,10 +4,9 @@ exports[`OrderManagerFilesetForm.vue > has the expected html structure 1`] = `
 <div
   data-v-09416229=""
 >
-  <heading-stub
+  <lux-heading
     data-v-09416229=""
     level="h2"
-    size="h1"
   >
      Edit 
     <small
@@ -16,55 +15,35 @@ exports[`OrderManagerFilesetForm.vue > has the expected html structure 1`] = `
     >
       the selected item
     </small>
-  </heading-stub>
+  </lux-heading>
   <form
     data-v-09416229=""
     id="app"
-    novalidate="novalidate"
+    novalidate=""
   >
-    <input-text-stub
+    <lux-input-text
       data-v-09416229=""
-      errormessage=""
-      helper=""
-      icon=""
       id="itemLabel"
       label="Label"
-      maxlength="256"
       name="itemLabel"
       placeholder="e.g., example.tif"
-      rows="5"
-      size="medium"
-      type="text"
-      value=""
-      width="auto"
-      wrapper="div"
     />
-    <input-select-stub
+    <lux-input-select
       data-v-09416229=""
-      errormessage=""
       id="pageType"
       label="Page Type"
       name="pageType"
       options="[object Object],[object Object],[object Object]"
-      size="medium"
       value="single"
-      width="auto"
-      wrapper="div"
     />
-    <input-checkbox-stub
+    <lux-input-checkbox
       data-v-09416229=""
-      errormessage=""
-      grouplabel=""
       id="startCanvasCheckbox"
-      label=""
       options="[object Object]"
     />
-    <input-checkbox-stub
+    <lux-input-checkbox
       data-v-09416229=""
-      errormessage=""
-      grouplabel=""
       id="thumbnailCheckbox"
-      label=""
       options="[object Object]"
     />
   </form>

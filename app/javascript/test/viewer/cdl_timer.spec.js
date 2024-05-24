@@ -1,4 +1,4 @@
-import CDLTimer from '@viewer/cdl_timer'
+import CDLTimer from '../../viewer/cdl_timer'
 describe('CDLTimer', () => {
   const initialHTML =
     '<meta name="csrf-token" content="YxKJmi/UUkd9MN+10GTo9/xKPqAvVdUIWtKxXzH9VpjVVwFLbT1swegQ6rcTZ517G5Y88pr/ndxzoyulCVZeQA==">' +

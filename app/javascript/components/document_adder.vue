@@ -29,10 +29,9 @@
         <tbody>
           <template
             v-for="recording in recordings"
+            :key="recording.id"
           >
-            <tr
-              :key="recording.id"
-            >
+            <tr>
               <td>
                 <a :href="'/catalog/' + recording.id">
                   {{ recording.title }}
@@ -76,6 +75,7 @@
 import axios from 'axios'
 import apollo from '../helpers/apolloClient'
 import gql from 'graphql-tag'
+import { reactive } from "vue"
 export default {
   props: {
     resourceId: {
@@ -144,7 +144,7 @@ export default {
         return data.data.resource.members
       })
     },
-    search (event) {
+    async search (event) {
       if (this.recording_query.trim() === '') {
         this.recordings = []
         return
@@ -154,12 +154,9 @@ export default {
       // Get all recording titles and IDs from a catalog search (Solr).
       // Ensure that this AJAX request does not trigger the caching of query
       // parameters (this is the default behavior for Blacklight 6 Controllers)
-      fetch(`/catalog.json?f[internal_resource_ssim][]=ScannedResource&f[change_set_ssim][]=recording&q=${this.recording_query}&async=true`)
-        .then(function (response) {
-          return response.json()
-        })
-        .then(function (data) { // Map to objects
-          return data.data.map(
+      let data = await fetch(`/catalog.json?f[internal_resource_ssim][]=ScannedResource&f[change_set_ssim][]=recording&q=${this.recording_query}&async=true`)
+      data = await data.json()
+      data = data.data.map(
             function (recordingDocument) {
               const titles = recordingDocument.attributes.figgy_title_ssi
               return {
@@ -169,22 +166,17 @@ export default {
               }
             }
           )
-        })
-        .then(function (recordings) {
-          const promises = []
-          // Set tracks for every recording, store promises in an array so we
-          // can tell when they resolve.
-          for (const recording of recordings) {
-            promises.concat(vm.tracks_by_recording_id(recording.id).then(function (tracks) {
-              recording.tracks = tracks
-            }))
-          }
-          // When all the tracks are set, update the Vue data to be now-complete
-          // recordings array.
-          Promise.all(promises).then(function () {
-            vm.recordings = recordings
-          })
-        })
+      let recordings = reactive(data)
+      const promises = []
+      // Set tracks for every recording, store promises in an array so we
+      // can tell when they resolve.
+      for (const recording of recordings) {
+        promises.concat(vm.tracks_by_recording_id(recording.id).then(function (tracks) {
+          recording.tracks = tracks
+        }))
+      }
+      await Promise.all(promises)
+      this.recordings = recordings
     }
   }
 }

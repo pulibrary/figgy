@@ -1,14 +1,7 @@
 <template>
   <div class="lux-orderManager">
-    <transition name="fade">
-      <div
-        v-if="loading"
-        class="lux-overlay"
-      >
-        <loader size="medium" />
-      </div>
-    </transition>
-    <alert
+
+    <lux-alert
       v-if="saved"
       status="success"
       type="alert"
@@ -16,8 +9,8 @@
       dismissible
     >
       Your work has been saved!
-    </alert>
-    <alert
+    </lux-alert>
+    <lux-alert
       v-if="saveError"
       status="error"
       type="alert"
@@ -26,18 +19,18 @@
       <h1>Sorry, there was a problem saving your work!</h1>
       <p>The following error message may help IT staff debug the problem:</p>
       <p><em>{{ errMsg }}</em></p>
-    </alert>
-    <wrapper
+    </lux-alert>
+    <lux-wrapper
       :full-width="false"
       class="lux-galleryPanel"
       type="div"
     >
       <toolbar @cards-resized="resizeCards($event)" />
       <div
-        v-if="isLoading"
+        v-if="isLoading || loading"
         class="loader"
       >
-        <loader
+        <lux-loader
           size="medium"
           class="galleryLoader"
         />
@@ -47,8 +40,8 @@
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
       />
-    </wrapper>
-    <wrapper
+    </lux-wrapper>
+    <lux-wrapper
       class="lux-sidePanel"
       type="div"
       :full-width="false"
@@ -59,8 +52,8 @@
       <filesets-form v-if="selectedTotal > 1" />
       <!-- Single Selected Form-->
       <fileset-form v-if="selectedTotal === 1" />
-      <controls viewer-id="viewer" />
-    </wrapper>
+      <controls viewer-id="viewer" :selected="selected"/>
+    </lux-wrapper>
   </div>
 </template>
 
@@ -68,6 +61,7 @@
 import { mapState } from 'vuex'
 import Controls from './OrderManagerControls.vue'
 import Toolbar from './OrderManagerToolbar.vue'
+import Gallery from './OrderManagerGallery.vue'
 import FilesetForm from './OrderManagerFilesetForm.vue'
 import FilesetsForm from './OrderManagerFilesetsForm.vue'
 import ResourceForm from './OrderManagerResourceForm.vue'
@@ -88,6 +82,7 @@ export default {
   type: 'Pattern',
   components: {
     toolbar: Toolbar,
+    gallery: Gallery,
     'resource-form': ResourceForm,
     'filesets-form': FilesetsForm,
     'fileset-form': FilesetForm,
@@ -117,7 +112,7 @@ export default {
     return {
       cardPixelWidth: 300,
       captionPixelPadding: 9,
-      errMsg: ''
+      errMsg: '',
     }
   },
   computed: {
@@ -136,6 +131,9 @@ export default {
         viewingHint: member.viewingHint
       }))
     },
+    selected () {
+      return this.gallery.selected
+    },
     selectedTotal () {
       return this.gallery.selected.length
     },
@@ -150,10 +148,13 @@ export default {
       return this.resource.loadState !== 'LOADED'
     },
     saved () {
-      return this.resource.saveState === 'SAVED'
+      return this.$store.getters.saved
     },
     saveError: function () {
-      return this.saveErrorMsg(this.resource.saveState)
+      if (this.$store.getters.saveError) {
+        return this.saveErrorMsg(this.resource.saveState)
+      }
+      return false
     },
     isLoading () {
       return this.resource.saveState === 'SAVING'

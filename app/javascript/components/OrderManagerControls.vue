@@ -1,13 +1,13 @@
 <template>
-  <wrapper class="lux-bg">
+  <lux-wrapper class="lux-bg">
     <div class="lux-controls">
-      <alert
+      <lux-alert
         v-if="orderChanged"
         status="info"
       >
         Page order has changed.
-      </alert>
-      <input-button
+      </lux-alert>
+      <lux-input-button
         id="save_btn"
         variation="solid"
         size="medium"
@@ -15,7 +15,7 @@
         @button-clicked="saveHandler($event)"
       >
         Apply Changes
-      </input-button>
+      </lux-input-button>
       <a
         v-if="!hidden"
         id="replace-file-button"
@@ -24,12 +24,12 @@
         Manage Page Files
       </a>
     </div>
-    <heading
+    <lux-heading
       v-if="selectedTotal === 1"
       level="h2"
     >
       Zoom <small>on the selected item</small>
-    </heading>
+    </lux-heading>
     <div
       v-if="selectedTotal === 1"
       class="lux-osd-wrapper"
@@ -41,7 +41,7 @@
         />
       </div>
     </div>
-  </wrapper>
+  </lux-wrapper>
 </template>
 
 <script>
@@ -73,6 +73,10 @@ export default {
     viewerId: {
       type: String,
       default: 'viewer'
+    },
+    selected: {
+      type: Array,
+      default: () => []
     }
   },
   data: function () {
@@ -127,10 +131,10 @@ export default {
     },
     selectedTotal () {
       return this.gallery.selected.length
-    }
+    },
   },
   updated: function () {
-    if (this.selectedTotal === 1) {
+    if (this.selected.length === 1) {
       this.initOSD()
     }
   },
@@ -140,6 +144,7 @@ export default {
         this.viewer.destroy()
         this.viewer = null
       }
+
       this.viewer = OpenSeadragon({
         id: this.osdId,
         showNavigationControl: false,

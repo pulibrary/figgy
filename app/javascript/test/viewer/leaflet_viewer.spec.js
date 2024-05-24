@@ -1,7 +1,7 @@
-import LeafletViewer from '@viewer/leaflet_viewer'
+import LeafletViewer from '../../viewer/leaflet_viewer'
 import jQ from 'jquery'
 import L from 'leaflet'
-import TabManager from '@viewer/tab_manager'
+import TabManager from '../../viewer/tab_manager'
 vi.mock('leaflet')
 describe('LeafletViewer', () => {
   const initialHTML =

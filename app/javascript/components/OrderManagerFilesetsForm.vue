@@ -1,101 +1,101 @@
 <template>
   <div>
-    <heading level="h2">
+    <lux-heading level="h2">
       Generate Labels <small class="text-muted">for selected items</small>
-    </heading>
+    </lux-heading>
     <form
       id="app"
       novalidate="true"
     >
-      <input-text
+      <lux-input-text
         id="unitLabel"
-        v-model="unitLabel"
+        :value="unitLabel"
         name="unitLabel"
         label="Label"
         placeholder="e.g., p."
-        @input="updateMultiLabels()"
+        @input="updateUnitLabel($event)"
+        @change="updateUnitLabel($event)"
       />
-      <input-text
+      <lux-input-text
         id="startNum"
-        v-model="start"
+        :value="start"
         name="startNum"
         label="Starting Numeral"
         placeholder="e.g., 10"
-        @input="updateMultiLabels()"
+        @input="updateStartNum($event)"
       />
-      <input-checkbox
+      <lux-input-checkbox
         v-if="!isMultiVolume"
-        v-model="bracket"
+        :value="bracket"
         :options="addBracketOpts"
-        @change="updateMultiLabels()"
+        @change="updateBracket($event)"
       />
-
-      <input-select
+      <lux-input-select
         v-if="bracket"
         id="bracketLocation"
-        v-model="bracketLocation"
+        :value="bracketLocation"
         name="bracketLocation"
         label="Bracket Location"
         :options="bracketLocationOpts"
-        @change="updateMultiLabels()"
+        @change="updateBracketLocation($event)"
       />
 
-      <input-select
+      <lux-input-select
         v-if="!isMultiVolume"
         id="labelMethod"
-        v-model="method"
+        :value="method"
         name="labelMethod"
         label="Labeling Method"
         :options="methodOpts"
-        @change="updateUnitLabel"
+        @change="updateMethod($event)"
       />
 
-      <input-select
+      <lux-input-select
         id="twoUp"
-        v-model="twoUp"
+        :value="twoUp"
         name="twoUp"
         label="Two Up"
         :options="twoUpOpts"
-        @change="updateMultiLabels()"
+        @change="updateTwoUp($event)"
       />
 
-      <input-text
+      <lux-input-text
         v-if="twoUp"
         id="twoUpSeparator"
-        v-model="twoUpSeparator"
+        :value="twoUpSeparator"
         name="twoUpSeparator"
         label="Two-Up Separator"
-        @input="updateMultiLabels()"
+        @input="updateTwoUpSeparator($event)"
       />
 
       <div
         v-if="method === 'foliate'"
         class="lux-row"
       >
-        <input-text
+        <lux-input-text
           id="frontLabel"
-          v-model="frontLabel"
+          :value="frontLabel"
           name="frontLabel"
           label="Front Label"
           placeholder="(recto)"
-          @input="updateMultiLabels()"
+          @input="updateFrontLabel($event)"
         />
-        <input-text
+        <lux-input-text
           id="backLabel"
-          v-model="backLabel"
+          :value="backLabel"
           name="backLabel"
           label="Back Label"
           placeholder="(verso)"
-          @input="updateMultiLabels()"
+          @input="updateBackLabel($event)"
         />
-        <input-select
+        <lux-input-select
           v-if="!isMultiVolume"
           id="startWith"
-          v-model="startWith"
+          :value="startWith"
           name="startWith"
           label="Start With"
           :options="startWithOpts"
-          @change="updateMultiLabels()"
+          @change="updateStartWith($event)"
         />
       </div>
     </form>
@@ -133,8 +133,8 @@ export default {
     return {
       start: '1',
       method: 'paginate',
-      frontLabel: 'r. ',
-      backLabel: 'v. ',
+      frontLabel: 'r.',
+      backLabel: 'v.',
       startsWith: 'front',
       unitLabel: 'p. ',
       bracket: false,
@@ -225,17 +225,59 @@ export default {
   },
   watch: {
     method: function (val) {
-      this.updateUnitLabel()
+      this.overrideUnitLabel()
     }
   },
   methods: {
-    updateUnitLabel () {
+    overrideUnitLabel () {
       // This should be generated with calculate() or watch()
       if (this.method === 'paginate') {
         this.unitLabel = 'p. '
       } else if (this.method === 'foliate') {
         this.unitLabel = 'f. '
       }
+    },
+    updateUnitLabel (event) {
+      const label = event.target.value
+      this.unitLabel = label
+      this.updateMultiLabels()
+    },
+    updateStartNum (event) {
+      const start = event.target.value
+      this.start = start
+      this.updateMultiLabels()
+    },
+    updateBracket (event) {
+      this.bracket = event
+      this.updateMultiLabels()
+    },
+    updateBracketLocation (event) {
+      this.bracketLocation = event
+      this.updateMultiLabels()
+    },
+    updateMethod (event) {
+      this.method = event
+      this.updateMultiLabels()
+    },
+    updateTwoUp (event) {
+      this.twoUp = event
+      this.updateMultiLabels()
+    },
+    updateTwoUpSeparator (event) {
+      this.twoUpSeparator = event.target.value
+      this.updateMultiLabels()
+    },
+    updateFrontLabel (event) {
+      this.frontLabel = event.target.value
+      this.updateMultiLabels()
+    },
+    updateBackLabel (event) {
+      this.backLabel = event.target.value
+      this.updateMultiLabels()
+    },
+    updateStartWith (event) {
+      this.startsWith = event
+      this.updateMultiLabels()
     },
     labelerOpts () {
       const unitLabel = this.unitLabel
@@ -263,20 +305,21 @@ export default {
       return /^\+?(0|[1-9]\d*)$/.test(str)
     },
     updateMultiLabels: debounce(function () {
-      const changeList = this.gallery.changeList
-      const items = this.gallery.items
+      let changeList = this.gallery.changeList
+      let items = this.gallery.items
       this.start = this.isNormalInteger(this.start)
         ? this.start - 0
         : this.start
-      const generator = Lablr.pageLabelGenerator(this.labelerOpts())
+      let generator = Lablr.pageLabelGenerator(this.labelerOpts())
+      window.generator = generator
       for (let i = 0; i < this.selectedTotal; i++) {
-        const index = this.gallery.items
+        let index = this.gallery.items
           .map(function (item) {
             return item.id
           })
           .indexOf(this.gallery.selected[i].id)
         // Allow unnumbered pages / flyleaves
-        const caption = !this.start || this.start.length === 0
+        let caption = !this.start || this.start.length === 0
           ? ''
           : generator.next().value
         items[index].caption = caption
@@ -297,5 +340,9 @@ export default {
 small {
   font-size: 1rem;
   font-weight: 400;
+}
+
+.lux-select:last-child {
+  margin-bottom: 16px;
 }
 </style>

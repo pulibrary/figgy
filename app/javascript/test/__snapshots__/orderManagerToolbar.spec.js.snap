@@ -5,27 +5,18 @@ exports[`OrderManagerToolbar.vue > has the expected html structure 1`] = `
   class="lux-toolbar"
   data-v-5c9142c7=""
 >
-  <dropdown-menu-stub
-    align="left"
-    buttonlabel="Selection Options"
+  <lux-dropdown-menu
+    button-label="Selection Options"
     data-v-5c9142c7=""
-    element="div"
-    menuitems="[object Object],[object Object],[object Object],[object Object]"
-    size="medium"
-    type="buttons"
+    menu-items="[object Object],[object Object],[object Object],[object Object]"
   />
-  <dropdown-menu-stub
-    align="left"
-    buttonlabel="With Selected..."
+  <lux-dropdown-menu
+    button-label="With Selected..."
     data-v-5c9142c7=""
-    element="div"
-    menuitems="[object Object],[object Object],[object Object]"
-    size="medium"
-    type="buttons"
+    menu-items="[object Object],[object Object],[object Object]"
   />
-  <spacer-stub
+  <lux-spacer
     data-v-5c9142c7=""
-    type="div"
   />
   <div
     class="lux-zoom-slider"
@@ -35,14 +26,10 @@ exports[`OrderManagerToolbar.vue > has the expected html structure 1`] = `
       class="lux-svg-icon"
       data-v-5c9142c7=""
       height="12"
-      iconcolor="rgb(0,0,0)"
-      iconname="shrink"
+      icon-color="rgb(0,0,0)"
+      icon-name="shrink"
       width="12"
-    >
-      <lux-icon-picture-stub
-        data-v-5c9142c7=""
-      />
-    </lux-icon-base-stub>
+    />
     <label
       data-v-5c9142c7=""
       for="img_zoom"
@@ -55,20 +42,15 @@ exports[`OrderManagerToolbar.vue > has the expected html structure 1`] = `
       max="500"
       min="40"
       type="range"
-      value="300"
     />
     <lux-icon-base-stub
       class="lux-svg-icon"
       data-v-5c9142c7=""
       height="24"
-      iconcolor="rgb(0,0,0)"
-      iconname="grow"
+      icon-color="rgb(0,0,0)"
+      icon-name="grow"
       width="24"
-    >
-      <lux-icon-picture-stub
-        data-v-5c9142c7=""
-      />
-    </lux-icon-base-stub>
+    />
   </div>
 </div>
 `;

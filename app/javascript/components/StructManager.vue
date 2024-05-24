@@ -5,10 +5,10 @@
         v-if="saving"
         class="lux-overlay"
       >
-        <loader size="medium" />
+        <lux-loader size="medium" />
       </div>
     </transition>
-    <alert
+    <lux-alert
       v-if="saved"
       status="success"
       type="alert"
@@ -17,8 +17,8 @@
       class="alert"
     >
       Your work has been saved!
-    </alert>
-    <alert
+    </lux-alert>
+    <lux-alert
       v-if="saveError"
       status="error"
       type="alert"
@@ -27,7 +27,7 @@
       class="alert"
     >
       Sorry, there was a problem saving your work!
-    </alert>
+    </lux-alert>
     <toolbar
       @cards-resized="resizeCards($event)"
       @clear-clipboard="clearClipboard"
@@ -48,12 +48,12 @@
       class="lux-sidePanel"
     >
       <div class="panelHeader">
-        <heading
+        <lux-heading
           level="h2"
           size="h6"
         >
           Logical Structure
-        </heading>
+        </lux-heading>
       </div>
       <tree
         :id="tree.structure.id"
@@ -68,12 +68,12 @@
       class="lux-galleryPanel"
     >
       <div class="panelHeader">
-        <heading
+        <lux-heading
           level="h2"
           size="h6"
         >
           Unstructured Files
-        </heading>
+        </lux-heading>
       </div>
       <struct-gallery
         class="lux-galleryWrapper"
@@ -88,10 +88,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import Toolbar from '@components/StructManagerToolbar.vue'
-import Tree from '@components/Tree.vue'
-import StructGallery from '@components/StructGallery.vue'
-import DeepZoom from '@components/DeepZoom.vue'
+import Toolbar from './StructManagerToolbar.vue'
+import Tree from './Tree.vue'
+import StructGallery from './StructGallery.vue'
+import DeepZoom from './DeepZoom.vue'
 import mixin from './structMixins.js'
 
 /**

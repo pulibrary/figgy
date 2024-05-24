@@ -33,7 +33,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :replaces, multiple: true, require: false
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
   property :notice_type, multiple: false, required: false
 
   # MARCRelator attributes

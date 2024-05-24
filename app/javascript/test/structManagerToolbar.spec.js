@@ -1,15 +1,11 @@
-import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { createStore } from 'vuex'
+import { mount, shallowMount } from "@vue/test-utils"
 import StructManagerToolbar from "../components/StructManagerToolbar.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
 import { actions } from "../store/vuex/actions"
 import { treeMutations } from "../store/tree"
 import { zoomMutations, zoomGetters } from "../store/zoom"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 let wrapper
 let items = [
@@ -136,7 +132,7 @@ const gallery = {
     changeList: ["2"],
     ogItems: items,
   },
-  mutations: modules.galleryModule.mutations,
+  mutations: galleryModule.mutations,
 }
 
 // let saveStructureAJAX: vi.fn();
@@ -166,7 +162,7 @@ let resource = {
   },
 }
 
-let store = new Vuex.Store({
+const store = createStore({
   actions: actions,
   modules: {
     ordermanager: resource,
@@ -176,18 +172,20 @@ let store = new Vuex.Store({
   },
 })
 
+
 describe("StructManagerToolbar.vue", () => {
   beforeEach(() => {
 
     wrapper = mount(StructManagerToolbar, {
-      localVue,
-      store,
-      stubs: [
-        "dropdown-menu",
-        "spacer",
-        "lux-icon-base",
-        "lux-icon-picture",
-      ],
+      global: {
+        plugins: [store],
+        stubs: [
+          "dropdown-menu",
+          "spacer",
+          "lux-icon-base",
+          "lux-icon-picture",
+        ],
+      }
     })
   })
 
@@ -213,7 +211,7 @@ describe("StructManagerToolbar.vue", () => {
     // we need to modify the structure to disable Save
     store.commit('SET_MODIFIED', true)
     expect(wrapper.vm.isSaveDisabled()).toBe(false)
-    await wrapper.findAll('#save_btn').trigger('click')
+    await wrapper.findAll('#save_btn')[0].trigger('button-clicked')
     expect(wrapper.emitted()).toHaveProperty('save-structure')
   })
 

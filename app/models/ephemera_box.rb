@@ -18,7 +18,7 @@ class EphemeraBox < Resource
   attribute :thumbnail_id
   attribute :local_identifier
   attribute :cached_parent_id, Valkyrie::Types::ID.optional
-  attribute :embargo_date, Valkyrie::Types::String.optional
+  attribute :embargo_date, ::Types::EmbargoDate.optional
 
   def title
     ["Ephemera Box"]

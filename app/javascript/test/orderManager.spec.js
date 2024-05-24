@@ -1,12 +1,8 @@
-import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { createStore } from "vuex"
+import { mount, shallowMount } from "@vue/test-utils"
 import OrderManager from "../components/OrderManager.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 // Work-around in order to ensure that the Global object is accessible from the component
 const Global = {
@@ -76,7 +72,7 @@ const gallery = {
     changeList: ["2"],
     ogItems: items,
   },
-  mutations: modules.galleryModule.mutations,
+  mutations: galleryModule.mutations,
 }
 
 const actions = {
@@ -104,12 +100,9 @@ let resource = {
   mutations: resourceMutations,
   getters: resourceGetters,
   actions: actions,
-  modules: {
-    gallery: gallery,
-  },
 }
 
-let store = new Vuex.Store({
+let store = createStore({
   modules: {
     ordermanager: resource,
     gallery: gallery,
@@ -120,22 +113,34 @@ describe("OrderManager.vue", () => {
   beforeEach(() => {
 
     wrapper = mount(OrderManager, {
-      localVue,
-      store,
-      propsData: {
+      global: {
+        plugins: [store],
+        stubs: [
+          "toolbar",
+          "gallery",
+          "text-style",
+          "wrapper",
+          "fileset-form",
+          "controls",
+          "lux-loader",
+          "resource-form"],
+      },
+      props: {
         resourceObject: resourceObject,
       },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
     })
   })
 
   it("has the right gallery items", () => {
+    store.commit('SET_RESOURCE', resourceObject)
     const items = wrapper.vm.galleryItems
     expect(items[0].caption).toBe("a")
     expect(items[0].mediaUrl).toBe(
       "https://libimages1.princeton.edu/loris/figgy_prod/f7%2F67%2Ffe%2Ff767fe4247524c5f96e16eba2ff93301%2Fintermediate_file.jp2/full/300,/0/default.jpg"
     )
     expect(items[1].mediaUrl).toBe("https://picsum.photos/600/300/?random")
+    // returns whether or not the resource is LOADING, should be LOADED
+    expect(wrapper.vm.loading).toBe(false)
   })
 
   it("has the right selectedTotal", () => {
@@ -144,10 +149,6 @@ describe("OrderManager.vue", () => {
 
   it("returns whether or not the resource isMultiVolume", () => {
     expect(wrapper.vm.isMultiVolume).toBe(false)
-  })
-
-  it("returns whether or not the resource is Loading", () => {
-    expect(wrapper.vm.loading).toBe(false)
   })
 
   it("returns whether or not the resource is Saved", () => {
@@ -171,12 +172,13 @@ describe("OrderManager.vue", () => {
   it("calls the right action when no resourceObject is passed in", () => {
     // need to remount since the action only fires before mounting
     const wrapper2 = mount(OrderManager, {
-      localVue,
-      store,
-      propsData: {
+      global: {
+        plugins: [store],
+        stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "lux-loader", "resource-form"],
+      },
+      props: {
         resourceId: "foo",
       },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
     })
     expect(actions.loadImageCollectionGql).toHaveBeenCalled()
   })
@@ -221,26 +223,24 @@ describe("OrderManager.vue", () => {
       mutations: resourceMutations,
       getters: resourceGetters,
       actions: actions,
-      modules: {
-        gallery: gallery,
-      }
     }
 
-    let store = new Vuex.Store({
+    let store = createStore({
       modules: {
         ordermanager: resource,
-	      gallery: gallery,
+        gallery: gallery,
       }
     })
 
     let wrapper = mount(OrderManager, {
-      localVue,
-      store: store,
-      propsData: {
-        resourceObject: resourceObject,
-	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      global: {
+        plugins: [store],
+        stubs: ["toolbar", "gallery", "lux-text-style", "lux-wrapper", "fileset-form", "controls", "lux-loader", "resource-form"],
       },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+      props: {
+        resourceObject: resourceObject,
+        defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      },
     })
 
     it("renders the default Figgy thumbnail", () => {
@@ -285,26 +285,24 @@ describe("OrderManager.vue", () => {
       mutations: resourceMutations,
       getters: resourceGetters,
       actions: actions,
-      modules: {
-        gallery: gallery,
-      }
     }
 
-    let store = new Vuex.Store({
+    let store = createStore({
       modules: {
         ordermanager: resource,
-	      gallery: gallery,
+        gallery: gallery,
       }
     })
 
     let wrapper = mount(OrderManager, {
-      localVue,
-      store: store,
-      propsData: {
-        resourceObject: resourceObject,
-	      defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      global: {
+        plugins: [store],
+        stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
       },
-      stubs: ["toolbar", "gallery", "text-style", "wrapper", "fileset-form", "controls", "loader", "resource-form"],
+      props: {
+        resourceObject: resourceObject,
+        defaultThumbnail: Global.figgy.resource.defaultThumbnail
+      },
     })
 
     it("displays an alert with an error message", () => {

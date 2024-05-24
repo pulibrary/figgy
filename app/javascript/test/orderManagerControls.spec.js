@@ -1,12 +1,8 @@
-import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { createStore } from "vuex"
+import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerControls from "../components/OrderManagerControls.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 let wrapper
 let getters
@@ -77,7 +73,7 @@ describe("OrderManagerControls.vue", () => {
         changeList: [],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const getters = {
@@ -106,12 +102,9 @@ describe("OrderManagerControls.vue", () => {
       mutations: resourceMutations,
       getters: getters,
       actions: actions,
-      modules: {
-        gallery: gallery,
-      },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: resource,
         gallery: gallery,
@@ -134,10 +127,11 @@ describe("OrderManagerControls.vue", () => {
     }
 
     wrapper = mount(OrderManagerControls, {
-      options,
-      localVue,
-      store,
-      stubs: ["heading", "input-button", "wrapper"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["lux-alert", "lux-heading", "lux-input-button"],
+      }
     })
   })
 
@@ -146,7 +140,7 @@ describe("OrderManagerControls.vue", () => {
   })
 
   it('shows the openseadragon div when a single fileset is selected', () => {
-    expect(wrapper.find('heading-stub').exists()).toBe(true)
+    expect(wrapper.find('lux-heading-stub').exists()).toBe(true)
     expect(wrapper.find('.lux-osd-wrapper').exists()).toBe(true)
   })
 
@@ -188,7 +182,7 @@ describe("OrderManagerControls.vue", () => {
         // changeList: ["2"],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const changedResource = {
@@ -212,12 +206,9 @@ describe("OrderManagerControls.vue", () => {
       mutations: resourceMutations,
       getters: changedGetters,
       actions: actions,
-      modules: {
-        gallery: changedGallery,
-      },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: changedResource,
         gallery: changedGallery,
@@ -240,17 +231,18 @@ describe("OrderManagerControls.vue", () => {
     }
 
     wrapper = mount(OrderManagerControls, {
-      options,
-      localVue,
-      store,
-      stubs: ["alert", "heading", "input-button", "wrapper"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["lux-heading", "lux-input-button"],
+      }
     })
 
     // orderChanged should be true when items and ogItems don't match
     expect(wrapper.vm.orderChanged).toBe(true)
 
     // displays an alert when page order has changed
-    expect(wrapper.find('alert-stub').exists()).toBe(true)
+    expect(wrapper.find('lux-alert').exists()).toBe(true)
 
     // Disable the button while saving.
     expect(wrapper.vm.isDisabled).toBeTruthy()
@@ -286,7 +278,7 @@ describe("OrderManagerControls.vue", () => {
         // changeList: ["2"],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const changedResource = {
@@ -310,12 +302,9 @@ describe("OrderManagerControls.vue", () => {
       mutations: resourceMutations,
       getters: changedGetters,
       actions: actions,
-      modules: {
-        gallery: changedGallery,
-      },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: changedResource,
         gallery: changedGallery,
@@ -338,10 +327,11 @@ describe("OrderManagerControls.vue", () => {
     }
 
     wrapper = mount(OrderManagerControls, {
-      options,
-      localVue,
-      store,
-      stubs: ["alert", "heading", "input-button", "wrapper"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["lux-alert", "lux-heading", "lux-input-button", "lux-wrapper"],
+      }
     })
 
     // calls the appropriate action on save

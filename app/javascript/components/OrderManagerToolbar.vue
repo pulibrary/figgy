@@ -3,17 +3,17 @@
     :is="type"
     :class="['lux-toolbar']"
   >
-    <dropdown-menu
+    <lux-dropdown-menu
       button-label="Selection Options"
       :menu-items="[
         {name: 'All', component: 'All'},
         {name: 'None', component: 'None'},
-        {name: 'Alternate', component: 'Alternate', disabled: true},
+        {name: 'Alternate', component: 'Alternate'},
         {name: 'Inverse', component: 'Inverse'}
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
-    <dropdown-menu
+    <lux-dropdown-menu
       button-label="With Selected..."
       :menu-items="[
         {name: 'Cut', component: 'Cut', disabled: isCutDisabled()},
@@ -22,7 +22,7 @@
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
-    <spacer />
+    <lux-spacer />
     <div class="lux-zoom-slider">
       <lux-icon-base
         class="lux-svg-icon"
@@ -187,12 +187,16 @@ export default {
   padding: 0 24px;
 }
 
+.lux-dropdown-menu {
+  margin: 0 .25rem;
+}
+
 .lux-zoom-slider {
   .lux-svg-icon,
   input {
     vertical-align: middle;
     line-height: 1;
-    margin: 0;
+    margin: 5px;
   }
 
   input[type="range"] {

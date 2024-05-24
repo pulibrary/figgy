@@ -1,21 +1,21 @@
 <template>
   <div>
-    <heading level="h2">
+    <lux-heading level="h2">
       Set Properties <small class="text-muted">
         for this <span v-if="isMultiVolume">
           multi-volume
         </span> resource
       </small>
-    </heading>
+    </lux-heading>
     <span class="lux-file_count">
-      <text-style variation="emphasis">
+      <lux-text-style variation="emphasis">
         Total files: {{ memberCount }}
-      </text-style>
-      <text-style
+      </lux-text-style>
+      <lux-text-style
         v-if="memberCount < 1"
         variation="strong"
       >Please add files to this Resource
-        before proceeding.</text-style>
+        before proceeding.</lux-text-style>
     </span>
     <span
       v-if="resource.bibId"
@@ -27,7 +27,7 @@
       id="app"
       novalidate="true"
     >
-      <input-radio
+      <lux-input-radio
         id="viewDir"
         vertical
         group-label="Viewing Direction"
@@ -35,7 +35,7 @@
         :value="viewDirs.value"
         @change="updateViewDir($event)"
       />
-      <input-radio
+      <lux-input-radio
         v-if="!isMultiVolume"
         id="viewHint"
         vertical

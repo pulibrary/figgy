@@ -1,8 +1,7 @@
 <template>
   <div id="embedded_file_browser">
-    <template v-for="file in selectedFiles">
+    <template v-for="file in selectedFiles" :key="file.path">
       <input
-        :key="file.path"
         type="hidden"
         :name="`ingest_files[]`"
         :value="file.path"

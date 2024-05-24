@@ -1,9 +1,5 @@
-import Vue from 'vue'
 import _ from 'lodash'
-import system from 'lux-design-system'
 
-Vue.use(system)
-Vue.config.productionTip = false
 vi.unmock('lodash')
 _.debounce = vi.fn((fn) => fn);
 

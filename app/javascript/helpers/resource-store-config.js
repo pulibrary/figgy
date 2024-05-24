@@ -1,12 +1,12 @@
 // resource-store-config.spec.js
-import { modules } from 'lux-design-system'
-import { resourceState, resourceMutations, resourceGetters } from "@store/resource"
+import { resourceState, resourceMutations, resourceGetters } from "../store/resource"
+import { galleryModule } from "../store/gallery"
 
 export default {
   state: resourceState,
   mutations: resourceMutations,
   getters: resourceGetters,
   modules: {
-    gallery: modules.galleryModule,
+    gallery: galleryModule,
   },
 }

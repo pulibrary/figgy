@@ -1,22 +1,22 @@
 <template>
   <div>
-    <heading level="h2">
+    <lux-heading level="h2">
       Edit <small class="text-muted">the selected item</small>
-    </heading>
+    </lux-heading>
     <form
       id="app"
       novalidate="true"
     >
-      <input-text
+      <lux-input-text
         id="itemLabel"
-        v-model="singleForm.caption"
+        :value="singleForm.caption"
         name="itemLabel"
         label="Label"
         placeholder="e.g., example.tif"
-        @input="updateSingle()"
+        @input="updateLabel($event)"
       />
 
-      <input-select
+      <lux-input-select
         v-if="!isMultiVolume"
         id="pageType"
         label="Page Type"
@@ -26,13 +26,13 @@
         @change="updateViewHint($event)"
       />
 
-      <input-checkbox
+      <lux-input-checkbox
         v-if="!isMultiVolume"
         id="startCanvasCheckbox"
         :options="startCanvasOpts"
         @change="updateStartCanvas($event)"
       />
-      <input-checkbox
+      <lux-input-checkbox
         id="thumbnailCheckbox"
         :options="thumbnailOpts"
         @change="updateThumbnail($event)"
@@ -162,6 +162,14 @@ export default {
       this.singleForm.viewingHint = viewHint
       this.updateSingle()
     },
+    updateLabel (event) {
+      let label = this.gallery.selected[0].caption
+      if (event) {
+        label = event.target.value
+      }
+      this.singleForm.caption = label
+      this.updateSingle()
+    },
     updateSingle: debounce(function () {
       const changeList = this.gallery.changeList
       const items = this.gallery.items
@@ -175,7 +183,6 @@ export default {
       if (changeList.indexOf(this.gallery.selected[0].id) === -1) {
         changeList.push(this.gallery.selected[0].id)
       }
-
       this.$store.dispatch('updateChanges', changeList)
       this.$store.dispatch('updateItems', items)
     }, 300, { leading: false, trailing: true })

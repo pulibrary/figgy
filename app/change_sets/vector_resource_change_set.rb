@@ -21,7 +21,7 @@ class VectorResourceChangeSet < ChangeSet
   property :depositor, multiple: false, require: false
   property :portion_note, multiple: false, required: false
   property :downloadable, multiple: false, require: true, default: "public"
-  property :embargo_date, multiple: false, required: false, type: Valkyrie::Types::String.optional
+  property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
   property :notice_type, multiple: false, required: false
 
   # Virtual Attributes

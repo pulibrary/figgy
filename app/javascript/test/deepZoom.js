@@ -5,10 +5,6 @@ import { zoomMutations, zoomGetters } from "../store/zoom"
 import { modules } from 'lux-design-system'
 import OpenSeadragon from 'openseadragon'
 
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
 let wrapper
 let items = [
   {
@@ -64,7 +60,6 @@ describe("DeepZoom.vue", () => {
   beforeEach(() => {
 
     wrapper = mount(DeepZoom, {
-      localVue,
       store,
       stubs: [
         "wrapper",

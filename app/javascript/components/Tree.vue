@@ -6,7 +6,7 @@
           v-if="!jsonData.file"
           class="lux-item"
         >
-          <input-button
+          <lux-input-button
             class="expand-collapse"
             type="button"
             variation="icon"
@@ -35,7 +35,7 @@
           >
             <lux-icon-end-node />
           </lux-icon-base>
-          <media-image
+          <lux-media-image
             v-if="thumbnail"
             :alt="structureData.label"
             :src="thumbnail"
@@ -57,7 +57,7 @@
               >
             </div>
             <div class="folder-edit">
-              <input-button
+              <lux-input-button
                 class="save-label"
                 type="button"
                 variation="icon"
@@ -75,7 +75,7 @@
               {{ structureData.label }}
             </div>
             <div class="folder-edit">
-              <input-button
+              <lux-input-button
                 class="toggle-edit"
                 type="button"
                 variation="icon"
@@ -84,7 +84,7 @@
                 @button-clicked="toggleEdit(id)"
               />
 
-              <input-button
+              <lux-input-button
                 v-if="!isFile"
                 class="create-folder"
                 type="button"
@@ -93,7 +93,7 @@
                 icon="add"
                 @button-clicked="createFolder(id)"
               />
-              <input-button
+              <lux-input-button
                 v-else
                 class="zoom-file"
                 type="button"
@@ -102,7 +102,7 @@
                 icon="search"
                 @button-clicked="zoomFile(id)"
               />
-              <input-button
+              <lux-input-button
                 class="delete-folder"
                 type="button"
                 variation="icon"
@@ -137,7 +137,7 @@
 <script>
 import store from '../store'
 import { mapState } from 'vuex'
-import IconEndNode from '@components/IconEndNode.vue'
+import IconEndNode from './IconEndNode.vue'
 import mixin from './structMixins.js'
 /**
  * TreeItems are the building blocks of hierarchical navigation.
@@ -151,6 +151,7 @@ export default {
     'lux-icon-end-node': IconEndNode
   },
   mixins: [mixin],
+  emits: ["create-folder", "delete-folder", "zoom-file"],
   props: {
     /**
      * id identifies the node in the tree.

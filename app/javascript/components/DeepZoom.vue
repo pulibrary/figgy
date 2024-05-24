@@ -1,9 +1,9 @@
 <template>
-  <wrapper style="max-width:100%;">
+  <lux-wrapper style="max-width:100%;">
     <div class="lux-modal">
-      <heading level="h2">
+      <lux-heading level="h2">
         Zoom <small>on {{ zoomed.caption }}</small>
-        <input-button
+        <lux-input-button
           class="close-zoom"
           type="button"
           variation="icon"
@@ -11,7 +11,7 @@
           icon="denied"
           @button-clicked="hideZoom()"
         />
-      </heading>
+      </lux-heading>
       <div class="lux-osd-wrapper">
         <div class="lux-osd">
           <div
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-  </wrapper>
+  </lux-wrapper>
 </template>
 
 <script>
@@ -96,7 +96,7 @@ export default {
 
     document.addEventListener('keydown', this._keyListener.bind(this))
   },
-  beforeDestroy: function () {
+  beforeUnmount: function () {
     document.removeEventListener('keydown', this._keyListener)
   },
   methods: {

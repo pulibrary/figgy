@@ -1,12 +1,8 @@
-import Vuex from "vuex"
-import { createLocalVue, mount, shallowMount } from "@vue/test-utils"
+import { createStore } from "vuex"
+import { mount, shallowMount } from "@vue/test-utils"
 import OrderManagerFilesetsForm from "../components/OrderManagerFilesetsForm.vue"
 import { resourceMutations, resourceGetters } from "../store/resource"
-import { modules } from 'lux-design-system'
-
-// create an extended `Vue` constructor
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { galleryModule } from '../store/gallery'
 
 let wrapper
 let getters
@@ -34,7 +30,7 @@ describe("OrderManagerFilesetsForm.vue", () => {
         changeList: [],
         ogItems: items,
       },
-      mutations: modules.galleryModule.mutations,
+      mutations: galleryModule.mutations,
     }
 
     const getters = {
@@ -67,7 +63,7 @@ describe("OrderManagerFilesetsForm.vue", () => {
       },
     }
 
-    store = new Vuex.Store({
+    store = createStore({
       modules: {
         ordermanager: resource,
         gallery: gallery,
@@ -90,10 +86,11 @@ describe("OrderManagerFilesetsForm.vue", () => {
     }
 
     wrapper = mount(OrderManagerFilesetsForm, {
-      options,
-      localVue,
-      store,
-      stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      global: {
+        options,
+        plugins: [store],
+        stubs: ["heading","input-select", "input-text", "input-checkbox"],
+      }
     })
   })
 
@@ -107,11 +104,11 @@ describe("OrderManagerFilesetsForm.vue", () => {
     expect(wrapper.vm.labelerOpts().unitLabel).toEqual('p. ')
 
     wrapper.vm.method = 'foliate'
-    wrapper.vm.updateUnitLabel()
+    wrapper.vm.overrideUnitLabel()
     expect(wrapper.vm.labelerOpts().unitLabel).toEqual('f. ')
 
     wrapper.vm.method = 'paginate'
-    wrapper.vm.updateUnitLabel()
+    wrapper.vm.overrideUnitLabel()
     expect(wrapper.vm.labelerOpts().unitLabel).toEqual('p. ')
   })
 
@@ -120,8 +117,8 @@ describe("OrderManagerFilesetsForm.vue", () => {
     expect(wrapper.vm.labelerOpts().backLabel).toEqual('')
 
     wrapper.vm.method = 'foliate'
-    expect(wrapper.vm.labelerOpts().frontLabel).toEqual('r. ')
-    expect(wrapper.vm.labelerOpts().backLabel).toEqual('v. ')
+    expect(wrapper.vm.labelerOpts().frontLabel).toEqual('r.')
+    expect(wrapper.vm.labelerOpts().backLabel).toEqual('v.')
 
     wrapper.vm.method = 'paginate'
     expect(wrapper.vm.labelerOpts().frontLabel).toEqual('')

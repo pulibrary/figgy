@@ -1,8 +1,7 @@
 <template>
   <div id="local_uploader">
-    <template v-for="file in uploadedFiles">
+    <template v-for="file in uploadedFiles" :key="file.id">
       <input
-        :key="file.id"
         type="hidden"
         :name="`metadata_ingest_files[]`"
         :value="JSON.stringify(file)"

@@ -105,7 +105,10 @@ const actions = {
     return apollo.mutate({ mutation, variables })
       .then(() => {
         context.commit('SAVED_STATE', 'SAVED')
-        context.commit('APPLY_STATE')
+        // pause a few seconds to let the user see the success alert 
+        setTimeout(() => {
+          context.commit('APPLY_STATE')
+        }, 3000)
       })
       .catch((err) => {
         context.commit('ERROR_MESSAGE', err)
