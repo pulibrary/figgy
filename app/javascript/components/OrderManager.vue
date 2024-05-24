@@ -160,14 +160,6 @@ export default {
       return this.resource.saveState === 'SAVING'
     }
   },
-  // watch: {
-  //   saved (newVal) {
-  //     this.stateSaved == newVal
-  //   },
-  //   saveError (newVal) {
-  //     this.stateSaveError == newVal
-  //   },
-  // },
   beforeMount: function () {
     if (this.resourceObject) {
       // if props are passed in set the resource on mount

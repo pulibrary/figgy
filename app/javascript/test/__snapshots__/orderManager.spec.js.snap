@@ -4,14 +4,6 @@ exports[`OrderManager.vue > has the expected html structure 1`] = `
 <div
   class="lux-orderManager"
 >
-  <transition-stub
-    appear="false"
-    css="true"
-    name="fade"
-    persisted="false"
-  >
-    <!--v-if-->
-  </transition-stub>
   <!--v-if-->
   <!--v-if-->
   <lux-wrapper
@@ -43,6 +35,7 @@ exports[`OrderManager.vue > has the expected html structure 1`] = `
       type="div"
     />
     <controls-stub
+      selected="[object Object]"
       type="div"
       viewerid="viewer"
     />

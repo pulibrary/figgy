@@ -25,39 +25,39 @@ exports[`OrderManagerFilesetsForm.vue > has the expected html structure 1`] = `
       data-v-6f9610f0=""
       id="unitLabel"
       label="Label"
-      modelvalue="p. "
       name="unitLabel"
       placeholder="e.g., p."
+      value="p. "
     />
     <lux-input-text
       data-v-6f9610f0=""
       id="startNum"
       label="Starting Numeral"
-      modelvalue="1"
       name="startNum"
       placeholder="e.g., 10"
+      value="1"
     />
     <lux-input-checkbox
       data-v-6f9610f0=""
-      modelvalue="false"
       options="[object Object]"
+      value="false"
     />
     <!--v-if-->
     <lux-input-select
       data-v-6f9610f0=""
       id="labelMethod"
       label="Labeling Method"
-      modelvalue="paginate"
       name="labelMethod"
       options="[object Object],[object Object]"
+      value="paginate"
     />
     <lux-input-select
       data-v-6f9610f0=""
       id="twoUp"
       label="Two Up"
-      modelvalue="false"
       name="twoUp"
       options="[object Object],[object Object]"
+      value="false"
     />
     <!--v-if-->
     <!--v-if-->

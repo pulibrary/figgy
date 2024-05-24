@@ -31,10 +31,6 @@ export default {
   components: {
     VueDraggable,
   },
-  // computed: mapState([
-  //   // map this.count to store.state.count
-  //   'gallery'
-  // ]),
   computed: {
     items: {
       get() {
@@ -44,9 +40,6 @@ export default {
         store.commit("SORT_ITEMS", value)
       },
     },
-    // ...mapState({
-    //   gallery: state => store.gallery.state,
-    // }),
     selected() {
       return store.state.gallery.selected
     },
@@ -137,10 +130,7 @@ export default {
   beforeMount: function () {
     if (this.galleryItems) {
       // if props are passed in set the cards on mount
-      // window.app = this
       store.commit("SET_GALLERY", this.galleryItems)
-    } else {
-      // retrieve the data via an asyn action
     }
   },
 }

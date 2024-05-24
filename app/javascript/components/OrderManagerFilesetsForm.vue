@@ -133,8 +133,8 @@ export default {
     return {
       start: '1',
       method: 'paginate',
-      frontLabel: 'r.',
-      backLabel: 'v.',
+      frontLabel: 'r. ',
+      backLabel: 'v. ',
       startsWith: 'front',
       unitLabel: 'p. ',
       bracket: false,
