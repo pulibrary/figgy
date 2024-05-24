@@ -117,8 +117,8 @@ describe("OrderManagerFilesetsForm.vue", () => {
     expect(wrapper.vm.labelerOpts().backLabel).toEqual('')
 
     wrapper.vm.method = 'foliate'
-    expect(wrapper.vm.labelerOpts().frontLabel).toEqual('r. ')
-    expect(wrapper.vm.labelerOpts().backLabel).toEqual('v. ')
+    expect(wrapper.vm.labelerOpts().frontLabel).toEqual('r.')
+    expect(wrapper.vm.labelerOpts().backLabel).toEqual('v.')
 
     wrapper.vm.method = 'paginate'
     expect(wrapper.vm.labelerOpts().frontLabel).toEqual('')
