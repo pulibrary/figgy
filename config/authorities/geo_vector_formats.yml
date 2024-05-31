@@ -5,3 +5,6 @@
   - :value: application/vnd.geo+json
     :label: GeoJSON
     :definition: GeoJSON
+  - :value: application/geopackage+sqlite3
+    :label: GeoPackage
+    :definition: GPKG

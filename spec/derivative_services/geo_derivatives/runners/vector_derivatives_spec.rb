@@ -104,5 +104,15 @@ RSpec.describe GeoDerivatives::Runners::VectorDerivatives do
 
       it_behaves_like "a set of vector derivatives"
     end
+
+    context "with a geopackage" do
+      let(:input_file_path) { Pathname.new(file_fixture("files/vector/geopackage.gpkg")) }
+      let(:input_mime_type) { "application/geopackage+sqlite3" }
+      let(:cloud_vector_uri) { test_derivative_url("geopackage_cloud_vector", "pmtiles") }
+      let(:display_vector_uri) { test_derivative_url("geopackage_display_vector", "zip") }
+      let(:thumbnail_uri) { test_derivative_url("geopackage_thumbnail", "png") }
+
+      it_behaves_like "a set of vector derivatives"
+    end
   end
 end

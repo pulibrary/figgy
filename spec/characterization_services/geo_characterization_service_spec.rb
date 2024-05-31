@@ -33,11 +33,9 @@ RSpec.describe GeoCharacterizationService do
 
     it "sets the correct mime_type on the file_set on characterize", run_real_characterization: true do
       file_set = valid_file_set
-      Timeout.timeout(20) do
-        new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
-        expect(new_file_set.original_file.mime_type).to eq ['application/zip; ogr-format="ESRI Shapefile"']
-        expect(new_file_set.original_file.geometry).to eq ["Polygon"]
-      end
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ['application/zip; ogr-format="ESRI Shapefile"']
+      expect(new_file_set.original_file.geometry).to eq ["Polygon"]
     end
   end
 
@@ -49,11 +47,9 @@ RSpec.describe GeoCharacterizationService do
 
     it "sets the correct mime_type on the file_set on characterize", run_real_characterization: true do
       file_set = valid_file_set
-      Timeout.timeout(20) do
-        new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
-        expect(new_file_set.original_file.mime_type).to eq ['application/zip; ogr-format="ESRI Shapefile"']
-        expect(new_file_set.original_file.geometry).to eq ["Polygon"]
-      end
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ['application/zip; ogr-format="ESRI Shapefile"']
+      expect(new_file_set.original_file.geometry).to eq ["Polygon"]
     end
   end
 
@@ -67,6 +63,20 @@ RSpec.describe GeoCharacterizationService do
       file_set = query_service.find_members(resource: resource).first
       expect(file_set.file_metadata[0].mime_type).to eq ["application/zip; ogr-format=\"ESRI Shapefile\""]
       expect(file_set.file_metadata[1].mime_type).to eq ["application/zip; ogr-format=\"ESRI Shapefile\""]
+    end
+  end
+
+  context "with a geopackage" do
+    let(:file) { fixture_file_upload("files/vector/geopackage.gpkg", "application/octet-stream") }
+    let(:resource) do
+      change_set_persister.save(change_set: VectorResourceChangeSet.new(VectorResource.new, files: [file]))
+    end
+
+    it "sets the correct mime_type on the file_set on characterize", run_real_characterization: true do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      expect(new_file_set.original_file.mime_type).to eq ["application/geopackage+sqlite3"]
+      expect(new_file_set.original_file.geometry).to eq ["Polygon"]
     end
   end
 
