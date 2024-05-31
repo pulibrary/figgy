@@ -68,7 +68,14 @@ module GeoDerivatives
             match = /(?<=Geometry:\s).*?(?=\n)/.match(doc)
             geom = match ? match[0] : ""
             # Transform OGR-style 'Line String' into GeoJSON 'Line'
-            geom == "Line String" ? "Line" : geom
+            # Transform OGR-style '3D Multi Polygon' into GeoJSON 'Polygon'
+            if geom == "Line String"
+              geom = "Line"
+            elsif geom == "3D Multi Polygon"
+              geom = "Polygon"
+            end
+
+            geom
           end
 
           # Given an output string from the ogrinfo command, returns
