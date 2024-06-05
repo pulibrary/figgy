@@ -6,7 +6,7 @@
 # Exit if any subcommand fails
 set -e
 
-gem install bundler:2.2.16
+gem install bundler:2.4.10
 brew install imagemagick gdal tesseract-lang mediainfo ffmpeg vips ocrmypdf lastpass-cli tippecanoe
 pip install cogeo-mosaic
 asdf reshim python
