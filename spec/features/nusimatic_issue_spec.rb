@@ -25,4 +25,15 @@ RSpec.feature "Numismatic Issue" do
 
     expect(page).not_to have_content "Test Monogram"
   end
+
+  scenario "ajax-select components are added to the page", js: true do
+    person = FactoryBot.create_for_repository(:numismatic_person, name1: "name1", name2: "name2")
+    issue = FactoryBot.create_for_repository(:numismatic_issue)
+    ChangeSetPersister.default.save(change_set: ChangeSet.for(person))
+    ChangeSetPersister.default.save(change_set: ChangeSet.for(issue))
+
+    visit edit_numismatics_issue_path(id: issue.id)
+
+    expect(page).to have_selector(".v-select")
+  end
 end

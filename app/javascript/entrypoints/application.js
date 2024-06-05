@@ -17,19 +17,16 @@ import FileUploader from '../components/file-uploader.vue'
 import Initializer from '../figgy/figgy_boot'
 import LocalUploader from '../components/local_uploader.vue'
 
-const app = createApp(
-  {
+const app = {
     data () {
       return { options: [] }
     },
-    beforeCreate () {
-      setupAjaxSelect()
-    },
-    onMounted () {
+    mounted() {
       setupCocoonLinks()
     }
-  }
-)
+}
+
+setupAjaxSelect()
 
 const createMyApp = () => createApp(app)
 
