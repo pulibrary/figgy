@@ -51,18 +51,6 @@ Other dependencies:
     * Used for publishing create/update/delete events for systems such as
       [Pomegranate](https://github.com/pulibrary/pomegranate)
 
-## Populate sidekiq-pro credentials from lastpass
-
-These steps are performed by `./bin/setup`; if that worked you don't have to do
-this separately.
-
-More information about lastpass-cli can be found here: https://lastpass.github.io/lastpass-cli/lpass.1.html
-```
-brew install lastpass-cli
-lpass login <email@email.com>
-bin/setup_credentials
-```
-
 ## Initial Setup
 
 ```sh
@@ -92,6 +80,25 @@ fail. To get this working, do the following:
 1. `yarn install`
 1. Close Terminal, right click "Terminal" app in Finder, go to "Get Info", and
    uncheck "Open using Rosetta"
+1. Add the following to `~/.zshrc` or `~/.zshrc.local`:
+```
+   # Fix issue with homebrew postgres and rails applications (Figgy in
+   particular).
+   # See: https://github.com/ged/ruby-pg/issues/538
+   export PGGSSENCMODE="disable"
+```
+
+## Populate sidekiq-pro credentials from lastpass
+
+These steps are performed by `./bin/setup`; if that worked you don't have to do
+this separately.
+
+More information about lastpass-cli can be found here: https://lastpass.github.io/lastpass-cli/lpass.1.html
+```
+brew install lastpass-cli
+lpass login <email@email.com>
+bin/setup_credentials
+```
 
 ## Setup server
 
