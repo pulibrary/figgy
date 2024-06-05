@@ -57,13 +57,13 @@ Other dependencies:
 git clone https://github.com/pulibrary/figgy.git
 cd figgy
 ./bin/setup_asdf
-Follow setup notes for Mac M1 processors if needed
+Follow setup notes for Mac M series processors if needed
 ./bin/setup
 ```
 
 Remember you'll need to run `bundle install` and `yarn install` on an ongoing basis as dependencies are updated.
 
-### Setup Notes for Mac M1 Processors
+### Setup Notes for Mac M Series Processors
 
 Mapnik currently isn't supported by M1 processors, so `yarn install` above will
 fail. To get this working, do the following:
