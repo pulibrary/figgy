@@ -74,6 +74,9 @@
 .card-delete-controls {
   border-top-width: 0px;
   padding-top: 1em;
+  .btn {
+    margin: 10px;
+  }
 }
 
 .set-access-controls, #attributes, #members {
