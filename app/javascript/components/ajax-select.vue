@@ -1,10 +1,10 @@
 <template>
   <v-select
     label="id"
-    :value="selected"
+    v-model="selected"
     :filterable="false"
     :options="options"
-    @input="updateValue"
+    @option:selected="updateValue"
     @search="onSearch"
   >
     <template v-slot:no-options>
@@ -28,6 +28,7 @@
 </template>
 <script>
 import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 import _ from 'lodash'
 
 export default {
@@ -61,7 +62,7 @@ export default {
       return `${this.searchURLBase}/?f%5Bhuman_readable_type_ssim%5D%5B%5D=${this.typeName}&all_models=true&sort=figgy_title_ssi+asc&q=${this.query}`
     }
   },
-  created: function () {
+  mounted: function () {
     const doc = document.getElementById(this.targetId)
 
     // Gets the current value of the input or a value passed as an attribute
@@ -83,6 +84,14 @@ export default {
         this.selected = this.options[0]
       }
     })
+  },
+  watch: {
+    selected: function (value) {
+      // This is needed because the vue-select compoment does not have clear selection event
+      if (value === null) {
+        this.updateValue(value)
+      }
+    },
   },
   methods: {
     updateValue (value) {
