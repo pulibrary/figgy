@@ -637,7 +637,7 @@ class ManifestBuilder
         format: "application/vnd.apple.mpegurl",
         label: resource.title.first,
         duration: file.duration.first.to_f,
-        type: file.video? ? "Video" : "Sound" # required for the viewer to play audio correctly
+        type: file.video? ? "Video" : "Audio" # required for the viewer to play audio correctly
       )
     end
 
