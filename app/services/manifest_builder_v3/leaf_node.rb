@@ -17,6 +17,10 @@ class ManifestBuilderV3
       resource.id.to_s
     end
 
+    def label
+      resource.title || "Unlabeled"
+    end
+
     ##
     # Stringify the image using the decorator
     # @return [String]

@@ -121,6 +121,20 @@ class ManifestBuilderV3
       end
     end
 
+    def default_av_ranges
+      file_set_presenters.map do |file_set|
+        TopStructure.new(
+          Structure.new(
+            label: file_set.label,
+            nodes: StructureNode.new(
+              label: file_set.label,
+              proxy: file_set.id
+            )
+          )
+        )
+      end
+    end
+
     def label(structure_node)
       proxy_id = structure_node.proxy.first
       file_set_presenter = file_set_presenters.find { |x| x.resource.id == proxy_id }
