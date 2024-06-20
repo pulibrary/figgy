@@ -27,29 +27,11 @@ class ManifestBuilderV3
         super
         range["items"] =
           canvas_builders.collect do |cb|
-            wrapped_range(cb) do
-              {
-                "type" => "Canvas",
-                "id" => "#{cb.path}#t=0,#{duration(cb)}"
-              }
-            end
+            {
+              "type" => "Canvas",
+              "id" => "#{cb.path}#t=0,#{duration(cb)}"
+            }
           end
-      end
-
-      def wrapped_range(cb)
-        return yield if record.structure.is_a?(Structure)
-        {
-          "type" => "Range",
-          "label": {
-            "@none": [
-              label(cb)
-            ]
-          },
-          "id": "#{cb.path}/range",
-          "items": [
-            yield
-          ]
-        }
       end
 
       def duration(canvas_builder)

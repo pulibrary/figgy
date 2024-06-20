@@ -98,6 +98,8 @@ class ManifestBuilderV3
     end
 
     def wrap_proxies(node)
+      # If it's a folder for the canvas, then make it a structure node and wrap
+      # its children.
       if node.proxy.blank?
         StructureNode.new(
           id: node.id,
@@ -105,6 +107,8 @@ class ManifestBuilderV3
           nodes: node.nodes.map { |x| wrap_proxies(x) }
         )
       else
+        # If it's a node for a canvas, create a structure node to wrap it so it
+        # shows up in the table of contents.
         StructureNode.new(
           id: node.id,
           label: label(node),
@@ -208,7 +212,6 @@ class ManifestBuilderV3
 
       ##
       # Retrieve the TopStructure for the resource manifest
-      # @param [TopStructure]
       def logical_structure
         resource.try(:logical_structure) || []
       end
