@@ -2,8 +2,15 @@
 class ManifestBuilderV3
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
-    def self.for(resource, _auth_token = nil, _current_ability = nil)
+    def self.for(resource, _auth_token = nil, current_ability = nil)
       case resource
+      when Collection
+        case ChangeSet.for(resource)
+        when ArchivalMediaCollectionChangeSet
+          ArchivalMediaCollectionNode.new(resource, nil, current_ability)
+        else
+          CollectionNode.new(resource, nil, current_ability)
+        end
       when ScannedMap
         ScannedMapNode.new(resource)
       else
@@ -229,5 +236,30 @@ class ManifestBuilderV3
       def logical_structure
         resource.try(:logical_structure) || []
       end
+  end
+
+  class ArchivalMediaCollectionNode < RootNode
+    def members
+      return @members unless @members.nil?
+
+      member_nodes = super
+      nodes = member_nodes
+      nodes += member_nodes.map { |child| child.decorate.members }.flatten
+      @members = nodes
+    end
+
+    def file_sets
+      return @file_sets unless @file_sets.nil?
+
+      leaves = members.map { |child| child.decorate.members }.flatten
+      @file_sets = leaves.select { |x| x.instance_of?(FileSet) && !x.image? }
+    end
+
+    ##
+    # Retrieve the leaf nodes for the Manifest
+    # @return [FileSet]
+    def leaf_nodes
+      @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
+    end
   end
 end
