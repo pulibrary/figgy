@@ -385,6 +385,19 @@ RSpec.describe Types::ScannedResourceType do
       let(:scanned_resource) do
         FactoryBot.create_for_repository(:complete_private_scanned_resource)
       end
+      let(:user) { FactoryBot.create(:user) }
+      context "and it's not a CDL resource" do
+        it "returns forbidden" do
+          expect(type.embed).to eq(
+            {
+              type: nil,
+              content: nil,
+              status: "forbidden",
+              media_type: nil
+            }
+          )
+        end
+      end
       context "and a permitted user is logged in" do
         let(:user) { FactoryBot.create(:admin) }
         it "returns an iframe and authorized" do
