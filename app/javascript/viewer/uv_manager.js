@@ -149,7 +149,7 @@ export default class UVManager {
         uvElement.dispatchEvent(uvClick)
         const cachedOpen = window.open
         window.open = function (url, target, features) {
-          window.plausible('UV-click', { props: { url } })
+          window.plausible('uv-click', { props: { url } })
           cachedOpen(url, target, features)
         }
         console.log("UV clicked!")
