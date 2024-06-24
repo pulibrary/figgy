@@ -2,6 +2,17 @@
 class ManifestBuilderV3
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
+    def self.multi_volume_recording?(resource)
+      decorated = resource.decorate
+      return unless decorated.respond_to?(:volumes) && !decorated.volumes.empty?
+
+      volumes = decorated.volumes
+      volume_file_sets = volumes.map(&:file_sets)
+      volume_file_sets.flatten!
+      av_file_sets = volume_file_sets.select(&:av?)
+      !av_file_sets.empty?
+    end
+
     def self.for(resource, _auth_token = nil, current_ability = nil)
       case resource
       when Collection
@@ -14,7 +25,16 @@ class ManifestBuilderV3
       when ScannedMap
         ScannedMapNode.new(resource)
       else
-        new(resource)
+        case ChangeSet.for(resource)
+        when RecordingChangeSet
+          if multi_volume_recording?(resource)
+            MultiVolumeRecordingNode.new(resource)
+          else
+            RecordingNode.new(resource)
+          end
+        else
+          new(resource)
+        end
       end
     end
     attr_reader :resource, :auth_token, :current_ability
@@ -260,6 +280,68 @@ class ManifestBuilderV3
     # @return [FileSet]
     def leaf_nodes
       @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
+    end
+  end
+
+  class MultiVolumeRecordingNode < RootNode
+    def child_members
+      @child_members ||= members.map { |child| child.decorate.members }.flatten
+    end
+
+    def file_sets
+      @file_sets ||= child_members.select { |x| x.instance_of?(FileSet) && !x.image? }
+    end
+
+    def leaf_nodes
+      @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
+    end
+
+    def default_av_ranges
+      members.map do |member|
+        av_file_sets = member.decorate.file_sets.select(&:av?)
+        nodes = av_file_sets.map do |file_set|
+          Structure.new(
+            label: file_set.title,
+            nodes: [
+              StructureNode.new(
+                label: IIIFManifest::V3::ManifestBuilder.language_map(file_set.title),
+                proxy: file_set.id
+              )
+            ]
+          )
+        end
+
+        TopStructure.new(
+          Structure.new(
+            label: member.title,
+            nodes: nodes
+          )
+        )
+      end
+    end
+  end
+
+  class RecordingNode < RootNode
+    def leaf_nodes
+      @leaf_nodes ||= super.select(&:av?)
+    end
+
+    def sequence_rendering
+      []
+    end
+
+    ##
+    # Retrieves the presenters for each member FileSet as a leaf
+    # @return [LeafNode]
+    def file_set_presenters
+      return @file_set_presenters unless @file_set_presenters.nil?
+
+      values = leaf_nodes.map do |node|
+        next unless node.decorate.av?
+
+        LeafNode.new(node, self)
+      end
+      @file_set_presenters = values.compact
     end
   end
 end

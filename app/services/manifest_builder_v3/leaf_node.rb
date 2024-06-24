@@ -32,6 +32,7 @@ class ManifestBuilderV3
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
     def display_image
+      return if file.av?
       @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
                                                         width: width.to_i,
                                                         height: height.to_i,

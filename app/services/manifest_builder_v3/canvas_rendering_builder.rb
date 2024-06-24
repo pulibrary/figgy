@@ -17,11 +17,14 @@ class ManifestBuilderV3
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
+      manifest["rendering"] += caption_downloads
       apply_geotiff_downloads(manifest)
     end
 
     private
 
+      # It's important to use original_file over primary_file here so that it
+      # knows to use the MP3 access download if there's no original_file.
       def original_file_hash
         return unless original_file
         original_file_id = original_file.id.to_s
