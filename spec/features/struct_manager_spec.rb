@@ -25,7 +25,7 @@ RSpec.feature "Structure Manager", js: true do
 
     # test create new folder
     find("button.lux-dropdown-button").click
-    find("button.lux-menu-item", text: "Create New Folder (Ctrl-n)").click
+    find("button.lux-menu-item", text: "Create New Folder (Ctrl-/)").click
     expect(page).to have_css("div.folder-label", text: "Untitled")
 
     # test edit folder label
@@ -51,7 +51,7 @@ RSpec.feature "Structure Manager", js: true do
     # test create new folder with ctrl-n
     find("div.folder-label", match: :first).click
     expect(page).not_to have_css("div.folder-label", text: "Untitled")
-    page.send_keys [:control, "n"]
+    page.send_keys [:control, "/"]
     expect(page).to have_css("div.folder-label", text: "Untitled")
 
     # test cutting a folder using keyboard commands

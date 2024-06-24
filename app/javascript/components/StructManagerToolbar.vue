@@ -7,7 +7,7 @@
       class="dropdown"
       button-label="Actions"
       :menu-items="[
-        {name: 'Create New Folder (Ctrl-n)', component: 'FolderCreate'},
+        {name: 'Create New Folder (Ctrl-/)', component: 'FolderCreate'},
         {name: 'Group Selected into New Folder (Ctrl-g)', component: 'SelectedCreate', disabled: isCutDisabled()},
         {name: 'Delete Folder (Ctrl-d)', component: 'FolderDelete', disabled: rootNodeSelected},
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
@@ -132,7 +132,7 @@ export default {
         e.preventDefault()
         this.clearClipboard()
       }
-      if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
+      if (e.key === '/' && (e.ctrlKey || e.metaKey)) {
         e.preventDefault()
         this.createFolder()
       }
@@ -211,7 +211,7 @@ export default {
     },
     menuSelection (value) {
       switch (value.target.innerText) {
-        case 'Create New Folder (Ctrl-n)':
+        case 'Create New Folder (Ctrl-/)':
           this.createFolder()
           break
         case 'Group Selected into New Folder (Ctrl-g)':
