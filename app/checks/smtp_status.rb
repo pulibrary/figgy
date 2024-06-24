@@ -2,7 +2,8 @@
 class SmtpStatus < HealthMonitor::Providers::Base
   def check!
     settings = ActionMailer::Base.smtp_settings
-    smtp = Net::SMTP.new(settings[:address], settings[:port])
+    tls_setting = settings[:enable_starttls] == false ? false : :auto
+    smtp = Net::SMTP.new(settings[:address], settings[:port], starttls: tls_setting)
     smtp.open_timeout = 1
     smtp.start
   end
