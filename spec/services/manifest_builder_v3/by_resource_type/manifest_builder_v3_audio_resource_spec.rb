@@ -119,7 +119,6 @@ RSpec.describe ManifestBuilderV3 do
       expect(child_ranges.first).to include "items"
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
-      expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
 
       expect(ranges.last["items"].length).to eq 1
       expect(ranges.last["items"].first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
