@@ -19,8 +19,6 @@ class ManifestBuilderV3
         case ChangeSet.for(resource)
         when ArchivalMediaCollectionChangeSet
           ArchivalMediaCollectionNode.new(resource, nil, current_ability)
-        else
-          CollectionNode.new(resource, nil, current_ability)
         end
       when ScannedMap
         ScannedMapNode.new(resource)

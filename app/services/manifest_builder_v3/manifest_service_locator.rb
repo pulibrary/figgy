@@ -16,6 +16,7 @@ class ManifestBuilderV3
           rights_builder,
           logo_builder,
           thumbnail_builder,
+          rendering_builder,
           iiif_search_builder,
           nav_place_builder,
           composite_builder: composite_builder
