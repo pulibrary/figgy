@@ -136,26 +136,6 @@ class ManifestBuilder
       end
     end
 
-    def wrap_proxies(node)
-      if node.proxy.blank?
-        StructureNode.new(
-          id: node.id,
-          label: node.label,
-          nodes: node.nodes.map { |x| wrap_proxies(x) }
-        )
-      else
-        StructureNode.new(
-          id: node.id,
-          label: label(node),
-          nodes: [
-            StructureNode.new(
-              proxy: node.proxy
-            )
-          ]
-        )
-      end
-    end
-
     def default_av_ranges
       file_set_presenters.map do |file_set|
         TopStructure.new(
@@ -172,12 +152,6 @@ class ManifestBuilder
 
     def collection?
       false
-    end
-
-    def label(structure_node)
-      proxy_id = structure_node.proxy.first
-      file_set_presenter = file_set_presenters.find { |x| x.resource.id == proxy_id }
-      file_set_presenter&.display_content&.label
     end
 
     ##
@@ -484,15 +458,6 @@ class ManifestBuilder
                                                         height: height.to_i,
                                                         format: "image/jpeg",
                                                         iiif_endpoint: endpoint)
-    end
-
-    def download_url
-      return if derivative.nil?
-      if helper.token_authorizable?(parent_node.resource)
-        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, auth_token: parent_node.resource.auth_token, as: "stream", format: "m3u8")
-      else
-        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, as: "stream", format: "m3u8")
-      end
     end
 
     def label
