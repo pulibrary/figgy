@@ -169,6 +169,31 @@ describe('UVManager', () => {
       expect(window.plausible).toHaveBeenCalledWith('Download', { props: { url: 'http://example.com' } })
     })
 
+    it('sends an event to Plausible when the Universal Viewer container is clicked', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      mockManifests(200)
+      mockPlausible()
+      stubQuery({
+        type: 'html',
+        content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
+        status: 'authorized',
+        mediaType: 'Image'
+      },
+        null,
+        'Test Playlist',
+        'Playlist'
+      )
+
+      // Initialize
+      const uvManager = new UVManager()
+      await uvManager.initialize()
+      document.getElementById('uv').click()
+      // This triggers a Plausible custom event.
+      expect(window.plausible).toHaveBeenCalledWith('UniversalViewer Click')
+    })
+
     it('passes on an auth token to graphql', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
