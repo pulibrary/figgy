@@ -24,6 +24,14 @@ RSpec.describe UsersController, type: :controller do
         end.to change(User, :count).by(1)
       end
 
+      it "can create a user that has an email NetID" do
+        post :create, params: { user: { uid: "bla@example.com" } }
+
+        u = User.last
+
+        expect(u.email).to eq "bla@example.com"
+      end
+
       it "redirects to the user list" do
         post :create, params: { user: { uid: "asdf" } }
         expect(response).to redirect_to(users_path)
