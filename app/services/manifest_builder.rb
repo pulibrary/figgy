@@ -110,7 +110,6 @@ class ManifestBuilder
     # Retrieves the presenter for each Range (sc:Range) instance
     # @return [TopStructure]
     def ranges
-      return av_ranges if av_manifest?
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure, resource)
       end
@@ -125,29 +124,6 @@ class ManifestBuilder
       work_presenters = work_presenter_nodes.select(&:av_manifest?)
 
       !av_file_sets.empty? || !work_presenters.empty?
-    end
-
-    def av_ranges
-      return default_av_ranges if logical_structure.blank? || logical_structure.flat_map(&:nodes).blank?
-      logical_structure.flat_map do |top_structure|
-        top_structure.nodes.map do |node|
-          TopStructure.new(wrap_proxies(node))
-        end
-      end
-    end
-
-    def default_av_ranges
-      file_set_presenters.map do |file_set|
-        TopStructure.new(
-          Structure.new(
-            label: file_set.label,
-            nodes: StructureNode.new(
-              label: file_set.label,
-              proxy: file_set.id
-            )
-          )
-        )
-      end
     end
 
     def collection?
@@ -460,10 +436,6 @@ class ManifestBuilder
                                                         iiif_endpoint: endpoint)
     end
 
-    def label
-      resource.title || "Unlabeled"
-    end
-
     def display_content
       return unless file.av?
 
@@ -471,8 +443,7 @@ class ManifestBuilder
         download_url,
         format: "application/vnd.apple.mpegurl",
         label: resource.title.first,
-        duration: file.duration.first.to_f,
-        type: file.video? ? "Video" : "Sound" # required for the viewer to play audio correctly
+        duration: file.duration.first.to_f
       )
     end
 
@@ -503,10 +474,6 @@ class ManifestBuilder
       # @return [File]
       def file
         resource.primary_file
-      end
-
-      def derivative
-        resource.derivative_file
       end
 
       ##
