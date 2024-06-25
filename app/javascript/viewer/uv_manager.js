@@ -21,13 +21,15 @@ export default class UVManager {
   async loadViewer () {
     if (this.isFiggyManifest) {
       const result = await this.checkFiggyStatus()
-      if (result.embed.status === 'unauthenticated') {
+      if (result.embed.status === 'unauthenticated' || result.embed.status === 'unauthorized') {
         return window.location.assign('/viewer/' + this.figgyId + '/auth')
       } else if (result.embed.status === 'authorized') {
         this.displayNotice(result)
         this.renderViewer(result)
         await this.buildLeafletViewer(result)
       }
+      // The other possible state is "forbidden", which means there's no way
+      // they're able to view this resource, don't even try.
     } else {
       return this.createUV()
     }

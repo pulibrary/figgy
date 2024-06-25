@@ -114,8 +114,14 @@ class Embed
         else
           "unauthenticated"
         end
-      else
+      elsif ability.can?(:discover, resource)
+        # If they can discover it, then it's probably a CDL resource - given
+        # some action they can get it
         "unauthorized"
+      else
+        # If they can't even discover it, there's nothing they can do. They're
+        # explicitly forbidden.
+        "forbidden"
       end
     end
 

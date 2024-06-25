@@ -237,6 +237,44 @@ describe('UVManager', () => {
       expect(spy).not.toHaveBeenCalled()
     })
 
+    it('redirects to viewer auth if graph says unauthorized, for cdl acceptance', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      stubQuery({
+        type: null,
+        content: null,
+        status: 'unauthorized',
+        mediaType: 'Image'
+      })
+
+      // Initialize
+      const uvManager = new UVManager()
+      const spy = vi.spyOn(uvManager, 'buildLeafletViewer')
+      await uvManager.initialize()
+      expect(window.location.assign).toHaveBeenCalledWith('/viewer/12345/auth')
+      expect(spy).not.toHaveBeenCalled()
+    })
+
+    it('does nothing if graph says forbidden', async () => {
+      document.body.innerHTML = initialHTML
+      mockJquery()
+      mockUvProvider()
+      stubQuery({
+        type: null,
+        content: null,
+        status: 'forbidden',
+        mediaType: 'Image'
+      })
+
+      // Initialize
+      const uvManager = new UVManager()
+      const spy = vi.spyOn(uvManager, 'buildLeafletViewer')
+      await uvManager.initialize()
+      expect(window.location.assign).not.toHaveBeenCalledWith('/viewer/12345/auth')
+      expect(spy).not.toHaveBeenCalled()
+    })
+
     it('falls back to a default viewer URI if not using a figgy manifest', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
