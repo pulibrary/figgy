@@ -18,23 +18,12 @@ class ManifestBuilder
   ##
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
-    def self.multi_volume_recording?(resource)
-      decorated = resource.decorate
-      return unless decorated.respond_to?(:volumes) && !decorated.volumes.empty?
-
-      volumes = decorated.volumes
-      volume_file_sets = volumes.map(&:file_sets)
-      volume_file_sets.flatten!
-      av_file_sets = volume_file_sets.select(&:av?)
-      !av_file_sets.empty?
-    end
-
     def self.for(resource, auth_token = nil, current_ability = nil)
       case resource
       when Collection
         case ChangeSet.for(resource)
         when ArchivalMediaCollectionChangeSet
-          ArchivalMediaCollectionNode.new(resource, nil, current_ability)
+          ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
         else
           CollectionNode.new(resource, nil, current_ability)
         end
@@ -49,15 +38,11 @@ class ManifestBuilder
       when Numismatics::Issue
         Numismatics::IssueNode.new(resource)
       when Playlist
-        PlaylistNode.new(resource, auth_token)
+        ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
       else
         case ChangeSet.for(resource)
         when RecordingChangeSet
-          if multi_volume_recording?(resource)
-            MultiVolumeRecordingNode.new(resource)
-          else
-            RecordingNode.new(resource)
-          end
+          ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
         else
           new(resource, auth_token)
         end
@@ -366,69 +351,6 @@ class ManifestBuilder
     end
   end
 
-  class ArchivalMediaCollectionNode < RootNode
-    def members
-      return @members unless @members.nil?
-
-      member_nodes = super
-      nodes = member_nodes
-      nodes += member_nodes.map { |child| child.decorate.members }.flatten
-      @members = nodes
-    end
-
-    def file_sets
-      return @file_sets unless @file_sets.nil?
-
-      leaves = members.map { |child| child.decorate.members }.flatten
-      @file_sets = leaves.select { |x| x.instance_of?(FileSet) && !x.image? }
-    end
-
-    ##
-    # Retrieve the leaf nodes for the Manifest
-    # @return [FileSet]
-    def leaf_nodes
-      @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
-    end
-  end
-
-  class MultiVolumeRecordingNode < RootNode
-    def child_members
-      @child_members ||= members.map { |child| child.decorate.members }.flatten
-    end
-
-    def file_sets
-      @file_sets ||= child_members.select { |x| x.instance_of?(FileSet) && !x.image? }
-    end
-
-    def leaf_nodes
-      @leaf_nodes ||= file_sets.select { |x| leaf_node_mime_type?(x.mime_type) }
-    end
-
-    def default_av_ranges
-      members.map do |member|
-        av_file_sets = member.decorate.file_sets.select(&:av?)
-        nodes = av_file_sets.map do |file_set|
-          Structure.new(
-            label: file_set.title,
-            nodes: [
-              StructureNode.new(
-                label: IIIFManifest::V3::ManifestBuilder.language_map(file_set.title),
-                proxy: file_set.id
-              )
-            ]
-          )
-        end
-
-        TopStructure.new(
-          Structure.new(
-            label: member.title,
-            nodes: nodes
-          )
-        )
-      end
-    end
-  end
-
   class ScannedMapNode < RootNode
     def manifestable_members
       @manifestable ||= decorate.members.reject { |x| x.is_a?(RasterResource) }
@@ -461,58 +383,6 @@ class ManifestBuilder
     # otherwise there is no image for the viewer.
     def members
       @members ||= super.select { |coin| coin.member_ids.present? }
-    end
-  end
-
-  class RecordingNode < RootNode
-    def leaf_nodes
-      @leaf_nodes ||= super.select(&:av?)
-    end
-
-    def sequence_rendering
-      []
-    end
-
-    ##
-    # Retrieves the presenters for each member FileSet as a leaf
-    # @return [LeafNode]
-    def file_set_presenters
-      return @file_set_presenters unless @file_set_presenters.nil?
-
-      values = leaf_nodes.map do |node|
-        next unless node.decorate.av?
-
-        LeafNode.new(node, self)
-      end
-      @file_set_presenters = values.compact
-    end
-  end
-
-  class PlaylistNode < RootNode
-    # Get all FileSets for a playlist, but decorate the label so that it's the
-    # proxy's label instead.
-    def leaf_nodes
-      @leaf_nodes ||= wayfinder.file_sets.map do |member|
-        ProxiedMember.new(member)
-      end
-    end
-
-    def wayfinder
-      @wayfinder ||= Wayfinder.for(resource)
-    end
-
-    class ProxiedMember < SimpleDelegator
-      def id
-        loaded[:proxy_parent].id
-      end
-
-      def proxied_object_id
-        __getobj__.id
-      end
-
-      def title
-        loaded[:proxy_parent].label
-      end
     end
   end
 
@@ -812,7 +682,9 @@ class ManifestBuilder
                     end
     end
 
+    # resource is a RootNode.
     def av?
+      return true if resource.resource.is_a?(Playlist)
       # Skip check if it's a Collection node, for performance.
       return false if resource.collection?
       av_presenters = resource.work_presenters.select(&:av_manifest?)
