@@ -19,8 +19,7 @@ class ManifestBuilderV3
 
     def label
       return record.structure.label if record.respond_to?(:structure)
-      # TODO: commented out due to coverage
-      # record.try(:label)
+      record.try(:label)
     end
   end
 end
