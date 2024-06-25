@@ -35,6 +35,11 @@ RSpec.feature "Browsing archival media collections" do
       expect(page).to have_link "Edit This Archival Media Collection", href: edit_collection_path(collection)
       expect(page).to have_link "Delete This Archival Media Collection", href: collection_path(collection)
     end
+    it "generates a v3 manifest" do
+      visit "/collections/#{collection.id}/manifest"
+      json = JSON.parse(page.body)
+      expect(json["@context"]).to include("http://iiif.io/api/presentation/3/context.json")
+    end
   end
 
   context "when ingesting a new archival media collection", js: true do

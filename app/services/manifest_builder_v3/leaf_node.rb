@@ -17,6 +17,10 @@ class ManifestBuilderV3
       resource.id.to_s
     end
 
+    def label
+      resource.title || "Unlabeled"
+    end
+
     ##
     # Stringify the image using the decorator
     # @return [String]
@@ -28,6 +32,7 @@ class ManifestBuilderV3
     # Retrieve an instance of the IIIFManifest::DisplayImage for the image
     # @return [IIIFManifest::DisplayImage]
     def display_image
+      return if file.av?
       @display_image ||= IIIFManifest::DisplayImage.new(display_image_url,
                                                         width: width.to_i,
                                                         height: height.to_i,
@@ -39,6 +44,27 @@ class ManifestBuilderV3
       helper.manifest_image_medium_path(resource)
     rescue
       ""
+    end
+
+    def display_content
+      return unless file.av?
+
+      @display_content ||= IIIFManifest::V3::DisplayContent.new(
+        download_url,
+        format: "application/vnd.apple.mpegurl",
+        label: resource.title.first,
+        duration: file.duration.first.to_f,
+        type: file.video? ? "Video" : "Audio" # required for the viewer to play audio correctly
+      )
+    end
+
+    def download_url
+      return if derivative.nil?
+      if helper.token_authorizable?(parent_node.resource)
+        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, auth_token: parent_node.resource.auth_token, as: "stream", format: "m3u8")
+      else
+        helper.download_url(resource.try(:proxied_object_id) || resource.id, derivative.id, as: "stream", format: "m3u8")
+      end
     end
 
     private
@@ -62,6 +88,10 @@ class ManifestBuilderV3
       # @return [File]
       def file
         resource.primary_file
+      end
+
+      def derivative
+        resource.derivative_file
       end
 
       ##

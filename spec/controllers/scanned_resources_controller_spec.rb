@@ -64,6 +64,16 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(response.body).not_to eq "{}"
       end
     end
+    context "when given a recording" do
+      it "renders a v3 manifest" do
+        resource = FactoryBot.create_for_repository(:recording_with_audio_file, state: "complete")
+
+        get :manifest, params: { id: resource.id, format: :json }
+        json = JSON.parse(response.body)
+
+        expect(json["@context"]).to include("http://iiif.io/api/presentation/3/context.json")
+      end
+    end
     context "when not logged in" do
       it "returns a 403" do
         resource = FactoryBot.create_for_repository(:complete_private_scanned_resource)

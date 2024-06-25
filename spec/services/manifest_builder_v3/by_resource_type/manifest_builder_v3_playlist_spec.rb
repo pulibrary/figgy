@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe ManifestBuilder do
+RSpec.describe ManifestBuilderV3 do
   with_queue_adapter :inline
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: resource.id)) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
@@ -17,7 +17,7 @@ RSpec.describe ManifestBuilder do
     end
     it "generates the Manifest" do
       expect(output).not_to be_empty
-      expect(output).to include("label" => resource.title)
+      expect(output).to include("label" => { "eng" => resource.title })
     end
 
     context "with proxies to FileSets", run_real_characterization: true do

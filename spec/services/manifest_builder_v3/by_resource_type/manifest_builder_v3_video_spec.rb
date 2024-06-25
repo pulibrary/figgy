@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe ManifestBuilder do
+RSpec.describe ManifestBuilderV3 do
   with_queue_adapter :inline
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }

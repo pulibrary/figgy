@@ -97,8 +97,8 @@ Metrics/ClassLength:
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/resources/scanned_resources/simple_change_set.rb'
     - 'app/jobs/ingest_archival_media_bag_job.rb'
-    - 'app/services/manifest_builder/manifest_service_locator_v3.rb'
     - 'app/services/manifest_builder.rb'
+    - 'app/services/manifest_builder_v3/root_node.rb'
     - 'app/controllers/catalog_controller.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
@@ -125,6 +125,7 @@ Metrics/ClassLength:
     - 'app/nested_resources/file_metadata.rb'
     - 'app/services/embed.rb'
     - 'app/services/manifest_builder/canvas_rendering_builder.rb'
+    - 'app/services/manifest_builder_v3/canvas_rendering_builder.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
@@ -183,10 +184,12 @@ Metrics/MethodLength:
     - 'app/services/pul_metadata_services/bib_record.rb'
     - 'app/models/concerns/linked_data/linked_resource.rb'
     - 'app/services/manifest_builder/canvas_rendering_builder.rb'
+    - 'app/services/manifest_builder_v3/canvas_rendering_builder.rb'
     - 'app/services/music_import_service.rb'
     - 'app/services/music_import_service/recording_collector.rb'
     - 'config/initializers/sequel_active_support_notification.rb'
     - 'app/services/manifest_builder.rb'
+    - 'app/services/manifest_builder_v3/root_node.rb'
     - 'app/indexers/imported_metadata_indexer.rb'
     - 'app/controllers/reports_controller.rb'
     - 'app/models/search_builder.rb'

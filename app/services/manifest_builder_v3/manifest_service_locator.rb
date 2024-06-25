@@ -49,7 +49,7 @@ class ManifestBuilderV3
       # Class accessor for the logo builder
       # @return [Class]
       def logo_builder
-        ManifestBuilder::LogoBuilderV3
+        ManifestBuilderV3::LogoBuilder
       end
 
       ##

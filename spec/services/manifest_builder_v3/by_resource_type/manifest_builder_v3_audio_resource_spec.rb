@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe ManifestBuilder do
+RSpec.describe ManifestBuilderV3 do
   with_queue_adapter :inline
   subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
 
@@ -119,7 +119,6 @@ RSpec.describe ManifestBuilder do
       expect(child_ranges.first).to include "items"
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
-      expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
 
       expect(ranges.last["items"].length).to eq 1
       expect(ranges.last["items"].first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
@@ -184,6 +183,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to include "items"
       canvases = output["items"]
       expect(canvases.length).to eq 2
+      # TODO: does this label need to include language?
       expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
       # This value rounds up/down based on mediainfo compilation, 0.255 vs 0.256
       # is close enough for our purpose

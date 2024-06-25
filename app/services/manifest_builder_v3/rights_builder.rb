@@ -22,8 +22,9 @@ class ManifestBuilderV3
     private
 
       def rights
-        statements = resource.decorate.rights_statement.map(&:value)
-        statements.empty? ? nil : statements.first
+        return unless resource.decorate.try(:rights_statement)
+        statements = resource.decorate.rights_statement&.map(&:value)
+        statements.blank? ? nil : statements.first
       end
   end
 end

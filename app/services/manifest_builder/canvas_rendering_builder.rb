@@ -23,7 +23,6 @@ class ManifestBuilder
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
-      manifest["rendering"] += caption_downloads
       apply_geotiff_downloads(manifest)
     end
 
@@ -74,7 +73,7 @@ class ManifestBuilder
       # Generate a download Hash for the FileSet and members
       # @return [Hash]
       def download_hash
-        original_file_hash || mp3_file_hash || {}
+        original_file_hash || {}
       end
 
       # It's important to use original_file over primary_file here so that it
@@ -124,43 +123,8 @@ class ManifestBuilder
         }
       end
 
-      def mp3_file_hash
-        return unless mp3_file
-        download_url_args = { resource_id: resource.id.to_s,
-                              id: mp3_file.id.to_s,
-                              protocol: protocol,
-                              host: host }
-        download_url = url_helpers.download_url(download_url_args)
-
-        {
-          "id" => download_url,
-          "type" => "Audio",
-          "label" => "Download the mp3",
-          "format" => mp3_file.mime_type.first
-        }
-      end
-
-      def caption_downloads
-        resource.captions.map do |caption|
-          download_url_args = { resource_id: resource.id.to_s,
-                                id: caption.id.to_s,
-                                protocol: protocol,
-                                host: host }
-          download_url = url_helpers.download_url(download_url_args)
-          {
-            "id" => download_url,
-            "label" => "Download Caption - #{caption.caption_language_label}",
-            "format" => caption.mime_type.first
-          }
-        end
-      end
-
       def original_file
         @original_file ||= resource.original_file
-      end
-
-      def mp3_file
-        @mp3_file ||= resource.file_metadata.find { |file| file.mime_type.include? "audio/mpeg" }
       end
   end
 end
