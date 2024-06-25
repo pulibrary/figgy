@@ -183,6 +183,7 @@ RSpec.describe ManifestBuilderV3 do
       expect(output).to include "items"
       canvases = output["items"]
       expect(canvases.length).to eq 2
+      # TODO: does this label need to include language?
       expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
       # This value rounds up/down based on mediainfo compilation, 0.255 vs 0.256
       # is close enough for our purpose
