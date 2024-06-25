@@ -686,7 +686,7 @@ class ManifestBuilder
     def av?
       return true if resource.resource.is_a?(Playlist)
       # Skip check if it's a Collection node, for performance.
-      return false if resource.collection?
+      return false if resource.try(:collection?)
       av_presenters = resource.work_presenters.select(&:av_manifest?)
       return true unless av_presenters.empty?
 
