@@ -30,6 +30,13 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:uid).merge(provider: "cas", email: "#{params[:user][:uid]}@princeton.edu")
+      params.require(:user).permit(:uid).merge(provider: "cas", email: user_email(params[:user][:uid].to_s))
+    end
+
+    # Guest users have NetIDs that are emails - don't create an email field for
+    # them.
+    def user_email(uid)
+      return uid if uid.include?("@")
+      "#{uid}@princeton.edu"
     end
 end
