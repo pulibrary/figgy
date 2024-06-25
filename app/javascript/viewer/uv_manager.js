@@ -127,6 +127,7 @@ export default class UVManager {
     }, this.urlDataProvider)
     this.cdlTimer = new CDLTimer(this.figgyId)
     this.cdlTimer.initializeTimer()
+    this.bindUvClick()
   }
 
   // Universal Viewer uses window.open for download links, and we want to track
@@ -137,6 +138,21 @@ export default class UVManager {
       window.plausible('Download', { props: { url } })
       cachedOpen(url, target, features)
     }
+  }
+
+  bindUvClick () {
+    const uvElement = document.getElementById('uv')
+    const uvClick = new Event("UniversalViewer Click", { bubbles: true });
+
+    uvElement.addEventListener(
+      "click",
+      (event) => {
+        /* … */
+        uvElement.dispatchEvent(uvClick)
+        window.plausible('UniversalViewer Click')
+      },
+      false,
+    );
   }
 
   createClover () {
