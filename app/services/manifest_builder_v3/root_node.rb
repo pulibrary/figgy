@@ -13,7 +13,7 @@ class ManifestBuilderV3
       !av_file_sets.empty?
     end
 
-    def self.for(resource, _auth_token = nil, current_ability = nil)
+    def self.for(resource, auth_token = nil, current_ability = nil)
       case resource
       when Collection
         case ChangeSet.for(resource)
@@ -24,6 +24,8 @@ class ManifestBuilderV3
         end
       when ScannedMap
         ScannedMapNode.new(resource)
+      when Playlist
+        PlaylistNode.new(resource, auth_token)
       else
         case ChangeSet.for(resource)
         when RecordingChangeSet
@@ -33,7 +35,7 @@ class ManifestBuilderV3
             RecordingNode.new(resource)
           end
         else
-          new(resource)
+          new(resource, auth_token)
         end
       end
     end
@@ -203,6 +205,7 @@ class ManifestBuilderV3
     end
 
     def sequence_rendering
+      return [] if av_manifest?
       [
         {
           "@id" => helper.pdf_url(resource),
@@ -342,6 +345,34 @@ class ManifestBuilderV3
         LeafNode.new(node, self)
       end
       @file_set_presenters = values.compact
+    end
+  end
+
+  class PlaylistNode < RootNode
+    # Get all FileSets for a playlist, but decorate the label so that it's the
+    # proxy's label instead.
+    def leaf_nodes
+      @leaf_nodes ||= wayfinder.file_sets.map do |member|
+        ProxiedMember.new(member)
+      end
+    end
+
+    def wayfinder
+      @wayfinder ||= Wayfinder.for(resource)
+    end
+
+    class ProxiedMember < SimpleDelegator
+      def id
+        loaded[:proxy_parent].id
+      end
+
+      def proxied_object_id
+        __getobj__.id
+      end
+
+      def title
+        loaded[:proxy_parent].label
+      end
     end
   end
 end
