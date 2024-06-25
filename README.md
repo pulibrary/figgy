@@ -195,7 +195,7 @@ To put figgy in readonly mode, use the [ansible playbook](https://github.com/pul
 ## Cloud Fixity Checking
 
 Documentation on setup for staging/production Fixity configuration can be found
-in [preservation_documentation.md](/preservation_documentation.md).
+in [preservation_documentation.md](/docs/technical/preservation/google_pub_sub.md).
 
 ### Deployment Steps
 
