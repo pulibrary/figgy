@@ -18,6 +18,6 @@ class ManifestBuilderV3
     # Instantiate the Manifest
     # @return [IIIFManifest]
     def manifest
-      @manifest ||= IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
+      @manifest ||= IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestBuilderV3::ManifestServiceLocator).to_h
     end
 end

@@ -802,7 +802,7 @@ class ManifestBuilder
     # @return [IIIFManifest]
     def manifest
       @manifest ||= if av_collection? || av?
-                      IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocatorV3).to_h
+                      IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestBuilderV3::ManifestServiceLocator).to_h
                     # If not multi-part and a collection, it's not a MVW
                     elsif @resource.viewing_hint.blank? && @resource.collection?
                       IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
