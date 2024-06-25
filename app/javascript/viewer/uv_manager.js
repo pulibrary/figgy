@@ -140,19 +140,14 @@ export default class UVManager {
 
   bindUvClick () {
     const uvElement = document.getElementById('uv')
-    const uvClick = new Event("uv-click", { bubbles: true });
+    const uvClick = new Event("UniversalViewer Click", { bubbles: true });
 
     uvElement.addEventListener(
       "click",
       (event) => {
         /* … */
         uvElement.dispatchEvent(uvClick)
-        const cachedOpen = window.open
-        window.open = function (url, target, features) {
-          window.plausible('uv-click', { props: { url } })
-          cachedOpen(url, target, features)
-        }
-        console.log("UV clicked!")
+        window.plausible('UniversalViewer Click')
       },
       false,
     );
