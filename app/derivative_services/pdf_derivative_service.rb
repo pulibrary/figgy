@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class PDFDerivativeService
+  class ZeroByteError < StandardError; end
+
   class Factory
     attr_reader :change_set_persister
     def initialize(change_set_persister:)
@@ -105,7 +107,24 @@ class PDFDerivativeService
   end
 
   def generate_pdf_image(filename, location, page)
+    with_rescue([ZeroByteError], retries: 1) do
+      convert_pdf_page(filename, location, page)
+    end
+  end
+
+  def convert_pdf_page(filename, location, page)
     `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --dpi 300 --access sequential`
+    raise(ZeroByteError, "Failed to generate PDF derivative #{location} - page #{page}.") if File.size(location).zero?
+  end
+
+  def with_rescue(exceptions, retries: 5)
+    try = 0
+    begin
+      yield try
+    rescue *exceptions => exc
+      try += 1
+      try <= retries ? retry : raise(exc)
+    end
   end
 
   def build_file(page, file_path)
