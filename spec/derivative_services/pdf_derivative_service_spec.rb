@@ -67,7 +67,8 @@ RSpec.describe PDFDerivativeService do
         intermediate_file = intermediate_files.first.intermediate_file
         intermediate_disk_file = Valkyrie::StorageAdapter.find_by(id: intermediate_file.file_identifiers.first)
         vips_image = Vips::Image.new_from_file(intermediate_disk_file.disk_path.to_s)
-        expect(vips_image.width).to eq 2550
+        # Don't upscale.
+        expect(vips_image.width).to eq 612
 
         # Ensure the thumbnail is set to the first derivative.
         reloaded_resource = query_service.find_by(id: scanned_resource.id)
@@ -85,6 +86,36 @@ RSpec.describe PDFDerivativeService do
         file_set = reloaded_members.first
         expect(file_set.id).to eq valid_resource.id
         expect(file_set.primary_file.error_message).to include(/not the pagerange error/)
+      end
+
+      it "rolls back all changes on failure" do
+        service = derivative_service.new(id: valid_resource.id)
+        # Fail on second page generation.
+        allow(service).to receive(:convert_pdf_page).and_call_original
+        allow(service).to receive(:convert_pdf_page).with(anything, anything, 1).and_raise(Vips::Error)
+        expect { service.create_derivatives }.to raise_error(Vips::Error)
+
+        reloaded_members = query_service.find_members(resource: scanned_resource)
+        expect(reloaded_members.count).to eq 1
+        expect(reloaded_members.first.preservation_file).to be_blank
+      end
+
+      it "retries generating a page if it creates a zero byte file" do
+        service = derivative_service.new(id: valid_resource.id)
+        allow(service).to receive(:convert_pdf_page).and_call_original
+        call_count = 0
+        # Create a zero byte file on the first try of of creating page 1.
+        allow(service).to receive(:convert_pdf_page).with(anything, anything, 1) do |arg1, arg2, _page|
+          call_count += 1
+          raise PDFDerivativeService::ZeroByteError if call_count == 1
+          service.convert_pdf_page(arg1, arg2, 0)
+        end
+        expect { service.create_derivatives }.not_to raise_error
+
+        reloaded_members = query_service.find_members(resource: scanned_resource)
+        expect(reloaded_members.count).to eq 3
+        file = Valkyrie::StorageAdapter.find_by(id: reloaded_members.last.intermediate_file.file_identifiers.first)
+        expect(file.size).not_to eq 0
       end
     end
 
