@@ -67,7 +67,8 @@ RSpec.describe PDFDerivativeService do
         intermediate_file = intermediate_files.first.intermediate_file
         intermediate_disk_file = Valkyrie::StorageAdapter.find_by(id: intermediate_file.file_identifiers.first)
         vips_image = Vips::Image.new_from_file(intermediate_disk_file.disk_path.to_s)
-        expect(vips_image.width).to eq 2550
+        # Don't upscale.
+        expect(vips_image.width).to eq 612
 
         # Ensure the thumbnail is set to the first derivative.
         reloaded_resource = query_service.find_by(id: scanned_resource.id)

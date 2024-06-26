@@ -113,7 +113,7 @@ class PDFDerivativeService
   end
 
   def convert_pdf_page(filename, location, page)
-    `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --dpi 300 --access sequential`
+    `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --access sequential`
     raise(ZeroByteError, "Failed to generate PDF derivative #{location} - page #{page}.") if File.size(location).zero?
   end
 
