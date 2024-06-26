@@ -86,6 +86,19 @@ RSpec.describe PDFDerivativeService do
         expect(file_set.id).to eq valid_resource.id
         expect(file_set.primary_file.error_message).to include(/not the pagerange error/)
       end
+      it "rolls back all changes on failure" do
+        service = derivative_service.new(id: valid_resource.id)
+        # We have to stub the double to make it error when we generate page 2.
+        allow(service).to receive(:page_slice).and_return(1)
+        allow(service).to receive(:generate_pdf_image).and_call_original
+        allow(service).to receive(:generate_pdf_image).with(anything, anything, 1).and_raise(Vips::Error, "something broke")
+
+        expect { service.create_derivatives }.to raise_error(Vips::Error)
+
+        reloaded_members = query_service.find_members(resource: scanned_resource)
+        expect(reloaded_members.count).to eq 1
+        expect(reloaded_members.first.preservation_file).to be_blank
+      end
     end
 
     context "when there was a previous error", run_real_derivatives: true, run_real_characterization: true do

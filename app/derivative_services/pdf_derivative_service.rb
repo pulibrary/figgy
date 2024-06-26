@@ -24,27 +24,36 @@ class PDFDerivativeService
   end
 
   def create_derivatives
-    update_pdf_use
-    tiffs = convert_pages
-    add_file_sets(tiffs)
-    update_error_message(message: nil) if target_file.error_message.present?
-  rescue StandardError => e
-    change_set_persister.after_rollback.add do
-      update_error_message(message: e.message)
+    buffered do
+      update_pdf_use
+      tiffs = convert_pages
+      add_file_sets(tiffs)
+      update_error_message(message: nil) if target_file.error_message.present?
+    rescue StandardError => e
+      change_set_persister.after_rollback.add do
+        update_error_message(message: e.message)
+      end
+      raise e
+    ensure
+      FileUtils.remove_entry(tmpdir, true) if File.exist?(tmpdir)
     end
-    raise e
-  ensure
-    FileUtils.remove_entry(tmpdir, true) if File.exist?(tmpdir)
+  end
+
+  def buffered
+    change_set_persister.buffer_into_index do |buffered_change_set_persister|
+      old_persister = change_set_persister
+      @change_set_persister = buffered_change_set_persister
+      yield
+      @change_set_persister = old_persister
+    end
   end
 
   def add_file_sets(files)
     resource = parent
-    change_set_persister.buffer_into_index do |buffered_change_set_persister|
-      files.each_slice(page_slice) do |file_slice|
-        change_set = ChangeSet.for(resource)
-        change_set.validate(files: file_slice)
-        resource = buffered_change_set_persister.save(change_set: change_set)
-      end
+    files.each_slice(page_slice) do |file_slice|
+      change_set = ChangeSet.for(resource)
+      change_set.validate(files: file_slice)
+      resource = change_set_persister.save(change_set: change_set)
     end
   end
 
@@ -89,10 +98,14 @@ class PDFDerivativeService
     pages = image.get_value("pdf-n_pages")
     files = Array.new(pages).lazy.each_with_index.map do |_, page|
       location = temporary_output(page).to_s
-      `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --dpi 300 --access sequential`
+      generate_pdf_image(filename, location, page)
       build_file(page + 1, location)
     end
     files
+  end
+
+  def generate_pdf_image(filename, location, page)
+    `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --dpi 300 --access sequential`
   end
 
   def build_file(page, file_path)
