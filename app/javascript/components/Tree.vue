@@ -53,10 +53,18 @@
                 v-model="structureData.label"
                 type="text"
                 class="folder-label-input"
-                @keyup="saveLabel(id)"
-                @keydown.enter="hideLabelInput()"
-                @blur="hideLabelInput()"
+                @keyup.enter="saveLabel(id)"
               >
+            </div>
+            <div class="folder-edit">
+              <lux-input-button
+                class="save-label"
+                type="button"
+                variation="icon"
+                size="small"
+                icon="approved"
+                @button-clicked="saveLabel(id)"
+              />
             </div>
           </template>
           <template v-else>
@@ -287,8 +295,6 @@ export default {
         }
       }
       store.commit('SAVE_LABEL', structure)
-    },
-    hideLabelInput: function () {
       this.editedFieldId = null
     },
     updateFolderLabel: function (array, selectedFolder) {
