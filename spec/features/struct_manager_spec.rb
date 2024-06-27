@@ -32,7 +32,6 @@ RSpec.feature "Structure Manager", js: true do
     page.all("button.toggle-edit")[1].click
     expect(page).to have_css "input.folder-label-input"
     find("input.folder-label-input").set("Chapter Foo")
-    page.send_keys [:enter]
     expect(page).to have_css("div.folder-label", text: "Chapter Foo")
 
     # test cut of gallery item
