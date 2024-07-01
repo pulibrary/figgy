@@ -49,7 +49,7 @@ RSpec.feature "Structure Manager", js: true do
     find("button.lux-menu-item", text: "Paste (Ctrl-.)").click
     expect(page).to have_css ".lux-structManager .file"
 
-    # test create new folder with ctrl-n
+    # test create new folder with ctrl-/
     find("div.folder-label", match: :first).click
     expect(page).not_to have_css("div.folder-label", text: "Untitled")
     page.send_keys [:control, "/"]
@@ -64,7 +64,7 @@ RSpec.feature "Structure Manager", js: true do
 
     # test paste of a cut folder into another folder using keyboard commands
     find("div.folder-label", text: "Untitled").click
-    page.send_keys [:control, "v"]
+    page.send_keys [:control, "."]
     first_node = find("ul.lux-tree-sub", match: :first)
     expect(first_node).to have_css(".folder-label", text: "Untitled")
 
