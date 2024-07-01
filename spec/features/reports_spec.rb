@@ -14,5 +14,10 @@ RSpec.feature "Reports" do
       expect(page).to have_selector("input#collection_ids")
       expect(page).to have_selector("input#date_range")
     end
+    it "renders a dpul sucess dashboard", js: true do
+      visit "/reports/dpul_success_dashboard"
+      expect(page).to have_content("DPUL-Collections Success Dashboard")
+      expect(page).to have_selector("input#date_range")
+    end
   end
 end

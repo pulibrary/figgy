@@ -220,4 +220,20 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
       expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
   end
+
+  describe "GET #dpul_success_dashboard" do
+    render_views
+    it "displays a html view when no params are passed" do
+      get :dpul_success_dashboard
+      expect(response).to render_template :dpul_success_dashboard
+      expect(response.body).not_to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
+    end
+
+    it "displays a html view when params are passed" do
+      get :dpul_success_dashboard, params: { date_range: "10/04/2020-10/04/2022" }
+      expect(response).to render_template :dpul_success_dashboard
+      expect(response.body).to include("DPUL Success Dashboard (10/04/2020-10/04/2022)")
+    end
+
+  end
 end
