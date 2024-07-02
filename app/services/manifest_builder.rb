@@ -44,7 +44,11 @@ class ManifestBuilder
         when RecordingChangeSet
           ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
         else
-          new(resource, auth_token)
+          if Wayfinder.for(resource).first_member.try(:av?)
+            ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
+          else
+            new(resource, auth_token)
+          end
         end
       end
     end
