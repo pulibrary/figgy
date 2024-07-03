@@ -40,12 +40,7 @@ class ManifestBuilder
       when Playlist
         ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
       else
-        case ChangeSet.for(resource)
-        when RecordingChangeSet
-          ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
-        else
-          new(resource, auth_token)
-        end
+        new(resource, auth_token)
       end
     end
     attr_reader :resource, :auth_token, :current_ability
@@ -115,17 +110,6 @@ class ManifestBuilder
       end
     end
 
-    def av_manifest?
-      av_file_sets = file_set_presenters.select do |fs_presenter|
-        fs_presenter.display_content.present?
-      end
-
-      work_presenter_nodes = Array.wrap(work_presenters)
-      work_presenters = work_presenter_nodes.select(&:av_manifest?)
-
-      !av_file_sets.empty? || !work_presenters.empty?
-    end
-
     def collection?
       false
     end
@@ -165,7 +149,6 @@ class ManifestBuilder
     end
 
     def sequence_rendering
-      return [] if av_manifest?
       [
         {
           "@id" => helper.pdf_url(resource),
@@ -436,17 +419,6 @@ class ManifestBuilder
                                                         iiif_endpoint: endpoint)
     end
 
-    def display_content
-      return unless file.av?
-
-      @display_content ||= IIIFManifest::V3::DisplayContent.new(
-        download_url,
-        format: "application/vnd.apple.mpegurl",
-        label: resource.title.first,
-        duration: file.duration.first.to_f
-      )
-    end
-
     def display_image_url
       helper.manifest_image_medium_path(resource)
     rescue
@@ -619,8 +591,6 @@ class ManifestBuilder
       return true if resource.resource.is_a?(Playlist)
       # Skip check if it's a Collection node, for performance.
       return false if resource.try(:collection?)
-      av_presenters = resource.work_presenters.select(&:av_manifest?)
-      return true unless av_presenters.empty?
 
       file_sets = Array.wrap(resource.try(:leaf_nodes))
       av_file_sets = file_sets.select(&:av?)

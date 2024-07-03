@@ -50,7 +50,12 @@ class ScannedResourcesController < ResourcesController
 
   def cached_manifest(resource, auth_token_param)
     Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
-      ManifestBuilder.new(resource, auth_token_param).build.to_json
+      builder_klass = if Wayfinder.for(resource).first_member.try(:av?)
+                        ManifestBuilderV3
+                      else
+                        ManifestBuilder
+                      end
+      builder_klass.new(resource, auth_token_param).build.to_json
     end
   end
 
