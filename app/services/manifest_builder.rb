@@ -40,12 +40,7 @@ class ManifestBuilder
       when Playlist
         ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
       else
-        case ChangeSet.for(resource)
-        when RecordingChangeSet
-          ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
-        else
-          new(resource, auth_token)
-        end
+        new(resource, auth_token)
       end
     end
     attr_reader :resource, :auth_token, :current_ability
