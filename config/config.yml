@@ -4,6 +4,7 @@ defaults: &defaults
   archivespace_url: <%= ENV["ASPACE_URL"] || "https://aspace-staging.princeton.edu/staff/api" %>
   archivespace_user: <%= ENV["ASPACE_USER"] %>
   archivespace_password: <%= ENV["ASPACE_PASSWORD"] %>
+  plausible_api_key: <%= ENV["PLAUSIBLE_API_KEY"] %>
   cdl_in_path: <%= ENV["CDL_IN_PATH"] %>
   ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
   ocr_out_path: <%= ENV["OCR_OUT_PATH"] %>

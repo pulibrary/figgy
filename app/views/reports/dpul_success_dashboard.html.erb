@@ -7,30 +7,20 @@
 </p>
 <% if @report %>
 <hr/>
-<p>
-  <%= link_to "Download CSV", dpul_success_dashboard_path(params: {date_range: params[:date_range]}, format: :csv) %>
-</p>
 
 <table class="table table-striped datatable">
   <thead>
     <tr>
-      <th>Date</th>
-      <th>Views Per Visit</th>
-      <th>Duration Per Visit</th>
+      <th>Metric</th>
+      <th>Total</th>
   </thead>
   <tbody>
-    <% @report.to_h.each do |r| %>
+    <% @report.plausible_api_request.each do |k,v| %>
       <tr>
-        <td><%= r[:day] %></td>
-        <td><%= r[:views_per_visit] %></td>
-        <td><%= r[:duration_per_visit] %></td>
+        <td><%= k %></td>
+        <td><%= v['value'] %></td>
       </tr>
     <% end %>
-    <tr>
-      <td>Totals</td>
-      <td></td>
-      <td></td>
-    </tr>
   </tbody>
 </table>
 <% end %>

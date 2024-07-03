@@ -59,7 +59,7 @@ class ReportsController < ApplicationController
     if params.key?(:date_range)
       valid_params = validate_dpul_date_range
       if valid_params.present?
-        @report = DPULSuccessDashboardGenerator.new(date_range: valid_params[:date_range])
+        @report = DpulSuccessDashboardReportGenerator.new(date_range: valid_params[:date_range])
       else
         flash.alert = "There was a problem generating your report. At least one valid Date is required."
       end
