@@ -11,16 +11,22 @@
 <table class="table table-striped datatable">
   <thead>
     <tr>
-      <th>Metric</th>
-      <th>Total</th>
+      <th>Day</th>
+      <th>Visitors</th>
+      <th>Page Views</th>
+      <th>Bounce Rate</th>
+      <th>Visit Duration</th>
   </thead>
   <tbody>
-    <% @report.plausible_api_request.each do |k,v| %>
+  <% @report.plausible_api_request.each do |day| %>
       <tr>
-        <td><%= k %></td>
-        <td><%= v['value'] %></td>
+        <td><%= day['date'] %></td>
+        <td><%= day['visitors'] %></td>
+        <td><%= day['pageviews'] %></td>
+        <td><%= day['bounce_rate'] %></td>
+        <td><%= day['visit_duration'] %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 <% end %>

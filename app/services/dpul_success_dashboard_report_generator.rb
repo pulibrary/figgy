@@ -17,10 +17,10 @@ class DpulSuccessDashboardReportGenerator
       conn.headers['Content-Type'] = 'application/json'
       conn.params['site_id'] = 'dpul.princeton.edu'
       conn.params['period'] = 'custom'
-      conn.params['date'] = @date_range.first.strftime("%Y-%m-%d") + ',' + @date_range.last.iso8601
+      conn.params['date'] = @date_range.first.iso8601 + ',' + @date_range.last.iso8601
       conn.params['metrics'] = 'visitors,pageviews,bounce_rate,visit_duration'
     end
-    response = request.get("/api/v1/stats/aggregate")
-    stats = JSON.parse(response.body).first.last
+    response = request.get("/api/v1/stats/timeseries")
+    stats = JSON.parse(response.body)['results']
   end
 end
