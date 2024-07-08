@@ -44,9 +44,10 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).to have_css ".lux-card-disabled"
 
     # test paste of gallery item into a tree structure folder
+    # the hotkey for paste is a period (.) to avoid hotkey collisions with Windows Ctrl-V
     find("div.folder-label", text: "Chapter Foo").click
     find("button.lux-dropdown-button").click
-    find("button.lux-menu-item", text: "Paste (Ctrl-v)").click
+    find("button.lux-menu-item", text: "Paste (Ctrl-.)").click
     expect(page).to have_css ".lux-structManager .file"
 
     # test create new folder with ctrl-/
@@ -64,7 +65,7 @@ RSpec.feature "Structure Manager", js: true do
 
     # test paste of a cut folder into another folder using keyboard commands
     find("div.folder-label", text: "Untitled").click
-    page.send_keys [:control, "v"]
+    page.send_keys [:control, "."]
     first_node = find("ul.lux-tree-sub", match: :first)
     expect(first_node).to have_css(".folder-label", text: "Untitled")
 

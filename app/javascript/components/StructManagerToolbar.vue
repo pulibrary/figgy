@@ -12,7 +12,7 @@
         {name: 'Delete Folder (Ctrl-d)', component: 'FolderDelete', disabled: rootNodeSelected},
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
-        {name: 'Paste (Ctrl-v)', component: 'Paste', disabled: isPasteDisabled()},
+        {name: 'Paste (Ctrl-.)', component: 'Paste', disabled: isPasteDisabled()},
         {name: 'Zoom on Selected (Ctrl-o)', component: 'Zoom', disabled: isZoomDisabled()}
       ]"
       @menu-item-clicked="menuSelection($event)"
@@ -120,7 +120,7 @@ export default {
         e.preventDefault()
         this.cutSelected()
       }
-      if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+      if (e.key === '.' && (e.ctrlKey || e.metaKey)) {
         e.preventDefault()
         this.paste()
       }
@@ -226,7 +226,7 @@ export default {
         case 'Cut (Ctrl-x)':
           this.cutSelected()
           break
-        case 'Paste (Ctrl-v)':
+        case 'Paste (Ctrl-.)':
           this.paste()
           break
         case 'Zoom on Selected (Ctrl-o)':
