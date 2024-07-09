@@ -1,20 +1,25 @@
 <h2>DPUL Success Dashboard</h2>
-<p>
-<%= form_with(url: dpul_success_dashboard_path, method: :get, local: true) do |f| %>
-  <lux-date-picker 
-    id="date_range" 
-    name="date_range" 
-    helper="Entering a single date will result in a report for that day." 
-    required="true" 
-    label="Date Range" 
-    mode="range"
-    <% if @report %>
-      :default-dates="{ <%= @report.default_dates %> }"
+<div class="dashboard-heading">
+  <div class="dashboard-range">
+    <h3><%= @report.display_dates %></h3>
+  </div>
+  <div class="dashboard-form">
+    <%= form_with(url: dpul_success_dashboard_path, method: :get, local: true) do |f| %>
+      <lux-date-picker 
+        id="date_range" 
+        name="date_range" 
+        helper="Entering a single date will result in a report for that day." 
+        required="true" 
+        label="Date Range" 
+        mode="range"
+        <% if @report %>
+          :default-dates="{ <%= @report.default_dates %> }"
+        <% end %>
+        ></lux-date-picker>
+      <%= f.submit("Generate Report") %>
     <% end %>
-    ></lux-date-picker>
-  <%= f.submit("Generate Report") %>
-<% end %>
-</p>
+  </div>
+</div>
 <% if @report %>
 <hr/>
 

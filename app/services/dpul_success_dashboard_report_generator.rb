@@ -19,6 +19,10 @@ class DpulSuccessDashboardReportGenerator
     'start: new Date(' + first_day + '), end: new Date(' + last_day + ')'
   end
 
+  def display_dates
+    @date_range.first.strftime('%B %d, %Y') + ' - ' + @date_range.last.strftime('%B %d, %Y')
+  end
+
   def plausible_api_request
     request = Faraday.new(url: 'https://plausible.io') do |conn|
       # Need help
