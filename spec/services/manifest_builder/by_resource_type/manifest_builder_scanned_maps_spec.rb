@@ -38,7 +38,7 @@ RSpec.describe ManifestBuilder do
   context "when given a nested scanned map set" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
     let(:scanned_map) do
-      FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id)
+      FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id, start_canvas: child.id)
     end
     let(:child) { FactoryBot.create_for_repository(:scanned_map, files: [file]) }
     it "builds a IIIF document" do
