@@ -38,7 +38,7 @@ RSpec.describe ManifestBuilder do
   context "when given a nested scanned map set" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_map.id)) }
     let(:scanned_map) do
-      FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id, start_canvas: child.id)
+      FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id)
     end
     let(:child) { FactoryBot.create_for_repository(:scanned_map, files: [file]) }
     it "builds a IIIF document" do
@@ -48,6 +48,17 @@ RSpec.describe ManifestBuilder do
       expect(output["@type"]).to eq "sc:Manifest"
       expect(output["manifests"]).to eq nil
       expect(output["sequences"].first["canvases"].length).to eq 1
+    end
+    context "that mistakenly has a scanned map set as a start_canvas" do
+      let(:scanned_map) do
+        FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id, start_canvas: child.id)
+      end
+      it "builds a IIIF document" do
+        output = manifest_builder.build
+        expect(output).to be_kind_of Hash
+        expect(output["@type"]).to eq "sc:Manifest"
+        expect(output["sequences"].first["canvases"].length).to eq 1
+      end
     end
   end
 
