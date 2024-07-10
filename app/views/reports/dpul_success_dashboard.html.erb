@@ -1,7 +1,9 @@
 <h2>DPUL Success Dashboard</h2>
 <div class="dashboard-heading">
   <div class="dashboard-range">
-    <h3><%= @report.display_dates %></h3>
+    <% if @report %>
+      <h3><%= @report.display_dates %></h3>
+    <% end %>
   </div>
   <div class="dashboard-form">
     <%= form_with(url: dpul_success_dashboard_path, method: :get, local: true) do |f| %>

@@ -248,6 +248,7 @@ test:
   archivespace_url: "https://aspace.test.org/staff/api"
   archivespace_user: "test"
   archivespace_password: "password"
+  plausible_api_key: "plausible_api_key"
   cdl_in_path: <%= Rails.root.join("tmp", "test_cdl_in") %>
   ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in#{ENV["TEST_ENV_NUMBER"]}") %>
   ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out#{ENV["TEST_ENV_NUMBER"]}") %>
