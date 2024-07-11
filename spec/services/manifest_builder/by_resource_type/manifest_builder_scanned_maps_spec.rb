@@ -49,6 +49,17 @@ RSpec.describe ManifestBuilder do
       expect(output["manifests"]).to eq nil
       expect(output["sequences"].first["canvases"].length).to eq 1
     end
+    context "that mistakenly has a scanned map set as a start_canvas" do
+      let(:scanned_map) do
+        FactoryBot.create_for_repository(:scanned_map, description: "Test Description", member_ids: child.id, start_canvas: child.id)
+      end
+      it "builds a IIIF document" do
+        output = manifest_builder.build
+        expect(output).to be_kind_of Hash
+        expect(output["@type"]).to eq "sc:Manifest"
+        expect(output["sequences"].first["canvases"].length).to eq 1
+      end
+    end
   end
 
   context "when given a multi-volume map set" do
