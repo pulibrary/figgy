@@ -37,4 +37,38 @@ class DpulSuccessDashboardReportGenerator
     response = request.get("/api/v1/stats/timeseries")
     stats = JSON.parse(response.body)['results']
   end
+
+  def plausible_downloads_api_request 
+    request = Faraday.new(url: 'https://plausible.io') do |conn|
+      # Need help
+      conn.request :authorization, 'Bearer', Figgy.config["plausible_api_key"]
+      conn.adapter Faraday.default_adapter
+      conn.headers['Content-Type'] = 'application/json'
+      conn.params['site_id'] = 'dpul.princeton.edu'
+      conn.params['period'] = 'custom'
+      conn.params['date'] = @date_range.first.iso8601 + ',' + @date_range.last.iso8601
+      conn.params['interval'] = 'date'
+      conn.params['filters'] = 'event:goal==Download'
+      conn.params['metrics'] = 'visitors,events'
+    end
+    response = request.get("/api/v1/stats/timeseries")
+    stats = JSON.parse(response.body)['results']
+  end 
+
+    def plausible_rpvs_api_request 
+    request = Faraday.new(url: 'https://plausible.io') do |conn|
+      # Need help
+      conn.request :authorization, 'Bearer', Figgy.config["plausible_api_key"]
+      conn.adapter Faraday.default_adapter
+      conn.headers['Content-Type'] = 'application/json'
+      conn.params['site_id'] = 'dpul.princeton.edu'
+      conn.params['period'] = 'custom'
+      conn.params['date'] = @date_range.first.iso8601 + ',' + @date_range.last.iso8601
+      conn.params['interval'] = 'date'
+      conn.params['filters'] = 'event:goal==Visit%20/*/catalog/*'
+      conn.params['metrics'] = 'visitors,events'
+    end
+    response = request.get("/api/v1/stats/timeseries")
+    stats = JSON.parse(response.body)['results']
+  end 
 end
