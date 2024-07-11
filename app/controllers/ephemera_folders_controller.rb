@@ -64,8 +64,19 @@ class EphemeraFoldersController < ResourcesController
     authorize! :manifest, resource
     respond_to do |f|
       f.json do
-        render json: ManifestBuilder.new(resource).build
+        render json: cached_manifest(resource, auth_token_param)
       end
+    end
+  end
+
+  def cached_manifest(resource, auth_token_param)
+    Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
+      builder_klass = if Wayfinder.for(resource).first_member.try(:av?)
+                        ManifestBuilderV3
+                      else
+                        ManifestBuilder
+                      end
+      builder_klass.new(resource, auth_token_param).build.to_json
     end
   end
 

@@ -148,6 +148,20 @@ RSpec.describe EphemeraFoldersController, type: :controller do
         expect(manifest_response[:sequences].length).to eq 1
         expect(manifest_response[:viewingHint]).to eq "individuals"
       end
+      context "when given a video", run_real_derivatives: true, run_real_characterization: true do
+        let(:file) { fixture_file_upload("files/city.mp4", "video/mp4") }
+        it "renders a v3 manifest" do
+          sign_in user
+          resource = FactoryBot.create_for_repository(:ephemera_folder, files: [file])
+
+          get :manifest, params: { id: resource.id.to_s, format: :json }
+          manifest_response = MultiJson.load(response.body)
+
+          expect(response.headers["Content-Type"]).to include "application/json"
+          expect(manifest_response["@context"]).to include("http://iiif.io/api/presentation/3/context.json")
+          expect(manifest_response["items"].first["items"][0]["items"][0]["body"]["type"]).to eq "Video"
+        end
+      end
     end
     context "when not signed in as an admin" do
       it "does not display needs_qa items" do
