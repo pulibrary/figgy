@@ -182,5 +182,16 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
       expect(report.sources.first['date']).to eq "2024-07-01"
     end
 
+    it "retrieves an aggregate of general and custom event metrics from plausible for each date in the given range" do 
+      report = described_class.new(date_range: DateTime.new(2024, 7, 1)..DateTime.new(2024, 7, 03))
+      expect(report.daily_metrics.is_a?(Array)).to be true
+      expect(report.daily_metrics.first['date']).to eq "2024-07-01"
+      expect(report.daily_metrics.first['download_events']).to eq ""
+      expect(report.daily_metrics.first['download_visitors']).to eq ""
+      expect(report.daily_metrics.first['rpv_events']).to eq ""
+      expect(report.daily_metrics.first['rpv_visitors']).to eq ""
+      expect(report.daily_metrics.first['viewerclick_events']).to eq ""
+      expect(report.daily_metrics.first['viewerclick_visitors']).to eq ""
+    end
   end
 end

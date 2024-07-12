@@ -34,18 +34,18 @@
       <th>Page Views</th>
       <th>Bounce Rate</th>
       <th>Visit Duration</th>
-      <th>Visitors that Downloaded</th>
-      <th>Number of Downloads</th>
-      <th>Avg Downloads per Visitor</th>
-      <th>Visitors that Viewed a Record Page</th>
-      <th>Number of Record Pages Viewed</th>
-      <th>Avg RPVs per Visitor</th>
-      <th>Visitors that Clicked a Viewer</th>
-      <th>Number of Viewer Clicks</th>
-      <th>Viewer Clicks per Visitor</th>
+      <th>Visitors: Downloads</th>
+      <th># Downloads</th>
+      <th>Avg Downloads / Visitor</th>
+      <th>Visitors: Viewed a Record Page</th>
+      <th># Record Pages Viewed</th>
+      <th>Avg RPVs / Visitor</th>
+      <th>Visitors: Clicked a Viewer</th>
+      <th># Viewer Clicks</th>
+      <th>Viewer Clicks / Visitor</th>
   </thead>
   <tbody>
-  <% @report.traffic.each do |day| %>
+  <% @report.daily_metrics.each do |day| %>
       <tr>
         <td><%= day['date'] %></td>
         <td><%= day['visitors'] %></td>
