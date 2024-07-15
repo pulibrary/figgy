@@ -34,15 +34,8 @@
       <th>Page Views</th>
       <th>Bounce Rate</th>
       <th>Visit Duration</th>
-      <th>Visitors: Downloads</th>
+      <th># Visitors who Downloaded</th>
       <th># Downloads</th>
-      <th>Avg Downloads / Visitor</th>
-      <th>Visitors: Viewed a Record Page</th>
-      <th># Record Pages Viewed</th>
-      <th>Avg RPVs / Visitor</th>
-      <th>Visitors: Clicked a Viewer</th>
-      <th># Viewer Clicks</th>
-      <th>Viewer Clicks / Visitor</th>
   </thead>
   <tbody>
   <% @report.daily_metrics.each do |day| %>
@@ -53,6 +46,8 @@
         <td><%= day['pageviews'] %></td>
         <td><%= day['bounce_rate'] %></td>
         <td><%= day['visit_duration'] %></td>
+        <td><%= day['download_visitors'] %></td>
+        <td><%= day['download_events'] %></td>
       </tr>
   <% end %>
   </tbody>

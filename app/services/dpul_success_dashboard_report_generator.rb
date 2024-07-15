@@ -26,12 +26,112 @@ class DpulSuccessDashboardReportGenerator
   end
 
   def daily_metrics
-    Async {
-      traffic.map do |day|
-        day['downloads_visitors'] = downloads[day['date']]['visitors']
-        day['downloads_events'] = downloads[day['date']]['events'] 
+    request = Faraday.new(url: 'https://plausible.io') do |conn|
+        # Need help
+        conn.request :authorization, 'Bearer', Figgy.config["plausible_api_key"]
+        conn.adapter Faraday.default_adapter
+        conn.headers['Content-Type'] = 'application/json'
+        conn.params['site_id'] = 'dpul.princeton.edu'
+        conn.params['period'] = 'custom'
+        conn.params['date'] = @date_range.first.iso8601 + ',' + @date_range.last.iso8601
+        conn.params['metrics'] = 'visitors,pageviews,bounce_rate,visit_duration,visits'
       end
-    }
+      
+      response = request.get("/api/v1/stats/timeseries")
+      stats = JSON.parse(response.body)['results']
+      # Convert stats array to a hash with date as key for easier lookup
+      stats_hash = stats.index_by { |stat| stat["date"] }
+
+      # Retrieve and merge the Downloads stats
+      request = Faraday.new(url: 'https://plausible.io') do |conn|
+        conn.request :authorization, 'Bearer', Figgy.config["plausible_api_key"]
+        conn.adapter Faraday.default_adapter
+        conn.headers['Content-Type'] = 'application/json'
+        conn.params['site_id'] = 'dpul.princeton.edu'
+        conn.params['period'] = 'custom'
+        conn.params['date'] = @date_range.first.iso8601 + ',' + @date_range.last.iso8601
+        conn.params['interval'] = 'date'
+        conn.params['filters'] = 'event:goal==Download'
+        conn.params['metrics'] = 'visitors,events'
+      end
+
+      response = request.get("/api/v1/stats/timeseries")
+      downloads_array = JSON.parse(response.body)['results']
+      downloads_hash = downloads_array.each_with_object({}) do |download, h| 
+        h[download['date'].to_sym] = { download_visitors: download['visitors'], download_events: download['events'] } 
+      end
+
+      # Iterate over downloads_hash and merge data into stats
+      downloads_hash.each do |date_key, metrics|
+        date_str = date_key.to_s # Convert symbol key to string
+
+        if stats_hash[date_str]
+          # Merge downloads into corresponding stats element
+          stats_hash[date_str].merge!(metrics.transform_keys(&:to_s))
+        end
+      end
+
+      # binding.pry
+      # # Retrieve and merge the RPV stats
+      # request = Faraday.new(url: 'https://plausible.io') do |conn|
+      #   conn.request :authorization, 'Bearer', Figgy.config["plausible_api_key"]
+      #   conn.adapter Faraday.default_adapter
+      #   conn.headers['Content-Type'] = 'application/json'
+      #   conn.params['site_id'] = 'dpul.princeton.edu'
+      #   conn.params['period'] = 'custom'
+      #   conn.params['date'] = @date_range.first.iso8601 + ',' + @date_range.last.iso8601
+      #   conn.params['interval'] = 'date'
+      #   conn.params['filters'] = 'event:goal==Visit+/*/catalog/*'
+      #   conn.params['metrics'] = 'visitors,events'
+      # end
+
+      # response = request.get("/api/v1/stats/timeseries")
+      # rpvs_array = JSON.parse(response.body)['results']
+      # rpvs_hash = rpvs_array.each_with_object({}) do |rpv, h| 
+      #   h[rpv['date'].to_sym] = { rpv_visitors: rpv['visitors'], rpv_events: rpv['events'] } 
+      # end
+
+      # # Iterate over rpvs_hash and merge data into stats
+      # rpvs_hash.each do |date_key, metrics|
+      #   date_str = date_key.to_s # Convert symbol key to string
+
+      #   if stats_hash[date_str]
+      #     # Merge downloads into corresponding stats element
+      #     stats_hash[date_str].merge!(metrics.transform_keys(&:to_s))
+      #   end
+      # end
+
+      # # Retrieve and merge the Viewer Click stats
+      # request = Faraday.new(url: 'https://plausible.io') do |conn|
+      #   conn.request :authorization, 'Bearer', Figgy.config["plausible_api_key"]
+      #   conn.adapter Faraday.default_adapter
+      #   conn.headers['Content-Type'] = 'application/json'
+      #   conn.params['site_id'] = 'dpul.princeton.edu'
+      #   conn.params['period'] = 'custom'
+      #   conn.params['date'] = @date_range.first.iso8601 + ',' + @date_range.last.iso8601
+      #   conn.params['interval'] = 'date'
+      #   conn.params['filters'] = 'event:goal==UniversalViewer%20Click'
+      #   conn.params['metrics'] = 'visitors,events'
+      # end
+      # binding.pry
+      # response = request.get("/api/v1/stats/timeseries")
+      # viewer_clicks_array = JSON.parse(response.body)['results']
+      # vc_hash = viewer_clicks_array.each_with_object({}) do |viewer_click, h| 
+      #   h[viewer_click['date'].to_sym] = { viewer_click_visitors: viewer_click['visitors'], viewer_click_events: viewer_click['events'] } 
+      # end
+
+      # # Iterate over rpvs_hash and merge data into stats
+      # vc_hash.each do |date_key, metrics|
+      #   date_str = date_key.to_s # Convert symbol key to string
+
+      #   if stats_hash[date_str]
+      #     # Merge downloads into corresponding stats element
+      #     stats_hash[date_str].merge!(metrics.transform_keys(&:to_s))
+      #   end
+      # end
+
+      # Convert stats hash back to array
+      stats_with_metrics = stats_hash.values
   end
 
   def traffic
@@ -85,9 +185,8 @@ class DpulSuccessDashboardReportGenerator
         conn.params['filters'] = 'event:goal==Visit%20/*/catalog/*'
         conn.params['metrics'] = 'visitors,events'
       end
-      Async {
-        response = request.get("/api/v1/stats/timeseries")
-      }
+
+      response = request.get("/api/v1/stats/timeseries")
       rpvs_array = JSON.parse(response.body)['results']
       rpvs_array.each_with_object({}) do |rpv, h| 
         h[rpv['date'].to_sym] = { rpv_visitors: rpv['visitors'], rpv_events: rpv['events'] } 
@@ -106,9 +205,8 @@ class DpulSuccessDashboardReportGenerator
         conn.params['filters'] = 'event:goal==UniversalViewer%20Click'
         conn.params['metrics'] = 'visitors,events'
       end
-      Async {
-        response = request.get("/api/v1/stats/timeseries")
-      }
+
+      response = request.get("/api/v1/stats/timeseries")
       viewer_clicks_array = JSON.parse(response.body)['results']
       viewer_clicks_array.each_with_object({}) do |viewer_click, h| 
         h[viewer_click['date'].to_sym] = { viewer_click_visitors: viewer_click['visitors'], viewer_click_events: viewer_click['events'] } 
