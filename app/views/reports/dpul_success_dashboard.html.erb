@@ -24,8 +24,9 @@
 </div>
 <% if @report %>
 <hr/>
-
-<table class="table table-striped datatable">
+<h2>Daily Stats for the current date range</h2>
+<hr/>
+<table class="table table-striped datatable dpul-dashboard-table">
   <thead>
     <tr>
       <th>Day</th>
@@ -36,6 +37,10 @@
       <th>Visit Duration</th>
       <th># Visitors who Downloaded</th>
       <th># Downloads</th>
+      <th># Visitors who viewed RPV</th>
+      <th># RPVs viewed</th>
+      <th># Visitors who clicked UV</th>
+      <th># UV Clicks</th>
   </thead>
   <tbody>
   <% @report.daily_metrics.each do |day| %>
@@ -48,6 +53,31 @@
         <td><%= day['visit_duration'] %></td>
         <td><%= day['download_visitors'] %></td>
         <td><%= day['download_events'] %></td>
+        <td><%= day['rpv_visitors'] %></td>
+        <td><%= day['rpv_events'] %></td>
+        <td><%= day['viewer_click_visitors'] %></td>
+        <td><%= day['viewer_click_events'] %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<hr/>
+<h2>Sources for the current date range</h2>
+<h3>Total Unique Sources: <%= @report.sources.count %></h3>
+<hr/>
+<table class="table table-striped dpul-dashboard-table">
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Visitors</th>
+      <th>Bounce Rate</th>
+  </thead>
+  <tbody>
+  <% @report.sources.each do |source| %>
+      <tr>
+        <td><%= source['source'] %></td>
+        <td><%= source['visitors'] %></td>
+        <td><%= source['bounce_rate'] %></td>
       </tr>
   <% end %>
   </tbody>

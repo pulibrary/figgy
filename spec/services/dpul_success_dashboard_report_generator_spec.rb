@@ -2,6 +2,70 @@
 require "rails_helper"
 
 RSpec.describe DpulSuccessDashboardReportGenerator do
+  before do
+    body = '{
+              "results": [
+                  {
+                      "date": "2024-07-01",
+                      "visitors": 3,
+                      "events": 4
+                  },
+                  {
+                      "date": "2024-07-02",
+                      "visitors": 5,
+                      "events": 10
+                  },
+                  {
+                      "date": "2024-07-03",
+                      "visitors": 7,
+                      "events": 3
+                  }
+              ]
+            }'
+
+     stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2021-07-01T00:00:00%2B00:00,2022-06-30T00:00:00%2B00:00&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu").
+         with(
+           headers: {
+       	  'Accept'=>'*/*',
+       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+       	  'Authorization'=>'Bearer plausible_api_key',
+       	  'Content-Type'=>'application/json',
+       	  'User-Agent'=>'Faraday v2.9.0'
+           }).to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+
+      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==Download&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu").
+         with(
+           headers: {
+       	  'Accept'=>'*/*',
+       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+       	  'Authorization'=>'Bearer plausible_api_key',
+       	  'Content-Type'=>'application/json',
+       	  'User-Agent'=>'Faraday v2.9.0'
+           }).
+         to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+
+      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==UniversalViewer%20Click&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu").
+              with(
+                headers: {
+                'Accept'=>'*/*',
+                'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                'Authorization'=>'Bearer plausible_api_key',
+                'Content-Type'=>'application/json',
+                'User-Agent'=>'Faraday v2.9.0'
+                }).
+              to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+
+      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==Visit%20/*/catalog/*&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu").
+            with(
+              headers: {
+              'Accept'=>'*/*',
+              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+              'Authorization'=>'Bearer plausible_api_key',
+              'Content-Type'=>'application/json',
+              'User-Agent'=>'Faraday v2.9.0'
+              }).
+            to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+  end
 
   context "when given a date range for analytics" do
 
@@ -16,30 +80,6 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
     end
 
     it "retrieves traffic data from plausible and puts it into an array of objects containing metrics for each date" do 
-      body = '{
-                "results": [
-                    {
-                        "date": "2024-07-01",
-                        "visitors": 0
-                    },
-                    {
-                        "date": "2024-07-02",
-                        "visitors": 0
-                    },
-                    {
-                        "date": "2024-07-03",
-                        "visitors": 0
-                    }
-                ]
-            }'
-
-      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2021-07-01T00:00:00%2B00:00,2022-06-30T00:00:00%2B00:00&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu").
-         with(
-           headers: {
-       	  'Authorization'=>'Bearer plausible_api_key',
-       	  'Content-Type'=>'application/json',
-       	  'User-Agent'=>'Faraday v2.9.0'
-           }).to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
       report = described_class.new(date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
       expect(report.traffic.is_a?(Array)).to be true
       expect(report.traffic.first['date']).to eq "2024-07-01"
@@ -47,94 +87,19 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
 
     it "retrieves the number of downloads in the given date range from plausible and puts it into an array of objects containing the number of downloads for each date" do 
       # Does this tally the number of visitors who achieved this "goal"? Or does it tally the number of times the goal was achieved? We should verify this.
-      # Verify if there is any latency in the numbers. For example, if I download an item, the expectation is that the api data would reflect that immediately.
-      body = '{
-            "results": [
-                {
-                    "date": "2024-07-01",
-                    "visitors": 3
-                },
-                {
-                    "date": "2024-07-02",
-                    "visitors": 5
-                },
-                {
-                    "date": "2024-07-03",
-                    "visitors": 10
-                }
-            ]
-        }'
-
-      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==Download&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu").
-         with(
-           headers: {
-       	  'Authorization'=>'Bearer plausible_api_key',
-       	  'Content-Type'=>'application/json',
-       	  'User-Agent'=>'Faraday v2.9.0'
-           }).
-         to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+      # Verify if there is any latency in the numbers. For example, if I download an item, the expectation is that the api data would reflect that immediately.      
       report = described_class.new(date_range: DateTime.new(2024, 7, 1)..DateTime.new(2024, 7, 03))
       expect(report.downloads.is_a?(Array)).to be true
       expect(report.downloads.first['date']).to eq "2024-07-01"
     end
 
     it "retrieves the number of viewer clicks in the given date range from plausible and puts it into an array of objects containing the number of viewer clicks for each date" do 
-      body = '{
-        "results": [
-            {
-                "date": "2024-07-01",
-                "visitors": 3
-            },
-            {
-                "date": "2024-07-02",
-                "visitors": 5
-            },
-            {
-                "date": "2024-07-03",
-                "visitors": 10
-            }
-        ]
-      }'
-
-      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==UniversalViewer%2520Click&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu").
-         with(
-           headers: {
-       	  'Authorization'=>'Bearer plausible_api_key',
-       	  'Content-Type'=>'application/json',
-       	  'User-Agent'=>'Faraday v2.9.0'
-           }).
-         to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
       report = described_class.new(date_range: DateTime.new(2024, 7, 1)..DateTime.new(2024, 7, 03))
       expect(report.viewer_clicks.is_a?(Array)).to be true
       expect(report.viewer_clicks.first['date']).to eq "2024-07-01"
     end
 
     it "retrieves the number of record page views in the given date range from plausible and puts it into an array of objects containing the number of RPVs for each date" do 
-      body = '{
-            "results": [
-                {
-                    "date": "2024-07-01",
-                    "visitors": 3
-                },
-                {
-                    "date": "2024-07-02",
-                    "visitors": 5
-                },
-                {
-                    "date": "2024-07-03",
-                    "visitors": 10
-                }
-            ]
-        }'
-
-      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==Visit%2520/*/catalog/*&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu").
-         with(
-           headers: {
-       	  'Authorization'=>'Bearer plausible_api_key',
-       	  'Content-Type'=>'application/json',
-       	  'User-Agent'=>'Faraday v2.9.0'
-           }).
-         to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
       report = described_class.new(date_range: DateTime.new(2024, 7, 1)..DateTime.new(2024, 7, 03))
       expect(report.record_page_views.is_a?(Array)).to be true
       expect(report.record_page_views.first['date']).to eq "2024-07-01"
@@ -145,15 +110,18 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
             "results": [
                 {
                     "date": "2024-07-01",
-                    "visitors": 3
+                    "visitors": 3,
+                    "events": 4
                 },
                 {
                     "date": "2024-07-02",
-                    "visitors": 5
+                    "visitors": 3,
+                    "events": 4
                 },
                 {
                     "date": "2024-07-03",
-                    "visitors": 10
+                    "visitors": 3,
+                    "events": 4
                 }
             ]
         }'
@@ -171,16 +139,46 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
     end
 
     it "retrieves an aggregate of general and custom event metrics from plausible for each date in the given range" do 
+      body = '{
+                "results": [
+                    {
+                        "date": "2024-07-01",
+                        "visitors": 5,
+                        "bounce_rate": 4
+                    },
+                    {
+                        "date": "2024-07-02",
+                        "visitors": 5,
+                        "bounce_rate": 4
+                    },
+                    {
+                        "date": "2024-07-03",
+                        "visitors": 5,
+                        "bounce_rate": 4
+                    }
+                ]
+              }'
+
+      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu").
+         with(
+           headers: {
+       	  'Accept'=>'*/*',
+       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+       	  'Authorization'=>'Bearer plausible_api_key',
+       	  'Content-Type'=>'application/json',
+       	  'User-Agent'=>'Faraday v2.9.0'
+           }).to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+
       report = described_class.new(date_range: DateTime.new(2024, 7, 1)..DateTime.new(2024, 7, 03))
       expect(report.daily_metrics.is_a?(Array)).to be true
       expect(report.daily_metrics.first['date']).to eq "2024-07-01"
-      expect(report.daily_metrics.first['bounce_rate']).to eq ""
-      expect(report.daily_metrics.first['download_events']).to eq ""
-      expect(report.daily_metrics.first['download_visitors']).to eq ""
-      # expect(report.daily_metrics.first['rpv_events']).to eq ""
-      # expect(report.daily_metrics.first['rpv_visitors']).to eq ""
-      # expect(report.daily_metrics.first['viewerclick_events']).to eq ""
-      # expect(report.daily_metrics.first['viewerclick_visitors']).to eq ""
+      expect(report.daily_metrics.first['bounce_rate']).to eq 4
+      expect(report.daily_metrics.first['download_events']).to eq 4
+      expect(report.daily_metrics.first['download_visitors']).to eq 3
+      expect(report.daily_metrics.first['rpv_events']).to eq 4
+      expect(report.daily_metrics.first['rpv_visitors']).to eq 3
+      expect(report.daily_metrics.first['viewer_click_events']).to eq 4
+      expect(report.daily_metrics.first['viewer_click_visitors']).to eq 3
     end
   end
 end
