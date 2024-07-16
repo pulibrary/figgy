@@ -223,35 +223,40 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
 
   describe "GET #dpul_success_dashboard" do
     before do
-      body = '{
-          "results": [
-              {
-                  "date": "2024-07-01",
-                  "visitors": 0
-              },
-              {
-                  "date": "2024-07-02",
-                  "visitors": 0
-              },
-              {
-                  "date": "2024-07-03",
-                  "visitors": 0
-              }
-          ]
-      }'
+    #   body = '{
+    #           "results": [
+    #               {
+    #                   "date": "2024-07-01",
+    #                   "visitors": 3,
+    #                   "events": 4
+    #               },
+    #               {
+    #                   "date": "2024-07-02",
+    #                   "visitors": 5,
+    #                   "events": 10
+    #               },
+    #               {
+    #                   "date": "2024-07-03",
+    #                   "visitors": 7,
+    #                   "events": 3
+    #               }
+    #           ]
+    #         }'
 
-      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01,2024-07-03&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu").
-         with(
-           headers: {
-       	  'Accept'=>'*/*',
-       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-       	  'Authorization'=>'Bearer plausible_api_key',
-       	  'Content-Type'=>'application/json',
-       	  'User-Agent'=>'Faraday v2.9.0'
-           }).
-         to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+
+    # stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01,2024-07-03&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu").
+    #      with(
+    #        headers: {
+    #    	  'Accept'=>'*/*',
+    #    	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+    #    	  'Authorization'=>'Bearer plausible_api_key',
+    #    	  'Content-Type'=>'application/json',
+    #    	  'User-Agent'=>'Faraday v2.9.0'
+    #        })
+    #        .to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+
       sign_in user
-    end 
+    end
     render_views
 
     it "displays a html view when no params are passed" do
@@ -264,7 +269,6 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
       get :dpul_success_dashboard, params: { date_range: "07/01/2024-07/03/2024" }
       expect(response).to render_template :dpul_success_dashboard
       expect(response.body).to include("July 01, 2024 - July 03, 2024")
-    end 
-
+    end
   end
 end
