@@ -223,37 +223,47 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
 
   describe "GET #dpul_success_dashboard" do
     before do
-    #   body = '{
-    #           "results": [
-    #               {
-    #                   "date": "2024-07-01",
-    #                   "visitors": 3,
-    #                   "events": 4
-    #               },
-    #               {
-    #                   "date": "2024-07-02",
-    #                   "visitors": 5,
-    #                   "events": 10
-    #               },
-    #               {
-    #                   "date": "2024-07-03",
-    #                   "visitors": 7,
-    #                   "events": 3
-    #               }
-    #           ]
-    #         }'
+        body = '{
+                "results": [
+                    {
+                        "date": "2024-07-01",
+                        "visitors": 3,
+                        "events": 4
+                    },
+                    {
+                        "date": "2024-07-02",
+                        "visitors": 5,
+                        "events": 10
+                    },
+                    {
+                        "date": "2024-07-03",
+                        "visitors": 7,
+                        "events": 3
+                    }
+                ]
+              }'
 
+        stub_request(:get, /https:\/\/plausible.io\/api\/v1\/stats\/timeseries.*/).
+         with(
+           headers: {
+       	  'Accept'=>'*/*',
+       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+       	  'Authorization'=>'Bearer plausible_api_key',
+       	  'Content-Type'=>'application/json',
+       	  'User-Agent'=>'Faraday v2.9.0'
+           }).
+         to_return(status: 200, body: body, headers: {})
 
-    # stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01,2024-07-03&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu").
-    #      with(
-    #        headers: {
-    #    	  'Accept'=>'*/*',
-    #    	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-    #    	  'Authorization'=>'Bearer plausible_api_key',
-    #    	  'Content-Type'=>'application/json',
-    #    	  'User-Agent'=>'Faraday v2.9.0'
-    #        })
-    #        .to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
+         stub_request(:get, "https://plausible.io/api/v1/stats/breakdown?date=2024-07-01,2024-07-03&interval=date&metrics=visitors,bounce_rate&period=custom&property=visit:source&site_id=dpul.princeton.edu").
+         with(
+           headers: {
+       	  'Accept'=>'*/*',
+       	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+       	  'Authorization'=>'Bearer plausible_api_key',
+       	  'Content-Type'=>'application/json',
+       	  'User-Agent'=>'Faraday v2.9.0'
+           }).
+         to_return(status: 200, body: body, headers: {})
 
       sign_in user
     end

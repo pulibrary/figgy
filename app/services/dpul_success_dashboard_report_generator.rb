@@ -28,12 +28,12 @@ class DpulSuccessDashboardReportGenerator
 
     # Iterate over custom event data hashes and merge data into stats
     downloads.each do |date_key, metrics|
-      date_str = date_key.to_s 
+      date_str = date_key.to_s
       stats_hash[date_str]&.merge!(metrics.transform_keys(&:to_s))
     end
 
     record_page_views.each do |date_key, metrics|
-      date_str = date_key.to_s 
+      date_str = date_key.to_s
       stats_hash[date_str]&.merge!(metrics.transform_keys(&:to_s))
     end
 
