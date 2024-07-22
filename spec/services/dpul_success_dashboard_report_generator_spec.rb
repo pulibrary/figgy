@@ -9,19 +9,28 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
                       "date": "2024-07-01",
                       "visitors": 3,
                       "events": 4,
-                      "bounce_rate": 4
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
                   },
                   {
                       "date": "2024-07-02",
                       "visitors": 5,
                       "events": 10,
-                      "bounce_rate": 4
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
                   },
                   {
                       "date": "2024-07-03",
                       "visitors": 7,
                       "events": 3,
-                      "bounce_rate": 4
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
                   }
               ]
             }'
@@ -151,17 +160,26 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
                     {
                         "date": "2024-07-01",
                         "visitors": 5,
-                        "bounce_rate": 4
+                        "bounce_rate": 4,
+                        "pageviews": 4,
+                        "visits": 4,
+                        "visit_duration": 4
                     },
                     {
                         "date": "2024-07-02",
                         "visitors": 5,
-                        "bounce_rate": 4
+                        "bounce_rate": 4,
+                        "pageviews": 4,
+                        "visits": 4,
+                        "visit_duration": 4
                     },
                     {
                         "date": "2024-07-03",
                         "visitors": 5,
-                        "bounce_rate": 4
+                        "bounce_rate": 4,
+                        "pageviews": 4,
+                        "visits": 4,
+                        "visit_duration": 4
                     }
                 ]
               }'
@@ -178,17 +196,18 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
          ).to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
 
       report = described_class.new(date_range: DateTime.new(2024, 7, 1)..DateTime.new(2024, 7, 3))
-      expect(report.daily_metrics.is_a?(Array)).to be true
-      expect(report.daily_metrics.first["date"]).to eq "2024-07-01"
-      expect(report.daily_metrics.first["bounce_rate"]).to eq 4
-      expect(report.daily_metrics.first["download_events"]).to eq 4
-      expect(report.daily_metrics.first["download_visitors"]).to eq 3
-      expect(report.daily_metrics.first["rpv_events"]).to eq 4
-      expect(report.daily_metrics.first["rpv_visitors"]).to eq 3
-      expect(report.daily_metrics.first["viewer_click_events"]).to eq 4
-      expect(report.daily_metrics.first["viewer_click_visitors"]).to eq 3
-      expect(report.daily_metrics.last["download_visitors"]).to eq 15
-      expect(report.daily_metrics.last["bounce_rate"]).to eq 12
+      metrics = report.daily_metrics
+      expect(metrics.is_a?(Array)).to be true
+      expect(metrics.first["date"]).to eq "2024-07-01"
+      expect(metrics.first["bounce_rate"]).to eq 4
+      expect(metrics.first["download_events"]).to eq 4
+      expect(metrics.first["download_visitors"]).to eq 3
+      expect(metrics.first["rpv_events"]).to eq 4
+      expect(metrics.first["rpv_visitors"]).to eq 3
+      expect(metrics.first["viewer_click_events"]).to eq 4
+      expect(metrics.first["viewer_click_visitors"]).to eq 3
+      expect(metrics.last["download_visitors"]).to eq 15
+      expect(metrics.last["bounce_rate"]).to eq 12
     end
 
   end

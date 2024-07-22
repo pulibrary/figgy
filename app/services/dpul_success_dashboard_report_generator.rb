@@ -62,8 +62,8 @@ class DpulSuccessDashboardReportGenerator
     stats = JSON.parse(response.body)["results"]
     stats.each do |stat|
       @totals_hash[:visitors] += stat["visitors"]
-      @totals_hash[:pageviews] += stat["pageviews"]
       @totals_hash[:bounce_rate] += stat["bounce_rate"]
+      @totals_hash[:pageviews] += stat["pageviews"]
       @totals_hash[:visit_duration] += stat["visit_duration"]
       @totals_hash[:visits] += stat["visits"]
     end
