@@ -145,25 +145,6 @@ GEM
       json (~> 2.0)
       nokogiri (~> 1.10)
     ast (2.4.2)
-    async (2.0.0)
-      console (~> 1.10)
-      io-event (~> 1.0.0)
-      timers (~> 4.1)
-    async-http (0.64.2)
-      async (>= 1.25)
-      async-io (>= 1.28)
-      async-pool (>= 0.2)
-      protocol-http (~> 0.26.0)
-      protocol-http1 (~> 0.19.0)
-      protocol-http2 (~> 0.16.0)
-      traces (>= 0.10.0)
-    async-http-faraday (0.14.0)
-      async-http (~> 0.42)
-      faraday
-    async-io (1.43.2)
-      async
-    async-pool (0.7.0)
-      async (>= 1.25)
     autoprefixer-rails (10.4.16.0)
       execjs (~> 2)
     awesome_print (1.9.2)
@@ -281,10 +262,6 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
-    console (1.25.2)
-      fiber-annotation
-      fiber-local (~> 1.1)
-      json
     content_disposition (1.0.0)
     crack (1.0.0)
       bigdecimal
@@ -399,10 +376,6 @@ GEM
     faraday-retry (2.2.1)
       faraday (~> 2.0)
     ffi (1.16.3)
-    fiber-annotation (0.2.0)
-    fiber-local (1.1.0)
-      fiber-storage
-    fiber-storage (0.1.2)
     filewatcher (1.1.1)
       optimist (~> 3.0)
     flutie (2.2.0)
@@ -557,7 +530,6 @@ GEM
     iiif_manifest (1.1.1)
       activesupport (>= 4)
     io-console (0.7.2)
-    io-event (1.0.9)
     irb (1.12.0)
       rdoc
       reline (>= 0.4.2)
@@ -768,13 +740,6 @@ GEM
       matrix (~> 0.4)
       pdf-core (~> 0.10.0)
       ttfunk (~> 1.8)
-    protocol-hpack (1.4.3)
-    protocol-http (0.26.8)
-    protocol-http1 (0.19.1)
-      protocol-http (~> 0.22)
-    protocol-http2 (0.16.0)
-      protocol-hpack (~> 1.4)
-      protocol-http (~> 0.18)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -1132,12 +1097,10 @@ GEM
     tilt (2.3.0)
     timecop (0.9.8)
     timeout (0.4.1)
-    timers (4.3.5)
     title (0.0.10)
       activesupport (>= 3.1)
       i18n
       railties (>= 3.1)
-    traces (0.11.1)
     trailblazer-option (0.1.2)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
@@ -1225,7 +1188,6 @@ DEPENDENCIES
   aasm
   arabic-letter-connector
   archivesspace-client
-  async-http-faraday
   autoprefixer-rails
   awesome_print
   aws-sdk-s3
