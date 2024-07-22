@@ -8,17 +8,20 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
                   {
                       "date": "2024-07-01",
                       "visitors": 3,
-                      "events": 4
+                      "events": 4,
+                      "bounce_rate": 4
                   },
                   {
                       "date": "2024-07-02",
                       "visitors": 5,
-                      "events": 10
+                      "events": 10,
+                      "bounce_rate": 4
                   },
                   {
                       "date": "2024-07-03",
                       "visitors": 7,
-                      "events": 3
+                      "events": 3,
+                      "bounce_rate": 4
                   }
               ]
             }'
@@ -184,13 +187,9 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
       expect(report.daily_metrics.first["rpv_visitors"]).to eq 3
       expect(report.daily_metrics.first["viewer_click_events"]).to eq 4
       expect(report.daily_metrics.first["viewer_click_visitors"]).to eq 3
+      expect(report.daily_metrics.last["download_visitors"]).to eq 15
+      expect(report.daily_metrics.last["bounce_rate"]).to eq 12
     end
 
-    it "calculates totals for each metric for the given range" do
-      report = described_class.new(date_range: DateTime.new(2024, 7, 1)..DateTime.new(2024, 7, 3))
-      expect(report.totals.is_a?(Hash)).to be true
-      expect(report.totals["bounce_rate"]).to eq 12
-      expect(report.daily_metrics.first["download_visitors"]).to eq 9
-    end 
   end
 end

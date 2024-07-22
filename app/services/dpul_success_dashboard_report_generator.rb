@@ -9,6 +9,7 @@ class DpulSuccessDashboardReportGenerator
 
   def initialize(date_range:)
     @date_range = date_range
+    @totals_hash = { date: "TOTAL", visitors: 0, pageviews: 0, bounce_rate: 0, visit_duration: 0, visits: 0 }
   end
 
   attr_reader :date_range
@@ -44,6 +45,7 @@ class DpulSuccessDashboardReportGenerator
 
     # Convert stats hash back to array
     stats_with_metrics = stats_hash.values
+    stats_with_metrics << @totals_hash.transform_keys(&:to_s)
   end
 
   def traffic
@@ -58,6 +60,13 @@ class DpulSuccessDashboardReportGenerator
     end
     response = request.get("/api/v1/stats/timeseries")
     stats = JSON.parse(response.body)["results"]
+    stats.each do |stat|
+      @totals_hash[:visitors] += stat["visitors"]
+      @totals_hash[:pageviews] += stat["pageviews"]
+      @totals_hash[:bounce_rate] += stat["bounce_rate"]
+      @totals_hash[:visit_duration] += stat["visit_duration"]
+      @totals_hash[:visits] += stat["visits"]
+    end
   end
 
   def downloads
@@ -74,8 +83,12 @@ class DpulSuccessDashboardReportGenerator
     end
     response = request.get("/api/v1/stats/timeseries")
     downloads_array = JSON.parse(response.body)["results"]
+    @totals_hash["download_visitors"] = 0
+    @totals_hash["download_events"] = 0
     downloads_hash = downloads_array.each_with_object({}) do |download, h|
       h[download["date"].to_sym] = { download_visitors: download["visitors"], download_events: download["events"] }
+      @totals_hash["download_visitors"] += download["visitors"]
+      @totals_hash["download_events"] += download["events"]
     end
   end
 
@@ -93,8 +106,12 @@ class DpulSuccessDashboardReportGenerator
     end
     response = request.get("/api/v1/stats/timeseries")
     rpvs_array = JSON.parse(response.body)["results"]
+    @totals_hash["rpv_visitors"] = 0
+    @totals_hash["rpv_events"] = 0
     rpvs_hash = rpvs_array.each_with_object({}) do |rpv, h|
       h[rpv["date"].to_sym] = { rpv_visitors: rpv["visitors"], rpv_events: rpv["events"] }
+      @totals_hash["rpv_visitors"] += rpv["visitors"]
+      @totals_hash["rpv_events"] += rpv["events"]
     end
   end
 
@@ -112,8 +129,12 @@ class DpulSuccessDashboardReportGenerator
     end
     response = request.get("/api/v1/stats/timeseries")
     viewer_clicks_array = JSON.parse(response.body)["results"]
+    @totals_hash["viewer_click_visitors"] = 0
+    @totals_hash["viewer_click_events"] = 0
     vc_hash = viewer_clicks_array.each_with_object({}) do |viewer_click, h|
       h[viewer_click["date"].to_sym] = { viewer_click_visitors: viewer_click["visitors"], viewer_click_events: viewer_click["events"] }
+      @totals_hash["viewer_click_visitors"] += viewer_click["visitors"]
+      @totals_hash["viewer_click_events"] += viewer_click["events"]
     end
   end
 
