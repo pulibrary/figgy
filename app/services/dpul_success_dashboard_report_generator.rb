@@ -12,8 +12,6 @@ class DpulSuccessDashboardReportGenerator
     @totals_hash = { date: "TOTAL", visitors: 0, pageviews: 0, bounce_rate: 0, visit_duration: 0, visits: 0 }
   end
 
-  attr_reader :date_range
-
   def default_dates
     first_day = @date_range.first.strftime("%Y,%m,%d")
     last_day = @date_range.last.strftime("%Y,%m,%d")
@@ -26,7 +24,6 @@ class DpulSuccessDashboardReportGenerator
 
   def daily_metrics
     stats_hash = traffic.index_by { |stat| stat["date"] }
-
     # Iterate over custom event data hashes and merge data into stats
     downloads.each do |date_key, metrics|
       date_str = date_key.to_s
@@ -48,8 +45,8 @@ class DpulSuccessDashboardReportGenerator
     stats_with_metrics << @totals_hash.transform_keys(&:to_s)
   end
 
-  def traffic
-    request = Faraday.new(url: "https://plausible.io") do |conn|
+  def traffic_request
+    Faraday.new(url: "https://plausible.io") do |conn|
       conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
       conn.adapter Faraday.default_adapter
       conn.headers["Content-Type"] = "application/json"
@@ -58,7 +55,10 @@ class DpulSuccessDashboardReportGenerator
       conn.params["date"] = @date_range.first.iso8601 + "," + @date_range.last.iso8601
       conn.params["metrics"] = "visitors,pageviews,bounce_rate,visit_duration,visits"
     end
-    response = request.get("/api/v1/stats/timeseries")
+  end
+
+  def traffic
+    response = traffic_request.get("/api/v1/stats/timeseries")
     stats = JSON.parse(response.body)["results"]
     stats.each do |stat|
       @totals_hash[:visitors] += stat["visitors"]
@@ -69,8 +69,8 @@ class DpulSuccessDashboardReportGenerator
     end
   end
 
-  def downloads
-    request = Faraday.new(url: "https://plausible.io") do |conn|
+  def downloads_request
+    Faraday.new(url: "https://plausible.io") do |conn|
       conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
       conn.adapter Faraday.default_adapter
       conn.headers["Content-Type"] = "application/json"
@@ -81,19 +81,22 @@ class DpulSuccessDashboardReportGenerator
       conn.params["filters"] = "event:goal==Download"
       conn.params["metrics"] = "visitors,events"
     end
-    response = request.get("/api/v1/stats/timeseries")
+  end
+
+  def downloads
+    response = downloads_request.get("/api/v1/stats/timeseries")
     downloads_array = JSON.parse(response.body)["results"]
     @totals_hash["download_visitors"] = 0
     @totals_hash["download_events"] = 0
-    downloads_hash = downloads_array.each_with_object({}) do |download, h|
+    downloads_array.each_with_object({}) do |download, h|
       h[download["date"].to_sym] = { download_visitors: download["visitors"], download_events: download["events"] }
       @totals_hash["download_visitors"] += download["visitors"]
       @totals_hash["download_events"] += download["events"]
     end
   end
 
-  def record_page_views
-    request = Faraday.new(url: "https://plausible.io") do |conn|
+  def record_page_views_request
+    Faraday.new(url: "https://plausible.io") do |conn|
       conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
       conn.adapter Faraday.default_adapter
       conn.headers["Content-Type"] = "application/json"
@@ -104,19 +107,22 @@ class DpulSuccessDashboardReportGenerator
       conn.params["filters"] = "event:goal==Visit /*/catalog/*"
       conn.params["metrics"] = "visitors,events"
     end
-    response = request.get("/api/v1/stats/timeseries")
+  end
+
+  def record_page_views
+    response = record_page_views_request.get("/api/v1/stats/timeseries")
     rpvs_array = JSON.parse(response.body)["results"]
     @totals_hash["rpv_visitors"] = 0
     @totals_hash["rpv_events"] = 0
-    rpvs_hash = rpvs_array.each_with_object({}) do |rpv, h|
+    rpvs_array.each_with_object({}) do |rpv, h|
       h[rpv["date"].to_sym] = { rpv_visitors: rpv["visitors"], rpv_events: rpv["events"] }
       @totals_hash["rpv_visitors"] += rpv["visitors"]
       @totals_hash["rpv_events"] += rpv["events"]
     end
   end
 
-  def viewer_clicks
-    request = Faraday.new(url: "https://plausible.io") do |conn|
+  def viewer_clicks_request
+    Faraday.new(url: "https://plausible.io") do |conn|
       conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
       conn.adapter Faraday.default_adapter
       conn.headers["Content-Type"] = "application/json"
@@ -127,19 +133,22 @@ class DpulSuccessDashboardReportGenerator
       conn.params["filters"] = "event:goal==UniversalViewer Click"
       conn.params["metrics"] = "visitors,events"
     end
-    response = request.get("/api/v1/stats/timeseries")
+  end
+
+  def viewer_clicks
+    response = viewer_clicks_request.get("/api/v1/stats/timeseries")
     viewer_clicks_array = JSON.parse(response.body)["results"]
     @totals_hash["viewer_click_visitors"] = 0
     @totals_hash["viewer_click_events"] = 0
-    vc_hash = viewer_clicks_array.each_with_object({}) do |viewer_click, h|
+    viewer_clicks_array.each_with_object({}) do |viewer_click, h|
       h[viewer_click["date"].to_sym] = { viewer_click_visitors: viewer_click["visitors"], viewer_click_events: viewer_click["events"] }
       @totals_hash["viewer_click_visitors"] += viewer_click["visitors"]
       @totals_hash["viewer_click_events"] += viewer_click["events"]
     end
   end
 
-  def sources
-    request = Faraday.new(url: "https://plausible.io") do |conn|
+  def sources_request
+    Faraday.new(url: "https://plausible.io") do |conn|
       conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
       conn.adapter Faraday.default_adapter
       conn.headers["Content-Type"] = "application/json"
@@ -150,7 +159,10 @@ class DpulSuccessDashboardReportGenerator
       conn.params["property"] = "visit:source"
       conn.params["metrics"] = "visitors,bounce_rate"
     end
-    response = request.get("/api/v1/stats/breakdown")
-    sources = JSON.parse(response.body)["results"]
+  end
+
+  def sources
+    response = sources_request.get("/api/v1/stats/breakdown")
+    JSON.parse(response.body)["results"]
   end
 end
