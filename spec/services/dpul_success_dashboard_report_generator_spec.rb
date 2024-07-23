@@ -209,6 +209,5 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
       expect(metrics.last["download_visitors"]).to eq 15
       expect(metrics.last["bounce_rate"]).to eq 12
     end
-
   end
 end
