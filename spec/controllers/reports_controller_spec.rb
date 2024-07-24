@@ -224,24 +224,36 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
   describe "GET #dpul_success_dashboard" do
     before do
       body = '{
-                "results": [
-                    {
-                        "date": "2024-07-01",
-                        "visitors": 3,
-                        "events": 4
-                    },
-                    {
-                        "date": "2024-07-02",
-                        "visitors": 5,
-                        "events": 10
-                    },
-                    {
-                        "date": "2024-07-03",
-                        "visitors": 7,
-                        "events": 3
-                    }
-                ]
-              }'
+              "results": [
+                  {
+                      "date": "2024-07-01",
+                      "visitors": 3,
+                      "events": 4,
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
+                  },
+                  {
+                      "date": "2024-07-02",
+                      "visitors": 5,
+                      "events": 10,
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
+                  },
+                  {
+                      "date": "2024-07-03",
+                      "visitors": 7,
+                      "events": 3,
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
+                  }
+              ]
+            }'
 
       stub_request(:get, /https:\/\/plausible.io\/api\/v1\/stats\/timeseries.*/)
         .with(
