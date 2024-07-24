@@ -66,9 +66,6 @@ class ReportsController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.csv do
-        send_data @report.to_csv, filename: "dpul_success_dashboard-#{Time.zone.today}.csv"
-      end
     end
   end
 
