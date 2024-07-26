@@ -295,9 +295,9 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
       expect(response.body).to include("July 01, 2024 - July 03, 2024")
     end
 
-    it "displays an error when an invalid date param is passed" do 
+    it "displays an error when an invalid date param is passed" do
       get :dpul_success_dashboard, params: { date_range: "foo" }
-      expect(flash["alert"]).to eq "There was a problem generating your report. At least one valid Date is required."
+      expect(response.body).to have_content "There was a problem generating your report. At least one valid Date is required."
     end
   end
 end
