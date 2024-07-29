@@ -296,7 +296,7 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
     end
 
     it "displays an error when an invalid date param is passed" do
-      get :dpul_success_dashboard, params: { date_range: "foo" }
+      get :dpul_success_dashboard, params: { date_range: "07/01/2024-07/03/2100" }
       expect(response.body).to have_content "There was a problem generating your report. At least one valid Date is required."
     end
   end

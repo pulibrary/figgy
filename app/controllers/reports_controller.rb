@@ -117,7 +117,8 @@ class ReportsController < ApplicationController
     end
 
     def validate_dpul_date_range
-      return nil if params[:date_range].blank? || !valid_dates
+      is_past = valid_dates.last < DateTime.now
+      return nil if params[:date_range].blank? || !valid_dates || !is_past
       { date_range: valid_dates }
     end
 

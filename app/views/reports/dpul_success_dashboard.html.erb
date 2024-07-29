@@ -14,6 +14,7 @@
         required="true" 
         label="Date Range" 
         mode="range"
+        :disabled-dates="[{ start: new Date(), end: null }]"
         <% if @report %>
           :default-dates="{ <%= @report.default_dates %> }"
         <% end %>

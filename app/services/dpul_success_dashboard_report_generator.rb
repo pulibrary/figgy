@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "json"
 
-# frozen_string_literal: true
 # Generates a report of DPUL success metrics given a date range
 # This report is used to measure user engagement with DPUL resources
 class DpulSuccessDashboardReportGenerator
@@ -13,8 +12,10 @@ class DpulSuccessDashboardReportGenerator
   end
 
   def default_dates
-    first_day = @date_range.first.strftime("%Y,%m,%d")
-    last_day = @date_range.last.strftime("%Y,%m,%d")
+    # lux datepicker has a bug with months because it starts January at 0
+    # See: https://github.com/pulibrary/lux-design-system/issues/299
+    first_day = @date_range.first.prev_month.strftime("%Y,%m,%d")
+    last_day = @date_range.last.prev_month.strftime("%Y,%m,%d")
     "start: new Date(" + first_day + "), end: new Date(" + last_day + ")"
   end
 
