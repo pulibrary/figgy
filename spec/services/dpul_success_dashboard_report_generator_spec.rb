@@ -91,7 +91,7 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
 
     it "provides a date range that the LUX datepicker can use" do
       report = described_class.new(date_range: DateTime.new(2021, 7, 1)..DateTime.new(2022, 6, 30))
-      # The discrepency in months is due to a workaround to a LUX datepicker bug. 
+      # The discrepency in months is due to a workaround to a LUX datepicker bug.
       # See: https://github.com/pulibrary/lux-design-system/issues/299
       expect(report.default_dates).to eq "start: new Date(2021,06,01), end: new Date(2022,05,30)"
     end

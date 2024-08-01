@@ -53,7 +53,7 @@ class DpulSuccessDashboardReportGenerator
       conn.headers["Content-Type"] = "application/json"
       conn.params["site_id"] = "dpul.princeton.edu"
       conn.params["period"] = "custom"
-      conn.params["date"] = @date_range.first.strftime('%Y-%m-%d') + "," + @date_range.last.strftime('%Y-%m-%d')
+      conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["metrics"] = "visitors,pageviews,bounce_rate,visit_duration,visits"
     end
   end
@@ -77,7 +77,7 @@ class DpulSuccessDashboardReportGenerator
       conn.headers["Content-Type"] = "application/json"
       conn.params["site_id"] = "dpul.princeton.edu"
       conn.params["period"] = "custom"
-      conn.params["date"] = @date_range.first.strftime('%Y-%m-%d') + "," + @date_range.last.strftime('%Y-%m-%d')
+      conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
       conn.params["filters"] = "event:goal==Download"
       conn.params["metrics"] = "visitors,events"
@@ -103,7 +103,7 @@ class DpulSuccessDashboardReportGenerator
       conn.headers["Content-Type"] = "application/json"
       conn.params["site_id"] = "dpul.princeton.edu"
       conn.params["period"] = "custom"
-      conn.params["date"] = @date_range.first.strftime('%Y-%m-%d') + "," + @date_range.last.strftime('%Y-%m-%d')
+      conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
       conn.params["filters"] = "event:goal==Visit /*/catalog/*"
       conn.params["metrics"] = "visitors,events"
@@ -129,7 +129,7 @@ class DpulSuccessDashboardReportGenerator
       conn.headers["Content-Type"] = "application/json"
       conn.params["site_id"] = "dpul.princeton.edu"
       conn.params["period"] = "custom"
-      conn.params["date"] = @date_range.first.strftime('%Y-%m-%d') + "," + @date_range.last.strftime('%Y-%m-%d')
+      conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
       conn.params["filters"] = "event:goal==UniversalViewer Click"
       conn.params["metrics"] = "visitors,events"
@@ -155,7 +155,7 @@ class DpulSuccessDashboardReportGenerator
       conn.headers["Content-Type"] = "application/json"
       conn.params["site_id"] = "dpul.princeton.edu"
       conn.params["period"] = "custom"
-      conn.params["date"] = @date_range.first.strftime('%Y-%m-%d') + "," + @date_range.last.strftime('%Y-%m-%d')
+      conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
       conn.params["property"] = "visit:source"
       conn.params["metrics"] = "visitors,bounce_rate"
