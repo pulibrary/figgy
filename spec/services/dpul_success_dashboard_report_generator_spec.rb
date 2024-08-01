@@ -35,7 +35,7 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
               ]
             }'
 
-    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2021-07-01T00:00:00%2B00:00,2022-06-30T00:00:00%2B00:00&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu")
+    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2021-07-01,2022-06-30&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu")
       .with(
           headers: {
             "Accept" => "*/*",
@@ -46,7 +46,7 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
           }
         ).to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
 
-    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==Download&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu")
+    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01,2024-07-03&filters=event:goal==Download&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu")
       .with(
          headers: {
            "Accept" => "*/*",
@@ -58,7 +58,7 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
        )
       .to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
 
-    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==UniversalViewer%20Click&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu")
+    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01,2024-07-03&filters=event:goal==UniversalViewer%20Click&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu")
       .with(
               headers: {
                 "Accept" => "*/*",
@@ -70,7 +70,7 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
             )
       .to_return(status: 200, body: body, headers: { "Content-Type": "application/json" })
 
-    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&filters=event:goal==Visit%20/*/catalog/*&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu")
+    stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01,2024-07-03&filters=event:goal==Visit%20/*/catalog/*&interval=date&metrics=visitors,events&period=custom&site_id=dpul.princeton.edu")
       .with(
             headers: {
               "Accept" => "*/*",
@@ -143,7 +143,7 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
             ]
         }'
 
-      stub_request(:get, "https://plausible.io/api/v1/stats/breakdown?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&interval=date&metrics=visitors,bounce_rate&period=custom&property=visit:source&site_id=dpul.princeton.edu")
+      stub_request(:get, "https://plausible.io/api/v1/stats/breakdown?date=2024-07-01,2024-07-03&interval=date&metrics=visitors,bounce_rate&period=custom&property=visit:source&site_id=dpul.princeton.edu")
         .with(
            headers: {
              "Authorization" => "Bearer plausible_api_key",
@@ -186,7 +186,7 @@ RSpec.describe DpulSuccessDashboardReportGenerator do
                 ]
               }'
 
-      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01T00:00:00%2B00:00,2024-07-03T00:00:00%2B00:00&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu")
+      stub_request(:get, "https://plausible.io/api/v1/stats/timeseries?date=2024-07-01,2024-07-03&metrics=visitors,pageviews,bounce_rate,visit_duration,visits&period=custom&site_id=dpul.princeton.edu")
         .with(
            headers: {
              "Accept" => "*/*",
