@@ -23,6 +23,16 @@ class DpulSuccessDashboardReportGenerator
     @date_range.first.strftime("%B %d, %Y") + " - " + @date_range.last.strftime("%B %d, %Y")
   end
 
+  def plausible_request 
+    Faraday.new(url: "https://plausible.io") do |conn| 
+      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"] 
+      conn.adapter Faraday.default_adapter 
+      conn.headers["Content-Type"] = "application/json" 
+      conn.params["site_id"] = "dpul.princeton.edu" 
+      yield conn 
+    end 
+  end
+
   def daily_metrics
     stats_hash = traffic.index_by { |stat| stat["date"] }
     # Iterate over custom event data hashes and merge data into stats
@@ -47,11 +57,7 @@ class DpulSuccessDashboardReportGenerator
   end
 
   def traffic_request
-    Faraday.new(url: "https://plausible.io") do |conn|
-      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
-      conn.adapter Faraday.default_adapter
-      conn.headers["Content-Type"] = "application/json"
-      conn.params["site_id"] = "dpul.princeton.edu"
+    plausible_request do |conn|
       conn.params["period"] = "custom"
       conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["metrics"] = "visitors,pageviews,bounce_rate,visit_duration,visits"
@@ -71,11 +77,7 @@ class DpulSuccessDashboardReportGenerator
   end
 
   def downloads_request
-    Faraday.new(url: "https://plausible.io") do |conn|
-      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
-      conn.adapter Faraday.default_adapter
-      conn.headers["Content-Type"] = "application/json"
-      conn.params["site_id"] = "dpul.princeton.edu"
+    plausible_request do |conn|
       conn.params["period"] = "custom"
       conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
@@ -97,11 +99,7 @@ class DpulSuccessDashboardReportGenerator
   end
 
   def record_page_views_request
-    Faraday.new(url: "https://plausible.io") do |conn|
-      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
-      conn.adapter Faraday.default_adapter
-      conn.headers["Content-Type"] = "application/json"
-      conn.params["site_id"] = "dpul.princeton.edu"
+    plausible_request do |conn|
       conn.params["period"] = "custom"
       conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
@@ -123,11 +121,7 @@ class DpulSuccessDashboardReportGenerator
   end
 
   def viewer_clicks_request
-    Faraday.new(url: "https://plausible.io") do |conn|
-      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
-      conn.adapter Faraday.default_adapter
-      conn.headers["Content-Type"] = "application/json"
-      conn.params["site_id"] = "dpul.princeton.edu"
+    plausible_request do |conn|
       conn.params["period"] = "custom"
       conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
@@ -149,11 +143,7 @@ class DpulSuccessDashboardReportGenerator
   end
 
   def sources_request
-    Faraday.new(url: "https://plausible.io") do |conn|
-      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
-      conn.adapter Faraday.default_adapter
-      conn.headers["Content-Type"] = "application/json"
-      conn.params["site_id"] = "dpul.princeton.edu"
+    plausible_request do |conn|
       conn.params["period"] = "custom"
       conn.params["date"] = @date_range.first.strftime("%Y-%m-%d") + "," + @date_range.last.strftime("%Y-%m-%d")
       conn.params["interval"] = "date"
