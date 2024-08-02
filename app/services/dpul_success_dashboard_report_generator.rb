@@ -23,14 +23,14 @@ class DpulSuccessDashboardReportGenerator
     @date_range.first.strftime("%B %d, %Y") + " - " + @date_range.last.strftime("%B %d, %Y")
   end
 
-  def plausible_request 
-    Faraday.new(url: "https://plausible.io") do |conn| 
-      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"] 
-      conn.adapter Faraday.default_adapter 
-      conn.headers["Content-Type"] = "application/json" 
-      conn.params["site_id"] = "dpul.princeton.edu" 
-      yield conn 
-    end 
+  def plausible_request
+    Faraday.new(url: "https://plausible.io") do |conn|
+      conn.request :authorization, "Bearer", Figgy.config["plausible_api_key"]
+      conn.adapter Faraday.default_adapter
+      conn.headers["Content-Type"] = "application/json"
+      conn.params["site_id"] = "dpul.princeton.edu"
+      yield conn
+    end
   end
 
   def daily_metrics
