@@ -6,3 +6,39 @@ main {
   margin: 0;
   border-bottom: 0;
 }
+
+.dashboard-heading {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.dashboard-range {
+  width: 67%;
+}
+
+.dashboard-form {
+  width: 33%;
+}
+
+.dashboard-range h3 {
+  font-size: 2.25rem;
+}
+
+.dpul-dashboard-table {
+  font-size: small;
+}
+
+@media (min-width:1132px) {
+  .dashboard-heading {
+    flex-wrap: nowrap;
+  }
+
+  .dashboard-heading>*:nth-child(1) {
+    width: calc(100% / 3 * 2);
+  }
+
+  .dashboard-heading>*:nth-child(2) {
+    width: calc(100% / 3);
+  }
+}

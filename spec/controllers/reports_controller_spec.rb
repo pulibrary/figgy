@@ -220,4 +220,84 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
       expect(response.body).to match(/There was a problem generating your report. Valid Collection IDs and at least one valid Date are required./)
     end
   end
+
+  describe "GET #dpul_success_dashboard" do
+    before do
+      body = '{
+              "results": [
+                  {
+                      "date": "2024-07-01",
+                      "visitors": 3,
+                      "events": 4,
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
+                  },
+                  {
+                      "date": "2024-07-02",
+                      "visitors": 5,
+                      "events": 10,
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
+                  },
+                  {
+                      "date": "2024-07-03",
+                      "visitors": 7,
+                      "events": 3,
+                      "bounce_rate": 4,
+                      "pageviews": 4,
+                      "visits": 4,
+                      "visit_duration": 4
+                  }
+              ]
+            }'
+
+      stub_request(:get, /https:\/\/plausible.io\/api\/v1\/stats\/timeseries.*/)
+        .with(
+         headers: {
+           "Accept" => "*/*",
+           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+           "Authorization" => "Bearer plausible_api_key",
+           "Content-Type" => "application/json",
+           "User-Agent" => "Faraday v2.9.0"
+         }
+       )
+        .to_return(status: 200, body: body, headers: {})
+
+      stub_request(:get, "https://plausible.io/api/v1/stats/breakdown?date=2024-07-01,2024-07-03&interval=date&metrics=visitors,bounce_rate&period=custom&property=visit:source&site_id=dpul.princeton.edu")
+        .with(
+        headers: {
+          "Accept" => "*/*",
+          "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+          "Authorization" => "Bearer plausible_api_key",
+          "Content-Type" => "application/json",
+          "User-Agent" => "Faraday v2.9.0"
+        }
+      )
+        .to_return(status: 200, body: body, headers: {})
+
+      sign_in user
+    end
+    render_views
+
+    it "displays a html view when no params are passed" do
+      get :dpul_success_dashboard
+      expect(response).to render_template :dpul_success_dashboard
+      expect(response.body).not_to match(/There was a problem generating your report. At least one valid Date are required./)
+    end
+
+    it "displays a html view when params are passed" do
+      get :dpul_success_dashboard, params: { date_range: "07/01/2024-07/03/2024" }
+      expect(response).to render_template :dpul_success_dashboard
+      expect(response.body).to include("July 01, 2024 - July 03, 2024")
+    end
+
+    it "displays an error when an invalid date param is passed" do
+      get :dpul_success_dashboard, params: { date_range: "07/01/2024-07/03/2100" }
+      expect(response.body).to have_content "There was a problem generating your report. At least one valid Date is required."
+    end
+  end
 end

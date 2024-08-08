@@ -126,6 +126,8 @@ Metrics/ClassLength:
     - 'app/services/embed.rb'
     - 'app/services/manifest_builder/canvas_rendering_builder.rb'
     - 'app/services/manifest_builder_v3/canvas_rendering_builder.rb'
+    - 'app/services/dpul_success_dashboard_report_generator.rb'
+    - 'app/controllers/reports_controller.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:

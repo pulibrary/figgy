@@ -1,0 +1,88 @@
+<h2>DPUL Success Dashboard</h2>
+<div class="dashboard-heading">
+  <div class="dashboard-range">
+    <% if @report %>
+      <h3><%= @report.display_dates %></h3>
+    <% end %>
+  </div>
+  <div class="dashboard-form">
+    <%= form_with(url: dpul_success_dashboard_path, method: :get, local: true) do |f| %>
+      <lux-date-picker 
+        id="date_range" 
+        name="date_range" 
+        helper="Entering a single date will result in a report for that day." 
+        required="true" 
+        label="Date Range" 
+        mode="range"
+        :disabled-dates="[{ start: new Date(), end: null }]"
+        <% if @report %>
+          :default-dates="{ <%= @report.default_dates %> }"
+        <% end %>
+        ></lux-date-picker>
+      <%= f.submit("Generate Report") %>
+    <% end %>
+  </div>
+</div>
+<% if @report %>
+<hr/>
+<h2>Daily Stats for the current date range</h2>
+<hr/>
+<table class="table table-striped datatable dpul-dashboard-table">
+  <thead>
+    <tr>
+      <th>Day</th>
+      <th>Visitors</th>
+      <th>Visits</th>
+      <th>Page Views</th>
+      <th>Bounce Rate</th>
+      <th>Visit Duration</th>
+      <th># Visitors who Downloaded</th>
+      <th># Downloads</th>
+      <th># Visitors who viewed RPV</th>
+      <th># RPVs viewed</th>
+      <th># Visitors who clicked UV</th>
+      <th># UV Clicks</th>
+  </thead>
+  <tbody>
+  <% @report.daily_metrics.each do |day| %>
+      <tr>
+        <td><%= day['date'] %></td>
+        <td><%= day['visitors'] %></td>
+        <td><%= day['visits'] %></td>
+        <td><%= day['pageviews'] %></td>
+        <td><%= day['bounce_rate'] %></td>
+        <td><%= day['visit_duration'] %></td>
+        <td><%= day['download_visitors'] %></td>
+        <td><%= day['download_events'] %></td>
+        <td><%= day['rpv_visitors'] %></td>
+        <td><%= day['rpv_events'] %></td>
+        <td><%= day['viewer_click_visitors'] %></td>
+        <td><%= day['viewer_click_events'] %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<hr/>
+<h2>Sources for the current date range</h2>
+<h3>Total Unique Sources: <%= @report.sources.count %></h3>
+<hr/>
+<table class="table table-striped dpul-dashboard-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Source</th>
+      <th>Visitors</th>
+      <th>Bounce Rate</th>
+  </thead>
+  <tbody>
+  <% @report.sources.each_with_index do |source, index| %>
+      <tr>
+        <td><%= index + 1 %>.</td>
+        <td><%= source['source'] %></td>
+        <td><%= source['visitors'] %></td>
+        <td><%= source['bounce_rate'] %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<% end %>

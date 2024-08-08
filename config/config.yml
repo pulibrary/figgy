@@ -4,6 +4,7 @@ defaults: &defaults
   archivespace_url: <%= ENV["ASPACE_URL"] || "https://aspace-staging.princeton.edu/staff/api" %>
   archivespace_user: <%= ENV["ASPACE_USER"] %>
   archivespace_password: <%= ENV["ASPACE_PASSWORD"] %>
+  plausible_api_key: <%= ENV["PLAUSIBLE_API_KEY"] %>
   cdl_in_path: <%= ENV["CDL_IN_PATH"] %>
   ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
   ocr_out_path: <%= ENV["OCR_OUT_PATH"] %>
@@ -247,6 +248,7 @@ test:
   archivespace_url: "https://aspace.test.org/staff/api"
   archivespace_user: "test"
   archivespace_password: "password"
+  plausible_api_key: "plausible_api_key"
   cdl_in_path: <%= Rails.root.join("tmp", "test_cdl_in") %>
   ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in#{ENV["TEST_ENV_NUMBER"]}") %>
   ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out#{ENV["TEST_ENV_NUMBER"]}") %>

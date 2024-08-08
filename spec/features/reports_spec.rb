@@ -15,4 +15,11 @@ RSpec.feature "Reports" do
       expect(page).to have_selector("input#date_range")
     end
   end
+  describe "DPUL Success Dashboard Report" do
+    it "renders a dpul sucess dashboard", js: true do
+      visit "/reports/dpul_success_dashboard"
+      expect(page).to have_content("DPUL Success Dashboard")
+      expect(page).to have_selector("input#date_range")
+    end
+  end
 end

@@ -53,6 +53,22 @@ class ReportsController < ApplicationController
     end
   end
 
+  def dpul_success_dashboard
+    authorize! :show, Report
+    # if the form has been submitted
+    if params.key?(:date_range)
+      valid_params = validate_dpul_date_range
+      if valid_params.present?
+        @report = DpulSuccessDashboardReportGenerator.new(date_range: valid_params[:date_range])
+      else
+        flash.alert = "There was a problem generating your report. At least one valid Date is required."
+      end
+    end
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def pulfa_ark_report
     authorize! :show, Report
     if params[:since_date].present?
@@ -98,6 +114,12 @@ class ReportsController < ApplicationController
       return nil if params[:collection_ids].blank? || params[:date_range].blank? || !valid_dates
       collection_ids = params[:collection_ids].delete(" ").split(",")
       { collection_ids: collection_ids, date_range: valid_dates }
+    end
+
+    def validate_dpul_date_range
+      is_past = valid_dates.last < DateTime.now
+      return nil if params[:date_range].blank? || !valid_dates || !is_past
+      { date_range: valid_dates }
     end
 
     def valid_dates
