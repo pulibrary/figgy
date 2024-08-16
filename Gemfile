@@ -9,7 +9,7 @@ gem "aws-sdk-s3"
 gem "bagit", "~> 0.4"
 # Pin to prevent passenger error
 gem "base64", "0.1.1"
-gem "blacklight", "7.33.1"
+gem "blacklight", "~> 7.33"
 gem "blacklight_iiif_search"
 gem "blacklight_range_limit"
 gem "bootsnap", require: false
