@@ -261,8 +261,7 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
            "Accept" => "*/*",
            "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
            "Authorization" => "Bearer plausible_api_key",
-           "Content-Type" => "application/json",
-           "User-Agent" => "Faraday v2.9.0"
+           "Content-Type" => "application/json"
          }
        )
         .to_return(status: 200, body: body, headers: {})
@@ -273,8 +272,7 @@ Princeton Only Image Count\nFoo,,,,,0,0,0,0\n"
           "Accept" => "*/*",
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
           "Authorization" => "Bearer plausible_api_key",
-          "Content-Type" => "application/json",
-          "User-Agent" => "Faraday v2.9.0"
+          "Content-Type" => "application/json"
         }
       )
         .to_return(status: 200, body: body, headers: {})
