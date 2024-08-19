@@ -39,6 +39,22 @@ GIT
       valkyrie
 
 GIT
+  remote: https://github.com/samvera/active_fedora.git
+  revision: b80313534374d3193daed13f4398cc422f2fcaeb
+  branch: main
+  specs:
+    active-fedora (14.0.1)
+      active-triples (>= 0.11.0, < 2.0.0)
+      activemodel (>= 5.1)
+      activesupport (>= 5.1)
+      deprecation
+      faraday (>= 1.0)
+      faraday-encoding (>= 0.0.5)
+      ldp (>= 0.7.0, < 2)
+      rsolr (>= 1.1.2, < 3)
+      ruby-progressbar (~> 1.0)
+
+GIT
   remote: https://github.com/samvera/hydra-derivatives.git
   revision: db4c9847f86f80d8da41c4392dbe63c37d8f7900
   branch: relax_rails
@@ -144,16 +160,6 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    active-fedora (14.0.1)
-      active-triples (>= 0.11.0, < 2.0.0)
-      activemodel (>= 5.1)
-      activesupport (>= 5.1)
-      deprecation
-      faraday (>= 1.0)
-      faraday-encoding (>= 0.0.5)
-      ldp (>= 0.7.0, < 2)
-      rsolr (>= 1.1.2, < 3)
-      ruby-progressbar (~> 1.0)
     active-triples (1.2.0)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -1249,6 +1255,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  active-fedora!
   arabic-letter-connector
   archivesspace-client
   autoprefixer-rails

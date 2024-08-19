@@ -2,6 +2,8 @@
 source "https://rubygems.org"
 
 gem "aasm"
+# TODO: Get rid of this we don't use it.
+gem "active-fedora", github: "samvera/active_fedora", branch: "main"
 gem "arabic-letter-connector"
 gem "archivesspace-client"
 gem "autoprefixer-rails"
