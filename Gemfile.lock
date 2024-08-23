@@ -46,8 +46,8 @@ GIT
 
 GIT
   remote: https://github.com/samvera/hydra-derivatives.git
-  revision: db4c9847f86f80d8da41c4392dbe63c37d8f7900
-  branch: relax_rails
+  revision: c01922a7c7c23b4cf1370d5c2e33809f534c2207
+  branch: main
   specs:
     hydra-derivatives (3.8.0)
       active-fedora (>= 14.0)
