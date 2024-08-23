@@ -6,16 +6,6 @@ GIT
       devise
 
 GIT
-  remote: https://github.com/pulibrary/blacklight_iiif_search.git
-  revision: 4861d2a0205b57d5bd91030bcd1654bbcdaba9c2
-  branch: rails_7
-  specs:
-    blacklight_iiif_search (2.0.0)
-      blacklight (~> 7.0)
-      iiif-presentation
-      rails (>= 5.1, < 7.3)
-
-GIT
   remote: https://github.com/pulibrary/mediainfo.git
   revision: 58f3e304f01009b459954b82d0675562106b1ac8
   branch: further_sanitize_track_names
@@ -262,6 +252,11 @@ GEM
       blacklight (> 6.0, < 8)
       cancancan (>= 1.8)
       deprecation (~> 1.0)
+    blacklight_iiif_search (2.1.0)
+      blacklight (~> 7.0)
+      ffi (~> 1.16.3)
+      iiif-presentation
+      rails (>= 6, < 7.3)
     blacklight_range_limit (8.5.0)
       blacklight (>= 7.25.2, < 9)
       deprecation
@@ -1267,7 +1262,7 @@ DEPENDENCIES
   benchmark-ips
   bixby (~> 5.0)
   blacklight (~> 7.33)
-  blacklight_iiif_search!
+  blacklight_iiif_search (~> 2.1.0)
   blacklight_range_limit
   bootsnap
   bootstrap (~> 4.0)
