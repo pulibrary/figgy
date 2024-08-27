@@ -11,8 +11,6 @@ module LinkedData
       :folder_number,
       :ephemera_project,
       :description,
-      :height,
-      :width,
       :sort_title,
       :page_count,
       :created_at,
@@ -24,6 +22,16 @@ module LinkedData
       :keywords,
       to: :decorated_resource
     )
+
+    def height
+      return if decorated_resource.height.empty?
+      Array.wrap("#{decorated_resource.height.first} cm")
+    end
+
+    def width
+      return if decorated_resource.width.empty?
+      Array.wrap("#{decorated_resource.width.first} cm")
+    end
 
     def geo_subject
       decorated_resource.geo_subject.map { |r| LinkedEphemeraTerm.new(resource: r).without_context }.reject { |v| v.nil? || v.try(:empty?) }
