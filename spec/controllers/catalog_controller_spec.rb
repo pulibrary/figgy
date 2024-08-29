@@ -825,6 +825,8 @@ RSpec.describe CatalogController, type: :controller do
         expect(response).to be_successful
         json_body = MultiJson.load(response.body, symbolize_keys: true)
         expect(json_body[:local_identifier][0]).to eq "xyz1"
+        expect(json_body[:width]).to eq ["10 cm"]
+        expect(json_body[:height]).to eq ["20 cm"]
 
         simple_resource = persister.save(resource: FactoryBot.build(:simple_resource, author: "Test Author", part_of: ArkWithTitle.new(identifier: "https://www.example.com", title: "Test")))
         get :show, params: { id: simple_resource.id.to_s, format: :jsonld }

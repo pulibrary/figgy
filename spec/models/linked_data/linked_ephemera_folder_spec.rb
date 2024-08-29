@@ -276,8 +276,8 @@ RSpec.describe LinkedData::LinkedEphemeraFolder do
       expect(jsonld["barcode"]).to eq "00000000000000"
       expect(jsonld["folder_number"]).to eq "1"
       expect(jsonld["sort_title"]).to eq ["test title"]
-      expect(jsonld["width"]).to eq ["test width"]
-      expect(jsonld["height"]).to eq ["test height"]
+      expect(jsonld["width"]).to eq ["test width cm"]
+      expect(jsonld["height"]).to eq ["test height cm"]
       expect(jsonld["page_count"]).to eq "test page count"
       expect(jsonld["creator"]).to eq ["test creator"]
       expect(jsonld["contributor"]).to eq ["test contributor"]
