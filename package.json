@@ -13,7 +13,7 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "ajv": "^6.12.3",
     "apollo-boost": "^0.1.10",
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "canvas-confetti": "^1.6.0",
     "core-js": "^3.16.2",
     "flush-promises": "^1.0.2",
