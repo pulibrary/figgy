@@ -10,7 +10,6 @@ development: &default
   port: <%= ENV["lando_figgy_database_conn_port"] %>
   username: <%= ENV["lando_figgy_database_creds_user"] %>
   password: <%= ENV["lando_figgy_database_creds_password"] %>
-  <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 test:
   <<: *default
