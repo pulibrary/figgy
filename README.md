@@ -68,18 +68,15 @@ Remember you'll need to run `bundle install` and `yarn install` on an ongoing ba
 Mapnik currently isn't supported by M1 processors, so `yarn install` above will
 fail. To get this working, do the following:
 
-1. Install Rosetta: `/usr/sbin/softwareupdate --install-rosetta --agree-to-license`
-1. Right click the "Terminal" app in Finder, go to "Get Info", and check "Open
-   using Rosetta"
-1. Open Terminal, go to this directory
+1. $ arch -x86_64 /bin/zsh --login
+1. you can validate that it's running the right architecture now by viewing the output of the `arch` command
 1. `asdf uninstall nodejs`
 1. `asdf uninstall yarn`
 1. `rm ~/.asdf/shims/yarn`
 1. `asdf install nodejs`
 1. `npm install -g yarn`
 1. `yarn install`
-1. Close Terminal, right click "Terminal" app in Finder, go to "Get Info", and
-   uncheck "Open using Rosetta"
+1. open a new Terminal or otherwise go back to the arm64 arch.
 1. Add the following to `~/.zshrc` or `~/.zshrc.local`:
 ```
    # Fix issue with homebrew postgres and rails applications (Figgy in
