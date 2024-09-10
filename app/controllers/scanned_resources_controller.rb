@@ -93,7 +93,7 @@ class ScannedResourcesController < ResourcesController
 
     def ingest_folder
       if change_set_param.eql? "recording"
-        "music"
+        Figgy.config["music_search_directory"]
       else
         Figgy.config["default_search_directory"]
       end

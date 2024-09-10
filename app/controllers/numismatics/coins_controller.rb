@@ -114,7 +114,10 @@ module Numismatics
     private
 
       def file_locator
-        IngestFolderLocator.new(id: resource.coin_number, search_directory: "numismatics")
+        IngestFolderLocator.new(
+          id: resource.coin_number,
+          search_directory: Figgy.config["numismatics_search_directory"]
+        )
       end
   end
 end
