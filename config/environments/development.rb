@@ -20,7 +20,7 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
   config.assets.debug = true
   config.assets.quiet = true
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.action_mailer.default_url_options = { host: "localhost:3000" }
   config.action_controller.action_on_unpermitted_parameters = false

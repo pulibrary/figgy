@@ -13,7 +13,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.delivery_method = :test
   config.active_support.deprecation = :stderr
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
   config.action_view.cache_template_loading = true
   config.assets.raise_runtime_errors = true
   config.action_mailer.default_url_options = { host: "www.example.com" }
