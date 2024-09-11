@@ -122,7 +122,7 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
 
     context "when a folder exists" do
       let(:coin_number) { 1234 }
-      let(:ingest_dir) { Pathname.new(Figgy.config["ingest_folder_path"]).join("numismatics", "1234") }
+      let(:ingest_dir) { Pathname.new(Figgy.config["ingest_folder_path"]).join("numismatics", "CoinImages", "1234") }
       let(:args) { { directory: ingest_dir.to_s, property: "id", id: coin.id.to_s } }
 
       it "returns JSON for whether a directory exists" do

@@ -31,6 +31,8 @@ defaults: &defaults
   export_base: <%= ENV['FIGGY_EXPORT_BASE'] || Rails.root.join("tmp", "export") %>
   pulfa_notify: uaaglist@princeton.edu,mssdiv@princeton.edu,escowles@princeton.edu
   default_search_directory: studio_new/DPUL
+  music_search_directory: music
+  numismatics_search_directory: numismatics/CoinImages
   enable_pyramidal_access: true
   findingaids_url: https://findingaids.princeton.edu/catalog/
   catalog_url: https://catalog.princeton.edu/catalog/
