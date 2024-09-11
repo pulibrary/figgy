@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe "Health Check", type: :request do
+RSpec.describe "Health Monitor", type: :request do
   before(:all) do
     # Setup ocr in path in tmp directory
     ocr_in_path = Figgy.config["ocr_in_path"]
@@ -9,7 +9,7 @@ RSpec.describe "Health Check", type: :request do
   end
 
   describe "GET /health" do
-    it "has a health check" do
+    it "has a success response" do
       stub_aspace_login
       allow(Net::SMTP).to receive(:new).and_return(instance_double(Net::SMTP, "open_timeout=": nil, start: true))
       # stub the number of processes since sidekiq doesn't run in test
