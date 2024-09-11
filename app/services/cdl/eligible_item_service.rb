@@ -4,6 +4,9 @@ module CDL
   class EligibleItemService
     class << self
       def item_ids(source_metadata_identifier:)
+        # This method controls determining if a resource has CDL items - return
+        # an empty array if CDL is disabled.
+        return [] unless Figgy.cdl_enabled?
         Rails.cache.fetch("cdl_item_ids_#{source_metadata_identifier}", expires_in: 5.minutes) do
           return [] unless RemoteRecord.catalog?(source_metadata_identifier)
           item_ids = get_item_ids(source_metadata_identifier: source_metadata_identifier)

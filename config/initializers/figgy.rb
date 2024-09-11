@@ -4,6 +4,10 @@ module Figgy
     @config ||= config_yaml.with_indifferent_access
   end
 
+  def cdl_enabled?
+    @cdl_enabled ||= Figgy.config["cdl"]
+  end
+
   def messaging_client
     @messaging_client ||= MessagingClient.new(Figgy.config["events"]["server"])
   end
@@ -60,5 +64,5 @@ module Figgy
     end
 
     module_function :config, :config_yaml, :messaging_client, :geoblacklight_messaging_client, :orangelight_messaging_client, :default_url_options, :campus_ip_ranges
-    module_function :global_protect_ips, :yaml, :all_environment_config, :index_read_only?, :pulfalight_unpublished_token
+    module_function :global_protect_ips, :yaml, :all_environment_config, :index_read_only?, :pulfalight_unpublished_token, :cdl_enabled?
 end

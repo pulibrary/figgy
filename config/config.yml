@@ -1,4 +1,5 @@
 defaults: &defaults
+  cdl: false
   ingest_folder_path: <%= ENV["INGEST_FOLDER_PATH"] || Rails.root.join("staged_files") %>
   index_read_only: false
   archivespace_url: <%= ENV["ASPACE_URL"] || "https://aspace-staging.princeton.edu/staff/api" %>
