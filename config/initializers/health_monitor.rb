@@ -9,6 +9,7 @@ Rails.application.config.after_initialize do
     config.add_custom_provider(RabbitMqStatus)
     config.add_custom_provider(SmtpStatus)
     config.add_custom_provider(FileWatcherStatus)
+    config.add_custom_provider(IngestMountStatus)
 
     # monitor all the queues for latency
     # The gem also comes with some additional default monitoring,

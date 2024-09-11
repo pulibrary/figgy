@@ -111,5 +111,24 @@ RSpec.describe "Health Check", type: :request do
         expect(response).to be_successful
       end
     end
+
+    context "when checking the status of the mounted directory" do
+      it "errors when the mount directory is empty" do
+        config_mock = Figgy.config.merge(
+          { "ingest_folder_path" => Rails.root.join("spec", "fixtures", "fake_directory").to_s }
+        )
+        allow(Figgy).to receive(:config).and_return(config_mock)
+
+        get "/health.json?providers[]=ingestmountstatus"
+
+        expect(response).not_to be_successful
+      end
+
+      it "succeeds when the mount directory has contents" do
+        get "/health.json?providers[]=ingestmountstatus"
+
+        expect(response).to be_successful
+      end
+    end
   end
 end
