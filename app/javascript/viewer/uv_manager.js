@@ -198,7 +198,7 @@ export default class UVManager {
   createTakedownElement () {
     const iconElement = document.createElement('a')
     iconElement.className = 'btn imageBtn takedown'
-    iconElement.href = 'https://library.princeton.edu/takedown-request'
+    iconElement.href = 'https://library.princeton.edu/about/policies/copyright-and-permissions-policies'
     iconElement.target = '_blank'
     iconElement.innerHTML = `<img src="${TakedownLogo}" style="width:25px; height=25px;"/> <span id="takedown-rights">Rights and Permissions</span>`
     return iconElement
