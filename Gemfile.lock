@@ -652,8 +652,6 @@ GEM
       railties (>= 4.2.0)
     libdatadog (7.0.0.1.0)
     libdatadog (7.0.0.1.0-x86_64-linux)
-    libddwaf (1.14.0.0.0)
-      ffi (~> 1.0)
     libddwaf (1.14.0.0.0-arm64-darwin)
       ffi (~> 1.0)
     libddwaf (1.14.0.0.0-x86_64-darwin)
@@ -972,7 +970,7 @@ GEM
     retriable (3.1.2)
     reverse_markdown (2.1.1)
       nokogiri
-    rexml (3.3.5)
+    rexml (3.3.6)
       strscan
     riiif (2.5.0)
       deprecation (>= 1.0.0)
@@ -1243,7 +1241,6 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
-  ruby
   x86_64-darwin-20
   x86_64-darwin-23
   x86_64-linux
