@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe "Health Check", type: :request do
+RSpec.describe "Health Monitor", type: :request do
   before(:all) do
     # Setup ocr in path in tmp directory
     ocr_in_path = Figgy.config["ocr_in_path"]
@@ -9,7 +9,7 @@ RSpec.describe "Health Check", type: :request do
   end
 
   describe "GET /health" do
-    it "has a health check" do
+    it "has a success response" do
       stub_aspace_login
       allow(Net::SMTP).to receive(:new).and_return(instance_double(Net::SMTP, "open_timeout=": nil, start: true))
       # stub the number of processes since sidekiq doesn't run in test
@@ -107,6 +107,25 @@ RSpec.describe "Health Check", type: :request do
         FileUtils.touch("#{ocr_in_path}/file1.pdf", mtime: thirteen_hours_ago)
 
         get "/health.json?providers[]=filewatcherstatus"
+
+        expect(response).to be_successful
+      end
+    end
+
+    context "when checking the status of the mounted directory" do
+      it "errors when the mount directory is empty" do
+        config_mock = Figgy.config.merge(
+          { "ingest_folder_path" => Rails.root.join("spec", "fixtures", "fake_directory").to_s }
+        )
+        allow(Figgy).to receive(:config).and_return(config_mock)
+
+        get "/health.json?providers[]=ingestmountstatus"
+
+        expect(response).not_to be_successful
+      end
+
+      it "succeeds when the mount directory has contents" do
+        get "/health.json?providers[]=ingestmountstatus"
 
         expect(response).to be_successful
       end

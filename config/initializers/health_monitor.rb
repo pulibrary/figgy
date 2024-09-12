@@ -9,6 +9,7 @@ Rails.application.config.after_initialize do
     config.add_custom_provider(RabbitMqStatus)
     config.add_custom_provider(SmtpStatus)
     config.add_custom_provider(FileWatcherStatus)
+    config.add_custom_provider(IngestMountStatus)
 
     # monitor all the queues for latency
     # The gem also comes with some additional default monitoring,
@@ -24,11 +25,11 @@ Rails.application.config.after_initialize do
       sidekiq_config.add_queue_configuration("realtime", latency: 30.seconds, queue_size: 100)
     end
 
-    # Make this health check available at /health
+    # Make this health monitor available at /health
     config.path = :health
 
     config.error_callback = proc do |e|
-      Rails.logger.error "Health check failed with: #{e.message}"
+      Rails.logger.error "Health monitor failed with: #{e.message}"
     end
   end
 end
