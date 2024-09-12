@@ -207,7 +207,7 @@ export default class UVManager {
   createStatementElement () {
     const iconElement = document.createElement('a')
     iconElement.className = 'btn imageBtn statement'
-    iconElement.href = 'https://library.princeton.edu/statement-harmful-content'
+    iconElement.href = 'https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content'
     iconElement.target = '_blank'
     iconElement.innerHTML = `<img src="${StatementOnHarmfulContentIcon}" style="width:25px; height=25px;"/> <span id="statement-on-harmful-content">Statement on Harmful Content</span>`
     return iconElement
