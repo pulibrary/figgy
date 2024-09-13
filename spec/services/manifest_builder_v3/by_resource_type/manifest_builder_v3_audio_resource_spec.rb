@@ -50,7 +50,7 @@ RSpec.describe ManifestBuilderV3 do
       # pres 3 context is always an array
       expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
       # logo is always an array
-      expect(output["logo"].first).to include("id" => "https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png")
+      expect(output["logo"].first).to include("id" => "https://www.example.com/pul_logo_icon.png")
       # Logical structure should be able to have nested and un-nested members.
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
@@ -188,7 +188,7 @@ RSpec.describe ManifestBuilderV3 do
       # This value rounds up/down based on mediainfo compilation, 0.255 vs 0.256
       # is close enough for our purpose
       expect(canvases.first["items"][0]["items"][0]["body"]["duration"].to_s).to start_with "0.25"
-      expect(output["logo"].first).to include("id" => "https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png",
+      expect(output["logo"].first).to include("id" => "https://www.example.com/vatican.png",
                                               "format" => "image/png",
                                               "height" => 100,
                                               "width" => 120,
