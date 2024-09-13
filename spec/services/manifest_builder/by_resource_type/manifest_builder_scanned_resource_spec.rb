@@ -135,7 +135,7 @@ RSpec.describe ManifestBuilder do
       expect(output["thumbnail"]["@id"]).to eq "#{first_image['resource']['service']['@id']}/full/!200,150/0/default.jpg"
       expect(output["thumbnail"]["service"]["@id"]).to eq first_image["resource"]["service"]["@id"]
       expect(output["sequences"][0]["startCanvas"]).to eq canvas_id
-      expect(output["logo"]).to eq("https://www.example.com/assets/pul_logo_icon-5333765252f2b86e34cd7c096c97e79495fe4656c5f787c5510a84ee6b67afd8.png")
+      expect(output["logo"]).to eq("https://www.example.com/pul_logo_icon.png")
       expect(output["seeAlso"].length).to eq 2
       expect(output["seeAlso"].last).to include "@id" => "https://catalog.princeton.edu/catalog/991234563506421.marcxml", "format" => "text/xml"
 
@@ -150,7 +150,7 @@ RSpec.describe ManifestBuilder do
     end
     it "provides the vatican logo" do
       output = manifest_builder.build
-      expect(output["logo"]).to eq("https://www.example.com/assets/vatican-2a0de5479c7ad0fcacf8e0bf4eccab9f963a5cfc3e0197051314c8d50969a478.png")
+      expect(output["logo"]).to eq("https://www.example.com/vatican.png")
     end
   end
 

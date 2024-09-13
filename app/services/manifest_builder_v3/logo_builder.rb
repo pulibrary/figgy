@@ -10,8 +10,6 @@ class ManifestBuilderV3
     # @param [Resource] resource the Resource being viewed
     def initialize(record)
       @record = record
-      protocol = /localhost/.match?(Figgy.default_url_options[:host]) ? "http" : "https"
-      @host = "#{protocol}://#{Figgy.default_url_options[:host]}"
     end
 
     def apply(manifest)
@@ -25,7 +23,7 @@ class ManifestBuilderV3
         Array.wrap(@record.resource.rights_statement)
       end
 
-      def logo_url
+      def logo_file
         if @record.resource.respond_to?(:rights_statement) && resource_logo.include?(RDF::URI("http://cicognara.org/microfiche_copyright"))
           "vatican.png"
         else
@@ -33,9 +31,14 @@ class ManifestBuilderV3
         end
       end
 
+      def logo_url
+        protocol = /localhost/.match?(Figgy.default_url_options[:host]) ? "http" : "https"
+        "#{protocol}://#{Figgy.default_url_options[:host]}/#{logo_file}"
+      end
+
       def logo
         {
-          "id" => ActionController::Base.helpers.image_url(logo_url, host: @host),
+          "id" => logo_url,
           "type" => "Image",
           "format" => "image/png",
           "height" => 100,
