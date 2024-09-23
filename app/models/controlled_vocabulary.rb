@@ -38,7 +38,7 @@ class ControlledVocabulary
   # @param value [String] the value for the Term being searched for
   # @return [Term] the Term Object within the vocabulary
   def find(value)
-    all.find { |x| x.value == value }
+    all.find { |x| x.value.to_s.gsub("http://", "https://") == value.to_s.gsub("http://", "https://") }
   end
 
   # Method which determines whether or not a Term Object containing a value exists in this vocabulary
@@ -390,7 +390,7 @@ class ControlledVocabulary
         value = values.first
         next if value.nil?
 
-        uri = value.gsub(".json", "")
+        uri = value.gsub(".json", "").gsub("http://", "https://")
         Term.new(label: label, value: uri, source_data: record)
       end
       values.compact
