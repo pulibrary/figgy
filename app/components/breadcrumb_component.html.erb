@@ -5,9 +5,9 @@
         <li class="breadcrumb-item"><%= root_breadcrumb %></li>
       <% end %>
       <% breadcrumb_hierarchy.each do |breadcrumb_resource| %>
-        <li class="breadcrumb-item"><%= link_to breadcrumb_resource.first_title, solr_document_path(id: "#{breadcrumb_resource.id}") %></li>
+        <li class="breadcrumb-item" dir='<%= breadcrumb_resource.first_title.to_s.dir %>'><%= link_to breadcrumb_resource.first_title, solr_document_path(id: "#{breadcrumb_resource.id}") %></li>
       <% end %>
-      <li class="breadcrumb-item"><%= decorated_resource.first_title %></li>
+      <li class="breadcrumb-item" dir='<%= decorated_resource.first_title.to_s.dir %>'><%= decorated_resource.first_title %></li>
     </ol>
   </nav>
 <% end %>
