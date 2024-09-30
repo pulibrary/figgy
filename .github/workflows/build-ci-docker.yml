@@ -22,7 +22,6 @@ env:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
-    # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
       contents: read
       packages: write
@@ -50,10 +49,21 @@ jobs:
           DOCKER_METADATA_PR_HEAD_SHA: true
 
       - name: Build and push Docker image
+        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v6
         with:
           context: "${{ github.workspace }}"
           file: "${{ github.workspace }}/.circleci/Dockerfile"
           push: true
           tags: ghcr.io/pulibrary/figgy:ci
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image
+        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && github.ref != 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          context: "${{ github.workspace }}"
+          file: "${{ github.workspace }}/.circleci/Dockerfile"
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
