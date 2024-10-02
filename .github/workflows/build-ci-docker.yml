@@ -1,0 +1,69 @@
+name: Create and publish a Docker CI image
+
+on:
+  push:
+    paths:
+      - .circleci/Dockerfile
+      - bin/**
+    branches:
+      - main
+  pull_request:
+    paths:
+      - .circleci/Dockerfile
+      - bin/**
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha
+        env:
+          DOCKER_METADATA_PR_HEAD_SHA: true
+
+      - name: Build and push Docker image
+        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          context: "${{ github.workspace }}"
+          file: "${{ github.workspace }}/.circleci/Dockerfile"
+          push: true
+          tags: ghcr.io/pulibrary/figgy:ci
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image
+        if: (github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request') && github.ref != 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          context: "${{ github.workspace }}"
+          file: "${{ github.workspace }}/.circleci/Dockerfile"
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

@@ -73,7 +73,7 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
 
     describe "#warp" do
       it "executes a reproject command" do
-        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png -co TILED=YES -co COMPRESS=NONE"
+        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png -co COMPRESS=NONE"
         processor.class.warp(file_name, output_file, options)
         expect(processor.class).to have_received(:execute).with command
       end

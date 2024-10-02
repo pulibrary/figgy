@@ -1,0 +1,19 @@
+name: Prune containers
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * SUN"  # every sunday at midnight
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    name: Delete old images
+    steps:
+      - uses: snok/container-retention-policy@v3.0.0
+        with:
+          account: pulibrary
+          image-names: figgy
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image-tags: "!ci !main"
+          cut-off: 2w

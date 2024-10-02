@@ -26,7 +26,7 @@ module GeoDerivatives
         # @param options [Hash] creation options
         def self.warp(in_path, out_path, options)
           execute "gdalwarp -q -t_srs #{options[:output_srid]} "\
-                  "\"#{in_path}\" #{out_path} -co TILED=YES -co COMPRESS=NONE"
+                  "\"#{in_path}\" #{out_path} -co COMPRESS=NONE"
         end
 
         # Executes a gdal_translate command. Used to compress
@@ -46,13 +46,12 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.cloud_optimized_geotiff(in_path, out_path, _options)
-          system("gdaladdo -q -r average \"#{in_path}\" 2 4 8 16 32")
-          execute("gdal_translate -q -expand rgb \"#{in_path}\" #{out_path} -ot Byte -co TILED=YES "\
-                    "-a_nodata 256 -co COMPRESS=LZW -co COPY_SRC_OVERVIEWS=YES")
+          execute("gdal_translate -q -expand rgb \"#{in_path}\" #{out_path} -ot Byte -of COG "\
+                    "-a_nodata 256 -co COMPRESS=LZW -co TILING_SCHEME=GoogleMapsCompatible")
         rescue StandardError
           # Try without expanding rgb
-          execute("gdal_translate -q \"#{in_path}\" #{out_path} -ot Byte -co TILED=YES "\
-                    "-a_nodata 256 -co COMPRESS=LZW -co COPY_SRC_OVERVIEWS=YES")
+          execute("gdal_translate -q \"#{in_path}\" #{out_path} -ot Byte -of COG "\
+                    "-a_nodata 256 -co COMPRESS=LZW -co TILING_SCHEME=GoogleMapsCompatible")
         end
 
         # Executes a gdal_rasterize command. Used to rasterize vector
