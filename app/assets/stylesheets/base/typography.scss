@@ -66,9 +66,12 @@ body .form-control {
   }
 }
 
-[dir='rtl'], input[type='text'] {
+[dir='rtl'] {
   font-family: verdana, arial;
   font-size: 150%;
+}
+input[type='text'] {
+  font-family: verdana, arial;
 }
 .breadcrumb-item[dir='rtl'] {
   font-size: 100%;
