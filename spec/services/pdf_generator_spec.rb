@@ -306,7 +306,7 @@ RSpec.describe PDFGenerator do
           :scanned_resource,
           files: [file],
           source_metadata_identifier: "991234563506421",
-          holding_location: ControlledVocabulary.for(:holding_location).all.first.value
+          holding_location: ControlledVocabulary.for(:holding_location).all.find { |v| v.label == "Plasma Physics Library" }.value
         )
         file_set = Wayfinder.for(resource).file_sets.first
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
@@ -323,7 +323,7 @@ RSpec.describe PDFGenerator do
         # page.
         text = cover_page.text.tr("\n", " ")
         expect(text).to include("ppllib@princeton.edu")
-        expect(text).to include("Forrestal Campus Princeton, NJ 08544")
+        expect(text).to include("Plasma Physics Library")
         expect(text).to include("609-243-3565")
       end
     end
