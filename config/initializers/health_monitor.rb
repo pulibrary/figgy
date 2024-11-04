@@ -1,20 +1,42 @@
 # frozen_string_literal: true
 Rails.application.config.after_initialize do
+  # Adds a patch a check is always critical if it's filtered for, otherwise fall
+  # back to configured value.
+  class HealthMonitor::Providers::Base
+    def critical
+      return true if request && request.parameters["providers"].present?
+      configuration.critical
+    end
+  end
+
   HealthMonitor.configure do |config|
     config.cache
 
     config.add_custom_provider(CheckOverrides::Redis)
-    config.add_custom_provider(SolrStatus)
-    config.add_custom_provider(AspaceStatus)
-    config.add_custom_provider(RabbitMqStatus)
-    config.add_custom_provider(SmtpStatus)
-    config.add_custom_provider(FileWatcherStatus)
-    config.add_custom_provider(IngestMountStatus)
+    config.add_custom_provider(SolrStatus).configure do |provider_config|
+      provider_config.critical = false
+    end
+    config.add_custom_provider(AspaceStatus).configure do |provider_config|
+      provider_config.critical = false
+    end
+    config.add_custom_provider(RabbitMqStatus).configure do |provider_config|
+      provider_config.critical = false
+    end
+    config.add_custom_provider(SmtpStatus).configure do |provider_config|
+      provider_config.critical = false
+    end
+    config.add_custom_provider(FileWatcherStatus).configure do |provider_config|
+      provider_config.critical = false
+    end
+    config.add_custom_provider(IngestMountStatus).configure do |provider_config|
+      provider_config.critical = false
+    end
 
     # monitor all the queues for latency
     # The gem also comes with some additional default monitoring,
     # e.g. it ensures that there are running workers
     config.sidekiq.configure do |sidekiq_config|
+      sidekiq_config.critical = false
       sidekiq_config.latency = 5.days
       sidekiq_config.queue_size = 1_000_000
       sidekiq_config.maximum_amount_of_retries = 17
