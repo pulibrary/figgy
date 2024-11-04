@@ -9,12 +9,24 @@ RSpec.describe "Health Monitor", type: :request do
   end
 
   describe "GET /health" do
-    it "has a success response" do
+    it "has a success response even if there are failures to non-critical services (e.g sidekiq)" do
       stub_aspace_login
 
       get "/health.json"
 
       expect(response).to be_successful
+    end
+
+    it "errors when there's a failure to a critical service" do
+      stub_aspace_login
+      allow_any_instance_of(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter).to receive(:execute) do |instance|
+        raise StandardError if database.blank? || instance.pool.db_config.name == database.to_s
+      end
+
+      get "/health.json"
+
+      expect(response).not_to be_successful
+      expect(response).to have_http_status :service_unavailable
     end
 
     it "errors when it can't contact the SMTP server" do
@@ -41,7 +53,7 @@ RSpec.describe "Health Monitor", type: :request do
 
       allow(Figgy.messaging_client).to receive(:bunny_client).and_raise(Bunny::TCPConnectionFailedForAllHosts, "Could not establish TCP connection to any of the configured hosts")
 
-      get "/health.json"
+      get "/health.json?providers[]=rabbitmqstatus"
 
       expect(response).not_to be_successful
       expect(response.status).to eq 503
