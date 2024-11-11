@@ -16,9 +16,6 @@ Rails.application.config.after_initialize do
     config.add_custom_provider(SolrStatus).configure do |provider_config|
       provider_config.critical = false
     end
-    config.add_custom_provider(AspaceStatus).configure do |provider_config|
-      provider_config.critical = false
-    end
     config.add_custom_provider(RabbitMqStatus).configure do |provider_config|
       provider_config.critical = false
     end
