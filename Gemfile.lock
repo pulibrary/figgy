@@ -546,7 +546,7 @@ GEM
     hashdiff (1.1.1)
     hashery (2.1.2)
     hashie (3.6.0)
-    health-monitor-rails (12.2.0)
+    health-monitor-rails (12.4.0)
       railties (>= 6.1)
     honeybadger (5.15.6)
     htmlentities (4.3.4)
@@ -1297,7 +1297,7 @@ DEPENDENCIES
   google-cloud-storage (= 1.38.0)
   graphiql-rails (= 1.4.10)
   graphql (~> 1.13.19)
-  health-monitor-rails (~> 12.1)
+  health-monitor-rails (= 12.4.0)
   honeybadger
   hydra-access-controls!
   hydra-derivatives!

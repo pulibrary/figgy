@@ -11,6 +11,7 @@ Rails.application.config.after_initialize do
 
   HealthMonitor.configure do |config|
     config.cache
+    config.database
 
     config.add_custom_provider(CheckOverrides::Redis)
     config.add_custom_provider(SolrStatus).configure do |provider_config|
@@ -27,6 +28,9 @@ Rails.application.config.after_initialize do
     end
     config.add_custom_provider(IngestMountStatus).configure do |provider_config|
       provider_config.critical = false
+    end
+    config.file_absence.configure do |file_config|
+      file_config.filename = "public/remove-from-nginx"
     end
 
     # monitor all the queues for latency
