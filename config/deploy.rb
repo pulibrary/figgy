@@ -81,7 +81,7 @@ before "deploy:assets:precompile", "deploy:yarn_install"
 before "deploy:assets:precompile", "deploy:whenever"
 
 namespace :application do
-  # You can/ should apply this command to a single host
+  # You can/ should apply this command to a subset of hosts
   # cap --hosts=figgy-web-staging1.princeton.edu staging application:remove_from_nginx
   desc "Marks the server(s) to be removed from the loadbalancer"
   task :remove_from_nginx do
@@ -89,8 +89,8 @@ namespace :application do
     on roles(:app) do
       count += 1
     end
-    if count > 1
-      raise "You must run this command on individual servers utilizing the --hosts= switch"
+    if count > (roles(:app).length / 2)
+      raise "You must run this command on no more than half the servers utilizing the --hosts= switch"
     end
     on roles(:app) do
       within release_path do
@@ -99,9 +99,9 @@ namespace :application do
     end
   end
 
-  # You can/ should apply this command to a single host
+  # You can/ should apply this command to a subset of hosts
   # cap --hosts=figgy-web-staging1.princeton.edu staging application:serve_from_nginx
-  desc "Marks the server(s) to be removed from the loadbalancer"
+  desc "Marks the server(s) to be added back to the loadbalancer"
   task :serve_from_nginx do
     on roles(:app) do
       within release_path do
