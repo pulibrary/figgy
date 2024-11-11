@@ -10,15 +10,12 @@ RSpec.describe "Health Monitor", type: :request do
 
   describe "GET /health" do
     it "has a success response even if there are failures to non-critical services (e.g sidekiq)" do
-      stub_aspace_login
-
       get "/health.json"
 
       expect(response).to be_successful
     end
 
     it "errors when there's a failure to a critical service" do
-      stub_aspace_login
       allow_any_instance_of(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter).to receive(:execute) do |instance|
         raise StandardError if database.blank? || instance.pool.db_config.name == database.to_s
       end
@@ -36,7 +33,6 @@ RSpec.describe "Health Monitor", type: :request do
     end
 
     it "errors when solr is down" do
-      stub_aspace_login
       allow(Blacklight.default_index.connection).to receive(:uri).and_return(URI("http://example.com/bla"))
       stub_request(:get, "http://example.com/solr/admin/cores?action=STATUS").to_return(body: { responseHeader: { status: 500 } }.to_json, headers: { "Content-Type" => "text/json" })
 
@@ -49,8 +45,6 @@ RSpec.describe "Health Monitor", type: :request do
     end
 
     it "errors when rabbitmq is down", rabbit_stubbed: true do
-      stub_aspace_login
-
       allow(Figgy.messaging_client).to receive(:bunny_client).and_raise(Bunny::TCPConnectionFailedForAllHosts, "Could not establish TCP connection to any of the configured hosts")
 
       get "/health.json?providers[]=rabbitmqstatus"
@@ -78,7 +72,6 @@ RSpec.describe "Health Monitor", type: :request do
 
     context "when there are files in the ocr in directory" do
       before do
-        stub_aspace_login
         allow(Net::SMTP).to receive(:new).and_return(instance_double(Net::SMTP, "open_timeout=": nil, start: true))
       end
 
