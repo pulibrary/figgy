@@ -15,7 +15,7 @@ gem "blacklight", "~> 7.33"
 gem "blacklight_iiif_search", "~> 2.1.0"
 gem "blacklight_range_limit"
 gem "bootsnap", require: false
-gem "bootstrap", "~> 4.0"
+gem "bootstrap", "~> 4.6"
 gem "bootstrap_form", "~> 4.5.0"
 gem "bunny"
 gem "capistrano-passenger"
