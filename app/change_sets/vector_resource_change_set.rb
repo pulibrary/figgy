@@ -9,7 +9,7 @@ class VectorResourceChangeSet < ChangeSet
   include RemoteMetadataProperty
   property :title, multiple: true, required: true, default: []
   property :source_metadata_identifier, required: true, multiple: false
-  property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
+  property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :holding_location, multiple: false, required: false, type: ::Types::URI
   property :local_identifier, multiple: true, required: false, default: []

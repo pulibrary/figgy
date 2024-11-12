@@ -111,7 +111,7 @@ RSpec.describe VectorResourceChangeSet do
     context "when given a blank VectorResource" do
       let(:form_resource) { VectorResource.new }
       it "sets a default Rights Statement" do
-        expect(change_set.rights_statement).to eq RightsStatements.no_known_copyright
+        expect(change_set.rights_statement).to eq RightsStatements.copyright_not_evaluated
       end
     end
   end

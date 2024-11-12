@@ -28,7 +28,7 @@ module Numismatics
     property :replaces, multiple: true, required: false, default: []
     property :depositor, multiple: false, required: false
     property :read_groups, multiple: true, required: false
-    property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
+    property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
     property :append_id, virtual: true, multiple: false, required: true
     property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 

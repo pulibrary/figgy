@@ -102,9 +102,9 @@ RSpec.shared_examples "a ChangeSet" do
     end
 
     describe "#rights_statement" do
-      let(:form_resource) { resource_klass.new(rights_statement: RightsStatements.no_known_copyright) }
+      let(:form_resource) { resource_klass.new(rights_statement: RightsStatements.copyright_not_evaluated) }
       it "is singular, required, and converts to an RDF::URI" do
-        expect(change_set.rights_statement).to eq RightsStatements.no_known_copyright
+        expect(change_set.rights_statement).to eq RightsStatements.copyright_not_evaluated
         change_set.validate(rights_statement: "")
         expect(change_set).not_to be_valid
         change_set.validate(rights_statement: RightsStatements.no_known_copyright.to_s)
@@ -113,7 +113,7 @@ RSpec.shared_examples "a ChangeSet" do
       context "when given a blank resource" do
         let(:form_resource) { resource_klass.new }
         it "sets a default Rights Statement" do
-          expect(change_set.rights_statement).to eq RightsStatements.no_known_copyright
+          expect(change_set.rights_statement).to eq RightsStatements.copyright_not_evaluated
         end
       end
     end
