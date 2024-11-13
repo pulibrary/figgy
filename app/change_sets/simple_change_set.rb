@@ -9,7 +9,7 @@ class SimpleChangeSet < ChangeSet
   include DateRangeProperty
   property :title, multiple: true, required: true, default: []
   property :downloadable, multiple: false, require: true, default: "public"
-  property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
+  property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
   property :rights_note, multiple: false, required: false
   property :viewing_hint, multiple: false, required: false, default: "individuals"
   property :pdf_type, multiple: false, required: false, default: "color"

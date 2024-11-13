@@ -48,7 +48,7 @@ class ChangeSet < Valkyrie::ChangeSet
       property :source_metadata_identifier, required: true, multiple: false
     end
     # Rights
-    property :rights_statement, multiple: false, required: true, default: RightsStatements.no_known_copyright, type: ::Types::URI
+    property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
     property :rights_note, multiple: false, required: false
     validates_with RightsStatementValidator
     # Visibility
