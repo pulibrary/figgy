@@ -27,6 +27,7 @@ RSpec.describe "Health Monitor", type: :request do
     end
 
     it "errors when it can't contact the SMTP server" do
+      SmtpStatus.next_check_timestamp = 0
       get "/health.json?providers[]=smtpstatus"
 
       expect(response).not_to be_successful
