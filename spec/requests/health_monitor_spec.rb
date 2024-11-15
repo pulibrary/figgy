@@ -32,6 +32,19 @@ RSpec.describe "Health Monitor", type: :request do
       expect(response).not_to be_successful
     end
 
+    it "caches a success on SMTP and doesn't call it twice in a short window" do
+      smtp_double = instance_double(Net::SMTP)
+      allow(Net::SMTP).to receive(:new).and_return(smtp_double)
+      allow(smtp_double).to receive(:open_timeout=)
+      allow(smtp_double).to receive(:start)
+
+      get "/health.json?providers[]=smtpstatus"
+      expect(response).to be_successful
+      get "/health.json?providers[]=smtpstatus"
+
+      expect(Net::SMTP).to have_received(:new).exactly(1).times
+    end
+
     it "errors when solr is down" do
       allow(Blacklight.default_index.connection).to receive(:uri).and_return(URI("http://example.com/bla"))
       stub_request(:get, "http://example.com/solr/admin/cores?action=STATUS").to_return(body: { responseHeader: { status: 500 } }.to_json, headers: { "Content-Type" => "text/json" })
