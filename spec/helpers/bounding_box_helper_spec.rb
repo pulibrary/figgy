@@ -15,6 +15,6 @@ describe BoundingBoxHelper do
 
   describe "#bbox_display_inputs" do
     subject { helper.bbox_display_inputs }
-    it { is_expected.to include("North", "East", "South", "West") }
+    it { is_expected.to include("N", "E", "S", "W") }
   end
 end
