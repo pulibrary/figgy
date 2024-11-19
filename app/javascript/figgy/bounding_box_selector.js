@@ -1,23 +1,29 @@
 export default class BoundingBoxSelector {
-  constructor($element) {
-    this.$inputId = $($element).data().inputId
-    this.$coverage = $($element).data().coverage
-    this.$readOnly = $($element).data().readOnly
+  constructor(element) {
+    this.coverage = element.data().coverage
+    this.readOnly = element.data().readOnly
+    this.inputElement = document.getElementById(element.data().inputId)
+    this.north = document.getElementById("bbox-north")
+    this.east = document.getElementById("bbox-east")
+    this.south = document.getElementById("bbox-south")
+    this.west = document.getElementById("bbox-west")
+    this.clear = document.getElementById("bbox-clear")
+    this.defaultBounds = L.latLngBounds([[-50, -100], [72, 100]])
     this.initialize_map()
   }
 
   initialize_map() {
     let initialBounds;
     let that = this;
-    if (!this.$coverage && this.$inputId ) {
-      this.$coverage = $(this.$inputId).val()
+    if (!this.coverage && this.inputElement ) {
+      this.coverage = this.inputElement.value
     }
 
-    if ((this.$coverage) && (this.$coverage.length !== 0)) {
-      initialBounds = this.coverageToBounds(this.$coverage)
+    if ((this.coverage) && (this.coverage.length !== 0)) {
+      initialBounds = this.coverageToBounds(this.coverage)
       this.updateBboxInputs(initialBounds)
     } else {
-      initialBounds = L.latLngBounds([[-50, -100], [72, 100]])
+      initialBounds = this.defaultBounds
     };
 
     let map = L.map('bbox', {
@@ -31,19 +37,47 @@ export default class BoundingBoxSelector {
     }).addTo(map)
     L.Control.geocoder({ position: 'topleft' }).addTo(map)
 
-    if (this.$readOnly) {
+    if (this.readOnly) {
       new L.Rectangle(initialBounds, { color: 'blue', weight: 2, opacity: 0.9 }).addTo(map)
     } else {
-      let boundingBox = new L.BoundingBox({ bounds: initialBounds,
+      this.boundingBox = new L.BoundingBox({ bounds: initialBounds,
                                      buttonPosition: 'topright', }).addTo(map)
 
-      boundingBox.on('change', function() {
-        $("#" + that.$inputId).val(that.boundsToCoverage(this.getBounds()))
+      this.boundingBox.on('change', function() {
+        that.inputElement.value = that.boundsToCoverage(this.getBounds())
         that.updateBboxInputs(this.getBounds())
       })
 
-      boundingBox.enable()
+      // Enable Clear Coverage button
+      this.clear.style.display = 'block'
+      this.clear.addEventListener('click', () => {
+        this.boundingBox.setBounds(this.defaultBounds)
+        map.fitBounds(this.defaultBounds)
+        this.north.value = null
+        this.east.value = null
+        this.south.value = null
+        this.west.value = null
+        this.inputElement.value = null
+      })
+
+      // Enable editing of bbox inputs
+      this.north.readOnly = false
+      this.east.readOnly = false
+      this.south.readOnly = false
+      this.west.readOnly = false
+
+      // Update bounding box when value in inputs are changed
+      this.north.addEventListener('change', () => { this.setNewBoundsFromInputs() });
+      this.east.addEventListener('change', () => { this.setNewBoundsFromInputs() });
+      this.south.addEventListener('change', () => { this.setNewBoundsFromInputs() });
+      this.west.addEventListener('change', () => { this.setNewBoundsFromInputs() });
+
+      this.boundingBox.enable()
     }
+  }
+
+  setNewBoundsFromInputs() {
+    this.boundingBox.setBounds(L.latLngBounds([this.south.value, this.west.value], [this.north.value, this.east.value]))
   }
 
   clampBounds(bounds) {
@@ -84,10 +118,10 @@ export default class BoundingBoxSelector {
   boundsToCoverage(bounds) {
     try {
       let clamped_bounds = this.clampBounds(bounds);
-      let n = clamped_bounds.getNorth().toFixed(6)
-      let e = clamped_bounds.getEast().toFixed(6)
-      let s = clamped_bounds.getSouth().toFixed(6)
-      let w = clamped_bounds.getWest().toFixed(6)
+      let n = clamped_bounds.getNorth().toFixed(4)
+      let e = clamped_bounds.getEast().toFixed(4)
+      let s = clamped_bounds.getSouth().toFixed(4)
+      let w = clamped_bounds.getWest().toFixed(4)
 
       if (n && e && s && w) {
         return 'northlimit=' + n + '; ' +
@@ -107,9 +141,9 @@ export default class BoundingBoxSelector {
 
   updateBboxInputs(bounds) {
     let clamped_bounds = this.clampBounds(bounds)
-    $('#bbox-north').val(clamped_bounds.getNorth().toFixed(6))
-    $('#bbox-east').val(clamped_bounds.getEast().toFixed(6))
-    $('#bbox-south').val(clamped_bounds.getSouth().toFixed(6))
-    $('#bbox-west').val(clamped_bounds.getWest().toFixed(6))
+    this.north.value = clamped_bounds.getNorth().toFixed(4)
+    this.east.value = clamped_bounds.getEast().toFixed(4)
+    this.south.value = clamped_bounds.getSouth().toFixed(4)
+    this.west.value = clamped_bounds.getWest().toFixed(4)
   }
 }

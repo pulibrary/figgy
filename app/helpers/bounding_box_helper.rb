@@ -42,7 +42,7 @@ module BoundingBoxHelper
         <div class="col-md-3">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text"><div>North</div></span>
+              <span class="input-group-text"><div>N</div></span>
             </div>
             <input readonly id="bbox-north" type="text" class="form-control bbox-input">
           </div>
@@ -50,7 +50,7 @@ module BoundingBoxHelper
         <div class="col-md-3">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text"><div>East</div></span>
+              <span class="input-group-text"><div>E</div></span>
             </div>
             <input readonly id="bbox-east" type="text" class="form-control bbox-input">
           </div>
@@ -58,7 +58,7 @@ module BoundingBoxHelper
         <div class="col-md-3">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text"><div>South</div></span>
+              <span class="input-group-text"><div>S</div></span>
             </div>
             <input readonly id="bbox-south" type="text" class="form-control bbox-input">
           </div>
@@ -66,10 +66,15 @@ module BoundingBoxHelper
         <div class="col-md-3">
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text"><div>West</div></span>
+              <span class="input-group-text"><div>W</div></span>
             </div>
             <input readonly id="bbox-west" type="text" class="form-control bbox-input">
           </div>
+        </div>
+      </div>
+      <div class="row bbox-inputs">
+        <div class="col-md-3">
+          <button type="button" id="bbox-clear" class="btn btn-danger" style="display: none">Clear Coverage</button>
         </div>
       </div>
     )
