@@ -29,7 +29,8 @@ class BulkUpdateJob < ApplicationJob
       :ocr_language,
       :refresh_remote_metadata,
       :rights_statement,
-      :visibility
+      :visibility,
+      :pdf_type
     ]
   end
 

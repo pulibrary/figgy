@@ -146,6 +146,7 @@ RSpec.feature "Bulk edit", js: true do
       expect(page).to have_content "Bulk edit 1 resources"
       page.check("mark_complete")
       page.select collection2.title.first, from: "append_collection_ids", visible: false
+      page.select "No PDF", from: "pdf_type", visible: false
       accept_alert do
         click_button("Apply Edits")
       end
@@ -154,6 +155,7 @@ RSpec.feature "Bulk edit", js: true do
       updated = adapter.query_service.find_by(id: member_scanned_resource.id)
       expect(updated.state).to eq ["complete"]
       expect(updated.member_of_collection_ids).to eq [collection.id, collection2.id]
+      expect(updated.pdf_type).to eq ["none"]
     end
 
     it "doesn't add a collection if one isn't picked" do
