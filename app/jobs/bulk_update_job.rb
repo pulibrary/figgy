@@ -30,7 +30,8 @@ class BulkUpdateJob < ApplicationJob
       :refresh_remote_metadata,
       :rights_statement,
       :visibility,
-      :pdf_type
+      :pdf_type,
+      :downloadable
     ]
   end
 
