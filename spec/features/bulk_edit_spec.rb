@@ -7,7 +7,7 @@ RSpec.feature "Bulk edit", js: true do
   let(:collection_title) { "My Collection" }
   let(:collection) { FactoryBot.create_for_repository(:collection, title: collection_title) }
   let(:member_scanned_resource) do
-    FactoryBot.create_for_repository(:scanned_resource, title: ["Member Resource"], member_of_collection_ids: [collection.id])
+    FactoryBot.create_for_repository(:scanned_resource, title: ["Member Resource"], member_of_collection_ids: [collection.id], pdf_type: "color")
   end
   let(:nonmember_scanned_resource) do
     FactoryBot.create_for_repository(:scanned_resource, title: ["Nonmember Resource"])
@@ -171,6 +171,8 @@ RSpec.feature "Bulk edit", js: true do
       updated = adapter.query_service.find_by(id: member_scanned_resource.id)
       expect(updated.state).to eq ["complete"]
       expect(updated.member_of_collection_ids).to eq [collection.id]
+      # Ensure PDF type doesn't change.
+      expect(updated.pdf_type).to eq ["color"]
     end
 
     context "with linked collections" do
