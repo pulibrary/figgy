@@ -71,6 +71,14 @@
               required: false %>
         </div>
         <div class="row">
+          <div class="col-sm-2"><%= label_tag "pdf_type", "PDF Type" %></div>
+          <%= select_tag :pdf_type,
+              options_from_collection_for_select(ControlledVocabulary.for(:pdf_type).all, "value", "label"),
+              include_blank: "[Do not update]",
+              input_html: { class: 'form-control pdf-type' },
+              required: false %>
+        </div>
+        <div class="row">
           <div class="col-sm-2"><%= label_tag "embargo_date", "Embargo Date" %></div>
           <%= select_tag :embargo_date_action,
               options_for_select({ "Input a date" => "date", "Clear all values" => "clear" }),
