@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 require "rails_helper"
 
@@ -13,6 +12,20 @@ describe AllMmsResourcesQuery do
       mms_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
       _component_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "AC044_c0003")
       expect(query.all_mms_resources.map(&:id).to_a).to eq [mms_resource.id]
+    end
+
+    it "can filter by created_at" do
+      id1 = "9985434293506421"
+      id2 = "9946093213506421"
+      stub_catalog(bib_id: id1)
+      stub_catalog(bib_id: id2)
+      FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: id1)
+      Timecop.travel(2021, 6, 30) do
+        FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: id2)
+      end
+
+      output = query.all_mms_resources(created_at: DateTime.new(2021, 3, 30)..DateTime.new(2021, 8, 30))
+      expect(output.flat_map(&:source_metadata_identifier)).to eq [id2]
     end
   end
 end
