@@ -32,8 +32,10 @@ describe AllMmsResourcesQuery do
   describe "#mms_title_resources" do
     it "finds all resources with a title that looks like an mms id" do
       mms_resource = FactoryBot.create_for_repository(:scanned_resource, title: "9985434293506421")
+      FactoryBot.create_for_repository(:file_set, title: "9985434293506421.pdf")
       FactoryBot.create_for_repository(:scanned_resource, title: "Totally normal resource with regular title")
-      expect(query.mms_title_resources.map(&:id).to_a).to eq [mms_resource.id]
+      result = query.mms_title_resources
+      expect(result.map(&:id).to_a).to eq [mms_resource.id]
     end
 
     it "can filter by created_at" do
