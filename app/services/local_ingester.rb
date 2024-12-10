@@ -50,11 +50,14 @@ class LocalIngester
   end
 
   # Determines whether or not the string encodes a bib. ID or a PULFA ID
-  # See SourceMetadataIdentifierValidator#validate
+  # Check that a pulfa id actually resolves, because its regex is quite
+  # permissive and would match, e.g. "vol1" which would mess up MVW ingests
   # @param [String] value
   # @return [Boolean]
   def valid_remote_identifier?(value)
-    RemoteRecord.valid?(value) && RemoteRecord.retrieve(value).success?
+    return false unless RemoteRecord.valid?(value)
+    return true if RemoteRecord.catalog?(value)
+    RemoteRecord.retrieve(value).success?
   rescue URI::InvalidURIError
     false
   end
