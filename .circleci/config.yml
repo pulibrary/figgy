@@ -42,6 +42,9 @@ jobs:
           paths:
             - ./vendor/bundle
       - run:
+          name: Configure Mapnik repository
+          command: "npm config set //npm.pkg.github.com/:_authToken ${GITHUB_PACKAGE_TOKEN} && npm config set @mapnik:registry https://npm.pkg.github.com"
+      - run:
           name: Install NPM Dependencies via Yarn
           command: yarn install --frozen-lockfile
       - run:
