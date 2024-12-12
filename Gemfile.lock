@@ -1016,7 +1016,7 @@ GEM
       ostruct
     sshkit-interactive (0.3.0)
       sshkit (~> 1.12)
-    string_rtl (0.1.0)
+    string_rtl (0.2.0)
     sxp (2.0.0)
       matrix (~> 0.4)
       rdf (~> 3.3)
