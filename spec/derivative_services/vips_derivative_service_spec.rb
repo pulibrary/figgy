@@ -2,12 +2,12 @@
 require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
 
-RSpec.describe VIPSDerivativeService do
+RSpec.describe VipsDerivativeService do
   it_behaves_like "a Valkyrie::Derivatives::DerivativeService"
 
   let(:thumbnail) { ::PcdmUse::ThumbnailImage }
   let(:derivative_service) do
-    VIPSDerivativeService::Factory.new(change_set_persister: change_set_persister)
+    VipsDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
@@ -154,7 +154,7 @@ RSpec.describe VIPSDerivativeService do
 
   context "tiff source larger than reduction threshold", run_real_derivatives: true do
     it "resizes it by half" do
-      stub_const("VIPSDerivativeService::REDUCTION_THRESHOLD", 1)
+      stub_const("VipsDerivativeService::REDUCTION_THRESHOLD", 1)
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
       reloaded = query_service.find_by(id: valid_resource.id)
@@ -166,7 +166,7 @@ RSpec.describe VIPSDerivativeService do
     end
     it "uploads it with the appropriate metadata" do
       allow(storage_adapter).to receive(:upload).and_call_original
-      stub_const("VIPSDerivativeService::REDUCTION_THRESHOLD", 1)
+      stub_const("VipsDerivativeService::REDUCTION_THRESHOLD", 1)
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
       expect(storage_adapter).to have_received(:upload).with(file: anything, resource: anything, original_filename: anything, metadata: { "height" => "144", "width" => "100" })
