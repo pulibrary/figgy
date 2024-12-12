@@ -3,8 +3,8 @@ require_relative "boot"
 require_relative "read_only_mode"
 require "rails"
 if ["development", "test"].include? ENV["RAILS_ENV"]
-  require "dotenv/rails-now"
-  Dotenv::Railtie.load
+  require "dotenv/load"
+  Dotenv::Rails.load
 end
 require_relative "lando_env"
 require "active_model/railtie"
@@ -21,7 +21,9 @@ require "shrine/storage/google_cloud_storage"
 Bundler.require(*Rails.groups)
 module Figgy
   class Application < Rails::Application
-    config.load_defaults "6.0"
+    config.load_defaults "7.1"
+    # Enabled because of https://github.com/heartcombo/devise/pull/5462
+    config.action_controller.raise_on_open_redirects = false
     config.action_controller.forgery_protection_origin_check = false
     config.assets.quiet = true
     config.generators do |generate|
