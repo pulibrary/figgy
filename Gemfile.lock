@@ -577,6 +577,9 @@ GEM
       json
     iiif_manifest (1.1.1)
       activesupport (>= 4)
+    image_processing (1.13.0)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     io-console (0.8.0)
     irb (1.14.1)
       rdoc (>= 4.0.0)
@@ -1164,6 +1167,7 @@ DEPENDENCIES
   hydra-head!
   hydra-role-management
   iiif_manifest (= 1.1.1)
+  image_processing (~> 1.2)
   iso-639
   jbuilder
   jquery-datatables
