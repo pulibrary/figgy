@@ -28,7 +28,10 @@ _Required if "asap" or "within the next 3 weeks" is checked. Add "Sudden Priorit
 _To be filled out by DLS._
 
 ### Acceptance Criteria
-_To be filled out by DLS._
+_To be filled out by DLS.Some requirements to consider, including:_
+
+- [ ] The UI implemented for this issue meets accessibility requirements
+- [ ] New functionality is documented
 
 ### First Step
 _To be filled out by DLS._
