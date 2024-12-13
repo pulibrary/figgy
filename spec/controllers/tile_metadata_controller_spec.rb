@@ -23,7 +23,7 @@ RSpec.describe TileMetadataController, type: :controller do
 
       get :tilejson, params: { id: raster_set.id, format: :json }
 
-      expect(response).to redirect_to "https://map-tiles-test.example.com/#{raster_set.id.to_s.tr('-', '')}/mosaicjson/tilejson.json"
+      expect(response).to redirect_to "https://map-tiles-test.example.com/#{raster_set.id.to_s.tr('-', '')}/mosaicjson/WebMercatorQuad/tilejson.json"
     end
     it "returns not_found if not given a mosaic" do
       scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
