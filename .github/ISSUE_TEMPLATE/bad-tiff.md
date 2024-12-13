@@ -2,7 +2,7 @@
 name: Bad TIFF
 about: Template used as informational MVP to help make issues actionable for developers
 title: 'Bad TIFF: [TITLE]'
-labels: ingest issues
+labels: ingest issues, user experience
 assignees: ''
 
 ---
