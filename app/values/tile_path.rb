@@ -8,12 +8,12 @@ class TilePath
 
   def tilejson
     return unless valid?
-    "#{tileserver}/#{id}/#{endpoint}/tilejson.json"
+    "#{tileserver}/#{id}/#{endpoint}/WebMercatorQuad/tilejson.json"
   end
 
   def wmts
     return unless valid?
-    "#{tileserver}/#{id}/#{endpoint}/WMTSCapabilities.xml"
+    "#{tileserver}/#{id}/#{endpoint}/WebMercatorQuad/WMTSCapabilities.xml"
   end
 
   def xyz
