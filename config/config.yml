@@ -9,6 +9,8 @@ defaults: &defaults
   cdl_in_path: <%= ENV["CDL_IN_PATH"] %>
   ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
   ocr_out_path: <%= ENV["OCR_OUT_PATH"] %>
+  illiad_sftp_user: <%= ENV["ILLIAD_SFTP_USER"] %>
+  illiad_sftp_pass: <%= ENV["ILLIAD_SFTP_PASSWORD"] %>
   pyramidals_bucket: "iiif-image-staging"
   pyramidals_region: "us-east-1"
   aws_access_key_id: <%= ENV["FIGGY_AWS_ACCESS_KEY_ID"] %>
