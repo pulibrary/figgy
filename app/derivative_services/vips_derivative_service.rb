@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class VIPSDerivativeService
+class VipsDerivativeService
   # Pixel width or height at which point it cuts the size in half for
   # performance.
   REDUCTION_THRESHOLD = 15_000
@@ -12,7 +12,7 @@ class VIPSDerivativeService
     end
 
     def new(id:)
-      VIPSDerivativeService.new(id: id, change_set_persister: change_set_persister)
+      VipsDerivativeService.new(id: id, change_set_persister: change_set_persister)
     end
   end
 
@@ -110,7 +110,7 @@ class VIPSDerivativeService
     image =
       begin
         Vips::Image.new_from_file(filename.to_s)
-        # If we fail to load a file via VIPS for some reason, load it into vips
+        # If we fail to load a file via Vips for some reason, load it into vips
         # via imagemagick. This will be slower, but fixes images with sub-byte
         # byte values. See https://github.com/libvips/libvips/issues/3948
       rescue Vips::Error

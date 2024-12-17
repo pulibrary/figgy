@@ -3,8 +3,8 @@
 
 // Node script to generate thumbnail image
 // Use: ./mapnik_thumbnail width height out_path style_sheet_string
-const mapnik = require('mapnik')
-const fs = require('fs')
+const fs = require('node:fs')
+const mapnik = require('@mapnik/mapnik')
 
 mapnik.register_default_fonts()
 mapnik.register_default_input_plugins()

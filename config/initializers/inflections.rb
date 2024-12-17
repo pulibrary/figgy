@@ -24,7 +24,6 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "CDL"
   inflect.acronym "IIIF"
   inflect.acronym "MARC"
-  inflect.acronym "VIPS"
   inflect.acronym "JP2"
   inflect.acronym "CSV"
   inflect.acronym "MODS"

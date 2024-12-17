@@ -61,7 +61,7 @@ class ScannedMapDerivativeService
   end
 
   def vips_derivative_service
-    VIPSDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
+    VipsDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
   end
 
   def pyramidal_change_set_persister(change_set_persister)

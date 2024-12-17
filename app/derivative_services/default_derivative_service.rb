@@ -78,7 +78,7 @@ class DefaultDerivativeService
   end
 
   def vips_derivative_service(change_set_persister = self.change_set_persister)
-    VIPSDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
+    VipsDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
   end
 
   def pyramidal_change_set_persister(change_set_persister)
