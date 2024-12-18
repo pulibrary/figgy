@@ -2,12 +2,11 @@
 
 class PdfOcrJob < ApplicationJob
   queue_as :high
-  attr_reader :blob, :out_path, :resource
+  attr_reader :blob, :resource
 
-  def perform(resource:, out_path:)
+  def perform(resource:)
     logger.info("PDF OCR job initiated for: #{resource.filename}")
     @resource = resource
-    @out_path = out_path
     @blob = resource.pdf # Required for ActiveStorage blob to tempfile method.
     update_state(state: "Processing")
     return unless pdf_attached?
@@ -39,5 +38,17 @@ class PdfOcrJob < ApplicationJob
     resource.state = state
     resource.note = message if message
     resource.save
+  end
+
+  def out_path
+    File.join(ocr_out_dir, resource.filename)
+  end
+
+  def ocr_out_dir
+    @ocr_out_dir ||= begin
+                       path = Figgy.config["ocr_out_path"]
+                       FileUtils.mkdir_p(path) unless File.directory?(path)
+                       path
+                     end
   end
 end

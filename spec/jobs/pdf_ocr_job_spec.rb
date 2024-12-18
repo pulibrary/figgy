@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe PdfOcrJob do
   describe "#perform" do
     let(:out_dir) { Figgy.config["ocr_out_path"] }
-    let(:out_path) { File.join(out_dir, "ocr-sample.pdf") }
+    let(:out_path) { File.join(out_dir, "sample.pdf") }
     let(:resource) { FactoryBot.create(:ocr_request, file: fixture_path) }
 
     before do
@@ -21,7 +21,7 @@ RSpec.describe PdfOcrJob do
       let(:fixture_path) { Rails.root.join("spec", "fixtures", "files", "sample.pdf") }
 
       it "creates on OCRed PDF in an output directory and deletes the attached PDF" do
-        expect { described_class.perform_now(resource: resource, out_path: out_path) }
+        expect { described_class.perform_now(resource: resource) }
           .to change { File.exist?(out_path) }
           .from(false).to(true)
         ocr_request = OcrRequest.all.first
@@ -34,7 +34,7 @@ RSpec.describe PdfOcrJob do
       let(:fixture_path) { Rails.root.join("spec", "fixtures", "files", "bad.pdf") }
 
       it "saves error on the ocr request resource and copies original file to out path" do
-        described_class.perform_now(resource: resource, out_path: out_path)
+        described_class.perform_now(resource: resource)
         ocr_request = OcrRequest.all.first
         expect(ocr_request.state).to eq "Error"
         expect(ocr_request.note).to include "PDF OCR job failed"
@@ -47,7 +47,7 @@ RSpec.describe PdfOcrJob do
       let(:resource) { FactoryBot.create(:ocr_request) }
 
       it "adds an error message to the ocr request resource" do
-        described_class.perform_now(resource: resource, out_path: out_path)
+        described_class.perform_now(resource: resource)
         ocr_request = OcrRequest.all.first
         expect(ocr_request.state).to eq "Error"
         expect(ocr_request.note).to include "Resource has no attached PDF"
