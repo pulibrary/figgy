@@ -3,27 +3,26 @@ require "rails_helper"
 
 RSpec.describe PdfOcrJob do
   describe "#perform" do
-    let(:out_dir) { Figgy.config["ocr_out_path"] }
-    let(:out_path) { File.join(out_dir, "sample.pdf") }
+    let(:ssh_session) { instance_double(Net::SSH::Connection::Session) }
+    let(:sftp_session) { instance_double(Net::SFTP::Session) }
     let(:resource) { FactoryBot.create(:ocr_request, file: fixture_path) }
 
     before do
-      # Create tmp ocr out directory
-      FileUtils.mkdir_p(out_dir) unless File.directory?(out_dir)
-    end
-
-    after do
-      # Cleanup PDFs
-      File.delete(out_path) if File.exist?(out_path)
+      allow(Net::SFTP).to receive(:start).and_return(sftp_session)
+      allow(sftp_session).to receive(:upload!)
+      allow(sftp_session).to receive(:close_channel)
+      allow(sftp_session).to receive(:session).and_return(ssh_session)
+      allow(ssh_session).to receive(:close)
     end
 
     context "with a valid PDF" do
       let(:fixture_path) { Rails.root.join("spec", "fixtures", "files", "sample.pdf") }
 
-      it "creates on OCRed PDF in an output directory and deletes the attached PDF" do
-        expect { described_class.perform_now(resource: resource) }
-          .to change { File.exist?(out_path) }
-          .from(false).to(true)
+      it "creates on OCRed PDF, uploads the file to the Illiad SFTP server, and deletes the attached PDF" do
+        described_class.perform_now(resource: resource)
+        expect(sftp_session).to have_received(:upload!)
+        expect(sftp_session).to have_received(:close_channel)
+        expect(ssh_session).to have_received(:close)
         ocr_request = OcrRequest.all.first
         expect(ocr_request.state).to eq "Complete"
         expect(ocr_request.pdf.attached?).to be false
@@ -33,12 +32,12 @@ RSpec.describe PdfOcrJob do
     context "with a PDF that can't be OCRed" do
       let(:fixture_path) { Rails.root.join("spec", "fixtures", "files", "bad.pdf") }
 
-      it "saves error on the ocr request resource and copies original file to out path" do
+      it "saves error on the ocr request resource and uploads the original file to the Illiad SFTP server" do
         described_class.perform_now(resource: resource)
         ocr_request = OcrRequest.all.first
         expect(ocr_request.state).to eq "Error"
         expect(ocr_request.note).to include "PDF OCR job failed"
-        expect(File.exist?(out_path)).to be true
+        expect(sftp_session).to have_received(:upload!)
         expect(ocr_request.pdf.attached?).to be false
       end
     end
