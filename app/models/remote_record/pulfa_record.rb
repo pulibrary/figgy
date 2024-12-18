@@ -18,6 +18,6 @@ class RemoteRecord::PulfaRecord
   end
 
   def client_result
-    @client_result ||= PulMetadataServices::Client.retrieve(source_metadata_identifier)
+    @client_result ||= PulMetadataServices::Client.record_from_findingaids(source_metadata_identifier)
   end
 end

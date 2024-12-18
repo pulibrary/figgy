@@ -2,16 +2,10 @@
 module PulMetadataServices
   class Client
     class << self
-      # Factory method for constructing BibRecord or PulfaRecord objects
-      # @param id [String] the identifier
-      # @return [PulMetadataServices::BibRecord, PulMetadataServices::AspacePulfaRecord]
-      def retrieve(id)
-        if catalog?(id)
-          src = retrieve_from_catalog(id)
-          PulMetadataServices::BibRecord.new(src)
-        elsif (src = retrieve_from_aspace_pulfa(id))
-          PulMetadataServices::AspacePulfaRecord.new(src)
-        end
+      def record_from_findingaids(id)
+        src = retrieve_from_aspace_pulfa(id)
+        return unless src
+        PulMetadataServices::AspacePulfaRecord.new(src)
       end
 
       def retrieve_from_aspace_pulfa(id)
