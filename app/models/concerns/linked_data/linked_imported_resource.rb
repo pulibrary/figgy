@@ -28,7 +28,7 @@ module LinkedData
       end
 
       def record_link_heading
-        if PulMetadataServices::Client.catalog?(resource.source_metadata_identifier.first)
+        if RemoteRecord.catalog?(resource.source_metadata_identifier.first)
           :link_to_catalog
         else
           :link_to_finding_aid

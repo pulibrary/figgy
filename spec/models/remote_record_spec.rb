@@ -4,8 +4,8 @@ require "rails_helper"
 RSpec.describe RemoteRecord, type: :model do
   describe ".retrieve" do
     context "with an Alma record ID" do
-      it "constructs a RemoteRecord instance" do
-        expect(described_class.retrieve("9946093213506421")).to be_a described_class
+      it "constructs a RemoteRecord::Catalog instance" do
+        expect(described_class.retrieve("9946093213506421")).to be_a RemoteRecord::Catalog
       end
     end
 
@@ -103,13 +103,13 @@ RSpec.describe RemoteRecord, type: :model do
 
   describe ".record_url" do
     context "with a Voyager record ID" do
-      it "validates that this is not a bib. ID" do
+      it "returns a link to the catalog" do
         expect(described_class.record_url("9946093213506421")).to eq "https://catalog.princeton.edu/catalog/9946093213506421"
       end
     end
 
     context "with a PULFA record ID" do
-      it "validates that this is a bib. ID" do
+      it "returns a link to finding aids" do
         expect(described_class.record_url("AC044_c0003")).to eq "https://findingaids.princeton.edu/catalog/AC044_c0003"
       end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# TODO: Call it RemoteMetadata::FindingAids
 class RemoteRecord::PulfaRecord
   attr_reader :source_metadata_identifier
 
@@ -10,14 +11,35 @@ class RemoteRecord::PulfaRecord
   end
 
   def attributes
-    @attributes ||= client_result.attributes.merge(source_metadata: client_result.full_source)
+    @attributes ||= source_attributes.merge(source_metadata: source)
   end
 
   def success?
-    client_result && client_result.source.strip.present?
+    source&.strip.present?
   end
 
-  def client_result
-    @client_result ||= PulMetadataServices::Client.record_from_findingaids(source_metadata_identifier)
+  def source_attributes
+    JSON.parse(source, symbolize_names: true)
+  end
+
+  def source
+    @source ||= json
+  end
+
+  def json
+    conn = Faraday.new(url: Figgy.config[:findingaids_url])
+    url = "#{source_metadata_identifier.tr('.', '-')}.json"
+    url += "?auth_token=#{Figgy.pulfalight_unpublished_token}" if Figgy.pulfalight_unpublished_token.present?
+    response = conn.get(url)
+    return unless response.success?
+    response.body.dup.force_encoding("UTF-8")
+  end
+
+  def ead_xml
+    conn = Faraday.new(url: Figgy.config[:findingaids_url])
+    url = "#{source_metadata_identifier.tr('.', '-')}.xml"
+    response = conn.get(url)
+    return unless response.success?
+    response.body.dup.force_encoding("UTF-8")
   end
 end

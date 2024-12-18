@@ -35,9 +35,25 @@ describe RemoteRecord::PulfaRecord, type: :model do
     end
   end
 
-  describe "#client_result" do
-    it "retrieves the record data and constructs a PulMetadataServices object" do
-      expect(pulfa_record.client_result).to be_a PulMetadataServices::AspacePulfaRecord
+  describe ".attributes" do
+    context "with a Pulfa-like id" do
+      let(:id) { "MC001.01_c000001" }
+      it "parses pulfalight records" do
+        stub_findingaid(pulfa_id: "MC001.01_c000001")
+        findingaids_record = described_class.new("MC001.01_c000001")
+        attributes = findingaids_record.attributes
+        expect(attributes[:title]).to eq ["Series 1: Reel Contents - American Civil Liberties Union Microfilm"]
+        expect(attributes[:extent]).to eq ["12 boxes", "44 items", "5 Reels", "1881 Volumes"]
+        expect(attributes[:date_created]).to eq ["1912-1950"]
+      end
+    end
+    context "when the metadata contains non-ASCII characters" do
+      let(:id) { "RBD1_c13076" }
+      let(:source) { file_fixture("files/pulfa/aspace/RBD1_c13076.json").read }
+      it "reads character encoding correctly" do
+        stub_findingaid(pulfa_id: "RBD1_c13076")
+        expect(described_class.new(id).source).to eq source
+      end
     end
   end
 end

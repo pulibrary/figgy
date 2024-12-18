@@ -13,8 +13,8 @@ class MarcRecordEnhancer
   def self.for(resource)
     return unless resource.try(:source_metadata_identifier)
     bibid = resource.source_metadata_identifier.first
-    return unless PulMetadataServices::Client.catalog? bibid
-    xml_str = PulMetadataServices::Client.retrieve_from_catalog(bibid)
+    return unless RemoteRecord.catalog? bibid
+    xml_str = RemoteRecord::Catalog.new(bibid).marcxml
     record = MARC::XMLReader.new(StringIO.new(xml_str), parser: "magic").first
     new(marc: record, resource: resource)
   end
