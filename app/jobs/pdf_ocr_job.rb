@@ -2,12 +2,11 @@
 
 class PdfOcrJob < ApplicationJob
   queue_as :high
-  attr_reader :blob, :out_path, :resource
+  attr_reader :blob, :resource
 
-  def perform(resource:, out_path:)
+  def perform(resource:)
     logger.info("PDF OCR job initiated for: #{resource.filename}")
     @resource = resource
-    @out_path = out_path
     @blob = resource.pdf # Required for ActiveStorage blob to tempfile method.
     update_state(state: "Processing")
     return unless pdf_attached?
@@ -24,20 +23,41 @@ class PdfOcrJob < ApplicationJob
 
   def run_pdf_ocr
     blob.open do |file|
-      _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", file.path, out_path.to_s)
-      return true if status.success?
-      update_state(state: "Error", message: "PDF OCR job failed: #{error_str}")
-
-      # Copy orginal file to destination without OCR
-      FileUtils.cp file.path, out_path.to_s
+      _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", file.path, temporary_file.path.to_s)
+      if status.success?
+        transfer_file(temporary_file.path.to_s)
+        true
+      else
+        update_state(state: "Error", message: "PDF OCR job failed: #{error_str}")
+        transfer_file(file.path)
+        false
+      end
     end
-
-    false
   end
 
   def update_state(state:, message: nil)
     resource.state = state
     resource.note = message if message
     resource.save
+  end
+
+  def temporary_file
+    @temporary_file ||= Tempfile.new
+  end
+
+  def transfer_file(path)
+    host = Figgy.config["illiad_sftp_host"]
+    user = Figgy.config["illiad_sftp_user"]
+    pass = Figgy.config["illiad_sftp_pass"]
+    port = Figgy.config["illiad_sftp_port"]
+    out_path = File.join(Figgy.config["illiad_sftp_path"], "pdf", resource.filename)
+
+    begin
+      sftp = Net::SFTP.start(host, user, { password: pass, port: port })
+      sftp.upload!(path, out_path)
+    ensure
+      sftp.close_channel
+      sftp.session.close
+    end
   end
 end
