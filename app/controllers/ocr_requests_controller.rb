@@ -21,7 +21,7 @@ class OCRRequestsController < ApplicationController
     authorize! :update, OcrRequest.new
     @ocr_request = OcrRequest.new(ocr_request_params)
     if @ocr_request.save
-      PdfOcrJob.perform_later(resource: @ocr_request, out_path: ocr_out_file)
+      PdfOcrJob.perform_later(resource: @ocr_request)
       render status: :ok, json: { message: "uploaded" }
     else
       render status: :unprocessable_entity, json: @ocr_request.errors
@@ -29,12 +29,6 @@ class OCRRequestsController < ApplicationController
   end
 
   private
-
-    def ocr_out_file
-      out_dir = Figgy.config["ocr_out_path"]
-      FileUtils.mkdir_p(out_dir) unless File.directory?(out_dir)
-      File.join(out_dir, @ocr_request.filename)
-    end
 
     def ocr_request_params
       {

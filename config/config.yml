@@ -8,9 +8,11 @@ defaults: &defaults
   plausible_api_key: <%= ENV["PLAUSIBLE_API_KEY"] %>
   cdl_in_path: <%= ENV["CDL_IN_PATH"] %>
   ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
-  ocr_out_path: <%= ENV["OCR_OUT_PATH"] %>
-  illiad_sftp_user: <%= ENV["ILLIAD_SFTP_USER"] %>
-  illiad_sftp_pass: <%= ENV["ILLIAD_SFTP_PASSWORD"] %>
+  illiad_sftp_host: <%= ENV["ILLIAD_SFTP_HOST"] || "sftp.example.com" %>
+  illiad_sftp_port: <%= ENV["ILLIAD_SFTP_PORT"] || "2222" %>
+  illiad_sftp_user: <%= ENV["ILLIAD_SFTP_USER"] || "user" %>
+  illiad_sftp_pass: <%= ENV["ILLIAD_SFTP_PASSWORD"] || "password" %>
+  illiad_sftp_path: <%= ENV["ILLIAD_SFTP_BASE_PATH"] || "/illiad" %>
   pyramidals_bucket: "iiif-image-staging"
   pyramidals_region: "us-east-1"
   aws_access_key_id: <%= ENV["FIGGY_AWS_ACCESS_KEY_ID"] %>
@@ -239,7 +241,6 @@ development:
   <<: *defaults
   cdl_in_path: <%= Rails.root.join("tmp", "cdl_in") %>
   ocr_in_path: <%= Rails.root.join("tmp", "ocr_in") %>
-  ocr_out_path: <%= Rails.root.join("tmp", "ocr_out") %>
   repository_path: <%= Rails.root.join("tmp", "more_files") %>
   pyramidals_bucket: <%= ENV["FIGGY_PYRAMIDALS_BUCKET"] %>
   cloud_geo_bucket: "figgy-geo-staging"
@@ -256,7 +257,6 @@ test:
   plausible_api_key: "plausible_api_key"
   cdl_in_path: <%= Rails.root.join("tmp", "test_cdl_in") %>
   ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in#{ENV["TEST_ENV_NUMBER"]}") %>
-  ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out#{ENV["TEST_ENV_NUMBER"]}") %>
   repository_path: <%= Rails.root.join("tmp", "test_files#{ENV["TEST_ENV_NUMBER"]}") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>

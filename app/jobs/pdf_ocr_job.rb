@@ -23,15 +23,16 @@ class PdfOcrJob < ApplicationJob
 
   def run_pdf_ocr
     blob.open do |file|
-      _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", file.path, out_path.to_s)
-      return true if status.success?
-      update_state(state: "Error", message: "PDF OCR job failed: #{error_str}")
-
-      # Copy orginal file to destination without OCR
-      FileUtils.cp file.path, out_path.to_s
+      _stdout_str, error_str, status = Open3.capture3("ocrmypdf", "--force-ocr", "--rotate-pages", "--deskew", file.path, temporary_file.path.to_s)
+      if status.success?
+        transfer_file(temporary_file.path.to_s)
+        true
+      else
+        update_state(state: "Error", message: "PDF OCR job failed: #{error_str}")
+        transfer_file(file.path)
+        false
+      end
     end
-
-    false
   end
 
   def update_state(state:, message: nil)
@@ -40,15 +41,23 @@ class PdfOcrJob < ApplicationJob
     resource.save
   end
 
-  def out_path
-    File.join(ocr_out_dir, resource.filename)
+  def temporary_file
+    @temporary_file ||= Tempfile.new
   end
 
-  def ocr_out_dir
-    @ocr_out_dir ||= begin
-                       path = Figgy.config["ocr_out_path"]
-                       FileUtils.mkdir_p(path) unless File.directory?(path)
-                       path
-                     end
+  def transfer_file(path)
+    host = Figgy.config["illiad_sftp_host"]
+    user = Figgy.config["illiad_sftp_user"]
+    pass = Figgy.config["illiad_sftp_pass"]
+    port = Figgy.config["illiad_sftp_port"]
+    out_path = File.join(Figgy.config["illiad_sftp_path"], "pdf", resource.filename)
+
+    begin
+      sftp = Net::SFTP.start(host, user, { password: pass, port: port })
+      sftp.upload!(path, out_path)
+    ensure
+      sftp.close_channel
+      sftp.session.close
+    end
   end
 end
