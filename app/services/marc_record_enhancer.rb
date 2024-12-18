@@ -14,7 +14,7 @@ class MarcRecordEnhancer
     return unless resource.try(:source_metadata_identifier)
     bibid = resource.source_metadata_identifier.first
     return unless RemoteRecord.catalog? bibid
-    xml_str = RemoteRecord::Catalog.new(bibid).marcxml
+    xml_str = RemoteRecord::CatalogRecord.new(bibid).marcxml
     record = MARC::XMLReader.new(StringIO.new(xml_str), parser: "magic").first
     new(marc: record, resource: resource)
   end

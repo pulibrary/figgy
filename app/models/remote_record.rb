@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 class RemoteRecord
-  # Factory method for PulMetadataServices objects
+  # Factory method for Catalog and PulfaRecord objects
   # @param source_metadata_identifier [String]
   # @param resource [Resource]
   # @return [RemoteRecord, RemoteRecord::PulfaRecord]
   def self.retrieve(source_metadata_identifier, resource: nil)
     if catalog?(source_metadata_identifier)
-      Catalog.new(source_metadata_identifier)
+      CatalogRecord.new(source_metadata_identifier)
     elsif pulfa?(source_metadata_identifier)
       PulfaRecord.new(source_metadata_identifier)
     end

@@ -1,11 +1,8 @@
 # frozen_string_literal: true
-# TODO: Call it RemoteMetadata::FindingAids
 class RemoteRecord::PulfaRecord
   attr_reader :source_metadata_identifier
 
-  # Constructor
   # @param source_metadata_identifier [String]
-  # @param resource [Resource]
   def initialize(source_metadata_identifier)
     @source_metadata_identifier = source_metadata_identifier
   end
@@ -16,10 +13,6 @@ class RemoteRecord::PulfaRecord
 
   def success?
     source&.strip.present?
-  end
-
-  def source_attributes
-    JSON.parse(source, symbolize_names: true)
   end
 
   def source
@@ -42,4 +35,10 @@ class RemoteRecord::PulfaRecord
     return unless response.success?
     response.body.dup.force_encoding("UTF-8")
   end
+
+  private
+
+    def source_attributes
+      JSON.parse(source, symbolize_names: true)
+    end
 end

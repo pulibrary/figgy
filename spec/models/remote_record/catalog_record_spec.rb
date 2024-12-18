@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-describe RemoteRecord::Catalog do
+describe RemoteRecord::CatalogRecord do
   let(:content_type_marc_xml) { "application/marcxml+xml" }
 
   before do

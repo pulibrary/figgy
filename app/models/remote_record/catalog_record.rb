@@ -1,7 +1,9 @@
 # frozen_string_literal: true
-class RemoteRecord::Catalog
+class RemoteRecord::CatalogRecord
   attr_reader :source_metadata_identifier
   delegate :success?, to: :jsonld_request
+
+  # @param source_metadata_identifier [String]
   def initialize(source_metadata_identifier)
     @source_metadata_identifier = source_metadata_identifier
   end
@@ -13,8 +15,7 @@ class RemoteRecord::Catalog
     hash.merge(source_jsonld: jsonld.to_json)
   end
 
-  # Retrieves a MARC record (serialized in XML) from Voyager using an ID
-  # @return [String] string-serialized XML for the MARC record
+  # Retrieves a MARC record (serialized in XML) from the catalog
   def marcxml
     conn = Faraday.new(url: Figgy.config[:catalog_url])
     response = conn.get("#{source_metadata_identifier}.marcxml")
