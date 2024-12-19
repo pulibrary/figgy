@@ -83,7 +83,7 @@ RSpec.describe CollectionsController, type: :controller do
       end
 
       context "when source metadata identifier is not found in pulfalight" do
-        it "" do
+        it "renders new again" do
           stub_findingaid_error(pulfa_id: "AC000_c0000", status_code: 500)
           post :create, params: { collection: { source_metadata_identifier: "AC000_c0000", slug: "slug" } }
 

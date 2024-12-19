@@ -167,7 +167,7 @@ class BarcodeComponentDict
     end
 
     def remote_record_source_metadata
-      @remote_record_source_metadata ||= PulMetadataServices::Client.retrieve_aspace_pulfa_ead(@component_id)
+      @remote_record_source_metadata ||= RemoteRecord::PulfaRecord.new(@component_id).ead_xml
     end
 
     # Parses XML from Collection Resource metadata

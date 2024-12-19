@@ -98,7 +98,7 @@ class ReportsController < ApplicationController
 
     def find_identifiers_to_reconcile
       @identifiers_to_reconcile ||= query_service.custom_queries.find_identifiers_to_reconcile.select do |r|
-        PulMetadataServices::Client.catalog?(r.source_metadata_identifier.first)
+        RemoteRecord.catalog?(r.source_metadata_identifier.first)
       end
     end
 
