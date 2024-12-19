@@ -7,7 +7,7 @@ defaults: &defaults
   archivespace_password: <%= ENV["ASPACE_PASSWORD"] %>
   plausible_api_key: <%= ENV["PLAUSIBLE_API_KEY"] %>
   cdl_in_path: <%= ENV["CDL_IN_PATH"] %>
-  ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
+  ocr_in_path: <%= ENV["OCR_ILLIAD_IN_PATH"] %>
   illiad_sftp_host: <%= ENV["ILLIAD_SFTP_HOST"] || "sftp.example.com" %>
   illiad_sftp_port: <%= ENV["ILLIAD_SFTP_PORT"] || "2222" %>
   illiad_sftp_user: <%= ENV["ILLIAD_SFTP_USER"] || "user" %>
