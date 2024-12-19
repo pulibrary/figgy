@@ -3,16 +3,12 @@ require "rails_helper"
 
 RSpec.describe PdfOcrJob do
   describe "#perform" do
-    let(:ssh_session) { instance_double(Net::SSH::Connection::Session) }
     let(:sftp_session) { instance_double(Net::SFTP::Session) }
     let(:resource) { FactoryBot.create(:ocr_request, file: fixture_path) }
 
     before do
-      allow(Net::SFTP).to receive(:start).and_return(sftp_session)
+      allow(Net::SFTP).to receive(:start).and_yield(sftp_session)
       allow(sftp_session).to receive(:upload!)
-      allow(sftp_session).to receive(:close_channel)
-      allow(sftp_session).to receive(:session).and_return(ssh_session)
-      allow(ssh_session).to receive(:close)
     end
 
     context "with a valid PDF" do
@@ -20,9 +16,7 @@ RSpec.describe PdfOcrJob do
 
       it "creates on OCRed PDF, uploads the file to the Illiad SFTP server, and deletes the attached PDF" do
         described_class.perform_now(resource: resource)
-        expect(sftp_session).to have_received(:upload!)
-        expect(sftp_session).to have_received(:close_channel)
-        expect(ssh_session).to have_received(:close)
+        expect(sftp_session).to have_received(:upload!).with(/.*/, /pdf\/sample\.pdf/)
         ocr_request = OcrRequest.all.first
         expect(ocr_request.state).to eq "Complete"
         expect(ocr_request.pdf.attached?).to be false

@@ -52,12 +52,8 @@ class PdfOcrJob < ApplicationJob
     port = Figgy.config["illiad_sftp_port"]
     out_path = File.join(Figgy.config["illiad_sftp_path"], "pdf", resource.filename)
 
-    begin
-      sftp = Net::SFTP.start(host, user, { password: pass, port: port })
+    Net::SFTP.start(host, user, { password: pass, port: port }) do |sftp|
       sftp.upload!(path, out_path)
-    ensure
-      sftp.close_channel
-      sftp.session.close
     end
   end
 end
