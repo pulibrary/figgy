@@ -20,6 +20,13 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_controller.action_on_unpermitted_parameters = false
   config.force_ssl = true
+  # exclude the health check from force_ssl so we can get to it from localhost
+  # pulled hsts configuration from config/initializers/new_framwork_defaults
+  # Configure SSL options to enable HSTS with subdomains. Previous versions had false.
+  config.ssl_options = {
+    hsts: { subdomains: true },
+    redirect: { exclude: ->(request) { /health/.match?(request.path) } }
+  }
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.active_storage.service = :local
   config.cache_store = :mem_cache_store, "figgy-web-prod1.princeton.edu"
