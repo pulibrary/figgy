@@ -234,7 +234,7 @@ en:
       heading: "Content Warning"
       accept_label: "View Content"
       message: >-
-        <p>This collection includes materials and images that are harmful (in that they are racist, transphobic, or otherwise demeaning). For more information on harmful content please see the PUL statement on Harmful Content: <a href="https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content" target="_blank">https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content</a></p>
+        <p>This collection includes materials and images that may reflect perspectives which some users could find oﬀensive or otherwise problematic. For more information, please see the PUL statement on Responsible Collection Description: <a href="https://library.princeton.edu/about/responsible-collection-description" target="_blank">https://library.princeton.edu/about/responsible-collection-description</a></p>
     explicit_content:
       heading: "Content Warning"
       accept_label: "View Content"
@@ -251,5 +251,4 @@ en:
       accept_label: "View Content"
       message: >-
         <p>%{message}</p>
-        <p>For more information on harmful content please see the PUL statement on Harmful Content: <a href="https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content" target="_blank">https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content</a></p>
-
+        <p>For more information, please see the PUL statement on Responsible Collection Description: <a href="https://library.princeton.edu/about/responsible-collection-description" target="_blank">https://library.princeton.edu/about/responsible-collection-description</a></p>
