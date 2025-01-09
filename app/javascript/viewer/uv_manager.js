@@ -1,7 +1,7 @@
 /* global UV, $, createUV */
 import CDLTimer from './cdl_timer'
 import IIIFLogo from '../images/iiif-logo.svg'
-import StatementOnHarmfulContentIcon from '../images/statement.png'
+import ResponsibleCollectionDescriptionIcon from '../images/statement.png'
 import TakedownLogo from '../images/copyright.svg'
 import LeafletViewer from './leaflet_viewer'
 import TabManager from './tab_manager'
@@ -207,9 +207,9 @@ export default class UVManager {
   createStatementElement () {
     const iconElement = document.createElement('a')
     iconElement.className = 'btn imageBtn statement'
-    iconElement.href = 'https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content'
+    iconElement.href = 'https://library.princeton.edu/about/responsible-collection-description'
     iconElement.target = '_blank'
-    iconElement.innerHTML = `<img src="${StatementOnHarmfulContentIcon}" style="width:25px; height=25px;"/> <span id="statement-on-harmful-content">Statement on Harmful Content</span>`
+    iconElement.innerHTML = `<img src="${ResponsibleCollectionDescriptionIcon}" style="width:25px; height=25px;"/> <span id="responsible-collection-description">Responsible Collection Description</span>`
     return iconElement
   }
 
