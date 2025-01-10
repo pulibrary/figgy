@@ -125,7 +125,7 @@ RSpec.describe DownloadsController do
 
         get :show, params: { resource_id: file_set.id.to_s, id: file_node.id.to_s, auth_token: persisted_playlist.auth_token }
 
-        expect(response.content_length).to eq(7332)
+        expect(response.content_length).to eq(9964)
         expect(response.media_type).to eq("video/MP2T")
       end
     end

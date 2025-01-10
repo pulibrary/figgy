@@ -17,6 +17,14 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./test/setup.js'],
+    server: {
+      deps: {
+        // Work around an issue with react-lazy-load-image-component, included
+        // as part of Clover since v2.12.0.
+        // See: https://github.com/vitest-dev/vitest/issues/4852
+        inline: ['@samvera/clover-iiif']
+      }
+    },
     alias: {
       '@/': './app/javascript'
     }
