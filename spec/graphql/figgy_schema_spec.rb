@@ -88,8 +88,8 @@ RSpec.describe FiggySchema do
           expect(notice["heading"]).to eq "Content Warning"
           expect(notice["acceptLabel"]).to eq "View Content"
           expect(notice["textHtml"]).to eq "<p>The \"Revolution in China\" album contains photographs of dead bodies.</p> " \
-            "<p>For more information on harmful content please see the PUL statement on Harmful Content: " \
-            '<a href="https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content" target="_blank">https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content</a></p>'
+            "<p>For more information, please see the PUL statement on Responsible Collection Description: " \
+            '<a href="https://library.princeton.edu/about/responsible-collection-description" target="_blank">https://library.princeton.edu/about/responsible-collection-description</a></p>'
         end
       end
       context "for an ephemera_folder with a content_warning" do
@@ -101,8 +101,8 @@ RSpec.describe FiggySchema do
           expect(notice["heading"]).to eq "Content Warning"
           expect(notice["acceptLabel"]).to eq "View Content"
           expect(notice["textHtml"]).to eq "<p>There's harmful content here.</p> " \
-            "<p>For more information on harmful content please see the PUL statement on Harmful Content: " \
-            '<a href="https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content" target="_blank">https://library.princeton.edu/about/diversity-equity-and-inclusion#Statement-on-Harmful-Content</a></p>'
+            "<p>For more information, please see the PUL statement on Responsible Collection Description: " \
+            '<a href="https://library.princeton.edu/about/responsible-collection-description" target="_blank">https://library.princeton.edu/about/responsible-collection-description</a></p>'
         end
       end
     end
