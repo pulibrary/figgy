@@ -82,7 +82,7 @@ before "deploy:assets:precompile", "deploy:whenever"
 
 namespace :application do
   # You can/ should apply this command to a subset of hosts
-  # cap --hosts=figgy-web-staging1.princeton.edu staging application:remove_from_nginx
+  # cap --hosts=figgy-web-staging1 staging application:remove_from_nginx
   desc "Marks the server(s) to be removed from the loadbalancer"
   task :remove_from_nginx do
     count = 0
@@ -100,7 +100,7 @@ namespace :application do
   end
 
   # You can/ should apply this command to a subset of hosts
-  # cap --hosts=figgy-web-staging1.princeton.edu staging application:serve_from_nginx
+  # cap --hosts=figgy-web-staging1 staging application:serve_from_nginx
   desc "Marks the server(s) to be added back to the loadbalancer"
   task :serve_from_nginx do
     on roles(:app) do
