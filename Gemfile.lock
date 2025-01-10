@@ -1326,6 +1326,7 @@ DEPENDENCIES
   modernizr-rails
   net-imap
   net-pop
+  net-sftp
   net-smtp
   net-ssh (~> 7.1.0)
   normalize-rails
