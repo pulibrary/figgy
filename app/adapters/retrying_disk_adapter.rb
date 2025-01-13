@@ -7,18 +7,8 @@ class RetryingDiskAdapter
   end
 
   def upload(...)
-    with_rescue([Errno::EPIPE, Errno::EAGAIN, Errno::EIO, Errno::ECONNRESET], retries: 5) do
+    FiggyUtils.with_rescue([Errno::EPIPE, Errno::EAGAIN, Errno::EIO, Errno::ECONNRESET], retries: 5) do
       inner_storage_adapter.upload(...)
-    end
-  end
-
-  def with_rescue(exceptions, retries: 5)
-    try = 0
-    begin
-      yield try
-    rescue *exceptions => exc
-      try += 1
-      try <= retries ? retry : raise(exc)
     end
   end
 end
