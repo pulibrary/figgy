@@ -184,6 +184,49 @@ RSpec.describe PreservationStatusReporter do
       expect(reporter.cloud_audit_failures.to_a.length).to eq 0
     end
 
+    it "retries file fetch if there's an ssl error for a metadata file" do
+      stub_ezid
+      # - a scannedresource with a metadata node that has the wrong checksum
+      resource = create_resource_bad_metadata_checksum
+      # error the first time, but not subsequent times
+      values = [proc { raise OpenSSL::SSL::SSLError }]
+      # Binary is fine
+      allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
+        .to receive(:find_by)
+        .and_call_original
+      # metadata errors
+      allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
+        .to receive(:find_by)
+        .with(id: Wayfinder.for(resource).preservation_objects.first.metadata_node.file_identifiers.first)
+        .and_wrap_original do |original, *args|
+        values.empty? ? original.call(*args) : values.shift.call
+      end
+
+      reporter = described_class.new(suppress_progress: true, io_directory: io_dir)
+      expect(reporter.cloud_audit_failures.to_a.map(&:id)).to eq([resource.id])
+    end
+
+    it "retries file fetch if there's an ssl error for a binary file" do
+      stub_ezid
+      resource = create_file_set_bad_binary_checksum
+      # error the first time, but not subsequent times
+      values = [proc { raise OpenSSL::SSL::SSLError }]
+      # Metadata is fine
+      allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
+        .to receive(:find_by)
+        .and_call_original
+      # binary errors
+      allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
+        .to receive(:find_by)
+        .with(id: Wayfinder.for(resource).preservation_objects.first.binary_nodes.first.file_identifiers.first)
+        .and_wrap_original do |original, *args|
+        values.empty? ? original.call(*args) : values.shift.call
+      end
+
+      reporter = described_class.new(suppress_progress: true, io_directory: io_dir)
+      expect(reporter.cloud_audit_failures.to_a.map(&:id)).to eq([resource.id])
+    end
+
     it "can load a state directory and start where it left off" do
       stub_ezid
       Timecop.travel(Time.current - 2.days) do

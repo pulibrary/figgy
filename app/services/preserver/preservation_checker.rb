@@ -47,7 +47,9 @@ class Preserver
 
       def preservation_file
         @preservation_file ||=
-          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first)
+          FiggyUtils.with_rescue([OpenSSL::SSL::SSLError], retries: 5) do
+            Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first)
+          end
       end
 
       def preservation_node
@@ -88,7 +90,9 @@ class Preserver
 
       def preservation_file
         @preservation_file ||=
-          Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first)
+          FiggyUtils.with_rescue([OpenSSL::SSL::SSLError], retries: 5) do
+            Valkyrie::StorageAdapter.find_by(id: preservation_node.file_identifiers.first)
+          end
       end
 
       def preserved?
