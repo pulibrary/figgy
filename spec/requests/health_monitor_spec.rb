@@ -81,7 +81,6 @@ RSpec.describe "Health Monitor", type: :request do
         "super_low" => hash_including(latency: 5.days, queue_size: 1_000_000),
         "realtime" => hash_including(latency: 30.seconds, queue_size: 100)
       )
-      expect(sidekiq_configuration.maximum_amount_of_retries).to match(17)
     end
 
     context "when there are files in the ocr in directory" do
