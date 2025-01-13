@@ -5,7 +5,11 @@ namespace :figgy do
   namespace :preservation do
     desc "Reports the number of unpreserved models, first rotating previous resumption and output files"
     task full_audit_restart: :environment do
-      state_directory = Rails.root.join("tmp", "rake_preservation_audit")
+      root_dir = Pathname.new("/opt/figgy/current")
+      if Rails.env.development? || Rails.env.test?
+        root_dir = Rails.root
+      end
+      state_directory = root_dir.join("tmp", "rake_preservation_audit")
       PreservationStatusReporter.rotate_file(state_directory.join(PreservationStatusReporter::FULL_AUDIT_OUTPUT_FILE))
       PreservationStatusReporter.rotate_file(state_directory.join(PreservationStatusReporter::RESUME_TIMESTAMP_FILE))
 
