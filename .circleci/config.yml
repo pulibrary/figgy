@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:sha-431d7e1
+      - image: ghcr.io/pulibrary/figgy:pr-6563
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -63,7 +63,7 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:sha-431d7e1
+      - image: ghcr.io/pulibrary/figgy:pr-6563
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -140,7 +140,7 @@ jobs:
   coverage_report:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:sha-431d7e1
+      - image: ghcr.io/pulibrary/figgy:pr-6563
     resource_class: large
     steps:
       - attach_workspace:
@@ -157,7 +157,7 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:sha-431d7e1
+      - image: ghcr.io/pulibrary/figgy:pr-6563
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
