@@ -38,9 +38,7 @@ Rails.application.config.after_initialize do
     # e.g. it ensures that there are running workers
     config.sidekiq.configure do |sidekiq_config|
       sidekiq_config.critical = false
-      sidekiq_config.latency = 5.days
-      sidekiq_config.queue_size = 1_000_000
-      sidekiq_config.maximum_amount_of_retries = 17
+      sidekiq_config.add_queue_configuration("default", latency: 5.days, queue_size: 1_000_000)
       sidekiq_config.add_queue_configuration("high", latency: 5.days, queue_size: 1_000_000)
       sidekiq_config.add_queue_configuration("mailers", latency: 5.days, queue_size: 1_000_000)
       sidekiq_config.add_queue_configuration("low", latency: 5.days, queue_size: 1_000_000)
