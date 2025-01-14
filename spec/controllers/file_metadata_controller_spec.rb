@@ -24,13 +24,13 @@ RSpec.describe FileMetadataController do
       it "deletes the FileMetadata and cleans the file from the repository" do
         resource = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions)
         file_set = Wayfinder.for(resource).file_sets.first
-        expect(file_set.captions.length).to eq 2
+        expect(file_set.captions.length).to eq 3
         caption = file_set.captions.first
 
         delete :destroy, params: { file_set_id: file_set.id, id: caption.id }
 
         resource = ChangeSetPersister.default.query_service.find_by(id: file_set.id)
-        expect(resource.captions.length).to eq 1
+        expect(resource.captions.length).to eq 2
         expect { Valkyrie::StorageAdapter.find_by(id: caption.file_identifiers.first) }.to raise_error Valkyrie::StorageAdapter::FileNotFound
       end
       it "fails to delete a FileMetadata that's not a caption" do

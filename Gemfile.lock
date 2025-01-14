@@ -579,7 +579,8 @@ GEM
     irb (1.14.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    iso-639 (0.3.6)
+    iso-639 (0.3.8)
+      csv
     jaro_winkler (1.6.0)
     jbuilder (2.12.0)
       actionview (>= 5.0.0)
