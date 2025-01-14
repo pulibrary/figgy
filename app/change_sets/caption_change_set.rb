@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class CaptionChangeSet < Valkyrie::ChangeSet
-  property :caption_language, multiple: false, type: Valkyrie::Types::String.optional, required: true
+  property :caption_language, multiple: true, type: Valkyrie::Types::Set, required: true
   property :change_set, required: true, default: "caption"
   property :original_language_caption, required: false, type: Dry::Types["params.bool"], default: false
   # VTT file uploaded from form.
@@ -9,13 +9,15 @@ class CaptionChangeSet < Valkyrie::ChangeSet
   validates :file, :caption_language, presence: true
 
   def caption_language=(value)
-    entry = ISO_639.find_by_code(value)
-    @fields["caption_language"] =
-      if entry
-        value
+    languages = value.reject(&:empty?).map do |code|
+      if ISO_639.find_by_code(code)
+        code
       else
         "und"
       end
+    end
+
+    @fields["caption_language"] = languages
   end
 
   def primary_terms

@@ -90,7 +90,7 @@ RSpec.describe FileMetadataController do
           file_metadata: {
             change_set: "Caption",
             file: nil,
-            caption_language: "eng"
+            caption_language: ["eng"]
           }
         }
 
@@ -105,7 +105,7 @@ RSpec.describe FileMetadataController do
           file_metadata: {
             change_set: "caption",
             file: fixture_file_upload("files/caption.vtt", "text/vtt"),
-            caption_language: "eng"
+            caption_language: ["eng"]
           }
         }
 

@@ -83,7 +83,7 @@ FactoryBot.define do
                   original_filename: "caption.vtt",
                   use: ::PcdmUse::Caption,
                   node_attributes: {
-                    caption_language: "eng",
+                    caption_language: ["eng"],
                     original_language_caption: true
                   }
                 ),
@@ -93,7 +93,18 @@ FactoryBot.define do
                   original_filename: "caption.vtt",
                   use: ::PcdmUse::Caption,
                   node_attributes: {
-                    caption_language: "und",
+                    caption_language: ["und"],
+                    original_language_caption: false
+                  }
+                ),
+
+                IngestableFile.new(
+                  file_path: Rails.root.join("spec", "fixtures", "files", "caption.vtt"),
+                  mime_type: "text/vtt",
+                  original_filename: "caption.vtt",
+                  use: ::PcdmUse::Caption,
+                  node_attributes: {
+                    caption_language: ["zgh", "alg"],
                     original_language_caption: false
                   }
                 )

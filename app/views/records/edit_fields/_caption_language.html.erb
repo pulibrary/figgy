@@ -5,5 +5,5 @@
               value_method: :value,
               hint: "One caption must exist in the original language of the audio",
               include_blank: true,
-              input_html: { class: 'form-control' },
+              input_html: { multiple: true, class: 'form-control' },
               required: f.object.required?(key) %>

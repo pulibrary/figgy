@@ -65,7 +65,7 @@ class BulkIngestService
     end
 
     def infer_language(vtt_path)
-      vtt_path.basename.sub_ext("").to_s.split("--")[-1]
+      [vtt_path.basename.sub_ext("").to_s.split("--")[-1]]
     end
 
     # @return [boolean] true if the second to last section of the filename

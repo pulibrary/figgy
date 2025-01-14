@@ -36,7 +36,6 @@ class HlsManifest::Primary
         default: caption_metadata.original_language_caption,
         autoselect: true,
         characteristics: accessibility_characteristics,
-        language: caption_metadata.caption_language,
         uri: helper.download_path(file_set.id, caption_metadata.id, as: "stream", auth_token: auth_token, format: "m3u8")
       )
     end
