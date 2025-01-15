@@ -33,7 +33,7 @@ class FileMetadata < Valkyrie::Resource
   attribute :page_count, Valkyrie::Types::Integer
 
   # Caption Metadata
-  attribute :caption_language, Valkyrie::Types::String.optional
+  attribute :caption_language, Valkyrie::Types::Set
   attribute :original_language_caption, Valkyrie::Types::Bool.optional
   attribute :change_set, Valkyrie::Types::String
 
@@ -139,7 +139,12 @@ class FileMetadata < Valkyrie::Resource
   end
 
   def caption_language_label
-    label = ControlledVocabulary.for(:language).label(caption_language)
+    label = if caption_language.count > 1
+              "Multilingual"
+            else
+              ControlledVocabulary.for(:language).label(caption_language&.first)
+            end
+
     return label unless original_language_caption
     "#{label} (Original)"
   end

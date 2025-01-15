@@ -277,12 +277,12 @@ class ControlledVocabulary
   class Language < ControlledVocabulary
     ControlledVocabulary.register(:language, self)
 
-    # Accesses all Terms mapped to ISO language codes
+    # Accesses all Terms mapped to ISO 639.2 language codes
     # @return [Array<Term>] the Term Objects modeling each language code
     def all(_scope = nil)
-      ISO_639::ISO_639_1.map(&:first).uniq.map do |value|
+      ISO_639::ISO_639_2.map(&:first).uniq.map do |value|
         find(value)
-      end
+      end.sort_by(&:label)
     end
 
     # Retrieve a Term with a specific ISO language code as a value

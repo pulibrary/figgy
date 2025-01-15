@@ -324,7 +324,7 @@ RSpec.describe BulkIngestService do
         )
         vtt_file_metadata = file_set.captions.first
         expect(vtt_file_metadata.original_filename).to eq(["city--original-language--eng.vtt"])
-        expect(vtt_file_metadata.caption_language).to eq("eng")
+        expect(vtt_file_metadata.caption_language).to eq(["eng"])
         expect(vtt_file_metadata.original_language_caption).to eq(true)
       end
     end
@@ -358,9 +358,9 @@ RSpec.describe BulkIngestService do
         vtt_file_metadatas = file_set.captions
         original_vtt = vtt_file_metadatas.find { |fm| fm.original_filename == ["city--original-language--engg.vtt"] }
         spa_vtt = vtt_file_metadatas.find { |fm| fm.original_filename == ["city--spa.vtt"] }
-        expect(spa_vtt.caption_language).to eq("spa")
+        expect(spa_vtt.caption_language).to eq(["spa"])
         expect(spa_vtt.original_language_caption).to eq(false)
-        expect(original_vtt.caption_language).to eq("und")
+        expect(original_vtt.caption_language).to eq(["und"])
         expect(original_vtt.original_language_caption).to eq(true)
       end
     end

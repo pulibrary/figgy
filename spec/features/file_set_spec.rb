@@ -70,18 +70,48 @@ RSpec.feature "FileSet" do
       click_link "Attach Caption"
 
       attach_file(Rails.root.join("spec", "fixtures", "files", "caption.vtt"))
-      select "English", from: "file_metadata[caption_language]"
+      select "English", from: "file_metadata[caption_language][]"
       check "Is this caption in the original language of the audio?"
       click_button "Save"
 
       expect(page).to have_content file_set.title.first
       caption = Wayfinder.for(resource).file_sets.first.captions.first
-      expect(caption.caption_language).to eq "eng"
+      expect(caption.caption_language).to eq ["eng"]
       expect(caption.file_identifiers.length).to eq 1
       expect(caption.original_language_caption).to eq true
       expect(page).to have_content "caption.vtt"
       expect(page).to have_css(".badge-dark", text: "Caption")
       expect(page).to have_css(".badge-dark", text: "English (Original)")
+      within(".files") do
+        click_link "Delete"
+      end
+      expect(page).not_to have_content "caption.vtt"
+    end
+  end
+
+  context "when creating a caption with multiple languages" do
+    with_queue_adapter :inline
+    it "can attach and delete a caption via a form" do
+      resource = FactoryBot.create_for_repository(:scanned_resource_with_video)
+      file_set = Wayfinder.for(resource).file_sets.first
+
+      visit solr_document_path(id: file_set.id)
+      click_link "Attach Caption"
+
+      attach_file(Rails.root.join("spec", "fixtures", "files", "caption.vtt"))
+      select "English", from: "file_metadata[caption_language][]"
+      select "Arabic", from: "file_metadata[caption_language][]"
+      check "Is this caption in the original language of the audio?"
+      click_button "Save"
+
+      expect(page).to have_content file_set.title.first
+      caption = Wayfinder.for(resource).file_sets.first.captions.first
+      expect(caption.caption_language).to eq ["ara", "eng"]
+      expect(caption.file_identifiers.length).to eq 1
+      expect(caption.original_language_caption).to eq true
+      expect(page).to have_content "caption.vtt"
+      expect(page).to have_css(".badge-dark", text: "Caption")
+      expect(page).to have_css(".badge-dark", text: "Multilingual (Original)")
       within(".files") do
         click_link "Delete"
       end
