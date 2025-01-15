@@ -168,13 +168,16 @@ RSpec.describe DownloadsController do
           expect(playlist.items[1].uri).to eq "/downloads/#{file_set.id}/file/#{caption_metadata.id}/stream.m3u8"
           expect(playlist.items[1].characteristics).to eq "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
           expect(playlist.items[1].name).to eq "English (Original)"
+          expect(playlist.items[1].language).to eq "eng"
           expect(playlist.items[1].default).to be true
           expect(playlist.items[2].characteristics).to eq "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
           expect(playlist.items[2].name).to eq "Undetermined"
           expect(playlist.items[2].default).to be false
+          expect(playlist.items[2].language).to eq "und"
           expect(playlist.items[3].characteristics).to eq "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
           expect(playlist.items[3].name).to eq "Multilingual"
           expect(playlist.items[3].default).to be false
+          expect(playlist.items[3].language).to be_nil
         end
       end
 

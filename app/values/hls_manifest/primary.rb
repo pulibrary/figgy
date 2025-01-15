@@ -36,9 +36,17 @@ class HlsManifest::Primary
         default: caption_metadata.original_language_caption,
         autoselect: true,
         characteristics: accessibility_characteristics,
+        language: caption_language(caption_metadata),
         uri: helper.download_path(file_set.id, caption_metadata.id, as: "stream", auth_token: auth_token, format: "m3u8")
       )
     end
+  end
+
+  def caption_language(caption_metadata)
+    iso_codes = caption_metadata.caption_language
+
+    return iso_codes.first if iso_codes.count == 1
+    nil
   end
 
   # Says via HLS that the subtitles should be treated as captions in HLS.
