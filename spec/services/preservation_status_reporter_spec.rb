@@ -198,8 +198,8 @@ RSpec.describe PreservationStatusReporter do
       allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
         .to receive(:find_by)
         .with(id: Wayfinder.for(resource).preservation_objects.first.metadata_node.file_identifiers.first)
-        .and_wrap_original do |original, *args|
-        values.empty? ? original.call(*args) : values.shift.call
+        .and_wrap_original do |original, **args|
+        values.empty? ? original.call(**args) : values.shift.call
       end
 
       reporter = described_class.new(suppress_progress: true, io_directory: io_dir)
@@ -219,8 +219,8 @@ RSpec.describe PreservationStatusReporter do
       allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
         .to receive(:find_by)
         .with(id: Wayfinder.for(resource).preservation_objects.first.binary_nodes.first.file_identifiers.first)
-        .and_wrap_original do |original, *args|
-        values.empty? ? original.call(*args) : values.shift.call
+        .and_wrap_original do |original, **args|
+        values.empty? ? original.call(**args) : values.shift.call
       end
 
       reporter = described_class.new(suppress_progress: true, io_directory: io_dir)
