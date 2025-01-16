@@ -2,7 +2,7 @@
 class AuthToken < ApplicationRecord
   before_create :assign_token
   before_save :clean_group
-  serialize :group, Array
+  serialize :group, coder: YAML, type: Array
   validates :label, presence: true
 
   private

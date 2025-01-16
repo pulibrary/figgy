@@ -6,9 +6,9 @@ class RetryingDiskAdapter
     @inner_storage_adapter = inner_storage_adapter
   end
 
-  def upload(...)
+  def upload(**args)
     FiggyUtils.with_rescue([Errno::EPIPE, Errno::EAGAIN, Errno::EIO, Errno::ECONNRESET], retries: 5) do
-      inner_storage_adapter.upload(...)
+      inner_storage_adapter.upload(**args)
     end
   end
 end

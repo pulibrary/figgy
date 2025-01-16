@@ -14,10 +14,10 @@ RSpec.describe RetryingDiskAdapter do
   context "when upload fails because of an Errno::EPIPE" do
     it "retries" do
       counts = 0
-      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, *args|
+      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, **args|
         counts += 1
         raise Errno::EPIPE if counts == 1
-        method.call(*args)
+        method.call(**args)
       end
 
       uploaded_file = storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff")
@@ -33,10 +33,10 @@ RSpec.describe RetryingDiskAdapter do
   context "when upload fails because of an Errno::EAGAIN" do
     it "tries again" do
       counts = 0
-      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, *args|
+      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, **args|
         counts += 1
         raise Errno::EAGAIN if counts == 1
-        method.call(*args)
+        method.call(**args)
       end
 
       uploaded_file = storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff")
@@ -48,10 +48,10 @@ RSpec.describe RetryingDiskAdapter do
   context "when upload fails because of an Errno::EIO" do
     it "tries again" do
       counts = 0
-      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, *args|
+      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, **args|
         counts += 1
         raise Errno::EIO if counts == 1
-        method.call(*args)
+        method.call(**args)
       end
 
       uploaded_file = storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff")
@@ -63,10 +63,10 @@ RSpec.describe RetryingDiskAdapter do
   context "when upload fails because of an Errno::ECONNRESET" do
     it "tries again" do
       counts = 0
-      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, *args|
+      allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_wrap_original do |method, **args|
         counts += 1
         raise Errno::EIO if counts == 1
-        method.call(*args)
+        method.call(**args)
       end
 
       uploaded_file = storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff")

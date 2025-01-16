@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:ci
+      - image: ghcr.io/pulibrary/figgy:pr-6563
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -25,22 +25,25 @@ jobs:
       - checkout
       - node/install:
           install-yarn: true
-          node-version: '18.20.2'
+          node-version: '22.11.0'
       - run:
           name: Check current version of node
           command: node -v
       # Restore Cached Dependencies
       - restore_cache:
           keys:
-            - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230518
+            - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20241209
       # Install Bundler
       - run: gem install bundler -v '2.3.18'
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
       - save_cache:
-          key: figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20230518
+          key: figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20241209
           paths:
             - ./vendor/bundle
+      - run:
+          name: Configure Mapnik repository
+          command: "npm config set //npm.pkg.github.com/:_authToken ${GITHUB_PACKAGE_TOKEN} && npm config set @mapnik:registry https://npm.pkg.github.com"
       - run:
           name: Install NPM Dependencies via Yarn
           command: yarn install --frozen-lockfile
@@ -51,7 +54,7 @@ jobs:
             yarn install --frozen-lockfile
       - save_cache:
           name: Save Yarn Package Cache
-          key: figgy-yarn-{{ checksum "yarn.lock" }}-20230518
+          key: figgy-yarn-{{ checksum "yarn.lock" }}-20241209
           paths:
             - ~/.cache/yarn
       - persist_to_workspace:
@@ -60,7 +63,7 @@ jobs:
   test:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:ci
+      - image: ghcr.io/pulibrary/figgy:pr-6563
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -87,7 +90,7 @@ jobs:
           at: '~/figgy'
       - node/install:
           install-yarn: true
-          node-version: '18.20.2'
+          node-version: '22.11.0'
       - run:
           name: Check current version of node
           command: node -v
@@ -137,7 +140,7 @@ jobs:
   coverage_report:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:ci
+      - image: ghcr.io/pulibrary/figgy:pr-6563
     resource_class: large
     steps:
       - attach_workspace:
@@ -154,7 +157,7 @@ jobs:
   rubocop:
     working_directory: ~/figgy
     docker:
-      - image: ghcr.io/pulibrary/figgy:ci
+      - image: ghcr.io/pulibrary/figgy:pr-6563
         environment:
           RAILS_ENV: test
           FIGGY_DB_HOST: localhost
@@ -168,7 +171,7 @@ jobs:
           at: '~/figgy'
       - node/install:
           install-yarn: true
-          node-version: '18.20.2'
+          node-version: '22.11.0'
       - run:
           name: Check current version of node
           command: node -v
