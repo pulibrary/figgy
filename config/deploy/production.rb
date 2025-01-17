@@ -7,16 +7,18 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-server "figgy-web-prod1", user: "deploy", roles: %w[app db production_db web]
-server "figgy-web-prod2", user: "deploy", roles: %w[app web]
-server "figgy-web-prod3", user: "deploy", roles: %w[app web]
-server "figgy-web-prod4", user: "deploy", roles: %w[app web]
-server "figgy-worker-prod1", user: "deploy", roles: %w[worker web]
-server "figgy-worker-prod2", user: "deploy", roles: %w[worker web]
-server "figgy-worker-prod3", user: "deploy", roles: %w[worker web]
-server "figgy-worker-prod4", user: "deploy", roles: %w[worker web]
-server "figgy-worker-prod5", user: "deploy", roles: %w[worker web]
-server "figgy-worker-prod6", user: "deploy", roles: %w[worker web]
+# If you're provisioning half of Figgy at a time, you can do `ROLES=group_a cap production deploy`
+# and it will deploy the same group_a as is defined in Ansible.
+server "figgy-web-prod1", user: "deploy", roles: %w[app db production_db web group_a]
+server "figgy-web-prod2", user: "deploy", roles: %w[app web group_a]
+server "figgy-web-prod3", user: "deploy", roles: %w[app web group_b]
+server "figgy-web-prod4", user: "deploy", roles: %w[app web group_b]
+server "figgy-worker-prod1", user: "deploy", roles: %w[worker web group_a]
+server "figgy-worker-prod2", user: "deploy", roles: %w[worker web group_a]
+server "figgy-worker-prod3", user: "deploy", roles: %w[worker web group_a]
+server "figgy-worker-prod4", user: "deploy", roles: %w[worker web group_b]
+server "figgy-worker-prod5", user: "deploy", roles: %w[worker web group_b]
+server "figgy-worker-prod6", user: "deploy", roles: %w[worker web group_b]
 
 set :google_fixity_request_topic, "figgy-production-fixity-request"
 set :google_service_account, "figgy-preservation-production@pulibrary-figgy-storage-1.iam.gserviceaccount.com"
