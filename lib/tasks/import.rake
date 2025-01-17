@@ -37,5 +37,18 @@ namespace :figgy do
       ingester = JsonIngester.new(json_path: file_path, logger: @logger)
       ingester.ingest!
     end
+
+    desc "Ingest a DSpace asset."
+    task dspace: :environment do
+      handle = ENV["HANDLE"]
+
+      abort "usage: rake import:dspace HANDLE=88435/dsp013t945q852" unless handle
+
+      @logger = Logger.new(STDOUT)
+      @logger.info "ingesting #{handle}"
+
+      ingester = DspaceIngester.new(handle: handle, logger: @logger)
+      ingester.ingest!
+    end
   end
 end
