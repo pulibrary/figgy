@@ -421,39 +421,39 @@
   resolved "https://registry.yarnpkg.com/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.15.tgz#d7c6e6755c78567a951e04ab52ef0fd26de59f32"
   integrity sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==
 
-"@mapnik/core-darwin-arm64@4.0.3":
-  version "4.0.3"
-  resolved "https://npm.pkg.github.com/download/@mapnik/core-darwin-arm64/4.0.3/6c8c646af6ef435dc501603be6f6d4bb74b6c102#6c8c646af6ef435dc501603be6f6d4bb74b6c102"
-  integrity sha512-Byv7OaJ23Wt9crBxuvGQaYILgN7RvirmbV6A+vMb/yde+wllinWyo4URYGBcyhta9O+g65RLiUB3aH2RMkgIcA==
+"@mapnik/core-darwin-arm64@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@mapnik/core-darwin-arm64/-/core-darwin-arm64-4.0.4.tgz#5826dc04c729b2ac77d3589a7d2385a66cd536b2"
+  integrity sha512-6Qjb+s3YTuXDcS0PMGpajKUOLoVkJf01PbE64uIAzdKXoPbWgCLSlhsO0QAezjFI+ztWIro2AzodtF5OHtv5RQ==
 
-"@mapnik/core-darwin-x64@4.0.3":
-  version "4.0.3"
-  resolved "https://npm.pkg.github.com/download/@mapnik/core-darwin-x64/4.0.3/45d1c12bd6f95b0cc8f5ad9c190918d3891b9f1e#45d1c12bd6f95b0cc8f5ad9c190918d3891b9f1e"
-  integrity sha512-8Umy0I4RmD1oMyd1RSf1KrcwuGLyjYbyoqXYCwXBaNW7B8PZkte155j1aNPVIyN3BfZ8vvXWToKQzQckplo58g==
+"@mapnik/core-darwin-x64@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@mapnik/core-darwin-x64/-/core-darwin-x64-4.0.4.tgz#9397a2191d993194c43b85d15ed9b5d3b626274e"
+  integrity sha512-w9OQIksRDdKDdp9j2hvhQmRRCMC8q833Ho7nVW8m2QdJeAZBJ1CYzR6xWlCxu48xcSe7rLmHM+o+1AebnUj/9A==
 
-"@mapnik/core-linux-arm64@4.0.3":
-  version "4.0.3"
-  resolved "https://npm.pkg.github.com/download/@mapnik/core-linux-arm64/4.0.3/7a05c71e4bd196a90a1e429219a8b12bb31e64a8#7a05c71e4bd196a90a1e429219a8b12bb31e64a8"
-  integrity sha512-UCYAXUaW13LDAD+gaTMEcrrcbKxvcMmrq7PIH2F9Vm88V7kElE2skOtXPv/TXXATj0aJKc4eUmiPnRdRK4XiaQ==
+"@mapnik/core-linux-arm64@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@mapnik/core-linux-arm64/-/core-linux-arm64-4.0.4.tgz#9bdbc60db9415f18c373152a75a15aac319b4627"
+  integrity sha512-hqJ+7STH1cvPeadIvnZEjQVmhMpFxPy6WE6TuRjNHDaR2jK6QcL4wD5Psid+Ru58S7xvw7FELuT2i7PV2rzhNQ==
 
-"@mapnik/core-linux-x64@4.0.3":
-  version "4.0.3"
-  resolved "https://npm.pkg.github.com/download/@mapnik/core-linux-x64/4.0.3/3b2a9711b7f0705ec5256a72402a5af10be85626#3b2a9711b7f0705ec5256a72402a5af10be85626"
-  integrity sha512-7mOpebnvFnA27sCPOKJ7v43p6mojCLmx67LqB4a1t/ay0T7VtEz//xXnLoOSDpJTFaXXC2OOUvuC1TdTzUph3w==
+"@mapnik/core-linux-x64@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@mapnik/core-linux-x64/-/core-linux-x64-4.0.4.tgz#c2f3785ab50f443c14ae22a7659451cfb7571462"
+  integrity sha512-Q/gZzL2+Awe7K6dd9A3NadVNb8zalwpsgDG2ioIczB003Hs4Cj/Vdg2UMGAvh0hvfWSkuFcr5iPZCS9ysH2Viw==
 
-"@mapnik/mapnik@^4.6.1":
-  version "4.6.5"
-  resolved "https://npm.pkg.github.com/download/@mapnik/mapnik/4.6.5/4974ea4805d1761170f55b40de9db79ac564bbce#4974ea4805d1761170f55b40de9db79ac564bbce"
-  integrity sha512-9WD7GtmVWwQ3PeHDD5aAp2X/PDZitWqxFuBxNccGuLjC6xAcYVO+/O5moaOFcfO32ikxOhTSied6umJp/eGSEA==
+"@mapnik/mapnik@^4.6":
+  version "4.6.6"
+  resolved "https://registry.yarnpkg.com/@mapnik/mapnik/-/mapnik-4.6.6.tgz#2406a7ef1e4039984fe414611282931d61461b2a"
+  integrity sha512-YurNUKk9Y/jAuNn7aFdOnpVIwhvJoTnnAczUxFZRP7w4uCqTFp5bG6HXEfhhe9a0Ns14IXMAS5ihHOWLrlDQAA==
   dependencies:
-    node-addon-api "^8.1.0"
+    node-addon-api "^8.3.0"
     node-gyp-build "^4.8.1"
     prebuildify "^6.0.1"
   optionalDependencies:
-    "@mapnik/core-darwin-arm64" "4.0.3"
-    "@mapnik/core-darwin-x64" "4.0.3"
-    "@mapnik/core-linux-arm64" "4.0.3"
-    "@mapnik/core-linux-x64" "4.0.3"
+    "@mapnik/core-darwin-arm64" "4.0.4"
+    "@mapnik/core-darwin-x64" "4.0.4"
+    "@mapnik/core-linux-arm64" "4.0.4"
+    "@mapnik/core-linux-x64" "4.0.4"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -5800,7 +5800,7 @@ node-abi@^3.3.0:
   dependencies:
     semver "^7.3.5"
 
-node-addon-api@^8.1.0:
+node-addon-api@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-8.3.0.tgz#ec3763f18befc1cdf66d11e157ce44d5eddc0603"
   integrity sha512-8VOpLHFrOQlAH+qA0ZzuGRlALRA6/LVh8QJldbrC4DY0hXoMP0l4Acq8TzFC018HztWiRqyCEj2aTWY2UvnJUg==
@@ -7169,16 +7169,7 @@ stream-shift@^1.0.0, stream-shift@^1.0.2:
   resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.3.tgz#85b8fab4d71010fc3ba8772e8046cc49b8a3864b"
   integrity sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==
 
-"string-width-cjs@npm:string-width@^4.2.0":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
-  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.1"
-
-"string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0", "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -7246,14 +7237,7 @@ stringify-entities@^4.0.0:
     character-entities-html4 "^2.0.0"
     character-entities-legacy "^3.0.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
-  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
-  dependencies:
-    ansi-regex "^5.0.1"
-
-strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
