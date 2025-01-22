@@ -4,6 +4,20 @@ require "rails_helper"
 RSpec.describe ReportsController, type: :controller do
   let(:user) { FactoryBot.create(:admin) }
 
+  describe "GET #mms_records" do
+    before do
+      sign_in user
+    end
+
+    it "provides a JSON dump of all MMS-ID records" do
+      open_mms_record = FactoryBot.create(:complete_open_scanned_resource, source_metadata_identifier: "991234563506421")
+      private_mms_record = FactoryBot.create(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421")
+      pending_mms_record = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "991234563506421")
+      open_findingaids_record = FactoryBot.create(:complete_open_scanned_resource, source_metadata_identifier: "C1372_c47202-68234")
+      # WIP.
+    end
+  end
+
   describe "GET #ephemera_data" do
     let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, boxless.id]) }
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: [folder.id]) }
