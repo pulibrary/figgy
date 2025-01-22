@@ -3,7 +3,7 @@ class ManifestBuilderV3
   # This class makes one small changes from ManifestBuilder::LogoBuilder, but we
   # do not inherit from that class because it will likely be deleted as part of
   # the work for https://github.com/pulibrary/figgy/issues/5747
-  class LogoBuilder
+  class AgentBuilder
     attr_reader :resource
 
     ##
@@ -13,7 +13,7 @@ class ManifestBuilderV3
     end
 
     def apply(manifest)
-      manifest["logo"] = [logo]
+      manifest["provider"] = [agent]
       manifest
     end
 
@@ -36,14 +36,25 @@ class ManifestBuilderV3
         "#{protocol}://#{Figgy.default_url_options[:host]}/#{logo_file}"
       end
 
-      def logo
+      def agent
         {
-          "id" => logo_url,
-          "type" => "Image",
-          "format" => "image/png",
-          "height" => 100,
-          "width" => 120
+          "id" => "https://library.princeton.edu/",
+          "type" => "Agent",
+          "label" => { "en": [ "Princeton University Library" ] },
+          "logo" => logo
         }
+      end
+
+      def logo
+        [
+          {
+            "id" => logo_url,
+            "type" => "Image",
+            "format" =>  "image/png",
+            "height" => 100,
+            "width" => 120
+          }
+        ]
       end
   end
 end

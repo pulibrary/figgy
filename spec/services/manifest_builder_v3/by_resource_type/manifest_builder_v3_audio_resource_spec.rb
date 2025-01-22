@@ -30,6 +30,9 @@ RSpec.describe ManifestBuilderV3 do
     )
   end
 
+  let(:schema_path) { Rails.root.join("config", "iiif", "iiif_3_0.json") }
+  let(:schema) { JSON.parse(File.read(schema_path)) }
+
   context "when given a scanned resource with audio files" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
     let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file], downloadable: "none") }
@@ -57,6 +60,7 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["behavior"]).to eq ["auto-advance"]
       # downloading is blocked
       expect(output["service"][0]).to eq({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
+      binding.pry
     end
 
     context "with no logical structure", run_real_characterization: true do

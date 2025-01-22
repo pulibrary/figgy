@@ -16,8 +16,7 @@ class ManifestBuilderV3
           "disableUI" => ["mediaDownload"]
         }
       end
-
-      manifest["posterCanvas"] = poster_canvas_builder.canvas unless poster_image_record.nil?
+      # manifest["posterCanvas"] = poster_canvas_builder.canvas unless poster_image_record.nil?
       manifest
     end
 

@@ -20,11 +20,11 @@ class ManifestBuilderV3
           "label" => { "en": ["download page text"] }
         }
       end
-
       return unless downloadable?
       manifest["rendering"] ||= []
       manifest["rendering"] << download_hash
       manifest["rendering"] += caption_downloads
+
       apply_geotiff_downloads(manifest)
     end
 
