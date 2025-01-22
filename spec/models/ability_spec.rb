@@ -161,6 +161,21 @@ describe Ability do
     FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete", user: other_staff_user)
   end
 
+  let(:video_file_set) do
+    scanned_resource_with_video_and_captions.decorate.members.first
+  end
+
+  let(:video_caption) do
+    DownloadsController::FileWithMetadata.new(
+      id: "1234",
+      file: "",
+      mime_type: "text/vtt",
+      original_name: "caption.vtt",
+      file_set_id: video_file_set.id,
+      file_metadata: instance_double(FileMetadata, derivative?: false, derivative_partial?: false, caption?: true)
+    )
+  end
+
   let(:scanned_resource_with_silent_video) do
     FactoryBot.create_for_repository(:scanned_resource_with_silent_video, state: "complete", user: other_staff_user)
   end
@@ -356,6 +371,7 @@ describe Ability do
       is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:download, video_caption)
     }
 
     context "when index read-only mode is on" do
@@ -519,6 +535,7 @@ describe Ability do
       is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:download, video_caption)
     }
 
     context "when read-only mode is on" do
@@ -725,6 +742,7 @@ describe Ability do
       is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:download, video_caption)
     }
 
     context "when index read-only mode is on" do
@@ -897,7 +915,7 @@ describe Ability do
         mime_type: "application/vnd.geo+json",
         original_name: "file.geosjon",
         file_set_id: file_set.id,
-        file_metadata: instance_double(FileMetadata, derivative?: false, derivative_partial?: false)
+        file_metadata: instance_double(FileMetadata, derivative?: false, derivative_partial?: false, caption?: false)
       )
     end
     let(:metadata_file) do
@@ -907,7 +925,7 @@ describe Ability do
         mime_type: "application/xml; schema=fgdc",
         original_name: "fgdc.xml",
         file_set_id: file_set.id,
-        file_metadata: instance_double(FileMetadata, derivative?: false, derivative_partial?: false)
+        file_metadata: instance_double(FileMetadata, derivative?: false, derivative_partial?: false, caption?: false)
       )
     end
     let(:thumbnail_file) do
@@ -1017,6 +1035,7 @@ describe Ability do
       is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
       is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:download, video_caption)
     }
 
     context "when accessing figgy via a campus IP" do

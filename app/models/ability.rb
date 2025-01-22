@@ -97,7 +97,7 @@ class Ability
     # Geo thumbnails/metadata are always downloadable no matter what.
     return true if geo_thumbnail?(resource) || geo_metadata?(resource)
     file_set = query_service.find_by(id: resource.file_set_id)
-    if resource.file_metadata.derivative? || resource.file_metadata.derivative_partial?
+    if resource.file_metadata.derivative? || resource.file_metadata.derivative_partial? || resource.file_metadata.caption?
       can?(:read, file_set)
     else
       can?(:download, file_set)
