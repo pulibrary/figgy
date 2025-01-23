@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "csv"
 class ReportsController < ApplicationController
+  include TokenAuth
   def ephemera_data
     authorize! :show, Report
     if params[:project_id]
@@ -81,6 +82,16 @@ class ReportsController < ApplicationController
         hashes = @resources.map { |r| resource_hash(r) }
         csv_report = CSVReport.new(hashes, fields: ["id", "component_id", "ark", "url"])
         send_data csv_report.hashes_to_csv, filename: "pulfa-ark-report-#{params[:since_date]}-to-#{Time.zone.today}.csv"
+      end
+    end
+  end
+
+  def mms_records
+    authorize! :show, :mms_report
+
+    respond_to do |format|
+      format.json do
+        render json: MmsReportGenerator.json_report
       end
     end
   end
