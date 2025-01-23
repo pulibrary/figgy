@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require "csv"
 class ReportsController < ApplicationController
+  include TokenAuth
   def ephemera_data
     authorize! :show, Report
     if params[:project_id]

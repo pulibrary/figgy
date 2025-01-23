@@ -9,6 +9,29 @@ RSpec.describe ReportsController, type: :controller do
       sign_in(user) if user
     end
 
+    context "when not logged in" do
+      let(:user) { nil }
+      it "doesn't let folks see it" do
+        get :mms_records, format: "json"
+
+        expect(response).to be_forbidden
+      end
+    end
+
+    context "when using an auth token with the `catalog_sync` group" do
+      let(:user) { nil }
+      it "renders" do
+        auth_token = AuthToken.create!(group: ["catalog_sync"], label: "Catalog Sync Token").token
+        stub_catalog(bib_id: "991234563506421")
+        _open_mms_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "991234563506421")
+
+        get :mms_records, format: "json", params: { auth_token: auth_token }
+
+        expect(response).to be_successful
+        expect(JSON.parse(response.body).length).to eq 1
+      end
+    end
+
     it "provides a JSON dump of all MMS-ID records" do
       stub_catalog(bib_id: "991234563506421")
       stub_catalog(bib_id: "9911606823506421")

@@ -11,6 +11,8 @@ class Ability
     roles.each do |role|
       send "#{role}_permissions" if current_user.send "#{role}?"
     end
+
+    can :show, :mms_report if current_user.groups.include?("catalog_sync")
     cannot [:create, :update, :destroy], :all if Figgy.read_only_mode
     cannot [:create, :update, :destroy], :all if Figgy.index_read_only?
   end
