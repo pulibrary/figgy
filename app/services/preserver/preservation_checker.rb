@@ -32,7 +32,15 @@ class Preserver
       end
 
       def preserved?
-        preservation_object.preserved_object_id == resource.id && resource.optimistic_lock_token.first&.token == preservation_object.metadata_version
+        preservation_ids_match? && recorded_versions_match?
+      end
+
+      def preservation_ids_match?
+        preservation_object.preserved_object_id == resource.id
+      end
+
+      def recorded_versions_match?
+        resource.optimistic_lock_token.first&.token == preservation_object.metadata_version
       end
 
       def preserved_file_checksums_match?
@@ -96,8 +104,15 @@ class Preserver
       end
 
       def preserved?
-        preservation_object.binary_nodes.find { |x| x.preservation_copy_of_id == file_metadata.id } &&
-          file_metadata.checksum == preservation_node&.checksum
+        preservation_ids_match? && recorded_checksums_match?
+      end
+
+      def preservation_ids_match?
+        preservation_object.binary_nodes.find { |x| x.preservation_copy_of_id == file_metadata.id }
+      end
+
+      def recorded_checksums_match?
+        file_metadata.checksum == preservation_node&.checksum
       end
 
       def preservation_node
