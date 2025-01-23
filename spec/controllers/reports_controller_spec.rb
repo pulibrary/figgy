@@ -46,7 +46,7 @@ RSpec.describe ReportsController, type: :controller do
       json = JSON.parse(response.body)
 
       expect(json.length).to eq 2
-      expect(json.keys).to eq ["991234563506421", "9911606823506421"]
+      expect(json.keys).to contain_exactly "991234563506421", "9911606823506421"
       # Only one resource for this key.
       expect(json["9911606823506421"].first).to eq(
         {

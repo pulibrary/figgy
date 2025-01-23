@@ -15,6 +15,6 @@ class MmsReportGenerator
   private
 
     def mms_resources
-      ChangeSetPersister.default.query_service.custom_queries.all_mms_resources.map { |resource| ReportResource.new(resource) }
+      ChangeSetPersister.default.query_service.custom_queries.all_mms_resources(fields: ReportResource.resource_fields).map { |resource| ReportResource.new(resource) }
     end
 end
