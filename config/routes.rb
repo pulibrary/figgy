@@ -260,6 +260,7 @@ Rails.application.routes.draw do
   get "/reports/identifiers_to_reconcile", to: "reports#identifiers_to_reconcile", as: :identifiers_to_reconcile
   get "/reports/collection_item_and_image_count", to: "reports#collection_item_and_image_count", as: :collection_item_and_image_count
   get "/reports/dpul_success_dashboard", to: "reports#dpul_success_dashboard", as: :dpul_success_dashboard
+  get "/reports/mms_records", to: "reports#mms_records", as: :mms_records_report, defaults: { format: :json }
 
   get "bulk_ingest/:resource_type", to: "bulk_ingest#show", as: "bulk_ingest_show"
   post "bulk_ingest/:resource_type/bulk_ingest", to: "bulk_ingest#bulk_ingest", as: "bulk_ingest"

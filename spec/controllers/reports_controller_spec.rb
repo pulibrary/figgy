@@ -6,15 +6,49 @@ RSpec.describe ReportsController, type: :controller do
 
   describe "GET #mms_records" do
     before do
-      sign_in user
+      sign_in(user) if user
     end
 
     it "provides a JSON dump of all MMS-ID records" do
-      open_mms_record = FactoryBot.create(:complete_open_scanned_resource, source_metadata_identifier: "991234563506421")
-      private_mms_record = FactoryBot.create(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421")
-      pending_mms_record = FactoryBot.create(:pending_scanned_resource, source_metadata_identifier: "991234563506421")
-      open_findingaids_record = FactoryBot.create(:complete_open_scanned_resource, source_metadata_identifier: "C1372_c47202-68234")
-      # WIP.
+      stub_catalog(bib_id: "991234563506421")
+      stub_catalog(bib_id: "9911606823506421")
+      stub_findingaid(pulfa_id: "C1372_c47202-68234")
+      open_mms_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "991234563506421")
+      other_mms_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "9911606823506421", portion_note: "Part")
+      private_mms_record = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421")
+      _pending_mms_record = FactoryBot.create_for_repository(:pending_scanned_resource, source_metadata_identifier: "991234563506421")
+      _open_findingaids_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "C1372_c47202-68234")
+
+      get :mms_records, format: "json"
+      json = JSON.parse(response.body)
+
+      expect(json.length).to eq 2
+      expect(json.keys).to eq ["991234563506421", "9911606823506421"]
+      # Only one resource for this key.
+      expect(json["9911606823506421"].first).to eq(
+        {
+          "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{other_mms_record.id}/manifest",
+          "portion_note" => "Part",
+          "visibility" => { "value" => "open", "label" => "open", "definition" => "Open to the world. Anyone can view." }
+        }
+      )
+      # Two resources for this key - one is open, one is private. The third
+      # isn't complete, so don't display it.
+      expect(json["991234563506421"].length).to eq 2
+      expect(json["991234563506421"]).to include(
+        {
+          "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{open_mms_record.id}/manifest",
+          "portion_note" => nil,
+          "visibility" => { "value" => "open", "label" => "open", "definition" => "Open to the world. Anyone can view." }
+        }
+      )
+      expect(json["991234563506421"]).to include(
+        {
+          "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{private_mms_record.id}/manifest",
+          "portion_note" => nil,
+          "visibility" => { "value" => "restricted", "label" => "private", "definition" => "Only privileged users of this application can view." }
+        }
+      )
     end
   end
 

@@ -85,6 +85,16 @@ class ReportsController < ApplicationController
     end
   end
 
+  def mms_records
+    authorize! :show, :mms_report
+
+    respond_to do |format|
+      format.json do
+        render json: MmsReportGenerator.json_report
+      end
+    end
+  end
+
   private
 
     def resource_hash(resource)
