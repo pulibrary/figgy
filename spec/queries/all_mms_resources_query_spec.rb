@@ -14,6 +14,25 @@ describe AllMmsResourcesQuery do
       expect(query.all_mms_resources.map(&:id).to_a).to eq [mms_resource.id]
     end
 
+    it "can just return fields" do
+      stub_catalog(bib_id: "9985434293506421")
+      stub_findingaid(pulfa_id: "AC044_c0003")
+      mms_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "9985434293506421")
+      _component_resource = FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "AC044_c0003")
+
+      result = query.all_mms_resources(fields: [:id, :internal_resource, Sequel[:metadata].pg_jsonb["visibility"][0].as(:visibility)])
+
+      expect(result.all).to eq(
+        [
+          {
+            id: mms_resource.id,
+            internal_resource: "ScannedResource",
+            visibility: "open"
+          }
+        ]
+      )
+    end
+
     it "can filter by created_at" do
       id1 = "9985434293506421"
       id2 = "9946093213506421"
