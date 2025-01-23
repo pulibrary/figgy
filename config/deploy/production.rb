@@ -13,7 +13,7 @@ server "figgy-web-prod1", user: "deploy", roles: %w[app db production_db web gro
 server "figgy-web-prod2", user: "deploy", roles: %w[app web group_a]
 server "figgy-web-prod3", user: "deploy", roles: %w[app web group_b]
 server "figgy-web-prod4", user: "deploy", roles: %w[app web group_b]
-server "figgy-worker-prod1", user: "deploy", roles: %w[worker web group_a]
+server "figgy-worker-prod1", user: "deploy", roles: %w[worker web group_a worker_db]
 server "figgy-worker-prod2", user: "deploy", roles: %w[worker web group_a]
 server "figgy-worker-prod3", user: "deploy", roles: %w[worker web group_a]
 server "figgy-worker-prod4", user: "deploy", roles: %w[worker web group_b]
