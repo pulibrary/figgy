@@ -994,6 +994,13 @@ CREATE INDEX index_users_on_uid ON public.users USING btree (uid);
 
 
 --
+-- Name: mms_id_substring_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX mms_id_substring_idx ON public.orm_resources USING btree ("substring"(((metadata -> 'source_metadata_identifier'::text) ->> 0), 1, 2)) WHERE ((internal_resource)::text <> ALL ((ARRAY['FileSet'::character varying, 'PreservationObject'::character varying, 'DeletionMarker'::character varying, 'Event'::character varying, 'EphemeraTerm'::character varying])::text[]));
+
+
+--
 -- Name: orm_resources_first_accession_number_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1066,6 +1073,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250123183528'),
 ('20230802152303'),
 ('20230119155402'),
 ('20221214184110'),

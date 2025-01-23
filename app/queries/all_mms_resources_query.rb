@@ -15,7 +15,7 @@ class AllMmsResourcesQuery
     relation = orm_class.use_cursor
     relation = relation.exclude(internal_resource: [FileSet, PreservationObject, DeletionMarker, Event, EphemeraTerm].map(&:to_s))
     relation = relation.where(created_at: created_at) if created_at
-    relation = relation.where(Sequel.lit("metadata ->> 'source_metadata_identifier' ~ '99[0-9]+6421'"))
+    relation = relation.where(Sequel.lit("SUBSTRING(metadata->'source_metadata_identifier'->>0,1,2)='99'"))
     if fields
       relation.select(*fields)
     else
