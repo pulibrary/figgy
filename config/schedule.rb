@@ -24,7 +24,7 @@ every :day, at: "10:00 PM", roles: [:db] do
   rake "figgy:fixity:request_daily_local_fixity "
 end
 
-every :day, at: "11:00 PM", roles: [:db] do
+every :day, at: "11:00 PM", roles: [:worker_db] do
   rake "figgy:clean:expired_local_files"
 end
 

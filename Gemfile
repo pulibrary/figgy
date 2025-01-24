@@ -104,7 +104,7 @@ gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
 gem "vite_rails", "3.0.17"
 gem "vite_ruby", "3.8.0"
-gem "whenever", "~> 0.10"
+gem "whenever", "~> 1.0"
 
 # Required for deployment under ruby 3.1
 gem "net-imap", require: false
