@@ -108,7 +108,10 @@ class ResourcesController < ApplicationController
       obj = nil
       change_set_persister.buffer_into_index do |persist|
         obj = persist.save(change_set: @change_set)
-        flash[:confetti] = true if @change_set.try(:state_changed?) && @change_set.new_state == "complete"
+        content_warning = @change_set.resource&.primary_or_local_content_warning
+        if @change_set.try(:state_changed?) && @change_set.new_state == "complete" && !content_warning
+          flash[:confetti] = true
+        end
       end
       after_update_success(obj, @change_set)
     else
