@@ -18,6 +18,17 @@ RSpec.shared_examples "a workflow controller" do |factory_resource|
 
     expect(flash[:confetti]).to eq true
   end
+  it "does not add a confetti-triggering flash when resource with a content warning is completed" do
+    stub_ezid
+    klass = factory_resource.to_s.camelize.constantize
+    skip("No content warning property for #{klass}") unless klass.new.respond_to?(:content_warning)
+    resource = FactoryBot.create_for_repository(factory_resource, content_warning: "a warning")
+    skip("No Complete state to confetti for #{resource.class}") unless ChangeSet.for(resource).workflow.valid_states.include?("complete")
+
+    patch :update, params: { id: resource.id.to_s, resource.model_name.singular.to_sym => { state: "complete" } }
+
+    expect(flash[:confetti]).to be_nil
+  end
   it "doesn't create a workflow note with an empty note" do
     resource = FactoryBot.create_for_repository(factory_resource)
 
