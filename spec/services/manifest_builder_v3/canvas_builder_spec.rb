@@ -18,7 +18,10 @@ RSpec.describe ManifestBuilderV3::CanvasBuilder do
       iiif_canvas_factory: ManifestBuilderV3::ManifestServiceLocator.iiif_canvas_factory,
       content_builder: ManifestBuilderV3::ManifestServiceLocator.content_builder,
       choice_builder: ManifestBuilderV3::ManifestServiceLocator.choice_builder,
-      iiif_annotation_page_factory: ManifestBuilderV3::ManifestServiceLocator.iiif_annotation_page_factory
+      annotation_content_builder: ManifestBuilderV3::ManifestServiceLocator.annotation_content_builder,
+      iiif_annotation_page_factory: ManifestBuilderV3::ManifestServiceLocator.iiif_annotation_page_factory,
+      thumbnail_builder_factory: ManifestBuilderV3::ManifestServiceLocator.thumbnail_builder_factory,
+      placeholder_canvas_builder_factory: ManifestBuilderV3::ManifestServiceLocator.placeholder_canvas_builder_factory
     )
   end
   let(:manifest) { ManifestBuilderV3::ManifestServiceLocator.iiif_manifest_factory.new }
@@ -67,7 +70,10 @@ RSpec.describe ManifestBuilderV3::CanvasBuilder do
         iiif_canvas_factory: ManifestBuilderV3::ManifestServiceLocator.iiif_canvas_factory,
         content_builder: ManifestBuilderV3::ManifestServiceLocator.content_builder,
         choice_builder: ManifestBuilderV3::ManifestServiceLocator.choice_builder,
-        iiif_annotation_page_factory: ManifestBuilderV3::ManifestServiceLocator.iiif_annotation_page_factory
+        annotation_content_builder: ManifestBuilderV3::ManifestServiceLocator.annotation_content_builder,
+        iiif_annotation_page_factory: ManifestBuilderV3::ManifestServiceLocator.iiif_annotation_page_factory,
+        thumbnail_builder_factory: ManifestBuilderV3::ManifestServiceLocator.thumbnail_builder_factory,
+        placeholder_canvas_builder_factory: ManifestBuilderV3::ManifestServiceLocator.placeholder_canvas_builder_factory
       )
     end
 

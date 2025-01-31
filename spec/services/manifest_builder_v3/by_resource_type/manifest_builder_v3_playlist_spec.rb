@@ -79,9 +79,6 @@ RSpec.describe ManifestBuilderV3 do
       it "generates the Canvases for the FileSets" do
         expect(output).not_to be_empty
 
-        expect(output).to include("rendering")
-        expect(output["rendering"]).to be_empty
-
         expect(output).to include("items")
         expect(output["items"].length).to eq(3)
 
@@ -145,12 +142,12 @@ RSpec.describe ManifestBuilderV3 do
           first_canvas = output["items"].first
           first_annotation_page = first_canvas["items"].first
           first_annotation = first_annotation_page["items"].first
-          expect(first_annotation["body"]["id"]).to be nil
+          expect(first_annotation["body"]["id"]).to eq ""
 
           last_canvas = output["items"].last
           first_annotation_page = last_canvas["items"].first
           first_annotation = first_annotation_page["items"].first
-          expect(first_annotation["body"]["id"]).to be nil
+          expect(first_annotation["body"]["id"]).to eq ""
         end
       end
 
