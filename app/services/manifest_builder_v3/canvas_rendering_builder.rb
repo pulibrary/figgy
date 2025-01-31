@@ -136,7 +136,7 @@ class ManifestBuilderV3
 
         {
           "id" => download_url,
-          "type" => "Audio",
+          "type" => "Sound",
           "label" => "Download the mp3",
           "format" => mp3_file.mime_type.first
         }

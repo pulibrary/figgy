@@ -57,6 +57,8 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["behavior"]).to eq ["auto-advance"]
       # downloading is blocked
       expect(output["service"][0]).to eq({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
+      # Use the Audio type
+      expect(output["items"][0]["items"][0]["items"][0]["body"]["type"]).to eq "Sound"
     end
 
     context "with no logical structure", run_real_characterization: true do
