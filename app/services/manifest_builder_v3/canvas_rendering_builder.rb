@@ -99,10 +99,10 @@ class ManifestBuilderV3
         # When given a MapSet with both ScannedMap tiffs and attached Raster
         # Resources we attach a link to the Raster's primary file so users can
         # download the GeoTiff from the viewer embedded in the catalog.
-        uncropped_download = geotiff_download_hash(label: "Download GeoTiff")
+        uncropped_download = geotiff_download_hash(label: { "en" => ["Download GeoTiff"] })
         manifest["rendering"] << uncropped_download if uncropped_download
         # Add a download link for cropped geotiffs
-        cropped_download = geotiff_download_hash(cropped: true, label: "Download Cropped GeoTiff")
+        cropped_download = geotiff_download_hash(cropped: true, label: { "en" => ["Download Cropped GeoTiff"] })
         manifest["rendering"] << cropped_download if cropped_download
       end
 
@@ -137,7 +137,7 @@ class ManifestBuilderV3
         {
           "id" => download_url,
           "type" => "Sound",
-          "label" => "Download the mp3",
+          "label" => { "en" => ["Download the mp3"] },
           "format" => mp3_file.mime_type.first
         }
       end
@@ -151,7 +151,7 @@ class ManifestBuilderV3
           download_url = url_helpers.download_url(download_url_args)
           {
             "id" => download_url,
-            "label" => "Download Caption - #{caption.caption_language_label}",
+            "label" => { "en" => ["Download Caption - #{caption.caption_language_label}"] },
             "format" => caption.mime_type.first
           }
         end

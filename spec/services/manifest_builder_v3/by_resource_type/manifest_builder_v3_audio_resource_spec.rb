@@ -49,8 +49,10 @@ RSpec.describe ManifestBuilderV3 do
       output = manifest_builder.build
       # pres 3 context is always an array
       expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
-      # logo is always an array
-      expect(output["logo"].first).to include("id" => "https://www.example.com/pul_logo_icon.png")
+      # logo is part of a provider object
+      provider = output["provider"][0]
+      expect(provider["type"]).to eq "Agent"
+      expect(provider["logo"].first).to include("id" => "https://www.example.com/pul_logo_icon.png")
       # Logical structure should be able to have nested and un-nested members.
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
@@ -185,16 +187,17 @@ RSpec.describe ManifestBuilderV3 do
       expect(output).to include "items"
       canvases = output["items"]
       expect(canvases.length).to eq 2
-      # TODO: does this label need to include language?
-      expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
+      label = canvases.first["rendering"][0]["label"]
+      expect(label["en"].first).to eq "Download the mp3"
       # This value rounds up/down based on mediainfo compilation, 0.255 vs 0.256
       # is close enough for our purpose
       expect(canvases.first["items"][0]["items"][0]["body"]["duration"].to_s).to start_with "0.25"
-      expect(output["logo"].first).to include("id" => "https://www.example.com/vatican.png",
-                                              "format" => "image/png",
-                                              "height" => 100,
-                                              "width" => 120,
-                                              "type" => "Image")
+      logo = output["provider"][0]["logo"][0]
+      expect(logo).to include("id" => "https://www.example.com/vatican.png",
+                              "format" => "image/png",
+                              "height" => 100,
+                              "width" => 120,
+                              "type" => "Image")
     end
   end
 

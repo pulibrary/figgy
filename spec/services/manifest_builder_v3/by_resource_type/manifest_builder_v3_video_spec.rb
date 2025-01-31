@@ -25,7 +25,7 @@ RSpec.describe ManifestBuilderV3 do
         output = manifest_builder.build
         rendering = output["items"][0]["rendering"]
         vtt_rendering = rendering.find { |x| x["format"] == "text/vtt" }
-        expect(vtt_rendering["label"]).to eq "Download Caption - English (Original)"
+        expect(vtt_rendering["label"]["en"].first).to eq "Download Caption - English (Original)"
       end
     end
 

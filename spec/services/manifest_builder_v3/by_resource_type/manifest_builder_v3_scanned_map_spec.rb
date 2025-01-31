@@ -217,11 +217,11 @@ RSpec.describe ManifestBuilderV3 do
       output = described_class.new(map_set).build
 
       uncropped_geo_rendering = output["items"][0]["rendering"].find do |rendering|
-        rendering["label"] == "Download GeoTiff"
+        rendering["label"]["en"].first == "Download GeoTiff"
       end
 
       cropped_geo_rendering = output["items"][0]["rendering"].find do |rendering|
-        rendering["label"] == "Download Cropped GeoTiff"
+        rendering["label"]["en"].first == "Download Cropped GeoTiff"
       end
 
       expect(uncropped_geo_rendering).to be_present
@@ -239,7 +239,7 @@ RSpec.describe ManifestBuilderV3 do
       output = described_class.new(scanned_map).build
 
       geo_rendering = output["items"][0]["rendering"].find do |rendering|
-        rendering["label"] == "Download GeoTiff"
+        rendering["label"]["en"].first == "Download GeoTiff"
       end
 
       expect(geo_rendering).to be_present

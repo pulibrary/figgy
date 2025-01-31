@@ -3,7 +3,7 @@ class ManifestBuilderV3
   # This class makes one small changes from ManifestBuilder::LogoBuilder, but we
   # do not inherit from that class because it will likely be deleted as part of
   # the work for https://github.com/pulibrary/figgy/issues/5747
-  class LogoBuilder
+  class ProviderBuilder
     attr_reader :resource
 
     ##
@@ -13,7 +13,7 @@ class ManifestBuilderV3
     end
 
     def apply(manifest)
-      manifest["logo"] = [logo]
+      manifest["provider"] = [provider]
       manifest
     end
 
@@ -43,6 +43,19 @@ class ManifestBuilderV3
           "format" => "image/png",
           "height" => 100,
           "width" => 120
+        }
+      end
+
+      def provider
+        {
+          "id": "https://library.princeton.edu",
+          "type": "Agent",
+          "label": {
+            "en": [
+              "Princeton University Library"
+            ]
+          },
+          "logo": [logo]
         }
       end
   end

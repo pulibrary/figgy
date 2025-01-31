@@ -14,7 +14,7 @@ class ManifestBuilderV3
           structure_builder,
           see_also_builder,
           rights_builder,
-          logo_builder,
+          provider_builder,
           thumbnail_builder,
           rendering_builder,
           iiif_search_builder,
@@ -48,8 +48,8 @@ class ManifestBuilderV3
       ##
       # Class accessor for the logo builder
       # @return [Class]
-      def logo_builder
-        ManifestBuilderV3::LogoBuilder
+      def provider_builder
+        ManifestBuilderV3::ProviderBuilder
       end
 
       ##
