@@ -6,6 +6,7 @@ class ManifestBuilderV3
       canvas["local_identifier"] = record.local_identifier.first if record.try(:local_identifier).present?
       canvas["viewingHint"] = record.viewing_hint.first if record.try(:viewing_hint).present?
       rendering_builder.new(record).apply(canvas)
+      accompanying_canvas_builder.new(record).apply(canvas)
     end
 
     def apply(sequence)
@@ -15,6 +16,10 @@ class ManifestBuilderV3
 
     def rendering_builder
       ManifestBuilderV3::CanvasRenderingBuilder
+    end
+
+    def accompanying_canvas_builder
+      ManifestBuilderV3::AccompanyingCanvasBuilder
     end
 
     def label

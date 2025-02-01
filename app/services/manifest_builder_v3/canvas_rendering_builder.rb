@@ -120,7 +120,7 @@ class ManifestBuilderV3
                               host: host }
         download_url = url_helpers.download_url(download_url_args)
         {
-          "@id" => download_url,
+          "id" => download_url,
           "label" => label,
           "format" => file.mime_type.first
         }

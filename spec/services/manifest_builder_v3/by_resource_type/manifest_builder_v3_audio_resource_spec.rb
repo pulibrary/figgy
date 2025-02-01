@@ -63,6 +63,18 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["items"][0]["items"][0]["items"][0]["body"]["type"]).to eq "Sound"
     end
 
+    context "with an accompanying image file" do
+      let(:image_file) { fixture_file_upload("files/example.tif") }
+      let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file, image_file], downloadable: "none") }
+
+      it "builds a manifest with an accompanyingCanvas element", run_real_characterization: true do
+        change_set_persister.save(change_set: change_set)
+        output = manifest_builder.build
+
+        expect(output["items"][0]["accompanyingCanvas"]["width"]).to eq 200
+      end
+    end
+
     context "with no logical structure", run_real_characterization: true do
       let(:logical_structure) { nil }
       it "builds a presentation 3 manifest with a default table of contents" do
@@ -132,42 +144,6 @@ RSpec.describe ManifestBuilderV3 do
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
       expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
-    end
-  end
-
-  context "when given a multi-volume recording with thumbnails", run_real_characterization: true, run_real_derivatives: true do
-    subject(:manifest_builder) { described_class.new(scanned_resource) }
-
-    let(:audio_file1) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
-    let(:image_file1) { fixture_file_upload("files/example.tif") }
-    let(:audio_file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
-    let(:image_file2) { fixture_file_upload("files/example.tif") }
-    let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [audio_file1, image_file1]) }
-    let(:volume2) { FactoryBot.create_for_repository(:scanned_resource, files: [audio_file2, image_file2]) }
-    let(:scanned_resource) do
-      sr = FactoryBot.create_for_repository(:recording)
-      cs = ScannedResourceChangeSet.new(sr)
-      cs.validate(member_ids: [volume1.id, volume2.id])
-      change_set_persister.save(change_set: cs)
-    end
-    let(:output) { manifest_builder.build }
-
-    it "generates the posterCanvas for the Manifest" do
-      expect(output).to be_kind_of Hash
-      expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
-      expect(output["type"]).to eq "Manifest"
-      expect(output["items"].length).to eq 2
-      first_item = output["items"].first
-      expect(first_item).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
-
-      expect(output).to include("posterCanvas")
-      poster_canvas = output["posterCanvas"]
-      pages = poster_canvas["items"]
-      expect(pages.length).to eq(1)
-      annotations = pages.first["items"]
-      expect(annotations.length).to eq(1)
-      body = annotations.last["body"]
-      expect(body["type"]).to eq("Image")
     end
   end
 

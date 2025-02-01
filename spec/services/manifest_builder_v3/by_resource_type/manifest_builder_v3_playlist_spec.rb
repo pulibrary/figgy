@@ -184,10 +184,9 @@ RSpec.describe ManifestBuilderV3 do
           body = annotations.last["body"]
           expect(body["label"]).to eq("eng" => ["audio_file.wav"])
 
-          expect(output).to include("posterCanvas")
-          poster_canvas = output["posterCanvas"]
+          accompanying_canvas = output["items"][0]["accompanyingCanvas"]
 
-          pages = poster_canvas["items"]
+          pages = accompanying_canvas["items"]
           expect(pages.length).to eq(1)
 
           annotations = pages.first["items"]
