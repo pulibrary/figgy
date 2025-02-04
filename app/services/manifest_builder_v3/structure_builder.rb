@@ -18,7 +18,9 @@ class ManifestBuilderV3
             {
               "type" => "Canvas",
               "id" => "#{cb.path}#t=0,#{duration(cb)}",
-              "label" => cb.label
+              "label" => { "eng" => cb.label },
+              "items" => [],
+              "duration" => duration(cb)
             }
           end
       end

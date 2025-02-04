@@ -203,6 +203,11 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["structures"].length).to eq 2
       expect(output["structures"].first).to include "label" => { "eng" => ["32101047382401_1"] }
       expect(output["structures"].last).to include "label" => { "eng" => ["32101047382401_2"] }
+
+      range_canvas = output["structures"][0]["items"][0]
+      expect(range_canvas).to include "label" => { "eng" => ["32101047382401_1"] }
+      expect(range_canvas).to include "items" => []
+      expect(range_canvas).to include "duration" => 0.256
     end
   end
 end
