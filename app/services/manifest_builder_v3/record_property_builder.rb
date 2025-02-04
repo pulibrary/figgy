@@ -7,7 +7,7 @@ class ManifestBuilderV3
     def apply(manifest)
       manifest = super
       manifest.viewing_direction = viewing_direction if viewing_direction.present? && manifest.respond_to?(:viewing_direction=)
-      manifest.behavior = ["auto-advance"]
+      manifest.behavior = behavior
       if record.resource.downloadable == ["none"]
         manifest["service"] ||= []
         manifest["service"] << {
@@ -26,6 +26,14 @@ class ManifestBuilderV3
 
       def viewing_direction
         (record.respond_to?(:viewing_direction) && record.send(:viewing_direction))
+      end
+
+      def behavior
+        if record.class == ScannedMapNode
+          ["individuals"]
+        else
+          ["auto-advance"]
+        end
       end
   end
 end

@@ -360,8 +360,8 @@ RSpec.describe ScannedMapsController, type: :controller do
       manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
       expect(response.headers["Content-Type"]).to include "application/json"
-      expect(manifest_response[:sequences].length).to eq 1
-      expect(manifest_response[:viewingHint]).to eq "individuals"
+      expect(manifest_response[:items].length).to eq 1
+      expect(manifest_response[:behavior]).to eq ["individuals"]
     end
   end
 
