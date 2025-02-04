@@ -45,7 +45,11 @@ class ManifestBuilderV3
       # Determines if the resource be downloaded by the user
       # @return [Boolean]
       def downloadable?
-        @record.respond_to?(:resource) || @record.is_a?(FileSet)
+        if @record.respond_to?(:resource) || @record.is_a?(FileSet)
+          @record.resource.decorate.downloadable?
+        else
+          false
+        end
       end
 
       # Retrieve the URL options for the App.

@@ -115,9 +115,6 @@ RSpec.describe ManifestBuilderV3 do
 
         # navPlace
         expect(output["navPlace"]["type"]).to eq "FeatureCollection"
-
-        # not downloadable
-        output["service"][0]["disableUI"] == ["mediaDownload"]
       end
     end
 

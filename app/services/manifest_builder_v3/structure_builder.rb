@@ -18,11 +18,19 @@ class ManifestBuilderV3
             {
               "type" => "Canvas",
               "id" => "#{cb.path}#t=0,#{duration(cb)}",
-              "label" => { "eng" => cb.label },
+              "label" => canvas_label(cb),
               "items" => [],
               "duration" => duration(cb)
             }
           end
+      end
+
+      def canvas_label(cb)
+        if cb.label.first.is_a?(Hash)
+          cb.label.first
+        else
+          { "eng" => cb.label }
+        end
       end
 
       def sub_ranges

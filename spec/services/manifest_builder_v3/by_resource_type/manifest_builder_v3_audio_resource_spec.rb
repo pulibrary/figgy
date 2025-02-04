@@ -58,7 +58,7 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
       expect(output["behavior"]).to eq ["auto-advance"]
       # downloading is blocked
-      expect(output["service"][0]).to eq({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
+      expect(output["items"][0].dig("rendering", 0, "format")).to be_nil
       # Use the Audio type
       expect(output["items"][0]["items"][0]["items"][0]["body"]["type"]).to eq "Sound"
     end
@@ -143,7 +143,7 @@ RSpec.describe ManifestBuilderV3 do
       expect(child_ranges.first).to include "items"
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
-      expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
+      expect(range_canvases.first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
     end
   end
 
@@ -153,7 +153,7 @@ RSpec.describe ManifestBuilderV3 do
       user = User.first
       stub_findingaid(pulfa_id: "C0652")
       stub_findingaid(pulfa_id: "C0652_c0377")
-      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
+      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user, visibility: "open")
 
       recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").last
       # it can use the vatican logo
@@ -189,7 +189,7 @@ RSpec.describe ManifestBuilderV3 do
       user = User.first
       stub_findingaid(pulfa_id: "C0652")
       stub_findingaid(pulfa_id: "C0652_c0377")
-      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user, member_of_collection_ids: [collection.id.to_s])
+      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user, member_of_collection_ids: [collection.id.to_s], visibility: "open")
     end
 
     it "builds a presentation 3 manifest with recordings as separate canvases" do
