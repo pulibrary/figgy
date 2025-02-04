@@ -7,8 +7,8 @@ defaults: &defaults
   archivespace_password: <%= ENV["ASPACE_PASSWORD"] %>
   plausible_api_key: <%= ENV["PLAUSIBLE_API_KEY"] %>
   cdl_in_path: <%= ENV["CDL_IN_PATH"] %>
-  ocr_in_path: <%= ENV["OCR_IN_PATH"] %>
-  ocr_out_path: <%= ENV["OCR_OUT_PATH"] %>
+  ocr_in_path: <%= ENV["OCR_ILLIAD_IN_PATH"] %>
+  ocr_out_path: <%= ENV["OCR_ILLIAD_OUT_PATH"] %>
   pyramidals_bucket: "iiif-image-staging"
   pyramidals_region: "us-east-1"
   aws_access_key_id: <%= ENV["FIGGY_AWS_ACCESS_KEY_ID"] %>
