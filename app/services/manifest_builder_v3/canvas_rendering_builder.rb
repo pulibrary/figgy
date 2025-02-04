@@ -121,6 +121,7 @@ class ManifestBuilderV3
         download_url = url_helpers.download_url(download_url_args)
         {
           "id" => download_url,
+          "type" => "Dataset",
           "label" => label,
           "format" => file.mime_type.first
         }
