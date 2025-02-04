@@ -10,11 +10,7 @@ class ManifestBuilderV3
       manifest.behavior = behavior
       if record.resource.downloadable == ["none"]
         manifest["service"] ||= []
-        manifest["service"] << {
-          "@context" => "http://universalviewer.io/context.json",
-          "profile" => "http://universalviewer.io/ui-extensions-profile",
-          "disableUI" => ["mediaDownload"]
-        }
+        manifest["service"] << uv_disable_download_service
       end
 
       manifest
@@ -23,6 +19,18 @@ class ManifestBuilderV3
     delegate :resource, to: :record
 
     private
+
+      # Works with our current UV setup, but doesn't work
+      # with Clover or newer versions of UV
+      def uv_disable_download_service
+        {
+          "@context" => "https://universalviewer.io/context.json",
+          "id" => "https://universalviewer.io/ui-extensions-profile#disableUI",
+          "type" => "UVExtensionService",
+          "profile" => "https://universalviewer.io/ui-extensions-profile",
+          "disableUI" => ["mediaDownload"]
+        }
+      end
 
       def viewing_direction
         (record.respond_to?(:viewing_direction) && record.send(:viewing_direction))
