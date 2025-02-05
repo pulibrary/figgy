@@ -13,31 +13,31 @@ class ManifestBuilderV3
       !av_file_sets.empty?
     end
 
-    def self.for(resource, auth_token = nil, current_ability = nil)
+    def self.for(resource, auth_token = nil, current_ability = nil, downloadable = nil)
       case resource
       when Collection
         case ChangeSet.for(resource)
         when ArchivalMediaCollectionChangeSet
-          ArchivalMediaCollectionNode.new(resource, nil, current_ability)
+          ArchivalMediaCollectionNode.new(resource, auth_token, current_ability, downloadable)
         end
       when ScannedMap
-        ScannedMapNode.new(resource)
+        ScannedMapNode.new(resource, auth_token, current_ability, downloadable)
       when Playlist
-        PlaylistNode.new(resource, auth_token)
+        PlaylistNode.new(resource, auth_token, current_ability, downloadable)
       else
         case ChangeSet.for(resource)
         when RecordingChangeSet
           if multi_volume_recording?(resource)
-            MultiVolumeRecordingNode.new(resource)
+            MultiVolumeRecordingNode.new(resource, auth_token, current_ability, downloadable)
           else
-            RecordingNode.new(resource)
+            RecordingNode.new(resource, auth_token, current_ability, downloadable)
           end
         else
-          new(resource, auth_token)
+          new(resource, auth_token, current_ability, downloadable)
         end
       end
     end
-    attr_reader :resource, :auth_token, :current_ability
+    attr_reader :resource, :auth_token, :current_ability, :downloadable
     delegate :decorate, :to_model, :id, to: :resource
 
     def source_metadata_identifier
@@ -46,10 +46,11 @@ class ManifestBuilderV3
 
     ##
     # @param [Resource] resource the Resource being modeled as the root
-    def initialize(resource, auth_token = nil, current_ability = nil)
+    def initialize(resource, auth_token = nil, current_ability = nil, downloadable = nil)
       @resource = resource
       @auth_token = auth_token
       @current_ability = current_ability
+      @downloadable = downloadable || resource.decorate.try(:downloadable?)
     end
 
     ##
@@ -81,7 +82,7 @@ class ManifestBuilderV3
     # @return [RootNode]
     def work_presenters
       @work_presenters ||= (members - leaf_nodes).map do |node|
-        RootNode.for(node)
+        RootNode.for(node, nil, nil, downloadable)
       end
     end
 
@@ -90,7 +91,7 @@ class ManifestBuilderV3
     # @return [LeafNode]
     def file_set_presenters
       @file_set_presenters ||= leaf_nodes.map do |node|
-        LeafNode.new(node, self)
+        LeafNode.new(node, self, downloadable)
       end
     end
 
@@ -105,14 +106,16 @@ class ManifestBuilderV3
     end
 
     def av_manifest?
-      av_file_sets = file_set_presenters.select do |fs_presenter|
-        fs_presenter.display_content.present?
-      end
-
       work_presenter_nodes = Array.wrap(work_presenters)
       work_presenters = work_presenter_nodes.select(&:av_manifest?)
 
       !av_file_sets.empty? || !work_presenters.empty?
+    end
+
+    def av_file_sets
+      @av_file_sets ||= file_set_presenters.select do |fs_presenter|
+        fs_presenter.display_content.present?
+      end
     end
 
     def av_ranges
@@ -340,7 +343,7 @@ class ManifestBuilderV3
       values = leaf_nodes.map do |node|
         next unless node.decorate.av?
 
-        LeafNode.new(node, self)
+        LeafNode.new(node, self, downloadable)
       end
       @file_set_presenters = values.compact
     end

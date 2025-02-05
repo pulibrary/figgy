@@ -83,6 +83,22 @@ RSpec.describe ManifestBuilderV3 do
       end
     end
 
+    context "with multiple files" do
+      let(:file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_2_pm.wav", "") }
+      let(:file3) { fixture_file_upload("av/la_c0652_2017_05_bag2/data/32101047382492_1_i.wav", "") }
+      let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file, file2, file3], downloadable: "none") }
+
+      it "retrieves the parent resource only once", run_real_characterization: true do
+        decorator = ScannedResourceDecorator.new(scanned_resource)
+        allow_any_instance_of(ScannedResource).to receive(:decorate).and_return(decorator)
+        allow(decorator).to receive(:downloadable?)
+        change_set_persister.save(change_set: change_set)
+        manifest_builder.build
+
+        expect(decorator).to have_received(:downloadable?).once
+      end
+    end
+
     context "with no logical structure", run_real_characterization: true do
       let(:logical_structure) { nil }
       it "builds a presentation 3 manifest with a default table of contents" do

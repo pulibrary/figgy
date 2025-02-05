@@ -42,11 +42,11 @@ class ManifestBuilderV3
         @record.respond_to?(:resource) ? @record.resource.to_model : @record
       end
 
-      # Determines if the resource be downloaded by the user
+      # Determines if the resource can be downloaded by the user
       # @return [Boolean]
       def downloadable?
-        if @record.respond_to?(:resource) || @record.is_a?(FileSet)
-          @record.resource.decorate.downloadable?
+        if @record.respond_to?(:resource)
+          @record.downloadable
         else
           false
         end
