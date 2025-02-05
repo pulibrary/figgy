@@ -7,6 +7,8 @@ RSpec.describe ManifestBuilderV3 do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
+  let(:schema_path) { Rails.root.join("spec", "fixtures", "iiif_v3_schema.json") }
+  let(:schema) { JSON.parse(File.read(schema_path)) }
 
   context "when given a scanned resource with video files" do
     subject(:manifest_builder) { described_class.new(query_service.find_by(id: scanned_resource.id)) }
@@ -26,6 +28,9 @@ RSpec.describe ManifestBuilderV3 do
         rendering = output["items"][0]["rendering"]
         vtt_rendering = rendering.find { |x| x["format"] == "text/vtt" }
         expect(vtt_rendering["label"]["en"].first).to eq "Download Caption - English (Original)"
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -38,6 +43,9 @@ RSpec.describe ManifestBuilderV3 do
       expect(canvases.first["items"][0]["items"][0]["body"]["duration"]).to eq 5.312
       expect(canvases.first["items"][0]["items"][0]["body"]["type"]).to eq "Video"
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 end
