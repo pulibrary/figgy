@@ -209,7 +209,7 @@ RSpec.describe ManifestBuilderV3 do
       user = User.first
       stub_findingaid(pulfa_id: "C0652")
       stub_findingaid(pulfa_id: "C0652_c0377")
-      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user, member_of_collection_ids: [collection.id.to_s], visibility: "open")
+      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user, member_of_collection_ids: [collection.id.to_s])
     end
 
     it "builds a presentation 3 manifest with recordings as separate canvases" do
