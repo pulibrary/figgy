@@ -8,6 +8,8 @@ RSpec.describe ManifestBuilderV3 do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
+  let(:schema_path) { Rails.root.join("spec", "fixtures", "iiif_v3_schema.json") }
+  let(:schema) { JSON.parse(File.read(schema_path)) }
   def file = fixture_file_upload("files/abstract.tiff", "image/tiff")
 
   def logical_structure(file_set_id)
@@ -96,6 +98,9 @@ RSpec.describe ManifestBuilderV3 do
 
         # navPlace
         expect(output["navPlace"]["type"]).to eq "FeatureCollection"
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -115,6 +120,9 @@ RSpec.describe ManifestBuilderV3 do
 
         # navPlace
         expect(output["navPlace"]["type"]).to eq "FeatureCollection"
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -133,6 +141,9 @@ RSpec.describe ManifestBuilderV3 do
 
         # structure is empty when the resource has no stucture defined
         expect(output["structures"]).to be_nil
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -150,6 +161,9 @@ RSpec.describe ManifestBuilderV3 do
         expect(output["type"]).to eq "Collection"
         expect(output["manifests"].length).to eq 1
         expect(output["manifests"][0]["id"]).to eq "http://www.example.com/concern/scanned_maps/#{volume1.id}/manifest"
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -167,6 +181,9 @@ RSpec.describe ManifestBuilderV3 do
       it "builds a IIIF document without the raster child" do
         output = manifest_builder.build
         expect(output["items"]).to be_empty
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
   end
@@ -179,6 +196,9 @@ RSpec.describe ManifestBuilderV3 do
 
       output = manifest_builder.build
       expect(output["items"][0]["items"][0]["items"][0]["body"]["id"]).to start_with "http://localhost:8182/pyramidals/iiif/2/"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -203,6 +223,9 @@ RSpec.describe ManifestBuilderV3 do
     it "doesn't error" do
       output = manifest_builder.build
       expect(output["thumbnail"]).to be_blank
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -227,6 +250,9 @@ RSpec.describe ManifestBuilderV3 do
       cropped_file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.present? }
       expect(uncropped_geo_rendering["id"]).to eq "http://www.example.com/downloads/#{uncropped_file_set.id}/file/#{uncropped_file_set.original_file.id}"
       expect(cropped_geo_rendering["id"]).to eq "http://www.example.com/downloads/#{cropped_file_set.id}/file/#{cropped_file_set.original_file.id}"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -242,6 +268,9 @@ RSpec.describe ManifestBuilderV3 do
       expect(geo_rendering).to be_present
       file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.blank? }
       expect(geo_rendering["id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 end
