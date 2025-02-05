@@ -74,6 +74,24 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(json["@context"]).to include("http://iiif.io/api/presentation/3/context.json")
       end
     end
+    context "when given a mvw recording" do
+      it "renders a v3 manifest" do
+        stub_ezid
+        file1 = fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "")
+        file2 = fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "")
+        volume1 = FactoryBot.create_for_repository(:scanned_resource, files: [file1])
+        volume2 = FactoryBot.create_for_repository(:scanned_resource, files: [file2])
+        sr = FactoryBot.create_for_repository(:recording, state: "complete")
+        cs = ScannedResourceChangeSet.new(sr)
+        cs.validate(member_ids: [volume1.id, volume2.id])
+        resource = ChangeSetPersister.default.save(change_set: cs)
+
+        get :manifest, params: { id: resource.id, format: :json }
+        json = JSON.parse(response.body)
+
+        expect(json["@context"]).to include("http://iiif.io/api/presentation/3/context.json")
+      end
+    end
     context "when given a video" do
       it "renders a v3 manifest" do
         stub_ezid
