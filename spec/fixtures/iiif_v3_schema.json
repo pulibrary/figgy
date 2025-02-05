@@ -501,6 +501,7 @@
                         "viewingDirection": { "$ref": "#/classes/viewingDirection" },
                         "placeholderCanvas": { "$ref": "#/classes/placeholderCanvas" },
                         "accompanyingCanvas": { "$ref": "#/classes/accompanyingCanvas" },
+                        "posterCanvas": { "$ref": "#/classes/posterCanvas" },
                         "rights": { "$ref": "#/classes/rights" },
                         "start": {},
                         "navDate": { "$ref": "#/classes/navDate" },
@@ -648,6 +649,66 @@
                         "service": { "$ref": "#/classes/service" },
                         "placeholderCanvas": { "$ref": "#/classes/placeholderCanvas" },
                         "accompanyingCanvas": { "$ref": "#/classes/accompanyingCanvas" },
+                        "thumbnail": {
+                            "type": "array",
+                            "items": { "$ref": "#/classes/resource" }
+                        },
+                        "homepage": { "$ref": "#/classes/homepage" },
+                        "behavior": { "$ref": "#/classes/behavior" },
+                        "partOf": { "$ref": "#/classes/partOf" },
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/classes/annotationPage"
+                            }
+                        },
+                        "annotations": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    { "$ref": "#/classes/annotationPage" },
+                                    { "$ref": "#/classes/annotationPageRef"}
+                                ]
+                            }
+                        }
+                    },
+                    "required": ["items"],
+                    "anyOf":[
+                        { "required": ["width"] },
+                        { "required": ["height"] },
+                        { "required": ["duration"] }
+                    ],
+                    "dependencies": {
+                        "width": ["height"],
+                        "height": ["width"]
+                    }
+                }
+            ]
+        },
+        "posterCanvas": {
+            "allOf": [
+                { "$ref": "#/types/class" },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "pattern": "^Canvas$",
+                            "default": "Canvas"
+                        },
+                        "height": { "$ref": "#/types/dimension" },
+                        "width": { "$ref": "#/types/dimension" },
+                        "duration": { "$ref": "#/types/duration" },
+                        "metadata": { "$ref": "#/classes/metadata" },
+                        "summary": { "$ref": "#/types/lngString" },
+                        "requiredStatement": { "$ref": "#/types/keyValueString" },
+                        "rendering": { "$ref": "#/types/external" },
+                        "rights": { "$ref": "#/classes/rights" },
+                        "navDate": { "$ref": "#/classes/navDate" },
+                        "navPlace": { "$ref": "#/classes/navPlace" },
+                        "provider": { "$ref": "#/classes/provider" },
+                        "seeAlso": { "$ref": "#/classes/seeAlso" },
+                        "service": { "$ref": "#/classes/service" },
                         "thumbnail": {
                             "type": "array",
                             "items": { "$ref": "#/classes/resource" }

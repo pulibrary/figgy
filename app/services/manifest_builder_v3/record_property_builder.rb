@@ -8,12 +8,18 @@ class ManifestBuilderV3
       manifest = super
       manifest.viewing_direction = viewing_direction if viewing_direction.present? && manifest.respond_to?(:viewing_direction=)
       manifest.behavior = behavior
+      poster_canvas_builder.apply(manifest)
+
       manifest
     end
 
     delegate :resource, to: :record
 
     private
+
+      def poster_canvas_builder
+        PosterCanvasBuilder.new(record)
+      end
 
       def viewing_direction
         (record.respond_to?(:viewing_direction) && record.send(:viewing_direction))

@@ -213,6 +213,9 @@ RSpec.describe ManifestBuilderV3 do
           expect(body["width"]).to eq(200)
           expect(body["format"]).to eq("image/jpeg")
 
+          # We need posterCanves Until we upgrade UV or change viewers.
+          expect(output["posterCanvas"]["width"]).to eq 200
+
           # Validate manifest
           expect(JSON::Validator.fully_validate(schema, output)).to be_empty
         end
