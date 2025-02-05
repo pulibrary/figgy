@@ -42,11 +42,7 @@ class ManifestBuilder
       else
         case ChangeSet.for(resource)
         when RecordingChangeSet
-          if ManifestBuilderV3::RootNode.multi_volume_recording?(resource)
-            ManifestBuilderV3::MultiVolumeRecordingNode.new(resource)
-          else
-            new(resource, auth_token)
-          end
+          ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
         else
           new(resource, auth_token)
         end
