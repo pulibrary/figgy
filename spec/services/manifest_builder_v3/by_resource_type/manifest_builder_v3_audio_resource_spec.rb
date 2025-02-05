@@ -8,6 +8,8 @@ RSpec.describe ManifestBuilderV3 do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
+  let(:schema_path) { Rails.root.join("spec", "fixtures", "iiif_v3_schema.json") }
+  let(:schema) { JSON.parse(File.read(schema_path)) }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(
       :scanned_resource,
@@ -61,6 +63,9 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["items"][0].dig("rendering", 0, "format")).to be_nil
       # Use the Audio type
       expect(output["items"][0]["items"][0]["items"][0]["body"]["type"]).to eq "Sound"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
 
     context "with an accompanying image file" do
@@ -72,6 +77,9 @@ RSpec.describe ManifestBuilderV3 do
         output = manifest_builder.build
 
         expect(output["items"][0]["accompanyingCanvas"]["width"]).to eq 200
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -83,6 +91,9 @@ RSpec.describe ManifestBuilderV3 do
         # A default table of contents should display
         expect(output["structures"][0]["items"][0]["id"]).to include "#t="
         expect(output["structures"][0]["label"]["eng"]).to eq ["32101047382401_1_pm.wav"]
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -93,6 +104,9 @@ RSpec.describe ManifestBuilderV3 do
         output = manifest_builder.build
 
         expect(output["service"]).to be_nil
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
   end
@@ -144,6 +158,9 @@ RSpec.describe ManifestBuilderV3 do
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
       expect(range_canvases.first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -174,6 +191,9 @@ RSpec.describe ManifestBuilderV3 do
                               "height" => 100,
                               "width" => 120,
                               "type" => "Image")
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -208,6 +228,9 @@ RSpec.describe ManifestBuilderV3 do
       expect(range_canvas).to include "label" => { "eng" => ["32101047382401_1"] }
       expect(range_canvas).to include "items" => []
       expect(range_canvas).to include "duration" => 0.256
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 end
