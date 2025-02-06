@@ -7,7 +7,7 @@ class ManifestBuilderV3
     ##
     # @param [Resource] resource the Resource being viewed
     def initialize(resource)
-      @resource = RootNode.new(resource)
+      @resource = resource
     end
 
     ##

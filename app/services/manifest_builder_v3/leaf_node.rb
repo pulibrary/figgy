@@ -2,13 +2,15 @@
 class ManifestBuilderV3
   # Presenter for Resource instances (usually FileSets) modeled as leaf nodes
   class LeafNode
-    attr_reader :resource, :parent_node
+    attr_reader :resource, :parent_node, :downloadable
+
     ##
     # @param [Resource] resource a FileSet resource featured in the IIIF Manifest
     # @param [RootNode] parent_node the node for the parent Work for the FileSet
-    def initialize(resource, parent_node)
+    def initialize(resource, parent_node, downloadable = nil)
       @resource = resource
       @parent_node = parent_node
+      @downloadable = downloadable
     end
 
     delegate :local_identifier, :viewing_hint, :ocr_content, :to_model, to: :resource
@@ -54,7 +56,7 @@ class ManifestBuilderV3
         format: "application/vnd.apple.mpegurl",
         label: resource.title.first,
         duration: file.duration.first.to_f,
-        type: file.video? ? "Video" : "Audio" # required for the viewer to play audio correctly
+        type: file.video? ? "Video" : "Sound" # required for the viewer to play audio correctly
       )
     end
 

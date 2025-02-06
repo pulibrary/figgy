@@ -575,7 +575,7 @@ GEM
       faraday (~> 2.7)
       geo_coord
       json
-    iiif_manifest (1.1.1)
+    iiif_manifest (1.6.0)
       activesupport (>= 4)
     image_processing (1.13.0)
       mini_magick (>= 4.9.5, < 5)
@@ -1167,7 +1167,7 @@ DEPENDENCIES
   hydra-derivatives!
   hydra-head!
   hydra-role-management
-  iiif_manifest (= 1.1.1)
+  iiif_manifest (= 1.6.0)
   image_processing (~> 1.2)
   iso-639
   jbuilder

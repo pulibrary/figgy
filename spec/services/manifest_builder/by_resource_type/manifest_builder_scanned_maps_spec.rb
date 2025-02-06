@@ -26,7 +26,7 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq ["Test Description"]
+      expect(output["description"]).to eq "Test Description"
       expect(output["sequences"][0]["canvases"][0]["images"].length).to eq 1
       expect(output["metadata"].find { |m| m["label"] == "Gbl Suppressed Override" }).to be nil
       expect(output["metadata"].find { |m| m["label"] == "Rendered Coverage" }).to be nil
@@ -44,7 +44,7 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF document" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq ["Test Description"]
+      expect(output["description"]).to eq "Test Description"
       expect(output["@type"]).to eq "sc:Manifest"
       expect(output["manifests"]).to eq nil
       expect(output["sequences"].first["canvases"].length).to eq 1
@@ -73,7 +73,7 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF collection" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["description"]).to eq ["Test Description"]
+      expect(output["description"]).to eq "Test Description"
       expect(output["@type"]).to eq "sc:Collection"
       expect(output["viewingHint"]).to eq "multi-part"
       expect(output["manifests"].length).to eq 1

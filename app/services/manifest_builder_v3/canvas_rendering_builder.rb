@@ -42,10 +42,14 @@ class ManifestBuilderV3
         @record.respond_to?(:resource) ? @record.resource.to_model : @record
       end
 
-      # Determines if the resource be downloaded by the user
+      # Determines if the resource can be downloaded by the user
       # @return [Boolean]
       def downloadable?
-        @record.respond_to?(:resource) || @record.is_a?(FileSet)
+        if @record.respond_to?(:resource)
+          @record.downloadable
+        else
+          false
+        end
       end
 
       # Retrieve the URL options for the App.
@@ -99,10 +103,10 @@ class ManifestBuilderV3
         # When given a MapSet with both ScannedMap tiffs and attached Raster
         # Resources we attach a link to the Raster's primary file so users can
         # download the GeoTiff from the viewer embedded in the catalog.
-        uncropped_download = geotiff_download_hash(label: "Download GeoTiff")
+        uncropped_download = geotiff_download_hash(label: { "en" => ["Download GeoTiff"] })
         manifest["rendering"] << uncropped_download if uncropped_download
         # Add a download link for cropped geotiffs
-        cropped_download = geotiff_download_hash(cropped: true, label: "Download Cropped GeoTiff")
+        cropped_download = geotiff_download_hash(cropped: true, label: { "en" => ["Download Cropped GeoTiff"] })
         manifest["rendering"] << cropped_download if cropped_download
       end
 
@@ -120,7 +124,8 @@ class ManifestBuilderV3
                               host: host }
         download_url = url_helpers.download_url(download_url_args)
         {
-          "@id" => download_url,
+          "id" => download_url,
+          "type" => "Dataset",
           "label" => label,
           "format" => file.mime_type.first
         }
@@ -136,8 +141,8 @@ class ManifestBuilderV3
 
         {
           "id" => download_url,
-          "type" => "Audio",
-          "label" => "Download the mp3",
+          "type" => "Sound",
+          "label" => { "en" => ["Download the mp3"] },
           "format" => mp3_file.mime_type.first
         }
       end
@@ -151,7 +156,8 @@ class ManifestBuilderV3
           download_url = url_helpers.download_url(download_url_args)
           {
             "id" => download_url,
-            "label" => "Download Caption - #{caption.caption_language_label}",
+            "type" => "Dataset",
+            "label" => { "en" => ["Download Caption - #{caption.caption_language_label}"] },
             "format" => caption.mime_type.first
           }
         end

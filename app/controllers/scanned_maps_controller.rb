@@ -18,4 +18,11 @@ class ScannedMapsController < ScannedResourcesController
     members = Wayfinder.for(@change_set.resource).logical_structure_members
     @logical_order = WithProxyForObject.new(@logical_order, members)
   end
+
+  # Override to force v3 manifests
+  def cached_manifest(resource, auth_token_param)
+    Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
+      ManifestBuilderV3.new(resource, auth_token_param).build.to_json
+    end
+  end
 end

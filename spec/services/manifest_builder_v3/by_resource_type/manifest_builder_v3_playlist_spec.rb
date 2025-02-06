@@ -7,6 +7,8 @@ RSpec.describe ManifestBuilderV3 do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
+  let(:schema_path) { Rails.root.join("spec", "fixtures", "iiif_v3_schema.json") }
+  let(:schema) { JSON.parse(File.read(schema_path)) }
 
   context "when it is a Playlist" do
     let(:resource) do
@@ -18,6 +20,9 @@ RSpec.describe ManifestBuilderV3 do
     it "generates the Manifest" do
       expect(output).not_to be_empty
       expect(output).to include("label" => { "eng" => resource.title })
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
 
     context "with proxies to FileSets", run_real_characterization: true do
@@ -79,9 +84,6 @@ RSpec.describe ManifestBuilderV3 do
       it "generates the Canvases for the FileSets" do
         expect(output).not_to be_empty
 
-        expect(output).to include("rendering")
-        expect(output["rendering"]).to be_empty
-
         expect(output).to include("items")
         expect(output["items"].length).to eq(3)
 
@@ -111,6 +113,9 @@ RSpec.describe ManifestBuilderV3 do
         expect(output["structures"][0]["items"][0]["items"][0]["id"].split("#").first).to eq first_canvas["id"]
         expect(output["structures"][0]["items"][1]["items"][0]["label"]).to eq("eng" => ["Proxy Title2"])
         expect(output["structures"][0]["items"][2]["label"]).to eq("eng" => ["Proxy Title3"])
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
 
       context "when an authorization token is used to access the Playlist Manifest" do
@@ -132,6 +137,9 @@ RSpec.describe ManifestBuilderV3 do
           first_annotation = first_annotation_page["items"].first
           file_node1 = file_set1.file_metadata.find(&:derivative?)
           expect(first_annotation["body"]).to include("id" => "http://www.example.com/downloads/#{file_set1.id}/file/#{file_node1.id}/stream.m3u8?auth_token=#{persisted.auth_token}")
+
+          # Validate manifest
+          expect(JSON::Validator.fully_validate(schema, output)).to be_empty
         end
       end
 
@@ -145,12 +153,16 @@ RSpec.describe ManifestBuilderV3 do
           first_canvas = output["items"].first
           first_annotation_page = first_canvas["items"].first
           first_annotation = first_annotation_page["items"].first
-          expect(first_annotation["body"]["id"]).to be nil
+          expect(first_annotation["body"]["id"]).to eq ""
 
           last_canvas = output["items"].last
           first_annotation_page = last_canvas["items"].first
           first_annotation = first_annotation_page["items"].first
-          expect(first_annotation["body"]["id"]).to be nil
+          expect(first_annotation["body"]["id"]).to eq ""
+
+          # Not validating this manifest. Without a derivative (and by extension
+          # an id) the annotation will not be valid, though it will probably
+          # display in the viewer.
         end
       end
 
@@ -187,10 +199,9 @@ RSpec.describe ManifestBuilderV3 do
           body = annotations.last["body"]
           expect(body["label"]).to eq("eng" => ["audio_file.wav"])
 
-          expect(output).to include("posterCanvas")
-          poster_canvas = output["posterCanvas"]
+          accompanying_canvas = output["items"][0]["accompanyingCanvas"]
 
-          pages = poster_canvas["items"]
+          pages = accompanying_canvas["items"]
           expect(pages.length).to eq(1)
 
           annotations = pages.first["items"]
@@ -201,6 +212,12 @@ RSpec.describe ManifestBuilderV3 do
           expect(body["height"]).to eq(287)
           expect(body["width"]).to eq(200)
           expect(body["format"]).to eq("image/jpeg")
+
+          # We need posterCanves Until we upgrade UV or change viewers.
+          expect(output["posterCanvas"]["width"]).to eq 200
+
+          # Validate manifest
+          expect(JSON::Validator.fully_validate(schema, output)).to be_empty
         end
       end
     end

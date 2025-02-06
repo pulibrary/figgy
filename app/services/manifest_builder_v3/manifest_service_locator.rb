@@ -14,7 +14,7 @@ class ManifestBuilderV3
           structure_builder,
           see_also_builder,
           rights_builder,
-          logo_builder,
+          provider_builder,
           thumbnail_builder,
           rendering_builder,
           iiif_search_builder,
@@ -48,8 +48,8 @@ class ManifestBuilderV3
       ##
       # Class accessor for the logo builder
       # @return [Class]
-      def logo_builder
-        ManifestBuilderV3::LogoBuilder
+      def provider_builder
+        ManifestBuilderV3::ProviderBuilder
       end
 
       ##
@@ -59,7 +59,8 @@ class ManifestBuilderV3
           ManifestBuilderV3::RecordPropertyBuilder,
           iiif_search_service_factory: IIIFManifest::ManifestBuilder::IIIFManifest::SearchService,
           iiif_autocomplete_service_factory: IIIFManifest::ManifestBuilder::IIIFManifest::AutocompleteService,
-          canvas_builder_factory: canvas_builder_factory
+          canvas_builder_factory: canvas_builder_factory,
+          thumbnail_builder_factory: thumbnail_builder_factory
         )
       end
 
@@ -71,7 +72,10 @@ class ManifestBuilderV3
           iiif_canvas_factory: iiif_canvas_factory,
           content_builder: content_builder,
           choice_builder: choice_builder,
-          iiif_annotation_page_factory: iiif_annotation_page_factory
+          annotation_content_builder: annotation_content_builder,
+          iiif_annotation_page_factory: iiif_annotation_page_factory,
+          thumbnail_builder_factory: thumbnail_builder_factory,
+          placeholder_canvas_builder_factory: placeholder_canvas_builder_factory
         )
       end
 

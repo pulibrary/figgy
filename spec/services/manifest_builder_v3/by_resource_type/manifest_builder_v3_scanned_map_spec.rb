@@ -8,6 +8,8 @@ RSpec.describe ManifestBuilderV3 do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
+  let(:schema_path) { Rails.root.join("spec", "fixtures", "iiif_v3_schema.json") }
+  let(:schema) { JSON.parse(File.read(schema_path)) }
   def file = fixture_file_upload("files/abstract.tiff", "image/tiff")
 
   def logical_structure(file_set_id)
@@ -42,6 +44,7 @@ RSpec.describe ManifestBuilderV3 do
         FactoryBot.create_for_repository(:scanned_map,
                                          title: title,
                                          coverage: coverage,
+                                         downloadable: "none",
                                          label: "test label",
                                          actor: "test person",
                                          sort_title: "test title2",
@@ -96,28 +99,34 @@ RSpec.describe ManifestBuilderV3 do
 
         # navPlace
         expect(output["navPlace"]["type"]).to eq "FeatureCollection"
+
+        # No link for downloading original file because downloadable is set to `none`
+        expect(output["items"][0]["rendering"].count).to eq 1
+        expect(output["items"][0]["rendering"][0]["label"]["en"]).not_to eq ["Download the original file"]
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
-    context "when a scanned map has imported coverage and is not downloadable" do
+    context "when a scanned map has imported coverage" do
       let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
       let(:resource) do
         FactoryBot.create_for_repository(:scanned_map,
-                                         downloadable: "none",
                                          imported_metadata: [{
                                            coverage: coverage,
                                            description: "Test Description"
                                          }])
       end
 
-      it "displays coverage and disables download" do
+      it "displays coverage" do
         output = manifest_builder.build
 
         # navPlace
         expect(output["navPlace"]["type"]).to eq "FeatureCollection"
 
-        # not downloadable
-        output["service"][0]["disableUI"] == ["mediaDownload"]
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -136,6 +145,9 @@ RSpec.describe ManifestBuilderV3 do
 
         # structure is empty when the resource has no stucture defined
         expect(output["structures"]).to be_nil
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -153,6 +165,9 @@ RSpec.describe ManifestBuilderV3 do
         expect(output["type"]).to eq "Collection"
         expect(output["manifests"].length).to eq 1
         expect(output["manifests"][0]["id"]).to eq "http://www.example.com/concern/scanned_maps/#{volume1.id}/manifest"
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -170,6 +185,9 @@ RSpec.describe ManifestBuilderV3 do
       it "builds a IIIF document without the raster child" do
         output = manifest_builder.build
         expect(output["items"]).to be_empty
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
   end
@@ -182,6 +200,9 @@ RSpec.describe ManifestBuilderV3 do
 
       output = manifest_builder.build
       expect(output["items"][0]["items"][0]["items"][0]["body"]["id"]).to start_with "http://localhost:8182/pyramidals/iiif/2/"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -206,6 +227,10 @@ RSpec.describe ManifestBuilderV3 do
     it "doesn't error" do
       output = manifest_builder.build
       expect(output["thumbnail"]).to be_blank
+
+      # Not validating this manifest. Setup for this test creates a bad
+      # manifest. In a real-world situation, the item will probably
+      # display in the viewer.
     end
   end
 
@@ -217,19 +242,22 @@ RSpec.describe ManifestBuilderV3 do
       output = described_class.new(map_set).build
 
       uncropped_geo_rendering = output["items"][0]["rendering"].find do |rendering|
-        rendering["label"] == "Download GeoTiff"
+        rendering["label"]["en"].first == "Download GeoTiff"
       end
 
       cropped_geo_rendering = output["items"][0]["rendering"].find do |rendering|
-        rendering["label"] == "Download Cropped GeoTiff"
+        rendering["label"]["en"].first == "Download Cropped GeoTiff"
       end
 
       expect(uncropped_geo_rendering).to be_present
       expect(cropped_geo_rendering).to be_present
       uncropped_file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.blank? }
       cropped_file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.present? }
-      expect(uncropped_geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{uncropped_file_set.id}/file/#{uncropped_file_set.original_file.id}"
-      expect(cropped_geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{cropped_file_set.id}/file/#{cropped_file_set.original_file.id}"
+      expect(uncropped_geo_rendering["id"]).to eq "http://www.example.com/downloads/#{uncropped_file_set.id}/file/#{uncropped_file_set.original_file.id}"
+      expect(cropped_geo_rendering["id"]).to eq "http://www.example.com/downloads/#{cropped_file_set.id}/file/#{cropped_file_set.original_file.id}"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -239,12 +267,15 @@ RSpec.describe ManifestBuilderV3 do
       output = described_class.new(scanned_map).build
 
       geo_rendering = output["items"][0]["rendering"].find do |rendering|
-        rendering["label"] == "Download GeoTiff"
+        rendering["label"]["en"].first == "Download GeoTiff"
       end
 
       expect(geo_rendering).to be_present
       file_set = scanned_map.decorate.decorated_raster_resources.first.members.find { |x| x.service_targets.blank? }
-      expect(geo_rendering["@id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
+      expect(geo_rendering["id"]).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_set.original_file.id}"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 end

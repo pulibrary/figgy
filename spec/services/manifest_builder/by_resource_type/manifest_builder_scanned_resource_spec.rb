@@ -92,8 +92,8 @@ RSpec.describe ManifestBuilder do
     it "generates a IIIF document with the correct structural components" do
       output = manifest_builder.build
       expect(output).to be_kind_of Hash
-      expect(output["label"]).to eq ["test title1"]
-      expect(output["description"]).to eq ["Test Description"]
+      expect(output["label"]).to eq "test title1"
+      expect(output["description"]).to eq "Test Description"
       expect(output["viewingHint"]).to eq "individuals"
       expect(output["viewingDirection"]).to eq "right-to-left"
       expect(output["rendering"]).to include "@id" => "http://arks.princeton.edu/ark:/88435/abc1234de", "format" => "text/html"
@@ -158,9 +158,9 @@ RSpec.describe ManifestBuilder do
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource, title: ["title1", "title2"])
     end
-    it "uses an array" do
+    it "displays a root label with a single string as label is a single value in Prezi V2" do
       output = manifest_builder.build
-      expect(output["label"]).to eq ["title1", "title2"]
+      expect(output["label"]).to eq "title1"
     end
   end
 

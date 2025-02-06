@@ -8,6 +8,8 @@ RSpec.describe ManifestBuilderV3 do
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
+  let(:schema_path) { Rails.root.join("spec", "fixtures", "iiif_v3_schema.json") }
+  let(:schema) { JSON.parse(File.read(schema_path)) }
   let(:scanned_resource) do
     FactoryBot.create_for_repository(
       :scanned_resource,
@@ -49,14 +51,55 @@ RSpec.describe ManifestBuilderV3 do
       output = manifest_builder.build
       # pres 3 context is always an array
       expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
-      # logo is always an array
-      expect(output["logo"].first).to include("id" => "https://www.example.com/pul_logo_icon.png")
+      # logo is part of a provider object
+      provider = output["provider"][0]
+      expect(provider["type"]).to eq "Agent"
+      expect(provider["logo"].first).to include("id" => "https://www.example.com/pul_logo_icon.png")
       # Logical structure should be able to have nested and un-nested members.
       expect(output["structures"][0]["items"][0]["id"]).to include "#t="
       expect(output["structures"][1]["items"][0]["items"][0]["id"]).to include "#t="
       expect(output["behavior"]).to eq ["auto-advance"]
       # downloading is blocked
-      expect(output["service"][0]).to eq({ "@context" => "http://universalviewer.io/context.json", "profile" => "http://universalviewer.io/ui-extensions-profile", "disableUI" => ["mediaDownload"] })
+      expect(output["items"][0].dig("rendering", 0, "format")).to be_nil
+      # Use the Audio type
+      expect(output["items"][0]["items"][0]["items"][0]["body"]["type"]).to eq "Sound"
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
+    end
+
+    context "with an accompanying image file" do
+      let(:image_file) { fixture_file_upload("files/example.tif") }
+      let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file, image_file], downloadable: "none") }
+
+      it "builds a manifest with an accompanyingCanvas element", run_real_characterization: true do
+        change_set_persister.save(change_set: change_set)
+        output = manifest_builder.build
+
+        expect(output["items"][0]["accompanyingCanvas"]["width"]).to eq 200
+
+        # We need posterCanves Until we upgrade UV or change viewers.
+        expect(output["posterCanvas"]["width"]).to eq 200
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
+      end
+    end
+
+    context "with multiple files" do
+      let(:file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_2_pm.wav", "") }
+      let(:file3) { fixture_file_upload("av/la_c0652_2017_05_bag2/data/32101047382492_1_i.wav", "") }
+      let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file, file2, file3], downloadable: "none") }
+
+      it "retrieves the parent resource only once", run_real_characterization: true do
+        decorator = ScannedResourceDecorator.new(scanned_resource)
+        allow_any_instance_of(ScannedResource).to receive(:decorate).and_return(decorator)
+        allow(decorator).to receive(:downloadable?)
+        change_set_persister.save(change_set: change_set)
+        manifest_builder.build
+
+        expect(decorator).to have_received(:downloadable?).once
+      end
     end
 
     context "with no logical structure", run_real_characterization: true do
@@ -67,6 +110,9 @@ RSpec.describe ManifestBuilderV3 do
         # A default table of contents should display
         expect(output["structures"][0]["items"][0]["id"]).to include "#t="
         expect(output["structures"][0]["label"]["eng"]).to eq ["32101047382401_1_pm.wav"]
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
@@ -77,6 +123,9 @@ RSpec.describe ManifestBuilderV3 do
         output = manifest_builder.build
 
         expect(output["service"]).to be_nil
+
+        # Validate manifest
+        expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
   end
@@ -85,8 +134,9 @@ RSpec.describe ManifestBuilderV3 do
     subject(:manifest_builder) { described_class.new(scanned_resource) }
 
     let(:file1) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+    let(:image1) { fixture_file_upload("files/example.tif", "") }
     let(:file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
-    let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [file1]) }
+    let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, image1]) }
     let(:volume2) { FactoryBot.create_for_repository(:scanned_resource, files: [file2]) }
     let(:scanned_resource) do
       sr = FactoryBot.create_for_repository(:recording)
@@ -127,43 +177,13 @@ RSpec.describe ManifestBuilderV3 do
       expect(child_ranges.first).to include "items"
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
-      expect(range_canvases.first).to include "label" => [{ "eng" => ["32101047382401_1_pm.wav"] }]
-    end
-  end
+      expect(range_canvases.first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
 
-  context "when given a multi-volume recording with thumbnails", run_real_characterization: true, run_real_derivatives: true do
-    subject(:manifest_builder) { described_class.new(scanned_resource) }
+      # Poster Canvas is generated in multi-volume resources
+      expect(output["posterCanvas"]["width"]).to eq 200
 
-    let(:audio_file1) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
-    let(:image_file1) { fixture_file_upload("files/example.tif") }
-    let(:audio_file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
-    let(:image_file2) { fixture_file_upload("files/example.tif") }
-    let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [audio_file1, image_file1]) }
-    let(:volume2) { FactoryBot.create_for_repository(:scanned_resource, files: [audio_file2, image_file2]) }
-    let(:scanned_resource) do
-      sr = FactoryBot.create_for_repository(:recording)
-      cs = ScannedResourceChangeSet.new(sr)
-      cs.validate(member_ids: [volume1.id, volume2.id])
-      change_set_persister.save(change_set: cs)
-    end
-    let(:output) { manifest_builder.build }
-
-    it "generates the posterCanvas for the Manifest" do
-      expect(output).to be_kind_of Hash
-      expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
-      expect(output["type"]).to eq "Manifest"
-      expect(output["items"].length).to eq 2
-      first_item = output["items"].first
-      expect(first_item).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
-
-      expect(output).to include("posterCanvas")
-      poster_canvas = output["posterCanvas"]
-      pages = poster_canvas["items"]
-      expect(pages.length).to eq(1)
-      annotations = pages.first["items"]
-      expect(annotations.length).to eq(1)
-      body = annotations.last["body"]
-      expect(body["type"]).to eq("Image")
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -173,7 +193,7 @@ RSpec.describe ManifestBuilderV3 do
       user = User.first
       stub_findingaid(pulfa_id: "C0652")
       stub_findingaid(pulfa_id: "C0652_c0377")
-      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user)
+      IngestArchivalMediaBagJob.perform_now(collection_component: "C0652", bag_path: bag_path, user: user, visibility: "open")
 
       recording = query_service.custom_queries.find_by_property(property: :local_identifier, value: "32101047382401").last
       # it can use the vatican logo
@@ -183,16 +203,20 @@ RSpec.describe ManifestBuilderV3 do
       expect(output).to include "items"
       canvases = output["items"]
       expect(canvases.length).to eq 2
-      # TODO: does this label need to include language?
-      expect(canvases.first["rendering"].map { |h| h["label"] }).to contain_exactly "Download the mp3"
+      label = canvases.first["rendering"][0]["label"]
+      expect(label["en"].first).to eq "Download the mp3"
       # This value rounds up/down based on mediainfo compilation, 0.255 vs 0.256
       # is close enough for our purpose
       expect(canvases.first["items"][0]["items"][0]["body"]["duration"].to_s).to start_with "0.25"
-      expect(output["logo"].first).to include("id" => "https://www.example.com/vatican.png",
-                                              "format" => "image/png",
-                                              "height" => 100,
-                                              "width" => 120,
-                                              "type" => "Image")
+      logo = output["provider"][0]["logo"][0]
+      expect(logo).to include("id" => "https://www.example.com/vatican.png",
+                              "format" => "image/png",
+                              "height" => 100,
+                              "width" => 120,
+                              "type" => "Image")
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 
@@ -222,6 +246,14 @@ RSpec.describe ManifestBuilderV3 do
       expect(output["structures"].length).to eq 2
       expect(output["structures"].first).to include "label" => { "eng" => ["32101047382401_1"] }
       expect(output["structures"].last).to include "label" => { "eng" => ["32101047382401_2"] }
+
+      range_canvas = output["structures"][0]["items"][0]
+      expect(range_canvas).to include "label" => { "eng" => ["32101047382401_1"] }
+      expect(range_canvas).to include "items" => []
+      expect(range_canvas).to include "duration" => 0.256
+
+      # Validate manifest
+      expect(JSON::Validator.fully_validate(schema, output)).to be_empty
     end
   end
 end
