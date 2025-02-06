@@ -134,8 +134,9 @@ RSpec.describe ManifestBuilderV3 do
     subject(:manifest_builder) { described_class.new(scanned_resource) }
 
     let(:file1) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
+    let(:image1) { fixture_file_upload("files/example.tif", "") }
     let(:file2) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "") }
-    let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [file1]) }
+    let(:volume1) { FactoryBot.create_for_repository(:scanned_resource, files: [file1, image1]) }
     let(:volume2) { FactoryBot.create_for_repository(:scanned_resource, files: [file2]) }
     let(:scanned_resource) do
       sr = FactoryBot.create_for_repository(:recording)
@@ -177,6 +178,9 @@ RSpec.describe ManifestBuilderV3 do
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
       expect(range_canvases.first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+
+      # Poster Canvas is generated in multi-volume resources
+      expect(output["posterCanvas"]["width"]).to eq 200
 
       # Validate manifest
       expect(JSON::Validator.fully_validate(schema, output)).to be_empty
