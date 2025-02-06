@@ -5,6 +5,18 @@ describe MemoryEfficientAllQuery do
   subject(:query) { described_class.new(query_service: query_service) }
   let(:query_service) { Valkyrie::MetadataAdapter.find(:indexing_persister).query_service }
 
+  describe "#memory_efficient_find_many_by_ids" do
+    it "doesn't return resources that don't exist" do
+      bad_id = SecureRandom.uuid
+      good_id = FactoryBot.create_for_repository(:scanned_resource).id.to_s
+
+      output = query.memory_efficient_find_many_by_ids(ids: [bad_id, good_id]).to_a
+
+      expect(output.length).to eq 1
+      expect(output[0].id.to_s).to eq good_id
+    end
+  end
+
   describe "#memory_efficient_all" do
     context "when not given any arguments" do
       it "finds all" do

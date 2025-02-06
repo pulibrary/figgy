@@ -30,9 +30,11 @@ class MemoryEfficientAllQuery
     ids.lazy.map do |id|
       connection.transaction(savepoint: true) do
         attributes = resources.first(id: id.to_s)
-        resource_factory.to_resource(object: attributes)
+        if attributes
+          resource_factory.to_resource(object: attributes)
+        end
       end
-    end
+    end.compact
   end
 
   def count_all_except_models(except_models: [], since: nil)
