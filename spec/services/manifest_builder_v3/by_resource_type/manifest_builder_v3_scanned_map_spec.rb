@@ -44,6 +44,7 @@ RSpec.describe ManifestBuilderV3 do
         FactoryBot.create_for_repository(:scanned_map,
                                          title: title,
                                          coverage: coverage,
+                                         downloadable: "none",
                                          label: "test label",
                                          actor: "test person",
                                          sort_title: "test title2",
@@ -99,23 +100,26 @@ RSpec.describe ManifestBuilderV3 do
         # navPlace
         expect(output["navPlace"]["type"]).to eq "FeatureCollection"
 
+        # No link for downloading original file because downloadable is set to `none`
+        expect(output["items"][0]["rendering"].count).to eq 1
+        expect(output["items"][0]["rendering"][0]["label"]["en"]).not_to eq ["Download the original file"]
+
         # Validate manifest
         expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
     end
 
-    context "when a scanned map has imported coverage and is not downloadable" do
+    context "when a scanned map has imported coverage" do
       let(:coverage) { GeoCoverage.new(43.039, -69.856, 42.943, -71.032).to_s }
       let(:resource) do
         FactoryBot.create_for_repository(:scanned_map,
-                                         downloadable: "none",
                                          imported_metadata: [{
                                            coverage: coverage,
                                            description: "Test Description"
                                          }])
       end
 
-      it "displays coverage and disables download" do
+      it "displays coverage" do
         output = manifest_builder.build
 
         # navPlace
