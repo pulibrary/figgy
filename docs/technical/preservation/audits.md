@@ -16,17 +16,71 @@ The following full audit tasks can be found in `lib/tasks/preservation.rake`:
 
 In 10 minutes or so you will see a progress bar. Check on it every once in a while; it will take maybe a week to generate the full report. See the tasks in that file for the location to access the reports.
 
-## How to repair resources that failed to preserve
+## Investigate failures
 
 Look through the audit report and investigate the resources that failed to identify patterns, create tickets, and fix bugs.
 
-Once a bug has been resolved, use the audit report as an input to re-preserve
-the resources that failed the audit. Use something like the following inside the
-each loop:
+Here are some code examples that may be useful for investigation
 
 ```
-PreserveResourceJob.set(queue: :super_low).perform_later(id: resource.id.to_s,
-force_preservation: true)
+# count resources with no preservation object at all
+qs = ChangeSetPersister.default.query_service
+File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt")).count do |line|
+  resource = qs.find_by(id: line.chomp)
+  preservation_object = Wayfinder.for(resource).preservation_object
+  preservation_object.nil?
+end
+```
+
+```
+# count resources for which preservation object has no metadata node
+File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt")).count do |line|
+  resource = qs.find_by(id: line.chomp)
+  preservation_object = Wayfinder.for(resource).preservation_object
+  next unless preservation_object
+  preservation_object.metadata_node.nil?
+end
+```
+
+You can run the above also with `preservation_object.binary_nodes.empty?` to find resources where preservation has no binary nodes.
+
+```
+# count resources for which metadata isn't properly preserved
+skip_metadata_checksum = false
+File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt")).count do |line|
+  resource = qs.find_by(id: line.chomp)
+  preservation_object = Wayfinder.for(resource).preservation_object
+  next unless preservation_object
+  # pull first checker because there's always only one; it's just wrapped in an array for consistency with the binary checkers
+  md_checker = Preserver::PreservationChecker.metadata_for(resource: resource, preservation_object: preservation_object, skip_checksum: skip_metadata_checksum).first
+  !md_checker.preserved?
+end
+```
+
+If count above is > 0, you can run again using `!checker.recorded_versions_match?` and `!checker.preservation_ids_match?` to see which part of preservation is wrong
+
+```
+# count resources for which at least one binary isn't properly preserved
+File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "sample.txt")).count do |line|
+  resource = qs.find_by(id: line.chomp)
+  preservation_object = Wayfinder.for(resource).preservation_object
+  next unless preservation_object
+  bin_checkers = Preserver::PreservationChecker.metadata_for(resource: resource, preservation_object: preservation_object)
+  bin_checkers.any?{ |checker| !checker.preserved? }
+end
+```
+
+If count above is > 0, you can run again using `!checker.recorded_checksums_match?` and `!checker.preservation_ids_match?` to see which part of preservation is wrong
+
+This is just some examples of things we've done before. You may need to investigate in additional ways.
+
+## Repair resources that failed to preserve
+
+Once a bug has been resolved, use the audit report as an input to re-preserve
+the resources that failed the audit. Use something like the following:
+
+```
+File.readlines(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt"), chomp: true).each { |id| PreserveResourceJob.set(queue: :super_low).perform_later(id: id.to_s, force_preservation: true) }
 ```
 
 ## Run a recheck report
