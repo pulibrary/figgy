@@ -30,6 +30,7 @@ RSpec.describe DownloadsController do
         expect(response.content_length).to eq(196_882)
         expect(response.media_type).to eq("image/tiff")
         expect(response.headers["Content-Disposition"]).to eq("inline; filename=\"example.tif\"; filename*=UTF-8''example.tif")
+        expect(response.headers).not_to include("access-control-allow-methods", "access-control-allow-origin", "access-control-max-age")
       end
 
       # The following appears to be from old items before we set this metadata.
@@ -161,6 +162,10 @@ RSpec.describe DownloadsController do
           get :show, params: { resource_id: file_set.id.to_s, id: file_metadata.id.to_s, as: "stream", format: "m3u8" }
 
           expect(response).to be_successful
+          expect(response.headers["access-control-allow-methods"]).to eq "GET"
+          expect(response.headers["access-control-allow-origin"]).to eq "*"
+          expect(response.headers["access-control-max-age"]).to eq 7200
+
           playlist = M3u8::Playlist.read(response.body)
           expect(playlist.items.length).to eq 4
           expect(playlist.items[0].uri).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}.m3u8"
