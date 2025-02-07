@@ -30,6 +30,7 @@ class DownloadsController < ApplicationController
 
   def send_hls
     manifest = HlsManifest.for(file_set: resource, file_metadata: file_desc, as: params[:as], auth_token: params[:auth_token])
+    add_cors_headers
     render plain: manifest.to_s
   end
 
@@ -94,8 +95,15 @@ class DownloadsController < ApplicationController
   def prepare_file_headers
     response.headers["Content-Type"] = file_desc.mime_type.first.to_s
     response.headers["Content-Length"] ||= binary_file.size.to_s
+
     # Prevent Rack::ETag from calculating a digest over body
     response.headers["Last-Modified"] = file_desc.updated_at.utc.strftime("%a, %d %b %Y %T GMT") if file_desc.updated_at.present?
+  end
+
+  def add_cors_headers
+    response.headers["Access-Control-Allow-Methods"] = "GET"
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Max-Age"] = 7200
   end
 
   def query_service
