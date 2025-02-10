@@ -29,8 +29,12 @@ class MosaicJob < ApplicationJob
     # Only one MosaicJob per resource should run at a time. This is to prevent conditions
     # where mosaic jobs finish out of order and produce an incorrect mosaic json document.
     def currently_running?
-      workers = Sidekiq::Workers.new
-      _, _, work = workers.find { |_, _, work| work.dig("payload", "args", 0, "job_class") == "MosaicJob" && work.dig("payload", "args", 0, "arguments", 0, "resource_id") == resource.id }
+      work_set = Sidekiq::WorkSet.new
+      _, _, work = work_set.find do |_, _, work|
+        payload = JSON.parse(work.payload)
+        payload.dig("args", 0, "job_class") == "MosaicJob" && payload.dig("args", 0, "arguments", 0, "resource_id") == resource.id
+      end
+
       return true if work
       false
     end
