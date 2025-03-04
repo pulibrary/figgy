@@ -1,8 +1,40 @@
 # frozen_string_literal: true
+
 class IngestMountStatus < HealthMonitor::Providers::Base
   def check!
-    ingest_mount = Figgy.config["ingest_folder_path"]
-    contents = Dir.glob(ingest_mount)
-    raise "ingest mount #{ingest_mount} is empty" if contents.empty?
+    expected_mounts.map do |emount|
+      next if system_mounts.include?(emount)
+      raise "#{emount} was expected to be mounted but is not"
+    end
+  end
+
+  def expected_mounts
+    [
+      "/mnt/diglibdata/pudl",
+      "/mnt/hydra_sources/ingest_scratch",
+      "/mnt/hydra_sources/pudl",
+      "/mnt/hydra_sources/archives",
+      "/mnt/hydra_sources/archives_bd",
+      "/mnt/hydra_sources/maplab",
+      "/mnt/hydra_sources/bitcur-archives",
+      "/mnt/hydra_sources/studio_new",
+      "/mnt/hydra_sources/marquand",
+      "/mnt/hydra_sources/mendel",
+      "/mnt/hydra_sources/mudd",
+      "/mnt/hydra_sources/microforms",
+      "/mnt/hydra_sources/music",
+      "/mnt/hydra_sources/numismatics",
+      "/mnt/illiad/images",
+      "/mnt/illiad/ocr_scan",
+      "/mnt/illiad/cdl_scans",
+      "/mnt/hosted_illiad/ILL_OCR_Scans",
+      Pathname.new("/opt/repository/files").realpath, # env-dependent subdir of "/mnt/diglibdata/hydra_binaries"
+      Pathname.new("/opt/repository/derivatives").realpath, # cantaloupe locations, different between prod and staging
+      Pathname.new("/opt/repository/stream_derivatives").realpath
+    ]
+  end
+
+  def system_mounts
+    @system_mounts ||= Sys::Filesystem.mounts.map(&:mount_point)
   end
 end
