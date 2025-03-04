@@ -11,6 +11,7 @@ class IngestMountStatus < HealthMonitor::Providers::Base
   def expected_mounts
     [
       "/mnt/diglibdata/pudl",
+      "/mnt/diglibdata/hydra_binaries",
       "/mnt/hydra_sources/ingest_scratch",
       "/mnt/hydra_sources/pudl",
       "/mnt/hydra_sources/archives",
@@ -28,9 +29,7 @@ class IngestMountStatus < HealthMonitor::Providers::Base
       "/mnt/illiad/ocr_scan",
       "/mnt/illiad/cdl_scans",
       "/mnt/hosted_illiad/ILL_OCR_Scans",
-      Pathname.new("/opt/repository/files").realpath, # env-dependent subdir of "/mnt/diglibdata/hydra_binaries"
       Pathname.new("/opt/repository/derivatives").realpath, # cantaloupe locations, different between prod and staging
-      Pathname.new("/opt/repository/stream_derivatives").realpath
     ]
   end
 
