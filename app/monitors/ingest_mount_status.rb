@@ -28,8 +28,7 @@ class IngestMountStatus < HealthMonitor::Providers::Base
       "/mnt/illiad/images",
       "/mnt/illiad/ocr_scan",
       "/mnt/illiad/cdl_scans",
-      "/mnt/hosted_illiad/ILL_OCR_Scans",
-      Pathname.new("/opt/repository/derivatives").realpath, # cantaloupe locations, different between prod and staging
+      "/mnt/hosted_illiad/ILL_OCR_Scans"
     ]
   end
 
