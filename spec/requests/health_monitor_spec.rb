@@ -127,22 +127,45 @@ RSpec.describe "Health Monitor", type: :request do
       end
     end
 
-    context "when checking the status of the mounted directory" do
-      it "errors when the mount directory is empty" do
-        config_mock = Figgy.config.merge(
-          { "ingest_folder_path" => Rails.root.join("spec", "fixtures", "fake_directory").to_s }
-        )
-        allow(Figgy).to receive(:config).and_return(config_mock)
-
+    context "when that mounts are in place" do
+      it "errors when the list of expected mounts does not match the system mounts" do
         get "/health.json?providers[]=ingestmountstatus"
 
         expect(response).not_to be_successful
       end
 
-      it "succeeds when the mount directory has contents" do
+      it "errors when the list of expected mounts does match the system mounts" do
+        allow(Sys::Filesystem).to receive(:mounts).and_return(mount_fixtures)
+
         get "/health.json?providers[]=ingestmountstatus"
 
         expect(response).to be_successful
+      end
+
+      def mount_fixtures
+        [
+          "/mnt/diglibdata/pudl",
+          "/mnt/diglibdata/hydra_binaries",
+          "/mnt/hydra_sources/ingest_scratch",
+          "/mnt/hydra_sources/pudl",
+          "/mnt/hydra_sources/archives",
+          "/mnt/hydra_sources/archives_bd",
+          "/mnt/hydra_sources/maplab",
+          "/mnt/hydra_sources/bitcur-archives",
+          "/mnt/hydra_sources/studio_new",
+          "/mnt/hydra_sources/marquand",
+          "/mnt/hydra_sources/mendel",
+          "/mnt/hydra_sources/mudd",
+          "/mnt/hydra_sources/microforms",
+          "/mnt/hydra_sources/music",
+          "/mnt/hydra_sources/numismatics",
+          "/mnt/illiad/images",
+          "/mnt/illiad/ocr_scan",
+          "/mnt/illiad/cdl_scans",
+          "/mnt/hosted_illiad/ILL_OCR_Scans"
+        ].map do |mp|
+          instance_double(Sys::Filesystem::Mount, mount_point: mp)
+        end
       end
     end
   end
