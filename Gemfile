@@ -158,3 +158,5 @@ group :test do
   gem "timecop"
   gem "webmock"
 end
+
+gem "sys-filesystem", "~> 1.5"
