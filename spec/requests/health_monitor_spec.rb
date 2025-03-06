@@ -129,15 +129,15 @@ RSpec.describe "Health Monitor", type: :request do
 
     context "when that mounts are in place" do
       it "errors when the list of expected mounts does not match the system mounts" do
-        get "/health.json?providers[]=ingestmountstatus"
+        get "/health.json?providers[]=mountstatus"
 
         expect(response).not_to be_successful
       end
 
-      it "errors when the list of expected mounts does match the system mounts" do
+      it "succeeds when the list of expected mounts does match the system mounts" do
         allow(Sys::Filesystem).to receive(:mounts).and_return(mount_fixtures)
 
-        get "/health.json?providers[]=ingestmountstatus"
+        get "/health.json?providers[]=mountstatus"
 
         expect(response).to be_successful
       end

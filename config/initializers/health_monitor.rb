@@ -26,7 +26,7 @@ Rails.application.config.after_initialize do
     config.add_custom_provider(FileWatcherStatus).configure do |provider_config|
       provider_config.critical = false
     end
-    config.add_custom_provider(IngestMountStatus).configure do |provider_config|
+    config.add_custom_provider(MountStatus).configure do |provider_config|
       provider_config.critical = false
     end
     config.file_absence.configure do |file_config|

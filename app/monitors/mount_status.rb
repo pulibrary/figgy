@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class IngestMountStatus < HealthMonitor::Providers::Base
+class MountStatus < HealthMonitor::Providers::Base
   def check!
+    system_mounts = Sys::Filesystem.mounts.map(&:mount_point)
     expected_mounts.map do |emount|
       next if system_mounts.include?(emount)
       raise "#{emount} was expected to be mounted but is not"
@@ -30,9 +31,5 @@ class IngestMountStatus < HealthMonitor::Providers::Base
       "/mnt/illiad/cdl_scans",
       "/mnt/hosted_illiad/ILL_OCR_Scans"
     ]
-  end
-
-  def system_mounts
-    @system_mounts ||= Sys::Filesystem.mounts.map(&:mount_point)
   end
 end
