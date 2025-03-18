@@ -1023,6 +1023,8 @@ GEM
     sxp (2.0.0)
       matrix (~> 0.4)
       rdf (~> 3.3)
+    sys-filesystem (1.5.3)
+      ffi (~> 1.1)
     thor (1.3.2)
     tilt (2.4.0)
     timecop (0.9.10)
@@ -1234,6 +1236,7 @@ DEPENDENCIES
   spring
   sprockets
   string_rtl
+  sys-filesystem (~> 1.5)
   timecop
   title
   tus-server (~> 2.3)
