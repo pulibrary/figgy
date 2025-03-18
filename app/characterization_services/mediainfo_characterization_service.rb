@@ -74,7 +74,7 @@ class MediainfoCharacterizationService
     # Determine if the media type for the FileSet is supported
     # @return [TrueClass, FalseClass]
     def supported_format?
-      (@file_set.mime_type & self.class.supported_formats).present? || extension&.include?(".wav") || extension&.include?(".mp4")
+      (@file_set.mime_type & self.class.supported_formats).present? || extension&.include?(".wav") || extension&.include?(".mp4") || extension&.include?(".mp3")
     end
 
     def extension

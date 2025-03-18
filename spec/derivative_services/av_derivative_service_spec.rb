@@ -33,6 +33,11 @@ RSpec.describe AvDerivativeService do
       it { is_expected.to be_valid }
     end
 
+    context "when given an mp3 mime_type" do
+      let(:file) { fixture_file_upload("files/demo_mp3.mp3", "audio/mpeg") }
+      it { is_expected.to be_valid }
+    end
+
     context "when given an invalid mime_type" do
       it "does not validate" do
         # rubocop:disable RSpec/SubjectStub

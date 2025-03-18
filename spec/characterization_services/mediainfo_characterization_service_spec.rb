@@ -60,6 +60,17 @@ RSpec.describe MediainfoCharacterizationService do
     end
   end
 
+  context "with an mp3" do
+    let(:file) { fixture_file_upload("files/demo_mp3.mp3", "application/octet-stream") }
+    it "pulls the mime type" do
+      characterizer = described_class.new(file_set: valid_file_set, persister: persister)
+      expect(characterizer).to be_valid
+      new_file_set = characterizer.characterize(save: false)
+
+      expect(new_file_set.original_file.mime_type).to eq ["audio/mpeg"]
+    end
+  end
+
   context "with an audio file" do
     let(:file) { fixture_file_upload("av/la_c0652_2017_05_bag/data/32101047382401_1_pm.wav", "audio/x-wav") }
     let(:audio_track_attributes) { double }
