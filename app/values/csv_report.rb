@@ -75,7 +75,16 @@ class CSVReport
         if fields.include?(:file_count)
           hsh[:file_count] = Wayfinder.for(resource).try(:file_sets_count)
         end
+        if fields.include?(:vocabulary_breadcrumbs)
+          hsh[:vocabulary_breadcrumbs] = vocabulary_breadcrumbs(resource)
+        end
       end
+    end
+
+    def vocabulary_breadcrumbs(resource)
+      parent_vocab = Wayfinder.for(resource).try(:vocabularies)&.first
+      grandparent_vocab = Wayfinder.for(parent_vocab).try(:parent_vocabularies)&.first
+      [parent_vocab, grandparent_vocab].compact.reverse.map(&:label).join(" | ")
     end
 
     # Only get the non-reserved attributes - gets rid of things like
