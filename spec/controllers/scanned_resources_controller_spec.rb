@@ -131,9 +131,16 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
   end
 
-  describe "change sets" do
+  describe "new change sets" do
     let(:user) { FactoryBot.create(:admin) }
     render_views
+
+    context "when there's no change_set" do
+      it "renders a new form" do
+        get :new
+        expect(response.body).to have_field "Content warning"
+      end
+    end
 
     context "when the params specify a change_set" do
       it "is simple, creates a new SimpleChangeSet" do
