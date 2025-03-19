@@ -22,6 +22,34 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     # Ensure the digital object was made.
     expect(mocked_digital_object_create).to have_been_made
     expect(mocked_digital_object_create.with { |req| req.body.include?("http://www.example.com/concern/scanned_resources/#{change_set.id}/manifest") }).to have_been_made
+    # Ensure it's published
+    expect(mocked_digital_object_create.with { |req| req.body.include?('"publish":true') }).to have_been_made
+    # Ensure the correct title is applied
+    expect(mocked_digital_object_create.with { |req| req.body.include?("View digital content") }).to have_been_made
+    # Ensure the archival object was linked to the digital object.
+    expect(mocked_archival_object_update).to have_been_made
+  end
+
+  it "creates an unpublished DAO if the item is private" do
+    stub_aspace_login
+    stub_find_archival_object(component_id: "MC001.01_c000001")
+    stub_findingaid(pulfa_id: "MC001.01_c000001")
+    stub_ezid
+    mocked_digital_object_create = stub_create_digital_object
+    mocked_archival_object_update = stub_archival_object_update(archival_object_id: "260330")
+    change_set_persister = ChangeSetPersister.default
+    resource = FactoryBot.create_for_repository(:pending_private_scanned_resource, source_metadata_identifier: "MC001.01_c000001")
+    change_set = ChangeSet.for(resource)
+    change_set.validate(state: "complete")
+    expect(change_set).to be_valid
+
+    change_set_persister.save(change_set: change_set)
+
+    # Ensure the digital object was made.
+    expect(mocked_digital_object_create).to have_been_made
+    expect(mocked_digital_object_create.with { |req| req.body.include?("http://www.example.com/concern/scanned_resources/#{change_set.id}/manifest") }).to have_been_made
+    # Ensure it's unpublished
+    expect(mocked_digital_object_create.with { |req| req.body.include?('"publish":false') }).to have_been_made
     # Ensure the correct title is applied
     expect(mocked_digital_object_create.with { |req| req.body.include?("View digital content") }).to have_been_made
     # Ensure the archival object was linked to the digital object.

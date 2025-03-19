@@ -9,7 +9,6 @@ class DaoUpdater
 
   def update!
     return unless decorated_resource.public_readable_state?
-    return if decorated_resource.private_visibility?
 
     # Assign digital object to Archival Object.
     link_digital_object
@@ -74,11 +73,11 @@ class DaoUpdater
       "jsonmodel_type" => "digital_object_component",
       "digital_object_id" => change_set.id.to_s,
       "title" => embed.link_label,
-      "publish" => true,
+      "publish" => !decorated_resource.private_visibility?,
       "file_versions" => [
         embed.to_dao.merge(
           {
-            "publish" => true,
+            "publish" => !decorated_resource.private_visibility?,
             "jsonmodel_type" => "file_version"
           }
         )
