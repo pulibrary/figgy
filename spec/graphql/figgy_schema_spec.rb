@@ -92,6 +92,36 @@ RSpec.describe FiggySchema do
             '<a href="https://library.princeton.edu/about/responsible-collection-description" target="_blank">https://library.princeton.edu/about/responsible-collection-description</a></p>'
         end
       end
+      context "for a resource with both an imported and a local content warning" do
+        let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "C1372_c47202-68234", content_warning: "Bad stuff in here.", import_metadata: true) }
+        it "prioritizes the imported warning" do
+          stub_findingaid(pulfa_id: "C1372_c47202-68234")
+
+          expect(result["errors"]).to be_blank
+          notice = result["data"]["resource"]["notice"]
+
+          expect(notice["heading"]).to eq "Content Warning"
+          expect(notice["acceptLabel"]).to eq "View Content"
+          expect(notice["textHtml"]).to eq "<p>The \"Revolution in China\" album contains photographs of dead bodies.</p> " \
+            "<p>For more information, please see the PUL statement on Responsible Collection Description: " \
+            '<a href="https://library.princeton.edu/about/responsible-collection-description" target="_blank">https://library.princeton.edu/about/responsible-collection-description</a></p>'
+        end
+      end
+      context "for a local content_warning bibliographic resource" do
+        let(:resource) { FactoryBot.create_for_repository(:scanned_resource, source_metadata_identifier: "991234563506421", import_metadata: true, content_warning: "There's harmful content here.") }
+        it "creates a specific notice" do
+          stub_catalog(bib_id: "991234563506421")
+
+          expect(result["errors"]).to be_blank
+          notice = result["data"]["resource"]["notice"]
+
+          expect(notice["heading"]).to eq "Content Warning"
+          expect(notice["acceptLabel"]).to eq "View Content"
+          expect(notice["textHtml"]).to eq "<p>There's harmful content here.</p> " \
+            "<p>For more information, please see the PUL statement on Responsible Collection Description: " \
+            '<a href="https://library.princeton.edu/about/responsible-collection-description" target="_blank">https://library.princeton.edu/about/responsible-collection-description</a></p>'
+        end
+      end
       context "for an ephemera_folder with a content_warning" do
         let(:resource) { FactoryBot.create_for_repository(:ephemera_folder, content_warning: "There's harmful content here.") }
         it "creates a specific notice" do

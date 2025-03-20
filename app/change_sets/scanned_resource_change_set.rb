@@ -35,6 +35,8 @@ class ScannedResourceChangeSet < ChangeSet
   property :series, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
   property :notice_type, multiple: false, required: false
+  # Harmful content note
+  property :content_warning, multiple: false, required: false
 
   # MARCRelator attributes
   Schema::MARCRelators.attributes.each { |field| property field }
@@ -71,6 +73,7 @@ class ScannedResourceChangeSet < ChangeSet
       :rights_statement,
       :rights_note,
       :notice_type,
+      :content_warning,
       :local_identifier,
       :holding_location,
       :pdf_type,
