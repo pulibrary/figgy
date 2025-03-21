@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require "rails_helper"
 
-RSpec.describe DspaceIngester do
+RSpec.describe DspaceCollectionIngester do
   subject(:dspace_ingester) { described_class.new(handle: handle) }
   let(:handle) { "88435/dsp01w6634629" }
 
