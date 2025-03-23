@@ -66,6 +66,10 @@ FactoryBot.define do
     factory :complete_ephemera_folder do
       state { "complete" }
     end
+    factory :needs_qa_ephemera_folder do
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      state { "needs_qa" }
+    end
     factory :non_validating_ephemera_folder do
       barcode { nil }
     end
