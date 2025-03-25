@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 class DspaceCommunityIngester < DspaceCollectionIngester
   def request_communities(headers: {}, **params)
-    path = "/communities/#{id}/communities"
+    path = "communities/#{id}/communities"
 
     paginated_request(path: path, headers: headers, **params)
   end
 
   def request_collections(headers: {}, **params)
-    path = "/communities/#{id}/collections"
+    path = "communities/#{id}/collections"
 
     paginated_request(path: path, headers: headers, **params)
+  end
+
+  def request_items_path
+    "communities/#{id}/items"
   end
 
   def communities
