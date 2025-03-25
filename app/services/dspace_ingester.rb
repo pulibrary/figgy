@@ -13,11 +13,7 @@ class DspaceIngester
     @json_path = handle
     @ark = @handle.gsub("ark:/", "")
     @base_url = "https://dataspace.princeton.edu/"
-    @base_uri = URI.parse(@base_url)
-    # @rest_base_url = "#{@base_url}/rest/"
-    @rest_base_url = URI.join(@base_url, "rest/")
-
-    # @download_base_url = "#{@base_url}/bitstream/#{ark}/"
+    @rest_base_url = URI.parse(@base_url + "rest/")
     @download_base_url = URI.join(@base_url, "bitstream/", "#{ark}/")
 
     @apply_remote_metadata = apply_remote_metadata

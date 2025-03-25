@@ -19,10 +19,12 @@ class DspaceCollectionIngester < DspaceIngester
     request_resource(path: path, params: request_params, headers: headers)
   end
 
-  def request_items(headers: {}, **params)
-    path = "/communities/#{id}/items"
+  def request_items_path
+    "collections/#{id}/items"
+  end
 
-    paginated_request(path: path, headers: headers, **params)
+  def request_items(headers: {}, **params)
+    paginated_request(path: request_items_path, headers: headers, **params)
   end
 
   def request_headers(**options)
@@ -34,7 +36,7 @@ class DspaceCollectionIngester < DspaceIngester
 
   def id
     @id ||= begin
-              path = "/handle/#{ark}"
+              path = "handle/#{ark}"
               headers = request_headers(Accept: "application/json")
               resource = request_resource(path: path, headers: headers)
 
