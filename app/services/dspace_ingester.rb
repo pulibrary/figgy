@@ -5,6 +5,10 @@ class DspaceIngester
 
   DSPACE_PAGE_SIZE = 20
 
+  def resource_type
+    "item"
+  end
+
   def initialize(handle:, logger: Rails.logger, dspace_api_token: nil, apply_remote_metadata: true)
     @handle = handle
     @logger = logger
@@ -19,23 +23,51 @@ class DspaceIngester
     @apply_remote_metadata = apply_remote_metadata
   end
 
+  def request_resource(path:, params: {}, headers: {})
+    uri = URI.parse(@rest_base_url.to_s + path)
+
+    response = Faraday.get(uri, params, headers)
+    return [] if response.status == 404
+
+    JSON.parse(response.body)
+  end
+
+  def paginated_request(path:, headers: {}, offset: 0, **params)
+    default_params = {
+      offset: offset,
+      limit: DSPACE_PAGE_SIZE
+    }
+    request_params = default_params.merge(params)
+
+    request_resource(path: path, params: request_params, headers: headers)
+  end
+
+  def request_headers(**options)
+    headers = options
+    headers["rest-dspace-token"] = @dspace_api_token unless @dspace_api_token.nil?
+
+    headers
+  end
+
   def id
     @id ||= begin
-              resource = rest_request(path: "handle/#{ark}")
+              path = "handle/#{ark}"
+              headers = request_headers("Accept" => "application/json")
+              resource = request_resource(path: path, headers: headers)
 
-              return {} unless resource.key?("id")
+              remote_type = resource["type"]
+              if remote_type != resource_type
+                raise(StandardError, "Handle resolves to resource type: #{resource_type}")
+              end
+              return unless resource.key?("id")
               resource["id"]
             end
   end
 
-  def request_bitstreams(offset: 0, headers: {})
+  def request_bitstreams(headers: {}, **params)
     path = "items/#{id}/bitstreams"
-    params = {
-      offset: offset,
-      limit: DSPACE_PAGE_SIZE
-    }
 
-    rest_request(path: path, params: params, headers: headers)
+    paginated_request(path: path, headers: headers, **params)
   end
 
   def bitstreams
