@@ -4,53 +4,12 @@ class DspaceCollectionIngester < DspaceIngester
     "collection"
   end
 
-  def request_resource(path:, params: {}, headers: {})
-    uri = URI.parse(@rest_base_url.to_s + path)
-
-    response = Faraday.get(uri, params, headers)
-    return [] if response.status == 404
-
-    JSON.parse(response.body)
-  end
-
-  def paginated_request(path:, headers: {}, offset: 0, **params)
-    default_params = {
-      offset: offset,
-      limit: DSPACE_PAGE_SIZE
-    }
-    request_params = default_params.merge(params)
-
-    request_resource(path: path, params: request_params, headers: headers)
-  end
-
   def request_items_path
     "collections/#{id}/items"
   end
 
   def request_items(headers: {}, **params)
     paginated_request(path: request_items_path, headers: headers, **params)
-  end
-
-  def request_headers(**options)
-    headers = options
-    headers["rest-dspace-token"] = @dspace_api_token unless @dspace_api_token.nil?
-
-    headers
-  end
-
-  def id
-    @id ||= begin
-              path = "handle/#{ark}"
-              headers = request_headers("Accept" => "application/json")
-              resource = request_resource(path: path, headers: headers)
-
-              remote_type = resource["type"]
-              if remote_type != resource_type
-                raise(StandardError, "Handle resolves to resource type: #{resource_type}")
-              end
-              return unless resource.key?("id")
-              resource["id"]
-            end
   end
 
   def items
