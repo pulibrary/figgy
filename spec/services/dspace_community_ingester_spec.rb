@@ -223,7 +223,7 @@ RSpec.describe DspaceCommunityIngester do
 
   describe "#ingest!" do
     before do
-      allow(IngestDspaceAssetJob).to receive(:perform_now)
+      allow(IngestFolderJob).to receive(:perform_later)
 
       stub_catalog(bib_id: mms_id)
 
@@ -290,7 +290,7 @@ RSpec.describe DspaceCommunityIngester do
         ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
         ingester.ingest!
 
-        expect(IngestDspaceAssetJob).to have_received(:perform_now).at_least(:once)
+        expect(IngestFolderJob).to have_received(:perform_later).at_least(:once)
       end
 
       context "when the MMS ID cannot be found using the ARK, " do
@@ -317,8 +317,8 @@ RSpec.describe DspaceCommunityIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestDspaceAssetJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestDspaceAssetJob).to have_received(:perform_now).at_least(:once)
+          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_later).at_least(:once)
         end
       end
 
@@ -343,8 +343,8 @@ RSpec.describe DspaceCommunityIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestDspaceAssetJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestDspaceAssetJob).to have_received(:perform_now).at_least(:once)
+          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_later).at_least(:once)
         end
       end
 
@@ -378,8 +378,8 @@ RSpec.describe DspaceCommunityIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestDspaceAssetJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestDspaceAssetJob).to have_received(:perform_now).at_least(:once)
+          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_later).at_least(:once)
         end
       end
     end

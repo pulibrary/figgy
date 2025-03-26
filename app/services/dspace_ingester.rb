@@ -166,7 +166,7 @@ class DspaceIngester
                            "DspaceResource"
                          end
 
-      IngestDspaceAssetJob.perform_now(
+      IngestFolderJob.perform_later(
         directory: dir_path,
         change_set_param: change_set_param,
         class_name: class_name,
@@ -242,7 +242,7 @@ class DspaceIngester
         identifier: oai_identifier
       }
       headers = {
-        Accept: "application/xml"
+        "Accept": "application/xml"
       }
 
       conn = Faraday.new(
