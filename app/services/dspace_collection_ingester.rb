@@ -30,20 +30,20 @@ class DspaceCollectionIngester < DspaceIngester
     @items ||= children(&method(:request_items))
   end
 
-  def ingest_items
+  def ingest_items(**attrs)
     items.each do |item|
       item_handle = item["handle"]
       logger.info "Preparing to ingest the member Item #{item_handle}..."
       item_ingester = DspaceIngester.new(handle: item_handle, logger: @logger, dspace_api_token: @dspace_api_token)
       # Reduces the number of API requests
       item_ingester.id = item["id"]
-      item_ingester.ingest!
+      item_ingester.ingest!(**attrs)
     end
   end
 
-  def ingest!
+  def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id}...")
 
-    ingest_items
+    ingest_items(**attrs)
   end
 end
