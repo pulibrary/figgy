@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class DspaceCollectionIngester < DspaceIngester
-  RESOURCE_TYPE = "collection"
-
   def resource_type
     "collection"
   end
