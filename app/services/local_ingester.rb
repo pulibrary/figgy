@@ -31,7 +31,7 @@ class LocalIngester
 
   def file_filters
     if resource_class_name == "EphemeraFolder"
-      [".tif", ".mp4", ".jpg", ".pdf", ".wav"]
+      [".tif", ".mp4", ".jpg", ".pdf", ".wav", ".mp3"]
     else
       []
     end
