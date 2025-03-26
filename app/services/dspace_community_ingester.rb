@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class DspaceCommunityIngester < DspaceCollectionIngester
-  RESOURCE_TYPE = "community"
+  def resource_type
+    "community"
+  end
 
   def request_communities(headers: {}, **params)
     path = "communities/#{id}/communities"
@@ -53,6 +55,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
   def ingest!
     logger.info("Ingesting DSpace community #{id}...")
+
     communities.each do |community|
       comm_handle = community["handle"]
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token)

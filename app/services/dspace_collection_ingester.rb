@@ -2,6 +2,10 @@
 class DspaceCollectionIngester < DspaceIngester
   RESOURCE_TYPE = "collection"
 
+  def resource_type
+    "collection"
+  end
+
   def request_resource(path:, params: {}, headers: {})
     uri = URI.parse(@rest_base_url.to_s + path)
 
@@ -42,8 +46,8 @@ class DspaceCollectionIngester < DspaceIngester
               headers = request_headers("Accept" => "application/json")
               resource = request_resource(path: path, headers: headers)
 
-              resource_type = resource["type"]
-              if resource_type != RESOURCE_TYPE
+              remote_type = resource["type"]
+              if remote_type != resource_type
                 raise(StandardError, "Handle resolves to resource type: #{resource_type}")
               end
               return unless resource.key?("id")

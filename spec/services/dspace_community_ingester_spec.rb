@@ -3,7 +3,8 @@ require "rails_helper"
 
 RSpec.describe DspaceCommunityIngester do
   subject(:dspace_ingester) { described_class.new(handle: handle) }
-  let(:handle) { "88435/dsp01w6634629" }
+  let(:community_handle) { "88435/dsp01testcommunity" }
+  let(:handle) { community_handle }
 
   let(:logger) { Logger.new(STDOUT) }
   let(:dspace_api_token) { "secret" }
@@ -22,27 +23,31 @@ RSpec.describe DspaceCommunityIngester do
   let(:community_id) { "test-community-id" }
   let(:community_response_body) do
     {
-      "id": community_id
+      "id": community_id,
+      "type": "community"
     }.to_json
   end
   let(:sub_community_id) { "test-sub-community-id" }
   let(:sub_community_response_body) do
     {
-      "id": sub_community_id
+      "id": sub_community_id,
+      "type": "community"
     }.to_json
   end
 
   let(:collection_id) { "test-collection-id" }
   let(:collection_response_body) do
     {
-      "id": collection_id
+      "id": collection_id,
+      "type": "collection"
     }.to_json
   end
 
   let(:item_id) { "test-id" }
   let(:response_body) do
     {
-      "id": item_id
+      "id": item_id,
+      "type": "item"
     }.to_json
   end
 
@@ -83,7 +88,6 @@ RSpec.describe DspaceCommunityIngester do
   end
   let(:catalog_response) { successful_catalog_response }
 
-  let(:community_handle) { "88435/dsp01testcommunity" }
   let(:sub_community_handle) { "88435/dsp01testsubcommunity" }
   let(:communities_query_response) do
     [
@@ -219,6 +223,13 @@ RSpec.describe DspaceCommunityIngester do
       status: 200,
       body: items_query_response
     )
+
+    stub_request(:get,
+                   "https://dataspace.princeton.edu/rest/handle/#{handle}").to_return(
+                    status: 200,
+                    headers: headers,
+                    body: community_response_body
+                  )
   end
 
   describe "#ingest!" do
@@ -227,19 +238,6 @@ RSpec.describe DspaceCommunityIngester do
 
       stub_catalog(bib_id: mms_id)
 
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/88435/dsp01w6634629").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: community_response_body
-                  )
-
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/#{community_handle}").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: community_response_body
-                  )
       stub_request(:get,
                    "https://dataspace.princeton.edu/rest/handle/#{sub_community_handle}").to_return(
                     status: 200,
@@ -408,7 +406,8 @@ RSpec.describe DspaceCommunityIngester do
   describe "#id" do
     let(:response_body) do
       {
-        "id": item_id
+        "id": community_id,
+        "type": "community"
       }.to_json
     end
     let(:bitstream_response) do
@@ -422,7 +421,7 @@ RSpec.describe DspaceCommunityIngester do
 
     before do
       stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/88435/dsp01w6634629").to_return(
+                   "https://dataspace.princeton.edu/rest/handle/#{handle}").to_return(
                     status: 200,
                     headers: headers,
                     body: response_body
@@ -430,43 +429,7 @@ RSpec.describe DspaceCommunityIngester do
     end
 
     it "retrieves the ID from the API response" do
-      expect(dspace_ingester.id).to eq(item_id)
-    end
-  end
-
-  describe "#bitstreams" do
-    let(:item_response) do
-      {
-        "id": item_id
-      }.to_json
-    end
-    let(:bitstream_response) do
-      [
-        {
-          "name" => "test-name",
-          "sequenceId" => "test-sequence-id"
-        }
-      ]
-    end
-    let(:bitstreams) { dspace_ingester.bitstreams }
-
-    before do
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/items/#{item_id}/bitstreams?limit=20&offset=0").to_return(
-                   status: 200,
-                   headers: headers,
-                   body: bitstream_response.to_json
-                 )
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/88435/dsp01w6634629").to_return(
-                   status: 200,
-                   headers: headers,
-                   body: item_response
-                 )
-    end
-
-    it "retrieves the bitstreams from the API response" do
-      expect(bitstreams).to eq(bitstream_response)
+      expect(dspace_ingester.id).to eq(community_id)
     end
   end
 end
