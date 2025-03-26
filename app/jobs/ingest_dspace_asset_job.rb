@@ -8,12 +8,12 @@ class IngestDspaceAssetJob < ApplicationJob
     )
   end
 
-  def perform(handle:, dspace_api_token:, ingest_service:)
+  def perform(handle:, dspace_api_token:, ingest_service:, **attrs)
     @handle = handle
     @dspace_api_token = dspace_api_token
     @logger = Rails.logger
     @ingest_service = ingest_service
 
-    dspace_service.ingest!
+    dspace_service.ingest!(**attrs)
   end
 end
