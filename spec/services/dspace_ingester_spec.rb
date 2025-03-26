@@ -3,11 +3,13 @@ require "rails_helper"
 
 RSpec.describe DspaceIngester do
   subject(:dspace_ingester) { described_class.new(handle: handle) }
-  let(:handle) { "88435/dsp01w6634629" }
+  let(:item_handle) { "88435/dsp01test" }
+  let(:handle) { item_handle }
 
   let(:logger) { Logger.new(STDOUT) }
   let(:dspace_api_token) { "secret" }
-  let(:id) { dspace_ingester.id }
+  let(:item_id) { "test-id" }
+  let(:id) { item_id }
   let(:request_authz_headers) do
     {
       "Rest-Dspace-Token" => "secret"
@@ -20,7 +22,8 @@ RSpec.describe DspaceIngester do
   end
   let(:response_body) do
     {
-      "id": "test-id"
+      "id": item_id,
+      "type": "item"
     }.to_json
   end
   let(:authz_bitstream_response) do
@@ -60,25 +63,28 @@ RSpec.describe DspaceIngester do
   end
   let(:catalog_response) { successful_catalog_response }
 
-  describe "#ingest!" do
-    before do
-      allow(IngestDspaceAssetJob).to receive(:perform_now)
-
-      stub_catalog(bib_id: mms_id)
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/88435/dsp01w6634629").to_return(
+  before do
+    stub_request(:get,
+                   "https://dataspace.princeton.edu/rest/handle/#{handle}").to_return(
                     status: 200,
                     headers: headers,
                     body: response_body
                   )
+  end
+
+  describe "#ingest!" do
+    before do
+      allow(IngestFolderJob).to receive(:perform_later)
+
+      stub_catalog(bib_id: mms_id)
       stub_request(:get,
-                   "https://dataspace.princeton.edu/oai/request?identifier=oai:dataspace.princeton.edu:88435/dsp01w6634629&metadataPrefix=oai_dc&verb=GetRecord").to_return(
+                   "https://dataspace.princeton.edu/oai/request?identifier=oai:dataspace.princeton.edu:#{handle}&metadataPrefix=oai_dc&verb=GetRecord").to_return(
                    status: 200,
                    headers: headers,
                    body: oai_response
                  )
       stub_request(:get,
-                   "https://catalog.princeton.edu/catalog.json?q=88435/dsp01w6634629&search_field=all_fields").to_return(
+                   "https://catalog.princeton.edu/catalog.json?q=#{handle}&search_field=all_fields").to_return(
                    status: 200,
                    headers: headers,
                    body: catalog_response.to_json
@@ -88,7 +94,7 @@ RSpec.describe DspaceIngester do
     context "when authenticated with an API token" do
       before do
         stub_request(:get,
-                    "https://dataspace.princeton.edu/rest/items/test-id/bitstreams?limit=20&offset=0").to_return(
+                    "https://dataspace.princeton.edu/rest/items/#{id}/bitstreams?limit=20&offset=0").to_return(
                     status: 200,
                     headers: headers,
                     body: bitstream_response.to_json
@@ -99,7 +105,17 @@ RSpec.describe DspaceIngester do
         ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
         ingester.ingest!
 
-        expect(IngestDspaceAssetJob).to have_received(:perform_now)
+        expect(IngestFolderJob).to have_received(:perform_later)
+      end
+
+      context "when providing default resource attributes" do
+        it "enqueues a new resource for ingestion with the attributes" do
+          collections = [123]
+          ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
+          ingester.ingest!(member_of_collection_ids: collections)
+
+          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collections))
+        end
       end
 
       context "when the MMS ID cannot be found using the ARK, " do
@@ -126,8 +142,8 @@ RSpec.describe DspaceIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestDspaceAssetJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestDspaceAssetJob).to have_received(:perform_now)
+          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_later)
         end
       end
 
@@ -152,8 +168,8 @@ RSpec.describe DspaceIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestDspaceAssetJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestDspaceAssetJob).to have_received(:perform_now)
+          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_later)
         end
       end
 
@@ -187,8 +203,8 @@ RSpec.describe DspaceIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestDspaceAssetJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestDspaceAssetJob).to have_received(:perform_now)
+          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_later)
         end
       end
     end
@@ -200,7 +216,7 @@ RSpec.describe DspaceIngester do
 
       before do
         stub_request(:get,
-                    "https://dataspace.princeton.edu/rest/items/test-id/bitstreams?limit=20&offset=0").to_return(
+                    "https://dataspace.princeton.edu/rest/items/#{id}/bitstreams?limit=20&offset=0").to_return(
                     status: 200,
                     headers: headers,
                     body: bitstream_response.to_json
@@ -219,40 +235,12 @@ RSpec.describe DspaceIngester do
   end
 
   describe "#id" do
-    let(:response_body) do
-      {
-        "id": "test-id"
-      }.to_json
-    end
-    let(:bitstream_response) do
-      [
-        {
-          "name" => "test-name",
-          "sequenceId" => "test-sequence-id"
-        }
-      ]
-    end
-
-    before do
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/88435/dsp01w6634629").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: response_body
-                  )
-    end
-
     it "retrieves the ID from the API response" do
-      expect(dspace_ingester.id).to eq("test-id")
+      expect(dspace_ingester.id).to eq(item_id)
     end
   end
 
   describe "#bitstreams" do
-    let(:item_response) do
-      {
-        "id": "test-id"
-      }.to_json
-    end
     let(:bitstream_response) do
       [
         {
@@ -269,12 +257,6 @@ RSpec.describe DspaceIngester do
                    status: 200,
                    headers: headers,
                    body: bitstream_response.to_json
-                 )
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/88435/dsp01w6634629").to_return(
-                   status: 200,
-                   headers: headers,
-                   body: item_response
                  )
     end
 

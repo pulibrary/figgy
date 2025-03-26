@@ -49,6 +49,7 @@ class BulkIngestService
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
     attributes.merge!(figgy_metadata_file_attributes(base_path: directory_path))
     resource = find_or_create_by(property: property, value: file_name, **attributes)
+
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
     attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
   end
@@ -138,7 +139,7 @@ class BulkIngestService
       resource = klass.new
 
       change_set = ChangeSet.for(resource, change_set_param: change_set_param)
-      return unless change_set.validate(**attributes)
+      raise("Invalid #{change_set}: #{change_set.errors}") unless change_set.validate(**attributes)
 
       persisted = change_set_persister.save(change_set: change_set)
       logger.info "Created the resource #{persisted.id}"

@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 class DspaceCommunityIngester < DspaceCollectionIngester
+  def resource_type
+    "community"
+  end
+
+  def resource_path
+    "/communities/#{id}"
+  end
+
   def request_communities(headers: {}, **params)
     path = "communities/#{id}/communities"
 
@@ -17,55 +25,54 @@ class DspaceCommunityIngester < DspaceCollectionIngester
   end
 
   def communities
-    @communities ||= begin
-                      data = []
-
-                      loop do
-                        headers = request_headers(Accept: "application/json")
-                        new_data = request_communities(headers: headers, offset: data.length)
-                        break if new_data.empty?
-                        data.concat(new_data)
-
-                        break if new_data.count < DSPACE_PAGE_SIZE
-                      end
-                      data
-                    end
+    @communities ||= children(&method(:request_communities))
   end
 
   def collections
-    @collections ||= begin
-                      data = []
-
-                      loop do
-                        headers = request_headers(Accept: "application/json")
-                        new_data = request_collections(headers: headers, offset: data.length)
-                        break if new_data.empty?
-                        data.concat(new_data)
-
-                        break if new_data.count < DSPACE_PAGE_SIZE
-                      end
-                      data
-                    end
+    @collections ||= children(&method(:request_collections))
   end
 
-  def ingest!
+  def ingest!(**parent_attrs)
     logger.info("Ingesting DSpace community #{id}...")
-    communities.each do |community|
+    attrs = parent_attrs.dup
+
+    attrs[:member_of_collection_ids] = @collection_ids
+    raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
+
+    # This was disabled
+    # persisted = persist_collection_resource
+    # attrs[:member_of_collection_ids].append(persisted.id.to_s)
+
+    # This was disabled
+    # This was giving me bugs
+    # @local_identifiers.append(title)
+    # @local_identifiers += [formatted_title]
+    # if attrs.key?(:local_identifier)
+    #  attrs[:local_identifier] += @local_identifiers
+    # else
+    #  attrs[:local_identifier] = @local_identifiers
+    # end
+
+    communities.each_with_index do |community, _index|
       comm_handle = community["handle"]
-      ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token)
+
+      ingester = DspaceCommunityIngester.new(
+        handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit
+      )
       # Reduces the number of API requests
       ingester.id = community["id"]
       ingester.ingest!
     end
 
-    collections.each do |collection|
+    collections.each_with_index do |collection, _index|
       collec_handle = collection["handle"]
-      ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token)
+
+      ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)
       # Reduces the number of API requests
       ingester.id = collection["id"]
       ingester.ingest!
     end
 
-    ingest_items
+    ingest_items(**attrs)
   end
 end

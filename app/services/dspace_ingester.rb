@@ -5,6 +5,10 @@ class DspaceIngester
 
   DSPACE_PAGE_SIZE = 20
 
+  def resource_type
+    "item"
+  end
+
   def initialize(handle:, logger: Rails.logger, dspace_api_token: nil, apply_remote_metadata: true)
     @handle = handle
     @logger = logger
@@ -17,25 +21,59 @@ class DspaceIngester
     @download_base_url = URI.join(@base_url, "bitstream/", "#{ark}/")
 
     @apply_remote_metadata = apply_remote_metadata
+    @title = nil
+    @publisher = nil
+  end
+
+  def request_resource(path:, params: {}, headers: {})
+    uri = URI.parse(@rest_base_url.to_s + path)
+    @logger.info("Requesting #{uri} #{params}")
+
+    response = Faraday.get(uri, params, headers)
+    raise("Failed to request bibliographic metadata: #{uri} #{params} #{headers}") if response.status == 404
+
+    JSON.parse(response.body)
+  rescue StandardError => error
+    Rails.logger.warn("Failed to request bibliographic metadata: #{uri} #{params} #{headers}")
+    raise(error)
+  end
+
+  def paginated_request(path:, headers: {}, offset: 0, **params)
+    default_params = {
+      offset: offset,
+      limit: DSPACE_PAGE_SIZE
+    }
+    request_params = default_params.merge(params)
+
+    request_resource(path: path, params: request_params, headers: headers)
+  end
+
+  def request_headers(**options)
+    headers = options
+    headers["rest-dspace-token"] = @dspace_api_token unless @dspace_api_token.nil?
+
+    headers
   end
 
   def id
     @id ||= begin
-              resource = rest_request(path: "handle/#{ark}")
+              path = "handle/#{ark}"
+              headers = request_headers("Accept" => "application/json")
+              resource = request_resource(path: path, headers: headers)
 
-              return {} unless resource.key?("id")
+              remote_type = resource["type"]
+              if remote_type != resource_type
+                raise(StandardError, "Handle resolves to resource type: #{resource_type}")
+              end
+              return unless resource.key?("id")
               resource["id"]
             end
   end
 
-  def request_bitstreams(offset: 0, headers: {})
+  def request_bitstreams(headers: {}, **params)
     path = "items/#{id}/bitstreams"
-    params = {
-      offset: offset,
-      limit: DSPACE_PAGE_SIZE
-    }
 
-    rest_request(path: path, params: params, headers: headers)
+    paginated_request(path: path, headers: headers, **params)
   end
 
   def bitstreams
@@ -119,15 +157,10 @@ class DspaceIngester
     ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
   end
 
-  def ingest!
-    raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
-
-    logger.info "Downloading the Bitstreams for #{ark}..."
-    download_bitstreams
-
-    logger.info "Requesting the metadata for #{ark}..."
-    oai_records.each do |record|
+  def oai_metadata
+    @oai_metadata ||= oai_records.map do |record|
       attrs = {}
+      # logger.info("Requesting the metadata for #{ark}...")
 
       metadata = record.at_xpath("xmlns:metadata")
       dublin_core = metadata.at_xpath("oai_dc:dc", "oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/")
@@ -155,9 +188,42 @@ class DspaceIngester
       @publisher = attrs.fetch(:publisher, nil)
       @logger.warn("Failed to retrieve the `publisher` field for #{ark}") if @publisher.nil?
 
+      # Ensure that the identifier does not include the full URL
+      # identifier = attrs.fetch(:identifier, nil)
+      # unless identifier.nil?
+      #  ark = identifier.gsub("http://arks.princeton.edu/", "")
+      #  attrs["identifier"] = ark
+      # end
+
       attrs["source_metadata_identifier"] = source_metadata_identifier unless source_metadata_identifier.nil?
 
       logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
+
+      attrs
+    end
+  end
+
+  def ingest!(**attrs)
+    
+    raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
+
+    logger.info "Downloading the Bitstreams for #{ark}..."
+    download_bitstreams
+
+    logger.info "Requesting the metadata for #{ark}..."
+    oai_metadata.each do |metadata|
+      logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
+
+      metadata.merge!(attrs)
+      identifier = metadata.fetch(:identifier, nil)
+
+      if !identifier.nil?
+        persisted = find_resources_by_ark(value: identifier)
+        if !persisted.empty?
+          logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
+          next
+        end
+      end
 
       # Cases where one MMS ID in Orangelight maps to multiple DataSpace Items should not apply remote metadata
       change_set_param = if apply_remote_metadata?
@@ -166,12 +232,12 @@ class DspaceIngester
                            "DspaceResource"
                          end
 
-      IngestDspaceAssetJob.perform_now(
+      IngestFolderJob.perform_later(
         directory: dir_path,
         change_set_param: change_set_param,
         class_name: class_name,
         file_filters: filters,
-        **attrs
+        **metadata
       )
       logger.info "Enqueued the ingestion of #{@title}."
     end
@@ -187,10 +253,20 @@ class DspaceIngester
 
   private
 
+    def query_service
+      Valkyrie.config.metadata_adapter.query_service
+    end
+
+    def find_resources_by_ark(value:)
+      query_service.custom_queries.find_many_by_property(property: :identifier, values: [value])
+    end
+
     def download_bitstream(url:, file_path:)
       return if File.exist?(file_path)
 
-      Open3.capture2e("wget -c '#{url}' -O '#{file_path}'")
+      command = "wget -c '#{url}' -O '#{file_path}'"
+      _output, status = Open3.capture2e(command)
+      raise("Failed to execute #{command}") if status.exitstatus != 0
     end
 
     def dspace_config
@@ -242,7 +318,7 @@ class DspaceIngester
         identifier: oai_identifier
       }
       headers = {
-        Accept: "application/xml"
+        "Accept": "application/xml"
       }
 
       conn = Faraday.new(
