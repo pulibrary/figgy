@@ -108,6 +108,16 @@ RSpec.describe DspaceIngester do
         expect(IngestFolderJob).to have_received(:perform_later)
       end
 
+      context "when providing default resource attributes" do
+        it "enqueues a new resource for ingestion with the attributes" do
+          collections = [123]
+          ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
+          ingester.ingest!(member_of_collection_ids: collections)
+
+          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collections))
+        end
+      end
+
       context "when the MMS ID cannot be found using the ARK, " do
         let(:catalog_response) do
           {

@@ -151,7 +151,7 @@ class DspaceIngester
     ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
   end
 
-  def ingest!
+  def ingest!(**attrs)
     raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
     logger.info "Downloading the Bitstreams for #{ark}..."
@@ -159,8 +159,6 @@ class DspaceIngester
 
     logger.info "Requesting the metadata for #{ark}..."
     oai_records.each do |record|
-      attrs = {}
-
       metadata = record.at_xpath("xmlns:metadata")
       dublin_core = metadata.at_xpath("oai_dc:dc", "oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/")
       children = dublin_core.xpath("./*")

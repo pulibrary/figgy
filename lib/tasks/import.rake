@@ -55,25 +55,30 @@ namespace :figgy do
     task dspace_collection: :environment do
       handle = ENV["HANDLE"]
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      collection = ENV["COLLECTION"]
 
       abort "usage: rake import:dspace_collection HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle
+      collections = [collection]
 
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Collection #{handle} from DSpace...")
 
-      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCollectionIngester)
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCollectionIngester, member_of_collection_ids: collections)
     end
 
     desc "Ingest a DSpace community."
     task dspace_community: :environment do
       handle = ENV["HANDLE"]
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      collection = ENV["COLLECTION"]
+
       abort "usage: rake import:dspace_community HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle
+      collections = [collection]
 
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Community #{handle} from DSpace...")
 
-      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCommunityIngester)
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCommunityIngester, member_of_collection_ids: collections)
     end
   end
 end
