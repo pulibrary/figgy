@@ -12,20 +12,22 @@ class DspaceCollectionIngester < DspaceIngester
     paginated_request(path: request_items_path, headers: headers, **params)
   end
 
+  def children
+    data = []
+
+    loop do
+      headers = request_headers("Accept" => "application/json")
+      new_data = yield(headers: headers, offset: data.length) if block_given?
+      break if new_data.empty?
+      data.concat(new_data)
+
+      break if new_data.count < DSPACE_PAGE_SIZE
+    end
+    data
+  end
+
   def items
-    @items ||= begin
-                      data = []
-
-                      loop do
-                        headers = request_headers("Accept" => "application/json")
-                        new_data = request_items(offset: data.length, headers: headers)
-                        break if new_data.empty?
-                        data.concat(new_data)
-
-                        break if new_data.count < DSPACE_PAGE_SIZE
-                      end
-                      data
-                    end
+    @items ||= children(&method(:request_items))
   end
 
   def ingest_items

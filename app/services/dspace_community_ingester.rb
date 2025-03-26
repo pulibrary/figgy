@@ -21,36 +21,11 @@ class DspaceCommunityIngester < DspaceCollectionIngester
   end
 
   def communities
-    @communities ||= begin
-                      data = []
-
-                      loop do
-                        headers = request_headers("Accept" => "application/json")
-                        new_data = request_communities(headers: headers, offset: data.length)
-                        break if new_data.empty?
-                        data.concat(new_data)
-
-                        break if new_data.count < DSPACE_PAGE_SIZE
-                      end
-                      data
-                    end
+    @communities ||= children(&method(:request_communities))
   end
 
   def collections
-    @collections ||= begin
-                      data = []
-
-                      loop do
-                        headers = request_headers("Accept" => "application/json")
-                        new_data = request_collections(headers: headers, offset: data.length)
-
-                        break if new_data.empty?
-                        data.concat(new_data)
-
-                        break if new_data.count < DSPACE_PAGE_SIZE
-                      end
-                      data
-                    end
+    @collections ||= children(&method(:request_collections))
   end
 
   def ingest!
