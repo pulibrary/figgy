@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class DspaceCommunityIngester < DspaceCollectionIngester
+  RESOURCE_TYPE = "community"
+
   def request_communities(headers: {}, **params)
     path = "communities/#{id}/communities"
 
@@ -21,7 +23,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
                       data = []
 
                       loop do
-                        headers = request_headers(Accept: "application/json")
+                        headers = request_headers("Accept" => "application/json")
                         new_data = request_communities(headers: headers, offset: data.length)
                         break if new_data.empty?
                         data.concat(new_data)
@@ -37,8 +39,9 @@ class DspaceCommunityIngester < DspaceCollectionIngester
                       data = []
 
                       loop do
-                        headers = request_headers(Accept: "application/json")
+                        headers = request_headers("Accept" => "application/json")
                         new_data = request_collections(headers: headers, offset: data.length)
+
                         break if new_data.empty?
                         data.concat(new_data)
 

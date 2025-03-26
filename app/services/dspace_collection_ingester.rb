@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class DspaceCollectionIngester < DspaceIngester
+  RESOURCE_TYPE = "collection"
+
   def request_resource(path:, params: {}, headers: {})
     uri = URI.parse(@rest_base_url.to_s + path)
 
@@ -37,9 +39,13 @@ class DspaceCollectionIngester < DspaceIngester
   def id
     @id ||= begin
               path = "handle/#{ark}"
-              headers = request_headers(Accept: "application/json")
+              headers = request_headers("Accept" => "application/json")
               resource = request_resource(path: path, headers: headers)
 
+              resource_type = resource["type"]
+              if resource_type != RESOURCE_TYPE
+                raise(StandardError, "Handle resolves to resource type: #{resource_type}")
+              end
               return unless resource.key?("id")
               resource["id"]
             end
@@ -50,7 +56,7 @@ class DspaceCollectionIngester < DspaceIngester
                       data = []
 
                       loop do
-                        headers = request_headers(Accept: "application/json")
+                        headers = request_headers("Accept" => "application/json")
                         new_data = request_items(offset: data.length, headers: headers)
                         break if new_data.empty?
                         data.concat(new_data)

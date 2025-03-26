@@ -48,8 +48,7 @@ namespace :figgy do
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Item #{handle} from DSpace...")
 
-      ingester = DspaceIngester.new(handle: handle, logger: @logger, dspace_api_token: dspace_api_token)
-      ingester.ingest!
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, resource_type: IngestDspaceAssetJob::ITEM)
     end
 
     desc "Ingest a DSpace collection."
@@ -62,22 +61,19 @@ namespace :figgy do
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Collection #{handle} from DSpace...")
 
-      ingester = DspaceCollectionIngester.new(handle: handle, logger: @logger, dspace_api_token: dspace_api_token)
-      ingester.ingest!
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, resource_type: IngestDspaceAssetJob::COLLECTION)
     end
 
     desc "Ingest a DSpace community."
     task dspace_community: :environment do
       handle = ENV["HANDLE"]
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
-
       abort "usage: rake import:dspace_community HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle
 
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Community #{handle} from DSpace...")
 
-      ingester = DspaceCommunityIngester.new(handle: handle, logger: @logger, dspace_api_token: dspace_api_token)
-      ingester.ingest!
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, resource_type: IngestDspaceAssetJob::COMMUNITY)
     end
   end
 end
