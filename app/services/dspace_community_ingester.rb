@@ -28,7 +28,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     @collections ||= children(&method(:request_collections))
   end
 
-  def ingest!
+  def ingest!(**attrs)
     logger.info("Ingesting DSpace community #{id}...")
 
     communities.each do |community|
@@ -36,7 +36,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token)
       # Reduces the number of API requests
       ingester.id = community["id"]
-      ingester.ingest!
+      ingester.ingest!(**attrs)
     end
 
     collections.each do |collection|
@@ -44,9 +44,9 @@ class DspaceCommunityIngester < DspaceCollectionIngester
       ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token)
       # Reduces the number of API requests
       ingester.id = collection["id"]
-      ingester.ingest!
+      ingester.ingest!(**attrs)
     end
 
-    ingest_items
+    ingest_items(**attrs)
   end
 end
