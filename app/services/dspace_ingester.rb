@@ -21,6 +21,8 @@ class DspaceIngester
     @download_base_url = URI.join(@base_url, "bitstream/", "#{ark}/")
 
     @apply_remote_metadata = apply_remote_metadata
+    @title = nil
+    @publisher = nil
   end
 
   def request_resource(path:, params: {}, headers: {})
@@ -151,14 +153,11 @@ class DspaceIngester
     ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
   end
 
-  def ingest!(**attrs)
-    raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
+  def oai_metadata
+    @oai_metadata ||= oai_records.map do |record|
+      attrs = {}
+      # logger.info("Requesting the metadata for #{ark}...")
 
-    logger.info "Downloading the Bitstreams for #{ark}..."
-    download_bitstreams
-
-    logger.info "Requesting the metadata for #{ark}..."
-    oai_records.each do |record|
       metadata = record.at_xpath("xmlns:metadata")
       dublin_core = metadata.at_xpath("oai_dc:dc", "oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/")
       children = dublin_core.xpath("./*")
@@ -189,6 +188,22 @@ class DspaceIngester
 
       logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
 
+      attrs
+    end
+  end
+
+  def ingest!(**attrs)
+    raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
+
+    logger.info "Downloading the Bitstreams for #{ark}..."
+    download_bitstreams
+
+    logger.info "Requesting the metadata for #{ark}..."
+    oai_metadata.each do |metadata|
+      logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
+
+      metadata.merge!(attrs)
+
       # Cases where one MMS ID in Orangelight maps to multiple DataSpace Items should not apply remote metadata
       change_set_param = if apply_remote_metadata?
                            "ScannedResource"
@@ -201,7 +216,7 @@ class DspaceIngester
         change_set_param: change_set_param,
         class_name: class_name,
         file_filters: filters,
-        **attrs
+        **metadata
       )
       logger.info "Enqueued the ingestion of #{@title}."
     end
