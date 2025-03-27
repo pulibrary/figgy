@@ -41,6 +41,11 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     persisted = persist_collection_resource
     attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
+    unless attrs.key?(:local_identifier)
+      attrs[:local_identifier] = []
+    end
+    attrs[:local_identifier].append(title)
+
     communities.each do |community|
       comm_handle = community["handle"]
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token)
