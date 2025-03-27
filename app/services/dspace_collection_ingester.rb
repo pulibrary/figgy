@@ -60,7 +60,7 @@ class DspaceCollectionIngester < DspaceIngester
   def persist_collection_resource
     collection = Collection.new
     collection_change_set = CollectionChangeSet.new(collection)
-    collection_change_set.validate(title: title, slug: handle.parameterize, owners: User.first.uid)
+    collection_change_set.validate(title: title, slug: handle.parameterize)
     change_set_persister = ChangeSetPersister.default
     change_set_persister.save(change_set: collection_change_set)
   end
@@ -73,6 +73,11 @@ class DspaceCollectionIngester < DspaceIngester
     end
     persisted = persist_collection_resource
     attrs[:member_of_collection_ids].append(persisted.id.to_s)
+
+    unless attrs.key?(:local_identifier)
+      attrs[:local_identifier] = []
+    end
+    attrs[:local_identifier].append(title)
 
     ingest_items(**attrs)
   end
