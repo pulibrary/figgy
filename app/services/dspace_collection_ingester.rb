@@ -4,6 +4,15 @@ class DspaceCollectionIngester < DspaceIngester
     "collection"
   end
 
+  def resource_path
+    "/collections/#{id}"
+  end
+
+  def resource
+    headers = request_headers("Accept" => "application/json")
+    request_resource(path: resource_path, headers: headers)
+  end
+
   def request_items_path
     "collections/#{id}/items"
   end
@@ -30,6 +39,13 @@ class DspaceCollectionIngester < DspaceIngester
     @items ||= children(&method(:request_items))
   end
 
+  def title
+    @title ||= begin
+                 return unless resource.key?("name")
+                 resource["name"]
+               end
+  end
+
   def ingest_items(**attrs)
     items.each do |item|
       item_handle = item["handle"]
@@ -41,8 +57,22 @@ class DspaceCollectionIngester < DspaceIngester
     end
   end
 
+  def persist_collection_resource
+    collection = Collection.new
+    collection_change_set = CollectionChangeSet.new(collection)
+    collection_change_set.validate(title: title, slug: handle.parameterize, owners: User.first.uid)
+    change_set_persister = ChangeSetPersister.default
+    change_set_persister.save(change_set: collection_change_set)
+  end
+
   def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id}...")
+
+    unless attrs.key?(:member_of_collection_ids)
+      attrs[:member_of_collection_ids] = []
+    end
+    persisted = persist_collection_resource
+    attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
     ingest_items(**attrs)
   end

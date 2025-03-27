@@ -4,6 +4,10 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     "community"
   end
 
+  def resource_path
+    "/communities/#{id}"
+  end
+
   def request_communities(headers: {}, **params)
     path = "communities/#{id}/communities"
 
@@ -30,6 +34,12 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
   def ingest!(**attrs)
     logger.info("Ingesting DSpace community #{id}...")
+
+    unless attrs.key?(:member_of_collection_ids)
+      attrs[:member_of_collection_ids] = []
+    end
+    persisted = persist_collection_resource
+    attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
     communities.each do |community|
       comm_handle = community["handle"]
