@@ -37,5 +37,48 @@ namespace :figgy do
       ingester = JsonIngester.new(json_path: file_path, logger: @logger)
       ingester.ingest!
     end
+
+    desc "Ingest a DSpace asset."
+    task dspace: :environment do
+      handle = ENV["HANDLE"]
+      dspace_api_token = ENV["DSPACE_API_TOKEN"]
+
+      abort "usage: rake import:dspace HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle && collection
+
+      @logger = Logger.new(STDOUT)
+      @logger.info("Preparing to ingest Item #{handle} from DSpace...")
+
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, resource_type: IngestDspaceAssetJob::ITEM)
+    end
+
+    desc "Ingest a DSpace collection."
+    task dspace_collection: :environment do
+      handle = ENV["HANDLE"]
+      dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      collection = ENV["COLLECTION"]
+
+      abort "usage: rake import:dspace_collection HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle && collection
+      collections = [collection]
+
+      @logger = Logger.new(STDOUT)
+      @logger.info("Preparing to ingest Collection #{handle} from DSpace...")
+
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCollectionIngester, member_of_collection_ids: collections)
+    end
+
+    desc "Ingest a DSpace community."
+    task dspace_community: :environment do
+      handle = ENV["HANDLE"]
+      dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      collection = ENV["COLLECTION"]
+
+      abort "usage: rake import:dspace_community HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle && collection
+      collections = [collection]
+
+      @logger = Logger.new(STDOUT)
+      @logger.info("Preparing to ingest Community #{handle} from DSpace...")
+
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCommunityIngester, member_of_collection_ids: collections)
+    end
   end
 end
