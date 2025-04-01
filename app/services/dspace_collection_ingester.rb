@@ -65,13 +65,26 @@ class DspaceCollectionIngester < DspaceIngester
     change_set_persister.save(change_set: collection_change_set)
   end
 
+  def query_service
+    Valkyrie.config.metadata_adapter.query_service
+  end
+
+  def find_or_persist
+
+    results = query_service.custom_queries.find_many_by_property(property: :title, values: [title])
+    persisted = results.last
+    return persisted unless persisted.nil?
+
+    persist_collection_resource
+  end
+
   def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id}...")
 
     unless attrs.key?(:member_of_collection_ids)
       attrs[:member_of_collection_ids] = []
     end
-    persisted = persist_collection_resource
+    persisted = find_or_persist
     attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
     unless attrs.key?(:local_identifier)

@@ -235,7 +235,9 @@ class DspaceIngester
     def download_bitstream(url:, file_path:)
       return if File.exist?(file_path)
 
-      Open3.capture2e("wget -c '#{url}' -O '#{file_path}'")
+      command = "wget -c '#{url}' -O '#{file_path}'"
+      _output, status = Open3.capture2e(command)
+      raise("Failed to execute #{command}") if status.exitstatus != 0
     end
 
     def dspace_config
