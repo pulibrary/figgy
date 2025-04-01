@@ -29,9 +29,14 @@ class DspaceIngester
     uri = URI.parse(@rest_base_url.to_s + path)
 
     response = Faraday.get(uri, params, headers)
-    return [] if response.status == 404
+    raise("Failed to request bibliographic metadata: #{uri} #{params} #{headers}") if response.status == 404
 
-    JSON.parse(response.body)
+    begin
+      JSON.parse(response.body)
+    rescue StandardError => error
+      Rails.logger.warn("Failed to request bibliographic metadata: #{uri} #{params} #{headers}")
+      raise(error)
+    end
   end
 
   def paginated_request(path:, headers: {}, offset: 0, **params)
@@ -183,6 +188,13 @@ class DspaceIngester
       # Publisher is used to cases where there is one MMS ID for many DSpace Items
       @publisher = attrs.fetch(:publisher, nil)
       @logger.warn("Failed to retrieve the `publisher` field for #{ark}") if @publisher.nil?
+
+      # Ensure that the identifier does not include the full URL
+      identifier = attrs.fetch(:identifier, nil)
+      unless identifier.nil?
+        ark = identifier.gsub("http://arks.princeton.edu/", "")
+        attrs["identifier"] = ark
+      end
 
       attrs["source_metadata_identifier"] = source_metadata_identifier unless source_metadata_identifier.nil?
 
