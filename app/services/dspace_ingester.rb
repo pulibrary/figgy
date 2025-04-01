@@ -190,11 +190,11 @@ class DspaceIngester
       @logger.warn("Failed to retrieve the `publisher` field for #{ark}") if @publisher.nil?
 
       # Ensure that the identifier does not include the full URL
-      identifier = attrs.fetch(:identifier, nil)
-      unless identifier.nil?
-        ark = identifier.gsub("http://arks.princeton.edu/", "")
-        attrs["identifier"] = ark
-      end
+      # identifier = attrs.fetch(:identifier, nil)
+      # unless identifier.nil?
+      #  ark = identifier.gsub("http://arks.princeton.edu/", "")
+      #  attrs["identifier"] = ark
+      # end
 
       attrs["source_metadata_identifier"] = source_metadata_identifier unless source_metadata_identifier.nil?
 

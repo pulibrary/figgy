@@ -70,7 +70,6 @@ class DspaceCollectionIngester < DspaceIngester
   end
 
   def find_or_persist
-
     results = query_service.custom_queries.find_many_by_property(property: :title, values: [title])
     persisted = results.last
     return persisted unless persisted.nil?
