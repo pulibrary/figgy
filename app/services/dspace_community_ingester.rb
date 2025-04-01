@@ -48,18 +48,22 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
     communities.each do |community|
       comm_handle = community["handle"]
+      comm_attrs = attrs.dup
+
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token)
       # Reduces the number of API requests
       ingester.id = community["id"]
-      ingester.ingest!(**attrs)
+      ingester.ingest!(**comm_attrs)
     end
 
     collections.each do |collection|
       collec_handle = collection["handle"]
+      collec_attrs = attrs.dup
+
       ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token)
       # Reduces the number of API requests
       ingester.id = collection["id"]
-      ingester.ingest!(**attrs)
+      ingester.ingest!(**collec_attrs)
     end
 
     ingest_items(**attrs)
