@@ -20,5 +20,14 @@ RSpec.describe ProjectIndexer do
       output = described_class.new(resource: box).to_solr
       expect(output["ephemera_project_ssim"]).to eq project.title
     end
+    it "indexes the project when it's a boxless folder" do
+      folder = FactoryBot.create_for_repository(:ephemera_folder)
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: folder.id)
+
+      output = described_class.new(resource: folder).to_solr
+
+      expect(output["ephemera_project_ssim"]).to eq project.title
+      expect(output["ephemera_project_tesim"]).to eq project.title
+    end
   end
 end

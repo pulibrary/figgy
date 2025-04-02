@@ -16,11 +16,6 @@ class ProjectIndexer
   end
 
   def project
-    return unless box
-    box.decorate.ephemera_project
-  end
-
-  def box
-    resource.decorate.ephemera_box
+    Wayfinder.for(resource).ephemera_projects.first&.decorate
   end
 end
