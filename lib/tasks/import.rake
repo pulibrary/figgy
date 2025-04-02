@@ -42,13 +42,15 @@ namespace :figgy do
     task dspace: :environment do
       handle = ENV["HANDLE"]
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      collection = ENV["COLLECTION"]
 
       abort "usage: rake import:dspace HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle && collection
+      collections = [collection]
 
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Item #{handle} from DSpace...")
 
-      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, resource_type: IngestDspaceAssetJob::ITEM)
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceIngester, collection_ids: collections)
     end
 
     desc "Ingest a DSpace collection."
