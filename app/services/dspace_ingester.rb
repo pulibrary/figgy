@@ -27,6 +27,7 @@ class DspaceIngester
 
   def request_resource(path:, params: {}, headers: {})
     uri = URI.parse(@rest_base_url.to_s + path)
+    @logger.info("Requesting #{uri} #{params}")
 
     response = Faraday.get(uri, params, headers)
     raise("Failed to request bibliographic metadata: #{uri} #{params} #{headers}") if response.status == 404
