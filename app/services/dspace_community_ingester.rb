@@ -35,11 +35,10 @@ class DspaceCommunityIngester < DspaceCollectionIngester
   def ingest!(**attrs)
     logger.info("Ingesting DSpace community #{id}...")
 
-    unless attrs.key?(:member_of_collection_ids)
-      attrs[:member_of_collection_ids] = []
-    end
-    persisted = persist_collection_resource
-    attrs[:member_of_collection_ids].append(persisted.id.to_s)
+    raise("A parent Collection is required for #{id}") unless attrs.key?(:member_of_collection_ids) && !attrs[:member_of_collection_ids].empty?
+
+    # persisted = persist_collection_resource
+    # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
     unless attrs.key?(:local_identifier)
       attrs[:local_identifier] = []

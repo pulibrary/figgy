@@ -19,6 +19,9 @@ class DspaceCollectionIngester < DspaceIngester
 
   def request_items(headers: {}, **params)
     paginated_request(path: request_items_path, headers: headers, **params)
+  rescue => error
+    Rails.logger.warn(error)
+    []
   end
 
   def children
@@ -80,11 +83,10 @@ class DspaceCollectionIngester < DspaceIngester
   def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id}...")
 
-    unless attrs.key?(:member_of_collection_ids)
-      attrs[:member_of_collection_ids] = []
-    end
-    persisted = find_or_persist
-    attrs[:member_of_collection_ids].append(persisted.id.to_s)
+    raise("A parent Collection is required for #{id}") unless attrs.key?(:member_of_collection_ids) && !attrs[:member_of_collection_ids].empty?
+
+    # persisted = find_or_persist
+    # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
     unless attrs.key?(:local_identifier)
       attrs[:local_identifier] = []
