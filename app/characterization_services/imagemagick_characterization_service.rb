@@ -57,9 +57,13 @@ class ImagemagickCharacterizationService
       height: vips_image.height.to_s,
       mime_type: mime_type,
       checksum: MultiChecksum.for(@file_object),
-      size: File.size(filename),
+      size: file_size,
       error_message: [] # Ensure any previous error messages are removed
     }
+  end
+
+  def file_size
+    File.size(filename)
   end
 
   def mime_type

@@ -18,10 +18,10 @@ RSpec.configure do |config|
     unless ex.metadata[:run_real_characterization]
       ruby_mock = instance_double(RubyTikaApp, to_json: tika_output)
       allow(RubyTikaApp).to receive(:new).and_return(ruby_mock)
-      allow_any_instance_of(MiniMagick::Image).to receive(:width).and_return(200)
-      allow_any_instance_of(MiniMagick::Image).to receive(:height).and_return(287)
-      allow_any_instance_of(MiniMagick::Image).to receive(:mime_type).and_return("image/tiff")
-      allow_any_instance_of(MiniMagick::Image).to receive(:size).and_return("196882B")
+      allow_any_instance_of(Vips::Image).to receive(:width).and_return(200)
+      allow_any_instance_of(Vips::Image).to receive(:height).and_return(287)
+      allow_any_instance_of(ImagemagickCharacterizationService).to receive(:mime_type).and_return("image/tiff")
+      allow_any_instance_of(ImagemagickCharacterizationService).to receive(:file_size).and_return("196882B")
     end
   end
 end
