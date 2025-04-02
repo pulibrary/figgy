@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class DspaceCollectionIngester < DspaceIngester
+  attr_reader :parent, :collection_ids, :local_identifiers
+
   def resource_type
     "collection"
   end
@@ -51,12 +53,13 @@ class DspaceCollectionIngester < DspaceIngester
 
   def ingest_items(**attrs)
     items.each do |item|
+      item_attrs = attrs.dup
       item_handle = item["handle"]
       logger.info "Preparing to ingest the member Item #{item_handle}..."
       item_ingester = DspaceIngester.new(handle: item_handle, logger: @logger, dspace_api_token: @dspace_api_token)
       # Reduces the number of API requests
       item_ingester.id = item["id"]
-      item_ingester.ingest!(**attrs)
+      item_ingester.ingest!(**item_attrs)
     end
   end
 
@@ -83,16 +86,29 @@ class DspaceCollectionIngester < DspaceIngester
   def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id}...")
 
-    raise("A parent Collection is required for #{id}") unless attrs.key?(:member_of_collection_ids) && !attrs[:member_of_collection_ids].empty?
+    attrs[:member_of_collection_ids] = @collection_ids
+    raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
 
     # persisted = find_or_persist
     # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
-    unless attrs.key?(:local_identifier)
-      attrs[:local_identifier] = []
+    @local_identifiers.append(title)
+    if attrs.key?(:local_identifier)
+      attrs[:local_identifier] += @local_identifiers
+    else
+      attrs[:local_identifier] = @local_identifiers
     end
-    attrs[:local_identifier].append(title)
 
     ingest_items(**attrs)
+  end
+
+  def initialize(collection_ids: [], parent: nil, local_identifiers: [], **options)
+    super(**options)
+
+    @parent = parent
+    @collection_ids = collection_ids
+    @collection_ids += @parent.collection_ids unless @parent.nil?
+    @local_identifiers = local_identifiers
+    @local_identifiers += @parent.local_identifiers unless @parent.nil?
   end
 end

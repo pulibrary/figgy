@@ -63,7 +63,7 @@ namespace :figgy do
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Collection #{handle} from DSpace...")
 
-      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCollectionIngester, member_of_collection_ids: collections)
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCollectionIngester, collection_ids: collections)
     end
 
     desc "Ingest a DSpace community."
@@ -78,7 +78,7 @@ namespace :figgy do
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Community #{handle} from DSpace...")
 
-      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCommunityIngester, member_of_collection_ids: collections)
+      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCommunityIngester, collection_ids: collections)
     end
   end
 end

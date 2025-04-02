@@ -32,37 +32,44 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     @collections ||= children(&method(:request_collections))
   end
 
-  def ingest!(**attrs)
+  def ingest!(**parent_attrs)
     logger.info("Ingesting DSpace community #{id}...")
+    attrs = parent_attrs.dup
 
-    raise("A parent Collection is required for #{id}") unless attrs.key?(:member_of_collection_ids) && !attrs[:member_of_collection_ids].empty?
+    attrs[:member_of_collection_ids] = @collection_ids
+    raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
 
     # persisted = persist_collection_resource
     # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
-    unless attrs.key?(:local_identifier)
-      attrs[:local_identifier] = []
+    # attrs[:local_identifier].append(title)
+
+    # @local_identifiers.append(title)
+    @local_identifiers += [title]
+    if attrs.key?(:local_identifier)
+      attrs[:local_identifier] += @local_identifiers
+    else
+      attrs[:local_identifier] = @local_identifiers
     end
-    attrs[:local_identifier].append(title)
 
     communities.each do |community|
       comm_handle = community["handle"]
-      comm_attrs = attrs.dup
+      # comm_attrs = Hash[attrs]
 
-      ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token)
+      ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
       # Reduces the number of API requests
       ingester.id = community["id"]
-      ingester.ingest!(**comm_attrs)
+      ingester.ingest!
     end
 
     collections.each do |collection|
       collec_handle = collection["handle"]
-      collec_attrs = attrs.dup
+      # collec_attrs = Hash[attrs]
 
-      ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token)
+      ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
       # Reduces the number of API requests
       ingester.id = collection["id"]
-      ingester.ingest!(**collec_attrs)
+      ingester.ingest!
     end
 
     ingest_items(**attrs)
