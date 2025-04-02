@@ -27,7 +27,7 @@ RSpec.describe RecharacterizeJob do
         book_members = query_service.find_members(resource: book)
         invalid_file_set = book_members.first
 
-        expect { described_class.perform_now(invalid_file_set.id) }.to raise_error(MiniMagick::Invalid)
+        expect { described_class.perform_now(invalid_file_set.id) }.to raise_error(Vips::Error)
         file_set = query_service.find_by(id: invalid_file_set.id)
         expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
       end
