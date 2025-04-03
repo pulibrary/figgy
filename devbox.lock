@@ -261,9 +261,6 @@
         }
       }
     },
-    "github:NixOS/nixpkgs/nixpkgs-unstable": {
-      "resolved": "github:NixOS/nixpkgs/384d1adab77a8d49172a3acc1d5c2f26d013a69a?lastModified=1743598831&narHash=sha256-e10M97wGA0dpFAFnp1D0dgk9BcgphvuUeksDpDXMZRA%3D"
-    },
     "imagemagick6@latest": {
       "last_modified": "2025-03-23T05:31:05Z",
       "resolved": "github:NixOS/nixpkgs/dd613136ee91f67e5dba3f3f41ac99ae89c5406b#imagemagick6",
@@ -487,6 +484,54 @@
             }
           ],
           "store_path": "/nix/store/nv95nwhqrabvchsl0yf59i197viagk63-libffi-39"
+        }
+      }
+    },
+    "lsof@latest": {
+      "last_modified": "2025-03-11T17:52:14Z",
+      "resolved": "github:NixOS/nixpkgs/0d534853a55b5d02a4ababa1d71921ce8f0aee4c#lsof",
+      "source": "devbox-search",
+      "version": "4.99.4",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fs6sn66n4dv6gnagvf8lgcy6x0jjgijd-lsof-4.99.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fs6sn66n4dv6gnagvf8lgcy6x0jjgijd-lsof-4.99.4"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/a0kvnds1g3jmz7bx1ldwbihbqlzzmlsj-lsof-4.99.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/a0kvnds1g3jmz7bx1ldwbihbqlzzmlsj-lsof-4.99.4"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/bqh7ipnb6cxi140h660h0v37s05d2kmm-lsof-4.99.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/bqh7ipnb6cxi140h660h0v37s05d2kmm-lsof-4.99.4"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/zqc3zaffcpgybm89jdkjgf5m7jk62lxq-lsof-4.99.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/zqc3zaffcpgybm89jdkjgf5m7jk62lxq-lsof-4.99.4"
         }
       }
     },

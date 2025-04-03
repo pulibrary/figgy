@@ -162,6 +162,12 @@ docker buildx build --push --platform linux/arm64,linux/amd64 -t pulibrary/ci-fi
 docker push pulibrary/ci-figgy:{version}
 ```
 
+## Adding packages to devbox
+
+If you need to add a package to Figgy, you can search https://www.nixhub.io/ or use `devbox search <packagename>` to see if it exists. Then add it with `devbox add <packagehere>`.
+
+If you want to test to make sure none of your local packages are conflicting with running tests, you can run `devbox shell --pure`
+
 ## More
 Valkyrie Documentation:
 - For links to helpful valkyrie documentation and troubleshooting tips, visit the [Valkyrie wiki](https://github.com/samvera-labs/valkyrie/wiki).

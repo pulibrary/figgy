@@ -12,6 +12,7 @@
     "lando_figgy_devopment_solr_conn_port": "9552",
     "lando_redis_conn_host":                "127.0.0.1",
     "lando_redis_conn_port":                "9553",
+    "TMPDIR": "/private/tmp",
     "DEVBOX_USE_VERSION":                   "0.13.7"
   },
   "packages": {
@@ -57,7 +58,8 @@
     "qemu":           "latest",
     "jdk":            "8",
     "unzip":          "latest",
-    "zip":            "latest"
+    "zip":            "latest",
+    "lsof":           "latest"
   },
   "shell": {
     "init_hook": [
