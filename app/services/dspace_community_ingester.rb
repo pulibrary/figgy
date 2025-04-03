@@ -43,6 +43,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     # persisted = persist_collection_resource
     # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
+    # This was disabled
     # This was giving me bugs
     # @local_identifiers.append(title)
     #@local_identifiers += [formatted_title]

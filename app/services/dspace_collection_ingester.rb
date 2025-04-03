@@ -60,6 +60,7 @@ class DspaceCollectionIngester < DspaceIngester
         end
       end
       item_attrs = attrs.dup
+
       item_handle = item["handle"]
       logger.info "Preparing to ingest the member Item #{item_handle}..."
       item_ingester = DspaceIngester.new(handle: item_handle, logger: @logger, dspace_api_token: @dspace_api_token)
@@ -115,6 +116,8 @@ class DspaceCollectionIngester < DspaceIngester
     # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
     @local_identifiers.append(formatted_title)
+    @local_identifiers = [] if @local_identifiers.length == 1 && @local_identifiers.first == title
+
     if attrs.key?(:local_identifier)
       attrs[:local_identifier] += @local_identifiers
     else
