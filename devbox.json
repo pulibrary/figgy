@@ -1,7 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
   "env": {
-    "DEVBOX_COREPACK_ENABLED": "true"
+    "DEVBOX_COREPACK_ENABLED":              "true",
+    "lando_figgy_database_conn_host":       "127.0.0.1",
+    "lando_figgy_database_conn_port":       "9550",
+    "lando_figgy_database_creds_user":      "postgres",
+    "lando_figgy_database_creds_password":  "password",
+    "lando_figgy_test_solr_conn_host":      "127.0.0.1",
+    "lando_figgy_test_solr_conn_port":      "9551",
+    "lando_figgy_devopment_solr_conn_host": "127.0.0.1",
+    "lando_figgy_devopment_solr_conn_port": "9552",
+    "lando_redis_conn_host":                "127.0.0.1",
+    "lando_redis_conn_port":                "9553",
+    "DEVBOX_USE_VERSION":                   "0.13.7"
   },
   "packages": {
     "ruby":   "3.2.6",
@@ -35,11 +46,17 @@
       "version": "22.11.0",
       "outputs": ["out", "libv8"]
     },
-    "python":       "3.9.1",
-    "lastpass-cli": "latest",
-    "tippecanoe":   "2.35.0",
-    "yarn":         "1.22.10",
-    "openjpeg":     "latest"
+    "python":         "3.9.1",
+    "lastpass-cli":   "latest",
+    "tippecanoe":     "2.35.0",
+    "yarn":           "1.22.10",
+    "openjpeg":       "latest",
+    "openssh":        "latest",
+    "podman":         "4.9.3",
+    "podman-compose": "latest",
+    "qemu":           "latest",
+    "jdk":            "8",
+    "unzip":          "latest"
   },
   "shell": {
     "init_hook": [
@@ -49,8 +66,17 @@
       "pip install cogeo-mosaic > /dev/null"
     ],
     "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
+      "setup": [
+        "bundle install",
+        "yarn install",
+        "podman machine init -v .:/mnt/app || true",
+        "podman machine start || true",
+        "devbox services up -b || true",
+        "PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup || true",
+        "RAILS_ENV=test rake db:create || true",
+        "RAILS_ENV=test rake db:migrate || true",
+        "RAILS_ENV=development rake db:create || true",
+        "RAILS_ENV=development rake db:migrate || true"
       ]
     }
   }

@@ -1,0 +1,21 @@
+processes:
+  postgresql:
+    command: "podman run -e POSTGRES_PASSWORD=password --rm --name figgy_db -p 9550:5432 postgres:15"
+    shutdown:
+      command: "podman stop figgy_db"
+  test_solr:
+    command: "podman run -v /mnt/app/solr/config/:/figgy_core/conf --rm --name figgy_test_solr -p 9551:8983 solr:7 solr-precreate figgy-core-test /figgy_core"
+    shutdown:
+      command: "podman stop figgy_test_solr"
+  dev_solr:
+    command: "podman run -v /mnt/app/solr/config/:/figgy_core/conf --rm --name figgy_dev_solr -p 9552:8983 solr:7 solr-precreate figgy-core-dev /figgy_core"
+    shutdown:
+      command: "podman stop figgy_dev_solr"
+  redis:
+    command: "podman run --rm --name figgy_redis -p 9553:6379 redis"
+    shutdown:
+      command: "podman stop figgy_redis"
+  chrome:
+    command: "podman run -e START_XVFB=true -e SE_NODE_MAX_SESSIONS=20 -e SE_NODE_OVERRIDE_MAX_SESSIONS=true --rm --name figgy_chrome -p 4445:4444 -p 5900:5900 -p 7900:7900 -v /dev/shm:/dev/shm seleniarm/standalone-chromium:114.0"
+    shutdown:
+      command: "podman stop figgy_chrome"
