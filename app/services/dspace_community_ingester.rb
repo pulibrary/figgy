@@ -59,7 +59,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
       comm_handle = community["handle"]
 
-      ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
+      ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)
       # Reduces the number of API requests
       ingester.id = community["id"]
       ingester.ingest!
@@ -72,7 +72,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
       collec_handle = collection["handle"]
 
-      ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
+      ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)
       # Reduces the number of API requests
       ingester.id = collection["id"]
       ingester.ingest!

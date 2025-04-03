@@ -130,5 +130,6 @@ class DspaceCollectionIngester < DspaceIngester
     @local_identifiers = local_identifiers
     @local_identifiers += @parent.local_identifiers unless @parent.nil?
     @limit = limit
+    @limit = limit.to_i unless limit.nil?
   end
 end
