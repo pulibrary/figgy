@@ -38,7 +38,8 @@
     "python":       "3.9.1",
     "lastpass-cli": "latest",
     "tippecanoe":   "2.35.0",
-    "yarn":         "1.22.10"
+    "yarn":         "1.22.10",
+    "openjpeg":     "latest"
   },
   "shell": {
     "init_hook": [

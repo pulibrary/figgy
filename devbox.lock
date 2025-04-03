@@ -623,6 +623,70 @@
         }
       }
     },
+    "openjpeg@latest": {
+      "last_modified": "2025-03-11T17:52:14Z",
+      "resolved": "github:NixOS/nixpkgs/0d534853a55b5d02a4ababa1d71921ce8f0aee4c#openjpeg",
+      "source": "devbox-search",
+      "version": "2.5.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/pjnfmihawikjjr65600ypaagrhn9v0fa-openjpeg-2.5.2",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/49qln8gjhx7mrk3jblby4yk2fb05hapm-openjpeg-2.5.2-dev"
+            }
+          ],
+          "store_path": "/nix/store/pjnfmihawikjjr65600ypaagrhn9v0fa-openjpeg-2.5.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/7ipj9lwzjg8k2kgl8pjsihqa4jzgklgm-openjpeg-2.5.2",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/9bdsrlwggfyx1jgkp03y6fg5l0vsy35z-openjpeg-2.5.2-dev"
+            }
+          ],
+          "store_path": "/nix/store/7ipj9lwzjg8k2kgl8pjsihqa4jzgklgm-openjpeg-2.5.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/46nyhh6xwdpnmas41h4kc2ph2v589ajl-openjpeg-2.5.2",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/vlcmsr50v9bgdzax2srmvpglbix67373-openjpeg-2.5.2-dev"
+            }
+          ],
+          "store_path": "/nix/store/46nyhh6xwdpnmas41h4kc2ph2v589ajl-openjpeg-2.5.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/l80xwb9p00mqpbpzvsfihqk8vzak7bnf-openjpeg-2.5.2",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/irjfriawqs7fsyr9va9116gyn1wa30sm-openjpeg-2.5.2-dev"
+            }
+          ],
+          "store_path": "/nix/store/l80xwb9p00mqpbpzvsfihqk8vzak7bnf-openjpeg-2.5.2"
+        }
+      }
+    },
     "poppler@latest": {
       "last_modified": "2025-03-11T17:52:14Z",
       "resolved": "github:NixOS/nixpkgs/0d534853a55b5d02a4ababa1d71921ce8f0aee4c#poppler",
