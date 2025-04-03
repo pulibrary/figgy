@@ -15,7 +15,7 @@ Follow these steps the first time you clone this project to run in dev or test.
 
 ### Install Devbox
 
-curl -fsSL https://get.jetify.com/devbox | bash
+`curl -fsSL https://get.jetify.com/devbox | bash`
 
 ### Every time setup
 
