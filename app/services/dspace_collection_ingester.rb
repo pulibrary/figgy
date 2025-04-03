@@ -52,7 +52,10 @@ class DspaceCollectionIngester < DspaceIngester
   end
 
   def ingest_items(**attrs)
-    items.each do |item|
+    items.each_with_index do |item, index|
+      unless @limit.nil?
+        break if index >= @limit
+      end
       item_attrs = attrs.dup
       item_handle = item["handle"]
       logger.info "Preparing to ingest the member Item #{item_handle}..."
@@ -118,7 +121,7 @@ class DspaceCollectionIngester < DspaceIngester
     ingest_items(**attrs)
   end
 
-  def initialize(collection_ids: [], parent: nil, local_identifiers: [], **options)
+  def initialize(collection_ids: [], parent: nil, local_identifiers: [], limit: nil, **options)
     super(**options)
 
     @parent = parent
@@ -126,5 +129,6 @@ class DspaceCollectionIngester < DspaceIngester
     @collection_ids += @parent.collection_ids unless @parent.nil?
     @local_identifiers = local_identifiers
     @local_identifiers += @parent.local_identifiers unless @parent.nil?
+    @limit = limit
   end
 end

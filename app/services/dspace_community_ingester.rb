@@ -52,7 +52,11 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     #  attrs[:local_identifier] = @local_identifiers
     #end
 
-    communities.each do |community|
+    communities.each_with_index do |community, index|
+      unless @limit.nil?
+        break if index >= @limit
+      end
+
       comm_handle = community["handle"]
 
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
@@ -61,7 +65,11 @@ class DspaceCommunityIngester < DspaceCollectionIngester
       ingester.ingest!
     end
 
-    collections.each do |collection|
+    collections.each_with_index do |collection, index|
+      unless @limit.nil?
+        break if index >= @limit
+      end
+
       collec_handle = collection["handle"]
 
       ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
