@@ -261,6 +261,9 @@
         }
       }
     },
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "resolved": "github:NixOS/nixpkgs/384d1adab77a8d49172a3acc1d5c2f26d013a69a?lastModified=1743598831&narHash=sha256-e10M97wGA0dpFAFnp1D0dgk9BcgphvuUeksDpDXMZRA%3D"
+    },
     "imagemagick6@latest": {
       "last_modified": "2025-03-23T05:31:05Z",
       "resolved": "github:NixOS/nixpkgs/dd613136ee91f67e5dba3f3f41ac99ae89c5406b#imagemagick6",
@@ -1494,6 +1497,54 @@
       "resolved": "github:NixOS/nixpkgs/404cd360c2607bcfe8d05a7d5ae609d6605f7e22#yarn",
       "source": "devbox-search",
       "version": "1.22.10"
+    },
+    "zip@latest": {
+      "last_modified": "2025-03-11T17:52:14Z",
+      "resolved": "github:NixOS/nixpkgs/0d534853a55b5d02a4ababa1d71921ce8f0aee4c#zip",
+      "source": "devbox-search",
+      "version": "3.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/c7l9cizx40hsq3lrxxc08sfwy8ggnj47-zip-3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/c7l9cizx40hsq3lrxxc08sfwy8ggnj47-zip-3.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/84damby6iyhxi9zwyav3apnzd7h04gj2-zip-3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/84damby6iyhxi9zwyav3apnzd7h04gj2-zip-3.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/sgd6ms2yqwjwp3vdxfyj2nksv6yrm8vf-zip-3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/sgd6ms2yqwjwp3vdxfyj2nksv6yrm8vf-zip-3.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/y2c2xz67ldvxh8d74vfq3716xmlz54nh-zip-3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/y2c2xz67ldvxh8d74vfq3716xmlz54nh-zip-3.0"
+        }
+      }
     }
   }
 }

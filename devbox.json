@@ -56,7 +56,8 @@
     "podman-compose": "latest",
     "qemu":           "latest",
     "jdk":            "8",
-    "unzip":          "latest"
+    "unzip":          "latest",
+    "zip":            "latest"
   },
   "shell": {
     "init_hook": [
