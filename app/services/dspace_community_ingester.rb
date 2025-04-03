@@ -53,10 +53,6 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     #end
 
     communities.each_with_index do |community, index|
-      unless @limit.nil?
-        break if index >= @limit
-      end
-
       comm_handle = community["handle"]
 
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)
@@ -66,10 +62,6 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     end
 
     collections.each_with_index do |collection, index|
-      unless @limit.nil?
-        break if index >= @limit
-      end
-
       collec_handle = collection["handle"]
 
       ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)

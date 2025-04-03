@@ -54,7 +54,10 @@ class DspaceCollectionIngester < DspaceIngester
   def ingest_items(**attrs)
     items.each_with_index do |item, index|
       unless @limit.nil?
-        break if index >= @limit
+        if index >= @limit
+          @limit = 0
+          break
+        end
       end
       item_attrs = attrs.dup
       item_handle = item["handle"]
