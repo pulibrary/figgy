@@ -83,16 +83,32 @@ class DspaceCollectionIngester < DspaceIngester
     persist_collection_resource
   end
 
+  def prefix_patterns
+    [
+      /Serials and series reports (.+?) - /,
+    ]
+  end
+
+  def formatted_title
+    unformatted = title
+    formatted = unformatted
+    prefix_patterns.each do |prefix_pattern|
+      formatted = unformatted.gsub(prefix_pattern, "")
+    end
+    formatted
+  end
+
   def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id}...")
 
     attrs[:member_of_collection_ids] = @collection_ids
     raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
 
+    # This was disabled
     # persisted = find_or_persist
     # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
-    @local_identifiers.append(title)
+    @local_identifiers.append(formatted_title)
     if attrs.key?(:local_identifier)
       attrs[:local_identifier] += @local_identifiers
     else

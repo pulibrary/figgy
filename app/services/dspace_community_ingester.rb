@@ -39,22 +39,21 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     attrs[:member_of_collection_ids] = @collection_ids
     raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
 
+    # This was disabled
     # persisted = persist_collection_resource
     # attrs[:member_of_collection_ids].append(persisted.id.to_s)
 
-    # attrs[:local_identifier].append(title)
-
+    # This was giving me bugs
     # @local_identifiers.append(title)
-    @local_identifiers += [title]
-    if attrs.key?(:local_identifier)
-      attrs[:local_identifier] += @local_identifiers
-    else
-      attrs[:local_identifier] = @local_identifiers
-    end
+    #@local_identifiers += [formatted_title]
+    #if attrs.key?(:local_identifier)
+    #  attrs[:local_identifier] += @local_identifiers
+    #else
+    #  attrs[:local_identifier] = @local_identifiers
+    #end
 
     communities.each do |community|
       comm_handle = community["handle"]
-      # comm_attrs = Hash[attrs]
 
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
       # Reduces the number of API requests
@@ -64,7 +63,6 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
     collections.each do |collection|
       collec_handle = collection["handle"]
-      # collec_attrs = Hash[attrs]
 
       ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self)
       # Reduces the number of API requests
