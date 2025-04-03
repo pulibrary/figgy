@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
+  "env": {
+    "DEVBOX_COREPACK_ENABLED": "true"
+  },
+  "packages": {
+    "ruby":   "3.2.6",
+    "libffi": "latest",
+    "vips": {
+      "version": "latest",
+      "outputs": ["out", "dev", "bin"]
+    },
+    "poppler": {
+      "version": "latest",
+      "outputs": ["out", "dev"]
+    },
+    "fontconfig": {
+      "version": "latest",
+      "outputs": ["lib", "dev", "bin", "out"]
+    },
+    "imagemagick6": {
+      "version":        "latest",
+      "allow_insecure": ["imagemagick-6.9.13-10"]
+    },
+    "postgresql": {
+      "version": "15.7",
+      "outputs": ["lib", "out"]
+    },
+    "gdal":        "3.6.4",
+    "tesseract_4": "latest",
+    "mediainfo":   "latest",
+    "ffmpeg":      "4.4.2",
+    "ocrmypdf":    "latest",
+    "nodejs": {
+      "version": "22.11.0",
+      "outputs": ["out", "libv8"]
+    },
+    "python":       "3.9.1",
+    "lastpass-cli": "latest",
+    "tippecanoe":   "2.35.0",
+    "yarn":         "1.22.10"
+  },
+  "shell": {
+    "init_hook": [
+      "export LD_LIBRARY_PATH=$(pwd)/.devbox/nix/profile/default/lib",
+      "export FONTCONFIG_PATH=${DEVBOX_PACKAGES_DIR}/etc/fonts",
+      ". $VENV_DIR/bin/activate",
+      "pip install cogeo-mosaic > /dev/null"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}

@@ -6,6 +6,16 @@ GIT
       devise
 
 GIT
+  remote: https://github.com/pulibrary/blacklight_iiif_search.git
+  revision: 0533d15ca417be0c9535fca7dd39326c9a47cc80
+  branch: ffi_patch
+  specs:
+    blacklight_iiif_search (2.1.0)
+      blacklight (~> 7.0)
+      iiif-presentation
+      rails (>= 6, < 7.3)
+
+GIT
   remote: https://github.com/pulibrary/mediainfo.git
   revision: 58f3e304f01009b459954b82d0675562106b1ac8
   branch: further_sanitize_track_names
@@ -257,11 +267,6 @@ GEM
       blacklight (> 6.0, < 8)
       cancancan (>= 1.8)
       deprecation (~> 1.0)
-    blacklight_iiif_search (2.1.0)
-      blacklight (~> 7.0)
-      ffi (~> 1.16.3)
-      iiif-presentation
-      rails (>= 6, < 7.3)
     blacklight_range_limit (8.5.0)
       blacklight (>= 7.25.2, < 9)
       deprecation
@@ -439,7 +444,9 @@ GEM
       net-http (>= 0.5.0)
     faraday-retry (2.2.1)
       faraday (~> 2.0)
-    ffi (1.16.3)
+    ffi (1.17.1-arm64-darwin)
+    ffi (1.17.1-x86_64-darwin)
+    ffi (1.17.1-x86_64-linux-gnu)
     filewatcher (1.1.1)
       optimist (~> 3.0)
     flutie (2.2.0)
@@ -1126,7 +1133,7 @@ DEPENDENCIES
   benchmark-ips
   bixby (~> 5.0)
   blacklight (~> 7.33)
-  blacklight_iiif_search (~> 2.1.0)
+  blacklight_iiif_search (~> 2.1.0)!
   blacklight_range_limit
   bootsnap
   bootstrap (~> 4.0)
@@ -1153,7 +1160,7 @@ DEPENDENCIES
   ezid-client (= 1.9.4)
   factory_bot_rails
   faker
-  ffi (~> 1.16.0)
+  ffi (~> 1.17.0)
   filewatcher (~> 1.0)
   flutie
   font-awesome-rails
