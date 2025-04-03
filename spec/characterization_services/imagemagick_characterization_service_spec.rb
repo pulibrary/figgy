@@ -92,7 +92,7 @@ RSpec.describe ImagemagickCharacterizationService do
     let(:file) { fixture_file_upload("files/invalid.tif", "image/tiff") }
     let(:invalid_file_set) { book_members.first }
     it "adds an error message to the file set and raises an error" do
-      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(MiniMagick::Invalid)
+      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(Vips::Error)
       file_set = query_service.find_by(id: invalid_file_set.id)
       expect(file_set.file_metadata[0].width).to be_empty
       expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
@@ -103,7 +103,7 @@ RSpec.describe ImagemagickCharacterizationService do
     let(:file) { fixture_file_upload("files/empty.tif", "image/tiff") }
     let(:invalid_file_set) { book_members.first }
     it "adds an error message to the file set and raises an error" do
-      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(MiniMagick::Invalid)
+      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(Vips::Error)
       file_set = query_service.find_by(id: invalid_file_set.id)
       expect(file_set.file_metadata[0].width).to be_empty
       expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
@@ -114,11 +114,11 @@ RSpec.describe ImagemagickCharacterizationService do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:test_file_set) { book_members.first }
     it "removes any previous error messages" do
-      allow(MiniMagick::Image).to receive(:open).and_raise("Error")
+      allow(Vips::Image).to receive(:new_from_file).and_raise("Error")
       expect { described_class.new(file_set: test_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
       file_set = query_service.find_by(id: test_file_set.id)
       expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
-      allow(MiniMagick::Image).to receive(:open).and_call_original
+      allow(Vips::Image).to receive(:new_from_file).and_call_original
       described_class.new(file_set: file_set, persister: persister).characterize
       file_set = query_service.find_by(id: test_file_set.id)
       expect(file_set.file_metadata[0].error_message).to be_empty

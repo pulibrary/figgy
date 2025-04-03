@@ -73,7 +73,7 @@ RSpec.describe ThumbnailDerivativeService do
       thumbnail = reloaded.thumbnail_files.first
       expect(thumbnail).to be_present
       thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnail.file_identifiers.first)
-      image = MiniMagick::Image.open(thumbnail_file.disk_path)
+      image = Vips::Image.new_from_file(thumbnail_file.disk_path.to_s)
       expect(image.width).to eq 200
       expect(image.height).to eq 287
     end
@@ -88,7 +88,7 @@ RSpec.describe ThumbnailDerivativeService do
       thumbnail = reloaded.thumbnail_files.first
       expect(thumbnail).to be_present
       thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnail.file_identifiers.first)
-      image = MiniMagick::Image.open(thumbnail_file.disk_path)
+      image = Vips::Image.new_from_file(thumbnail_file.disk_path.to_s)
       expect(image.width).to eq 200
       expect(image.height).to eq 287
     end

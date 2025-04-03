@@ -153,7 +153,7 @@ RSpec.describe VipsDerivativeService do
   end
 
   context "tiff source larger than reduction threshold", run_real_derivatives: true do
-    it "resizes it by half" do
+    it "resizes it by half", run_real_characterization: true do
       stub_const("VipsDerivativeService::REDUCTION_THRESHOLD", 1)
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
@@ -162,9 +162,9 @@ RSpec.describe VipsDerivativeService do
 
       expect(derivative).to be_present
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
-      expect(Vips::Image.new_from_file(derivative_file.disk_path.to_s).height).to eq 144
+      expect(Vips::Image.magickload(derivative_file.disk_path.to_s).height).to eq 144
     end
-    it "uploads it with the appropriate metadata" do
+    it "uploads it with the appropriate metadata", run_real_characterization: true do
       allow(storage_adapter).to receive(:upload).and_call_original
       stub_const("VipsDerivativeService::REDUCTION_THRESHOLD", 1)
       derivative_service.new(id: valid_change_set.id).create_derivatives
