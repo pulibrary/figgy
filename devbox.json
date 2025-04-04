@@ -13,7 +13,6 @@
     "lando_redis_conn_host":                "127.0.0.1",
     "lando_redis_conn_port":                "9553",
     "TMPDIR": "/private/tmp",
-    "DEVBOX_USE_VERSION":                   "0.13.7",
     "LD_LIBRARY_PATH": "$PWD/.devbox/nix/profile/default/lib",
     "FONTCONFIG_PATH": "$PWD/.devbox/nix/profile/default/etc/fonts"
   },
@@ -65,7 +64,8 @@
   },
   "shell": {
     "init_hook": [
-      "if [[ -n $FISH_VERSION ]]; then . $VENV_DIR/bin/activate.fish; else . $VENV_DIR/bin/activate; fi",
+      "echo $FISH_VERSION",
+      "source $VENV_DIR/bin/activate || source $VENV_DIR/bin/activate.fish",
       "pip install cogeo-mosaic > /dev/null"
     ],
     "scripts": {
