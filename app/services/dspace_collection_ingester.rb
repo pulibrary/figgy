@@ -92,7 +92,7 @@ class DspaceCollectionIngester < DspaceIngester
 
   def prefix_patterns
     [
-      /Serials and series reports (.+?) - /,
+      /Serials and series reports (.+?) - /
     ]
   end
 

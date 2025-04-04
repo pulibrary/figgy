@@ -46,14 +46,14 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     # This was disabled
     # This was giving me bugs
     # @local_identifiers.append(title)
-    #@local_identifiers += [formatted_title]
-    #if attrs.key?(:local_identifier)
+    # @local_identifiers += [formatted_title]
+    # if attrs.key?(:local_identifier)
     #  attrs[:local_identifier] += @local_identifiers
-    #else
+    # else
     #  attrs[:local_identifier] = @local_identifiers
-    #end
+    # end
 
-    communities.each_with_index do |community, index|
+    communities.each_with_index do |community, _index|
       comm_handle = community["handle"]
 
       ingester = DspaceCommunityIngester.new(handle: comm_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)
@@ -62,7 +62,7 @@ class DspaceCommunityIngester < DspaceCollectionIngester
       ingester.ingest!
     end
 
-    collections.each_with_index do |collection, index|
+    collections.each_with_index do |collection, _index|
       collec_handle = collection["handle"]
 
       ingester = DspaceCollectionIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)
