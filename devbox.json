@@ -65,7 +65,7 @@
   },
   "shell": {
     "init_hook": [
-      ". $VENV_DIR/bin/activate",
+      "if [[ -n $FISH_VERSION ]]; then . $VENV_DIR/bin/activate.fish; else . $VENV_DIR/bin/activate; fi",
       "pip install cogeo-mosaic > /dev/null"
     ],
     "scripts": {
