@@ -13,7 +13,9 @@
     "lando_redis_conn_host":                "127.0.0.1",
     "lando_redis_conn_port":                "9553",
     "TMPDIR": "/private/tmp",
-    "DEVBOX_USE_VERSION":                   "0.13.7"
+    "DEVBOX_USE_VERSION":                   "0.13.7",
+    "LD_LIBRARY_PATH": "$PWD/.devbox/nix/profile/default/lib",
+    "FONTCONFIG_PATH": "$PWD/.devbox/nix/profile/default/etc/fonts"
   },
   "packages": {
     "ruby":   "3.2.6",
@@ -63,8 +65,6 @@
   },
   "shell": {
     "init_hook": [
-      "export LD_LIBRARY_PATH=$(pwd)/.devbox/nix/profile/default/lib",
-      "export FONTCONFIG_PATH=${DEVBOX_PACKAGES_DIR}/etc/fonts",
       ". $VENV_DIR/bin/activate",
       "pip install cogeo-mosaic > /dev/null"
     ],
