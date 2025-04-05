@@ -162,7 +162,7 @@ RSpec.describe VipsDerivativeService do
 
       expect(derivative).to be_present
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
-      expect(Vips::Image.new_from_file(derivative_file.disk_path.to_s).height).to eq 144
+      expect(Vips::Image.magickload(derivative_file.disk_path.to_s).height).to eq 144
     end
     it "uploads it with the appropriate metadata" do
       allow(storage_adapter).to receive(:upload).and_call_original
