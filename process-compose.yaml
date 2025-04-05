@@ -4,11 +4,11 @@ processes:
     shutdown:
       command: "podman stop figgy_db"
   test_solr:
-    command: "podman run -v /mnt/app/solr/config/:/figgy_core/conf --rm --name figgy_test_solr -p 9551:8983 solr:7 solr-precreate figgy-core-test /figgy_core"
+    command: "podman run -v /mnt/$(pwd)/solr/config/:/figgy_core/conf --rm --name figgy_test_solr -p 9551:8983 solr:7 solr-precreate figgy-core-test /figgy_core"
     shutdown:
       command: "podman stop figgy_test_solr"
   dev_solr:
-    command: "podman run -v /mnt/app/solr/config/:/figgy_core/conf --rm --name figgy_dev_solr -p 9552:8983 solr:7 solr-precreate figgy-core-dev /figgy_core"
+    command: "podman run -v /mnt/$(pwd)/solr/config/:/figgy_core/conf --rm --name figgy_dev_solr -p 9552:8983 solr:7 solr-precreate figgy-core-dev /figgy_core"
     shutdown:
       command: "podman stop figgy_dev_solr"
   redis:

@@ -72,7 +72,7 @@
       "setup": [
         "bundle install",
         "yarn install",
-        "podman machine init -v .:/mnt/app || true",
+        "podman machine init -m 8192 -v $HOME:/mnt/$HOME || true",
         "podman machine start || true",
         "devbox services up -b || true",
         "PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup || true",
