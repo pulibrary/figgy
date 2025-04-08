@@ -1,0 +1,26 @@
+inputs:
+  podman_4_9:
+    url: github:nixos/nixpkgs/e89cf1c932006531f454de7d652163a9a5c86668
+  nixpkgs:
+    url: github:cachix/devenv-nixpkgs/rolling
+  officialpkgs:
+    url: github:nixos/nixpkgs
+  nixpkgs-python:
+    url: github:cachix/nixpkgs-python
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+  nixpkgs-ruby:
+    url: github:bobvanderlinden/nixpkgs-ruby
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
+  # Found on https://www.nixhub.io/packages/gdal
+  gdal_3_6_4:
+    url: github:nixos/nixpkgs/bf57c599729771cd23054a18c0f3a391ae85e193
+  # Found on https://www.nixhub.io/packages/tippecanoe
+  tippecanoe_2_35_0:
+    url: github:nixos/nixpkgs/a71323f68d4377d12c04a5410e214495ec598d4c
+permittedInsecurePackages:
+  - "imagemagick-6.9.13-10"
+impure: true
