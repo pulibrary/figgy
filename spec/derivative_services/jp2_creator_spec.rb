@@ -22,7 +22,7 @@ RSpec.describe JP2Creator do
     end
   end
   context "jpeg source" do
-    it "creates a JP2" do
+    it "creates a JP2", run_real_characterization: true do
       file = fixture_file_upload("files/large-jpg-test.jpg", "image/jpeg")
       creator = described_class.new(filename: file.path.to_s)
       output = creator.generate
@@ -31,7 +31,7 @@ RSpec.describe JP2Creator do
     end
   end
   context "png source" do
-    it "creates a JP2" do
+    it "creates a JP2", run_real_characterization: true do
       file = fixture_file_upload("files/abstract.png", "image/png")
       creator = described_class.new(filename: file.path.to_s)
       output = creator.generate

@@ -53,20 +53,25 @@ class ImagemagickCharacterizationService
 
   def file_characterization_attributes
     {
-      width: image.width.to_s,
-      height: image.height.to_s,
-      mime_type: image.mime_type,
+      width: vips_image.width.to_s,
+      height: vips_image.height.to_s,
+      mime_type: mime_type,
       checksum: MultiChecksum.for(@file_object),
-      size: image.size,
+      size: file_size,
       error_message: [] # Ensure any previous error messages are removed
     }
   end
 
-  # Retrieve the image handler from MiniMagick
-  # @return [MiniMagick::Image]
-  def image
-    # TODO: memoize this?
-    MiniMagick::Image.open(filename)
+  def file_size
+    File.size(filename)
+  end
+
+  def mime_type
+    `file --b --mime-type #{Shellwords.escape(filename)}`.strip
+  end
+
+  def vips_image
+    Vips::Image.new_from_file(filename.to_s)
   end
 
   # Retrieve the Resource to which the FileSet is attached
