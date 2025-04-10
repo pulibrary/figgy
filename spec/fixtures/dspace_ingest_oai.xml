@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="static/style.xsl"?><OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"><responseDate>2025-03-05T14:49:56Z</responseDate><request verb="GetRecord" identifier="oai:dataspace.princeton.edu:88435/dsp01gb19f818g" metadataPrefix="oai_dc">https://dataspace.princeton.edu/oai/request</request><GetRecord><record><header><identifier>oai:dataspace.princeton.edu:88435/dsp01gb19f818g</identifier><datestamp>2015-09-24T05:06:44Z</datestamp><setSpec>com_88435_dsp01r781wg06f</setSpec><setSpec>com_88435_dsp01g732d9019</setSpec><setSpec>col_88435_dsp01n583xv05p</setSpec></header><metadata><oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:doc="http://www.lyncode.com/xoai" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+<dc:title>Alcuin Society newsletter, No. 22</dc:title>
+<dc:creator>Greaves, Howard</dc:creator>
+<dc:subject>Printing</dc:subject>
+<dc:subject>Book collecting</dc:subject>
+<dc:date>2015-09-23T19:59:57Z</dc:date>
+<dc:date>2015-09-23T19:59:57Z</dc:date>
+<dc:date>2015</dc:date>
+<dc:identifier>1919-0670</dc:identifier>
+<dc:identifier>http://arks.princeton.edu/ark:/88435/dsp01gb19f818g</dc:identifier>
+<dc:language>en</dc:language>
+<dc:relation>Alcuin Society newsletter, 2015, No. 22</dc:relation>
+<dc:publisher>[Vancouver]</dc:publisher>
+<dc:publisher>Alcuin Society</dc:publisher>
+</oai_dc:dc>
+</metadata></record></GetRecord></OAI-PMH>
