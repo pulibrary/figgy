@@ -44,7 +44,7 @@ namespace :figgy do
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
       collection = ENV["COLLECTION"]
 
-      abort "usage: rake import:dspace HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret" unless handle && collection
+      abort "usage: rake import:dspace HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret" unless handle && collection
       collections = [collection]
 
       @logger = Logger.new(STDOUT)
@@ -60,7 +60,7 @@ namespace :figgy do
       collection = ENV["COLLECTION"]
       limit = ENV["LIMIT"]
 
-      abort "usage: rake import:dspace_collection HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
+      abort "usage: rake import:dspace_collection HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
       collections = [collection]
 
       @logger = Logger.new(STDOUT)
@@ -80,7 +80,7 @@ namespace :figgy do
       collection = ENV["COLLECTION"]
       limit = ENV["LIMIT"]
 
-      abort "usage: rake import:dspace_community HANDLE=88435/dsp013t945q852 DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
+      abort "usage: rake import:dspace_community HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
       collections = [collection]
 
       @logger = Logger.new(STDOUT)

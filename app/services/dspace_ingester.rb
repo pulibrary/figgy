@@ -32,12 +32,10 @@ class DspaceIngester
     response = Faraday.get(uri, params, headers)
     raise("Failed to request bibliographic metadata: #{uri} #{params} #{headers}") if response.status == 404
 
-    begin
-      JSON.parse(response.body)
-    rescue StandardError => error
-      Rails.logger.warn("Failed to request bibliographic metadata: #{uri} #{params} #{headers}")
-      raise(error)
-    end
+    JSON.parse(response.body)
+  rescue StandardError => error
+    Rails.logger.warn("Failed to request bibliographic metadata: #{uri} #{params} #{headers}")
+    raise(error)
   end
 
   def paginated_request(path:, headers: {}, offset: 0, **params)
@@ -206,6 +204,7 @@ class DspaceIngester
   end
 
   def ingest!(**attrs)
+    
     raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
     logger.info "Downloading the Bitstreams for #{ark}..."
@@ -216,6 +215,15 @@ class DspaceIngester
       logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
 
       metadata.merge!(attrs)
+      identifier = metadata.fetch(:identifier, nil)
+
+      if !identifier.nil?
+        persisted = find_resources_by_ark(value: identifier)
+        if !persisted.empty?
+          logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
+          next
+        end
+      end
 
       # Cases where one MMS ID in Orangelight maps to multiple DataSpace Items should not apply remote metadata
       change_set_param = if apply_remote_metadata?
@@ -244,6 +252,14 @@ class DspaceIngester
   end
 
   private
+
+    def query_service
+      Valkyrie.config.metadata_adapter.query_service
+    end
+
+    def find_resources_by_ark(value:)
+      query_service.custom_queries.find_many_by_property(property: :identifier, values: [value])
+    end
 
     def download_bitstream(url:, file_path:)
       return if File.exist?(file_path)
