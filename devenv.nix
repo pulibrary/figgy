@@ -178,7 +178,7 @@ in
         RAILS_ENV=development rake db:create || true
         RAILS_ENV=development rake db:migrate || true
       '';
-      after = [ "processes:start" ];
+      after = [ "app:bundle" ];
     };
     "app:bundle" = {
       exec = ''
