@@ -11,63 +11,25 @@ A digital repository application in use at Princeton University Library for stor
 
 Follow these steps the first time you clone this project to run in dev or test.
 
-#### Install Language Dependencies
+Install Nix:
 
-- We use asdf to manage language dependencies. If you don't have it installed do `brew install asdf`.
-- To support Java on Mac via asdf, add the following line to your `~/.asdfrc` file:
-    ```
-    java_macos_integration_enable = yes
-    ```
-- If your `~/.asdfrc` has this line you may need to remove it:
-    ```
-    legacy_version_file = yes
-    ```
-- After making these changes open a new terminal window for figgy.
-- Run `./bin/setup_asdf`. This script ensures all required plugins are installed and then installs all language dependencies specified in `.tool-versions`.
-
-#### Install Package Dependencies
-
-- First follow package setup for Mac M series processors (below) if needed
-- Then run `./bin/setup` to ensure that required dependencies via homebrew, pip, bundler, and yarn.
-
-Remember you'll need to run `bundle install` and `yarn install` on an ongoing basis as dependencies are updated.
-
-##### Package Setup for Mac M Series Processors
-
-Mapnik currently isn't supported by M-series processors, so `yarn install` above will
-fail. To get this working, do the following:
-
-1. $ arch -x86_64 /bin/zsh --login
-1. you can validate that it's running the right architecture now by viewing the output of the `arch` command
-1. `asdf uninstall nodejs`
-1. `asdf uninstall yarn`
-1. `rm ~/.asdf/shims/yarn`
-1. `asdf install nodejs`
-1. `npm install -g yarn`
-1. `yarn install`
-1. open a new Terminal or otherwise go back to the arm64 arch.
-1. Add the following to `~/.zshrc` or `~/.zshrc.local`:
 ```
-   # Fix issue with homebrew postgres and rails applications (Figgy in
-   particular).
-   # See: https://github.com/ged/ruby-pg/issues/538
-   export PGGSSENCMODE="disable"
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install \
+--extra-conf "trusted-users = root ${USER}" \
+--no-confirm
 ```
 
-#### Install Lando
+Restart terminal
 
-Lando will automatically set up docker images for Solr and Postgres which match
-the versions we use in Production. The ports will not collide with any other
-projects you're using Solr/Postgres for, and you can easily clean up with `lando
-destroy` or turn off all services with `lando poweroff`.
+Install devenv:
 
-1. Install Lando DMG from [[https://github.com/lando/lando/releases]]
+`nix-env --install --attr devenv -f https://github.com/NixOS/nixpkgs/tarball/nixpkgs-unstable`
 
 ### Every time setup
 
-Follow these steps every time you start new work in this project in dev or test
-
-1. Run `bundle exec rake servers:start` to start lando services and set up database state.
+- `./bin/shell` will open a shell for the project.
+- `setup` will launch all the required services and get the app ready.
+  * `tests` will run all the tests.
 
 ### Running tests
 
@@ -85,8 +47,6 @@ http://localhost:7900, use the password `secret`, and run tests like this:
 
 If you'd like to run the test suite in parallel do the following:
 
-1. `bundle exec rake servers:start`
-1. `PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake parallel:setup` (Sets up suport database; only needed after db has been destroyed)
 1. `./bin/parallel_rspec_coverage`
 
 The output from the parallel runs will be interspersed, and the failures will be

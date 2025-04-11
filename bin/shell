@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export NIXPKGS_ALLOW_INSECURE=1
+devenv shell
