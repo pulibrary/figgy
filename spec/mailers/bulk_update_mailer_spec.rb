@@ -20,7 +20,7 @@ RSpec.describe BulkUpdateMailer, type: :mailer do
         time = Time.current.to_s
         email = described_class.with(email: user.email, ids: ids, time: time, search_params: search_params).update_status
 
-        expect(email.from).to contain_exactly "no-reply@www.example.com"
+        expect(email.from).to contain_exactly "no-reply@princeton.edu"
         expect(email.to).to contain_exactly user.email
         expect(email.subject).to eq "Bulk update status for batch initiated on #{time}"
         expect(email.body.to_s).to include "Bulk update successful for #{ids.length} Resource(s) in batch."
@@ -35,7 +35,7 @@ RSpec.describe BulkUpdateMailer, type: :mailer do
         time = Time.current.to_s
         email = described_class.with(email: user.email, ids: ids, resource_id: resource1.id, time: time, search_params: search_params).update_status
 
-        expect(email.from).to contain_exactly "no-reply@www.example.com"
+        expect(email.from).to contain_exactly "no-reply@princeton.edu"
         expect(email.to).to contain_exactly user.email
         expect(email.subject).to eq "Bulk update status for batch initiated on #{time}"
         expect(email.body.to_s).to include "Bulk update failed due to invalid parameters on Resource with ID <a href=\"http://www.example.com/catalog/#{resource1.id}\">#{resource1.id}</a>"
