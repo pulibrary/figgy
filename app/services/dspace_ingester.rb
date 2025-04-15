@@ -66,7 +66,7 @@ class DspaceIngester
               resource = request_resource(path: path, headers: headers)
 
               remote_type = resource["type"]
-              if !resource_types.include?(remote_type)
+              unless resource_types.include?(remote_type)
                 raise(StandardError, "Handle resolves to resource type #{remote_type}, expected #{resource_types}")
               end
 
@@ -240,9 +240,9 @@ class DspaceIngester
       metadata.merge!(attrs)
       identifier = metadata.fetch(:identifier, nil)
 
-      if !identifier.nil?
+      unless identifier.nil?
         persisted = find_resources_by_ark(value: identifier)
-        if !persisted.empty?
+        unless persisted.empty?
           logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
           next
         end
@@ -273,9 +273,9 @@ class DspaceIngester
       metadata.merge!(attrs)
       identifier = metadata.fetch(:identifier, nil)
 
-      if !identifier.nil?
+      unless identifier.nil?
         persisted = find_resources_by_ark(value: identifier)
-        if !persisted.empty?
+        unless persisted.empty?
           logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
           next
         end

@@ -77,4 +77,3 @@ class DspaceMultivolumeIngester < DspaceCollectionIngester
     persisted
   end
 end
-
