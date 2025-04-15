@@ -24,14 +24,6 @@ class DspaceMultivolumeIngester < DspaceCollectionIngester
     persisted.flatten
   end
 
-  def persist_collection_resource
-    collection = Collection.new
-    collection_change_set = CollectionChangeSet.new(collection)
-    collection_change_set.validate(title: title, slug: handle.parameterize)
-    change_set_persister = ChangeSetPersister.default
-    change_set_persister.save(change_set: collection_change_set)
-  end
-
   def change_set_persister
     ChangeSetPersister.default
   end
@@ -56,6 +48,10 @@ class DspaceMultivolumeIngester < DspaceCollectionIngester
     persist_resource(**attrs)
   end
 
+  def ark_url
+    "http://arks.princeton.edu/ark:/#{ark}"
+  end
+
   def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id} as a multi-volume Work...")
 
@@ -72,6 +68,7 @@ class DspaceMultivolumeIngester < DspaceCollectionIngester
     @publisher = @title
     attrs[:title] = @title
     attrs[:source_metadata_identifier] = source_metadata_identifier
+    attrs[:identifier] = ark_url
 
     persisted = find_or_persist_resource(**attrs)
     persisted
