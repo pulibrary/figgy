@@ -203,8 +203,16 @@ class DspaceIngester
     end
   end
 
+  # Cases where one MMS ID in Orangelight maps to multiple DataSpace Items should not apply remote metadata
+  def change_set_param
+    if apply_remote_metadata?
+      "ScannedResource"
+    else
+      "DspaceResource"
+    end
+  end
+
   def ingest!(**attrs)
-    
     raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
     logger.info "Downloading the Bitstreams for #{ark}..."
@@ -225,13 +233,6 @@ class DspaceIngester
         end
       end
 
-      # Cases where one MMS ID in Orangelight maps to multiple DataSpace Items should not apply remote metadata
-      change_set_param = if apply_remote_metadata?
-                           "ScannedResource"
-                         else
-                           "DspaceResource"
-                         end
-
       IngestFolderJob.perform_later(
         directory: dir_path,
         change_set_param: change_set_param,
@@ -241,6 +242,42 @@ class DspaceIngester
       )
       logger.info "Enqueued the ingestion of #{@title}."
     end
+  end
+
+  def ingest_now!(**attrs)
+    raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
+
+    logger.info "Downloading the Bitstreams for #{ark}..."
+    download_bitstreams
+
+    logger.info "Requesting the metadata for #{ark}..."
+    persisted = []
+    oai_metadata.each do |metadata|
+      logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
+
+      metadata.merge!(attrs)
+      identifier = metadata.fetch(:identifier, nil)
+
+      if !identifier.nil?
+        persisted = find_resources_by_ark(value: identifier)
+        if !persisted.empty?
+          logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
+          next
+        end
+      end
+
+      resource = IngestFolderJob.perform_now(
+        directory: dir_path,
+        change_set_param: change_set_param,
+        class_name: class_name,
+        file_filters: filters,
+        **metadata
+      )
+      persisted << resource
+      logger.info "Enqueued the ingestion of #{@title}."
+    end
+
+    persisted
   end
 
   def class_name

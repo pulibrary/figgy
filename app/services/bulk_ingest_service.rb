@@ -32,7 +32,7 @@ class BulkIngestService
   # @param base_directory [String] the path to the base directory
   # @param property [String, nil] the resource property (when attaching files to existing resources)
   # @param file_filters [Array] the filter used for matching against the filename extension
-  def attach_dir(base_directory:, property: nil, file_filters: [], preserve_file_names: false, **attributes)
+  def attach_dir(base_directory:, property: nil, file_filters: [], preserve_file_names: false, parent_class: nil, **attributes)
     raise ArgumentError, "#{self.class}: Directory does not exist: #{base_directory}" unless File.exist?(base_directory)
     return ingest_bag(base_directory: base_directory, **attributes) if archival_media_bag?(base_directory)
 
@@ -51,7 +51,7 @@ class BulkIngestService
     resource = find_or_create_by(property: property, value: file_name, **attributes)
 
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
-    attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
+    attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, parent_class: parent_class, **child_attributes)
   end
 
   def archival_media_bag?(directory)
@@ -108,10 +108,15 @@ class BulkIngestService
     # @param path [Pathname] the path to the directory containing the child directories
     # @param resource [Resource] the resource being used to construct child resources
     # @param file_filters [Array] the filter used for matching against the filename extension
-    def attach_children(path:, resource:, file_filters: [], preserve_file_names: false, **attributes)
+    # @paramm preserve_file_names [Boolean] whether to preserve the original file names
+    # @param parent_class [Class] the class of the parent resource
+    # @attributes [Hash] the attributes to use for the child resource
+    # @return [Resource] the parent resource
+    def attach_children(path:, resource:, file_filters: [], preserve_file_names: false, parent_class: nil, **attributes)
       child_attributes = attributes.except(:member_of_collection_ids)
+      parent_class ||= resource.class
       child_resources = dirs(path: path, resource: resource).map do |subdir_path|
-        child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
+        child_klass = child_klass(parent_class: parent_class, title: subdir_path.basename)
         attach_children(
           path: subdir_path,
           resource: new_resource(klass: child_klass, **child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))),
