@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 class DspaceIngester
-  attr_reader :json_path, :logger, :handle, :ark
+  attr_reader :json_path, :logger, :handle, :ark, :resource_types
   attr_writer :id
 
   DSPACE_PAGE_SIZE = 20
 
-  def resource_type
-    "item"
+  def default_resource_types
+    [
+      "item"
+    ]
   end
 
-  def initialize(handle:, logger: Rails.logger, dspace_api_token: nil, apply_remote_metadata: true)
+  def initialize(handle:, logger: Rails.logger, dspace_api_token: nil, resource_types: nil, apply_remote_metadata: true)
     @handle = handle
     @logger = logger
     @dspace_api_token = dspace_api_token
@@ -23,6 +25,8 @@ class DspaceIngester
     @apply_remote_metadata = apply_remote_metadata
     @title = nil
     @publisher = nil
+
+    @resource_types = resource_types || default_resource_types
   end
 
   def request_resource(path:, params: {}, headers: {})
@@ -55,18 +59,25 @@ class DspaceIngester
     headers
   end
 
-  def id
-    @id ||= begin
+  def rest_resource
+    @rest_resource ||= begin
               path = "handle/#{ark}"
               headers = request_headers("Accept" => "application/json")
               resource = request_resource(path: path, headers: headers)
 
               remote_type = resource["type"]
-              if remote_type != resource_type
-                raise(StandardError, "Handle resolves to resource type: #{resource_type}")
+              if !resource_types.include?(remote_type)
+                raise(StandardError, "Handle resolves to resource type #{remote_type}, expected #{resource_types}")
               end
-              return unless resource.key?("id")
-              resource["id"]
+
+              resource
+            end
+  end
+
+  def id
+    @id ||= begin
+              return unless rest_resource.key?("id")
+              rest_resource["id"]
             end
   end
 
@@ -212,6 +223,10 @@ class DspaceIngester
     end
   end
 
+  def change_set
+    @change_set ||= "#{change_set_param}ChangeSet".constantize
+  end
+
   def ingest!(**attrs)
     raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
@@ -347,24 +362,33 @@ class DspaceIngester
       end
     end
 
+    def oai_document
+      @oai_document ||= begin
+                          oai_identifier = "oai:dataspace.princeton.edu:#{handle}"
+                          params = {
+                            verb: "GetRecord",
+                            metadataPrefix: "oai_dc",
+                            identifier: oai_identifier
+                          }
+                          headers = {
+                            "Accept": "application/xml"
+                          }
+
+                          conn = Faraday.new(
+                            url: @base_url,
+                            headers: headers
+                          )
+                          response = conn.get("/oai/request", params)
+
+                          Nokogiri::XML.parse(response.body)
+                        end
+    end
+
+    def oai_record_xpath
+      "//xmlns:OAI-PMH/xmlns:GetRecord/xmlns:record"
+    end
+
     def oai_records
-      oai_identifier = "oai:dataspace.princeton.edu:#{handle}"
-      params = {
-        verb: "GetRecord",
-        metadataPrefix: "oai_dc",
-        identifier: oai_identifier
-      }
-      headers = {
-        "Accept": "application/xml"
-      }
-
-      conn = Faraday.new(
-        url: @base_url,
-        headers: headers
-      )
-      response = conn.get("/oai/request", params)
-
-      document = Nokogiri::XML.parse(response.body)
-      document.xpath("xmlns:OAI-PMH/xmlns:GetRecord/xmlns:record")
+      @oai_records ||= oai_document.xpath(oai_record_xpath)
     end
 end

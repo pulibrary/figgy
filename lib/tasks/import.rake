@@ -50,7 +50,12 @@ namespace :figgy do
       @logger = Logger.new(STDOUT)
       @logger.info("Preparing to ingest Item #{handle} from DSpace...")
 
-      IngestDspaceAssetJob.perform_later(handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceIngester, collection_ids: collections)
+      IngestDspaceAssetJob.perform_later(
+        handle: handle,
+        dspace_api_token: dspace_api_token,
+        ingest_service: DspaceIngester,
+        collection_ids: collections
+      )
     end
 
     desc "Ingest a DSpace collection."
@@ -67,7 +72,31 @@ namespace :figgy do
       @logger.info("Preparing to ingest Collection #{handle} from DSpace...")
 
       IngestDspaceAssetJob.perform_later(
-        handle: handle, dspace_api_token: dspace_api_token, ingest_service: DspaceCollectionIngester,
+        handle: handle,
+        dspace_api_token: dspace_api_token,
+        ingest_service: DspaceCollectionIngester,
+        collection_ids: collections,
+        limit: limit
+      )
+    end
+
+    desc "Ingest a DSpace collection as a multi-volume work."
+    task dspace_mvw_collection: :environment do
+      handle = ENV["HANDLE"]
+      dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      collection = ENV["COLLECTION"]
+      limit = ENV["LIMIT"]
+
+      abort "usage: rake import:dspace_mvw_collection HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
+      collections = [collection]
+
+      @logger = Logger.new(STDOUT)
+      @logger.info("Preparing to ingest Collection #{handle} from DSpace...")
+
+      IngestDspaceAssetJob.perform_later(
+        handle: handle,
+        dspace_api_token: dspace_api_token,
+        ingest_service: DspaceMultivolumeIngester,
         collection_ids: collections,
         limit: limit
       )

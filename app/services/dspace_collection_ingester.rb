@@ -2,8 +2,10 @@
 class DspaceCollectionIngester < DspaceIngester
   attr_reader :parent, :collection_ids, :local_identifiers
 
-  def resource_type
-    "collection"
+  def resource_types
+    [
+      "collection"
+    ]
   end
 
   def resource_path
@@ -37,6 +39,7 @@ class DspaceCollectionIngester < DspaceIngester
 
       break if new_data.count < DSPACE_PAGE_SIZE
     end
+
     data
   end
 
@@ -70,26 +73,6 @@ class DspaceCollectionIngester < DspaceIngester
     end
   end
 
-  def persist_collection_resource
-    collection = Collection.new
-    collection_change_set = CollectionChangeSet.new(collection)
-    collection_change_set.validate(title: title, slug: handle.parameterize)
-    change_set_persister = ChangeSetPersister.default
-    change_set_persister.save(change_set: collection_change_set)
-  end
-
-  def query_service
-    Valkyrie.config.metadata_adapter.query_service
-  end
-
-  def find_or_persist
-    results = query_service.custom_queries.find_many_by_property(property: :title, values: [title])
-    persisted = results.last
-    return persisted unless persisted.nil?
-
-    persist_collection_resource
-  end
-
   def prefix_patterns
     [
       /Serials and series reports (.+?) - /
@@ -110,19 +93,6 @@ class DspaceCollectionIngester < DspaceIngester
 
     attrs[:member_of_collection_ids] = @collection_ids
     raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
-
-    # This was disabled
-    # persisted = find_or_persist
-    # attrs[:member_of_collection_ids].append(persisted.id.to_s)
-
-    @local_identifiers.append(formatted_title)
-    @local_identifiers = [] if @local_identifiers.length == 1 && @local_identifiers.first == title
-
-    if attrs.key?(:local_identifier)
-      attrs[:local_identifier] += @local_identifiers
-    else
-      attrs[:local_identifier] = @local_identifiers
-    end
 
     ingest_items(**attrs)
   end

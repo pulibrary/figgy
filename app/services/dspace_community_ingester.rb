@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class DspaceCommunityIngester < DspaceCollectionIngester
-  def resource_type
-    "community"
+  def resource_types
+    [
+      "community"
+    ]
   end
 
   def resource_path
@@ -38,20 +40,6 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
     attrs[:member_of_collection_ids] = @collection_ids
     raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
-
-    # This was disabled
-    # persisted = persist_collection_resource
-    # attrs[:member_of_collection_ids].append(persisted.id.to_s)
-
-    # This was disabled
-    # This was giving me bugs
-    # @local_identifiers.append(title)
-    # @local_identifiers += [formatted_title]
-    # if attrs.key?(:local_identifier)
-    #  attrs[:local_identifier] += @local_identifiers
-    # else
-    #  attrs[:local_identifier] = @local_identifiers
-    # end
 
     communities.each_with_index do |community, _index|
       comm_handle = community["handle"]
