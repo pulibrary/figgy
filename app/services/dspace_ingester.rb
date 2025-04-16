@@ -3,18 +3,26 @@ class DspaceIngester
   attr_reader :json_path, :logger, :handle, :ark, :resource_types
   attr_writer :id
 
-  DSPACE_PAGE_SIZE = 20
+  DEFAULT_PAGE_SIZE = 20
+  def self.default_page_size
+    DEFAULT_PAGE_SIZE
+  end
 
-  def default_resource_types
+  def self.default_logger
+    Rails.logger
+  end
+
+  def self.default_resource_types
     [
       "item"
     ]
   end
 
-  def initialize(handle:, logger: Rails.logger, dspace_api_token: nil, resource_types: nil, apply_remote_metadata: true)
+  def initialize(handle:, apply_remote_metadata: true, logger: nil, dspace_api_token: nil, resource_types: nil)
     @handle = handle
-    @logger = logger
+    @apply_remote_metadata = apply_remote_metadata
     @dspace_api_token = dspace_api_token
+    @logger = logger || self.class.default_logger
 
     @json_path = handle
     @ark = @handle.gsub("ark:/", "")
@@ -22,209 +30,11 @@ class DspaceIngester
     @rest_base_url = URI.parse(@base_url + "rest/")
     @download_base_url = URI.join(@base_url, "bitstream/", "#{ark}/")
 
-    @apply_remote_metadata = apply_remote_metadata
     @title = nil
     @publisher = nil
 
-    @resource_types = resource_types || default_resource_types
-  end
-
-  def request_resource(path:, params: {}, headers: {})
-    uri = URI.parse(@rest_base_url.to_s + path)
-    @logger.info("Requesting #{uri} #{params}")
-
-    response = Faraday.get(uri, params, headers)
-    raise("Failed to request bibliographic metadata: #{uri} #{params} #{headers}") if response.status == 404
-
-    JSON.parse(response.body)
-  rescue StandardError => error
-    Rails.logger.warn("Failed to request bibliographic metadata: #{uri} #{params} #{headers}")
-    raise(error)
-  end
-
-  def paginated_request(path:, headers: {}, offset: 0, **params)
-    default_params = {
-      offset: offset,
-      limit: DSPACE_PAGE_SIZE
-    }
-    request_params = default_params.merge(params)
-
-    request_resource(path: path, params: request_params, headers: headers)
-  end
-
-  def request_headers(**options)
-    headers = options
-    headers["rest-dspace-token"] = @dspace_api_token unless @dspace_api_token.nil?
-
-    headers
-  end
-
-  def rest_resource
-    @rest_resource ||= begin
-              path = "handle/#{ark}"
-              headers = request_headers("Accept" => "application/json")
-              resource = request_resource(path: path, headers: headers)
-
-              remote_type = resource["type"]
-              unless resource_types.include?(remote_type)
-                raise(StandardError, "Handle resolves to resource type #{remote_type}, expected #{resource_types}")
-              end
-
-              resource
-            end
-  end
-
-  def id
-    @id ||= begin
-              return unless rest_resource.key?("id")
-              rest_resource["id"]
-            end
-  end
-
-  def request_bitstreams(headers: {}, **params)
-    path = "items/#{id}/bitstreams"
-
-    paginated_request(path: path, headers: headers, **params)
-  end
-
-  def bitstreams
-    @bitstreams ||= begin
-                      data = []
-
-                      loop do
-                        headers = {}
-                        headers["rest-dspace-token"] = @dspace_api_token unless @dspace_api_token.nil?
-                        new_data = request_bitstreams(offset: data.length, headers: headers)
-                        data.concat(new_data) unless new_data.empty?
-
-                        break if new_data.count < DSPACE_PAGE_SIZE
-                      end
-                      data
-                    end
-  end
-
-  def apply_remote_metadata?
-    @apply_remote_metadata
-  end
-
-  def find_mms_by_query(query:)
-    catalog_url = Figgy.config[:catalog_url]
-    catalog_uri = URI.parse(catalog_url)
-
-    catalog_base_url = "#{catalog_uri.scheme}://#{catalog_uri.host}"
-    headers = {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    }
-    conn = Faraday.new(
-      url: catalog_base_url,
-      headers: headers
-    )
-
-    path = "catalog.json"
-    params = {
-      "search_field": "all_fields",
-      "q": query
-    }
-    response = conn.get(path, params)
-    json_body = JSON.parse(response.body)
-
-    results = json_body.fetch("data", [])
-    if results.empty?
-      @logger.warn("Failed to find the MMS ID using the ARK #{ark}")
-      return
-    end
-
-    eportfolio_results = results.select { |result| result["attributes"].key?("electronic_portfolio_s") }
-    if eportfolio_results.empty?
-      @logger.warn("Failed to find the MMS ID for #{ark} with the `electronic_portfolio_s` attribute.")
-      return
-    end
-
-    result = eportfolio_results.first
-    raise(StandardError, "Failed to find the key 'id' in the JSON #{result}") unless result.key?("id")
-
-    @apply_remote_metadata = query == @ark
-
-    @source_metadata_identifier = result["id"]
-    @logger.info("Successfully found the MMS ID for #{ark}: {@source_metadata_identifier}")
-    @source_metadata_identifier
-  end
-
-  def publicly_visible?
-    response = request_bitstreams
-    !response.empty?
-  end
-
-  def source_metadata_identifier
-    @source_metadata_identifier ||= find_mms_by_query(query: ark) || find_mms_by_query(query: @publisher) || find_mms_by_query(query: @title)
-  end
-
-  def default_visibility
-    Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-  end
-
-  def private_visibility
-    ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
-  end
-
-  def oai_metadata
-    @oai_metadata ||= oai_records.map do |record|
-      attrs = {}
-      # logger.info("Requesting the metadata for #{ark}...")
-
-      metadata = record.at_xpath("xmlns:metadata")
-      dublin_core = metadata.at_xpath("oai_dc:dc", "oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/")
-      children = dublin_core.xpath("./*")
-
-      children.each do |child|
-        key = child.name.to_sym
-        value = child.text
-
-        attrs[key] = value
-      end
-
-      # Determine the visibility by requesting the Bitstreams without an auth. token
-      attrs[:visibility] = if publicly_visible?
-                             default_visibility
-                           else
-                             private_visibility
-                           end
-
-      # All items must have a title
-      @title = attrs.fetch(:title, nil)
-      raise(StandardError, "Failed to find the title element for #{ark}") if @title.nil?
-
-      # Publisher is used to cases where there is one MMS ID for many DSpace Items
-      @publisher = attrs.fetch(:publisher, nil)
-      @logger.warn("Failed to retrieve the `publisher` field for #{ark}") if @publisher.nil?
-
-      # Ensure that the identifier does not include the full URL
-      # identifier = attrs.fetch(:identifier, nil)
-      # unless identifier.nil?
-      #  ark = identifier.gsub("http://arks.princeton.edu/", "")
-      #  attrs["identifier"] = ark
-      # end
-
-      attrs["source_metadata_identifier"] = source_metadata_identifier unless source_metadata_identifier.nil?
-
-      logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
-
-      attrs
-    end
-  end
-
-  # Cases where one MMS ID in Orangelight maps to multiple DataSpace Items should not apply remote metadata
-  def change_set_param
-    if apply_remote_metadata?
-      "ScannedResource"
-    else
-      "DspaceResource"
-    end
-  end
-
-  def change_set
-    @change_set ||= "#{change_set_param}ChangeSet".constantize
+    @resource_types = resource_types || self.class.default_resource_types
+    @page_size = page_size || self.class.default_page_size
   end
 
   def ingest!(**attrs)
@@ -295,15 +105,213 @@ class DspaceIngester
     persisted
   end
 
-  def class_name
-    "ScannedResource"
-  end
-
-  def filters
-    [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
-  end
-
   private
+
+    def request_resource(path:, params: {}, headers: {})
+      uri = URI.parse(@rest_base_url.to_s + path)
+      @logger.info("Requesting #{uri} #{params}")
+
+      response = Faraday.get(uri, params, headers)
+      raise("Failed to request bibliographic metadata: #{uri} #{params} #{headers}") if response.status == 404
+
+      JSON.parse(response.body)
+    rescue StandardError => error
+      Rails.logger.warn("Failed to request bibliographic metadata: #{uri} #{params} #{headers}")
+      raise(error)
+    end
+
+    def paginated_request(path:, headers: {}, offset: 0, **params)
+      default_params = {
+        offset: offset,
+        limit: @page_size
+      }
+      request_params = default_params.merge(params)
+
+      request_resource(path: path, params: request_params, headers: headers)
+    end
+
+    def request_headers(**options)
+      headers = options
+      headers["rest-dspace-token"] = @dspace_api_token unless @dspace_api_token.nil?
+
+      headers
+    end
+
+    def rest_resource
+      @rest_resource ||= begin
+                path = "handle/#{ark}"
+                headers = request_headers("Accept" => "application/json")
+                resource = request_resource(path: path, headers: headers)
+
+                remote_type = resource["type"]
+                unless resource_types.include?(remote_type)
+                  raise(StandardError, "Handle resolves to resource type #{remote_type}, expected #{resource_types}")
+                end
+
+                resource
+              end
+    end
+
+    def id
+      @id ||= begin
+                return unless rest_resource.key?("id")
+                rest_resource["id"]
+              end
+    end
+
+    def request_bitstreams(headers: {}, **params)
+      path = "items/#{id}/bitstreams"
+
+      paginated_request(path: path, headers: headers, **params)
+    end
+
+    def bitstreams
+      @bitstreams ||= begin
+                        data = []
+
+                        loop do
+                          headers = {}
+                          headers["rest-dspace-token"] = @dspace_api_token unless @dspace_api_token.nil?
+                          new_data = request_bitstreams(offset: data.length, headers: headers)
+                          data.concat(new_data) unless new_data.empty?
+
+                          break if new_data.count < DSPACE_PAGE_SIZE
+                        end
+                        data
+                      end
+    end
+
+    def apply_remote_metadata?
+      @apply_remote_metadata
+    end
+
+    def find_mms_by_query(query:)
+      catalog_url = Figgy.config[:catalog_url]
+      catalog_uri = URI.parse(catalog_url)
+
+      catalog_base_url = "#{catalog_uri.scheme}://#{catalog_uri.host}"
+      headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+      conn = Faraday.new(
+        url: catalog_base_url,
+        headers: headers
+      )
+
+      path = "catalog.json"
+      params = {
+        "search_field": "all_fields",
+        "q": query
+      }
+      response = conn.get(path, params)
+      json_body = JSON.parse(response.body)
+
+      results = json_body.fetch("data", [])
+      if results.empty?
+        @logger.warn("Failed to find the MMS ID using the ARK #{ark}")
+        return
+      end
+
+      eportfolio_results = results.select { |result| result["attributes"].key?("electronic_portfolio_s") }
+      if eportfolio_results.empty?
+        @logger.warn("Failed to find the MMS ID for #{ark} with the `electronic_portfolio_s` attribute.")
+        return
+      end
+
+      result = eportfolio_results.first
+      raise(StandardError, "Failed to find the key 'id' in the JSON #{result}") unless result.key?("id")
+
+      @apply_remote_metadata = query == @ark
+
+      @source_metadata_identifier = result["id"]
+      @logger.info("Successfully found the MMS ID for #{ark}: {@source_metadata_identifier}")
+      @source_metadata_identifier
+    end
+
+    def publicly_visible?
+      response = request_bitstreams
+      !response.empty?
+    end
+
+    def source_metadata_identifier
+      @source_metadata_identifier ||= find_mms_by_query(query: ark) || find_mms_by_query(query: @publisher) || find_mms_by_query(query: @title)
+    end
+
+    def default_visibility
+      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
+
+    def private_visibility
+      ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
+    end
+
+    def oai_metadata
+      @oai_metadata ||= oai_records.map do |record|
+        attrs = {}
+        # logger.info("Requesting the metadata for #{ark}...")
+
+        metadata = record.at_xpath("xmlns:metadata")
+        dublin_core = metadata.at_xpath("oai_dc:dc", "oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/")
+        children = dublin_core.xpath("./*")
+
+        children.each do |child|
+          key = child.name.to_sym
+          value = child.text
+
+          attrs[key] = value
+        end
+
+        # Determine the visibility by requesting the Bitstreams without an auth. token
+        attrs[:visibility] = if publicly_visible?
+                               default_visibility
+                             else
+                               private_visibility
+                             end
+
+        # All items must have a title
+        @title = attrs.fetch(:title, nil)
+        raise(StandardError, "Failed to find the title element for #{ark}") if @title.nil?
+
+        # Publisher is used to cases where there is one MMS ID for many DSpace Items
+        @publisher = attrs.fetch(:publisher, nil)
+        @logger.warn("Failed to retrieve the `publisher` field for #{ark}") if @publisher.nil?
+
+        # Ensure that the identifier does not include the full URL
+        # identifier = attrs.fetch(:identifier, nil)
+        # unless identifier.nil?
+        #  ark = identifier.gsub("http://arks.princeton.edu/", "")
+        #  attrs["identifier"] = ark
+        # end
+
+        attrs["source_metadata_identifier"] = source_metadata_identifier unless source_metadata_identifier.nil?
+
+        logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
+
+        attrs
+      end
+    end
+
+    # Cases where one MMS ID in Orangelight maps to multiple DataSpace Items should not apply remote metadata
+    def change_set_param
+      if apply_remote_metadata?
+        "ScannedResource"
+      else
+        "DspaceResource"
+      end
+    end
+
+    def change_set
+      @change_set ||= "#{change_set_param}ChangeSet".constantize
+    end
+
+    def class_name
+      "ScannedResource"
+    end
+
+    def filters
+      [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
+    end
 
     def query_service
       Valkyrie.config.metadata_adapter.query_service
