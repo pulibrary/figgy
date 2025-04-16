@@ -18,15 +18,15 @@ class DspaceMultivolumeIngester < DspaceCollectionIngester
     attrs[:member_of_collection_ids] = @collection_ids
     raise("A parent Collection is required for #{id}") if attrs[:member_of_collection_ids].empty?
 
-    persisted = ingest_items(**attrs)
-    member_ids = persisted.map { |m| m.id.to_s }
-    raise("Empty member_ids for #{id}") if member_ids.empty?
+    member_ids = []
+    while member_ids.empty?
+      persisted = ingest_items(**attrs)
+      member_ids = persisted.map { |m| m.id.to_s }
+    end
 
     attrs[:member_ids] = member_ids
 
     @title = rest_resource["name"]
-    # This should be removed
-    @publisher = @title
     attrs[:title] = @title
     attrs[:source_metadata_identifier] = source_metadata_identifier
     attrs[:identifier] = ark_url

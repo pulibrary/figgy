@@ -37,7 +37,16 @@ class DspaceIngester
     @page_size = page_size || self.class.default_page_size
   end
 
-  def ingest!(job_method: :perform_later, **attrs)
+  def ingest_later(**job_args)
+    IngestFolderJob.perform_later(**job_args)
+  end
+
+  def ingest_now(**job_args)
+    created = IngestFolderJob.perform_now(**job_args)
+    created
+  end
+
+  def ingest!(later: false, **attrs)
     raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
     logger.info "Downloading the Bitstreams for #{ark}..."
@@ -58,19 +67,30 @@ class DspaceIngester
         persisted = find_resources_by_ark(value: identifier)
         unless persisted.empty?
           logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
+          created << persisted
           next
         end
       end
 
-      new_resource = IngestFolderJob.send(
-        job_method,
-        directory: dir_path,
-        change_set_param: change_set_param,
-        class_name: class_name,
-        file_filters: filters,
-        **metadata
-      )
-      created << new_resource
+      if later
+        ingest_later(
+          directory: dir_path,
+          change_set_param: change_set_param,
+          class_name: class_name,
+          file_filters: filters,
+          **metadata
+        )
+      else
+        new_resource = ingest_now(
+          directory: dir_path,
+          change_set_param: change_set_param,
+          class_name: class_name,
+          file_filters: filters,
+          **metadata
+        )
+        created << new_resource
+      end
+
       logger.info("IngestFolderJob invoked for the ingestion of #{@title}.")
     end
 
@@ -78,7 +98,7 @@ class DspaceIngester
   end
 
   def ingest_now!(**attrs)
-    ingest!(job_method: :perform_now, **attrs)
+    ingest!(later: true, **attrs)
   end
 
   private
@@ -229,16 +249,15 @@ class DspaceIngester
     end
 
     def source_metadata_identifier
-      # @source_metadata_identifier ||= find_mms_by_query(query: ark) || find_mms_by_query(query: @publisher) || find_mms_by_query(query: @title)
       @source_metadata_identifier ||= begin
-                                        mms_by_query_args = { query: ark }
-                                        if !@publisher.nil?
-                                          mms_by_query_args[:publisher] = @publisher
+                                        find_mms_by_query_args = { query: ark }
+                                        unless @publisher.nil?
+                                          find_mms_by_query_args[:publisher] = @publisher
                                         end
-                                        if !@title.nil?
-                                          mms_by_query_args[:title] = @title
+                                        unless @title.nil?
+                                          find_mms_by_query_args[:title] = @title
                                         end
-                                        find_mms_by_query(**mms_by_query_args)
+                                        find_mms_by_query(**find_mms_by_query_args)
                                       end
     end
 
