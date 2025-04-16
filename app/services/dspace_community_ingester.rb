@@ -1,37 +1,9 @@
 # frozen_string_literal: true
 class DspaceCommunityIngester < DspaceCollectionIngester
-  def resource_types
+  def self.default_resource_types
     [
       "community"
     ]
-  end
-
-  def resource_path
-    "/communities/#{id}"
-  end
-
-  def request_communities(headers: {}, **params)
-    path = "communities/#{id}/communities"
-
-    paginated_request(path: path, headers: headers, **params)
-  end
-
-  def request_collections(headers: {}, **params)
-    path = "communities/#{id}/collections"
-
-    paginated_request(path: path, headers: headers, **params)
-  end
-
-  def request_items_path
-    "communities/#{id}/items"
-  end
-
-  def communities
-    @communities ||= children(&method(:request_communities))
-  end
-
-  def collections
-    @collections ||= children(&method(:request_collections))
   end
 
   def ingest!(**parent_attrs)
@@ -63,4 +35,34 @@ class DspaceCommunityIngester < DspaceCollectionIngester
 
     ingest_items(**attrs)
   end
+
+  private
+
+    def resource_path
+      "/communities/#{id}"
+    end
+
+    def request_communities(headers: {}, **params)
+      path = "communities/#{id}/communities"
+
+      paginated_request(path: path, headers: headers, **params)
+    end
+
+    def request_collections(headers: {}, **params)
+      path = "communities/#{id}/collections"
+
+      paginated_request(path: path, headers: headers, **params)
+    end
+
+    def request_items_path
+      "communities/#{id}/items"
+    end
+
+    def communities
+      @communities ||= children(&method(:request_communities))
+    end
+
+    def collections
+      @collections ||= children(&method(:request_collections))
+    end
 end
