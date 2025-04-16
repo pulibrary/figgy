@@ -46,7 +46,7 @@ class DspaceIngester
     created
   end
 
-  def ingest!(later: false, **attrs)
+  def ingest!(later: true, **attrs)
     raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
     logger.info "Downloading the Bitstreams for #{ark}..."

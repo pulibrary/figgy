@@ -49,13 +49,22 @@ RSpec.describe DspaceIngester do
     oai_document.to_xml
   end
   let(:mms_id) { "99125128447906421" }
+  let(:catalog_response_meta) do
+    {
+      "pages" => {
+        "total_count" => 1
+      }
+    }
+  end
+
   let(:successful_catalog_response) do
     {
+      "meta" => catalog_response_meta,
       "data" => [
         {
           "id" => mms_id,
           "attributes" => {
-            "electronic_portfolio_s" => nil
+            "electronic_portfolio_s" => {}
           }
         }
       ]
@@ -73,22 +82,26 @@ RSpec.describe DspaceIngester do
   end
 
   describe "#ingest!" do
+    let(:catalog_request_url) do
+      "https://catalog.princeton.edu/catalog.json?f%5Baccess_facet%5D%5B0%5D=Online&f%5Bpublisher%5D%5B0%5D=Alcuin%20Society&f%5Btitle%5D%5B0%5D=Alcuin%20Society%20newsletter,%20No.%2022&q=88435/dsp01test&search_field=electronic_access_1display"
+    end
+
     before do
       allow(IngestFolderJob).to receive(:perform_later)
 
       stub_catalog(bib_id: mms_id)
       stub_request(:get,
                    "https://dataspace.princeton.edu/oai/request?identifier=oai:dataspace.princeton.edu:#{handle}&metadataPrefix=oai_dc&verb=GetRecord").to_return(
-                   status: 200,
-                   headers: headers,
-                   body: oai_response
-                 )
-      stub_request(:get,
-                   "https://catalog.princeton.edu/catalog.json?q=#{handle}&search_field=all_fields").to_return(
-                   status: 200,
-                   headers: headers,
-                   body: catalog_response.to_json
-                 )
+        status: 200,
+        headers: headers,
+        body: oai_response
+      )
+
+      stub_request(:get, catalog_request_url).to_return(
+        status: 200,
+        headers: headers,
+        body: catalog_response.to_json
+      )
     end
 
     context "when authenticated with an API token" do
@@ -121,6 +134,7 @@ RSpec.describe DspaceIngester do
       context "when the MMS ID cannot be found using the ARK, " do
         let(:catalog_response) do
           {
+            "meta" => catalog_response_meta,
             "data" => []
           }
         end
@@ -150,6 +164,7 @@ RSpec.describe DspaceIngester do
       context "when a bib. record can be found using the title instead of the ARK" do
         let(:catalog_response_by_ark) do
           {
+            "meta" => catalog_response_meta,
             "data" => []
           }
         end
@@ -176,6 +191,7 @@ RSpec.describe DspaceIngester do
       context "when a bib. record can be found using the ARK but it does not have the `electronic_portfolio_s` attribute" do
         let(:catalog_response) do
           {
+            "meta" => catalog_response_meta,
             "data" => [
               {
                 "id" => mms_id,
