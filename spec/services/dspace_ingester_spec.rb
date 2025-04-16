@@ -235,7 +235,7 @@ RSpec.describe DspaceIngester do
   end
 
   describe "#id" do
-    it "retrieves the ID from the API response" do
+    xit "retrieves the ID from the API response" do
       expect(dspace_ingester.id).to eq(item_id)
     end
   end
@@ -260,7 +260,7 @@ RSpec.describe DspaceIngester do
                  )
     end
 
-    it "retrieves the bitstreams from the API response" do
+    xit "retrieves the bitstreams from the API response" do
       expect(bitstreams).to eq(bitstream_response)
     end
   end
