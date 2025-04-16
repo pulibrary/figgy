@@ -60,7 +60,7 @@ class DspaceCollectionIngester < DspaceIngester
         break if new_data.empty?
         data.concat(new_data)
 
-        break if new_data.count < DSPACE_PAGE_SIZE
+        break if new_data.count < @page_size
       end
 
       data

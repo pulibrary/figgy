@@ -18,7 +18,7 @@ class DspaceIngester
     ]
   end
 
-  def initialize(handle:, apply_remote_metadata: true, logger: nil, dspace_api_token: nil, resource_types: nil)
+  def initialize(handle:, apply_remote_metadata: true, logger: nil, dspace_api_token: nil, resource_types: nil, page_size: nil)
     @handle = handle
     @apply_remote_metadata = apply_remote_metadata
     @dspace_api_token = dspace_api_token
@@ -37,17 +37,21 @@ class DspaceIngester
     @page_size = page_size || self.class.default_page_size
   end
 
-  def ingest!(**attrs)
+  def ingest!(job_method: :perform_later, **attrs)
     raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
     logger.info "Downloading the Bitstreams for #{ark}..."
     download_bitstreams
 
+    created = []
+
     logger.info "Requesting the metadata for #{ark}..."
+
     oai_metadata.each do |metadata|
       logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
 
       metadata.merge!(attrs)
+      # This is the ARK as a URL
       identifier = metadata.fetch(:identifier, nil)
 
       unless identifier.nil?
@@ -58,51 +62,23 @@ class DspaceIngester
         end
       end
 
-      IngestFolderJob.perform_later(
+      new_resource = IngestFolderJob.send(
+        job_method,
         directory: dir_path,
         change_set_param: change_set_param,
         class_name: class_name,
         file_filters: filters,
         **metadata
       )
-      logger.info "Enqueued the ingestion of #{@title}."
+      created << new_resource
+      logger.info("IngestFolderJob invoked for the ingestion of #{@title}.")
     end
+
+    created
   end
 
   def ingest_now!(**attrs)
-    raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
-
-    logger.info "Downloading the Bitstreams for #{ark}..."
-    download_bitstreams
-
-    logger.info "Requesting the metadata for #{ark}..."
-    persisted = []
-    oai_metadata.each do |metadata|
-      logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
-
-      metadata.merge!(attrs)
-      identifier = metadata.fetch(:identifier, nil)
-
-      unless identifier.nil?
-        persisted = find_resources_by_ark(value: identifier)
-        unless persisted.empty?
-          logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
-          next
-        end
-      end
-
-      resource = IngestFolderJob.perform_now(
-        directory: dir_path,
-        change_set_param: change_set_param,
-        class_name: class_name,
-        file_filters: filters,
-        **metadata
-      )
-      persisted << resource
-      logger.info "Enqueued the ingestion of #{@title}."
-    end
-
-    persisted
+    ingest!(job_method: :perform_now, **attrs)
   end
 
   private
@@ -175,7 +151,7 @@ class DspaceIngester
                           new_data = request_bitstreams(offset: data.length, headers: headers)
                           data.concat(new_data) unless new_data.empty?
 
-                          break if new_data.count < DSPACE_PAGE_SIZE
+                          break if new_data.count < @page_size
                         end
                         data
                       end
@@ -185,7 +161,7 @@ class DspaceIngester
       @apply_remote_metadata
     end
 
-    def find_mms_by_query(query:)
+    def find_mms_by_query(query:, title: nil, publisher: nil)
       catalog_url = Figgy.config[:catalog_url]
       catalog_uri = URI.parse(catalog_url)
 
@@ -200,26 +176,44 @@ class DspaceIngester
       )
 
       path = "catalog.json"
+
       params = {
-        "search_field": "all_fields",
+        "search_field": "electronic_access_1display",
         "q": query
       }
+      params["f[access_facet]"] = ["Online"]
+      if title
+        params["f[title]"] = [title]
+      end
+      if publisher
+        params["f[publisher]"] = [publisher]
+      end
+
       response = conn.get(path, params)
       json_body = JSON.parse(response.body)
 
+      response_meta = json_body["meta"]
+      response_pages = response_meta["pages"]
+      total_count = response_pages["total_count"]
+
       results = json_body.fetch("data", [])
       if results.empty?
-        @logger.warn("Failed to find the MMS ID using the ARK #{ark}")
+        @logger.warn("Failed to find the MMS ID.")
         return
       end
 
       eportfolio_results = results.select { |result| result["attributes"].key?("electronic_portfolio_s") }
       if eportfolio_results.empty?
-        @logger.warn("Failed to find the MMS ID for #{ark} with the `electronic_portfolio_s` attribute.")
+        @logger.warn("Failed to find the MMS ID with the `electronic_portfolio_s` attribute.")
         return
       end
 
+      if total_count > 1
+        @logger.warn("Found more than one MMS ID for #{ark}. Using the first record.")
+      end
+
       result = eportfolio_results.first
+
       raise(StandardError, "Failed to find the key 'id' in the JSON #{result}") unless result.key?("id")
 
       @apply_remote_metadata = query == @ark
@@ -235,7 +229,17 @@ class DspaceIngester
     end
 
     def source_metadata_identifier
-      @source_metadata_identifier ||= find_mms_by_query(query: ark) || find_mms_by_query(query: @publisher) || find_mms_by_query(query: @title)
+      # @source_metadata_identifier ||= find_mms_by_query(query: ark) || find_mms_by_query(query: @publisher) || find_mms_by_query(query: @title)
+      @source_metadata_identifier ||= begin
+                                        mms_by_query_args = { query: ark }
+                                        if !@publisher.nil?
+                                          mms_by_query_args[:publisher] = @publisher
+                                        end
+                                        if !@title.nil?
+                                          mms_by_query_args[:title] = @title
+                                        end
+                                        find_mms_by_query(**mms_by_query_args)
+                                      end
     end
 
     def default_visibility
@@ -249,7 +253,6 @@ class DspaceIngester
     def oai_metadata
       @oai_metadata ||= oai_records.map do |record|
         attrs = {}
-        # logger.info("Requesting the metadata for #{ark}...")
 
         metadata = record.at_xpath("xmlns:metadata")
         dublin_core = metadata.at_xpath("oai_dc:dc", "oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/")
@@ -276,13 +279,6 @@ class DspaceIngester
         # Publisher is used to cases where there is one MMS ID for many DSpace Items
         @publisher = attrs.fetch(:publisher, nil)
         @logger.warn("Failed to retrieve the `publisher` field for #{ark}") if @publisher.nil?
-
-        # Ensure that the identifier does not include the full URL
-        # identifier = attrs.fetch(:identifier, nil)
-        # unless identifier.nil?
-        #  ark = identifier.gsub("http://arks.princeton.edu/", "")
-        #  attrs["identifier"] = ark
-        # end
 
         attrs["source_metadata_identifier"] = source_metadata_identifier unless source_metadata_identifier.nil?
 
