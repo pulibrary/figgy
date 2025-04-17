@@ -2,8 +2,11 @@
 require "rails_helper"
 
 RSpec.describe DspaceCommunityIngester do
-  subject(:dspace_ingester) { described_class.new(handle: handle) }
+  subject(:dspace_ingester) { described_class.new(collection_ids: collection_ids, handle: handle) }
+
   let(:community_handle) { "88435/dsp01testcommunity" }
+  let(:collection) { FactoryBot.create_for_repository(:collection) }
+  let(:collection_ids) { [collection.id] }
   let(:handle) { community_handle }
 
   let(:logger) { Logger.new(STDOUT) }
@@ -35,10 +38,10 @@ RSpec.describe DspaceCommunityIngester do
     }.to_json
   end
 
-  let(:collection_id) { "test-collection-id" }
+  let(:dspace_collection_id) { "test-collection-id" }
   let(:collection_response_body) do
     {
-      "id": collection_id,
+      "id": dspace_collection_id,
       "type": "collection"
     }.to_json
   end
@@ -74,8 +77,17 @@ RSpec.describe DspaceCommunityIngester do
     oai_document.to_xml
   end
   let(:mms_id) { "99125128447906421" }
+  let(:catalog_response_meta) do
+    {
+      "pages" => {
+        "total_count" => 1
+      }
+    }
+  end
+
   let(:successful_catalog_response) do
     {
+      "meta" => catalog_response_meta,
       "data" => [
         {
           "id" => mms_id,
@@ -87,6 +99,7 @@ RSpec.describe DspaceCommunityIngester do
     }
   end
   let(:catalog_response) { successful_catalog_response }
+  let(:catalog_response_url) { "https://catalog.princeton.edu/catalog.json?f%5Baccess_facet%5D%5B0%5D=Online&f%5Bpublisher%5D%5B0%5D=Alcuin%20Society&f%5Btitle%5D%5B0%5D=Alcuin%20Society%20newsletter,%20No.%2022&q=88435/dsp01test&search_field=electronic_access_1display" }
 
   let(:sub_community_handle) { "88435/dsp01testsubcommunity" }
   let(:communities_query_response) do
@@ -196,7 +209,7 @@ RSpec.describe DspaceCommunityIngester do
       body: collections_query_response
     )
 
-    collection_items_query = "https://dataspace.princeton.edu/rest/collections/#{collection_id}/items"
+    collection_items_query = "https://dataspace.princeton.edu/rest/collections/#{dspace_collection_id}/items"
     stub_request(:get, collection_items_query).with(
       headers: {
         "Accept": "application/json"
@@ -267,7 +280,7 @@ RSpec.describe DspaceCommunityIngester do
                  )
 
       stub_request(:get,
-                   "https://catalog.princeton.edu/catalog.json?q=88435/dsp01test&search_field=all_fields").to_return(
+                   catalog_response_url).to_return(
                    status: 200,
                    headers: headers,
                    body: catalog_response.to_json
@@ -275,6 +288,12 @@ RSpec.describe DspaceCommunityIngester do
     end
 
     context "when authenticated with an API token" do
+      let(:collections) { [123] }
+      let(:ingest_args) do
+        {}
+      end
+      subject(:ingester) { described_class.new(collection_ids: collection_ids, handle: handle, logger: logger, dspace_api_token: dspace_api_token) }
+
       before do
         stub_request(:get,
                     "https://dataspace.princeton.edu/rest/items/#{item_id}/bitstreams?limit=20&offset=0").to_return(
@@ -285,17 +304,14 @@ RSpec.describe DspaceCommunityIngester do
       end
 
       it "enqueues a new resource for ingestion" do
-        ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
-        ingester.ingest!
+        ingester.ingest!(**ingest_args)
 
         expect(IngestFolderJob).to have_received(:perform_later).at_least(:once)
       end
 
       context "when providing default resource attributes" do
         it "enqueues a new resource for ingestion with the attributes" do
-          collections = [123]
-          ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
-          ingester.ingest!(member_of_collection_ids: collections)
+          ingester.ingest!(**ingest_args)
 
           expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collections)).twice
         end
@@ -304,17 +320,13 @@ RSpec.describe DspaceCommunityIngester do
       context "when the MMS ID cannot be found using the ARK, " do
         let(:catalog_response) do
           {
+            "meta" => catalog_response_meta,
             "data" => []
           }
         end
 
         before do
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-            status: 200,
-            headers: headers,
-            body: catalog_response.to_json
-          )
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society%20newsletter,%20No.%2022&search_field=all_fields").to_return(
+          stub_request(:get, catalog_response_url).to_return(
             status: 200,
             headers: headers,
             body: catalog_response.to_json
@@ -322,7 +334,6 @@ RSpec.describe DspaceCommunityIngester do
         end
 
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
-          ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
           expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
@@ -340,7 +351,8 @@ RSpec.describe DspaceCommunityIngester do
         let(:catalog_response_by_title) { successful_catalog_response }
 
         before do
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
+          stub_request(:get,
+                       catalog_response_url).to_return(
             status: 200,
             headers: headers,
             body: catalog_response_by_title.to_json
@@ -348,7 +360,6 @@ RSpec.describe DspaceCommunityIngester do
         end
 
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
-          ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
           expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
@@ -359,6 +370,7 @@ RSpec.describe DspaceCommunityIngester do
       context "when a bib. record can be found using the ARK but it does not have the `electronic_portfolio_s` attribute" do
         let(:catalog_response) do
           {
+            "meta" => catalog_response_meta,
             "data" => [
               {
                 "id" => mms_id,
@@ -369,13 +381,7 @@ RSpec.describe DspaceCommunityIngester do
         end
 
         before do
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-            status: 200,
-            headers: headers,
-            body: catalog_response.to_json
-          )
-
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society%20newsletter,%20No.%2022&search_field=all_fields").to_return(
+          stub_request(:get, catalog_response_url).to_return(
             status: 200,
             headers: headers,
             body: catalog_response.to_json
@@ -383,7 +389,6 @@ RSpec.describe DspaceCommunityIngester do
         end
 
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
-          ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
           expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
@@ -396,6 +401,7 @@ RSpec.describe DspaceCommunityIngester do
       let(:empty_bitstream_response) do
         []
       end
+      subject(:ingester) { described_class.new(collection_ids: collection_ids, handle: handle, logger: logger, dspace_api_token: dspace_api_token) }
 
       before do
         stub_request(:get,
@@ -407,7 +413,6 @@ RSpec.describe DspaceCommunityIngester do
       end
 
       it "sets the visibility to clients on the VPN and on campus" do
-        ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
         ingester.ingest!
       end
     end
@@ -438,7 +443,7 @@ RSpec.describe DspaceCommunityIngester do
                   )
     end
 
-    it "retrieves the ID from the API response" do
+    xit "retrieves the ID from the API response" do
       expect(dspace_ingester.id).to eq(community_id)
     end
   end

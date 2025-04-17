@@ -27,7 +27,9 @@ class DspaceCommunityIngester < DspaceCollectionIngester
     collections.each_with_index do |collection, _index|
       collec_handle = collection["handle"]
 
-      ingester = DspaceMVWIngester.new(handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit)
+      ingester = DspaceCollectionIngester.new(
+        handle: collec_handle, logger: @logger, dspace_api_token: @dspace_api_token, parent: self, limit: @limit
+      )
       # Reduces the number of API requests
       ingester.id = collection["id"]
       ingester.ingest!

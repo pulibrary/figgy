@@ -145,6 +145,7 @@ RSpec.describe DspaceIngester do
             headers: headers,
             body: catalog_response.to_json
           )
+
           stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society%20newsletter,%20No.%2022&search_field=all_fields").to_return(
             status: 200,
             headers: headers,
