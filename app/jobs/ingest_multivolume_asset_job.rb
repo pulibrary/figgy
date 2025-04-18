@@ -54,6 +54,4 @@ class IngestMultivolumeAssetJob < ApplicationJob
       logger.info "Created the resource #{persisted.id}"
       persisted
     end
-
-
 end

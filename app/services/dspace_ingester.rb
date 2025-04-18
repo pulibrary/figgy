@@ -18,9 +18,10 @@ class DspaceIngester
     ]
   end
 
-  def initialize(handle:, apply_remote_metadata: true, logger: nil, dspace_api_token: nil, resource_types: nil, page_size: nil)
+  def initialize(handle:, apply_remote_metadata: true, delete_preexisting: false, logger: nil, dspace_api_token: nil, resource_types: nil, page_size: nil)
     @handle = handle
     @apply_remote_metadata = apply_remote_metadata
+    @delete_preexisting = delete_preexisting
     @dspace_api_token = dspace_api_token
     @logger = logger || self.class.default_logger
 
@@ -66,9 +67,16 @@ class DspaceIngester
       unless identifier.nil?
         persisted = find_resources_by_ark(value: identifier)
         unless persisted.empty?
+
           logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
-          created << persisted
-          next
+          if @delete_preexisting
+            persisted.each do |resource|
+              change_set_persister.metadata_adapter.persister.delete(resource: resource)
+            end
+          else
+            created << persisted
+            next
+          end
         end
       end
 
@@ -339,7 +347,7 @@ class DspaceIngester
     def download_bitstream(url:, file_path:)
       return if File.exist?(file_path)
 
-      command = "wget -c '#{url}' -O '#{file_path}'"
+      command = "/usr/bin/env wget -c '#{url}' -O '#{file_path}'"
       _output, status = Open3.capture2e(command)
       raise("Failed to execute #{command}") if status.exitstatus != 0
     end

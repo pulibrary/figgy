@@ -85,7 +85,12 @@ namespace :figgy do
       handle = ENV["HANDLE"]
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
       collection = ENV["COLLECTION"]
+      # Optional arguments
       limit = ENV["LIMIT"]
+      delete_preexisting = false
+      if "DELETE_PREEXISTING" in ENV
+        delete_preexisting = ENV["DELETE_PREEXISTING"].lowercase == "true"
+      end
 
       abort "usage: rake import:dspace_mvw_collection HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
       collections = [collection]
@@ -98,7 +103,8 @@ namespace :figgy do
         dspace_api_token: dspace_api_token,
         ingest_service: DspaceMultivolumeIngester,
         collection_ids: collections,
-        limit: limit
+        limit: limit,
+        delete_preexisting: delete_preexisting
       )
     end
 
