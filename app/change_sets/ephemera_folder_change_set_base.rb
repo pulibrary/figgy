@@ -145,6 +145,10 @@ class EphemeraFolderChangeSetBase < ChangeSet
     resource.decorate.public_readable_state?
   end
 
+  def inherit_visibility_from_parent?
+    false
+  end
+
   private
 
     def metadata_adapter

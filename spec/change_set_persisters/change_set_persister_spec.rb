@@ -987,6 +987,19 @@ RSpec.describe ChangeSetPersister do
         allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
       end
 
+      it "doesn't propagate visibility, only state" do
+        folder = FactoryBot.create_for_repository(:private_ephemera_folder, state: "needs_qa")
+        box = FactoryBot.create_for_repository(:open_ephemera_box, state: "received", member_ids: folder.id)
+
+        change_set = change_set_class.new(box)
+        change_set.validate(state: "all_in_production")
+        change_set_persister.save(change_set: change_set)
+
+        reloaded_folder = ChangeSetPersister.default.query_service.find_by(id: folder.id)
+        expect(reloaded_folder.visibility).to eq folder.visibility
+        expect(reloaded_folder.state).to eq ["complete"]
+      end
+
       it "re-indexes the child folders when marked all_in_production", rabbit_stubbed: true do
         allow(rabbit_connection).to receive(:publish)
         solr = Blacklight.default_index.connection

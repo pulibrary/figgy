@@ -35,6 +35,7 @@ class ChangeSetPersister
 
       # set visibility on most resources; VisibilityProperty concern will make necessary changes on read_groups
       def propagate_visibility(member_change_set)
+        return member_change_set unless member_change_set.inherit_visibility_from_parent?
         return propagate_read_groups(member_change_set) unless change_set.respond_to?(:visibility) && change_set.visibility && member_change_set.respond_to?(:visibility=)
         member_change_set.validate(visibility: change_set.visibility)
         member_change_set
