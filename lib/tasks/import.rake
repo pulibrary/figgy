@@ -128,8 +128,6 @@ namespace :figgy do
       end
     end
 
-
-
     # I am not certain if this is needed
     desc "Ingest a DSpace community."
     task dspace_community: :environment do

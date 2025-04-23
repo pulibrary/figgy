@@ -37,7 +37,6 @@ class DspaceIngester
     @ark = @handle.gsub("ark:/", "")
     @base_url = "https://dataspace.princeton.edu/"
     @rest_base_url = URI.parse(@base_url + "rest/")
-    @download_base_url = URI.join(@base_url, "bitstream/", "#{ark}/")
 
     @title = nil
     @publisher = nil
@@ -180,7 +179,10 @@ class DspaceIngester
     end
 
     def publicly_visible?
-      !bitstreams.empty?
+      @publicly_visible ||= begin
+                              public_bitstreams = request_bitstreams(headers: {}, offset: 0, limit: 1)
+                              !public_bitstreams.empty?
+                            end
     end
 
     def default_visibility
@@ -270,9 +272,10 @@ class DspaceIngester
     end
 
     def download_bitstream(url:, file_path:)
-      return if File.exist?(file_path)
+      File.delete(file_path) if File.exist?(file_path)
 
-      command = "/usr/bin/env wget -c '#{url}' -O '#{file_path}'"
+      command = "/usr/bin/env curl -H 'rest-dspace-token: #{@dspace_api_token}' -o '#{file_path}' '#{url}'"
+
       output, status = Open3.capture2e(command)
 
       raise("Failed to execute #{command}: #{output}") if status.exitstatus != 0
@@ -305,15 +308,12 @@ class DspaceIngester
       FileUtils.mkdir_p(dir_path)
 
       bitstreams.each do |bitstream|
-        next unless bitstream.key?("name")
-
         name = bitstream["name"]
         file_path = File.join(dir_path, name)
 
-        next unless bitstream.key?("sequenceId")
+        bitstream_id = bitstream["id"]
 
-        sequence_id = bitstream["sequenceId"]
-        url = "#{@download_base_url}/#{sequence_id}"
+        url = "#{@rest_base_url}bitstreams/#{bitstream_id}/retrieve"
 
         download_bitstream(url: url, file_path: file_path)
       end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class IngestDspaceAssetJob < ApplicationJob
+  queue_as :high
+
   def ingest_service
     @ingest_service ||= @ingest_service_klass.new(
       handle: @handle,
@@ -9,8 +11,11 @@ class IngestDspaceAssetJob < ApplicationJob
     )
   end
 
-  def perform(handle:, dspace_api_token:, ingest_service_klass:,
-              limit: nil, delete_preexisting: false,
+  def perform(handle:,
+              dspace_api_token:,
+              ingest_service_klass:,
+              limit: nil,
+              delete_preexisting: false,
               **attrs)
 
     @handle = handle

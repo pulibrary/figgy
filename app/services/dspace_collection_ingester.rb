@@ -18,9 +18,6 @@ class DspaceCollectionIngester < DspaceIngester
   def ingest!(**attrs)
     logger.info("Ingesting DSpace collection #{id}...")
 
-    # raise("A parent Collection is required for #{id}") if member_of_collection_ids.empty?
-    # attrs[:member_of_collection_ids] = member_of_collection_ids
-
     ingest_items(**attrs)
   end
 
