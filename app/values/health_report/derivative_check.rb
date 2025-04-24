@@ -12,7 +12,12 @@ class HealthReport::DerivativeCheck
     @resource = resource
   end
 
+  def ignored_resources
+    [EphemeraProject]
+  end
+
   def valid?
+    return if ignored_resources.find { |klass| resource.is_a?(klass) }
     true
   end
 

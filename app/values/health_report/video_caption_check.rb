@@ -9,7 +9,12 @@ class HealthReport::VideoCaptionCheck
     @resource = resource
   end
 
+  def ignored_resources
+    [EphemeraProject]
+  end
+
   def valid?
+    return if ignored_resources.find { |klass| resource.is_a?(klass) }
     if file_set?
       resource.video?
     else
