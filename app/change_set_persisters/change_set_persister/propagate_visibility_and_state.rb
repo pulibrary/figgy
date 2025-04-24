@@ -2,6 +2,28 @@
 class ChangeSetPersister
   # Ensures that member resources inherit the visibility set on their parents
   # Also ensures that member resources have a state set which is appropriate to their Class
+  #
+  # Different resource types have different propagation behavior.
+  #
+  # 1. Most resources propagate state/visibility to their
+  # children - if a parent is marked complete or set to private, its children
+  # are marked complete or set to private. This is mostly used for Multivolume Works.
+  #
+  # 2. EphemeraProjects are more like collections from a workflow perspective.
+  # If a project is marked complete or set to private, it doesn't propagate to
+  # any of its members.
+  #
+  # 3. EphemeraBoxes are like collections with unique membership (one box per
+  # folder), but with the ability to bulk complete all
+  # children when the box's `all_in_production` state is set. So state
+  # propagates (when `all_in_production` is set, all box children are marked
+  # complete), but visibility does not (a folder might need to be private
+  # independent of box state.)
+  #
+  # 4. Collections don't propagate anything, because objects can be members of
+  # multiple collections so it can't act as an authority.
+  #
+  # TODO: See about cleaning up these workflows to make them more standard.
   class PropagateVisibilityAndState
     attr_reader :change_set_persister, :change_set
     delegate :query_service, :persister, to: :change_set_persister
