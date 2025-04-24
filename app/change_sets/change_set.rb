@@ -125,6 +125,10 @@ class ChangeSet < Valkyrie::ChangeSet
     true
   end
 
+  def inherit_visibility_from_parent?
+    true
+  end
+
   # This is a temporary fix to deal with the fact that we have change sets which
   # are set to be singular when the model is set to be multiple. REMOVE THIS as
   # soon as the model has single-value fields in places where it makes sense.
