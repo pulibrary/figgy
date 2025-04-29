@@ -6,7 +6,7 @@ RSpec.describe DspaceCollectionIngester do
   let(:collection_handle) { "88435/dsp01testcollection" }
   let(:handle) { collection_handle }
   let(:collection) { FactoryBot.create_for_repository(:collection) }
-  let(:collection_ids) { [collection.id] }
+  let(:collection_ids) { [collection.id.to_s] }
 
   let(:logger) { Logger.new(STDOUT) }
   let(:dspace_api_token) { "secret" }
@@ -50,6 +50,7 @@ RSpec.describe DspaceCollectionIngester do
       "Accept:": "application/xml"
     }
   end
+  let(:oai_fixture_path) { Rails.root.join("spec", "fixtures", "dspace_ingest_oai.xml") }
   let(:oai_document_fixture_file) { Rails.root.join("spec", "fixtures", "dspace_ingest_oai.xml") }
   let(:oai_document_fixture) { File.read(oai_document_fixture_file) }
   let(:oai_document) do
@@ -93,52 +94,16 @@ RSpec.describe DspaceCollectionIngester do
   end
 
   before do
-    items_query = "https://dataspace.princeton.edu/rest/collections/#{collection_id}/items"
-    stub_request(:get, items_query).with(
-      headers: {
-        "Accept": "application/json"
-      },
-      query: {
-        "limit": 20,
-        "offset": 0
-      }
-    ).to_return(
-      status: 200,
-      body: items_query_response
-    )
-
-    stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/#{handle}").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: collection_response_body
-                  )
+    stub_dspace_collection_requests(headers: headers, collection_id: collection_id, item_handle: item_handle)
   end
 
   describe "#ingest!" do
     before do
-      allow(IngestFolderJob).to receive(:perform_later)
-
       stub_catalog(bib_id: mms_id)
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/#{item_handle}").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: response_body
-                  )
+      stub_dspace_item_requests(headers: headers, item_id: item_id, item_handle: item_handle)
+      stub_dspace_oai_requests(mms_id: mms_id, headers: headers, item_handle: item_handle, catalog_response_url: catalog_response_url, oai_fixture_path: oai_fixture_path)
 
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/oai/request?identifier=oai:dataspace.princeton.edu:#{item_handle}&metadataPrefix=oai_dc&verb=GetRecord").to_return(
-                   status: 200,
-                   headers: headers,
-                   body: oai_response
-                 )
-      stub_request(:get,
-                   catalog_response_url).to_return(
-                   status: 200,
-                   headers: headers,
-                   body: catalog_response.to_json
-                 )
+      allow(IngestDspaceAssetJob).to receive(:perform_later)
     end
 
     context "when authenticated with an API token" do
@@ -154,14 +119,14 @@ RSpec.describe DspaceCollectionIngester do
       it "enqueues a new resource for ingestion" do
         ingester.ingest!
 
-        expect(IngestFolderJob).to have_received(:perform_later)
+        expect(IngestDspaceAssetJob).to have_received(:perform_later)
       end
 
       context "when providing default resource attributes" do
         it "enqueues a new resource for ingestion with the attributes" do
           ingester.ingest!(member_of_collection_ids: collection_ids)
 
-          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collection_ids))
+          expect(IngestDspaceAssetJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collection_ids))
         end
       end
 
@@ -173,28 +138,15 @@ RSpec.describe DspaceCollectionIngester do
           }
         end
 
-        before do
-          # stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-          #  status: 200,
-          #  headers: headers,
-          #  body: catalog_response.to_json
-          # )
-          # stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society%20newsletter,%20No.%2022&search_field=all_fields").to_return(
-          #  status: 200,
-          #  headers: headers,
-          #  body: catalog_response.to_json
-          # )
-        end
-
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestDspaceAssetJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestDspaceAssetJob).to have_received(:perform_later)
         end
       end
 
-      context "when a bib. record can be found using the title instead of the ARK" do
+      context "when the MMS ID can be found using the title instead of the ARK" do
         let(:catalog_response_by_ark) do
           {
             "meta" => catalog_response_meta,
@@ -204,19 +156,11 @@ RSpec.describe DspaceCollectionIngester do
         let(:catalog_response) { catalog_response_by_ark }
         let(:catalog_response_by_title) { successful_catalog_response }
 
-        before do
-          # stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-          #  status: 200,
-          #  headers: headers,
-          #  body: catalog_response_by_title.to_json
-          # )
-        end
-
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestDspaceAssetJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestDspaceAssetJob).to have_received(:perform_later)
         end
       end
 
@@ -233,25 +177,11 @@ RSpec.describe DspaceCollectionIngester do
           }
         end
 
-        before do
-          # stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-          #  status: 200,
-          #  headers: headers,
-          #  body: catalog_response.to_json
-          # )
-
-          # stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society%20newsletter,%20No.%2022&search_field=all_fields").to_return(
-          #  status: 200,
-          #  headers: headers,
-          #  body: catalog_response.to_json
-          # )
-        end
-
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestDspaceAssetJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestDspaceAssetJob).to have_received(:perform_later)
         end
       end
     end

@@ -3,6 +3,8 @@ class DspaceIngester
   attr_reader :json_path, :logger, :handle, :ark, :resource_types
   attr_writer :id
 
+  class DspaceIngestionError < StandardError; end
+
   def self.default_page_size
     20
   end
@@ -44,15 +46,15 @@ class DspaceIngester
 
   def ingest_resource(**job_args)
     IngestFolderJob.perform_now(**job_args)
+
     results = find_resources_by_ark(value: ark_url)
-    if results.empty?
-      raise(StandardError, "Failed to persist the resource with #{ark_url}")
-    end
+    raise(DspaceIngestionError, "Failed to persist the resource with #{ark_url}") if results.empty?
+
     results.last
   end
 
   def ingest!(parent_id: nil, **attrs)
-    raise(StandardError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
+    raise(DspaceIngestionError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
 
     logger.info "Downloading the Bitstreams for #{ark}..."
     download_bitstreams
@@ -66,18 +68,20 @@ class DspaceIngester
       # This is the ARK as a URL
       identifier = metadata.fetch(:identifier, nil)
 
-      unless identifier.nil?
-        persisted = find_resources_by_ark(value: identifier)
-        unless persisted.empty?
+      raise(DspaceIngestionError, "Failed to find the identifier for #{ark}") if identifier.blank?
+      persisted = find_resources_by_ark(value: identifier)
 
-          if @delete_preexisting
-            persisted.each do |resource|
-              change_set_persister.metadata_adapter.persister.delete(resource: resource)
+      unless persisted.empty?
+        if @delete_preexisting
+          persisted.each do |resource|
+            change_set = ChangeSet.for(resource)
+            change_set_persister.buffer_into_index do |persist|
+              persist.delete(change_set: change_set)
             end
-          else
-            logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
-            next
           end
+        else
+          logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
+          next
         end
       end
 
@@ -137,9 +141,7 @@ class DspaceIngester
                 resource = request_resource(path: path, headers: headers)
 
                 remote_type = resource["type"]
-                unless resource_types.include?(remote_type)
-                  raise(StandardError, "Handle resolves to resource type #{remote_type}, expected #{resource_types}")
-                end
+                raise(DspaceIngestionError, "Handle resolves to resource type #{remote_type}, expected #{resource_types}") unless resource_types.include?(remote_type)
 
                 resource
               end
@@ -217,7 +219,7 @@ class DspaceIngester
 
         # All items must have a title
         @title = attrs.fetch(:title, nil)
-        raise(StandardError, "Failed to find the title element for #{ark}") if @title.nil?
+        raise(DspaceIngestionError, "Failed to find the title element for #{ark}") if @title.nil?
 
         # Publisher is used to cases where there is one MMS ID for many DSpace Items
         @publisher = attrs.fetch(:publisher, nil)

@@ -24,7 +24,7 @@ describe IngestDspaceAssetJob do
       {
         handle: handle,
         dspace_api_token: dspace_api_token,
-        ingest_service: ingest_service_class,
+        ingest_service_klass: ingest_service_class,
         collection_ids: collection_ids
       }
     end

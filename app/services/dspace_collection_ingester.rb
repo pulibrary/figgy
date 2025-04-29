@@ -33,7 +33,7 @@ class DspaceCollectionIngester < DspaceIngester
   private
 
     def resource_path
-      "/collections/#{id}"
+      "collections/#{id}"
     end
 
     def resource
