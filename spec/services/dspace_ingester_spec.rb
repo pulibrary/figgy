@@ -5,6 +5,7 @@ RSpec.describe DspaceIngester do
   subject(:dspace_ingester) { described_class.new(handle: handle) }
   let(:item_handle) { "88435/dsp01test" }
   let(:handle) { item_handle }
+  let(:ark) { "http://arks.princeton.edu/ark:/#{handle}" }
 
   let(:logger) { Logger.new(STDOUT) }
   let(:dspace_api_token) { "secret" }
@@ -79,6 +80,14 @@ RSpec.describe DspaceIngester do
                     headers: headers,
                     body: response_body
                   )
+
+    # For checking if the bitstreams can be accessed without an API token
+    stub_request(:get,
+                    "https://dataspace.princeton.edu/rest/items/#{id}/bitstreams?limit=1&offset=0").to_return(
+                    status: 200,
+                    headers: headers,
+                    body: bitstream_response.to_json
+                  )
   end
 
   describe "#ingest!" do
@@ -86,8 +95,11 @@ RSpec.describe DspaceIngester do
       "https://catalog.princeton.edu/catalog.json?f%5Baccess_facet%5D%5B0%5D=Online&f%5Bpublisher%5D%5B0%5D=Alcuin%20Society&f%5Btitle%5D%5B0%5D=Alcuin%20Society%20newsletter,%20No.%2022&q=88435/dsp01test&search_field=electronic_access_1display"
     end
 
+    let(:persisted_resource) { FactoryBot.create(:scanned_resource, identifier: ark) }
+
     before do
-      allow(IngestFolderJob).to receive(:perform_later)
+      persisted_resource
+      allow(IngestFolderJob).to receive(:perform_now).and_return(persisted_resource)
 
       stub_catalog(bib_id: mms_id)
       stub_request(:get,
@@ -123,7 +135,7 @@ RSpec.describe DspaceIngester do
         ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
         ingester.ingest!
 
-        expect(IngestFolderJob).to have_received(:perform_later)
+        expect(IngestFolderJob).to have_received(:perform_now)
       end
 
       context "when providing default resource attributes" do
@@ -132,7 +144,7 @@ RSpec.describe DspaceIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!(member_of_collection_ids: collections)
 
-          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collections))
+          expect(IngestFolderJob).to have_received(:perform_now).with(hash_including(member_of_collection_ids: collections))
         end
       end
 
@@ -162,8 +174,8 @@ RSpec.describe DspaceIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestFolderJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_now)
         end
       end
 
@@ -189,8 +201,8 @@ RSpec.describe DspaceIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestFolderJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_now)
         end
       end
 
@@ -225,8 +237,8 @@ RSpec.describe DspaceIngester do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestFolderJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
+          expect(IngestFolderJob).to have_received(:perform_now)
         end
       end
     end
