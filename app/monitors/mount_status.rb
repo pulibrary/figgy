@@ -26,10 +26,7 @@ class MountStatus < HealthMonitor::Providers::Base
       "/mnt/hydra_sources/microforms",
       "/mnt/hydra_sources/music",
       "/mnt/hydra_sources/numismatics",
-      "/mnt/illiad/images",
-      "/mnt/illiad/ocr_scan",
-      "/mnt/illiad/cdl_scans",
-      "/mnt/hosted_illiad/ILL_OCR_Scans"
+      "/mnt/hosted_illiad/RequestScans"
     ]
   end
 end
