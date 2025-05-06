@@ -6,7 +6,7 @@ RSpec.describe DspaceCollectionIngester do
   let(:collection_handle) { "88435/dsp01testcollection" }
   let(:handle) { collection_handle }
   let(:collection) { FactoryBot.create_for_repository(:collection) }
-  let(:collection_ids) { [collection.id] }
+  let(:collection_ids) { [collection.id.to_s] }
 
   let(:logger) { Logger.new(STDOUT) }
   let(:dspace_api_token) { "secret" }
@@ -117,7 +117,7 @@ RSpec.describe DspaceCollectionIngester do
 
   describe "#ingest!" do
     before do
-      allow(IngestFolderJob).to receive(:perform_later)
+      allow(IngestDspaceAssetJob).to receive(:perform_later)
 
       stub_catalog(bib_id: mms_id)
       stub_request(:get,
@@ -154,14 +154,14 @@ RSpec.describe DspaceCollectionIngester do
       it "enqueues a new resource for ingestion" do
         ingester.ingest!
 
-        expect(IngestFolderJob).to have_received(:perform_later)
+        expect(IngestDspaceAssetJob).to have_received(:perform_later)
       end
 
       context "when providing default resource attributes" do
         it "enqueues a new resource for ingestion with the attributes" do
           ingester.ingest!(member_of_collection_ids: collection_ids)
 
-          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collection_ids))
+          expect(IngestDspaceAssetJob).to have_received(:perform_later).with(hash_including(member_of_collection_ids: collection_ids))
         end
       end
 
@@ -189,8 +189,8 @@ RSpec.describe DspaceCollectionIngester do
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestDspaceAssetJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestDspaceAssetJob).to have_received(:perform_later)
         end
       end
 
@@ -215,8 +215,8 @@ RSpec.describe DspaceCollectionIngester do
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestDspaceAssetJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestDspaceAssetJob).to have_received(:perform_later)
         end
       end
 
@@ -250,8 +250,8 @@ RSpec.describe DspaceCollectionIngester do
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_later)
+          expect(IngestDspaceAssetJob).not_to have_received(:perform_later).with(source_metadata_identifier: mms_id)
+          expect(IngestDspaceAssetJob).to have_received(:perform_later)
         end
       end
     end
