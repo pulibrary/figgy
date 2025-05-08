@@ -133,12 +133,9 @@ RSpec.describe Numismatics::MonogramsController, type: :controller do
       expect(manifest_response[:viewingHint]).to eq "individuals"
     end
 
-    it "returns an error message if the object doesn't exist" do
+    it "returns a not found status response" do
       get :manifest, params: { id: "asdf", format: :json }
-      manifest_response = MultiJson.load(response.body, symbolize_keys: true)
-
-      expect(response.headers["Content-Type"]).to include "application/json"
-      expect(manifest_response[:message]).to eq "No manifest found for asdf"
+      expect(response.status).to eq(404)
     end
   end
   def find_resource(id)

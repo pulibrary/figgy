@@ -6,6 +6,7 @@ class ResourcesController < ApplicationController
   include TokenAuth
   include Blacklight::SearchContext
   before_action :load_collections, only: [:new, :edit, :update, :create]
+  before_action :validate_resource_class, only: [:manifest, :file_manager, :order_manager, :structure, :pdf]
   delegate :metadata_adapter, to: :change_set_persister
   delegate :persister, :query_service, to: :metadata_adapter
   skip_before_action :verify_authenticity_token, only: [:refresh_remote_metadata]
@@ -163,6 +164,16 @@ class ResourcesController < ApplicationController
 
   def load_collections
     @collections = query_service.find_all_of_model(model: Collection).map(&:decorate) || []
+  end
+
+  # Check if the resource class is the same as the resource class set for the
+  # specific controller. Prevents errors by prohibiting scenarios like:
+  # ScannedResource.id = 1234
+  # /concern/ephemera_folders/1234/manifest
+  def validate_resource_class
+    return unless params[:id]
+    return unless resource.class != resource_class
+    raise Valkyrie::Persistence::ObjectNotFoundError
   end
 
   def resource

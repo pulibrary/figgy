@@ -178,4 +178,20 @@ RSpec.describe "ScannedResource requests", type: :request do
       end
     end
   end
+
+  describe "controller resource validation" do
+    let(:user) { nil }
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:persister) { adapter.persister }
+    let(:query_service) { adapter.query_service }
+    before do
+      sign_in user if user
+    end
+
+    it "returns a 404 when the controller resource class does not match the resource's class" do
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource)
+      get "/concern/ephemera_folders/#{resource.id}/file_manager"
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end
