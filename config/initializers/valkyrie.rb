@@ -350,7 +350,7 @@ Rails.application.config.to_prepare do
   Valkyrie::Derivatives::DerivativeService.services << VectorResourceDerivativeService::Factory.new(
     change_set_persister: ::ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
-      storage_adapter: Valkyrie::StorageAdapter.find(:derivatives)
+      storage_adapter: Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
     )
   )
 

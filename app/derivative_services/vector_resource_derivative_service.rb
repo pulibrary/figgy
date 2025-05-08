@@ -54,19 +54,16 @@ class VectorResourceDerivativeService
 
   def create_derivatives
     run_derivatives
-    create_local_derivatives
+    create_cloud_thumbail
     create_cloud_derivatives
-    update_cloud_acl
+    update_cloud_derivative_acl
+    update_cloud_thumbnail_acl
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
     change_set_persister.after_rollback.add do
       update_error_message(message: error.message)
     end
     raise error
-  end
-
-  def cloud_storage_adapter
-    Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
   end
 
   def file_object
@@ -124,11 +121,18 @@ class VectorResourceDerivativeService
     @temporary_thumbnail_output ||= Tempfile.new
   end
 
-  def update_cloud_acl
+  def update_cloud_derivative_acl
     parent = Wayfinder.for(change_set.model).parent
     cloud_file = change_set.model.cloud_derivative_files.first
     key = cloud_file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "")
     CloudFilePermissionsService.new(resource: parent, key: key).run
+  end
+
+  def update_cloud_thumbnail_acl
+    parent = Wayfinder.for(change_set.model).parent
+    cloud_file = change_set.model.thumbnail_files.first
+    key = cloud_file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "")
+    CloudFilePermissionsService.new(resource: parent, key: key, public_acl: true).run
   end
 
   def use_cloud_derivative
@@ -168,24 +172,22 @@ class VectorResourceDerivativeService
       end
     end
 
-    def create_local_derivatives
+    def create_cloud_derivatives
+      return unless missing_cloud_derivative?
+      @change_set = ChangeSet.for(resource)
+      change_set.files = [build_cloud_file]
+      change_set_persister.buffer_into_index do |buffered_persister|
+        @resource = buffered_persister.save(change_set: change_set)
+      end
+    end
+
+    def create_cloud_thumbail
       return unless missing_thumbnail?
       @resource = query_service.find_by(id: id)
       @change_set = ChangeSet.for(resource)
       change_set.files = [build_thumbnail_file]
       change_set_persister.buffer_into_index do |buffered_persister|
         @resource = buffered_persister.save(change_set: change_set)
-      end
-    end
-
-    def create_cloud_derivatives
-      return unless missing_cloud_derivative?
-      @change_set = ChangeSet.for(resource)
-      change_set.files = [build_cloud_file]
-      change_set_persister.with(storage_adapter: cloud_storage_adapter) do |cloud_persister|
-        cloud_persister.buffer_into_index do |buffered_persister|
-          @resource = buffered_persister.save(change_set: change_set)
-        end
       end
     end
 
