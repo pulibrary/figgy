@@ -31,6 +31,34 @@ namespace :figgy do
         end
       end
     end
+
+    desc "Write a CSV report of resources missing MMS IDs"
+    task missing_mms_ids: :environment do
+      output = ENV["OUTPUT"]
+      collection_id = ENV["COLLECTION"]
+
+      abort "usage: OUTPUT=output_path COLLECTION=collection_id rake report:missing_mms_ids" unless output && collection_id
+
+      @logger = Logger.new(STDOUT)
+      @logger.info "Generating report for collection #{collection_id} to #{output}..."
+
+      generator = MissingMmsReportGenerator.new(collection_id: collection_id, csv_file: output)
+      generator.generate
+    end
+
+    desc "Write a CSV report of resources referencing MMS IDs"
+    task referenced_mms_ids: :environment do
+      output = ENV["OUTPUT"]
+      collection_id = ENV["COLLECTION"]
+
+      abort "usage: OUTPUT=output_path COLLECTION=collection_id rake report:missing_mms_ids" unless output && collection_id
+
+      @logger = Logger.new(STDOUT)
+      @logger.info "Generating report for collection #{collection_id} to #{output}..."
+
+      generator = ReferencedMmsReportGenerator.new(collection_id: collection_id, csv_file: output)
+      generator.generate
+    end
   end
 
   def collect_terms(vocab)

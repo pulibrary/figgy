@@ -42,6 +42,8 @@ Metrics/AbcSize:
     - 'app/services/file_appender.rb'
     - 'app/services/cdl/charge_manager.rb'
     - 'app/jobs/cloud_fixity_job.rb'
+    - 'app/services/dspace_ingester.rb'
+    - 'app/jobs/add_mms_id_by_ark_job.rb'
 Metrics/BlockLength:
   Exclude:
     - '**/*.rake'
@@ -60,6 +62,7 @@ Metrics/BlockLength:
     - 'app/controllers/concerns/resource_relations.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/derivative_services/geo_derivatives/processors/image.rb'
+    - 'app/services/dspace_ingester.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_sets/change_set.rb'
@@ -76,6 +79,7 @@ Metrics/ClassLength:
     - 'app/change_sets/scanned_resource_change_set.rb'
     - 'app/models/ability.rb'
     - 'app/decorators/ephemera_folder_decorator.rb'
+    - 'app/services/dspace_ingester.rb'
     - 'app/services/geo_discovery/geoblacklight_document.rb'
     - 'app/services/geo_resource_reindexer.rb'
     - 'app/services/ingest_ephemera_service.rb'
@@ -166,6 +170,8 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Exclude:
     - 'app/change_set_persisters/change_set_persister.rb'
+    - 'app/jobs/ingest_dspace_asset_job.rb'
+    - 'app/jobs/ingest_multivolume_asset_job.rb'
     - 'app/jobs/ingest_folders_job.rb'
     - 'app/jobs/ingest_folder_job.rb'
     - 'app/services/music_import_service/recording_collector.rb'
@@ -174,6 +180,7 @@ Metrics/ParameterLists:
     - 'app/jobs/issue_import_job.rb'
     - 'app/queries/paged_all_query.rb'
     - 'spec/models/oai/figgy/valkyrie_provider_model_spec.rb'
+    - 'app/services/dspace_ingester.rb'
 Metrics/PerceivedComplexity:
   Max: 12
   Exclude:
@@ -190,6 +197,7 @@ Metrics/PerceivedComplexity:
     - 'app/services/pdf_generator/cover_page_generator.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/models/ability.rb'
+    - 'app/services/dspace_ingester.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/helpers/fixity_dashboard_helper.rb'

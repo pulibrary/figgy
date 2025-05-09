@@ -232,6 +232,8 @@ defaults: &defaults
         - 'audio/mpeg'
         - 'video/mp4'
   pulfalight_unpublished_token: <%= ENV["PULFALIGHT_UNPUBLISHED_TOKEN"] %>
+  dspace:
+    download_path: "/tmp"
 
 development:
   <<: *defaults
