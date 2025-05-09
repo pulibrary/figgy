@@ -169,7 +169,7 @@ RSpec.describe EphemeraFoldersController, type: :controller do
 
         get :manifest, params: { id: resource.id.to_s, format: :json }
 
-        expect(response).to be_forbidden
+        expect(response.status).to eq 401
       end
       it "displays complete items" do
         resource = FactoryBot.create_for_repository(:complete_ephemera_folder, files: [file])
