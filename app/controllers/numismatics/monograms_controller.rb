@@ -28,8 +28,6 @@ module Numismatics
           render json: ManifestBuilder.new(@resource).build
         end
       end
-    rescue Valkyrie::Persistence::ObjectNotFoundError
-      render json: { message: "No manifest found for #{params[:id]}" }
     end
 
     private
