@@ -29,8 +29,6 @@ class PlaylistsController < ResourcesController
         render json: manifest_builder.build
       end
     end
-  rescue Valkyrie::Persistence::ObjectNotFoundError
-    render json: { message: "No manifest found for #{params[:id]}" }
   end
 
   # View the structural metadata for a given repository resource

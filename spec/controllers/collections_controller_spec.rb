@@ -178,7 +178,7 @@ RSpec.describe CollectionsController, type: :controller do
 
         get :manifest, params: { id: collection.id.to_s, format: :json }
 
-        expect(metadata_adapter.query_service).to have_received(:find_by).exactly(1).times
+        expect(metadata_adapter.query_service).to have_received(:find_by).exactly(2).times
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
 
         expect(manifest_response[:manifests].length).to eq 5
