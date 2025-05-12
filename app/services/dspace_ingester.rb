@@ -23,11 +23,10 @@ class DspaceIngester
     "http://arks.princeton.edu/ark:/#{ark}"
   end
 
-  def initialize(handle:, apply_remote_metadata: true, delete_preexisting: false, dspace_api_token: nil, **_attrs)
+  def initialize(handle:, delete_preexisting: false, dspace_api_token: nil, **_attrs)
     @handle = handle
 
     # Optional arguments
-    @apply_remote_metadata = apply_remote_metadata
     @delete_preexisting = delete_preexisting
     @dspace_api_token = dspace_api_token
 
@@ -79,9 +78,6 @@ class DspaceIngester
               persist.delete(change_set: change_set)
             end
           end
-        else
-          logger.warn("Existing #{ark} found for persisted resources: #{persisted.join(',')}")
-          next
         end
       end
 
@@ -106,15 +102,12 @@ class DspaceIngester
 
     def request_resource(path:, params: {}, headers: {})
       uri = URI.parse(@rest_base_url.to_s + path)
-      @logger.info("Requesting #{uri} #{params}")
+      @logger.info("Requesting #{uri} #{params} #{headers}")
 
       response = Faraday.get(uri, params, headers)
       raise("Failed to request bibliographic metadata: #{uri} #{params} #{headers}") if response.status == 404
 
       JSON.parse(response.body)
-    rescue StandardError => error
-      Rails.logger.warn("Failed to request bibliographic metadata: #{uri} #{params} #{headers}")
-      raise(error)
     end
 
     def paginated_request(path:, headers: {}, offset: 0, **params)
@@ -174,10 +167,6 @@ class DspaceIngester
                         end
                         data
                       end
-    end
-
-    def apply_remote_metadata?
-      @apply_remote_metadata
     end
 
     def publicly_visible?
@@ -253,10 +242,6 @@ class DspaceIngester
       class_name
     end
 
-    def change_set
-      @change_set ||= ScannedResourceChangeSet
-    end
-
     def filters
       [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
     end
@@ -293,17 +278,6 @@ class DspaceIngester
 
     def dir_path
       @dir_path ||= File.join(download_path, id.to_s)
-    end
-
-    def rest_request(path: "/", params: {}, headers: {})
-      conn = Faraday.new(
-        url: @rest_base_url,
-        headers: headers
-      )
-
-      response = conn.get(path, params)
-
-      JSON.parse(response.body)
     end
 
     def download_bitstreams

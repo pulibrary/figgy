@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class AddMemberJob < ApplicationJob
-  # queue_as :realtime
   queue_as :high
 
   def perform(resource_id:, parent_id:)

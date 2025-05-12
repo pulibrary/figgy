@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddMmsIdByTitleJob < AddMmsIdByArkJob
-  # queue_as :realtime
   queue_as :high
 
   class FindMmsIdByTitleError < StandardError; end

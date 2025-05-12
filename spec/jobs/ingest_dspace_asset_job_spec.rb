@@ -40,19 +40,5 @@ describe IngestDspaceAssetJob do
       expect(ingest_service_class).to have_received(:new)
       expect(ingest_service).to have_received(:ingest!)
     end
-
-    context "when specifying an unsupported Class" do
-      before do
-        allow(Rails.logger).to receive(:warn)
-      end
-
-      xit "logs a warning message" do
-        described_class.perform_now(**job_args)
-
-        expect(ingest_service_class).to have_received(:new)
-        expect(ingest_service).to have_received(:ingest!)
-        expect(Rails.logger).to have_received(:warn).with("Ingesting a folder with an unsupported class: Playlist")
-      end
-    end
   end
 end

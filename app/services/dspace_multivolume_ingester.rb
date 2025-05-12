@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DspaceMultivolumeIngester < DspaceCollectionIngester
   def ark_url
     "http://arks.princeton.edu/ark:/#{ark}"

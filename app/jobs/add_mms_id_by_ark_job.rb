@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddMmsIdByArkJob < ApplicationJob
-  # queue_as :realtime
   queue_as :high
 
   class FindMmsIdByArkError < StandardError; end

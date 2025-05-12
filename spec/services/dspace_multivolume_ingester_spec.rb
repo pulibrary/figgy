@@ -2,7 +2,15 @@
 require "rails_helper"
 
 describe DspaceMultivolumeIngester do
-  subject(:ingester) { described_class.new(title: title, handle: handle, collection_ids: collection_ids) }
+  subject(:ingester) { described_class.new(**ingester_args) }
+
+  let(:ingester_args) do
+    {
+      title: title,
+      handle: handle,
+      collection_ids: collection_ids
+    }
+  end
   let(:title) { "test-title" }
   let(:collection_handle) { "88435/dsp01testcollection" }
   let(:handle) { collection_handle }
@@ -84,7 +92,7 @@ describe DspaceMultivolumeIngester do
     }
   end
   let(:catalog_response) { successful_catalog_response }
-  let(:catalog_response_url) { "https://catalog.princeton.edu/catalog.json?f%5Baccess_facet%5D%5B0%5D=Online&f%5Bpublisher%5D%5B0%5D=Alcuin%20Society&f%5Btitle%5D%5B0%5D=Alcuin%20Society%20newsletter,%20No.%2022&q=88435/dsp01test&search_field=electronic_access_1display" }
+  let(:catalog_request_url) { "https://catalog.princeton.edu/catalog.json?f%5Baccess_facet%5D%5B0%5D=Online&f%5Bpublisher%5D%5B0%5D=Alcuin%20Society&f%5Btitle%5D%5B0%5D=Alcuin%20Society%20newsletter,%20No.%2022&q=88435/dsp01test&search_field=electronic_access_1display" }
   let(:item_handle) { "88435/dsp01test" }
   let(:items_query_response) do
     [
@@ -103,14 +111,79 @@ describe DspaceMultivolumeIngester do
     before do
       stub_catalog(bib_id: mms_id)
       stub_dspace_item_requests(headers: headers, item_id: item_id, item_handle: item_handle)
-      stub_dspace_oai_requests(mms_id: mms_id, headers: headers, item_handle: item_handle, catalog_response_url: catalog_response_url, oai_fixture_path: oai_fixture_path)
+      stub_dspace_catalog_requests(headers: headers, mms_id: mms_id, catalog_request_url: catalog_request_url)
+      stub_dspace_oai_requests(headers: headers, item_handle: item_handle, oai_fixture_path: oai_fixture_path)
 
       allow(IngestDspaceAssetJob).to receive(:perform_later)
-      ingester.ingest!(member_of_collection_ids: collection_ids)
     end
 
     it "ingests items into a new multi-volume ScannedResource" do
-      expect(IngestDspaceAssetJob).to have_received(:perform_later)
+      ingester.ingest!(member_of_collection_ids: collection_ids)
+      expect(IngestDspaceAssetJob).to have_received(:perform_later).with(
+        hash_including(
+          dspace_api_token: nil,
+          ingest_service_klass: DspaceIngester,
+          member_of_collection_ids: collection_ids
+        )
+      )
+    end
+
+    context "when resources have been persisted with the same ARK identifiers" do
+      let(:ingester_args) do
+        {
+          title: title,
+          handle: handle,
+          collection_ids: collection_ids
+        }
+      end
+      let(:identifier) do
+        [
+          "http://arks.princeton.edu/ark:/#{handle}"
+        ]
+      end
+      let(:existing) do
+        FactoryBot.create_for_repository(:scanned_resource, identifier: identifier)
+      end
+      let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+
+      before do
+        existing
+      end
+
+      context "when the ingester service is told to delete preexisting resources" do
+        let(:ingester_args) do
+          {
+            title: title,
+            handle: handle,
+            collection_ids: collection_ids,
+            delete_preexisting: true
+          }
+        end
+
+        it "deletes existing resources with matching ARK URLs" do
+          ingester.ingest!(member_of_collection_ids: collection_ids)
+          expect(IngestDspaceAssetJob).to have_received(:perform_later).with(
+            hash_including(
+              delete_preexisting: true
+            )
+          )
+
+          expect do
+            metadata_adapter.query_service.find_by(id: existing.id)
+          end.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        end
+      end
+
+      it "by default does not ingest a new resource with an identical ARK" do
+        expect(existing).to be_persisted
+        ingester.ingest!(member_of_collection_ids: collection_ids)
+        expect(IngestDspaceAssetJob).to have_received(:perform_later).with(
+          hash_including(
+            parent_id: existing.id.to_s
+          )
+        )
+        expect(existing).to be_persisted
+      end
     end
   end
 end

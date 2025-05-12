@@ -6,7 +6,6 @@ class IngestDspaceAssetJob < ApplicationJob
     @ingest_service ||= @ingest_service_klass.new(
       handle: @handle,
       dspace_api_token: @dspace_api_token,
-      limit: @limit,
       delete_preexisting: @delete_preexisting
     )
   end
@@ -14,7 +13,6 @@ class IngestDspaceAssetJob < ApplicationJob
   def perform(handle:,
               dspace_api_token:,
               ingest_service_klass:,
-              limit: nil,
               delete_preexisting: false,
               **attrs)
 
@@ -22,7 +20,6 @@ class IngestDspaceAssetJob < ApplicationJob
     @dspace_api_token = dspace_api_token
     @ingest_service_klass = ingest_service_klass
 
-    @limit = limit
     @delete_preexisting = delete_preexisting
 
     ingest_service.ingest!(**attrs)

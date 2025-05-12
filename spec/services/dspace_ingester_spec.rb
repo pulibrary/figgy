@@ -11,83 +11,17 @@ RSpec.describe DspaceIngester do
   let(:dspace_api_token) { "secret" }
   let(:item_id) { "test-id" }
   let(:id) { item_id }
-  let(:request_authz_headers) do
-    {
-      "Rest-Dspace-Token" => "secret"
-    }
-  end
+  let(:oai_fixture_path) { Rails.root.join("spec", "fixtures", "dspace_ingest_oai.xml") }
   let(:headers) do
     {
       "Accept:": "application/json"
     }
   end
-  let(:response_body) do
-    {
-      "id": item_id,
-      "type": "item"
-    }.to_json
-  end
-  let(:authz_bitstream_response) do
-    [
-      {
-        "name" => "test-name",
-        "sequenceId" => "test-sequence-id"
-      }
-    ]
-  end
-  let(:bitstream_response) { authz_bitstream_response }
-  let(:xml_headers) do
-    {
-      "Accept:": "application/xml"
-    }
-  end
-  let(:oai_document_fixture_file) { Rails.root.join("spec", "fixtures", "dspace_ingest_oai.xml") }
-  let(:oai_document_fixture) { File.read(oai_document_fixture_file) }
-  let(:oai_document) do
-    Nokogiri::XML(oai_document_fixture)
-  end
-  let(:oai_response) do
-    oai_document.to_xml
-  end
   let(:mms_id) { "99125128447906421" }
-  let(:catalog_response_meta) do
-    {
-      "pages" => {
-        "total_count" => 1
-      }
-    }
-  end
-
-  let(:successful_catalog_response) do
-    {
-      "meta" => catalog_response_meta,
-      "data" => [
-        {
-          "id" => mms_id,
-          "attributes" => {
-            "electronic_portfolio_s" => {}
-          }
-        }
-      ]
-    }
-  end
-  let(:catalog_response) { successful_catalog_response }
+  let(:catalog_request_url) { "https://catalog.princeton.edu/catalog.json?f%5Baccess_facet%5D%5B0%5D=Online&f%5Bpublisher%5D%5B0%5D=Alcuin%20Society&f%5Btitle%5D%5B0%5D=Alcuin%20Society%20newsletter,%20No.%2022&q=88435/dsp01test&search_field=electronic_access_1display" }
 
   before do
-    stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/handle/#{handle}").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: response_body
-                  )
-
-    # For checking if the bitstreams can be accessed without an API token
-    stub_request(:get,
-                    "https://dataspace.princeton.edu/rest/items/#{id}/bitstreams?limit=1&offset=0").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: bitstream_response.to_json
-                  )
+    stub_dspace_item_requests(headers: headers, item_id: item_id, item_handle: item_handle)
   end
 
   describe "#ingest!" do
@@ -102,32 +36,26 @@ RSpec.describe DspaceIngester do
       allow(IngestFolderJob).to receive(:perform_now).and_return(persisted_resource)
 
       stub_catalog(bib_id: mms_id)
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/oai/request?identifier=oai:dataspace.princeton.edu:#{handle}&metadataPrefix=oai_dc&verb=GetRecord").to_return(
-        status: 200,
-        headers: headers,
-        body: oai_response
-      )
-
-      stub_request(:get, catalog_request_url).to_return(
-        status: 200,
-        headers: headers,
-        body: catalog_response.to_json
-      )
+      stub_dspace_item_requests(headers: headers, item_id: item_id, item_handle: item_handle)
+      stub_dspace_catalog_requests(headers: headers, mms_id: mms_id, catalog_request_url: catalog_request_url)
+      stub_dspace_oai_requests(headers: headers, item_handle: item_handle, oai_fixture_path: oai_fixture_path)
     end
 
     context "when authenticated with an API token" do
+      let(:headers) do
+        {
+          "Rest-Dspace-Token" => "secret",
+          "Accept" => "application/json"
+        }
+      end
+
       let(:status) { instance_double(Process::Status) }
 
       before do
-        allow(status).to receive(:exitstatus).and_return(0)
-        stub_request(:get,
-                    "https://dataspace.princeton.edu/rest/items/#{id}/bitstreams?limit=20&offset=0").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: bitstream_response.to_json
-                  )
+        stub_dspace_visibility_request(headers: headers, item_id: id)
+        stub_dspace_bitstream_requests(headers: headers, item_id: id)
 
+        allow(status).to receive(:exitstatus).and_return(0)
         allow(Open3).to receive(:capture2e).and_return(["", status])
       end
 
@@ -149,33 +77,34 @@ RSpec.describe DspaceIngester do
       end
 
       context "when the MMS ID cannot be found using the ARK, " do
-        let(:catalog_response) do
-          {
-            "meta" => catalog_response_meta,
-            "data" => []
-          }
-        end
-
         before do
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-            status: 200,
-            headers: headers,
-            body: catalog_response.to_json
-          )
-
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society%20newsletter,%20No.%2022&search_field=all_fields").to_return(
-            status: 200,
-            headers: headers,
-            body: catalog_response.to_json
-          )
+          stub_dspace_bitstream_requests(headers: headers, item_id: item_id)
+          stub_dspace_catalog_missing_requests(headers: headers, catalog_request_url: catalog_request_url)
         end
 
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_now)
+          expect(IngestFolderJob).not_to have_received(:perform_now).with(
+            hash_including(
+              source_metadata_identifier: mms_id
+            )
+          )
+          expect(IngestFolderJob).to have_received(:perform_now).with(
+            hash_including(
+              creator: "Greaves, Howard",
+              date: "2015",
+              directory: "/tmp/test-id",
+              identifier: "http://arks.princeton.edu/ark:/88435/dsp01gb19f818g",
+              language: "en",
+              publisher: "Alcuin Society",
+              relation: "Alcuin Society newsletter, 2015, No. 22",
+              subject: "Book collecting",
+              title: "Alcuin Society newsletter, No. 22",
+              visibility: "open"
+            )
+          )
         end
       end
 
@@ -190,47 +119,39 @@ RSpec.describe DspaceIngester do
         let(:catalog_response_by_title) { successful_catalog_response }
 
         before do
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-            status: 200,
-            headers: headers,
-            body: catalog_response_by_title.to_json
-          )
+          stub_dspace_bitstream_requests(headers: headers, item_id: item_id)
+          stub_dspace_catalog_missing_requests(headers: headers, catalog_request_url: catalog_request_url)
         end
 
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
           ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
           ingester.ingest!
 
-          expect(IngestFolderJob).not_to have_received(:perform_now).with(source_metadata_identifier: mms_id)
-          expect(IngestFolderJob).to have_received(:perform_now)
+          expect(IngestFolderJob).not_to have_received(:perform_now).with(
+            hash_including(
+              source_metadata_identifier: mms_id
+            )
+          )
+          expect(IngestFolderJob).to have_received(:perform_now).with(
+            hash_including(
+              creator: "Greaves, Howard",
+              date: "2015",
+              directory: "/tmp/test-id",
+              identifier: "http://arks.princeton.edu/ark:/88435/dsp01gb19f818g",
+              language: "en",
+              publisher: "Alcuin Society",
+              relation: "Alcuin Society newsletter, 2015, No. 22",
+              subject: "Book collecting",
+              title: "Alcuin Society newsletter, No. 22",
+              visibility: "open"
+            )
+          )
         end
       end
 
       context "when a bib. record can be found using the ARK but it does not have the `electronic_portfolio_s` attribute" do
-        let(:catalog_response) do
-          {
-            "meta" => catalog_response_meta,
-            "data" => [
-              {
-                "id" => mms_id,
-                "attributes" => {}
-              }
-            ]
-          }
-        end
-
         before do
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society&search_field=all_fields").to_return(
-            status: 200,
-            headers: headers,
-            body: catalog_response.to_json
-          )
-
-          stub_request(:get, "https://catalog.princeton.edu/catalog.json?q=Alcuin%20Society%20newsletter,%20No.%2022&search_field=all_fields").to_return(
-            status: 200,
-            headers: headers,
-            body: catalog_response.to_json
-          )
+          stub_dspace_invalid_catalog_requests(headers: headers, catalog_request_url: catalog_request_url, mms_id: mms_id)
         end
 
         it "logs a warning and enqueues a new resource for ingestion without the MMS ID" do
@@ -244,58 +165,92 @@ RSpec.describe DspaceIngester do
     end
 
     context "when the DSpace Item is access-restricted" do
-      let(:empty_bitstream_response) do
-        []
+      before do
+        stub_dspace_access_restricted_request(headers: headers, item_id: item_id)
+        stub_dspace_bitstream_requests(headers: headers, item_id: item_id)
+      end
+
+      it "ingests the item with restricted visibility" do
+        ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
+
+        ingester.ingest!
+
+        expect(IngestFolderJob).to have_received(:perform_now).with(
+          hash_including(
+            creator: "Greaves, Howard",
+            date: "2015",
+            directory: "/tmp/test-id",
+            identifier: "http://arks.princeton.edu/ark:/88435/dsp01gb19f818g",
+            language: "en",
+            publisher: "Alcuin Society",
+            relation: "Alcuin Society newsletter, 2015, No. 22",
+            subject: "Book collecting",
+            title: "Alcuin Society newsletter, No. 22",
+            visibility: "on_campus"
+          )
+        )
+      end
+    end
+
+    context "when resources with the same ARK have been persisted" do
+      let(:identifier) do
+        [
+          # "http://arks.princeton.edu/ark:/#{handle}"
+          "http://arks.princeton.edu/ark:/88435/dsp01gb19f818g"
+        ]
+      end
+      let(:existing) do
+        FactoryBot.create_for_repository(:scanned_resource, identifier: identifier)
+      end
+      let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+
+      before do
+        existing
+        stub_dspace_visibility_request(headers: headers, item_id: item_id)
+        stub_dspace_bitstream_requests(headers: headers, item_id: item_id)
+      end
+
+      context "when the ingester service is told to delete preexisting resources" do
+        it "deletes the persisted resources" do
+          expect(existing).to be_persisted
+
+          ingester = described_class.new(
+            handle: handle, logger: logger, dspace_api_token: dspace_api_token,
+            delete_preexisting: true
+          )
+
+          ingester.ingest!
+          expect do
+            metadata_adapter.query_service.find_by(id: existing.id)
+          end.to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+        end
+      end
+    end
+
+    context "when a parent ID is provided" do
+      let(:parent) do
+        FactoryBot.create_for_repository(:scanned_resource)
       end
 
       before do
-        stub_request(:get,
-                    "https://dataspace.princeton.edu/rest/items/#{id}/bitstreams?limit=20&offset=0").to_return(
-                    status: 200,
-                    headers: headers,
-                    body: bitstream_response.to_json
-                  ).to_return(
-                    status: 200,
-                    headers: headers,
-                    body: empty_bitstream_response.to_json
-                  )
+        allow(AddMemberJob).to receive(:perform_later)
+        stub_dspace_visibility_request(headers: headers, item_id: item_id)
+        stub_dspace_bitstream_requests(headers: headers, item_id: item_id)
       end
 
-      it "sets the visibility to clients on the VPN and on campus" do
-        ingester = described_class.new(handle: handle, logger: logger, dspace_api_token: dspace_api_token)
-        ingester.ingest!
+      it "enqueues a job to add the resource to the parent" do
+        ingester = described_class.new(
+          handle: handle,
+          logger: logger,
+          dspace_api_token: dspace_api_token
+        )
+
+        ingester.ingest!(
+          parent_id: parent.id.to_s
+        )
+
+        expect(AddMemberJob).to have_received(:perform_later).with(hash_including(parent_id: parent.id.to_s))
       end
-    end
-  end
-
-  describe "#id" do
-    xit "retrieves the ID from the API response" do
-      expect(dspace_ingester.id).to eq(item_id)
-    end
-  end
-
-  describe "#bitstreams" do
-    let(:bitstream_response) do
-      [
-        {
-          "name" => "test-name",
-          "sequenceId" => "test-sequence-id"
-        }
-      ]
-    end
-    let(:bitstreams) { dspace_ingester.bitstreams }
-
-    before do
-      stub_request(:get,
-                   "https://dataspace.princeton.edu/rest/items/test-id/bitstreams?limit=20&offset=0").to_return(
-                   status: 200,
-                   headers: headers,
-                   body: bitstream_response.to_json
-                 )
-    end
-
-    xit "retrieves the bitstreams from the API response" do
-      expect(bitstreams).to eq(bitstream_response)
     end
   end
 end

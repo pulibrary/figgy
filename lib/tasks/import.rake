@@ -40,16 +40,25 @@ namespace :figgy do
 
     desc "Ingest a DSpace collection."
     task dspace_collection: :environment do
+      # Ingestion for DataSpace Collections with Items mapped to Figgy ScannedResources
+      # Example: https://dataspace.princeton.edu/handle/88435/dsp016q182k16g
+      # Example: https://dataspace.princeton.edu/handle/88435/dsp01bg257f09p
+      #
+      # @param HANDLE [String] the DSpace handle of the collection to ingest
       handle = ENV["HANDLE"]
+      # @param DSPACE_API_TOKEN [String] the DSpace API token for authentication against the REST API
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      # @param COLLECTION [String] the collection ID in Figgy to which the DSpace collection will be ingested
       collection = ENV["COLLECTION"]
-      limit = ENV["LIMIT"]
+
+      # Optional arguments
+      # @param DELETE_PREEXISTING [Boolean] whether to delete preexisting items in the collection before ingesting
       delete_preexisting = false
       if "DELETE_PREEXISTING" in ENV
         delete_preexisting = ENV["DELETE_PREEXISTING"].casecmp("true").zero?
       end
 
-      abort "usage: rake import:dspace_collection HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
+      abort "usage: rake import:dspace_collection HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret" unless handle && collection
       collections = [collection]
 
       @logger = Logger.new(STDOUT)
@@ -58,55 +67,35 @@ namespace :figgy do
       IngestDspaceAssetJob.perform_later(
         handle: handle,
         dspace_api_token: dspace_api_token,
-        ingest_service_klass: DspaceCollectionIngester,
         member_of_collection_ids: collections,
-        limit: limit,
-        delete_preexisting: delete_preexisting
-      )
-    end
-
-    desc "Ingest a DSpace collection as a multi-volume work."
-    task dspace_mvw_collection: :environment do
-      handle = ENV["HANDLE"]
-      dspace_api_token = ENV["DSPACE_API_TOKEN"]
-      collection = ENV["COLLECTION"]
-      # Optional arguments
-      limit = ENV["LIMIT"]
-      delete_preexisting = false
-      if ENV.key?("DELETE_PREEXISTING")
-        delete_preexisting = ENV["DELETE_PREEXISTING"].casecmp("true").zero?
-      end
-
-      abort "usage: rake import:dspace_mvw_collection HANDLE=88435/dsp013t945q852 COLLECTION=COLLECTION DSPACE_API_TOKEN=secret [LIMIT=n]" unless handle && collection
-      collections = [collection]
-
-      @logger = Logger.new(STDOUT)
-      @logger.info("Preparing to ingest Collection #{handle} from DSpace...")
-
-      IngestDspaceAssetJob.perform_later(
-        handle: handle,
-        dspace_api_token: dspace_api_token,
-        ingest_service_klass: DspaceMultivolumeIngester,
-        member_of_collection_ids: collections,
-        limit: limit,
-        delete_preexisting: delete_preexisting
+        delete_preexisting: delete_preexisting,
+        ingest_service_klass: DspaceCollectionIngester
       )
     end
 
     desc "Ingest a YAML list of DSpace collections as multi-volume works."
     task dspace_mvw_collections: :environment do
+      # Ingestion for DataSpace Collections with Items mapped to Figgy Multivolume Work ScannedResources
+      # Example: https://dataspace.princeton.edu/handle/88435/dsp01kh04dp74g
+      # Example: https://dataspace.princeton.edu/handle/88435/dsp01r781wg06f
+      #
+      # @param CONFIG_FILE [String] the path to the YAML file containing the list of DSpace collection URIs
+      # Example: config/dataspace_serials_public.yml
+      # Example: config/dataspace_serials_restricted.yml
       config_file = ENV["CONFIG_FILE"]
+      # @param DSPACE_API_TOKEN [String] the DSpace API token for authentication against the REST API
       dspace_api_token = ENV["DSPACE_API_TOKEN"]
+      # @param COLLECTION [String] the collection ID in Figgy to which the DSpace collection will be ingested
       collection = ENV["COLLECTION"]
 
       # Optional arguments
-      limit = ENV["LIMIT"]
+      # @param DELETE_PREEXISTING [Boolean] whether to delete preexisting items in the collection before ingesting
       delete_preexisting = false
       if ENV.key?("DELETE_PREEXISTING")
         delete_preexisting = ENV["DELETE_PREEXISTING"].casecmp("true").zero?
       end
 
-      abort "usage: rake import:dspace_mvw_collection CONFIG_FILE=config/dataspace_mvws.yml COLLECTION=COLLECTION DSPACE_API_TOKEN=secret [LIMIT=n]" unless config_file && collection
+      abort "usage: rake import:dspace_mvw_collection CONFIG_FILE=config/dataspace_mvws.yml COLLECTION=COLLECTION DSPACE_API_TOKEN=secret" unless config_file && collection
 
       uris = YAML.load_file(config_file)
       collections = [collection]
@@ -120,10 +109,9 @@ namespace :figgy do
         IngestDspaceAssetJob.perform_later(
           handle: handle,
           dspace_api_token: dspace_api_token,
-          ingest_service_klass: DspaceMultivolumeIngester,
           member_of_collection_ids: collections,
-          limit: limit,
-          delete_preexisting: delete_preexisting
+          delete_preexisting: delete_preexisting,
+          ingest_service_klass: DspaceMultivolumeIngester
         )
       end
     end

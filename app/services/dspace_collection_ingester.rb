@@ -21,13 +21,10 @@ class DspaceCollectionIngester < DspaceIngester
     ingest_items(**attrs)
   end
 
-  def initialize(parent: nil, limit: nil, **options)
+  def initialize(parent: nil, **options)
     super(**options)
 
     @parent = parent
-
-    @limit = limit
-    @limit = limit.to_i unless limit.nil?
   end
 
   private
@@ -47,9 +44,6 @@ class DspaceCollectionIngester < DspaceIngester
 
     def request_items(headers: {}, **params)
       paginated_request(path: request_items_path, headers: headers, **params)
-    rescue => error
-      Rails.logger.warn(error)
-      []
     end
 
     def children
@@ -72,14 +66,7 @@ class DspaceCollectionIngester < DspaceIngester
     end
 
     def ingest_items(**attrs)
-      items.each_with_index do |item, index|
-        unless @limit.nil?
-          if index >= @limit
-            @limit = 0
-            break
-          end
-        end
-
+      items.each_with_index do |item, _index|
         item_handle = item["handle"]
         logger.info("Enqueuing the job to ingest the member Item #{item_handle}...")
 
@@ -87,7 +74,6 @@ class DspaceCollectionIngester < DspaceIngester
           handle: item_handle,
           dspace_api_token: @dspace_api_token,
           ingest_service_klass: DspaceIngester,
-          limit: @limit,
           delete_preexisting: @delete_preexisting,
           **attrs
         )
