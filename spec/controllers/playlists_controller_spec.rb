@@ -235,11 +235,7 @@ RSpec.describe PlaylistsController, type: :controller do
         it "returns a not found status response" do
           get :manifest, params: { id: "invalid", format: :json }
 
-          expect(response.status).to eq(200)
-          expect(response.body).not_to be_empty
-          response_message = JSON.parse(response.body)
-
-          expect(response_message).to include("message" => "No manifest found for invalid")
+          expect(response.status).to eq(404)
         end
       end
 
@@ -409,7 +405,7 @@ RSpec.describe PlaylistsController, type: :controller do
 
         expect(response.body).to have_link resource.title.first, href: solr_document_path(id: resource.id)
         expect(query_service).not_to have_received(:find_inverse_references_by)
-        expect(query_service).to have_received(:find_by).with(id: resource.id)
+        expect(query_service).to have_received(:find_by).with(id: resource.id).twice
       end
     end
   end

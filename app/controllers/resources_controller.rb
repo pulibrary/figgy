@@ -6,6 +6,8 @@ class ResourcesController < ApplicationController
   include TokenAuth
   include Blacklight::SearchContext
   before_action :load_collections, only: [:new, :edit, :update, :create]
+  before_action :redirect_if_local_identifier, only: [:manifest]
+  before_action :validate_resource_class, only: [:manifest, :file_manager, :order_manager, :structure, :pdf]
   delegate :metadata_adapter, to: :change_set_persister
   delegate :persister, :query_service, to: :metadata_adapter
   skip_before_action :verify_authenticity_token, only: [:refresh_remote_metadata]
@@ -165,8 +167,28 @@ class ResourcesController < ApplicationController
     @collections = query_service.find_all_of_model(model: Collection).map(&:decorate) || []
   end
 
+  # Check if the resource class is the same as the resource class set for the
+  # specific controller. Prevents errors by prohibiting scenarios like:
+  # ScannedResource.id = 1234
+  # /concern/ephemera_folders/1234/manifest
+  def validate_resource_class
+    return unless params[:id]
+    return unless resource.class != resource_class
+    raise Valkyrie::Persistence::ObjectNotFoundError
+  end
+
+  def redirect_if_local_identifier
+    # ID is a UUID
+    return if params[:id].match?(/^\h{8}-(\h{4}-){3}\h{12}$/)
+
+    # It is not a UUID so try local identifier
+    @resource = query_service.custom_queries.find_by_local_identifier(local_identifier: params[:id]).first
+    raise Valkyrie::Persistence::ObjectNotFoundError unless @resource
+    redirect_to action: action_name, id: @resource.id.to_s
+  end
+
   def resource
-    find_resource(params[:id])
+    @resource ||= find_resource(params[:id])
   end
 
   def change_set
