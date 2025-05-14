@@ -12,6 +12,7 @@ gem "bagit", "~> 0.4"
 # Pin to prevent passenger error
 gem "base64", "0.1.1"
 gem "blacklight", "~> 7.33"
+# This will get backported soon, switch to 2.x when it does.
 gem "blacklight_iiif_search", github: "pulibrary/blacklight_iiif_search", branch: "backport-ffi"
 gem "blacklight_range_limit"
 gem "bootsnap", require: false
