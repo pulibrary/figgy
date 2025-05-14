@@ -42,3 +42,5 @@ node_modules
 # https://vitejs.dev/guide/env-and-mode.html#env-files
 *.local
 
+# Someone has devbox running, ignore it.
+devbox.json
