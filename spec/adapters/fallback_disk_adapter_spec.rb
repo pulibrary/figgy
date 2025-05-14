@@ -18,6 +18,7 @@ RSpec.describe FallbackDiskAdapter do
   describe "#find_by" do
     context "when it's not found in primary adapter" do
       it "falls back to read from the fallback adapter" do
+        allow(Rails.logger).to receive(:warn)
         resource = ScannedResource.new(id: SecureRandom.uuid)
         # The use case is we have a folder of files that are being moved to a new
         # folder. Check that old folder if the new one doesn't have it yet.
@@ -28,6 +29,7 @@ RSpec.describe FallbackDiskAdapter do
 
         reloaded_uploaded_file = storage_adapter.find_by(id: uploaded_file.id)
         expect(reloaded_uploaded_file.id).to eq uploaded_file.id
+        expect(Rails.logger).to have_received(:warn).with(/Disk adapter used fallback for /)
       end
       it "can handle the directory for fallback adapter not existing" do
         resource = ScannedResource.new(id: SecureRandom.uuid)
