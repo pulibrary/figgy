@@ -22,6 +22,27 @@ Rails.application.config.to_prepare do
         }
       )
     ),
+    :primary_disk
+  )
+
+  Valkyrie::StorageAdapter.register(
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["fallback_repository_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
+    ),
+    :fallback_disk
+  )
+
+  Valkyrie::StorageAdapter.register(
+    FallbackDiskAdapter.new(
+      primary_adapter: Valkyrie::StorageAdapter.find(:primary_disk),
+      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_disk)
+    ),
     :disk
   )
 
@@ -50,6 +71,24 @@ Rails.application.config.to_prepare do
         base_path: Figgy.config["repository_path"],
         file_mover: FileUtils.method(:cp)
       )
+    ),
+    :primary_disk_via_copy
+  )
+
+  Valkyrie::StorageAdapter.register(
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["fallback_repository_path"],
+        file_mover: FileUtils.method(:cp)
+      )
+    ),
+    :fallback_disk_via_copy
+  )
+
+  Valkyrie::StorageAdapter.register(
+    FallbackDiskAdapter.new(
+      primary_adapter: Valkyrie::StorageAdapter.find(:primary_disk_via_copy),
+      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_disk_via_copy)
     ),
     :disk_via_copy
   )

@@ -25,6 +25,7 @@ defaults: &defaults
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "pyramidal_derivatives") %>
   stream_derivatives_path: <%= Rails.root.join("tmp", "stream_derivatives") %>
   repository_path: <%= Rails.root.join("tmp", "files") %>
+  fallback_repository_path: <%= Rails.root.join("tmp", "files_fallback") %>
   pyramidal_url: <%= ENV.fetch('PYRAMIDAL_URL', 'http://localhost:8182/iiif/2/') %>
   bag_path: <%= Rails.root.join("tmp", "bags") %>
   pudl_root: <%= Rails.root.join("tmp", "pudl_root") %>
@@ -241,6 +242,7 @@ development:
   ocr_in_path: <%= Rails.root.join("tmp", "ocr_in") %>
   ocr_out_path: <%= Rails.root.join("tmp", "ocr_out") %>
   repository_path: <%= Rails.root.join("tmp", "more_files") %>
+  fallback_repository_path: <%= Rails.root.join("tmp", "files_fallback") %>
   pyramidals_bucket: <%= ENV["FIGGY_PYRAMIDALS_BUCKET"] %>
   cloud_geo_bucket: "figgy-geo-staging"
   tileserver:
@@ -258,6 +260,7 @@ test:
   ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in#{ENV["TEST_ENV_NUMBER"]}") %>
   ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out#{ENV["TEST_ENV_NUMBER"]}") %>
   repository_path: <%= Rails.root.join("tmp", "test_files#{ENV["TEST_ENV_NUMBER"]}") %>
+  fallback_repository_path: <%= Rails.root.join("tmp", "test_files_fallback#{ENV["TEST_ENV_NUMBER"]}") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   bag_path: <%= Rails.root.join("tmp", "test_bags#{ENV["TEST_ENV_NUMBER"]}") %>
@@ -281,6 +284,7 @@ production:
   index_read_only: false # set to true if doing a long reindex process.
   archivespace_url: <%= ENV["ASPACE_URL"] || "https://aspace.princeton.edu/staff/api" %>
   repository_path: "/opt/repository/files"
+  fallback_repository_path: "/opt/repository/fallback_files"
   derivative_path: "/opt/repository/derivatives"
   stream_derivatives_path: "/opt/repository/stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
