@@ -51,7 +51,4 @@ RSpec.describe FallbackDiskAdapter do
       end
     end
   end
-
-  describe "#upload" do
-  end
 end
