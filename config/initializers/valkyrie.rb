@@ -56,6 +56,27 @@ Rails.application.config.to_prepare do
         }
       )
     ),
+    :primary_stream_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["fallback_stream_derivatives_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
+    ),
+    :fallback_stream_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
+    FallbackDiskAdapter.new(
+      primary_adapter: Valkyrie::StorageAdapter.find(:primary_stream_derivatives),
+      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_stream_derivatives)
+    ),
     :stream_derivatives
   )
 
@@ -160,6 +181,27 @@ Rails.application.config.to_prepare do
           FileUtils.chmod(0o644, new_path)
         }
       )
+    ),
+    :primary_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["fallback_derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
+    ),
+    :fallback_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
+    FallbackDiskAdapter.new(
+      primary_adapter: Valkyrie::StorageAdapter.find(:primary_derivatives),
+      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_derivatives)
     ),
     :derivatives
   )
