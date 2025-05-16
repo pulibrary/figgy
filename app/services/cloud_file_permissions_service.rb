@@ -2,12 +2,13 @@
 
 # Updates an s3 object ACL based on resource visibilty
 class CloudFilePermissionsService
-  attr_reader :resource, :key, :region, :bucket
-  def initialize(resource:, key:, region: Figgy.config["cloud_geo_region"], bucket: Figgy.config["cloud_geo_bucket"])
+  attr_reader :resource, :key, :region, :bucket, :public_acl
+  def initialize(resource:, key:, region: Figgy.config["cloud_geo_region"], bucket: Figgy.config["cloud_geo_bucket"], public_acl: false)
     @resource = resource
     @key = key
     @region = region
     @bucket = bucket
+    @public_acl = public_acl
   end
 
   def run
@@ -18,11 +19,15 @@ class CloudFilePermissionsService
   private
 
     def acl
-      if resource.visibility == [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+      if public_acl || public_resource?
         "public-read"
       else
         "private"
       end
+    end
+
+    def public_resource?
+      resource.visibility == [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
     end
 
     def client
