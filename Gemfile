@@ -12,7 +12,8 @@ gem "bagit", "~> 0.4"
 # Pin to prevent passenger error
 gem "base64", "0.1.1"
 gem "blacklight", "~> 7.33"
-gem "blacklight_iiif_search", "~> 2.1.0"
+# This will get backported soon, switch to 2.x when it does.
+gem "blacklight_iiif_search", github: "pulibrary/blacklight_iiif_search", branch: "backport-ffi"
 gem "blacklight_range_limit"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
@@ -31,7 +32,6 @@ gem "dnsruby"
 gem "draper"
 gem "ezid-client", "1.9.4" # v1.9.0 introduces response errors in our tests/stubbing
 gem "faker"
-gem "ffi", "~> 1.16.0"
 gem "filewatcher", "~> 1.0"
 gem "flutie"
 gem "font-awesome-rails"
