@@ -47,6 +47,14 @@ Rails.application.config.to_prepare do
   )
 
   Valkyrie::StorageAdapter.register(
+    FallbackDiskAdapter.new(
+      primary_adapter: Valkyrie::StorageAdapter.find(:primary_stream_derivatives),
+      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_stream_derivatives)
+    ),
+    :stream_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
     RetryingDiskAdapter.new(
       Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["stream_derivatives_path"],
@@ -56,7 +64,20 @@ Rails.application.config.to_prepare do
         }
       )
     ),
-    :stream_derivatives
+    :primary_stream_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["fallback_stream_derivatives_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
+    ),
+    :fallback_stream_derivatives
   )
 
   # Registers a storage adapter for a *NIX file system
@@ -152,6 +173,14 @@ Rails.application.config.to_prepare do
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
   Valkyrie::StorageAdapter.register(
+    FallbackDiskAdapter.new(
+      primary_adapter: Valkyrie::StorageAdapter.find(:primary_derivatives),
+      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_derivatives)
+    ),
+    :derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
     RetryingDiskAdapter.new(
       Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["derivative_path"],
@@ -161,7 +190,20 @@ Rails.application.config.to_prepare do
         }
       )
     ),
-    :derivatives
+    :primary_derivatives
+  )
+
+  Valkyrie::StorageAdapter.register(
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["fallback_derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
+    ),
+    :fallback_derivatives
   )
 
   if Figgy.config["pyramidals_bucket"].present? && !Rails.env.test?
