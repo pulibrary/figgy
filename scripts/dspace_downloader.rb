@@ -129,7 +129,8 @@ class Bitstream
   end
 
   def sequence_id
-    data["sequenceId"]
+    # Zero pad so it sorts.
+    data["sequenceId"].to_s.rjust(3, "0")
   end
 end
 
