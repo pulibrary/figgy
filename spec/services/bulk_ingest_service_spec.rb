@@ -249,19 +249,17 @@ RSpec.describe BulkIngestService do
         updated_collection = query_service.find_by(id: coll.id)
         decorated_collection = updated_collection.decorate
         expect(decorated_collection.members.to_a.length).to eq 1
-        expect(decorated_collection.members.first.member_ids.length).to eq 3
+        expect(decorated_collection.members.first.member_ids.length).to eq 2
 
         resource = decorated_collection.members.to_a.first
         expect(resource.source_metadata_identifier).to include(bib)
         expect(resource.local_identifier).to include(local_id)
         expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
-        expect(resource.member_ids.length).to eq 3 # color.tif, gray.tif, and figgy_metadata.json
+        expect(resource.member_ids.length).to eq 2 # color.tif, gray.tif
         expect(resource.depositor).to eq ["tpend"]
 
         first_member = Wayfinder.for(resource).members.first
-        expect(first_member.title).to eq ["figgy_metadata.json"]
-        second_member = Wayfinder.for(resource).members.second
-        expect(second_member.title).to eq ["1"]
+        expect(first_member.title).to eq ["1"]
       end
     end
 
