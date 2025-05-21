@@ -97,7 +97,7 @@ class DspaceIngester
 
     # If there are multiple PDF bitstreams, create a parent resource and ingest the Item as a MVW
     @parent_id = parent_id
-    if @parent_id.nil? && pdf_bitstreams.length > 1:
+    if @parent_id.nil? && pdf_bitstreams.length > 1
       # TODO: Deduplicate
 
       parent = find_or_persist_parent_resource
