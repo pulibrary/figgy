@@ -1206,6 +1206,7 @@ DEPENDENCIES
   omniauth (= 2.1.2)
   omniauth-cas (= 3.0.0)
   openseadragon
+  parallel
   parallel_tests
   pdf-reader!
   pg
