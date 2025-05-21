@@ -185,6 +185,7 @@ class Downloader
       download_bitstream(item, item_path, item.bitstreams.first)
     elsif item.bitstreams.length == 0
       puts "No bitstreams for #{item.handle} #{item.metadata['dc.title']}. #{item.resource_data["bitstreams"].map{|x| x["name"]}}"
+      return
     else
       item.bitstreams.each do |bitstream|
         sub_path = item_path.join("#{bitstream.sequence_id} - #{bitstream.folder_name}")
