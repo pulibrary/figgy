@@ -70,18 +70,6 @@ class DspaceIngester
       identifier = metadata.fetch(:identifier, nil)
 
       raise(DspaceIngestionError, "Failed to find the identifier for #{ark}") if identifier.blank?
-      #persisted = find_resources_by_ark(value: identifier)
-
-      #unless persisted.empty?
-      #  if @delete_preexisting
-      #    persisted.each do |resource|
-      #      change_set = ChangeSet.for(resource)
-      #      change_set_persister.buffer_into_index do |persist|
-      #        persist.delete(change_set: change_set)
-      #      end
-      #    end
-      #  end
-      #end
 
       bitstream_dir_path = build_bitstream_dir_path(bitstream: bitstream)
       ingested_resource = ingest_resource(
@@ -207,6 +195,36 @@ class DspaceIngester
       ::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS
     end
 
+    def oai_document
+      @oai_document ||= begin
+                          oai_identifier = "oai:dataspace.princeton.edu:#{handle}"
+                          params = {
+                            verb: "GetRecord",
+                            metadataPrefix: "oai_dc",
+                            identifier: oai_identifier
+                          }
+                          headers = {
+                            "Accept": "application/xml"
+                          }
+
+                          conn = Faraday.new(
+                            url: @base_url,
+                            headers: headers
+                          )
+                          response = conn.get("/oai/request", params)
+
+                          Nokogiri::XML.parse(response.body)
+                        end
+    end
+
+    def oai_record_xpath
+      "//xmlns:OAI-PMH/xmlns:GetRecord/xmlns:record"
+    end
+
+    def oai_records
+      @oai_records ||= oai_document.xpath(oai_record_xpath)
+    end
+
     def oai_metadata
       @oai_metadata ||= oai_records.map do |record|
         attrs = {}
@@ -245,42 +263,7 @@ class DspaceIngester
       end
     end
 
-    def resource_klass
-      ScannedResource
-    end
-
-    def new_resource
-      resource_klass.new
-    end
-
-    def resource_change_set
-      @resource_change_set ||= ChangeSet.for(new_resource)
-    end
-
-    def class_name
-      resource_klass.name
-    end
-
-    def change_set_param
-      class_name
-    end
-
-    def filters
-      [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
-    end
-
-    def query_service
-      Valkyrie.config.metadata_adapter.query_service
-    end
-
-    def find_resources_by_ark(value:)
-      query_service.custom_queries.find_many_by_property(property: :identifier, values: [value])
-    end
-
-    def change_set_persister
-      ChangeSetPersister.default
-    end
-
+    # Download a bitstream from DSpace to a file path
     def download_bitstream(url:, file_path:)
       # Only download the bitstream if it doesn't already exist
       return if File.exist?(file_path)
@@ -309,15 +292,9 @@ class DspaceIngester
       bitstream_dir_path = File.join(dir_path, dir_name)
     end
 
-    #def build_bitstream_file_path(bitstream:)
-    #  bitstream_dir_path = build_bitstream_dir_path(bitstream: bitstream)
-    #  name = bitstream["name"]
-    #  file_path = File.join(bitstream_dir_path, name)
-    #end
-
     # For each PDF bitstream, create a directory named after the ID of the PDF bitstream
     # Within this directory, download the one PDF, along with all other non-PDF bitstreams associated with the DSpace Item
-    # This duplicates content for non-PDF bitstreams
+    # This duplicates content for non-PDF bitstreams, but does not require that IngestFolderJob be extended.
     def download_bitstreams
       FileUtils.mkdir_p(dir_path)
 
@@ -340,36 +317,29 @@ class DspaceIngester
       end
     end
 
-    def oai_document
-      @oai_document ||= begin
-                          oai_identifier = "oai:dataspace.princeton.edu:#{handle}"
-                          params = {
-                            verb: "GetRecord",
-                            metadataPrefix: "oai_dc",
-                            identifier: oai_identifier
-                          }
-                          headers = {
-                            "Accept": "application/xml"
-                          }
-
-                          conn = Faraday.new(
-                            url: @base_url,
-                            headers: headers
-                          )
-                          response = conn.get("/oai/request", params)
-
-                          Nokogiri::XML.parse(response.body)
-                        end
+    # For persisting resources
+    def resource_klass
+      ScannedResource
     end
 
-    def oai_record_xpath
-      "//xmlns:OAI-PMH/xmlns:GetRecord/xmlns:record"
+    def new_resource
+      resource_klass.new
     end
 
-    def oai_records
-      @oai_records ||= oai_document.xpath(oai_record_xpath)
+    def resource_change_set
+      @resource_change_set ||= ChangeSet.for(new_resource)
     end
 
+    # For querying for existing resources
+    def query_service
+      Valkyrie.config.metadata_adapter.query_service
+    end
+
+    def change_set_persister
+      ChangeSetPersister.default
+    end
+
+    # Persist a new parent resource
     def persist_resource(**attrs)
       raise("Invalid attributes: #{resource_change_set.errors.full_messages.to_sentence}") unless resource_change_set.validate(**attrs)
 
@@ -378,17 +348,9 @@ class DspaceIngester
       new_parent
     end
 
+    # This creates parent resources for cases where there are multiple PDF bitstreams
+    # This assumes that these are for cases where all Items ingested from DSpace which are children of MVWs only have one PDF
     def find_or_persist_parent
-      #results = find_resources_by_ark(value: ark_url)
-      #persisted = nil
-      #if @delete_preexisting
-      #  results.each do |resource|
-      #    change_set_persister.metadata_adapter.persister.delete(resource: resource)
-      #  end
-      #else
-      #  persisted = results.last
-      #end
-
       return @parent unless @parent.nil?
 
       unless @parent_id.nil?
@@ -405,5 +367,20 @@ class DspaceIngester
       @parent = persist_resource(**parent_attrs)
       @parent_id = parent_resource.id
       @parent
+    end
+
+    # This is for IngestFolderJob
+    def class_name
+      resource_klass.name
+    end
+
+    # This is for IngestFolderJob
+    def change_set_param
+      class_name
+    end
+
+    # This is for IngestFolderJob
+    def filters
+      [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
     end
 end
