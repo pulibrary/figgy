@@ -111,6 +111,8 @@ gem "net-imap", require: false
 gem "net-pop", require: false
 gem "net-smtp", require: false
 
+gem "parallel"
+
 source "https://gems.contribsys.com/" do
   gem "sidekiq-pro"
 end
