@@ -281,6 +281,8 @@ test:
         url: <%= ENV.fetch('CAS_URL', 'https://localhost.localdomain/cas') %>
   tileserver:
     url: "https://map-tiles-test.example.com"
+  dspace:
+    download_path: <%= Rails.root.join("tmp", "dspace_export_test") %>
 
 production:
   <<: *defaults
