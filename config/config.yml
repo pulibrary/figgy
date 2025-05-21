@@ -236,7 +236,7 @@ defaults: &defaults
         - 'video/mp4'
   pulfalight_unpublished_token: <%= ENV["PULFALIGHT_UNPUBLISHED_TOKEN"] %>
   dspace:
-    download_path: "/tmp"
+    download_path: <%= Rails.root.join("tmp", "dspace_export") %>
 
 development:
   <<: *defaults
@@ -300,6 +300,8 @@ production:
   pyramidals_bucket: "iiif-image-production"
   cloud_geo_bucket: "figgy-geo-production"
   enable_pyramidal_access: <%= ENV["FIGGY_PYRAMIDAL_ACCESS"].present? || false %>
+  dspace:
+    download_path: "/mnt/hydra_sources/ingest_scratch/trey/dspace_export"
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
@@ -320,6 +322,8 @@ staging:
   fallback_stream_derivatives_path: "/opt/repository/fallback_stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
+  dspace:
+    download_path: "/mnt/hydra_sources/ingest_scratch/trey/dspace_export"
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
