@@ -52,37 +52,40 @@ class DspaceIngester
     results.last
   end
 
-  def ingest!(parent_id: nil, **attrs)
-    raise(DspaceIngestionError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
+  def pdf_bitstreams
+    bitstreams.select { |bitstream| bitstream["mimeType"].include?("application/pdf") }
+  end
 
-    logger.info "Downloading the Bitstreams for #{ark}..."
-    download_bitstreams
+  def binary_bitstreams
+    bitstreams.reject { |bitstream| bitstream["mimeType"].include?("application/pdf") }
+  end
 
+  def ingest_item(bitstream:, parent_id: nil, **attrs)
     logger.info "Requesting the metadata for #{ark}..."
 
     oai_metadata.each do |metadata|
-      logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
 
       metadata.merge!(attrs)
       # This is the ARK as a URL
       identifier = metadata.fetch(:identifier, nil)
 
       raise(DspaceIngestionError, "Failed to find the identifier for #{ark}") if identifier.blank?
-      persisted = find_resources_by_ark(value: identifier)
+      #persisted = find_resources_by_ark(value: identifier)
 
-      unless persisted.empty?
-        if @delete_preexisting
-          persisted.each do |resource|
-            change_set = ChangeSet.for(resource)
-            change_set_persister.buffer_into_index do |persist|
-              persist.delete(change_set: change_set)
-            end
-          end
-        end
-      end
+      #unless persisted.empty?
+      #  if @delete_preexisting
+      #    persisted.each do |resource|
+      #      change_set = ChangeSet.for(resource)
+      #      change_set_persister.buffer_into_index do |persist|
+      #        persist.delete(change_set: change_set)
+      #      end
+      #    end
+      #  end
+      #end
 
+      bitstream_dir_path = build_bitstream_dir_path(bitstream: bitstream)
       ingested_resource = ingest_resource(
-        directory: dir_path,
+        directory: bitstream_dir_path,
         change_set_param: change_set_param,
         class_name: class_name,
         file_filters: filters,
@@ -94,6 +97,27 @@ class DspaceIngester
       end
 
       logger.info("Persisted the resource #{ingested_resource}.")
+    end
+  end
+
+  def ingest!(parent_id: nil, **attrs)
+    raise(DspaceIngestionError, "Failed to retrieve bitstreams for #{ark}. Perhaps you require an authentication token?") if bitstreams.empty?
+
+    logger.info "Downloading the Bitstreams for #{ark}..."
+    download_bitstreams
+    logger.info "Successfully retrieved the Bitstreams and metadata for #{@title}."
+
+    # If there are multiple PDF bitstreams, create a parent resource and ingest the Item as a MVW
+    @parent_id = parent_id
+    if @parent_id.nil? && pdf_bitstreams.length > 1:
+      # TODO: Deduplicate
+
+      parent = find_or_persist_parent_resource
+      @parent_id = parent.id
+    end
+
+    pdf_bitstreams.each do |bitstream|
+      ingest_item(bitstream: bitstream, parent_id: @parent_id, **attrs)
     end
   end
 
@@ -280,18 +304,39 @@ class DspaceIngester
       @dir_path ||= File.join(download_path, id.to_s)
     end
 
+    def build_bitstream_dir_path(bitstream:)
+      dir_name = bitstream["id"]
+      bitstream_dir_path = File.join(dir_path, dir_name)
+    end
+
+    #def build_bitstream_file_path(bitstream:)
+    #  bitstream_dir_path = build_bitstream_dir_path(bitstream: bitstream)
+    #  name = bitstream["name"]
+    #  file_path = File.join(bitstream_dir_path, name)
+    #end
+
+    # For each PDF bitstream, create a directory named after the ID of the PDF bitstream
+    # Within this directory, download the one PDF, along with all other non-PDF bitstreams associated with the DSpace Item
+    # This duplicates content for non-PDF bitstreams
     def download_bitstreams
       FileUtils.mkdir_p(dir_path)
 
-      bitstreams.each do |bitstream|
-        name = bitstream["name"]
-        file_path = File.join(dir_path, name)
+      pdf_bitstreams.each do |pdf_bitstream|
 
-        bitstream_id = bitstream["id"]
+        bitstream_dir_path = build_bitstream_dir_path(bitstream: pdf_bitstream)
+        FileUtils.mkdir_p(bitstream_dir_path)
 
-        url = "#{@rest_base_url}bitstreams/#{bitstream_id}/retrieve"
+        bitstreams = [pdf_bitstream] + binary_bitstreams
+        bitstreams.each do |bitstream|
 
-        download_bitstream(url: url, file_path: file_path)
+          name = bitstream["name"]
+          file_path = File.join(bitstream_dir_path, name)
+
+          bitstream_id = bitstream["id"]
+          url = "#{@rest_base_url}bitstreams/#{bitstream_id}/retrieve"
+
+          download_bitstream(url: url, file_path: file_path)
+        end
       end
     end
 
@@ -323,5 +368,42 @@ class DspaceIngester
 
     def oai_records
       @oai_records ||= oai_document.xpath(oai_record_xpath)
+    end
+
+    def persist_resource(**attrs)
+      raise("Invalid attributes: #{resource_change_set.errors.full_messages.to_sentence}") unless resource_change_set.validate(**attrs)
+
+      new_parent = change_set_persister.save(change_set: resource_change_set)
+
+      new_parent
+    end
+
+    def find_or_persist_parent
+      #results = find_resources_by_ark(value: ark_url)
+      #persisted = nil
+      #if @delete_preexisting
+      #  results.each do |resource|
+      #    change_set_persister.metadata_adapter.persister.delete(resource: resource)
+      #  end
+      #else
+      #  persisted = results.last
+      #end
+
+      return @parent unless @parent.nil?
+
+      unless @parent_id.nil?
+        results = query_service.find_by_id(id: @parent_id)
+        persisted = results.last
+        @parent = persisted
+        return persisted unless persisted.nil?
+      end
+
+      parent_attrs = {}
+      parent_attrs[:member_of_collection_ids] = attrs[:member_of_collection_ids]
+      parent_resource = find_or_persist_parent_resource(**parent_attrs)
+
+      @parent = persist_resource(**parent_attrs)
+      @parent_id = parent_resource.id
+      @parent
     end
 end
