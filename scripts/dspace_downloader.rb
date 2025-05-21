@@ -231,4 +231,7 @@ class Downloader
       @collection_resource ||= Fetcher.new(collection_handle, dspace_token).resource
     end
 end
+# Public one
 Downloader.new("88435/dsp016q182k16g", ENV["DSPACE_TOKEN"]).download_all!
+# Private one.
+# Downloader.new("88435/dsp01bg257f09p", ENV["DSPACE_TOKEN"]).download_all!
