@@ -92,7 +92,7 @@ class Fetcher
 
     # Probably missing files?
     # Maybe just skip license.txt
-    # TODO: Don't ignore files.
+    # TODO: Don't ignore files. Only ignore license.txt.
     def bitstream_extensions
       [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
     end
@@ -239,3 +239,16 @@ end
 Downloader.new("88435/dsp016q182k16g", ENV["DSPACE_TOKEN"]).download_all!
 # Private one.
 # Downloader.new("88435/dsp01bg257f09p", ENV["DSPACE_TOKEN"]).download_all!
+# TODO: Add support for collections
+# There are collections when `collection_resource["collections"] isn't blank.
+# If there's collections, we can't do mapped/unmapped. Just trust the ark
+# report.
+# Folder structures:
+# - <mms-id of collection>
+#   - <title of item>
+#     - <bitstream.pdf>
+#     - figgy_metadata.json
+# - <title of collection>
+#   - <mms-id of item>
+#     - <bitstream.pdf>
+#     - figgy_metadata.json
