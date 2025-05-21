@@ -90,6 +90,9 @@ class Fetcher
       end
     end
 
+    # Probably missing files?
+    # Maybe just skip license.txt
+    # TODO: Don't ignore files.
     def bitstream_extensions
       [".pdf", ".jpg", ".png", ".tif", ".TIF", ".tiff", ".TIFF"]
     end
@@ -231,6 +234,7 @@ class Downloader
       @collection_resource ||= Fetcher.new(collection_handle, dspace_token).resource
     end
 end
+# Non Serials
 # Public one
 Downloader.new("88435/dsp016q182k16g", ENV["DSPACE_TOKEN"]).download_all!
 # Private one.
