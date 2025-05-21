@@ -44,7 +44,8 @@ namespace :figgy do
       # Example: https://dataspace.princeton.edu/handle/88435/dsp016q182k16g
       # Example: https://dataspace.princeton.edu/handle/88435/dsp01bg257f09p
       #
-      # @param HANDLE [String] the DSpace handle of the collection to ingest
+      # @param HANDLE [String] the DSpace handle of the collection to ingest.
+      #   Example: 88435/dsp016q182k16g.
       handle = ENV["HANDLE"]
       # @param DSPACE_API_TOKEN [String] the DSpace API token for authentication against the REST API
       dspace_api_token = ENV["DSPACE_API_TOKEN"]

@@ -63,9 +63,13 @@ class DspaceIngester
   def ingest_item(bitstream:, parent_id: nil, **attrs)
     logger.info "Requesting the metadata for #{ark}..."
 
+    # This is always one element. [oai_metadata]
     oai_metadata.each do |metadata|
 
       metadata.merge!(attrs)
+      # Now this is something like
+      # { "title" => "My Resource", "publisher" => "My Publisher", "description"
+      # => "My Description", "identifier" => ["ark"]}
       # This is the ARK as a URL
       identifier = metadata.fetch(:identifier, nil)
 
@@ -252,6 +256,7 @@ class DspaceIngester
         raise(DspaceIngestionError, "Failed to find the title element for #{ark}") if @title.nil?
 
         # Publisher is used to cases where there is one MMS ID for many DSpace Items
+        # TODO: Remove this.
         @publisher = attrs.fetch(:publisher, nil)
         @logger.warn("Failed to retrieve the `publisher` field for #{ark}") if @publisher.nil?
 
@@ -298,6 +303,19 @@ class DspaceIngester
     def download_bitstreams
       FileUtils.mkdir_p(dir_path)
 
+      # There are some jpegs in there. How do we not miss those?
+      # There are other random files, are we okay missing those?
+      # TODO: Should we log the ones we ignore??
+      # Output directory structure:
+      # <itemid> e.g. 1000
+      # - <pdf-bitstream-id> e.g 1207
+      #   - <pdf>
+      #   - <other-file.txt>
+      # - <pdf-bitstream-id> e.g 1301
+      #   - <pdf>
+      #   - <other-file.txt>
+      # - <other-file-bitstream-id> e.g 1402
+      #   - <other-file.txt>
       pdf_bitstreams.each do |pdf_bitstream|
 
         bitstream_dir_path = build_bitstream_dir_path(bitstream: pdf_bitstream)

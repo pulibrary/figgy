@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# Queues up a bunch of ingest jobs, one per DSpace Item.
 class DspaceCollectionIngester < DspaceIngester
   attr_reader :parent, :member_of_collection_ids, :local_identifiers
 
@@ -49,6 +50,7 @@ class DspaceCollectionIngester < DspaceIngester
     def children
       data = []
 
+      # Loop to paginate just in case.
       loop do
         headers = request_headers("Accept" => "application/json")
         new_data = yield(headers: headers, offset: data.length) if block_given?
