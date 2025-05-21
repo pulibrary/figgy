@@ -258,7 +258,8 @@ class DspaceIngester
     end
 
     def download_bitstream(url:, file_path:)
-      File.delete(file_path) if File.exist?(file_path)
+      # Only download the bitstream if it doesn't already exist
+      return if File.exist?(file_path)
 
       command = "/usr/bin/env curl -H 'rest-dspace-token: #{@dspace_api_token}' -o '#{file_path}' '#{url}'"
 
