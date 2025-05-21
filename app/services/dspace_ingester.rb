@@ -88,7 +88,6 @@ class DspaceIngester
         file_filters: filters,
         **metadata
       )
-      AddMmsIdByArkJob.perform_later(resource_id: ingested_resource.id.to_s)
 
       unless parent_id.nil?
         AddMemberJob.perform_later(resource_id: ingested_resource.id.to_s, parent_id: parent_id.to_s)

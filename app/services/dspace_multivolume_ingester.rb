@@ -40,7 +40,6 @@ class DspaceMultivolumeIngester < DspaceCollectionIngester
 
       new_parent = change_set_persister.save(change_set: resource_change_set)
 
-      AddMmsIdByArkJob.perform_later(resource_id: new_parent.id.to_s)
       new_parent
     end
 
