@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Get all resources
 class Fetcher
   delegate :get, to: :client
@@ -55,7 +56,7 @@ class Fetcher
     end
 
     def metadata
-      (resource_data["metadata"] || []).group_by{|x| x["key"]}.map{|k, v| [k, v.flat_map{|x| x["value"]}]}.to_h
+      (resource_data["metadata"] || []).group_by { |x| x["key"] }.map { |k, v| [k, v.flat_map { |x| x["value"] }] }.to_h
     end
 
     def dir
@@ -75,15 +76,16 @@ class Fetcher
     end
 
     def items
-      @items ||= resource_data["items"].lazy.map do |item|
+      @items ||= resource_data["items"].map do |item|
         Resource.new(item, client)
       end
     end
 
     def bitstreams
-      (resource_data["bitstreams"] || []).map do |bitstream|
+      bitstreams = (resource_data["bitstreams"] || []).map do |bitstream|
         Bitstream.new(bitstream)
-      end.select do |b|
+      end
+      bitstreams.select do |b|
         bitstream_extensions.include?(b.extension)
       end
     end
@@ -144,13 +146,15 @@ class Downloader
 
   def download_all!
     FileUtils.mkdir_p(collection_dir)
+    progress_bar
     Parallel.each(collection_resource.items, in_threads: 10) do |item|
       download_item(item)
+      progress_bar.progress += 1
     end
   end
 
   def ark_mapping
-    @ark_mapping ||= CSV.read(Rails.root.join("scripts", "dspace_mms_to_ark.csv")).group_by(&:last).map{|k, v| [k, v.flat_map(&:first).uniq]}.to_h
+    @ark_mapping ||= CSV.read(Rails.root.join("scripts", "dspace_mms_to_ark.csv")).group_by(&:last).map { |k, v| [k, v.flat_map(&:first).uniq] }.to_h
   end
 
   def collection_dir
@@ -160,31 +164,35 @@ class Downloader
   def download_item(item)
     # If the ark mapping has a key, put it in the right space.
     mms_id = Array.wrap(ark_mapping[item.handle]).first
-    if mms_id
-      item_path = mapped_dir.join(mms_id)
-    else
-      item_path = unmapped_dir.join(item.ark_ending)
+    item_path = if mms_id
+                  mapped_dir.join(mms_id)
+                else
+                  unmapped_dir.join(item.ark_ending)
+                end
+    # We've done this one - skip it
+    if File.exist?(item_path.join("figgy_metadata.json"))
+      return
     end
     # If we were unmapped before, and mapped now, move all the files.
     if mms_id && File.exist?(unmapped_dir.join(item.ark_ending))
-      puts "Moving previously unmapped #{item.metadata["dc.title"]}"
+      puts "Moving previously unmapped #{item.metadata['dc.title']}"
       FileUtils.mkdir_p(item_path.dirname)
       FileUtils.mv(unmapped_dir.join(item.ark_ending), item_path)
     end
     item.reload_data!
-    puts "Downloading bitstreams for #{item.metadata["dc.title"]}"
     # If it's one bitstream, put it right in the dir.
     if item.bitstreams.length == 1
       download_bitstream(item, item_path, item.bitstreams.first)
+    elsif item.bitstreams.length == 0
+      puts "No bitstreams for #{item.handle} #{item.metadata['dc.title']}. #{item.resource_data["bitstreams"].map{|x| x["name"]}}"
     else
       item.bitstreams.each do |bitstream|
         sub_path = item_path.join("#{bitstream.sequence_id} - #{bitstream.folder_name}")
         download_bitstream(item, sub_path, bitstream)
       end
     end
-    puts "Writing figgy_metadata.json"
     File.open(item_path.join("figgy_metadata.json"), "w") do |f|
-      f.write({identifier: item.ark}.to_json)
+      f.write({ identifier: item.ark }.to_json)
     end
   end
 
@@ -196,16 +204,20 @@ class Downloader
     collection_dir.join("unmapped")
   end
 
+  def progress_bar
+    @progress_bar ||= ProgressBar.create format: "%a %e %P% Resources Processed: %c of %C", total: collection_resource.items.length
+  end
+
   def download_bitstream(item, item_path, bitstream)
-    puts "Downloading #{bitstream.name}"
     FileUtils.mkdir_p(item_path)
     bitstream_path = item_path.join(bitstream.filename)
     return if File.exist?(bitstream_path)
     resp = item.client.bitstream_client.get("rest/#{bitstream.retrieve_link}")
     puts "Broken Link!" unless resp.success?
+    return unless resp.success?
     File.open(bitstream_path, "wb") do |f|
       f.write resp.body
-    end if resp.success?
+    end
   end
 
   def export_dir
@@ -215,7 +227,7 @@ class Downloader
   private
 
     def collection_resource
-      @collection_Resource ||= Fetcher.new(collection_handle, dspace_token).resource
+      @collection_resource ||= Fetcher.new(collection_handle, dspace_token).resource
     end
 end
 Downloader.new("88435/dsp016q182k16g", ENV["DSPACE_TOKEN"]).download_all!
