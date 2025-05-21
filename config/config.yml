@@ -236,7 +236,7 @@ defaults: &defaults
         - 'video/mp4'
   pulfalight_unpublished_token: <%= ENV["PULFALIGHT_UNPUBLISHED_TOKEN"] %>
   dspace:
-    download_path: "/tmp"
+    download_path: <%= Rails.root.join("tmp", "dspace_ingest") %>
 
 development:
   <<: *defaults
