@@ -222,7 +222,7 @@ class Downloader
   end
 
   def export_dir
-    Rails.root.join("tmp").join("dspace_export")
+    Pathname.new(Figgy.config["dspace"]["download_path"].to_s)
   end
 
   private
