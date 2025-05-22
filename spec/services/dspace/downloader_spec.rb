@@ -4,11 +4,14 @@ require "rails_helper"
 RSpec.describe Dspace::Downloader do
   let(:handle) { "88435/dsp016q182k16g" }
   let(:token) { "bla" }
+
   def stub_item(item_number)
     stub_request(:get, "https://dataspace.princeton.edu/rest/items/#{item_number}?expand=all")
       .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "dspace", "#{item_number}.json")), headers: { "Content-Type" => "application/json" })
   end
+
   let(:download_path) { Pathname.new(Figgy.config["dspace"]["download_path"]) }
+
   before do
     stub_request(:get, "https://dataspace.princeton.edu/rest/handle/88435/dsp016q182k16g?expand=all")
       .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "dspace", "monographic_collection.json")), headers: { "Content-Type" => "application/json" })
@@ -18,6 +21,7 @@ RSpec.describe Dspace::Downloader do
       .to_return(status: 200, body: File.open(Rails.root.join("spec", "fixtures", "files", "sample.pdf")), headers: {})
     FileUtils.rm_rf(download_path)
   end
+
   context "when a resource has items" do
     it "downloads all items" do
       downloader = described_class.new(handle, token, { "88435/dsp012801pg38m" => "9971957363506421" })
