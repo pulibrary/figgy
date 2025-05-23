@@ -73,7 +73,7 @@ RSpec.describe Dspace::Downloader do
         }
       end
 
-      context "when the Item has already been downloaded" do
+      context "when the Item has been downloaded before it was mapped to a MMS ID" do
         let(:unmapped_path) { download_path.join("#{collection_assigned_name}/unmapped/#{item_assigned_name}") }
         let(:metadata_path) { unmapped_path.join("figgy_metadata.json") }
         let(:mapped_path) { download_path.join("#{collection_assigned_name}/mapped/#{item_mms_id}") }
@@ -101,6 +101,29 @@ RSpec.describe Dspace::Downloader do
 
           expect(Rails.logger).to have_received(:debug).with(/Moving previously unmapped/)
         end
+      end
+    end
+
+    context "when the Item has been downloaded after it was mapped to a MMS ID" do
+      let(:mapped_path) { download_path.join("#{collection_assigned_name}/mapped/#{item_mms_id}") }
+      let(:mapped_metadata_path) { mapped_path.join("figgy_metadata.json") }
+
+      before do
+        FileUtils.rm_rf(mapped_path)
+
+        FileUtils.mkdir_p(mapped_path)
+        File.write(mapped_metadata_path, "{}")
+      end
+
+      after do
+        FileUtils.rm_rf(mapped_path)
+      end
+
+      it "does not download the bitstream" do
+        downloader.download_item(item)
+
+        expect(File.exist?(mapped_metadata_path)).to be true
+        expect(WebMock).not_to have_requested(:get, %r{https://dataspace.princeton.edu/rest/bitstreams/.*/retrieve})
       end
     end
 
