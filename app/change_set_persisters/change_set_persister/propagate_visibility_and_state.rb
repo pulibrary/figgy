@@ -40,6 +40,7 @@ class ChangeSetPersister
     # Execute the handler
     def run
       return if collection_record
+      return if ephemera_project
       return if numismatics_issue
       members.each do |member|
         resource_change_set = ChangeSet.for(member)
@@ -128,6 +129,10 @@ class ChangeSetPersister
 
       def collection_record
         change_set.model.is_a?(Collection)
+      end
+
+      def ephemera_project
+        change_set.model.is_a?(EphemeraProject)
       end
 
       def numismatics_issue
