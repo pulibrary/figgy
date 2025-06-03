@@ -1000,6 +1000,18 @@ RSpec.describe ChangeSetPersister do
         expect(reloaded_folder.state).to eq ["complete"]
       end
 
+      it "doesn't propagate project visibility or state" do
+        folder = FactoryBot.create_for_repository(:private_ephemera_folder, state: "needs_qa")
+        box = FactoryBot.create_for_repository(:open_ephemera_box, state: "received", member_ids: folder.id)
+        ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
+        ephemera_field = FactoryBot.create_for_repository(:ephemera_field)
+        project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_vocabulary.id, box.id, ephemera_field.id])
+
+        change_set = EphemeraProjectChangeSet.new(project)
+        change_set.validate(title: "yo")
+        expect { change_set_persister.save(change_set: change_set) }.not_to raise_error
+      end
+
       it "re-indexes the child folders when marked all_in_production", rabbit_stubbed: true do
         allow(rabbit_connection).to receive(:publish)
         solr = Blacklight.default_index.connection
