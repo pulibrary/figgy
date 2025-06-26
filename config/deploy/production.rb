@@ -9,16 +9,16 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 # If you're provisioning half of Figgy at a time, you can do `ROLES=group_a cap production deploy`
 # and it will deploy the same group_a as is defined in Ansible.
-server "figgy-web-prod1", user: "deploy", roles: %w[app db production_db web group_a]
-server "figgy-web-prod2", user: "deploy", roles: %w[app web group_a]
-server "figgy-web-prod3", user: "deploy", roles: %w[app web group_b]
-server "figgy-web-prod4", user: "deploy", roles: %w[app web group_b]
-server "figgy-worker-prod1", user: "deploy", roles: %w[worker web group_a worker_db]
-server "figgy-worker-prod2", user: "deploy", roles: %w[worker web group_a]
-server "figgy-worker-prod3", user: "deploy", roles: %w[worker web group_a]
-server "figgy-worker-prod4", user: "deploy", roles: %w[worker web group_b]
-server "figgy-worker-prod5", user: "deploy", roles: %w[worker web group_b]
-server "figgy-worker-prod6", user: "deploy", roles: %w[worker web group_b]
+server "figgy-web-prod1.princeton.edu", user: "deploy", roles: %w[app db production_db web group_a]
+server "figgy-web-prod2.princeton.edu", user: "deploy", roles: %w[app web group_a]
+server "figgy-web-prod3.princeton.edu", user: "deploy", roles: %w[app web group_b]
+server "figgy-web-prod4.princeton.edu", user: "deploy", roles: %w[app web group_b]
+server "figgy-worker-prod1.princeton.edu", user: "deploy", roles: %w[worker web group_a worker_db]
+server "figgy-worker-prod2.princeton.edu", user: "deploy", roles: %w[worker web group_a]
+server "figgy-worker-prod3.princeton.edu", user: "deploy", roles: %w[worker web group_a]
+server "figgy-worker-prod4.princeton.edu", user: "deploy", roles: %w[worker web group_b]
+server "figgy-worker-prod5.princeton.edu", user: "deploy", roles: %w[worker web group_b]
+server "figgy-worker-prod6.princeton.edu", user: "deploy", roles: %w[worker web group_b]
 
 set :google_fixity_request_topic, "figgy-production-fixity-request"
 set :google_service_account, "figgy-preservation-production@pulibrary-figgy-storage-1.iam.gserviceaccount.com"

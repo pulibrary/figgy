@@ -10,7 +10,11 @@ class RefreshRemoteMetadataJob < ApplicationJob
     @imported_metadata = change_set.model.primary_imported_metadata
     apply_remote_metadata
     return unless changed?
-    change_set_persister.save(change_set: change_set)
+    # No need to propagate visibility/state.
+    change_set_persister.with do |csp|
+      csp.prevent_propagation!
+      csp.save(change_set: change_set)
+    end
   end
 
   private
