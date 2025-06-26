@@ -11,8 +11,10 @@ class RefreshRemoteMetadataJob < ApplicationJob
     apply_remote_metadata
     return unless changed?
     # No need to propagate visibility/state.
-    change_set_persister.prevent_propagation!
-    change_set_persister.save(change_set: change_set)
+    change_set_persister.with do |csp|
+      csp.prevent_propagation!
+      csp.save(change_set: change_set)
+    end
   end
 
   private
