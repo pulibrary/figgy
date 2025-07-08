@@ -15,4 +15,18 @@ RSpec.describe "Numismatic Ingest", js: true do
       end
     end
   end
+
+  describe "local file ingest" do
+    it "has a dropzone" do
+      user = FactoryBot.create(:admin)
+      coin = FactoryBot.create_for_repository(:coin, coin_number: 1234)
+
+      sign_in user
+      visit file_manager_numismatics_coin_path(id: coin.id)
+
+      expect(page).to have_link "Ingest Local Files"
+      click_link("Ingest Local Files")
+      expect(page).to have_selector "#local_uploader .uppy-Root"
+    end
+  end
 end

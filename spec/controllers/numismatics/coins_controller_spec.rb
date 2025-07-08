@@ -113,6 +113,20 @@ RSpec.describe Numismatics::CoinsController, type: :controller do
       expect(manifest_response[:viewingHint]).to eq "individuals"
     end
   end
+  describe "local upload" do
+    context "when uploading local files from the vue widget" do
+      let(:user) { FactoryBot.create(:admin) }
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+      it "works" do
+        sign_in user
+        resource = FactoryBot.create_for_repository(:coin)
+
+        patch :update, params: { id: resource.id.to_s, numismatics_coin: { files: { "0" => file } } }
+
+        expect(Wayfinder.for(resource).members.first.title).to eq ["example.tif"]
+      end
+    end
+  end
   describe "auto ingest" do
     let(:user) { FactoryBot.create(:admin) }
     let(:coin) { FactoryBot.create_for_repository(:complete_open_coin, coin_number: coin_number) }
