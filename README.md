@@ -195,6 +195,16 @@ To enable:
    production or staging and deploy the branch.
 1. Deploy `main` again when reindexing is complete.
 
+### Running Scripts
+One can run scripts in the `scripts` directory using the Rails runner.
+This is useful for tasks like data migration, cleanup, or other one-off operations.
+
+For example, to run a script named `your_script.rb`, one would use:
+
+```bash
+bundle exec rails runner scripts/your_script.rb
+```
+
 ## Maintaining CircleCI base image
 
 We maintain a Figgy Docker image for use in CircleCI. The Dockerfile is
