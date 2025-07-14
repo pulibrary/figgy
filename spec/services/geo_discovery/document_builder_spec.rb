@@ -342,10 +342,11 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
       let(:child_change_set) { ScannedMapChangeSet.new(child, files: [file]) }
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
 
-      it "returns document with no thumbnail or iiif refs" do
+      it "returns document with no thumbnail but with iiif refs of first member" do
         refs = JSON.parse(document["dct_references_s"])
         expect(refs["http://schema.org/thumbnailUrl"]).to be_nil
-        expect(refs["http://iiif.io/api/presentation#manifest"]).to be_nil
+        expect(refs["http://iiif.io/api/presentation#manifest"]).to match(/concern\/scanned_maps/)
+        expect(refs["http://iiif.io/api/image"]).to match(/image-service/)
       end
     end
 

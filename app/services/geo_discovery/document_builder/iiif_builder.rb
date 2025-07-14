@@ -25,10 +25,25 @@ module GeoDiscovery
         # @return [FileSetDecorator] geo file set decorator
         def geo_file_set
           @geo_file_set ||= begin
-            member_id = resource_decorator.thumbnail_id.try(:first)
-            return nil unless member_id
-            members = resource_decorator.geo_members.select { |m| m.id == member_id }
-            members.first.decorate unless members.empty?
+            thumbnail_member_id = resource_decorator.thumbnail_id.try(:first)
+            thumbnail_member = resource_decorator.geo_members.select { |m| m.id == thumbnail_member_id }&.first&.decorate
+            return thumbnail_member if thumbnail_member
+            resource_decorator.geo_members&.first&.decorate
+          end
+        end
+
+        # Returns a map set's representative file set decorator.
+        # @return [FileSetDecorator] representative file set decorator
+        def map_set_file_set
+          @map_set_file_set ||= begin
+            thumbnail_member_id = resource_decorator.thumbnail_id.try(:first)
+            thumbnail_member = resource_decorator.decorated_scanned_maps.select { |m| m.id == thumbnail_member_id }&.first
+            if thumbnail_member
+              thumbnail_member.geo_members&.first
+            else
+              scanned_map = resource_decorator.decorated_scanned_maps&.first
+              scanned_map&.geo_members&.first
+            end
           end
         end
 
@@ -60,24 +75,6 @@ module GeoDiscovery
 
         def manifestable?
           resource_decorator.model.class.can_have_manifests?
-        end
-
-        # Returns a map set's representative file set decorator.
-        # @return [FileSetDecorator] representative file set decorator
-        def map_set_file_set
-          @map_set_file_set ||= begin
-            member_id = Array.wrap(resource_decorator.thumbnail_id).first
-            return unless member_id
-            member = query_service.find_by(id: member_id)
-            return member.decorate if member&.is_a?(FileSet)
-            member.decorate.geo_members.try(:first)
-          end
-        rescue Valkyrie::Persistence::ObjectNotFoundError
-          nil
-        end
-
-        def query_service
-          Valkyrie.config.metadata_adapter.query_service
         end
     end
   end
