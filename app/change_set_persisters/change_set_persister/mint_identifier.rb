@@ -53,7 +53,7 @@ class ChangeSetPersister
       end
 
       def identifier_service
-        return IdentifierService::Mock if Rails.env.development?
+        return IdentifierService::Mock if Rails.env.development? || Rails.env.staging?
         IdentifierService
       end
   end
