@@ -40,19 +40,13 @@ module Dspace
       # If the ark mapping has a key, put it in the right space.
       mms_id = Array.wrap(ark_mapping[item.handle]).first
       item_path = if mms_id
-                    mapped_dir.join(mms_id)
+                    collection_dir.join(mms_id)
                   else
-                    unmapped_dir.join(item.ark_ending)
+                    collection_dir.join(item.name)
                   end
       # We've done this one - skip it
       if File.exist?(item_path.join("figgy_metadata.json"))
         return
-      end
-      # If we were unmapped before, and mapped now, move all the files.
-      if mms_id && File.exist?(unmapped_dir.join(item.ark_ending))
-        Rails.logger.debug "Moving previously unmapped #{item.title}"
-        FileUtils.mkdir_p(item_path.dirname)
-        FileUtils.mv(unmapped_dir.join(item.ark_ending), item_path)
       end
       item.reload_data!
       # If it's one bitstream, put it right in the dir.
@@ -72,14 +66,6 @@ module Dspace
       end
     end
     # rubocop:enable Metrics/AbcSize
-
-    def mapped_dir
-      collection_dir.join("mapped")
-    end
-
-    def unmapped_dir
-      collection_dir.join("unmapped")
-    end
 
     def progress_bar
       @progress_bar ||= ProgressBar.create format: "%a %e %P% Resources Processed: %c of %C", total: collection_resource.items.length

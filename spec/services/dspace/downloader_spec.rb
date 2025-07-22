@@ -45,14 +45,14 @@ RSpec.describe Dspace::Downloader do
       downloader = described_class.new(handle, token, { "88435/dsp012801pg38m" => "9971957363506421" })
       downloader.download_all!
 
-      # Single PDF, mapped
-      expect(File.exist?(download_path.join("dsp016q182k16g/mapped/9971957363506421/dinner tables.pdf"))).to eq true
-      expect(Dir.glob("#{download_path.join('dsp016q182k16g/mapped/9971957363506421')}/*").length).to eq 2 # figgy_metadata.json and one pdf
+      # Single PDF
+      expect(File.exist?(download_path.join("dsp016q182k16g/9971957363506421/dinner tables.pdf"))).to eq true
+      expect(Dir.glob("#{download_path.join('dsp016q182k16g/9971957363506421')}/*").length).to eq 2 # figgy_metadata.json and one pdf
 
-      # Multiple PDFs, unmapped
-      unmapped_item_dir = download_path.join("dsp016q182k16g/unmapped/dsp01h989r5980")
-      expect(Dir.glob(unmapped_item_dir.join("*")).length).to eq 24 # 23 PDFs, one figgy_metadata.json
-      expect(unmapped_item_dir.children.sort.first.basename.to_s).to eq "001 - National"
+      # Multiple PDFs - no mapping, so use title.
+      item_dir = download_path.join("dsp016q182k16g/Recenseamento do Brazil em 1872")
+      expect(Dir.glob(item_dir.join("*")).length).to eq 24 # 23 PDFs, one figgy_metadata.json
+      expect(item_dir.children.sort.first.basename.to_s).to eq "001 - National"
     end
   end
 
@@ -72,40 +72,10 @@ RSpec.describe Dspace::Downloader do
           item_handle => item_mms_id
         }
       end
-
-      context "when the Item has been downloaded before it was mapped to a MMS ID" do
-        let(:unmapped_path) { download_path.join("#{collection_assigned_name}/unmapped/#{item_assigned_name}") }
-        let(:metadata_path) { unmapped_path.join("figgy_metadata.json") }
-        let(:mapped_path) { download_path.join("#{collection_assigned_name}/mapped/#{item_mms_id}") }
-        let(:mapped_metadata_path) { mapped_path.join("figgy_metadata.json") }
-
-        before do
-          FileUtils.rm_rf(mapped_path)
-          FileUtils.rm_rf(unmapped_path)
-
-          FileUtils.mkdir_p(unmapped_path)
-          File.write(metadata_path, "{}")
-
-          allow(Rails.logger).to receive(:debug)
-        end
-
-        after do
-          FileUtils.rm_rf(unmapped_path)
-        end
-
-        it "moves the existing item to the mapped directory" do
-          downloader.download_item(item)
-
-          expect(File.exist?(metadata_path)).to be false
-          expect(File.exist?(mapped_metadata_path)).to be true
-
-          expect(Rails.logger).to have_received(:debug).with(/Moving previously unmapped/)
-        end
-      end
     end
 
     context "when the Item has been downloaded after it was mapped to a MMS ID" do
-      let(:mapped_path) { download_path.join("#{collection_assigned_name}/mapped/#{item_mms_id}") }
+      let(:mapped_path) { download_path.join("#{collection_assigned_name}/#{item_mms_id}") }
       let(:mapped_metadata_path) { mapped_path.join("figgy_metadata.json") }
 
       before do
@@ -143,7 +113,7 @@ RSpec.describe Dspace::Downloader do
           "withdrawn" => "false"
         }.to_json
       end
-      let(:bitstream_path) { download_path.join("#{collection_assigned_name}/unmapped/#{item_assigned_name}") }
+      let(:bitstream_path) { download_path.join("#{collection_assigned_name}/Travelling across dinner-tables.") }
 
       before do
         stub_request(:get, item_url).to_return(
