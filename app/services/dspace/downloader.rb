@@ -62,7 +62,7 @@ module Dspace
         end
       end
       File.open(item_path.join("figgy_metadata.json"), "w") do |f|
-        f.write({ identifier: item.ark }.to_json)
+        f.write({ identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.to_json)
       end
     end
     # rubocop:enable Metrics/AbcSize

@@ -53,6 +53,13 @@ RSpec.describe Dspace::Downloader do
       item_dir = download_path.join("dsp016q182k16g/Recenseamento do Brazil em 1872")
       expect(Dir.glob(item_dir.join("*")).length).to eq 24 # 23 PDFs, one figgy_metadata.json
       expect(item_dir.children.sort.first.basename.to_s).to eq "001 - National"
+
+      # Ensure the figgy_metadata.json has the appropriate info.
+      figgy_metadata = item_dir.join("figgy_metadata.json")
+      content = JSON.parse(File.read(figgy_metadata.to_s))
+      expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01h989r5980"
+      # Include DSpace IDs so we can backtrack later if we must.
+      expect(content["local_identifier"]).to eq ["88435/dsp01h989r5980", "93362"]
     end
   end
 

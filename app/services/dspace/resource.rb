@@ -24,6 +24,10 @@ class Dspace::Resource
     ark_ending
   end
 
+  def id
+    resource_data["id"]
+  end
+
   def handle
     resource_data["handle"]
   end
