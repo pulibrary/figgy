@@ -61,7 +61,6 @@ module Dspace
       if item.type == "collection"
         Downloader.new(collection_handle: item.handle, dspace_token: dspace_token, collection_dir: item_path, collection_resource: item, ark_mapping: ark_mapping, logger: logger).download_all!
       else
-        item.reload_data!
         # If it's one bitstream, put it right in the dir.
         if item.bitstreams.length == 1
           download_bitstream(item, item_path, item.bitstreams.first)
