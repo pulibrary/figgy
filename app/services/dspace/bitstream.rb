@@ -10,7 +10,7 @@ class Dspace::Bitstream
   end
 
   def filename
-    name.downcase
+    name
   end
 
   def extension

@@ -1,0 +1,132 @@
+{
+  "id": 2186,
+  "name": "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles",
+  "handle": "88435/dsp01jm214r79v",
+  "type": "collection",
+  "link": "/rest/collections/2186",
+  "expand": [],
+  "logo": null,
+  "parentCommunity": {
+    "id": 226,
+    "name": "Serials and series reports (Publicly Accessible)",
+    "handle": "88435/dsp01kh04dp74g",
+    "type": "community",
+    "link": "/rest/communities/226",
+    "expand": [
+      "parentCommunity",
+      "collections",
+      "subCommunities",
+      "logo",
+      "all"
+    ],
+    "logo": null,
+    "parentCommunity": null,
+    "copyrightText": "",
+    "introductoryText": "",
+    "shortDescription": "",
+    "sidebarText": "",
+    "countItems": 2236,
+    "subcommunities": [],
+    "collections": []
+  },
+  "parentCommunityList": [
+    {
+      "id": 226,
+      "name": "Serials and series reports (Publicly Accessible)",
+      "handle": "88435/dsp01kh04dp74g",
+      "type": "community",
+      "link": "/rest/communities/226",
+      "expand": [
+        "parentCommunity",
+        "collections",
+        "subCommunities",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "countItems": 2236,
+      "subcommunities": [],
+      "collections": []
+    },
+    {
+      "id": 146,
+      "name": "Princeton University Library",
+      "handle": "88435/dsp01g732d9019",
+      "type": "community",
+      "link": "/rest/communities/146",
+      "expand": [
+        "parentCommunity",
+        "collections",
+        "subCommunities",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "countItems": 13230,
+      "subcommunities": [],
+      "collections": []
+    }
+  ],
+  "items": [
+    {
+      "id": 88496,
+      "name": "Country Profile: FGM in Senegal, 2015",
+      "handle": "88435/dsp01q524jr415",
+      "type": "item",
+      "link": "/rest/items/88496",
+      "expand": [
+        "metadata",
+        "parentCollection",
+        "parentCollectionList",
+        "parentCommunityList",
+        "bitstreams",
+        "all"
+      ],
+      "lastModified": "2017-09-16 04:08:20.925",
+      "parentCollection": null,
+      "parentCollectionList": null,
+      "parentCommunityList": null,
+      "bitstreams": null,
+      "archived": "true",
+      "withdrawn": "false"
+    },
+    {
+      "id": 88499,
+      "name": "Country Profile: FGM in The Gambia, 2015",
+      "handle": "88435/dsp01kd17cw508",
+      "type": "item",
+      "link": "/rest/items/88499",
+      "expand": [
+        "metadata",
+        "parentCollection",
+        "parentCollectionList",
+        "parentCommunityList",
+        "bitstreams",
+        "all"
+      ],
+      "lastModified": "2017-09-16 04:08:23.059",
+      "parentCollection": null,
+      "parentCollectionList": null,
+      "parentCommunityList": null,
+      "bitstreams": null,
+      "archived": "true",
+      "withdrawn": "false"
+    }
+  ],
+  "license": "In order for Princeton University's DataSpace to reproduce, translate, and\ndistribute your submission for worldwide public access your agreement to the\nfollowing terms is necessary. Please take a moment to read the terms of this\nlicense.\n\nBy clicking through this license, you (the author(s) or creator(s) or copyright\nowner(s)) grant to Princeton University the non-exclusive right to reproduce,\ntranslate (as defined below), and/or distribute your submission (including the\nabstract) worldwide in electronic format.\n\nYou represent that the submission is your original work, and/or that you have\nthe right to grant the rights contained in this license.  You represent that\nyour submission does not, to the best of your knowledge, infringe upon anyone's\ncopyright.\n\nBecause Princeton University owns the copyright in any work that any member of\nthe University staff (not faculty) creates in the course of his or her assigned\nduties at the University (“University Work Product”), University Work Products\nmay not be deposited in DataSpace without first securing the consent of the\nUniversity supervisor who is responsible for the creation and dissemination the\nUniversity Work Product.  Such consent must include acknowledgement by the\nsupervisor that the University Work Product can, and will, be made available to\nthe general public.\n\nYou also represent, to the best of your knowledge, that public distribution of\nyour submission will not violate the personal privacy rights of any group or\nindividual.  You agree that Princeton University may translate the submission to\nany medium or format for the purpose of preservation.\n\nYou also agree that Princeton University may keep more than one copy of this\nsubmission for purposes of security, back-up, and preservation.\n\nIf the submission contains material for which you do not hold copyright, you\nrepresent that you have obtained the unrestricted permission of the copyright\nowner to grant Princeton University the rights required by this license, and\nthat such third-party owned material is clearly identified and acknowledged\nwithin the text or content of the submission.\n\nIf the submission is based upon work that has been sponsored or supported by an\nagency or organization other than Princeton University, you represent that you\nhave fulfilled any right of review or other obligations required by such\ncontract or agreement.\n\nPrinceton University will not make any alteration, other than as allowed by this\nlicense, to your submission.\n\nPrinceton University reserves the right to make unavailable any content which it\ndeems to be in violation of this agreement, or of applicable local, state or\nfederal law.  Princeton also reserves the right to make content unavailable for\nlimited periods of time so as to perform maintenance on the repository or its\ncontents.\n\nPrinceton will endeavor to maintain this repository and make its contents\navailable indefinitely.  However, the University reserves the right to terminate\nthis repository and its services should circumstances warrant.  In such a case,\nPrinceton’s sole responsibility will be to make a best-faith effort to transfer\nthe content to another repository and/or return the content to its original\nowner.\n",
+  "copyrightText": "",
+  "introductoryText": "",
+  "shortDescription": "",
+  "sidebarText": "",
+  "numberItems": 13
+}

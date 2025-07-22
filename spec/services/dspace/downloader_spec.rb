@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe Dspace::Downloader do
-  subject(:downloader) { described_class.new(handle, token, ark_mapping) }
+  subject(:downloader) { described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: ark_mapping) }
 
   let(:handle) { "88435/dsp016q182k16g" }
   let(:token) { "bla" }
@@ -28,6 +28,11 @@ RSpec.describe Dspace::Downloader do
       .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "dspace", "#{item_number}.json")), headers: { "Content-Type" => "application/json" })
   end
 
+  def stub_collection(item_number)
+    stub_request(:get, "https://dataspace.princeton.edu/rest/collections/#{item_number}?expand=all")
+      .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "dspace", "#{item_number}.json")), headers: { "Content-Type" => "application/json" })
+  end
+
   let(:download_path) { Pathname.new(Figgy.config["dspace"]["download_path"]) }
 
   before do
@@ -42,7 +47,7 @@ RSpec.describe Dspace::Downloader do
 
   context "when a resource has items" do
     it "downloads all items" do
-      downloader = described_class.new(handle, token, { "88435/dsp012801pg38m" => "9971957363506421" })
+      downloader = described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: { "88435/dsp012801pg38m" => "9971957363506421" })
       downloader.download_all!
 
       # Single PDF
@@ -60,6 +65,44 @@ RSpec.describe Dspace::Downloader do
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01h989r5980"
       # Include DSpace IDs so we can backtrack later if we must.
       expect(content["local_identifier"]).to eq ["88435/dsp01h989r5980", "93362"]
+    end
+  end
+
+  context "when a resource has collections" do
+    let(:handle) { "88435/dsp01kh04dp74g" }
+    let(:token) { "bla" }
+    before do
+      stub_request(:get, "https://dataspace.princeton.edu/rest/handle/88435/dsp01kh04dp74g?expand=all")
+        .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "dspace", "serials_collection.json")), headers: { "Content-Type" => "application/json" })
+      stub_collection("2186")
+      stub_item("88499")
+      stub_item("88496")
+    end
+    it "downloads all sub-collections as MVW resources" do
+      downloader = described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: { "88435/dsp01kd17cw508" => "99103970043506421" })
+      downloader.download_all!
+
+      # Serials and series reports (Publicly Accessible) (collection)  // Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles // Item
+      # Single PDF, mapped
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles/99103970043506421/TheGambia_2015.pdf"))).to eq true
+      figgy_metadata = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles/99103970043506421/figgy_metadata.json")
+      expect(File.exist?(figgy_metadata)).to eq true
+      content = JSON.parse(File.read(figgy_metadata.to_s))
+      expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01kd17cw508"
+      # Include DSpace IDs so we can backtrack later if we must.
+      expect(content["local_identifier"]).to eq ["88435/dsp01kd17cw508", "88499"]
+
+      # Single PDF, unmapped
+      item_path = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles/Country Profile: FGM in Senegal, 2015")
+      file_path = item_path.join("Senegal_2015.pdf")
+      figgy_metadata = item_path.join("figgy_metadata.json")
+
+      expect(File.exist?(file_path)).to eq true
+      expect(File.exist?(figgy_metadata)).to eq true
+      content = JSON.parse(File.read(figgy_metadata.to_s))
+      expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01q524jr415"
+      # Include DSpace IDs so we can backtrack later if we must.
+      expect(content["local_identifier"]).to eq ["88435/dsp01q524jr415", "88496"]
     end
   end
 

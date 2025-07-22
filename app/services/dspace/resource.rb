@@ -24,6 +24,10 @@ class Dspace::Resource
     ark_ending
   end
 
+  def type
+    resource_data["type"]
+  end
+
   def id
     resource_data["id"]
   end
@@ -50,7 +54,13 @@ class Dspace::Resource
   end
 
   def items
-    @items ||= resource_data["items"].map do |item|
+    @items ||= resource_data.fetch("items", []).map do |item|
+      Dspace::Resource.new(item, client)
+    end
+  end
+
+  def collections
+    @collections ||= resource_data.fetch("collections", []).map do |item|
       Dspace::Resource.new(item, client)
     end
   end

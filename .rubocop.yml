@@ -182,6 +182,7 @@ Metrics/ParameterLists:
     - 'app/queries/paged_all_query.rb'
     - 'spec/models/oai/figgy/valkyrie_provider_model_spec.rb'
     - 'app/services/dspace_ingester.rb'
+    - 'app/services/dspace/downloader.rb'
 Metrics/PerceivedComplexity:
   Max: 12
   Exclude:
