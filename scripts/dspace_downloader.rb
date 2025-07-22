@@ -6,12 +6,17 @@
 
 # Monograph Collections
 # Public one
-Dspace::Downloader.new(collection_handle: "88435/dsp016q182k16g", dspace_token: ENV["DSPACE_TOKEN"]).download_all!
+logger = Logger.new(STDOUT)
+logger.info "Downloading public monographs"
+Dspace::Downloader.new(collection_handle: "88435/dsp016q182k16g", dspace_token: ENV["DSPACE_TOKEN"], logger: logger).download_all!
 # Private one.
-Dspace::Downloader.new(collection_handle: "88435/dsp01bg257f09p", dspace_token: ENV["DSPACE_TOKEN"]).download_all!
+logger.info "Downloading private monographs"
+Dspace::Downloader.new(collection_handle: "88435/dsp01bg257f09p", dspace_token: ENV["DSPACE_TOKEN"], logger: logger).download_all!
 
 # Serials
 ## Public
-Dspace::Downloader.new(collection_handle: "88435/dsp01jm214r79v", dspace_token: dspace_token).download_all!
+logger.info "Downloading public serials"
+Dspace::Downloader.new(collection_handle: "88435/dsp01jm214r79v", dspace_token: dspace_token, logger: logger).download_all!
 ## Private
-Dspace::Downloader.new(collection_handle: "88435/dsp01r781wg06f", dspace_token: dspace_token).download_all!
+logger.info "Downloading private serials"
+Dspace::Downloader.new(collection_handle: "88435/dsp01r781wg06f", dspace_token: dspace_token, logger: logger).download_all!

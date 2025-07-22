@@ -2,14 +2,15 @@
 
 module Dspace
   class Downloader
-    attr_reader :collection_handle, :dspace_token, :progress
-    def initialize(collection_handle:, dspace_token:, collection_dir: nil, collection_resource: nil, ark_mapping: nil, progress: nil)
+    attr_reader :collection_handle, :dspace_token, :progress, :logger
+    def initialize(collection_handle:, dspace_token:, collection_dir: nil, collection_resource: nil, ark_mapping: nil, progress: nil, logger: Rails.logger)
       @collection_handle = collection_handle
       @dspace_token = dspace_token
       @ark_mapping = ark_mapping
       @progress = progress
       @collection_dir = collection_dir
       @collection_resource = collection_resource
+      @logger = logger
     end
 
     def download_all!
@@ -58,14 +59,14 @@ module Dspace
       item.reload_data!
       # Ingesting a collection - launch a sub-downloader.
       if item.type == "collection"
-        Downloader.new(collection_handle: item.handle, dspace_token: dspace_token, collection_dir: item_path, collection_resource: item, ark_mapping: ark_mapping).download_all!
+        Downloader.new(collection_handle: item.handle, dspace_token: dspace_token, collection_dir: item_path, collection_resource: item, ark_mapping: ark_mapping, logger: logger).download_all!
       else
         item.reload_data!
         # If it's one bitstream, put it right in the dir.
         if item.bitstreams.length == 1
           download_bitstream(item, item_path, item.bitstreams.first)
         elsif item.bitstreams.empty?
-          Rails.logger.debug "No bitstreams for #{item.handle} #{item.title}. #{(item.resource_data['bitstreams'] || []).map { |x| x['name'] }}"
+          logger.info "No bitstreams for #{item.handle} #{item.title}. #{(item.resource_data['bitstreams'] || []).map { |x| x['name'] }}"
           return
         else
           item.bitstreams.each do |bitstream|
@@ -89,7 +90,7 @@ module Dspace
       bitstream_path = item_path.join(bitstream.filename)
       return if File.exist?(bitstream_path)
       resp = item.client.bitstream_client.get("rest#{bitstream.retrieve_link}")
-      Rails.logger.debug "Broken Link!" unless resp.success?
+      logger.info "Broken Link!" unless resp.success?
       return unless resp.success?
       File.open(bitstream_path, "wb") do |f|
         f.write resp.body
