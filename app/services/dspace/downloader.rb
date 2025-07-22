@@ -65,7 +65,7 @@ module Dspace
         if item.bitstreams.length == 1
           download_bitstream(item, item_path, item.bitstreams.first)
         elsif item.bitstreams.empty?
-          Rails.logger.debug "No bitstreams for #{item.handle} #{item.title}. #{item.resource_data['bitstreams'].map { |x| x['name'] }}"
+          Rails.logger.debug "No bitstreams for #{item.handle} #{item.title}. #{(item.resource_data['bitstreams'] || []).map { |x| x['name'] }}"
           return
         else
           item.bitstreams.each do |bitstream|
