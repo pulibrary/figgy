@@ -200,6 +200,7 @@ Metrics/PerceivedComplexity:
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/models/ability.rb'
     - 'app/services/dspace_ingester.rb'
+    - 'app/services/dspace/downloader.rb'
 Rails/OutputSafety:
   Exclude:
     - 'app/helpers/fixity_dashboard_helper.rb'
