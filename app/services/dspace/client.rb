@@ -17,6 +17,7 @@ class Dspace::Client
         "rest-dspace-token" => dspace_token
       }
     ) do |builder|
+      builder.request :retry, { max: 300, interval: 0.5, interval_randomness: 0.5, backoff_factor: 2 }
       builder.request :json
       builder.response :json
     end

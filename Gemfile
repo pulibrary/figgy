@@ -32,6 +32,7 @@ gem "dnsruby"
 gem "draper"
 gem "ezid-client", "1.9.4" # v1.9.0 introduces response errors in our tests/stubbing
 gem "faker"
+gem "faraday-retry"
 gem "filewatcher", "~> 1.0"
 gem "flutie"
 gem "font-awesome-rails"
