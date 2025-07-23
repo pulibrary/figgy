@@ -41,7 +41,7 @@ class Dspace::Resource
   end
 
   def dir_name
-    name.tr("/", "-")[0..49].strip
+    name.gsub(/[\/\[\]]/, "-")[0..49].strip
   end
 
   def title
