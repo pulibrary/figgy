@@ -68,6 +68,8 @@ module Dspace
       item.reload_data!
       # Ingesting a collection - launch a sub-downloader.
       if item.type == "collection"
+        FileUtils.mkdir_p(item_path)
+        write_metadata(item, item_path)
         Downloader.new(collection_handle: item.handle, dspace_token: dspace_token, collection_dir: item_path, collection_resource: item, ark_mapping: ark_mapping, logger: logger).download_all!
       else
         # If it's one bitstream, put it right in the dir.
@@ -83,12 +85,16 @@ module Dspace
             download_bitstream(item, sub_path, bitstream)
           end
         end
-        File.open(item_path.join("figgy_metadata.json"), "w") do |f|
-          f.write({ title: item.name, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.to_json)
-        end
+        write_metadata(item, item_path)
       end
     end
     # rubocop:enable Metrics/AbcSize
+
+    def write_metadata(item, item_path)
+      File.open(item_path.join("figgy_metadata.json"), "w") do |f|
+        f.write({ title: item.name, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.to_json)
+      end
+    end
 
     def progress_bar
       @progress_bar ||= ProgressBar.create format: "%a %e %P% Resources Processed: %c of %C", total: collection_resource.items.length + collection_resource.collections.length

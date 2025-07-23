@@ -88,7 +88,7 @@ RSpec.describe Dspace::Downloader do
       # Ensure the figgy_metadata.json has the full un-truncated title
       figgy_metadata = item_dir.join("figgy_metadata.json")
       content = JSON.parse(File.read(figgy_metadata.to_s))
-      expect(content["title"]).to eq "Sistematización de buenas prácticas en materia de Educación. Ciudadana Intercultural para los Pueblos Indígenas de América Latina en contextos de pobreza"
+      expect(content["title"]).to eq "Sistematización de/buenas prácticas en materia de Educación. / Ciudadana Intercultural para los Pueblos Indígenas de América Latina en contextos de pobreza"
     end
   end
 
@@ -106,10 +106,16 @@ RSpec.describe Dspace::Downloader do
       downloader = described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: { "88435/dsp01kd17cw508" => "99103970043506421" })
       downloader.download_all!
 
+      # Ensure the full title is in the figgy_metadata.json
+      figgy_metadata = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/figgy_metadata.json")
+      expect(File.exist?(figgy_metadata)).to eq true
+      content = JSON.parse(File.read(figgy_metadata.to_s))
+      expect(content["title"]).to eq "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles"
       # Serials and series reports (Publicly Accessible) (collection)  // Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles // Item
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/99103970043506421/TheGambia_2015.pdf"))).to eq true
       # Single PDF, mapped
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles/99103970043506421/TheGambia_2015.pdf"))).to eq true
-      figgy_metadata = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles/99103970043506421/figgy_metadata.json")
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/99103970043506421/TheGambia_2015.pdf"))).to eq true
+      figgy_metadata = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/99103970043506421/figgy_metadata.json")
       expect(File.exist?(figgy_metadata)).to eq true
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01kd17cw508"
@@ -117,7 +123,7 @@ RSpec.describe Dspace::Downloader do
       expect(content["local_identifier"]).to eq ["88435/dsp01kd17cw508", "88499"]
 
       # Single PDF, unmapped
-      item_path = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles/Country Profile: FGM in Senegal, 2015")
+      item_path = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/Country Profile: FGM in Senegal, 2015")
       file_path = item_path.join("Senegal_2015.pdf")
       figgy_metadata = item_path.join("figgy_metadata.json")
 
