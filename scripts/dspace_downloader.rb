@@ -16,7 +16,7 @@ Dspace::Downloader.new(collection_handle: "88435/dsp01bg257f09p", dspace_token: 
 # Serials
 ## Public
 logger.info "Downloading public serials"
-Dspace::Downloader.new(collection_handle: "88435/dsp01jm214r79v", dspace_token: ENV["DSPACE_TOKEN"], logger: logger).download_all!
+Dspace::Downloader.new(collection_handle: "88435/dsp01kh04dp74g", dspace_token: ENV["DSPACE_TOKEN"], logger: logger).download_all!
 ## Private
 logger.info "Downloading private serials"
 Dspace::Downloader.new(collection_handle: "88435/dsp01r781wg06f", dspace_token: ENV["DSPACE_TOKEN"], logger: logger).download_all!

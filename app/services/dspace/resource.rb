@@ -13,13 +13,6 @@ class Dspace::Resource
     @resource_data = response.body
   end
 
-  def metadata
-    entries = resource_data["metadata"] || []
-    grouped = entries.group_by { |x| x["key"] }
-    pairs = grouped.map { |k, v| [k.sub("dc.", ""), v.flat_map { |x| x["value"] }] }
-    pairs.to_h
-  end
-
   def dir
     ark_ending
   end
@@ -40,8 +33,10 @@ class Dspace::Resource
     resource_data["name"]
   end
 
-  def dir_name
-    name.gsub(/[\/\[\]]/, "-")[0..49].strip
+  def dir_name(parent_title = nil)
+    name = self.name
+    name = self.name.to_s.gsub("#{parent_title} - ", "") if parent_title
+    "#{id}-#{name.gsub(/[\/\[\]]/, '-')[0..49].strip}"
   end
 
   def title

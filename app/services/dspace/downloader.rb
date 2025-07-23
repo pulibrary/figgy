@@ -2,7 +2,7 @@
 
 module Dspace
   class Downloader
-    attr_reader :collection_handle, :dspace_token, :progress, :logger
+    attr_reader :collection_handle, :dspace_token, :progress, :logger, :parent_title
     def initialize(collection_handle:, dspace_token:, collection_dir: nil, collection_resource: nil, ark_mapping: nil, progress: nil, logger: Rails.logger)
       @collection_handle = collection_handle
       @dspace_token = dspace_token
@@ -10,6 +10,7 @@ module Dspace
       @progress = progress
       @collection_dir = collection_dir
       @collection_resource = collection_resource
+      @parent_title = self.collection_resource.title
       @logger = logger
     end
 
@@ -54,7 +55,7 @@ module Dspace
       if mms_id
         collection_dir.join(mms_id)
       else
-        collection_dir.join(item.dir_name)
+        collection_dir.join(item.dir_name(parent_title))
       end
     end
 

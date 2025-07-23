@@ -55,10 +55,10 @@ RSpec.describe Dspace::Downloader do
       downloader.download_all!
 
       expect(Rails.logger).to have_received(:info).with(/Failed to download 88435\/dsp01tx31qh74p/)
-      item_dir = download_path.join("dsp016q182k16g/Recenseamento do Brazil em 1872")
+      item_dir = download_path.join("dsp016q182k16g/93362-Recenseamento do Brazil em 1872")
       expect(File.exist?(item_dir)).to eq true
 
-      item_dir = download_path.join("dsp016q182k16g/Sistematización de-buenas prácticas en materia de")
+      item_dir = download_path.join("dsp016q182k16g/2595-Sistematización de-buenas prácticas en materia de")
       expect(File.exist?(item_dir)).to eq false
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Dspace::Downloader do
       expect(Dir.glob("#{download_path.join('dsp016q182k16g/9971957363506421')}/*").length).to eq 2 # figgy_metadata.json and one pdf
 
       # Multiple PDFs - no mapping, so use title.
-      item_dir = download_path.join("dsp016q182k16g/Recenseamento do Brazil em 1872")
+      item_dir = download_path.join("dsp016q182k16g/93362-Recenseamento do Brazil em 1872")
       expect(Dir.glob(item_dir.join("*")).length).to eq 24 # 23 PDFs, one figgy_metadata.json
       expect(item_dir.children.sort.first.basename.to_s).to eq "001 - -T-Nati-onal"
       # Handle slashes in the description
@@ -89,7 +89,7 @@ RSpec.describe Dspace::Downloader do
       expect(content["local_identifier"]).to eq ["88435/dsp01h989r5980", "93362"]
 
       # Ensure files with slashes get handled and that long names are truncated.
-      item_dir = download_path.join("dsp016q182k16g/Sistematización de-buenas prácticas en materia de")
+      item_dir = download_path.join("dsp016q182k16g/2595-Sistematización de-buenas prácticas en materia de")
       expect(Dir.glob(item_dir.join("*")).length).to eq 2 # 1 PDF, one figgy_metadata.json
       # Ensure the figgy_metadata.json has the full un-truncated title
       figgy_metadata = item_dir.join("figgy_metadata.json")
@@ -113,15 +113,16 @@ RSpec.describe Dspace::Downloader do
       downloader.download_all!
 
       # Ensure the full title is in the figgy_metadata.json
-      figgy_metadata = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/figgy_metadata.json")
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/figgy_metadata.json"))).to eq false
+      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/figgy_metadata.json")
       expect(File.exist?(figgy_metadata)).to eq true
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["title"]).to eq "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles"
       # Serials and series reports (Publicly Accessible) (collection)  // Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles // Item
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/99103970043506421/TheGambia_2015.pdf"))).to eq true
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/99103970043506421/TheGambia_2015.pdf"))).to eq true
       # Single PDF, mapped
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/99103970043506421/TheGambia_2015.pdf"))).to eq true
-      figgy_metadata = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/99103970043506421/figgy_metadata.json")
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/99103970043506421/TheGambia_2015.pdf"))).to eq true
+      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/99103970043506421/figgy_metadata.json")
       expect(File.exist?(figgy_metadata)).to eq true
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01kd17cw508"
@@ -129,7 +130,7 @@ RSpec.describe Dspace::Downloader do
       expect(content["local_identifier"]).to eq ["88435/dsp01kd17cw508", "88499"]
 
       # Single PDF, unmapped
-      item_path = download_path.join("dsp01kh04dp74g/Serials and series reports (Publicly Accessible) -/Country Profile: FGM in Senegal, 2015")
+      item_path = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/88496-Country Profile: FGM in Senegal, 2015")
       file_path = item_path.join("Senegal_2015.pdf")
       figgy_metadata = item_path.join("figgy_metadata.json")
 
