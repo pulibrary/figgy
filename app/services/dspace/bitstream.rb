@@ -46,7 +46,7 @@ class Dspace::Bitstream
   end
 
   def folder_name
-    description.presence.tr("/", "-")[0..49] || name_no_extension
+    description.to_s.tr("/", "-")[0..49].presence || name_no_extension
   end
 
   def sequence_id
