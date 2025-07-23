@@ -5,6 +5,22 @@ class Dspace::Bitstream
     @data = data
   end
 
+  def title
+    description.presence || name_no_extension
+  end
+
+  def ark
+    nil
+  end
+
+  def handle
+    nil
+  end
+
+  def id
+    data["id"]
+  end
+
   def name
     Array.wrap(data["name"]).first
   end
@@ -30,7 +46,7 @@ class Dspace::Bitstream
   end
 
   def folder_name
-    description.presence || name_no_extension
+    description.presence.tr("/", "-")[0..49] || name_no_extension
   end
 
   def sequence_id

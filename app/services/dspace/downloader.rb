@@ -82,6 +82,8 @@ module Dspace
         else
           item.bitstreams.each do |bitstream|
             sub_path = item_path.join("#{bitstream.sequence_id} - #{bitstream.folder_name}")
+            FileUtils.mkdir_p(sub_path)
+            write_metadata(bitstream, sub_path)
             download_bitstream(item, sub_path, bitstream)
           end
         end
@@ -92,7 +94,7 @@ module Dspace
 
     def write_metadata(item, item_path)
       File.open(item_path.join("figgy_metadata.json"), "w") do |f|
-        f.write({ title: item.name, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.to_json)
+        f.write({ title: item.title, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.compact.to_json)
       end
     end
 

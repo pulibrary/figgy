@@ -73,7 +73,13 @@ RSpec.describe Dspace::Downloader do
       # Multiple PDFs - no mapping, so use title.
       item_dir = download_path.join("dsp016q182k16g/Recenseamento do Brazil em 1872")
       expect(Dir.glob(item_dir.join("*")).length).to eq 24 # 23 PDFs, one figgy_metadata.json
-      expect(item_dir.children.sort.first.basename.to_s).to eq "001 - National"
+      expect(item_dir.children.sort.first.basename.to_s).to eq "001 - Nati-onal"
+      # Handle slashes in the description
+      file = item_dir.join("001 - Nati-onal/DSBrazilCensus1872v1National.pdf")
+      expect(File.exist?(file)).to eq true
+      figgy_metadata = item_dir.join("001 - Nati-onal/figgy_metadata.json")
+      content = JSON.parse(File.read(figgy_metadata.to_s))
+      expect(content["title"]).to eq "Nati/onal"
 
       # Ensure the figgy_metadata.json has the appropriate info.
       figgy_metadata = item_dir.join("figgy_metadata.json")

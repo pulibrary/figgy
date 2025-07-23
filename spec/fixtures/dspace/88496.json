@@ -225,6 +225,31 @@
       "policies": null
     },
     {
+      "id": 1147888,
+      "name": "Senegal_20/15.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/114788",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": null,
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 4015482,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/114788/retrieve",
+      "checkSum": {
+        "value": "29bcb36057d5fe709116432cb50cfac6",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 1,
+      "policies": null
+    },
+    {
       "id": 114789,
       "name": "license.txt",
       "handle": null,

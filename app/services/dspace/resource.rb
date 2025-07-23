@@ -45,7 +45,7 @@ class Dspace::Resource
   end
 
   def title
-    Array.wrap(metadata["title"]).first
+    name
   end
 
   def ark
