@@ -287,6 +287,34 @@ RSpec.describe BulkIngestService do
         first_member = Wayfinder.for(resource).members.first
         expect(first_member.title).to eq ["1"]
       end
+      context "when the figgy_metadata.json file has a source_metadata_identifier" do
+        let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single_figgy_metadata_with_id") }
+        it "uses it to import metadata" do
+          ingester.attach_dir(
+            base_directory: single_dir,
+            file_filters: [".tif"],
+            local_identifier: local_id,
+            member_of_collection_ids: [coll.id],
+            depositor: "tpend"
+          )
+
+          updated_collection = query_service.find_by(id: coll.id)
+          decorated_collection = updated_collection.decorate
+          expect(decorated_collection.members.to_a.length).to eq 1
+          expect(decorated_collection.members.first.member_ids.length).to eq 2
+
+          resource = decorated_collection.members.to_a.first
+          expect(resource.source_metadata_identifier).to include(bib)
+          expect(resource.local_identifier).to include(local_id)
+          expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
+          expect(resource.member_ids.length).to eq 2 # color.tif, gray.tif
+          expect(resource.depositor).to eq ["tpend"]
+          expect(resource.title.first.to_s).to eq "Bible, Latin." # Imported from figgy_metadata source metadata identifier.
+
+          first_member = Wayfinder.for(resource).members.first
+          expect(first_member.title).to eq ["1"]
+        end
+      end
     end
 
     context "when ingesting AV bags" do

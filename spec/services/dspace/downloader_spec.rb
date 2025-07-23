@@ -109,6 +109,8 @@ RSpec.describe Dspace::Downloader do
       stub_item("88496")
     end
     it "downloads all sub-collections as MVW resources" do
+      # TODO: The items in the sub-collections need to be in order, even if they
+      # have metadata IDs.
       downloader = described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: { "88435/dsp01kd17cw508" => "99103970043506421" })
       downloader.download_all!
 
@@ -119,18 +121,19 @@ RSpec.describe Dspace::Downloader do
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["title"]).to eq "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles"
       # Serials and series reports (Publicly Accessible) (collection)  // Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles // Item
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/99103970043506421/TheGambia_2015.pdf"))).to eq true
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-99103970043506421/TheGambia_2015.pdf"))).to eq true
       # Single PDF, mapped
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/99103970043506421/TheGambia_2015.pdf"))).to eq true
-      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/99103970043506421/figgy_metadata.json")
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-99103970043506421/TheGambia_2015.pdf"))).to eq true
+      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-99103970043506421/figgy_metadata.json")
       expect(File.exist?(figgy_metadata)).to eq true
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01kd17cw508"
       # Include DSpace IDs so we can backtrack later if we must.
       expect(content["local_identifier"]).to eq ["88435/dsp01kd17cw508", "88499"]
+      expect(content["source_metadata_identifier"]).to eq "99103970043506421"
 
       # Single PDF, unmapped
-      item_path = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/88496-Country Profile: FGM in Senegal, 2015")
+      item_path = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/001-88496-Country Profile: FGM in Senegal, 2015")
       file_path = item_path.join("Senegal_2015.pdf")
       figgy_metadata = item_path.join("figgy_metadata.json")
 
@@ -140,6 +143,7 @@ RSpec.describe Dspace::Downloader do
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01q524jr415"
       # Include DSpace IDs so we can backtrack later if we must.
       expect(content["local_identifier"]).to eq ["88435/dsp01q524jr415", "88496"]
+      expect(content["source_metadata_identifier"]).to be_nil
     end
   end
 
@@ -177,7 +181,7 @@ RSpec.describe Dspace::Downloader do
       end
 
       it "does not download the bitstream" do
-        downloader.download_item(item)
+        downloader.download_item(item, nil)
 
         expect(File.exist?(mapped_metadata_path)).to be true
         expect(WebMock).not_to have_requested(:get, %r{https://dataspace.princeton.edu/rest/bitstreams/.*/retrieve})
@@ -219,7 +223,7 @@ RSpec.describe Dspace::Downloader do
       end
 
       it "logs a debug message" do
-        downloader.download_item(item)
+        downloader.download_item(item, nil)
 
         expect(Rails.logger).to have_received(:info).with(/No bitstreams for /)
         expect(File.exist?(bitstream_path)).to be false

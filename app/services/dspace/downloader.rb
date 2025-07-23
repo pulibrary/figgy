@@ -2,8 +2,8 @@
 
 module Dspace
   class Downloader
-    attr_reader :collection_handle, :dspace_token, :progress, :logger, :parent_title
-    def initialize(collection_handle:, dspace_token:, collection_dir: nil, collection_resource: nil, ark_mapping: nil, progress: nil, logger: Rails.logger)
+    attr_reader :collection_handle, :dspace_token, :progress, :logger, :parent_title, :order_items
+    def initialize(collection_handle:, dspace_token:, collection_dir: nil, collection_resource: nil, ark_mapping: nil, progress: nil, logger: Rails.logger, order_items: false)
       @collection_handle = collection_handle
       @dspace_token = dspace_token
       @ark_mapping = ark_mapping
@@ -12,14 +12,15 @@ module Dspace
       @collection_resource = collection_resource
       @parent_title = self.collection_resource.title
       @logger = logger
+      @order_items = order_items
     end
 
     def download_all!
       FileUtils.mkdir_p(collection_dir)
       progress_bar unless progress
-      Parallel.each(collection_resource.items, in_threads: 10) do |item|
+      Parallel.each_with_index(collection_resource.items, in_threads: 10) do |item, idx|
         begin
-          download_item(item)
+          download_item(item, idx)
         rescue StandardError => e
           FileUtils.rm_rf(item_path(item))
           logger.info "Failed to download #{item.handle} - #{e.message}"
@@ -27,7 +28,7 @@ module Dspace
         progress_bar.progress += 1 unless progress
       end
       Parallel.each(collection_resource.collections, in_threads: 10) do |item|
-        download_item(item)
+        download_item(item, nil)
         progress_bar.progress += 1 unless progress
       end
     end
@@ -49,19 +50,22 @@ module Dspace
       @collection_dir ||= export_dir.join(collection_resource.ark_ending)
     end
 
-    def item_path(item)
+    def item_path(item, idx = nil)
       # If the ark mapping has a key, put it in the right space.
       mms_id = Array.wrap(ark_mapping[item.handle]).first
-      if mms_id
-        collection_dir.join(mms_id)
-      else
-        collection_dir.join(item.dir_name(parent_title))
-      end
+      dir_name = ""
+      dir_name += "#{(idx + 1).to_s.rjust(3, '0')}-" if order_items
+      dir_name += if mms_id
+                    mms_id.to_s
+                  else
+                    item.dir_name(parent_title)
+                  end
+      collection_dir.join(dir_name)
     end
 
     # rubocop:disable Metrics/AbcSize
-    def download_item(item)
-      item_path = item_path(item)
+    def download_item(item, idx)
+      item_path = item_path(item, idx)
       # We've done this one - skip it
       if File.exist?(item_path.join("figgy_metadata.json"))
         return
@@ -71,7 +75,8 @@ module Dspace
       if item.type == "collection"
         FileUtils.mkdir_p(item_path)
         write_metadata(item, item_path)
-        Downloader.new(collection_handle: item.handle, dspace_token: dspace_token, collection_dir: item_path, collection_resource: item, ark_mapping: ark_mapping, logger: logger).download_all!
+        Downloader.new(collection_handle: item.handle, order_items: true, dspace_token: dspace_token, collection_dir: item_path, collection_resource: item, ark_mapping: ark_mapping,
+                       logger: logger).download_all!
       else
         # If it's one bitstream, put it right in the dir.
         if item.bitstreams.length == 1
@@ -94,8 +99,9 @@ module Dspace
     # rubocop:enable Metrics/AbcSize
 
     def write_metadata(item, item_path)
+      mms_id = Array.wrap(ark_mapping[item.handle]).first
       File.open(item_path.join("figgy_metadata.json"), "w") do |f|
-        f.write({ title: item.title, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.compact.to_json)
+        f.write({ title: item.title, source_metadata_identifier: mms_id, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.compact.to_json)
       end
     end
 
