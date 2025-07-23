@@ -39,6 +39,7 @@ RSpec.describe Dspace::Downloader do
     stub_request(:get, "https://dataspace.princeton.edu/rest/handle/88435/dsp016q182k16g?expand=all")
       .to_return(status: 200, body: File.read(Rails.root.join("spec", "fixtures", "dspace", "monographic_collection.json")), headers: { "Content-Type" => "application/json" })
     stub_item("1672")
+    stub_item("2595")
     stub_item("93362")
     stub_request(:get, %r{https://dataspace.princeton.edu/rest/bitstreams/.*/retrieve})
       .to_return(status: 200, body: File.open(Rails.root.join("spec", "fixtures", "files", "sample.pdf")), headers: {})
@@ -46,6 +47,21 @@ RSpec.describe Dspace::Downloader do
   end
 
   context "when a resource has items" do
+    it "skips any items it fails on, emptying the directory" do
+      stub_request(:get, "https://dataspace.princeton.edu/rest/bitstreams/6113/retrieve")
+        .to_return(status: 400, headers: {})
+      allow(Rails.logger).to receive(:info)
+      downloader = described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: { "88435/dsp012801pg38m" => "9971957363506421" })
+      downloader.download_all!
+
+      expect(Rails.logger).to have_received(:info).with(/Failed to download 88435\/dsp01tx31qh74p/)
+      item_dir = download_path.join("dsp016q182k16g/Recenseamento do Brazil em 1872")
+      expect(File.exist?(item_dir)).to eq true
+
+      item_dir = download_path.join("dsp016q182k16g/Sistematización de-buenas prácticas en materia de")
+      expect(File.exist?(item_dir)).to eq false
+    end
+
     it "downloads all items" do
       downloader = described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: { "88435/dsp012801pg38m" => "9971957363506421" })
       downloader.download_all!
@@ -65,6 +81,14 @@ RSpec.describe Dspace::Downloader do
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01h989r5980"
       # Include DSpace IDs so we can backtrack later if we must.
       expect(content["local_identifier"]).to eq ["88435/dsp01h989r5980", "93362"]
+
+      # Ensure files with slashes get handled and that long names are truncated.
+      item_dir = download_path.join("dsp016q182k16g/Sistematización de-buenas prácticas en materia de")
+      expect(Dir.glob(item_dir.join("*")).length).to eq 2 # 1 PDF, one figgy_metadata.json
+      # Ensure the figgy_metadata.json has the full un-truncated title
+      figgy_metadata = item_dir.join("figgy_metadata.json")
+      content = JSON.parse(File.read(figgy_metadata.to_s))
+      expect(content["title"]).to eq "Sistematización de buenas prácticas en materia de Educación. Ciudadana Intercultural para los Pueblos Indígenas de América Latina en contextos de pobreza"
     end
   end
 
@@ -178,13 +202,13 @@ RSpec.describe Dspace::Downloader do
           body: collection_fixture
         )
 
-        allow(Rails.logger).to receive(:debug)
+        allow(Rails.logger).to receive(:info)
       end
 
       it "logs a debug message" do
         downloader.download_item(item)
 
-        expect(Rails.logger).to have_received(:debug).with(/No bitstreams for /)
+        expect(Rails.logger).to have_received(:info).with(/No bitstreams for /)
         expect(File.exist?(bitstream_path)).to be false
       end
     end

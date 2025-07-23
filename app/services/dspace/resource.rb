@@ -40,6 +40,10 @@ class Dspace::Resource
     resource_data["name"]
   end
 
+  def dir_name
+    name.tr("/", "-")[0..49].strip
+  end
+
   def title
     Array.wrap(metadata["title"]).first
   end

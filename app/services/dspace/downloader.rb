@@ -17,7 +17,12 @@ module Dspace
       FileUtils.mkdir_p(collection_dir)
       progress_bar unless progress
       Parallel.each(collection_resource.items, in_threads: 10) do |item|
-        download_item(item)
+        begin
+          download_item(item)
+        rescue StandardError => e
+          FileUtils.rm_rf(item_path(item))
+          logger.info "Failed to download #{item.handle} - #{e.message}"
+        end
         progress_bar.progress += 1 unless progress
       end
       Parallel.each(collection_resource.collections, in_threads: 10) do |item|
@@ -43,15 +48,19 @@ module Dspace
       @collection_dir ||= export_dir.join(collection_resource.ark_ending)
     end
 
-    # rubocop:disable Metrics/AbcSize
-    def download_item(item)
+    def item_path(item)
       # If the ark mapping has a key, put it in the right space.
       mms_id = Array.wrap(ark_mapping[item.handle]).first
-      item_path = if mms_id
-                    collection_dir.join(mms_id)
-                  else
-                    collection_dir.join(item.name)
-                  end
+      if mms_id
+        collection_dir.join(mms_id)
+      else
+        collection_dir.join(item.dir_name)
+      end
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def download_item(item)
+      item_path = item_path(item)
       # We've done this one - skip it
       if File.exist?(item_path.join("figgy_metadata.json"))
         return
@@ -66,6 +75,7 @@ module Dspace
           download_bitstream(item, item_path, item.bitstreams.first)
         elsif item.bitstreams.empty?
           logger.info "No bitstreams for #{item.handle} #{item.title}. #{(item.resource_data['bitstreams'] || []).map { |x| x['name'] }}"
+          FileUtils.rm_rf(item_path)
           return
         else
           item.bitstreams.each do |bitstream|
@@ -74,7 +84,7 @@ module Dspace
           end
         end
         File.open(item_path.join("figgy_metadata.json"), "w") do |f|
-          f.write({ identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.to_json)
+          f.write({ title: item.name, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.to_json)
         end
       end
     end
@@ -89,7 +99,7 @@ module Dspace
       bitstream_path = item_path.join(bitstream.filename)
       return if File.exist?(bitstream_path)
       resp = item.client.bitstream_client.get("rest#{bitstream.retrieve_link}")
-      logger.info "Broken Link!" unless resp.success?
+      raise "Unable to fetch bitstream #{bitstream.filename}" unless resp.success?
       return unless resp.success?
       File.open(bitstream_path, "wb") do |f|
         f.write resp.body

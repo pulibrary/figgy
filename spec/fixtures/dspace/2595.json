@@ -1,0 +1,257 @@
+{
+  "id": 2595,
+  "name": "Sistematización de/buenas prácticas en materia de Educación. / Ciudadana Intercultural para los Pueblos Indígenas de América Latina en contextos de pobreza",
+  "handle": "88435/dsp01tx31qh74p",
+  "type": "item",
+  "link": "/rest/items/2595",
+  "expand": [],
+  "lastModified": "2013-02-07 09:49:37.497",
+  "parentCollection": {
+    "id": 222,
+    "name": "Monographic reports and papers (Publicly Accessible)",
+    "handle": "88435/dsp016q182k16g",
+    "type": "collection",
+    "link": "/rest/collections/222",
+    "expand": [
+      "parentCommunityList",
+      "parentCommunity",
+      "items",
+      "license",
+      "logo",
+      "all"
+    ],
+    "logo": null,
+    "parentCommunity": null,
+    "parentCommunityList": [],
+    "items": [],
+    "license": null,
+    "copyrightText": "",
+    "introductoryText": "",
+    "shortDescription": "",
+    "sidebarText": "",
+    "numberItems": 2225
+  },
+  "parentCollectionList": [
+    {
+      "id": 222,
+      "name": "Monographic reports and papers (Publicly Accessible)",
+      "handle": "88435/dsp016q182k16g",
+      "type": "collection",
+      "link": "/rest/collections/222",
+      "expand": [
+        "parentCommunityList",
+        "parentCommunity",
+        "items",
+        "license",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "parentCommunityList": [],
+      "items": [],
+      "license": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "numberItems": 2225
+    }
+  ],
+  "parentCommunityList": [
+    {
+      "id": 146,
+      "name": "Princeton University Library",
+      "handle": "88435/dsp01g732d9019",
+      "type": "community",
+      "link": "/rest/communities/146",
+      "expand": [
+        "parentCommunity",
+        "collections",
+        "subCommunities",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "countItems": 13230,
+      "subcommunities": [],
+      "collections": []
+    }
+  ],
+  "metadata": [
+    {
+      "key": "dc.contributor.author",
+      "value": "Castillo, Claribel",
+      "language": null
+    },
+    {
+      "key": "dc.contributor.author",
+      "value": "McLean, Guillermo",
+      "language": null
+    },
+    {
+      "key": "dc.date.accessioned",
+      "value": "2013-01-14T19:52:49Z",
+      "language": null
+    },
+    {
+      "key": "dc.date.available",
+      "value": "2013-01-14T19:52:49Z",
+      "language": null
+    },
+    {
+      "key": "dc.date.issued",
+      "value": "2007",
+      "language": null
+    },
+    {
+      "key": "dc.identifier.isbn",
+      "value": "9789972427930",
+      "language": null
+    },
+    {
+      "key": "dc.identifier.isbn",
+      "value": "9972427935",
+      "language": null
+    },
+    {
+      "key": "dc.identifier.uri",
+      "value": "http://arks.princeton.edu/ark:/88435/dsp01tx31qh74p",
+      "language": null
+    },
+    {
+      "key": "dc.language.iso",
+      "value": "es",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.relation.uri",
+      "value": "http://red.pucp.edu.pe/ridei/files/2012/09/nicaragua.pdf",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.subject",
+      "value": "Latin America",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.subject",
+      "value": "Indigenous peoples",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.subject",
+      "value": "Multicultural education",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.title",
+      "value": "Sistematización de buenas prácticas en materia de Educación. Ciudadana Intercultural para los Pueblos Indígenas de América Latina en contextos de pobreza",
+      "language": "en_US"
+    },
+    {
+      "key": "pu.projectgrantnumber",
+      "value": "690-1011",
+      "language": "en_US"
+    },
+    {
+      "key": "pu.depositor",
+      "value": "Acosta-Rodriguez, Fernando",
+      "language": null
+    },
+    {
+      "key": "dc.publisher.place",
+      "value": "Peru; Nicaragua",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.publisher.corporate",
+      "value": "URACCAN; Fondo Editorial de la Pontificia Universidad Católica del Perú; Red Internacional de Estudios Interculturales",
+      "language": "en_US"
+    }
+  ],
+  "bitstreams": [
+    {
+      "id": 6113,
+      "name": "Sistematizacion_de_buenas_practicas 1/2.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/6113",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": null,
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 1651477,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/6113/retrieve",
+      "checkSum": {
+        "value": "5e984db554dcb4acf58796bcc902963a",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 1,
+      "policies": null
+    },
+    {
+      "id": 6114,
+      "name": "license.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/6114",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "LICENSE",
+      "description": null,
+      "format": "License",
+      "mimeType": "text/plain",
+      "sizeBytes": 677,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/6114/retrieve",
+      "checkSum": {
+        "value": "eed0bb67d228ded438310bb3a7b0d0f5",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 2,
+      "policies": null
+    },
+    {
+      "id": 6706,
+      "name": "Sistematizacion_de_buenas_practicas .pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/6706",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 122217,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/6706/retrieve",
+      "checkSum": {
+        "value": "b4e73ef012a1e0f0d7ef49d790d9e512",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 3,
+      "policies": null
+    }
+  ],
+  "archived": "true",
+  "withdrawn": "false"
+}

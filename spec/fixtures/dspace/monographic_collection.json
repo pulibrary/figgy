@@ -92,6 +92,28 @@
       "bitstreams": null,
       "archived": "true",
       "withdrawn": "false"
+    },
+    {
+      "id": 2595,
+      "name": "Sistematización de/buenas prácticas en materia de Educación. / Ciudadana Intercultural para los Pueblos Indígenas de América Latina en contextos de pobreza",
+      "handle": "88435/dsp01tx31qh74p",
+      "type": "item",
+      "link": "/rest/items/2595",
+      "expand": [
+        "metadata",
+        "parentCollection",
+        "parentCollectionList",
+        "parentCommunityList",
+        "bitstreams",
+        "all"
+      ],
+      "lastModified": "2013-02-07 09:49:37.497",
+      "parentCollection": null,
+      "parentCollectionList": null,
+      "parentCommunityList": null,
+      "bitstreams": null,
+      "archived": "true",
+      "withdrawn": "false"
     }
   ],
   "license": "<p>By agreeing, you are verifying that, to the best of your knowledge,<br>\r\n1. this file meets the guidelines for these collections\r\nas expressed on the Collection Development Sharepoint <a href=\"https://sp.princeton.edu/library/selectors/DSpacePDFLibrary/default.aspx\">DSPACE Digital Publications</a> site; and that<br>\r\n2. if the file is to be publicly available, its content is not restricted by copyright regulations; and also that<br>\r\n3. if access is to be limited to the Princeton Network, it meets Princeton’s license/publishers agreements<br>\r\nQuestions regarding the guidelines may be directed to <a href=\"mailto:pattygb@princeton.edu\">pattygb@princeton.edu</a></p>",

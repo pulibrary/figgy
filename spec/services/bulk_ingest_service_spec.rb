@@ -236,7 +236,7 @@ RSpec.describe BulkIngestService do
         stub_ezid
       end
 
-      it "applies that metadata" do
+      it "applies that metadata, but still imports metadata" do
         ingester.attach_dir(
           base_directory: single_dir,
           file_filters: [".tif"],
@@ -257,6 +257,32 @@ RSpec.describe BulkIngestService do
         expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
         expect(resource.member_ids.length).to eq 2 # color.tif, gray.tif
         expect(resource.depositor).to eq ["tpend"]
+        expect(resource.title).not_to eq ["My Title"] # brought in from figgy_metadata.json
+
+        first_member = Wayfinder.for(resource).members.first
+        expect(first_member.title).to eq ["1"]
+      end
+
+      it "applies metadata if it doesn't import metadata" do
+        ingester.attach_dir(
+          base_directory: single_dir,
+          file_filters: [".tif"],
+          local_identifier: local_id,
+          member_of_collection_ids: [coll.id],
+          depositor: "tpend"
+        )
+
+        updated_collection = query_service.find_by(id: coll.id)
+        decorated_collection = updated_collection.decorate
+        expect(decorated_collection.members.to_a.length).to eq 1
+        expect(decorated_collection.members.first.member_ids.length).to eq 2
+
+        resource = decorated_collection.members.to_a.first
+        expect(resource.local_identifier).to include(local_id)
+        expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
+        expect(resource.member_ids.length).to eq 2 # color.tif, gray.tif
+        expect(resource.depositor).to eq ["tpend"]
+        expect(resource.title).to eq ["My Title"] # brought in from figgy_metadata.json
 
         first_member = Wayfinder.for(resource).members.first
         expect(first_member.title).to eq ["1"]

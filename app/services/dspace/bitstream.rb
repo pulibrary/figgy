@@ -10,7 +10,7 @@ class Dspace::Bitstream
   end
 
   def filename
-    name
+    name.tr("/", "-")
   end
 
   def extension
