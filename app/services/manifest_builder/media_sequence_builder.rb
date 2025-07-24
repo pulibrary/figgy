@@ -10,7 +10,7 @@ class ManifestBuilder
     end
 
     def apply(manifest)
-      return manifest unless resource.leaf_nodes&.first&.mime_type == ["application/pdf"]
+      return manifest unless resource.leaf_nodes&.first&.mime_type == ["application/pdf"] && resource.leaf_nodes&.first&.derivative_partial_files&.empty?
       return manifest if pdf_node.primary_file.preservation_file?
       manifest["mediaSequences"] = [media_sequence]
       manifest

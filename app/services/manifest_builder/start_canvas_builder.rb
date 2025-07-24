@@ -20,7 +20,7 @@ class ManifestBuilder
 
       def path
         canvas_builder.new(
-          ManifestBuilder::LeafNode.new(file_set, resource),
+          Array.wrap(ManifestBuilder::LeafNode.for(file_set, resource)).first,
           resource
         ).path
       end

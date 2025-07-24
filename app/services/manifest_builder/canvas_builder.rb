@@ -9,7 +9,7 @@ class ManifestBuilder
     end
 
     def apply(sequence)
-      return sequence if record.resource.mime_type.include?("application/pdf")
+      return sequence if record.resource.mime_type.include?("application/pdf") && record.resource.derivative_partial_files.empty?
       super
     end
 

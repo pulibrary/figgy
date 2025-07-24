@@ -25,12 +25,12 @@ module BlacklightIiifSearch
     end
 
     def child_manifest_node
-      @child_manifest_node ||= ManifestBuilder::LeafNode.new(
+      @child_manifest_node ||= Array.wrap(ManifestBuilder::LeafNode.for(
         Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.to_resource(
           object: document.to_h
         ),
         parent_manifest_node
-      )
+      )).first
     end
 
     ##

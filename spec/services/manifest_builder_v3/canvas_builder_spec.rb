@@ -13,7 +13,7 @@ RSpec.describe ManifestBuilderV3::CanvasBuilder do
   let(:root_node) { ManifestBuilderV3::RootNode.new(scanned_resource) }
   let(:builder) do
     described_class.new(
-      ManifestBuilderV3::LeafNode.new(record, root_node),
+      ManifestBuilderV3::LeafNode.for(record, root_node),
       root_node,
       iiif_canvas_factory: ManifestBuilderV3::ManifestServiceLocator.iiif_canvas_factory,
       content_builder: ManifestBuilderV3::ManifestServiceLocator.content_builder,

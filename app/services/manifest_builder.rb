@@ -101,8 +101,8 @@ class ManifestBuilder
     # Retrieves the presenters for each member FileSet as a leaf
     # @return [LeafNode]
     def file_set_presenters
-      @file_set_presenters ||= leaf_nodes.map do |node|
-        LeafNode.new(node, self)
+      @file_set_presenters ||= leaf_nodes.flat_map do |node|
+        LeafNode.for(node, self)
       end
     end
 
@@ -389,14 +389,26 @@ class ManifestBuilder
   ##
   # Presenter for Resource instances (usually FileSets) modeled as leaf nodes
   class LeafNode
-    attr_reader :resource, :parent_node
+    def self.for(resource, parent_node)
+      # If it's a PDF we need to render every page.
+      if resource.mime_type.include?("application/pdf") && resource.derivative_partial_files.present?
+        resource.derivative_partial_files.map do |pdf_page|
+          new(resource, parent_node, pdf_page)
+        end
+      else
+        new(resource, parent_node, resource.primary_file)
+      end
+    end
+
+    attr_reader :resource, :parent_node, :file
     delegate :query_service, to: :metadata_adapter
     ##
     # @param [Resource] resource a FileSet resource featured in the IIIF Manifest
     # @param [RootNode] parent_node the node for the parent Work for the FileSet
-    def initialize(resource, parent_node)
+    def initialize(resource, parent_node, file)
       @resource = resource
       @parent_node = parent_node
+      @file = file
     end
 
     delegate :local_identifier, :viewing_hint, :ocr_content, :to_model, to: :resource
@@ -409,7 +421,11 @@ class ManifestBuilder
     # Stringify the image using the decorator
     # @return [String]
     def to_s
-      Valkyrie::ResourceDecorator.new(resource).header
+      if resource.primary_file == file
+        Valkyrie::ResourceDecorator.new(resource).header
+      else
+        file.label.first.to_s
+      end
     end
 
     ##
@@ -444,13 +460,6 @@ class ManifestBuilder
       # @return [String]
       def height
         file.height.first
-      end
-
-      ##
-      # Retrieve the File related to the image resource
-      # @return [File]
-      def file
-        resource.primary_file
       end
 
       ##

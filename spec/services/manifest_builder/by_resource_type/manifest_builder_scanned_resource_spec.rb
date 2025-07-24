@@ -217,7 +217,7 @@ RSpec.describe ManifestBuilder do
     end
   end
 
-  context "when given a PDF ScannedResource", run_real_characterization: true do
+  context "when given a PDF ScannedResource", run_real_derivatives: true, run_real_characterization: true do
     let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
     let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
     before do
@@ -231,6 +231,7 @@ RSpec.describe ManifestBuilder do
       expect(output["mediaSequences"]).to be_nil
       canvases = output["sequences"].first["canvases"]
       expect(canvases.length).to eq 2
+      expect(canvases[0]["label"]).to eq "00000001"
     end
   end
 
