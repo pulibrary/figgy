@@ -36,7 +36,7 @@ class Dspace::Resource
   def dir_name(parent_title = nil)
     name = self.name
     name = self.name.to_s.gsub("#{parent_title} - ", "") if parent_title
-    "#{id}-#{name.gsub(/[\/\[\]]/, '-')[0..49].strip}"
+    name.gsub(/[\/\[\]]/, "-")[0..49].strip.to_s
   end
 
   def title

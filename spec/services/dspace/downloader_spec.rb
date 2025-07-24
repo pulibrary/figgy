@@ -68,8 +68,8 @@ RSpec.describe Dspace::Downloader do
       downloader.download_all!
 
       # Single PDF
-      expect(File.exist?(download_path.join("dsp016q182k16g/9971957363506421/dinner tables.pdf"))).to eq true
-      expect(Dir.glob("#{download_path.join('dsp016q182k16g/9971957363506421')}/*").length).to eq 2 # figgy_metadata.json and one pdf
+      expect(File.exist?(download_path.join("dsp016q182k16g/1672-9971957363506421/dinner tables.pdf"))).to eq true
+      expect(Dir.glob("#{download_path.join('dsp016q182k16g/1672-9971957363506421')}/*").length).to eq 2 # figgy_metadata.json and one pdf
 
       # Multiple PDFs - no mapping, so use title.
       item_dir = download_path.join("dsp016q182k16g/93362-Recenseamento do Brazil em 1872")
@@ -122,10 +122,10 @@ RSpec.describe Dspace::Downloader do
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["title"]).to eq "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles"
       # Serials and series reports (Publicly Accessible) (collection)  // Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles // Item
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-99103970043506421/TheGambia_2015.pdf"))).to eq true
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-88499-99103970043506421/TheGambia_2015.pdf"))).to eq true
       # Single PDF, mapped
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-99103970043506421/TheGambia_2015.pdf"))).to eq true
-      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-99103970043506421/figgy_metadata.json")
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-88499-99103970043506421/TheGambia_2015.pdf"))).to eq true
+      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-88499-99103970043506421/figgy_metadata.json")
       expect(File.exist?(figgy_metadata)).to eq true
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01kd17cw508"
@@ -174,7 +174,7 @@ RSpec.describe Dspace::Downloader do
     end
 
     context "when the Item has been downloaded after it was mapped to a MMS ID" do
-      let(:mapped_path) { download_path.join("#{collection_assigned_name}/#{item_mms_id}") }
+      let(:mapped_path) { download_path.join("#{collection_assigned_name}/#{item.id}-#{item_mms_id}") }
       let(:mapped_metadata_path) { mapped_path.join("figgy_metadata.json") }
 
       before do

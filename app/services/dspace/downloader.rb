@@ -59,6 +59,7 @@ module Dspace
       mms_id = self.mms_id(item)
       dir_name = ""
       dir_name += "#{(idx + 1).to_s.rjust(3, '0')}-" if order_items
+      dir_name += "#{item.id}-"
       dir_name += if mms_id
                     mms_id.to_s
                   else
