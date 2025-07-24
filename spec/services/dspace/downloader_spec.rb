@@ -115,6 +115,12 @@ RSpec.describe Dspace::Downloader do
       downloader = described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: { "88435/dsp01kd17cw508" => "99103970043506421" })
       downloader.download_all!
 
+      # Ensure the directories exist and in the right order.
+      expect(Dir.glob(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles", "*")).select { |x| File.directory?(x) }.map { |x| File.basename(x) }.sort).to eq [
+        "0008494503367-88499-99103970043506421", # Gambia
+        "0008494504235-88496-Country Profile: FGM in Senegal, 2015"
+      ]
+
       # Ensure the full title is in the figgy_metadata.json
       expect(File.exist?(download_path.join("dsp01kh04dp74g/figgy_metadata.json"))).to eq false
       figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/figgy_metadata.json")
@@ -122,10 +128,10 @@ RSpec.describe Dspace::Downloader do
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["title"]).to eq "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles"
       # Serials and series reports (Publicly Accessible) (collection)  // Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles // Item
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-88499-99103970043506421/TheGambia_2015.pdf"))).to eq true
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/0008494503367-88499-99103970043506421/TheGambia_2015.pdf"))).to eq true
       # Single PDF, mapped
-      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-88499-99103970043506421/TheGambia_2015.pdf"))).to eq true
-      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/002-88499-99103970043506421/figgy_metadata.json")
+      expect(File.exist?(download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/0008494503367-88499-99103970043506421/TheGambia_2015.pdf"))).to eq true
+      figgy_metadata = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/0008494503367-88499-99103970043506421/figgy_metadata.json")
       expect(File.exist?(figgy_metadata)).to eq true
       content = JSON.parse(File.read(figgy_metadata.to_s))
       expect(content["identifier"]).to eq "http://arks.princeton.edu/ark:/88435/dsp01kd17cw508"
@@ -134,7 +140,7 @@ RSpec.describe Dspace::Downloader do
       expect(content["source_metadata_identifier"]).to eq "99103970043506421"
 
       # Single PDF, unmapped
-      item_path = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/001-88496-Country Profile: FGM in Senegal, 2015")
+      item_path = download_path.join("dsp01kh04dp74g/2186-28 Too Many FGM Country Profiles/0008494504235-88496-Country Profile: FGM in Senegal, 2015")
       file_path = item_path.join("Senegal_2015.pdf")
       figgy_metadata = item_path.join("figgy_metadata.json")
 

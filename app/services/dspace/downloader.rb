@@ -58,7 +58,8 @@ module Dspace
       # If the ark mapping has a key, put it in the right space.
       mms_id = self.mms_id(item)
       dir_name = ""
-      dir_name += "#{(idx + 1).to_s.rjust(3, '0')}-" if order_items
+      # Sort by accessioned date if we got it, otherwise use idx.
+      dir_name += "#{item.inverse_accessioned_date_timestamp&.to_s&.rjust(13, '0') || (idx + 1).to_s.rjust(3, '0')}-" if order_items
       dir_name += "#{item.id}-"
       dir_name += if mms_id
                     mms_id.to_s
@@ -70,12 +71,13 @@ module Dspace
 
     # rubocop:disable Metrics/AbcSize
     def download_item(item, idx)
+      item.reload_data! if order_items # We need accessioned_date :(
       item_path = item_path(item, idx)
       # We've done this one - skip it
       if File.exist?(item_path.join("figgy_metadata.json"))
         return
       end
-      item.reload_data!
+      item.reload_data! unless order_items
       # Ingesting a collection - launch a sub-downloader.
       if item.type == "collection"
         FileUtils.mkdir_p(item_path)

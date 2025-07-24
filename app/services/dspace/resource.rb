@@ -39,6 +39,17 @@ class Dspace::Resource
     name.gsub(/[\/\[\]]/, "-")[0..49].strip.to_s
   end
 
+  def accessioned_date
+    resource_data["metadata"].find { |hsh| hsh["key"] == "dc.date.accessioned" }&.fetch("value")
+  end
+
+  # Seconds until the end of the epoch timestamp - a way to do reverse sort on
+  # accessioned date.
+  def inverse_accessioned_date_timestamp
+    return nil unless accessioned_date
+    9_999_999_999 - accessioned_date&.to_datetime&.to_i
+  end
+
   def title
     name
   end
