@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require "rails_helper"
+# TODO: Check order, fix display of nested PDFs.
 
 RSpec.describe Dspace::Downloader do
   subject(:downloader) { described_class.new(collection_handle: handle, dspace_token: token, ark_mapping: ark_mapping) }
@@ -153,6 +154,13 @@ RSpec.describe Dspace::Downloader do
       expect(output).to be_a(Hash)
       expect(output).to have_key(item_handle)
       expect(output[item_handle]).to include(item_mms_id)
+    end
+  end
+
+  describe "#mms_id" do
+    it "strips out any odd characters from the CSV mapping" do
+      output = downloader.mms_id(Dspace::Resource.new({ "handle" => "88435/dsp013484zk75b" }, nil))
+      expect(output.split("").first).to eq "9"
     end
   end
 

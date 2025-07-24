@@ -50,9 +50,13 @@ module Dspace
       @collection_dir ||= export_dir.join(collection_resource.ark_ending)
     end
 
+    def mms_id(item)
+      Array.wrap(ark_mapping[item.handle]).first.to_s.gsub(/[^0-9]/, "").presence
+    end
+
     def item_path(item, idx = nil)
       # If the ark mapping has a key, put it in the right space.
-      mms_id = Array.wrap(ark_mapping[item.handle]).first
+      mms_id = self.mms_id(item)
       dir_name = ""
       dir_name += "#{(idx + 1).to_s.rjust(3, '0')}-" if order_items
       dir_name += if mms_id
@@ -99,7 +103,7 @@ module Dspace
     # rubocop:enable Metrics/AbcSize
 
     def write_metadata(item, item_path)
-      mms_id = Array.wrap(ark_mapping[item.handle]).first
+      mms_id = self.mms_id(item)
       File.open(item_path.join("figgy_metadata.json"), "w") do |f|
         f.write({ title: item.title, source_metadata_identifier: mms_id, identifier: item.ark, local_identifier: [item.handle, item.id.to_s].select(&:present?) }.compact.to_json)
       end
