@@ -155,7 +155,7 @@ class FileAppender
     # Extensions for primary_files that shouldn't be used as thumbnails.
     # @return [Array<String>] the file extensions
     def no_thumbnail_extensions
-      [".xml", ".pdf"]
+      [".xml"]
     end
 
     # Returns a thumbnail id for the parent and a array of file_sets.

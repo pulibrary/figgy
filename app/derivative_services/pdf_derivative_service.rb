@@ -27,9 +27,8 @@ class PDFDerivativeService
 
   def create_derivatives
     buffered do
-      update_pdf_use
       tiffs = convert_pages
-      add_file_sets(tiffs)
+      add_pages(tiffs)
       update_error_message(message: nil) if target_file.error_message.present?
     rescue StandardError => e
       change_set_persister.after_rollback.add do
@@ -50,13 +49,15 @@ class PDFDerivativeService
     end
   end
 
-  def add_file_sets(files)
-    resource = parent
-    files.each_slice(page_slice) do |file_slice|
-      change_set = ChangeSet.for(resource)
-      change_set.validate(files: file_slice)
-      resource = change_set_persister.save(change_set: change_set)
+  def add_pages(files)
+    change_set.files = files.to_a
+    change_set_persister.buffer_into_index do |buffered_persister|
+      @resource = buffered_persister.save(change_set: change_set)
     end
+  end
+
+  def change_set
+    @change_set ||= ChangeSet.for(resource)
   end
 
   def parent
@@ -65,13 +66,12 @@ class PDFDerivativeService
 
   # Delete the filesets that were generated from the pdf.
   def cleanup_derivatives
-    # if there's no parent, it's been deleted and its members are cleaned via
-    # change set persister callbacks
-    return unless parent
-    intermediate_derivatives = Wayfinder.for(parent).members.select do |member|
-      member.intermediate_files.present? && member.primary_file.original_filename.first.starts_with?("converted_from_pdf")
+    deleted_file_metadata_identifiers = resource.derivative_partial_files.select(&:derivative_partial?).flat_map(&:file_identifiers)
+    change_set.file_metadata = change_set.file_metadata.reject(&:derivative_partial?)
+    buffered do
+      @resource = change_set_persister.save(change_set: change_set)
     end
-    intermediate_derivatives.each { |fs| cleanup_file_set(fs) }
+    CleanupFilesJob.perform_later(file_identifiers: deleted_file_metadata_identifiers.map(&:to_s))
   end
 
   def cleanup_file_set(file_set)
@@ -101,32 +101,38 @@ class PDFDerivativeService
     files = Array.new(pages).lazy.each_with_index.map do |_, page|
       location = temporary_output(page).to_s
       generate_pdf_image(filename, location, page)
-      build_file(page + 1, location)
     end
     files
   end
 
   def generate_pdf_image(filename, location, page)
-    FiggyUtils.with_rescue([ZeroByteError], retries: 1) do
+    FiggyUtils.with_rescue([PDFDerivativeService::ZeroByteError], retries: 1) do
       convert_pdf_page(filename, location, page)
     end
   end
 
   def convert_pdf_page(filename, location, page)
-    `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --access sequential`
-    raise(ZeroByteError, "Failed to generate PDF derivative #{location} - page #{page}.") if File.size(location).zero?
+    image = Vips::Image.pdfload(filename, access: :sequential, page: page, n: 1)
+    VipsDerivativeService.save_tiff(image, location.to_s)
+    raise(PDFDerivativeService::ZeroByteError, "Failed to generate PDF derivative #{location} - page #{page}.") if File.size(location).zero?
+    build_file(image, page + 1, location)
   end
 
-  def build_file(page, file_path)
+  def build_file(image, page, file_path)
+    upload_options = {
+      metadata: {
+        "width" => image.width.to_s,
+        "height" => image.height.to_s
+      }
+    }
+
     IngestableFile.new(
-      file_path: file_path,
+      file_path: file_path.to_s,
       mime_type: "image/tiff",
-      use: ::PcdmUse::IntermediateFile,
-      original_filename: "converted_from_pdf_page_#{page}.tiff",
-      container_attributes: {
-        title: pad_with_zeroes(page)
-      },
-      copy_before_ingest: true
+      original_filename: "page_#{page}.tif",
+      use: ::PcdmUse::ServiceFilePartial,
+      upload_options: upload_options,
+      node_attributes: { page: page, label: pad_with_zeroes(page), width: image.width.to_s, height: image.height.to_s }
     )
   end
 
@@ -152,15 +158,6 @@ class PDFDerivativeService
 
   def persister
     change_set_persister.metadata_adapter.persister
-  end
-
-  def update_pdf_use
-    pdf_file_metadata = resource.file_metadata.select { |f| f.use == [::PcdmUse::OriginalFile] }.find(&:pdf?)
-    return unless pdf_file_metadata
-
-    pdf_file_metadata.use = [::PcdmUse::PreservationFile]
-    resource.file_metadata = resource.file_metadata.select { |x| x.id != pdf_file_metadata.id } + [pdf_file_metadata]
-    persister.save(resource: resource)
   end
 
   # Updates error message property on the primary file.

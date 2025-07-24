@@ -23,6 +23,7 @@ class IngestableFile < Valkyrie::Resource
   #   `lae_storage` or `disk_via_copy` storage adapter, which is the case for the
   #   various bulk ingest jobs.
   attribute :copy_before_ingest, Valkyrie::Types::Bool
+  attribute :upload_options, Valkyrie::Types::Hash.optional
 
   def content_type
     mime_type

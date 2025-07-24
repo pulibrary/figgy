@@ -16,6 +16,19 @@ class VipsDerivativeService
     end
   end
 
+  def self.save_tiff(vips_image, path)
+    vips_image.tiffsave(
+      path,
+      compression: :jpeg,
+      tile: true,
+      pyramid: true,
+      Q: 90,
+      tile_width: 1024,
+      tile_height: 1024,
+      strip: true
+    )
+  end
+
   class IoDecorator < SimpleDelegator
     attr_reader :original_filename, :content_type, :use, :upload_options
     def initialize(io, original_filename, content_type, use, upload_options: {})
@@ -81,16 +94,7 @@ class VipsDerivativeService
   end
 
   def run_derivatives
-    vips_image.tiffsave(
-      temporary_output.path.to_s,
-      compression: :jpeg,
-      tile: true,
-      pyramid: true,
-      Q: 90,
-      tile_width: 1024,
-      tile_height: 1024,
-      strip: true
-    )
+    self.class.save_tiff(vips_image, temporary_output.path.to_s)
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
   end
 

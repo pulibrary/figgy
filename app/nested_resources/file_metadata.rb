@@ -31,6 +31,7 @@ class FileMetadata < Valkyrie::Resource
 
   # PDF Metadata
   attribute :page_count, Valkyrie::Types::Integer
+  attribute :page, Valkyrie::Types::Integer
 
   # Caption Metadata
   attribute :caption_language, Valkyrie::Types::Set

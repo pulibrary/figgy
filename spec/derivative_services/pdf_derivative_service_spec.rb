@@ -51,28 +51,29 @@ RSpec.describe PDFDerivativeService do
   describe "#create_derivatives" do
     context "when there are no errors", run_real_derivatives: true, run_real_characterization: true do
       with_queue_adapter :inline
-      it "creates an intermediate tiff for each page and marks the pdf as preservation file" do
+      it "creates a pyramidal tiff in cloud storage for each page" do
         valid_resource
 
         reloaded_members = query_service.find_members(resource: scanned_resource)
+        # There's only the PDF FileSet
+        expect(reloaded_members.length).to eq 1
+        file_set = reloaded_members.first
+        derivative_partials = file_set.derivative_partial_files
 
-        expect(reloaded_members.reject { |fs| fs.preservation_file.nil? }.map(&:id).first).to eq valid_resource.id
-        intermediate_files = reloaded_members.reject { |fs| fs.intermediate_file.nil? }
-        expect(intermediate_files.count).to eq 2
-        expect(intermediate_files.first.title).to eq ["00000001"]
-        expect(intermediate_files.last.title).to eq ["00000002"]
-        expect(intermediate_files.first.intermediate_file.checksum.first).not_to eq intermediate_files.last.intermediate_file.checksum.first
-        # Ensure the derivative is created with a decent size for better
-        # quality.
-        intermediate_file = intermediate_files.first.intermediate_file
-        intermediate_disk_file = Valkyrie::StorageAdapter.find_by(id: intermediate_file.file_identifiers.first)
-        vips_image = Vips::Image.new_from_file(intermediate_disk_file.disk_path.to_s)
+        expect(derivative_partials.length).to eq 2 # One partial per file.
+        first_partial = derivative_partials.first
+        expect(first_partial.page).to eq 1
+        expect(first_partial.label).to eq ["00000001"]
+        expect(first_partial.width).to eq ["612"]
+        expect(first_partial.height).to eq ["792"]
+        first_partial_file = Valkyrie::StorageAdapter.find_by(id: first_partial.file_identifiers.first)
+        vips_image = Vips::Image.new_from_file(first_partial_file.disk_path.to_s)
         # Don't upscale.
         expect(vips_image.width).to eq 612
 
-        # Ensure the thumbnail is set to the first derivative.
+        # Ensure the thumbnail is set to the PDF.
         reloaded_resource = query_service.find_by(id: scanned_resource.id)
-        expect(reloaded_resource.thumbnail_id).to eq [intermediate_files.first.id]
+        expect(reloaded_resource.thumbnail_id).to eq [file_set.id]
       end
     end
 
@@ -113,8 +114,8 @@ RSpec.describe PDFDerivativeService do
         expect { service.create_derivatives }.not_to raise_error
 
         reloaded_members = query_service.find_members(resource: scanned_resource)
-        expect(reloaded_members.count).to eq 3
-        file = Valkyrie::StorageAdapter.find_by(id: reloaded_members.last.intermediate_file.file_identifiers.first)
+        expect(reloaded_members.count).to eq 1
+        file = Valkyrie::StorageAdapter.find_by(id: reloaded_members.first.derivative_partial_files.first.file_identifiers.first)
         expect(file.size).not_to eq 0
       end
     end
@@ -145,15 +146,13 @@ RSpec.describe PDFDerivativeService do
   describe "#cleanup_derivatives", run_real_derivatives: true, run_real_characterization: true do
     with_queue_adapter :inline
     before { valid_resource }
-    it "deletes all intermediate files with original_filename starting 'converted_from_pdf'" do
+    it "clears all the derivative partials" do
       derivative_service.new(id: valid_resource.id).cleanup_derivatives
 
       reloaded_members = query_service.find_members(resource: scanned_resource)
       expect(reloaded_members.count).to eq 1
       expect(reloaded_members.first.id).to eq valid_resource.id
-
-      intermediate_files = reloaded_members.reject { |fs| fs.intermediate_file.nil? }
-      expect(intermediate_files).to be_empty
+      expect(reloaded_members.first.derivative_partial_files.length).to eq 0
     end
   end
 end
