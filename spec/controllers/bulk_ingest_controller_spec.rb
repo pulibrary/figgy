@@ -316,13 +316,12 @@ RSpec.describe BulkIngestController do
       reloaded1 = query_service.find_by(id: folder1.id)
       reloaded2 = query_service.find_by(id: folder2.id)
 
-      # 6 files, 2 extras get made because the PDF generates two derivatives and
-      # attaches them.
-      expect(reloaded1.member_ids.length).to eq 8
+      # 6 files
+      expect(reloaded1.member_ids.length).to eq 6
       expect(reloaded2.member_ids.length).to eq 2
 
       file_sets = query_service.find_members(resource: reloaded1)
-      expect(file_sets.flat_map(&:mime_type).to_a).to eq ["image/tiff", "audio/mpeg", "audio/x-wav", "video/mp4", "image/tiff", "application/pdf", "image/tiff", "image/tiff"]
+      expect(file_sets.flat_map(&:mime_type).to_a).to eq ["image/tiff", "audio/mpeg", "audio/x-wav", "video/mp4", "image/tiff", "application/pdf"]
 
       file_sets = query_service.find_members(resource: reloaded2)
       expect(file_sets.flat_map(&:title).to_a).to eq ["1", "2"]

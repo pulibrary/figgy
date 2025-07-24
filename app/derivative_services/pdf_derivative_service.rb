@@ -65,10 +65,10 @@ class PDFDerivativeService
   end
 
   # Delete the filesets that were generated from the pdf.
-  # TODO: Also cleanup the old versions if they're around.
+  # TODO: Also cleanup the old versions (derivatives of intermediate files) if they're around.
   def cleanup_derivatives
     deleted_file_metadata_identifiers = resource.derivative_partial_files.select(&:derivative_partial?).flat_map(&:file_identifiers)
-    change_set.file_metadata = change_set.file_metadata.reject(&:derivative_partial?)
+    change_set.validate(file_metadata: change_set.file_metadata.reject(&:derivative_partial?))
     buffered do
       @resource = change_set_persister.save(change_set: change_set)
     end

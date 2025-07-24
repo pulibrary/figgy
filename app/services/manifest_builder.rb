@@ -391,7 +391,7 @@ class ManifestBuilder
   class LeafNode
     def self.for(resource, parent_node)
       # If it's a PDF we need to render every page.
-      if resource.mime_type.include?("application/pdf") && resource.derivative_partial_files.present?
+      if resource.mime_type&.include?("application/pdf") && resource.derivative_partial_files.present?
         resource.derivative_partial_files.map do |pdf_page|
           new(resource, parent_node, pdf_page)
         end

@@ -48,7 +48,8 @@ RSpec.describe CDL::AutomaticCompleter do
         described_class.run
 
         resource = query_service.find_by(id: resource.id)
-        expect(resource.member_ids.length).to eq 3
+        expect(resource.member_ids.length).to eq 1
+        expect(Wayfinder.for(resource).members.first.derivative_partial_files.length).to eq 2
         expect(resource.state).to eq ["complete"]
         expect(ActionMailer::Base.deliveries.size).to eq 1
         mail = ActionMailer::Base.deliveries.first
