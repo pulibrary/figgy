@@ -441,7 +441,7 @@ class ManifestBuilder
     end
 
     def display_image_url
-      helper.manifest_image_medium_path(resource)
+      helper.manifest_image_medium_path(resource, file)
     rescue
       ""
     end
@@ -466,8 +466,8 @@ class ManifestBuilder
       # Retrieve an instance of the IIIFManifest::IIIFEndpoint for the service endpoint
       # @return [IIIFManifest::IIIFEndpoint]
       def endpoint
-        return unless resource.derivative_file
-        IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(resource),
+        return unless resource.derivative_file || resource.derivative_partial_files.present?
+        IIIFManifest::IIIFEndpoint.new(helper.manifest_image_path(resource, file),
                                        profile: "http://iiif.io/api/image/2/level2.json")
       end
 
@@ -529,11 +529,11 @@ class ManifestBuilder
     # Retrieve the base URL for Riiif
     # @param [String] id identifier for the image resource
     # @return [String]
-    def manifest_image_path(resource)
+    def manifest_image_path(resource, file_metadata = nil)
       if (Rails.env.development? && Figgy.config["pyramidals_bucket"].blank?) || Rails.env.test?
-        RiiifHelper.new.base_url(resource.id)
+        RiiifHelper.new.base_url("#{resource.id}~#{file_metadata&.id || resource.pyramidal_derivative&.id}")
       else
-        PyramidalHelper.new.base_url(resource)
+        PyramidalHelper.new.base_url(resource, file_metadata = nil)
       end
     end
 
@@ -542,19 +542,19 @@ class ManifestBuilder
     # @param [FileSet] resource A FileSet to generate a
     #   thumbnail URL from.
     # @return [String]
-    def manifest_image_thumbnail_path(resource)
-      "#{manifest_image_path(resource)}/full/!200,150/0/default.jpg"
+    def manifest_image_thumbnail_path(resource, file_metadata = nil)
+      "#{manifest_image_path(resource, file_metadata)}/full/!200,150/0/default.jpg"
     end
 
-    def manifest_image_medium_path(resource)
-      "#{manifest_image_path(resource)}/full/1000,/0/default.jpg"
+    def manifest_image_medium_path(resource, file_metadata = nil)
+      "#{manifest_image_path(resource, file_metadata)}/full/1000,/0/default.jpg"
     end
   end
 
   # Returns the URL for pyramidal objects stored in S3.
   class PyramidalHelper
-    def base_url(file_set)
-      file_metadata = file_set.pyramidal_derivative
+    def base_url(file_set, file_metadata = nil)
+      file_metadata ||= file_set.pyramidal_derivative
       raise Valkyrie::Persistence::ObjectNotFoundError, file_set.id if file_metadata.nil?
       begin
         file = file_metadata.file_identifiers[0].to_s.gsub(/^.*:\/\//, "")
