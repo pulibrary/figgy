@@ -533,7 +533,7 @@ class ManifestBuilder
       if (Rails.env.development? && Figgy.config["pyramidals_bucket"].blank?) || Rails.env.test?
         RiiifHelper.new.base_url("#{resource.id}~#{file_metadata&.id || resource.pyramidal_derivative&.id}")
       else
-        PyramidalHelper.new.base_url(resource, file_metadata = nil)
+        PyramidalHelper.new.base_url(resource, file_metadata)
       end
     end
 
