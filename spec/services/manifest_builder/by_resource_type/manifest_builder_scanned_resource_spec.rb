@@ -234,6 +234,40 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when given a deeply nested serial resource with PDFs", run_real_characterization: true do
+    let(:file_1) { fixture_file_upload("files/sample.pdf", "application/pdf") }
+    let(:file_2) { fixture_file_upload("files/sample.pdf", "application/pdf") }
+    before do
+      stub_catalog(bib_id: "991234563506421")
+    end
+    it "builds a MVW manifest that leads to a flattened manifest", run_real_characterization: true, run_real_derivatives: true do
+      part1 = FactoryBot.create_for_repository(:scanned_resource, title: "Part 1", files: [file_1])
+      part2 = FactoryBot.create_for_repository(:scanned_resource, title: "Part 2", files: [file_2])
+      issue = FactoryBot.create_for_repository(:scanned_resource, title: "Issue", member_ids: [part1.id, part2.id])
+      serial = FactoryBot.create_for_repository(:scanned_resource, title: "Serial", member_ids: [issue.id])
+      builder = described_class.new(query_service.find_by(id: serial.id))
+      output = builder.build
+
+      expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{issue.id}/manifest?flatten=true"
+
+      issue_builder = described_class.new(query_service.find_by(id: issue.id), nil, nil, true)
+      output = issue_builder.build
+      expect(output["manifests"]).to be_blank
+      expect(output["structures"]).not_to be_blank
+
+      # Combine both PDFs into one.
+      expect(output["sequences"][0]["canvases"].length).to eq 4
+
+      # Two ranges at top level pointing to the parts.
+      expect(output["structures"][0]["ranges"].length).to eq 2
+      expect(output["structures"][1]["label"]).to eq "Part 1"
+      # Point to first non-pdf canvas of the first part.
+      expect(output["structures"][1]["canvases"]).to eq ["http://www.example.com/concern/scanned_resources/#{issue.id}/manifest/canvas/#{Wayfinder.for(part1).members.second.id}"]
+      expect(output["structures"][2]["label"]).to eq "Part 2"
+      expect(output["structures"][2]["canvases"]).to eq ["http://www.example.com/concern/scanned_resources/#{issue.id}/manifest/canvas/#{Wayfinder.for(part2).members.second.id}"]
+    end
+  end
+
   context "when given a legacy PDF ScannedResource" do
     it "builds a PDF mediaSequence" do
       file_set = FactoryBot.create_for_repository(
