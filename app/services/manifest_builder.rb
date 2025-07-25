@@ -4,8 +4,8 @@ class ManifestBuilder
 
   ##
   # @param [Resource] resource the Resource subject
-  def initialize(resource, auth_token = nil, current_ability = nil)
-    @resource = RootNode.for(resource, auth_token, current_ability)
+  def initialize(resource, auth_token = nil, current_ability = nil, flatten = false)
+    @resource = RootNode.for(resource, auth_token, current_ability, flatten)
   end
 
   ##
@@ -18,7 +18,7 @@ class ManifestBuilder
   ##
   # Presenter modeling the Resource subjects as root nodes
   class RootNode
-    def self.for(resource, auth_token = nil, current_ability = nil)
+    def self.for(resource, auth_token = nil, current_ability = nil, flatten = false)
       case resource
       when Collection
         case ChangeSet.for(resource)
@@ -28,15 +28,15 @@ class ManifestBuilder
           CollectionNode.new(resource, nil, current_ability)
         end
       when EphemeraProject
-        EphemeraProjectNode.new(resource)
+        EphemeraProjectNode.new(resource, nil, nil, flatten)
       when EphemeraFolder
-        EphemeraFolderNode.new(resource)
+        EphemeraFolderNode.new(resource, nil, nil, flatten)
       when IndexCollection
-        IndexCollectionNode.new(resource)
+        IndexCollectionNode.new(resource, nil, nil, flatten)
       when ScannedMap
-        ScannedMapNode.new(resource)
+        ScannedMapNode.new(resource, nil, nil, flatten)
       when Numismatics::Issue
-        Numismatics::IssueNode.new(resource)
+        Numismatics::IssueNode.new(resource, nil, nil, flatten)
       when Playlist
         ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
       else
@@ -44,11 +44,12 @@ class ManifestBuilder
         when RecordingChangeSet
           ManifestBuilderV3::RootNode.for(resource, auth_token, current_ability)
         else
-          new(resource, auth_token)
+          new(resource, auth_token, nil, flatten)
         end
       end
     end
-    attr_reader :resource, :auth_token, :current_ability
+    attr_reader :resource, :auth_token, :current_ability, :flatten
+    attr_accessor :child_of
     delegate :query_service, to: :metadata_adapter
     delegate :decorate, :to_model, :id, to: :resource
 
@@ -58,10 +59,11 @@ class ManifestBuilder
 
     ##
     # @param [Resource] resource the Resource being modeled as the root
-    def initialize(resource, auth_token = nil, current_ability = nil)
+    def initialize(resource, auth_token = nil, current_ability = nil, flatten = false)
       @resource = resource
       @auth_token = auth_token
       @current_ability = current_ability
+      @flatten = flatten
     end
 
     ##
@@ -74,6 +76,10 @@ class ManifestBuilder
 
     def search_enabled?
       resource.try(:ocr_language).present?
+    end
+
+    def sammelband?
+      flatten == true
     end
 
     def description
@@ -93,7 +99,9 @@ class ManifestBuilder
     # @return [RootNode]
     def work_presenters
       @work_presenters ||= (members - leaf_nodes).map do |node|
-        RootNode.for(node)
+        RootNode.for(node).tap do |child_node|
+          child_node.child_of = self
+        end
       end
     end
 
@@ -110,9 +118,34 @@ class ManifestBuilder
     # Retrieves the presenter for each Range (sc:Range) instance
     # @return [TopStructure]
     def ranges
+      return sammelband_ranges if flatten
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure, resource)
       end
+    end
+
+    def sammelband_ranges
+      [
+        TopStructure.new(
+          Structure.new(
+            label: "Logical",
+            nodes: work_presenters.map do |work_presenter|
+              StructureNode.new(
+                label: Array.wrap(work_presenter.to_s).first,
+                nodes: sammelband_work_structure(work_presenter)
+              )
+            end
+          ),
+          resource
+        )
+      ]
+    end
+
+    def sammelband_work_structure(work_presenter)
+      file_set = work_presenter.file_set_presenters.find { |x| x.resource.mime_type != ["application/pdf"] }
+      [
+        StructureNode.new(label: file_set.to_s, proxy: file_set.id)
+      ]
     end
 
     def collection?
@@ -123,7 +156,12 @@ class ManifestBuilder
     # Helper method for generating the URL to the resource manifest
     # @return [String]
     def manifest_url
-      helper.manifest_url(resource)
+      # We're a child resource being embedded - make sure our URL flattens.
+      if child_of.present?
+        "#{helper.manifest_url(resource)}?flatten=true"
+      else
+        helper.manifest_url(resource)
+      end
     end
 
     # Generate the IIIF Manifest metadata using the resource decorator

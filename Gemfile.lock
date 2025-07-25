@@ -1160,6 +1160,7 @@ DEPENDENCIES
   ezid-client (= 1.9.4)
   factory_bot_rails
   faker
+  faraday-retry
   filewatcher (~> 1.0)
   flutie
   font-awesome-rails
@@ -1206,6 +1207,7 @@ DEPENDENCIES
   omniauth (= 2.1.2)
   omniauth-cas (= 3.0.0)
   openseadragon
+  parallel
   parallel_tests
   pdf-reader!
   pg
