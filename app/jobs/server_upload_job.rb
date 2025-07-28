@@ -16,7 +16,11 @@ class ServerUploadJob < ApplicationJob
         if attach_uploads.present?
           change_set = ChangeSet.for(resource)
           change_set.validate(files: attach_uploads)
-          buffered_change_set_persister.save(change_set: change_set)
+          begin
+            buffered_change_set_persister.save(change_set: change_set)
+          rescue Sequel::DatabaseDisconnectError
+            Honeybadger.notify "ServerUploadJob not retrying due to Sequel::DatabaseDisconnectError, resource_id: #{resource_id}"
+          end
         end
       end
     end

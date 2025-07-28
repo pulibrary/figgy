@@ -30,4 +30,26 @@ RSpec.describe ServerUploadJob do
       expect(propagated_resources.map(&:id)).not_to include(resource.id)
     end
   end
+
+  context "when the resource is so big the database transaction expires" do
+    it "does not retry" do
+      pending_upload = PendingUpload.new(
+        id: SecureRandom.uuid,
+        storage_adapter_id: "disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"
+      )
+      resource = FactoryBot.create_for_repository(:scanned_resource, pending_uploads: [pending_upload])
+
+      buffered_csp_mock = instance_double(ChangeSetPersister::Basic)
+      allow(buffered_csp_mock).to receive(:save).and_raise(Sequel::DatabaseDisconnectError)
+      allow(buffered_csp_mock).to receive(:prevent_propagation!)
+      allow(buffered_csp_mock).to receive(:query_service).and_return(ChangeSetPersister.default.query_service)
+      csp_mock = instance_double(ChangeSetPersister::Basic)
+      allow(csp_mock).to receive(:buffer_into_index).and_yield(buffered_csp_mock)
+      allow_any_instance_of(described_class).to receive(:change_set_persister).and_return(csp_mock)
+      allow(Honeybadger).to receive(:notify)
+
+      expect { described_class.perform_now(resource.id.to_s, [pending_upload.id.to_s]) }.not_to raise_error(Sequel::DatabaseDisconnectError)
+      expect(Honeybadger).to have_received(:notify)
+    end
+  end
 end
