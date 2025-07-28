@@ -157,7 +157,8 @@ class ManifestBuilder
     # @return [String]
     def manifest_url
       # We're a child resource being embedded - make sure our URL flattens.
-      if child_of.present?
+      # Don't flatten collections, they're used for DPUL indexing.
+      if child_of.present? && !child_of.try(:collection?)
         "#{helper.manifest_url(resource)}?flatten=true"
       else
         helper.manifest_url(resource)
