@@ -259,7 +259,8 @@ RSpec.describe BulkIngestService do
         expect(resource.viewing_hint).to eq ["paged"] # brought in from figgy_metadata.json
         expect(resource.member_ids.length).to eq 2 # color.tif, gray.tif
         expect(resource.depositor).to eq ["tpend"]
-        expect(resource.title).not_to eq ["My Title"] # brought in from figgy_metadata.json
+        expect(resource.title.first.to_s).to eq "Bible, Latin." # Imported from source_metadata_identifier.
+        expect(resource.title).not_to include "My Title" # figgy_metadata.json has this defined, it gets overridden by the above imported title.
 
         first_member = Wayfinder.for(resource).members.first
         expect(first_member.title).to eq ["1"]

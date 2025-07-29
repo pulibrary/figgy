@@ -72,21 +72,30 @@ as `https://arks.princeton.edu/<arkhere>/pdf`. This means that our system needs
 to support that route moving forward, or we would lose access to these pdfs.
 
 
-## Bulk Ingest ETDs from RDSS
+## Bulk Ingest Migrated External Resources
 
-Every year RDSS bulk ingests senior theses and dissertations into Figgy, with
-per-resource visibility and embargoes set. Every thesis has a record in Alma
-identified by an MMS ID.
+We use Bulk Ingest for migrating resources into Figgy. Typically, as we did
+for DSpace, we create a folder structure that looks like this in scratch space:
 
-RDSS sets up a directory structure that looks like this on the isilon:
-
-* 📁 theses_ingest_2022
+* 📁 ingest_folder
     * 📁 \<mmsid\>
         * 💿 figgy_metadata.json
         * 💿 \<filename\>.pdf
     * 📁 \<mmsid\>
         * 💿 figgy_metadata.json
         * 💿 \<filename\>.pdf
+    * 📁 Amazing Item
+        * 📁 001-\<mmsid\>
+          * 💿 figgy_metadata.json
+          * 💿 \<filename\>.pdf
+        * 📁 002-\<mmsid\>
+          * 💿 figgy_metadata.json
+          * 💿 \<filename\>.pdf
+
+Folders that have sub-folders (such as Amazing Item) will create child resources ordered alphabetically.
+If you want the resulting resource title or MMS-ID to be different than the folder name, because
+it needs to sort, then you can add that information to `figgy_metadata.json` and that will take precedence.
+
 
 ### figgy_metadata.json
 
@@ -94,12 +103,11 @@ The JSON file has a structure that looks like this:
 
 ```json
 {
-  "embargo_date": "01/21/2023",
   "visibility": "open",
-  "notice_type": "senior_thesis"
+  "title": "Full Title",
+  "source_metadata_identifier": "<mmsid>"
 }
 ```
-`embargo_date` is in the format `mm/dd/yyyy`, and is optional
 
 `visibility` is either:
 
@@ -110,8 +118,9 @@ The JSON file has a structure that looks like this:
 Room.
 * `private`: Not viewable by anyone (except library staff with Figgy staff/admin access)
 
-`notice_type` being set to "senior_thesis" makes the senior thesis click-through
-in the viewer happen.
+Any field that's valid for a Figgy resource can be in that JSON and it will be imported with the resource.
+If the source metadata identifier is in the JSON then any imported metadata will take precedence over metadata
+in the JSON.
 
 ### Ingest
 
