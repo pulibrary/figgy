@@ -3,6 +3,15 @@ require "rails_helper"
 
 RSpec.describe ServerUploadJob do
   with_queue_adapter :inline
+  context "when a resource is gone" do
+    it "returns false and doesn't error" do
+      pending_upload = PendingUpload.new(
+        id: SecureRandom.uuid,
+        storage_adapter_id: "disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"
+      )
+      expect { described_class.perform_now(SecureRandom.uuid, [pending_upload.id.to_s]) }.not_to raise_error
+    end
+  end
   context "when given a resource and pending upload IDs" do
     it "creates and appends them" do
       pending_upload = PendingUpload.new(
