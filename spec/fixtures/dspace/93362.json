@@ -1,0 +1,1342 @@
+{
+  "id": 93362,
+  "name": "Recenseamento do Brazil em 1872",
+  "handle": "88435/dsp01h989r5980",
+  "type": "item",
+  "link": "/rest/items/93362",
+  "expand": [],
+  "lastModified": "2018-11-10 04:19:33.258",
+  "parentCollection": {
+    "id": 222,
+    "name": "Monographic reports and papers (Publicly Accessible)",
+    "handle": "88435/dsp016q182k16g",
+    "type": "collection",
+    "link": "/rest/collections/222",
+    "expand": [
+      "parentCommunityList",
+      "parentCommunity",
+      "items",
+      "license",
+      "logo",
+      "all"
+    ],
+    "logo": null,
+    "parentCommunity": null,
+    "parentCommunityList": [],
+    "items": [],
+    "license": null,
+    "copyrightText": "",
+    "introductoryText": "",
+    "shortDescription": "",
+    "sidebarText": "",
+    "numberItems": 1982
+  },
+  "parentCollectionList": [
+    {
+      "id": 222,
+      "name": "Monographic reports and papers (Publicly Accessible)",
+      "handle": "88435/dsp016q182k16g",
+      "type": "collection",
+      "link": "/rest/collections/222",
+      "expand": [
+        "parentCommunityList",
+        "parentCommunity",
+        "items",
+        "license",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "parentCommunityList": [],
+      "items": [],
+      "license": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "numberItems": 1982
+    }
+  ],
+  "parentCommunityList": [
+    {
+      "id": 146,
+      "name": "Princeton University Library",
+      "handle": "88435/dsp01g732d9019",
+      "type": "community",
+      "link": "/rest/communities/146",
+      "expand": [
+        "parentCommunity",
+        "collections",
+        "subCommunities",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "countItems": 12954,
+      "subcommunities": [],
+      "collections": []
+    }
+  ],
+  "metadata": [
+    {
+      "key": "dc.contributor.author",
+      "value": "Brazil. Directoria Geral de Estatística",
+      "language": null
+    },
+    {
+      "key": "dc.date.accessioned",
+      "value": "2018-11-09T18:27:51Z",
+      "language": null
+    },
+    {
+      "key": "dc.date.available",
+      "value": "2018-11-09T18:27:51Z",
+      "language": null
+    },
+    {
+      "key": "dc.date.issued",
+      "value": "1874",
+      "language": null
+    },
+    {
+      "key": "dc.identifier.uri",
+      "value": "http://arks.princeton.edu/ark:/88435/dsp01h989r5980",
+      "language": null
+    },
+    {
+      "key": "dc.description",
+      "value": "Voyager bib record for microfilm: 2986798",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.language.iso",
+      "value": "pt",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.relation.uri",
+      "value": "https://biblioteca.ibge.gov.br/index.php/biblioteca-catalogo?view=detalhes&id=225477",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.subject",
+      "value": "Brazil -- Census, 1872",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.title",
+      "value": "Recenseamento do Brazil em 1872",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.title.alternative",
+      "value": "Recenseamento da população do Imperio do Brazil a que se procedeu no dia 1⁰. de agosto de 1872",
+      "language": "en_US"
+    },
+    {
+      "key": "pu.projectgrantnumber",
+      "value": "690-1011",
+      "language": null
+    },
+    {
+      "key": "pu.depositor",
+      "value": "Donatiello, Joann",
+      "language": null
+    },
+    {
+      "key": "dc.publisher.place",
+      "value": "[Rio de Janeiro]",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.publisher.corporate",
+      "value": "[A Directoria]",
+      "language": "en_US"
+    }
+  ],
+  "bitstreams": [
+    {
+      "id": 125297,
+      "name": "DSBrazilCensus1872v1National.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125297",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 1115051,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125297/retrieve",
+      "checkSum": {
+        "value": "b6caf443ba43db8659d38276c8980d73",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 25,
+      "policies": null
+    },
+    {
+      "id": 125298,
+      "name": "DSBrazilCensus1872Alagoas.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125298",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 525828,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125298/retrieve",
+      "checkSum": {
+        "value": "83320852061cc1bd0e1590b2e1d5775e",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 26,
+      "policies": null
+    },
+    {
+      "id": 125299,
+      "name": "DSBrazilCensus1872Amazonas.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125299",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 437477,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125299/retrieve",
+      "checkSum": {
+        "value": "0a6f22926acc59c480f078693b566cc9",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 27,
+      "policies": null
+    },
+    {
+      "id": 125300,
+      "name": "DSBrazilCensus1872Bahia.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125300",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 3343463,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125300/retrieve",
+      "checkSum": {
+        "value": "775bbab9536d11280fa3a726ce6125a4",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 28,
+      "policies": null
+    },
+    {
+      "id": 125301,
+      "name": "DSBrazilCensus1872Ceara.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125301",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 845990,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125301/retrieve",
+      "checkSum": {
+        "value": "eb4ee1159715a7fc094661abd4d10f59",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 29,
+      "policies": null
+    },
+    {
+      "id": 125302,
+      "name": "DSBrazilCensus1872EspiritoSanto.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125302",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 535376,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125302/retrieve",
+      "checkSum": {
+        "value": "2a4453aff7c4c9a562df0127768afe93",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 30,
+      "policies": null
+    },
+    {
+      "id": 125303,
+      "name": "DSBrazilCensus1872Goyaz.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125303",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 991701,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125303/retrieve",
+      "checkSum": {
+        "value": "6993cb0ac67a56b62b8630b1735bc760",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 31,
+      "policies": null
+    },
+    {
+      "id": 125304,
+      "name": "DSBrazilCensus1872Maranhao.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125304",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 1087217,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125304/retrieve",
+      "checkSum": {
+        "value": "763e5b3644a9b433091d131b07085041",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 32,
+      "policies": null
+    },
+    {
+      "id": 125305,
+      "name": "DSBrazilCensus1872MattoGrosso.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125305",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 338829,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125305/retrieve",
+      "checkSum": {
+        "value": "6bed40677757ab1567f79eb52bb71072",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 33,
+      "policies": null
+    },
+    {
+      "id": 125306,
+      "name": "DSBrazilCensus1872MinasGeraesI.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125306",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 3634833,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125306/retrieve",
+      "checkSum": {
+        "value": "bcc7dc7ba9bd26e0cfd30b6c0c0228d4",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 34,
+      "policies": null
+    },
+    {
+      "id": 125327,
+      "name": "DSBrazilCensus1872MinasGeraesII.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125327",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 3600861,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125327/retrieve",
+      "checkSum": {
+        "value": "2136ad3933e78432d712dbada31091fc",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 35,
+      "policies": null
+    },
+    {
+      "id": 125328,
+      "name": "DSBrazilCensus1872MunicipioNeutro.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125328",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 472280,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125328/retrieve",
+      "checkSum": {
+        "value": "aeb031b13a35f54fa272edd4f50e6b17",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 36,
+      "policies": null
+    },
+    {
+      "id": 125329,
+      "name": "DSBrazilCensus1872Para.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125329",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 1406159,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125329/retrieve",
+      "checkSum": {
+        "value": "83211ce435dfd7c9540422caf51f06b1",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 37,
+      "policies": null
+    },
+    {
+      "id": 125330,
+      "name": "DSBrazilCensus1872Parahyba.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125330",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 882605,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125330/retrieve",
+      "checkSum": {
+        "value": "36d337989e340f39255169c4e71f0a19",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 38,
+      "policies": null
+    },
+    {
+      "id": 125331,
+      "name": "DSBrazilCensus1872Parana.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125331",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 496970,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125331/retrieve",
+      "checkSum": {
+        "value": "528a11397a156dba9b0f6ace5a5c4377",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 39,
+      "policies": null
+    },
+    {
+      "id": 125332,
+      "name": "DSBrazilCensus1872Pernambuco.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125332",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 1475166,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125332/retrieve",
+      "checkSum": {
+        "value": "1e5818cd73bccd2e809ce475a4a1f8e0",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 40,
+      "policies": null
+    },
+    {
+      "id": 125333,
+      "name": "DSBrazilCensus1872Piauhy.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125333",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 589343,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125333/retrieve",
+      "checkSum": {
+        "value": "f4c128ee8a8a27a1b489c4f0b2288a4f",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 41,
+      "policies": null
+    },
+    {
+      "id": 125334,
+      "name": "DSBrazilCensus1872RiodeJaneiro.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125334",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 2472422,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125334/retrieve",
+      "checkSum": {
+        "value": "ea9500185fc1beb373b8e8d0ce2de016",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 42,
+      "policies": null
+    },
+    {
+      "id": 125335,
+      "name": "DSBrazilCensus1872RioGrandedoNorte.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125335",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 484582,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125335/retrieve",
+      "checkSum": {
+        "value": "ce1a2859928522575c8fbcfc0c1b3bb3",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 43,
+      "policies": null
+    },
+    {
+      "id": 125336,
+      "name": "DSBrazilCensus1872RioGrandedoSul.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125336",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 1584068,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125336/retrieve",
+      "checkSum": {
+        "value": "db238f4be6f3e81c289d8101f304085a",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 44,
+      "policies": null
+    },
+    {
+      "id": 125337,
+      "name": "DSBrazilCensus1872SantaCatharina.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125337",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 819357,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125337/retrieve",
+      "checkSum": {
+        "value": "d917187d4f33b8192f1298336e950efe",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 45,
+      "policies": null
+    },
+    {
+      "id": 125338,
+      "name": "DSBrazilCensus1872SaoPaulo.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125338",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 2519438,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125338/retrieve",
+      "checkSum": {
+        "value": "124827e5e69f57fda62a157732952a80",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 46,
+      "policies": null
+    },
+    {
+      "id": 125339,
+      "name": "DSBrazilCensus1872Sergipe.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125339",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 520968,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125339/retrieve",
+      "checkSum": {
+        "value": "5b1cf72a37bace37337fd3c26b2058d0",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 47,
+      "policies": null
+    },
+    {
+      "id": 125089,
+      "name": "DSBrazilCensus1872v1National.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125089",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "[T]Nati/onal",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 25414978,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125089/retrieve",
+      "checkSum": {
+        "value": "2ee8ffdbc7c07fdfcff9725963fe0d60",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 1,
+      "policies": null
+    },
+    {
+      "id": 125090,
+      "name": "DSBrazilCensus1872Alagoas.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125090",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Alagoas",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 13850904,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125090/retrieve",
+      "checkSum": {
+        "value": "7a2a60857ddc6cabcab2cbf458f280b3",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 2,
+      "policies": null
+    },
+    {
+      "id": 125091,
+      "name": "DSBrazilCensus1872Amazonas.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125091",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Amazonas",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 8542922,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125091/retrieve",
+      "checkSum": {
+        "value": "ead05d9e55778181848dff3e9dbb1c82",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 3,
+      "policies": null
+    },
+    {
+      "id": 125144,
+      "name": "DSBrazilCensus1872Bahia.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125144",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Bahia",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 70922021,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125144/retrieve",
+      "checkSum": {
+        "value": "3ac1f1bce99324cc377fa6829414559f",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 4,
+      "policies": null
+    },
+    {
+      "id": 125092,
+      "name": "DSBrazilCensus1872Ceara.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125092",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Ceara",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 27297850,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125092/retrieve",
+      "checkSum": {
+        "value": "d453c63d601f858ac1e413a537c68745",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 5,
+      "policies": null
+    },
+    {
+      "id": 125093,
+      "name": "DSBrazilCensus1872EspiritoSanto.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125093",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Espirito Santo",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 12133224,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125093/retrieve",
+      "checkSum": {
+        "value": "c7b5a4debf7444a41612972f9b55e5f4",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 6,
+      "policies": null
+    },
+    {
+      "id": 125145,
+      "name": "DSBrazilCensus1872Goyaz.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125145",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Goyaz",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 23159303,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125145/retrieve",
+      "checkSum": {
+        "value": "df74f782218719a198ae49219fccf608",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 7,
+      "policies": null
+    },
+    {
+      "id": 125146,
+      "name": "DSBrazilCensus1872Maranhao.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125146",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Maranhao",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 21990168,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125146/retrieve",
+      "checkSum": {
+        "value": "d94e0d8754c834f30586e10acd068f20",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 8,
+      "policies": null
+    },
+    {
+      "id": 125094,
+      "name": "DSBrazilCensus1872MattoGrosso.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125094",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Matto Grosso",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 7630066,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125094/retrieve",
+      "checkSum": {
+        "value": "78e29d539323e58276219fdd4c9ed8f1",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 9,
+      "policies": null
+    },
+    {
+      "id": 125095,
+      "name": "DSBrazilCensus1872MinasGeraesI.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125095",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Minas Geraes part 1",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 74766746,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125095/retrieve",
+      "checkSum": {
+        "value": "547e1cc6b5763047e9d92e4bb0afa030",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 10,
+      "policies": null
+    },
+    {
+      "id": 125147,
+      "name": "DSBrazilCensus1872MinasGeraesII.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125147",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Minas Geraes part 2",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 67112211,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125147/retrieve",
+      "checkSum": {
+        "value": "eed37650aa3f626792301ac0d1538cb1",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 11,
+      "policies": null
+    },
+    {
+      "id": 125096,
+      "name": "DSBrazilCensus1872MunicipioNeutro.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125096",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Municipio Neutro",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 10086665,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125096/retrieve",
+      "checkSum": {
+        "value": "c1c7efcc378537c65b6094e6eced67d9",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 12,
+      "policies": null
+    },
+    {
+      "id": 125097,
+      "name": "DSBrazilCensus1872Para.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125097",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Para",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 28767454,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125097/retrieve",
+      "checkSum": {
+        "value": "415223af1e799784f15b22d626dcfb18",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 13,
+      "policies": null
+    },
+    {
+      "id": 125098,
+      "name": "DSBrazilCensus1872Parahyba.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125098",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Parahyba",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 17219008,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125098/retrieve",
+      "checkSum": {
+        "value": "9ae061e9cf0b9694568b78f74e7457fa",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 14,
+      "policies": null
+    },
+    {
+      "id": 125099,
+      "name": "DSBrazilCensus1872Parana.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125099",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Parana",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 10803778,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125099/retrieve",
+      "checkSum": {
+        "value": "fbf97af47414c8fd3d6b902d3d2127f9",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 15,
+      "policies": null
+    },
+    {
+      "id": 125100,
+      "name": "DSBrazilCensus1872Pernambuco.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125100",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Pernambuco",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 29138389,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125100/retrieve",
+      "checkSum": {
+        "value": "009699fa412c64f475c519b8ea051cd7",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 16,
+      "policies": null
+    },
+    {
+      "id": 125101,
+      "name": "DSBrazilCensus1872Piauhy.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125101",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Piauhy",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 11470525,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125101/retrieve",
+      "checkSum": {
+        "value": "170345ba1edafba925e715f631843a8e",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 17,
+      "policies": null
+    },
+    {
+      "id": 125102,
+      "name": "DSBrazilCensus1872RiodeJaneiro.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125102",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Rio de Janeiro",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 44880247,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125102/retrieve",
+      "checkSum": {
+        "value": "60d0dea8c052d0d0c2c687fbbc819479",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 18,
+      "policies": null
+    },
+    {
+      "id": 125103,
+      "name": "DSBrazilCensus1872RioGrandedoNorte.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125103",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Rio Grande do Norte",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 10177701,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125103/retrieve",
+      "checkSum": {
+        "value": "286aed3bbe69588a6d63bdb7149443da",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 19,
+      "policies": null
+    },
+    {
+      "id": 125104,
+      "name": "DSBrazilCensus1872RioGrandedoSul.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125104",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Rio Grande do Sul",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 27047848,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125104/retrieve",
+      "checkSum": {
+        "value": "9e758af852ad8d528ac058afd96bfe79",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 20,
+      "policies": null
+    },
+    {
+      "id": 125105,
+      "name": "DSBrazilCensus1872SantaCatharina.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125105",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Santa Catharina",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 16032036,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125105/retrieve",
+      "checkSum": {
+        "value": "36198bbcde0b43646e1279231f154d4a",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 21,
+      "policies": null
+    },
+    {
+      "id": 125148,
+      "name": "DSBrazilCensus1872SaoPaulo.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125148",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Sao Paulo",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 55910304,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125148/retrieve",
+      "checkSum": {
+        "value": "975415d712d73cf2d66ced11fa3572b6",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 22,
+      "policies": null
+    },
+    {
+      "id": 125106,
+      "name": "DSBrazilCensus1872Sergipe.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125106",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": "Sergipe",
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 11668905,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125106/retrieve",
+      "checkSum": {
+        "value": "342b380ff017143762e6ea4d4fbd9895",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 23,
+      "policies": null
+    },
+    {
+      "id": 125167,
+      "name": "license.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/125167",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "LICENSE",
+      "description": null,
+      "format": "License",
+      "mimeType": "text/plain",
+      "sizeBytes": 677,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/125167/retrieve",
+      "checkSum": {
+        "value": "eed0bb67d228ded438310bb3a7b0d0f5",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 24,
+      "policies": null
+    }
+  ],
+  "archived": "true",
+  "withdrawn": "false"
+}

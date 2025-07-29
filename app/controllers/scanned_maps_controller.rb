@@ -20,7 +20,7 @@ class ScannedMapsController < ScannedResourcesController
   end
 
   # Override to force v3 manifests
-  def cached_manifest(resource, auth_token_param)
+  def cached_manifest(resource, auth_token_param, _flatten = false)
     Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
       ManifestBuilderV3.new(resource, auth_token_param).build.to_json
     end

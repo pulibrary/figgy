@@ -30,6 +30,8 @@ RSpec.describe ManifestBuilder do
       expect(output["metadata"]).not_to be_empty
       expect(output["metadata"].first).to include "label" => "Exhibit", "value" => [collection.decorate.slug]
       expect(output["manifests"].length).to eq 1
+      # It's important it doesn't flatten here, because we use this for DPUL
+      # indexing and that would break MVW manifest indexing.
       expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{scanned_resource.id}/manifest"
       expect(output["viewingDirection"]).to eq nil
     end

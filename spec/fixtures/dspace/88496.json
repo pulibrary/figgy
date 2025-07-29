@@ -1,0 +1,256 @@
+{
+  "id": 88496,
+  "name": "Country Profile: FGM in Senegal, 2015",
+  "handle": "88435/dsp01q524jr415",
+  "type": "item",
+  "link": "/rest/items/88496",
+  "expand": [],
+  "lastModified": "2017-09-16 04:08:20.925",
+  "parentCollection": {
+    "id": 2186,
+    "name": "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles",
+    "handle": "88435/dsp01jm214r79v",
+    "type": "collection",
+    "link": "/rest/collections/2186",
+    "expand": [
+      "parentCommunityList",
+      "parentCommunity",
+      "items",
+      "license",
+      "logo",
+      "all"
+    ],
+    "logo": null,
+    "parentCommunity": null,
+    "parentCommunityList": [],
+    "items": [],
+    "license": null,
+    "copyrightText": "",
+    "introductoryText": "",
+    "shortDescription": "",
+    "sidebarText": "",
+    "numberItems": 13
+  },
+  "parentCollectionList": [
+    {
+      "id": 2186,
+      "name": "Serials and series reports (Publicly Accessible) - 28 Too Many FGM Country Profiles",
+      "handle": "88435/dsp01jm214r79v",
+      "type": "collection",
+      "link": "/rest/collections/2186",
+      "expand": [
+        "parentCommunityList",
+        "parentCommunity",
+        "items",
+        "license",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "parentCommunityList": [],
+      "items": [],
+      "license": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "numberItems": 13
+    }
+  ],
+  "parentCommunityList": [
+    {
+      "id": 226,
+      "name": "Serials and series reports (Publicly Accessible)",
+      "handle": "88435/dsp01kh04dp74g",
+      "type": "community",
+      "link": "/rest/communities/226",
+      "expand": [
+        "parentCommunity",
+        "collections",
+        "subCommunities",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "countItems": 2236,
+      "subcommunities": [],
+      "collections": []
+    },
+    {
+      "id": 146,
+      "name": "Princeton University Library",
+      "handle": "88435/dsp01g732d9019",
+      "type": "community",
+      "link": "/rest/communities/146",
+      "expand": [
+        "parentCommunity",
+        "collections",
+        "subCommunities",
+        "logo",
+        "all"
+      ],
+      "logo": null,
+      "parentCommunity": null,
+      "copyrightText": "",
+      "introductoryText": "",
+      "shortDescription": "",
+      "sidebarText": "",
+      "countItems": 13230,
+      "subcommunities": [],
+      "collections": []
+    }
+  ],
+  "metadata": [
+    {
+      "key": "dc.contributor.author",
+      "value": "Wilson, Ann-Marie",
+      "language": null
+    },
+    {
+      "key": "dc.date.accessioned",
+      "value": "2017-09-15T17:16:04Z",
+      "language": null
+    },
+    {
+      "key": "dc.date.available",
+      "value": "2017-09-15T17:16:04Z",
+      "language": null
+    },
+    {
+      "key": "dc.date.issued",
+      "value": "2015-06",
+      "language": null
+    },
+    {
+      "key": "dc.identifier.other",
+      "value": "Registered Charity : No: 1150379",
+      "language": null
+    },
+    {
+      "key": "dc.identifier.other",
+      "value": "Limited Company: No: 08122211",
+      "language": null
+    },
+    {
+      "key": "dc.identifier.uri",
+      "value": "http://arks.princeton.edu/ark:/88435/dsp01q524jr415",
+      "language": null
+    },
+    {
+      "key": "dc.language.iso",
+      "value": "en_US",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.relation.ispartofseries",
+      "value": "Country Profile: FGM in Senegal, 2015",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.subject",
+      "value": "Female circumcision--Senegal.",
+      "language": "en_US"
+    },
+    {
+      "key": "dc.title",
+      "value": "Country Profile: FGM in Senegal, 2015",
+      "language": "en_US"
+    },
+    {
+      "key": "pu.depositor",
+      "value": "Meerson, Anna",
+      "language": null
+    },
+    {
+      "key": "dc.publisher.corporate",
+      "value": "28 Too Many",
+      "language": "en_US"
+    }
+  ],
+  "bitstreams": [
+    {
+      "id": 114846,
+      "name": "Senegal_2015.pdf.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/114846",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "TEXT",
+      "description": "Extracted text",
+      "format": "Text",
+      "mimeType": "text/plain",
+      "sizeBytes": 168155,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/114846/retrieve",
+      "checkSum": {
+        "value": "264a0a2ea57370ec53a2ba129ed67ff4",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 3,
+      "policies": null
+    },
+    {
+      "id": 114788,
+      "name": "Senegal_2015.pdf",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/114788",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "ORIGINAL",
+      "description": null,
+      "format": "Adobe PDF",
+      "mimeType": "application/pdf",
+      "sizeBytes": 4015482,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/114788/retrieve",
+      "checkSum": {
+        "value": "29bcb36057d5fe709116432cb50cfac6",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 1,
+      "policies": null
+    
+    },
+    {
+      "id": 114789,
+      "name": "license.txt",
+      "handle": null,
+      "type": "bitstream",
+      "link": "/rest/bitstreams/114789",
+      "expand": [
+        "parent",
+        "policies",
+        "all"
+      ],
+      "bundleName": "LICENSE",
+      "description": null,
+      "format": "License",
+      "mimeType": "text/plain",
+      "sizeBytes": 3223,
+      "parentObject": null,
+      "retrieveLink": "/bitstreams/114789/retrieve",
+      "checkSum": {
+        "value": "1e204dad3e9e1e2e6660eef9c33467e9",
+        "checkSumAlgorithm": "MD5"
+      },
+      "sequenceId": 2,
+      "policies": null
+    }
+  ],
+  "archived": "true",
+  "withdrawn": "false"
+}

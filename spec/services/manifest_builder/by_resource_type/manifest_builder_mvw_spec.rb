@@ -22,7 +22,7 @@ RSpec.describe ManifestBuilder do
     expect(output["thumbnail"]).to include "@id" => "http://www.example.com/image-service/#{child.member_ids.first.id}/full/!200,150/0/default.jpg"
 
     expect(output["manifests"].length).to eq 1
-    expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest"
+    expect(output["manifests"][0]["@id"]).to eq "http://www.example.com/concern/scanned_resources/#{child.id}/manifest?flatten=true"
     expect(output["manifests"][0]["viewingHint"]).to be_nil
     expect(output["manifests"][0]["metadata"]).to be_nil
     expect(output["seeAlso"]).to include "@id" => "http://www.example.com/catalog/#{scanned_resource.id}.jsonld", "format" => "application/ld+json"
