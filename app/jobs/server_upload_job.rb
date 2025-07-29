@@ -24,6 +24,8 @@ class ServerUploadJob < ApplicationJob
         end
       end
     end
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    false
   end
 
   # We have access to the files on disk, so copy them from their locations.
