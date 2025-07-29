@@ -43,11 +43,11 @@ class BulkIngestService
     directory_path = absolute_path(base_directory)
 
     base_name = File.basename(base_directory)
-    file_name = attributes[:id] || base_name
     # Assign a title if source_metadata_identifier is not set
     title = [directory_path.basename]
-    attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
     attributes.merge!(figgy_metadata_file_attributes(base_path: directory_path))
+    file_name = attributes[:id] || base_name
+    attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
     resource = find_or_create_by(property: property, value: file_name, **attributes)
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
     attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
@@ -111,9 +111,11 @@ class BulkIngestService
       child_attributes = attributes.except(:member_of_collection_ids)
       child_resources = dirs(path: path, resource: resource).map do |subdir_path|
         child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
+        new_attributes = child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))
+        new_attributes.merge!(figgy_metadata_file_attributes(base_path: subdir_path))
         attach_children(
           path: subdir_path,
-          resource: new_resource(klass: child_klass, **child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))),
+          resource: new_resource(klass: child_klass, **new_attributes),
           file_filters: file_filters,
           preserve_file_names: preserve_file_names
         )
