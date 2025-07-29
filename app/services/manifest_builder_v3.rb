@@ -3,7 +3,7 @@ class ManifestBuilderV3
   attr_reader :resource, :services
 
   # @param [Resource] resource the Resource subject
-  def initialize(resource, auth_token = nil, current_ability = nil)
+  def initialize(resource, auth_token = nil, current_ability = nil, _flatten = nil)
     @resource = RootNode.for(resource, auth_token, current_ability)
   end
 
