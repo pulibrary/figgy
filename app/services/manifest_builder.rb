@@ -78,7 +78,15 @@ class ManifestBuilder
       resource.try(:ocr_language).present?
     end
 
+    # This triggers the upstream manifest builder to pull in the canvases of all
+    # the child volumes instead of create a multi-part work. We use it for
+    # flattening too - but flattened manifests aren't sammelbands (which are
+    # resources that have both file sets and child resources).
     def sammelband?
+      flattened?
+    end
+
+    def flattened?
       flatten == true
     end
 
@@ -118,13 +126,14 @@ class ManifestBuilder
     # Retrieves the presenter for each Range (sc:Range) instance
     # @return [TopStructure]
     def ranges
-      return sammelband_ranges if flatten
+      # If we're a flattened manifest then build ranges for child volumes.
+      return flattened_ranges if flatten
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure, resource)
       end
     end
 
-    def sammelband_ranges
+    def flattened_ranges
       [
         TopStructure.new(
           Structure.new(
@@ -132,7 +141,7 @@ class ManifestBuilder
             nodes: work_presenters.map do |work_presenter|
               StructureNode.new(
                 label: Array.wrap(work_presenter.to_s).first,
-                nodes: sammelband_work_structure(work_presenter)
+                nodes: flattened_range_work_structure(work_presenter)
               )
             end
           ),
@@ -141,7 +150,7 @@ class ManifestBuilder
       ]
     end
 
-    def sammelband_work_structure(work_presenter)
+    def flattened_range_work_structure(work_presenter)
       file_set = work_presenter.file_set_presenters.find { |x| x.resource.mime_type != ["application/pdf"] }
       [
         StructureNode.new(label: file_set.to_s, proxy: file_set.id)
