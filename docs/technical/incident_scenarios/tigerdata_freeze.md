@@ -2,7 +2,7 @@
 
 ## Scenario
 
-Tigerdata's MediaFlux instance has locked up and all access to files in the repository are locked up. We've received an alert from CheckMK that it's been happening for at least 5 minutes.
+Tigerdata's MediaFlux instance has locked up and all files in the repository are inaccessible. We've received an alert from CheckMK that it's been happening for at least 5 minutes.
 
 ## Background Information
 
@@ -31,7 +31,7 @@ No response necessary - the Research Computing team has been notified by the ale
 
 Post a message to #digital-library informing users of the impact of the downtime, and have Figgy's PO message users who may be particularly effected if necessary. A draft of the message:
 
-> @channel Everyone - Figgy's Tigerdata mount is currently down. Research Data and us are working to get it worked out. In the meantime you'll be unable to do new ingests to Figgy and patrons will be unable to play videos. The data in the repository is still safe - we'll alert you all when things are back to normal.
+> @channel Everyone - Figgy's connection to Tigerdata is currently down. Research Data is working with us to get it resolved. In the meantime you'll be unable to do new ingests to Figgy and patrons will be unable to play videos. The data in the repository is still safe - we'll alert you all when things are back to normal.
 
 ### > 3 hours, < 1 Day
 
