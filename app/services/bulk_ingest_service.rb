@@ -111,9 +111,11 @@ class BulkIngestService
       child_attributes = attributes.except(:member_of_collection_ids)
       child_resources = dirs(path: path, resource: resource).map do |subdir_path|
         child_klass = child_klass(parent_class: resource.class, title: subdir_path.basename)
+        new_attributes = child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))
+        new_attributes.merge!(figgy_metadata_file_attributes(base_path: subdir_path))
         attach_children(
           path: subdir_path,
-          resource: new_resource(klass: child_klass, **child_attributes.merge(title_or_identifier(child_klass, subdir_path.basename))),
+          resource: new_resource(klass: child_klass, **new_attributes),
           file_filters: file_filters,
           preserve_file_names: preserve_file_names
         )

@@ -192,7 +192,7 @@ RSpec.describe BulkIngestService do
         stub_ezid
       end
 
-      it "ingests them as child resources, and does not add them to collections", bulk: true do
+      it "ingests them as child resources, imports figgy_metadata.json, and does not add them to collections", bulk: true do
         coll = FactoryBot.create_for_repository(:collection)
 
         ingester.attach_dir(
@@ -221,6 +221,8 @@ RSpec.describe BulkIngestService do
         expect(child_resource.source_metadata_identifier).to be_nil
         expect(child_resource.title).to eq ["vol1"]
         expect(child_resource.member_of_collection_ids). to be_nil
+        # This is in figgy_metadata.json for Vol1.
+        expect(child_resource.series).to eq ["Cool stuff"]
       end
     end
 
