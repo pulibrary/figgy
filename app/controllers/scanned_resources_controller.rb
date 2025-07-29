@@ -39,19 +39,19 @@ class ScannedResourcesController < ResourcesController
     authorize! :manifest, @resource
     respond_to do |f|
       f.json do
-        render json: cached_manifest(@resource, auth_token_param)
+        render json: cached_manifest(@resource, auth_token_param, params[:flatten] == "true")
       end
     end
   end
 
-  def cached_manifest(resource, auth_token_param)
-    Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
+  def cached_manifest(resource, auth_token_param, flatten)
+    Rails.cache.fetch("#{ManifestKey.for(resource)}/#{flatten}/#{auth_token_param}") do
       builder_klass = if Wayfinder.for(resource).first_member.try(:av?)
                         ManifestBuilderV3
                       else
                         ManifestBuilder
                       end
-      builder_klass.new(resource, auth_token_param).build.to_json
+      builder_klass.new(resource, auth_token_param, nil, flatten).build.to_json
     end
   end
 
