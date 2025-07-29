@@ -80,7 +80,7 @@ class ManifestBuilder
 
     # This triggers the upstream manifest builder to pull in the canvases of all
     # the child volumes instead of create a multi-part work. We use it for
-    # flattening too - but flattened manifests aren't sammelbands (which are
+    # flattening too - but not all flattened manifests are sammelbands (which are
     # resources that have both file sets and child resources).
     def sammelband?
       flattened?
