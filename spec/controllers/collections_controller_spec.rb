@@ -216,6 +216,13 @@ RSpec.describe CollectionsController, type: :controller do
         expect(manifest_response[:collections].length).to eq 1
         expect(manifest_response[:collections][0][:@id]).to eq "http://www.example.com/collections/#{collection.id}/manifest"
       end
+      it "works with archival media collections" do
+        FactoryBot.create_for_repository(:archival_media_collection)
+
+        get :index_manifest, params: { format: :json }
+
+        expect(response.status).to eq 200
+      end
     end
 
     describe "show ark_report" do

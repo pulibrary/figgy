@@ -38,6 +38,7 @@ class ManifestBuilderV3
       end
     end
     attr_reader :resource, :auth_token, :current_ability, :downloadable
+    attr_accessor :child_of
     delegate :decorate, :to_model, :id, to: :resource
 
     def source_metadata_identifier
