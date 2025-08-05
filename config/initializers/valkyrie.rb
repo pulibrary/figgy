@@ -12,42 +12,35 @@ Rails.application.config.to_prepare do
   # The file system in the server environment was overriding this, specifically for cases where files were saved to...
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
-      Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["repository_path"],
-        file_mover: lambda { |old_path, new_path|
-          FileUtils.mv(old_path, new_path)
-          FileUtils.chmod(0o644, new_path)
-        }
-      )
-    ),
-    :primary_disk
+  primary_repository = RetryingDiskAdapter.new(
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["repository_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
+    )
   )
 
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
-      Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["fallback_repository_path"],
-        file_mover: lambda { |old_path, new_path|
-          FileUtils.mv(old_path, new_path)
-          FileUtils.chmod(0o644, new_path)
-        }
-      )
-    ),
-    :fallback_disk
+  fallback_repository = RetryingDiskAdapter.new(
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["fallback_repository_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
+    )
   )
 
   Valkyrie::StorageAdapter.register(
     FallbackDiskAdapter.new(
-      primary_adapter: Valkyrie::StorageAdapter.find(:primary_disk),
-      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_disk)
+      primary_adapter: primary_repository,
+      fallback_adapter: fallback_repository
     ),
     :disk
   )
 
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
+  primary_stream = RetryingDiskAdapter.new(
       Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["stream_derivatives_path"],
         file_mover: lambda { |old_path, new_path|
@@ -55,27 +48,22 @@ Rails.application.config.to_prepare do
           FileUtils.chmod(0o644, new_path)
         }
       )
-    ),
-    :primary_stream_derivatives
-  )
+    )
 
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
-      Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["fallback_stream_derivatives_path"],
-        file_mover: lambda { |old_path, new_path|
-          FileUtils.mv(old_path, new_path)
-          FileUtils.chmod(0o644, new_path)
-        }
-      )
-    ),
-    :fallback_stream_derivatives
+  fallback_stream = RetryingDiskAdapter.new(
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["fallback_stream_derivatives_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
+    )
   )
 
   Valkyrie::StorageAdapter.register(
     FallbackDiskAdapter.new(
-      primary_adapter: Valkyrie::StorageAdapter.find(:primary_stream_derivatives),
-      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_stream_derivatives)
+      primary_adapter: primary_stream,
+      fallback_adapter: fallback_stream
     ),
     :stream_derivatives
   )
@@ -86,30 +74,24 @@ Rails.application.config.to_prepare do
   # @see http://manpages.ubuntu.com/manpages/xenial/man1/cp.1.html
   # is deployed on the same file system as the one storing the files being uploaded
   # NOTE: Separate inodes are created
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
+  primary_repository_copy = RetryingDiskAdapter.new(
       Valkyrie::Storage::Disk.new(
         base_path: Figgy.config["repository_path"],
         file_mover: FileUtils.method(:cp)
       )
-    ),
-    :primary_disk_via_copy
-  )
+    )
 
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
-      Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["fallback_repository_path"],
-        file_mover: FileUtils.method(:cp)
-      )
-    ),
-    :fallback_disk_via_copy
+  fallback_repository_copy = RetryingDiskAdapter.new(
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["fallback_repository_path"],
+      file_mover: FileUtils.method(:cp)
+    )
   )
 
   Valkyrie::StorageAdapter.register(
     FallbackDiskAdapter.new(
-      primary_adapter: Valkyrie::StorageAdapter.find(:primary_disk_via_copy),
-      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_disk_via_copy)
+      primary_adapter: primary_repository_copy,
+      fallback_adapter: fallback_repository_copy
     ),
     :disk_via_copy
   )
@@ -172,36 +154,30 @@ Rails.application.config.to_prepare do
   # The file system in the server environment was overriding this, specifically for cases where files were saved to...
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
-      Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["derivative_path"],
-        file_mover: lambda { |old_path, new_path|
-          FileUtils.mv(old_path, new_path)
-          FileUtils.chmod(0o644, new_path)
-        }
-      )
-    ),
-    :primary_derivatives
+  primary_derivatives = RetryingDiskAdapter.new(
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["derivative_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
+    )
   )
 
-  Valkyrie::StorageAdapter.register(
-    RetryingDiskAdapter.new(
-      Valkyrie::Storage::Disk.new(
-        base_path: Figgy.config["fallback_derivative_path"],
-        file_mover: lambda { |old_path, new_path|
-          FileUtils.mv(old_path, new_path)
-          FileUtils.chmod(0o644, new_path)
-        }
-      )
-    ),
-    :fallback_derivatives
+  fallback_derivatives = RetryingDiskAdapter.new(
+    Valkyrie::Storage::Disk.new(
+      base_path: Figgy.config["fallback_derivative_path"],
+      file_mover: lambda { |old_path, new_path|
+        FileUtils.mv(old_path, new_path)
+        FileUtils.chmod(0o644, new_path)
+      }
+    )
   )
 
   Valkyrie::StorageAdapter.register(
     FallbackDiskAdapter.new(
-      primary_adapter: Valkyrie::StorageAdapter.find(:primary_derivatives),
-      fallback_adapter: Valkyrie::StorageAdapter.find(:fallback_derivatives)
+      primary_adapter: primary_derivatives,
+      fallback_adapter: fallback_derivatives
     ),
     :derivatives
   )

@@ -10,8 +10,8 @@ RSpec.describe FallbackDiskAdapter do
       fallback_adapter: fallback_adapter
     )
   end
-  let(:primary_adapter) { Valkyrie::StorageAdapter.find(:primary_disk) }
-  let(:fallback_adapter) { Valkyrie::StorageAdapter.find(:fallback_disk) }
+  let(:primary_adapter) { Valkyrie::StorageAdapter.find(:disk).primary_adapter }
+  let(:fallback_adapter) { Valkyrie::StorageAdapter.find(:disk).fallback_adapter }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
 

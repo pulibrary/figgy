@@ -150,6 +150,27 @@ RSpec.describe DownloadsController do
     end
 
     context "with an HLS playlist FileSet and ?as=stream" do
+      context "when the resource is in the fallback stream adapter" do
+        with_queue_adapter :inline
+        it "returns it", run_real_derivatives: true, run_real_characterization: true do
+          stub_ezid
+          output = FactoryBot.create_for_repository(:scanned_resource_with_video_and_captions, state: "complete")
+          file_set = Wayfinder.for(output).file_sets.first
+          file_metadata = file_set.file_metadata.find(&:hls_manifest?)
+          # Move file over to fallback adapter.
+          file = Valkyrie.config.storage_adapter.find_by(id: file_metadata.file_identifiers.first)
+          new_path = Pathname.new(file.disk_path.to_s.gsub(Figgy.config["stream_derivatives_path"], Figgy.config["fallback_stream_derivatives_path"]))
+          FileUtils.mkdir_p(new_path.parent)
+          FileUtils.mv(file.disk_path, new_path)
+
+          get :show, params: { resource_id: file_set.id.to_s, id: file_metadata.id.to_s, as: "stream", format: "m3u8" }
+
+          expect(response).to be_successful
+          expect(response.headers["access-control-allow-methods"]).to eq "GET"
+          expect(response.headers["access-control-allow-origin"]).to eq "*"
+          expect(response.headers["access-control-max-age"]).to eq 7200
+        end
+      end
       context "with no auth token given" do
         with_queue_adapter :inline
         it "doesn't append one", run_real_derivatives: true, run_real_characterization: true do

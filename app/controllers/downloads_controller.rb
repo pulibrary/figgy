@@ -73,7 +73,7 @@ class DownloadsController < ApplicationController
 
   def binary_file
     return unless file_desc
-    @binary_file ||= storage_adapter.find_by(id: file_desc.file_identifiers.first)
+    @binary_file ||= Valkyrie::StorageAdapter.find_by(id: file_desc.file_identifiers.first)
   end
 
   class FileWithMetadata < Valkyrie::Resource
@@ -108,9 +108,5 @@ class DownloadsController < ApplicationController
 
   def query_service
     Valkyrie.config.metadata_adapter.query_service
-  end
-
-  def storage_adapter
-    Valkyrie.config.storage_adapter
   end
 end
