@@ -47,6 +47,20 @@ CREATE FUNCTION public.get_ids_array(jsonb, text) RETURNS text[]
       $_$;
 
 
+--
+-- Name: notify_on_orm_resource_change(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.notify_on_orm_resource_change() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+PERFORM pg_notify('orm_resources_change', (NEW.id)::text);
+RETURN NEW;
+END;
+$$;
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -1043,6 +1057,13 @@ CREATE INDEX resource_id_idx ON public.orm_resources USING btree ((((((metadata 
 
 
 --
+-- Name: orm_resources notify_after_orm_resource_change; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER notify_after_orm_resource_change AFTER INSERT OR DELETE OR UPDATE ON public.orm_resources FOR EACH ROW EXECUTE FUNCTION public.notify_on_orm_resource_change();
+
+
+--
 -- Name: ocr_requests fk_rails_712a4527c4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1073,6 +1094,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250808200036'),
 ('20250123183528'),
 ('20230802152303'),
 ('20230119155402'),
