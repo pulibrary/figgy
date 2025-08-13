@@ -31,6 +31,14 @@ RSpec.describe BulkIngestController do
     sign_in user if user
   end
 
+  def stub_ingest_folder_job
+    ingest_folder_stub = object_double(IngestFolderJob.set(queue: :bla))
+    allow(IngestFolderJob).to receive(:perform_later)
+    allow(ingest_folder_stub).to receive(:perform_later)
+    allow(IngestFolderJob).to receive(:set).and_return(ingest_folder_stub)
+    ingest_folder_stub
+  end
+
   describe "GET #show" do
     render_views
     let(:persister) { adapter.persister }
@@ -84,14 +92,16 @@ RSpec.describe BulkIngestController do
             visibility: "open",
             ingest_directory: "studio_new/DPUL/Santa/ready"
           }
-        allow(IngestFolderJob).to receive(:perform_later)
+        ingest_folder_stub = stub_ingest_folder_job
         stub_catalog(bib_id: "991234563506421")
         stub_catalog(bib_id: "9946093213506421")
         stub_catalog(bib_id: "9917912613506421")
         ingest_path = Pathname.new(Figgy.config["ingest_folder_path"]).join("studio_new", "DPUL", "Santa", "ready")
 
         post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob)
+        # It ingests as a bulk queued job
+        expect(IngestFolderJob).to have_received(:set).with(queue: :bulk).at_least(:once)
+        expect(ingest_folder_stub)
           .to have_received(:perform_later)
           .with(
             hash_including(
@@ -102,7 +112,7 @@ RSpec.describe BulkIngestController do
               source_metadata_identifier: "9946093213506421"
             )
           )
-        expect(IngestFolderJob)
+        expect(ingest_folder_stub)
           .to have_received(:perform_later)
           .with(
             hash_including(
@@ -126,13 +136,13 @@ RSpec.describe BulkIngestController do
             visibility: "open",
             ingest_directory: "examples/lapidus"
           }
-        allow(IngestFolderJob).to receive(:perform_later)
+        ingest_folder_stub = stub_ingest_folder_job
         stub_findingaid(pulfa_id: "AC044_c0003")
         stub_catalog(bib_id: "9946093213506421")
         ingest_path = Pathname.new(Figgy.config["ingest_folder_path"]).join("examples")
 
         post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
-        expect(IngestFolderJob)
+        expect(ingest_folder_stub)
           .to have_received(:perform_later)
           .with(
             hash_including(
@@ -143,7 +153,7 @@ RSpec.describe BulkIngestController do
               source_metadata_identifier: "9946093213506421"
             )
           )
-        expect(IngestFolderJob)
+        expect(ingest_folder_stub)
           .to have_received(:perform_later)
           .with(
             hash_including(
@@ -168,10 +178,11 @@ RSpec.describe BulkIngestController do
       }
     end
     let(:user) { FactoryBot.create(:admin) }
+    let(:ingest_folder_stub) { stub_ingest_folder_job }
 
     before do
       sign_in user if user
-      allow(IngestFolderJob).to receive(:perform_later)
+      ingest_folder_stub
     end
     let(:ingest_path) { Pathname.new(Figgy.config["ingest_folder_path"]) }
     let(:ingest_directory) { "examples/single_volume" }
@@ -193,7 +204,7 @@ RSpec.describe BulkIngestController do
           member_of_collection_ids: ["9912345673506421"],
           source_metadata_identifier: "9946093213506421"
         }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+        expect(ingest_folder_stub).to have_received(:perform_later).with(hash_including(expected_attributes))
       end
 
       context "and preserve_file_names is checked" do
@@ -216,7 +227,7 @@ RSpec.describe BulkIngestController do
             source_metadata_identifier: "9946093213506421",
             preserve_file_names: true
           }
-          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+          expect(ingest_folder_stub).to have_received(:perform_later).with(hash_including(expected_attributes))
         end
       end
 
@@ -240,7 +251,7 @@ RSpec.describe BulkIngestController do
             source_metadata_identifier: "9946093213506421",
             holding_location: "https://bibdata.princeton.edu/locations/delivery_locations/15"
           }
-          expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+          expect(ingest_folder_stub).to have_received(:perform_later).with(hash_including(expected_attributes))
         end
       end
     end
@@ -258,7 +269,7 @@ RSpec.describe BulkIngestController do
           visibility: "open",
           member_of_collection_ids: ["9912345673506421"]
         }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+        expect(ingest_folder_stub).to have_received(:perform_later).with(hash_including(expected_attributes))
       end
     end
 
@@ -273,7 +284,7 @@ RSpec.describe BulkIngestController do
           visibility: "open",
           member_of_collection_ids: ["9912345673506421"]
         }
-        expect(IngestFolderJob).to have_received(:perform_later).with(hash_including(expected_attributes))
+        expect(ingest_folder_stub).to have_received(:perform_later).with(hash_including(expected_attributes))
       end
 
       context "when no files have been selected" do
@@ -283,7 +294,7 @@ RSpec.describe BulkIngestController do
         end
 
         it "does not enqueue an ingest folder job and alerts the client" do
-          expect(IngestFolderJob).not_to have_received(:perform_later)
+          expect(ingest_folder_stub).not_to have_received(:perform_later)
           expect(flash[:alert]).to eq("Please select some files to ingest.")
           expect(response).to redirect_to(bulk_ingest_show_path)
         end
