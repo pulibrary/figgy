@@ -6,6 +6,9 @@
 const fs = require('node:fs')
 const mapnik = require('@mapnik/mapnik')
 
+// Our templates use init rules, so set this.
+process.env.PROJ_USE_PROJ4_INIT_RULES = 'YES';
+
 mapnik.register_default_fonts()
 mapnik.register_default_input_plugins()
 

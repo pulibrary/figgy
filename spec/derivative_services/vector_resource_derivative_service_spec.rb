@@ -49,6 +49,10 @@ RSpec.describe VectorResourceDerivativeService do
 
       expect(cloud_vector_file_set.use).to eq([::PcdmUse::CloudDerivative])
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
+      image = Vips::Image.new_from_file(thumbnail_file.io.path)
+      # Generate the avg of the image bands to ensure it's the correct
+      # thumbnail. This is mostly white, but not -all- white.
+      expect(image.avg.round).to eq 250
       expect(cloud_vector_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
     end
