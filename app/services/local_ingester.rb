@@ -11,7 +11,7 @@ class LocalIngester
 
   def ingest
     ingest_paths.each do |path|
-      IngestFolderJob.perform_later(
+      IngestFolderJob.set(queue: :bulk).perform_later(
         directory: path.to_s,
         file_filters: file_filters,
         class_name: resource_class_name,
