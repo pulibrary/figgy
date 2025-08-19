@@ -63,6 +63,7 @@ namespace :sidekiq do
     on roles(:worker) do
       execute :sudo, :service, "figgy-workers", :restart
       execute :sudo, :service, "figgy-realtime-workers", :restart
+      execute :sudo, :service, "figgy-bulk-workers", :restart
     end
   end
 end
