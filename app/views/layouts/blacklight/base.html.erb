@@ -27,6 +27,7 @@
     <%= render 'shared/analytics' if Rails.env.production? %>
   </head>
   <body class="<%= render_body_class %>">
+    <%= render 'shared/analytics_noscript' if Rails.env.production? %>
     <div class="lux">
     <nav id="skip-link" role="navigation" aria-label="<%= t('blacklight.skip_links.label') %>">
       <%= link_to t('blacklight.skip_links.search_field'), '#search_field', class: 'element-invisible element-focusable rounded-bottom py-2 px-3', data: { turbolinks: 'false' } %>
