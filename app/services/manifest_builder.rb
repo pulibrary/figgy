@@ -106,11 +106,18 @@ class ManifestBuilder
     # Retrieves the presenters for each member Work as a separate root
     # @return [RootNode]
     def work_presenters
-      @work_presenters ||= (members - leaf_nodes).map do |node|
-        RootNode.for(node).tap do |child_node|
-          child_node.child_of = self
+      @work_presenters ||=
+        begin
+          candidates = (members - leaf_nodes).map do |node|
+            RootNode.for(node).tap do |child_node|
+              child_node.child_of = self
+            end
+          end
+          # Only grab things that have members or are collections.
+          candidates.select do |node|
+            node.try(:collection?) || node.resource.respond_to?(:member_ids)
+          end
         end
-      end
     end
 
     ##
@@ -127,7 +134,7 @@ class ManifestBuilder
     # @return [TopStructure]
     def ranges
       # If we're a flattened manifest then build ranges for child volumes.
-      return flattened_ranges if flatten
+      return flattened_ranges if flatten && work_presenters.present?
       logical_structure.map do |top_structure|
         TopStructure.new(top_structure, resource)
       end

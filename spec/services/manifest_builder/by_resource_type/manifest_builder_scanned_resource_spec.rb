@@ -214,6 +214,7 @@ RSpec.describe ManifestBuilder do
     it "builds a IIIF document without the mets file" do
       output = manifest_builder.build
       expect(output["sequences"]).to be_nil
+      expect(output["viewingHint"]).to eq "individuals"
     end
   end
 
@@ -231,6 +232,22 @@ RSpec.describe ManifestBuilder do
       expect(output["mediaSequences"]).to be_nil
       canvases = output["sequences"].first["canvases"]
       expect(canvases.length).to eq 2
+    end
+  end
+
+  context "when rendering a flattened manifest that's not multi-part", run_real_characterization: true do
+    let(:file_1) { fixture_file_upload("files/sample.pdf", "application/pdf") }
+    it "doesn't go through the flattening step" do
+      issue = FactoryBot.create_for_repository(:scanned_resource, title: "Issue", files: [file_1])
+      issue = query_service.find_by(id: issue.id)
+      change_set = ScannedResourceChangeSet.new(issue)
+      change_set.validate(logical_structure: logical_structure(issue.member_ids.first), start_canvas: issue.member_ids.first)
+      change_set_persister.save(change_set: change_set)
+      builder = described_class.new(query_service.find_by(id: issue.id), nil, nil, true)
+
+      output = builder.build
+      expect(output["structures"][0]["ranges"]).not_to be_blank
+      expect(output["viewingHint"]).to eq "individuals"
     end
   end
 
