@@ -107,15 +107,7 @@ class VipsDerivativeService
   end
 
   def image_from_file(filename)
-    image =
-      begin
-        Vips::Image.new_from_file(filename.to_s)
-        # If we fail to load a file via Vips for some reason, load it into vips
-        # via imagemagick. This will be slower, but fixes images with sub-byte
-        # byte values. See https://github.com/libvips/libvips/issues/3948
-      rescue Vips::Error
-        Vips::Image.magickload(filename.to_s)
-      end
+    image = load_image(filename.to_s)
     # Adjust color profile to be srgb. Unfortunately we were unable to find a
     # good way to unit test that this is working, but manual testing shows that
     # this results in the proper colors.
@@ -126,6 +118,15 @@ class VipsDerivativeService
       Rails.logger.debug("No embedded profile - skipping ICC Transform")
     end
     image
+  end
+
+  def load_image(path)
+    Vips::Image.new_from_file(path)
+    # If we fail to load a file via Vips for some reason, load it into vips
+    # via imagemagick. This will be slower, but fixes images with sub-byte
+    # byte values. See https://github.com/libvips/libvips/issues/3948
+  rescue Vips::Error
+    Vips::Image.magickload(path)
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
@@ -146,10 +147,16 @@ class VipsDerivativeService
   end
 
   def upload_options
+    # Get image metadata from derivative image.
+    # Width and height can change if original is above REDUCTION_THRESHOLD
+    # Page number is a property of the derivative tiff
+    pyramidal_image = load_image(temporary_output.path)
+
     {
       metadata: {
-        "width" => vips_image.width.to_s,
-        "height" => vips_image.height.to_s
+        "width" => pyramidal_image.width.to_s,
+        "height" => pyramidal_image.height.to_s,
+        "pages" => pyramidal_image.get("n-pages").to_s
       }
     }
   end
