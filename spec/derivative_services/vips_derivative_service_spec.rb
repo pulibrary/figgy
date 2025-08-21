@@ -169,7 +169,7 @@ RSpec.describe VipsDerivativeService do
       stub_const("VipsDerivativeService::REDUCTION_THRESHOLD", 1)
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
-      expect(storage_adapter).to have_received(:upload).with(file: anything, resource: anything, original_filename: anything, metadata: { "height" => "144", "width" => "100" })
+      expect(storage_adapter).to have_received(:upload).with(file: anything, resource: anything, original_filename: anything, metadata: { "height" => "144", "width" => "100", "pages" => "1" })
     end
   end
 
