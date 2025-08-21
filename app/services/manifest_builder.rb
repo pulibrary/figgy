@@ -113,8 +113,9 @@ class ManifestBuilder
               child_node.child_of = self
             end
           end
+          # Only grab things that have members or are collections.
           candidates.select do |node|
-            node.resource.respond_to?(:member_ids)
+            node.try(:collection?) || node.resource.respond_to?(:member_ids)
           end
         end
     end
