@@ -29,5 +29,14 @@ describe TilePath do
         expect(described_class.new(raster).tilejson).to eq "https://map-tiles-test.example.com/testgeo/cog/WebMercatorQuad/tilejson.json"
       end
     end
+
+    context "with a RasterSet with a GeoTiff FileSet without derivatives" do
+      it "returns a nil tilejson path" do
+        file_set = FactoryBot.create_for_repository(:geo_raster_file_set, service_targets: ["tiles"])
+        raster = FactoryBot.create_for_repository(:raster_resource, member_ids: [file_set.id])
+
+        expect(described_class.new(raster).tilejson).to be_nil
+      end
+    end
   end
 end
