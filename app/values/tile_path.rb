@@ -35,7 +35,7 @@ class TilePath
       if mosaic?
         resource.id.to_s.delete("-")
       else
-        fs = query_service.custom_queries.mosaic_file_sets_for(id: resource.id).first
+        fs = file_sets.first
         fm = fs.file_metadata.find { |m| m.cloud_uri.present? }
         fm.cloud_uri.gsub(/^.*\/\//, "").split("/")[-2].delete("-")
       end
@@ -46,8 +46,7 @@ class TilePath
     end
 
     def valid?
-      file_count = resource.decorate.try(:mosaic_file_count)
-      return false unless file_count&.positive?
+      return false unless file_sets.count.positive?
       true
     end
 
@@ -56,6 +55,10 @@ class TilePath
       # This tests if there are multiple child raster FileSets.
       return true if raster_file_sets && raster_file_sets.count > 1
       false
+    end
+
+    def file_sets
+      @file_sets ||= query_service.custom_queries.mosaic_file_sets_for(id: resource.id)
     end
 
     def query_service
