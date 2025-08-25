@@ -30,7 +30,7 @@ class VectorResourceDerivativeService
 
   def build_cloud_file
     IngestableFile.new(file_path: temporary_cloud_output.path, mime_type: "application/vnd.pmtiles", original_filename: "display_vector.pmtiles", use: use_cloud_derivative,
-                       copy_before_ingest: false)
+                       copy_before_ingest: true)
   end
 
   def build_thumbnail_file
