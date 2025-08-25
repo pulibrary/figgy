@@ -129,11 +129,11 @@ class RasterResourceDerivativeService
   end
 
   def temporary_display_output
-    @temporary_display_output ||= Tempfile.new("raster_display", Hydra::Derivatives.temp_file_base)
+    @temporary_display_output ||= Tempfile.new("raster_display", temporary_working_directory)
   end
 
   def temporary_thumbnail_output
-    @temporary_thumbnail_output ||= Tempfile.new("raster_thumb", Hydra::Derivatives.temp_file_base)
+    @temporary_thumbnail_output ||= Tempfile.new("raster_thumb", temporary_working_directory)
   end
 
   def update_cloud_acl

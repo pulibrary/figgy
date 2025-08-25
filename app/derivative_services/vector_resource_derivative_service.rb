@@ -127,11 +127,11 @@ class VectorResourceDerivativeService
   end
 
   def temporary_cloud_output
-    @temporary_cloud_output ||= Tempfile.new("vector_cloud", Hydra::Derivatives.temp_file_base)
+    @temporary_cloud_output ||= Tempfile.new("vector_cloud", temporary_working_directory)
   end
 
   def temporary_thumbnail_output
-    @temporary_thumbnail_output ||= Tempfile.new("vector_thumb", Hydra::Derivatives.temp_file_base)
+    @temporary_thumbnail_output ||= Tempfile.new("vector_thumb", temporary_working_directory)
   end
 
   def update_cloud_acl
