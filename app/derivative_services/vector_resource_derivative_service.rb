@@ -63,6 +63,10 @@ class VectorResourceDerivativeService
       update_error_message(message: error.message)
     end
     raise error
+  ensure
+    FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
+    File.unlink(temporary_cloud_output.path) if File.exist?(temporary_cloud_output.path)
+    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
   end
 
   def cloud_storage_adapter
@@ -84,7 +88,8 @@ class VectorResourceDerivativeService
       id: prefixed_id,
       format: "pmtiles",
       srid: "EPSG:4326",
-      url: URI("file://#{temporary_cloud_output.path}")
+      url: URI("file://#{temporary_cloud_output.path}"),
+      working_dir: temporary_working_directory
     }
   end
 
@@ -95,7 +100,8 @@ class VectorResourceDerivativeService
       id: resource.id,
       format: "png",
       size: "200x150",
-      url: URI("file://#{temporary_thumbnail_output.path}")
+      url: URI("file://#{temporary_thumbnail_output.path}"),
+      working_dir: temporary_working_directory
     }
   end
 
@@ -116,12 +122,16 @@ class VectorResourceDerivativeService
     )
   end
 
+  def temporary_working_directory
+    @temporary_working_directory ||= Dir.mktmpdir("vector_working_dir", Hydra::Derivatives.temp_file_base)
+  end
+
   def temporary_cloud_output
-    @temporary_cloud_output ||= Tempfile.new
+    @temporary_cloud_output ||= Tempfile.new("vector_cloud", Hydra::Derivatives.temp_file_base)
   end
 
   def temporary_thumbnail_output
-    @temporary_thumbnail_output ||= Tempfile.new
+    @temporary_thumbnail_output ||= Tempfile.new("vector_thumb", Hydra::Derivatives.temp_file_base)
   end
 
   def update_cloud_acl
