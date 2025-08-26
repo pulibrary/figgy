@@ -30,7 +30,7 @@ class RasterResourceDerivativeService
 
   def build_cloud_file
     IngestableFile.new(file_path: temporary_display_output.path, mime_type: "image/tiff; gdal-format=GTiff", original_filename: "display_raster.tif", use: use_cloud_derivative,
-                       copy_before_ingest: false)
+                       copy_before_ingest: true)
   end
 
   def build_thumbnail_file
@@ -63,6 +63,11 @@ class RasterResourceDerivativeService
       update_error_message(message: error.message)
     end
     raise error
+
+  ensure
+    FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
+    File.unlink(temporary_display_output.path) if File.exist?(temporary_display_output.path)
+    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
   end
 
   def cloud_storage_adapter
@@ -84,7 +89,8 @@ class RasterResourceDerivativeService
       id: prefixed_id,
       format: "tif",
       srid: "EPSG:3857",
-      url: URI("file://#{temporary_display_output.path}")
+      url: URI("file://#{temporary_display_output.path}"),
+      working_dir: temporary_working_directory
     }
   end
 
@@ -95,7 +101,8 @@ class RasterResourceDerivativeService
       id: resource.id,
       format: "png",
       size: "200x150",
-      url: URI("file://#{temporary_thumbnail_output.path}")
+      url: URI("file://#{temporary_thumbnail_output.path}"),
+      working_dir: temporary_working_directory
     }
   end
 
@@ -117,12 +124,16 @@ class RasterResourceDerivativeService
     )
   end
 
+  def temporary_working_directory
+    @temporary_working_directory ||= Dir.mktmpdir("raster_working_dir", Hydra::Derivatives.temp_file_base)
+  end
+
   def temporary_display_output
-    @temporary_display_output ||= Tempfile.new
+    @temporary_display_output ||= Tempfile.new("raster_display", temporary_working_directory)
   end
 
   def temporary_thumbnail_output
-    @temporary_thumbnail_output ||= Tempfile.new
+    @temporary_thumbnail_output ||= Tempfile.new("raster_thumb", temporary_working_directory)
   end
 
   def update_cloud_acl

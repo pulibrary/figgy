@@ -50,6 +50,17 @@ module GeoDerivatives
         def self.cloud_vector(in_path, out_path, options)
           run_commands(in_path, out_path, cloud_queue, options)
         end
+
+        def encode_file(file_suffix, options)
+          temp_file_name = output_file(file_suffix, options[:working_dir])
+          self.class.encode(source_path, options, temp_file_name)
+          output_file_service.call(File.open(temp_file_name, "rb"), directives)
+          File.unlink(temp_file_name)
+        end
+
+        def output_file(file_suffix, working_dir)
+          Dir::Tmpname.create(["vector_derivative", ".#{file_suffix}"], working_dir) {}
+        end
       end
     end
   end

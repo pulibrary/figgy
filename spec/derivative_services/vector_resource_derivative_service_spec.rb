@@ -36,6 +36,17 @@ RSpec.describe VectorResourceDerivativeService do
   end
 
   context "with a valid shapefile" do
+    let(:temp_dir) { Rails.root.join("tmp", "temp_dir") }
+
+    before do
+      Dir.mkdir(temp_dir) unless Dir.exist?(temp_dir)
+      allow(Hydra::Derivatives).to receive(:temp_file_base).and_return temp_dir
+    end
+
+    after do
+      FileUtils.rmtree(temp_dir)
+    end
+
     it "creates a thumbnail in the derivatives directory and also stores to the cloud" do
       cloud_file_service = instance_double(CloudFilePermissionsService)
       allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
@@ -55,6 +66,9 @@ RSpec.describe VectorResourceDerivativeService do
       expect(image.avg.round).to eq 250
       expect(cloud_vector_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
+
+      # Ensure that temporary files and directories are cleaned up
+      expect(Dir.empty?(temp_dir)).to be true
     end
   end
 

@@ -51,7 +51,8 @@ module GeoDerivatives
           output_size: output_size,
           output_srid: output_srid,
           basename: basename,
-          id: id
+          id: id,
+          working_dir: working_dir
         }
       end
 
@@ -84,6 +85,12 @@ module GeoDerivatives
       # @return [String] fileset id
       def id
         directives.fetch(:id, nil)
+      end
+
+      # Gets the temporary working directory
+      # @return [String] working directory path
+      def working_dir
+        directives.fetch(:working_dir, nil)
       end
     end
   end
