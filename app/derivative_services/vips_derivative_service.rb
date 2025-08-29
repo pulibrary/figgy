@@ -3,6 +3,7 @@ class VipsDerivativeService
   # Pixel width or height at which point it cuts the size in half for
   # performance.
   REDUCTION_THRESHOLD = 15_000
+  TILE_SIZE = 1024
   class Factory
     attr_reader :change_set_persister
     delegate :metadata_adapter, to: :change_set_persister
@@ -98,12 +99,22 @@ class VipsDerivativeService
     @vips_image ||=
       begin
         image = image_from_file(filename.to_s)
-        if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
-          image.resize(0.5)
-        else
-          image
-        end
+        resize(image)
       end
+  end
+
+  def resize(image)
+    if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
+      # Scale the image down by 50% to improve performance
+      image.resize(0.5)
+    elsif image.height < TILE_SIZE || image.width < TILE_SIZE
+      # Scale the image up so both dimensions are above the pyramidal tile size
+      relevant_dimension = TILE_SIZE - image.height > TILE_SIZE - image.width ? image.height : image.width
+      image.resize(TILE_SIZE.to_f / relevant_dimension.to_f)
+    else
+      # No need to resize
+      image
+    end
   end
 
   def image_from_file(filename)

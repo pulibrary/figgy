@@ -163,6 +163,7 @@ RSpec.describe VipsDerivativeService do
       expect(derivative).to be_present
       derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
       expect(Vips::Image.magickload(derivative_file.disk_path.to_s).height).to eq 144
+      expect(Vips::Image.magickload(derivative_file.disk_path.to_s).width).to eq 100
     end
     it "uploads it with the appropriate metadata", run_real_characterization: true do
       allow(storage_adapter).to receive(:upload).and_call_original
@@ -170,6 +171,26 @@ RSpec.describe VipsDerivativeService do
       derivative_service.new(id: valid_change_set.id).create_derivatives
 
       expect(storage_adapter).to have_received(:upload).with(file: anything, resource: anything, original_filename: anything, metadata: { "height" => "144", "width" => "100", "pages" => "1" })
+    end
+  end
+
+  context "tiff source smaller than pyramidal derivative tiles size", run_real_derivatives: true do
+    it "resizes the derivate so it is at least as big as tile", run_real_characterization: true do
+      derivative_service.new(id: valid_change_set.id).create_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      derivative = reloaded.derivative_file
+
+      expect(derivative).to be_present
+      derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+      expect(Vips::Image.magickload(derivative_file.disk_path.to_s).height).to eq 1469
+      expect(Vips::Image.magickload(derivative_file.disk_path.to_s).width).to eq 1024
+    end
+    it "uploads it with the appropriate metadata", run_real_characterization: true do
+      allow(storage_adapter).to receive(:upload).and_call_original
+      derivative_service.new(id: valid_change_set.id).create_derivatives
+
+      expect(storage_adapter).to have_received(:upload).with(file: anything, resource: anything, original_filename: anything, metadata: { "height" => "1469", "width" => "1024", "pages" => "2" })
     end
   end
 
