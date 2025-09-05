@@ -27,6 +27,7 @@ RSpec.feature "VectorResources" do
     expect(page).to have_field "Issued"
     expect(page).to have_field "Creator"
     expect(page).to have_field "Language"
+    expect(page).not_to have_field "Held by"
   end
 
   context "when a user creates a new vector resource" do

@@ -30,6 +30,7 @@ RSpec.feature "ScannedMaps" do
     expect(page).to have_field "Language"
     expect(page).to have_field "Cartographic scale"
     expect(page).to have_field "Always show in Pulmap search results"
+    expect(page).not_to have_field "Held by"
   end
 
   context "when a user creates a new scanned map" do
