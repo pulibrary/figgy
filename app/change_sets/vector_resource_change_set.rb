@@ -64,7 +64,6 @@ class VectorResourceChangeSet < ChangeSet
         :cartographic_scale,
         :cartographic_projection,
         :coverage,
-        :held_by,
         :embargo_date
       ]
     }

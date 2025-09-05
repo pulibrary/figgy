@@ -36,7 +36,6 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :language,
       :cartographic_scale,
       :coverage,
-      :held_by,
       :embargo_date
     ]
   end
