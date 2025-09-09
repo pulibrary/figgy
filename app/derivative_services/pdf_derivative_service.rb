@@ -96,8 +96,7 @@ class PDFDerivativeService
   end
 
   def convert_pages
-    image = Vips::Image.pdfload(filename, access: :sequential, memory: true)
-    pages = image.get_value("pdf-n_pages")
+    pages = Vips::Image.pdfload(filename, access: :sequential, memory: true).get_value("pdf-n_pages")
     files = Array.new(pages).lazy.each_with_index.map do |_, page|
       location = temporary_output(page).to_s
       generate_pdf_image(filename, location, page)
@@ -113,7 +112,11 @@ class PDFDerivativeService
   end
 
   def convert_pdf_page(filename, location, page)
-    `vips pdfload "#{filename}" #{location} --page #{page} --n 1 --access sequential`
+    image = Vips::Image.pdfload(filename, page: page, dpi: 300, access: :sequential)
+    image.tiffsave(
+      location,
+      compression: :jpeg
+    )
     raise(ZeroByteError, "Failed to generate PDF derivative #{location} - page #{page}.") if File.size(location).zero?
   end
 
