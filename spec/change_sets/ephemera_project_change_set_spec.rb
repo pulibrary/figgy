@@ -16,6 +16,18 @@ RSpec.describe EphemeraProjectChangeSet do
     end
   end
 
+  describe "#tagline" do
+    it "accesses the tagline assigned to an Ephemera Project" do
+      expect(change_set.tagline).to include "project tagline"
+    end
+  end
+
+  describe "#description" do
+    it "accesses the description assigned to an Ephemera Project" do
+      expect(change_set.description).to include "project extended description"
+    end
+  end
+
   describe "#language_options" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id]) }
     let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
@@ -43,7 +55,7 @@ RSpec.describe EphemeraProjectChangeSet do
 
   describe "#primary_terms" do
     it "exposes the title, slug, and top_language as the primary terms for Ephemera Projects" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :contributor_uids, :top_language]
+      expect(change_set.primary_terms).to eq [:title, :slug, :contributor_uids, :top_language, :tagline, :description]
     end
   end
 
