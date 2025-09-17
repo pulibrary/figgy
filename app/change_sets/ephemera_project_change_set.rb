@@ -39,4 +39,10 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   def preserve_children?
     false
   end
+
+  # Render fields with rich text editor
+  def rich_text?(key)
+    return unless key == :description
+    true
+  end
 end
