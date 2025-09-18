@@ -5,6 +5,8 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   property :slug, multiple: false, required: true
   property :top_language, multiple: true, required: false
   property :contributor_uids, multiple: true, required: false
+  property :tagline, multiple: false, required: false
+  property :description, multiple: false, required: false
 
   validates :title, :slug, presence: true
 
@@ -12,7 +14,7 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   validates_with UniqueSlugValidator
 
   def primary_terms
-    [:title, :slug, :contributor_uids, :top_language]
+    [:title, :slug, :contributor_uids, :top_language, :tagline, :description]
   end
 
   def top_language=(top_language_values)
@@ -36,5 +38,11 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   # states and will preserve on complete.
   def preserve_children?
     false
+  end
+
+  # Render fields with rich text editor
+  def rich_text?(key)
+    return unless key == :description
+    true
   end
 end

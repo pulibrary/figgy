@@ -15,6 +15,8 @@ import BoundingBoxSelector from './bounding_box_selector'
 import FieldManager from './field_manager'
 import Confetti from 'canvas-confetti'
 import DownloadNotifier from './download_notifier'
+import Trix from "trix"
+import "trix/dist/trix.css"
 
 export default class Initializer {
   constructor() {

@@ -230,9 +230,6 @@ RSpec/EmptyExampleGroup:
     - 'spec/models/search_builder_spec.rb'
 RSpec/ExampleLength:
   Enabled: false
-RSpec/FilePath:
-  Exclude:
-    - 'spec/registered_adapter_spec.rb'
 RSpec/MessageChain:
   Exclude:
     - 'spec/decorators/file_set_decorator_spec.rb'
