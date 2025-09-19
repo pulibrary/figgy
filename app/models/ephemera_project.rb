@@ -8,6 +8,7 @@ class EphemeraProject < Resource
   attribute :contributor_uids, Valkyrie::Types::Set
   attribute :tagline, Valkyrie::Types::Set
   attribute :description, Valkyrie::Types::Set
+  attribute :publish, Valkyrie::Types::Bool.optional
 
   def logical_structure
     []

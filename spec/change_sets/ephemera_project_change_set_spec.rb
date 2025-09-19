@@ -55,7 +55,7 @@ RSpec.describe EphemeraProjectChangeSet do
 
   describe "#primary_terms" do
     it "exposes the title, slug, and top_language as the primary terms for Ephemera Projects" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :contributor_uids, :top_language, :tagline, :description]
+      expect(change_set.primary_terms).to eq [:title, :slug, :publish, :contributor_uids, :top_language, :tagline, :description]
     end
   end
 
