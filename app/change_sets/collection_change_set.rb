@@ -10,16 +10,23 @@ class CollectionChangeSet < ChangeSet
   property :visibility, multiple: false, required: false
   property :owners, multiple: true, required: false
   property :restricted_viewers, multiple: true, required: false
+  property :publish, multiple: false, required: false, type: Valkyrie::Types::Bool
   validates :slug, presence: true
   validates_with UniqueSlugValidator
   validates_with SourceMetadataIdentifierValidator
   validates_with SourceMetadataIdentifierOrTitleValidator
 
   def primary_terms
-    [:title, :slug, :source_metadata_identifier, :description, :owners, :restricted_viewers]
+    [:title, :slug, :publish, :source_metadata_identifier, :owners, :restricted_viewers, :description]
   end
 
   def preserve?
+    true
+  end
+
+  # Render fields with rich text editor
+  def rich_text?(key)
+    return unless key == :description
     true
   end
 end
