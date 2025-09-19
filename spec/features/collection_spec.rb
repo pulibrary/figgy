@@ -16,10 +16,13 @@ RSpec.feature "Collection" do
     expect(page).to have_field "Title", with: collection.title.first
     expect(page).to have_field "DPUL URL", with: collection.slug.first
     expect(page).to have_checked_field "Publish in Digital Collections"
-    expect(page).to have_field "Source Metadata ID", with: collection.source_metadata_identifier.first
+    expect(page).to have_field "Source Metadata ID"
     expect(page).to have_field "Refresh metadata from PULFA/Catalog"
-    expect(page).to have_field "Description", with: collection.description.first
     expect(page).to have_content "Owners"
     expect(page).to have_field "Restricted viewers"
+
+    # renders rich text editor for description
+    element = find("trix-editor > div")
+    expect(element.text).to eq collection.description.first
   end
 end
