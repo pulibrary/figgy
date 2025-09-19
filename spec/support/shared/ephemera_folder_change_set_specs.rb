@@ -48,7 +48,7 @@ RSpec.shared_examples "an ephemera folder change set" do |change_set_class|
 
   describe "#primary_terms" do
     it "includes collections" do
-      expect(change_set.primary_terms).to include :member_of_collection_ids
+      expect(change_set.primary_terms[""]).to include :member_of_collection_ids
     end
   end
 

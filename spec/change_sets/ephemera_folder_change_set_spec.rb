@@ -84,10 +84,10 @@ RSpec.describe EphemeraFolderChangeSet do
 
   describe "#primary_terms" do
     it "includes the transliterated title as a primary term" do
-      expect(change_set.primary_terms).to include :transliterated_title
+      expect(change_set.primary_terms[""]).to include :transliterated_title
     end
     it "includes keywords" do
-      expect(change_set.primary_terms).to include :keywords
+      expect(change_set.primary_terms[""]).to include :keywords
     end
   end
 
