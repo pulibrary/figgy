@@ -8,6 +8,16 @@ RSpec.feature "Ephemera Folder" do
     sign_in user
   end
 
+  scenario "edit a folder", js: true do
+    folder = FactoryBot.create_for_repository(:ephemera_folder)
+    visit edit_ephemera_folder_path(id: folder.id)
+
+    # Access and display section
+    expect(page).to have_content "Access and Display"
+    expect(page).to have_checked_field "Feature in Digital Collections"
+    expect(page).to have_content "Embargo Date"
+  end
+
   scenario "multiple descriptions", js: true do
     folder = FactoryBot.create_for_repository(:ephemera_folder)
     visit edit_ephemera_folder_path(id: folder.id)

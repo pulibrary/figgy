@@ -24,6 +24,7 @@ FactoryBot.define do
     rights_statement { RightsStatements.no_known_copyright }
     read_groups { "public" }
     state { "needs_qa" }
+    featurable { true }
     member_of_collection_ids { [] }
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)

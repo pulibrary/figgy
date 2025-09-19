@@ -45,6 +45,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :append_id, virtual: true, multiple: false, required: false
   property :keywords, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
+  property :featurable, multiple: false, required: false, type: Valkyrie::Types::Bool
 
   property :start_canvas, required: false
   property :viewing_direction, required: false
@@ -66,43 +67,48 @@ class EphemeraFolderChangeSetBase < ChangeSet
   delegate :human_readable_type, to: :model
 
   def primary_terms
-    [
-      :append_id,
-      :barcode,
-      :folder_number,
-      :title,
-      :sort_title,
-      :alternative_title,
-      :transliterated_title,
-      :language,
-      :genre,
-      :width,
-      :height,
-      :page_count,
-      :ocr_language,
-      :keywords,
-      :series,
-      :creator,
-      :contributor,
-      :publisher,
-      :geographic_origin,
-      :subject,
-      :geo_subject,
-      :description,
-      :date_created,
-      :date_range_form,
-      :provenance,
-      :dspace_url,
-      :source_url,
-      :downloadable,
-      :pdf_type,
-      :holding_location,
-      :rights_statement,
-      :notice_type,
-      :content_warning,
-      :member_of_collection_ids,
-      :embargo_date
-    ]
+    {
+      "" => [
+        :append_id,
+        :barcode,
+        :folder_number,
+        :title,
+        :sort_title,
+        :alternative_title,
+        :transliterated_title,
+        :language,
+        :genre,
+        :width,
+        :height,
+        :page_count,
+        :ocr_language,
+        :keywords,
+        :series,
+        :creator,
+        :contributor,
+        :publisher,
+        :geographic_origin,
+        :subject,
+        :geo_subject,
+        :description,
+        :date_created,
+        :date_range_form,
+        :provenance,
+        :dspace_url,
+        :source_url,
+        :downloadable,
+        :pdf_type,
+        :holding_location,
+        :rights_statement,
+        :notice_type,
+        :content_warning,
+        :member_of_collection_ids
+      ],
+      "Access and Display" => [
+        :featurable,
+        :embargo_date
+      ]
+    }
   end
 
   def valid?
