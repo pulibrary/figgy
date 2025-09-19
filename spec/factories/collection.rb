@@ -3,6 +3,8 @@ FactoryBot.define do
   factory :collection do
     title { "Title" }
     slug { "test" }
+    publish { true }
+    description { "description" }
     visibility { "open" }
     read_groups { "public" }
     to_create do |instance|
