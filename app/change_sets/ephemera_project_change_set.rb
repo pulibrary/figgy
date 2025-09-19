@@ -7,6 +7,7 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   property :contributor_uids, multiple: true, required: false
   property :tagline, multiple: false, required: false
   property :description, multiple: false, required: false
+  property :publish, multiple: false, required: false, type: Valkyrie::Types::Bool
 
   validates :title, :slug, presence: true
 
@@ -14,7 +15,7 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   validates_with UniqueSlugValidator
 
   def primary_terms
-    [:title, :slug, :contributor_uids, :top_language, :tagline, :description]
+    [:title, :slug, :publish, :contributor_uids, :top_language, :tagline, :description]
   end
 
   def top_language=(top_language_values)
