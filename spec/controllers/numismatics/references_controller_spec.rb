@@ -65,6 +65,15 @@ RSpec.describe Numismatics::ReferencesController, type: :controller do
       expect(response.location).to start_with "http://test.host/concern/numismatics/reference"
     end
   end
+  describe "json update" do
+    let(:user) { FactoryBot.create(:admin) }
+
+    it "saves and does not redirect" do
+      numismatic_reference = FactoryBot.create_for_repository(:numismatic_reference)
+      patch :update, params: { id: numismatic_reference.id.to_s, numismatics_reference: { title: ["Reference 3"] } }, format: :json
+      expect(response).not_to be_redirect
+    end
+  end
   describe "index" do
     context "when they have permission" do
       let(:user) { FactoryBot.create(:admin) }

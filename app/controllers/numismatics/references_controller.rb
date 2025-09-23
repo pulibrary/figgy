@@ -18,7 +18,12 @@ module Numismatics
     end
 
     def after_update_success(_obj, _change_set)
-      redirect_to numismatics_references_path
+      respond_to do |format|
+        format.html do
+          redirect_to numismatics_references_path
+        end
+        format.json { render json: { status: "ok" } }
+      end
     end
 
     private

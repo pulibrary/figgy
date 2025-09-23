@@ -2,7 +2,7 @@
       <% decorated_resource = resource.decorate %>
       <% if decorated_resource.attachable_objects.length == 1 %>
         <% concern = decorated_resource.attachable_objects.first %>
-        <%= link_to "Attach #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id), class: 'btn btn-light' %>
+        <%= link_to "Attach New #{concern.human_readable_type}", polymorphic_path([:parent, :new, ActiveModel::Naming.param_key(concern).to_sym], parent_id: resource.id), class: 'btn btn-light' %>
       <% end %>
 
       <% if decorated_resource.attachable_objects.length > 1 %>

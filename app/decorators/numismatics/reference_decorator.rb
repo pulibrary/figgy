@@ -8,7 +8,7 @@ module Numismatics
             :title,
             :year
 
-    delegate :decorated_parent, :decorated_authors, :members, to: :wayfinder
+    delegate :decorated_parent, :decorated_authors, :decorated_members, :related_numismatic_issues, :related_numismatic_coins, :members, to: :wayfinder
 
     def attachable_objects
       [Numismatics::Reference]
@@ -36,6 +36,10 @@ module Numismatics
 
     def title
       Array.wrap(super).first
+    end
+
+    def first_title
+      title
     end
   end
 end
