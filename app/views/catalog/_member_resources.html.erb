@@ -19,98 +19,83 @@
       id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
       <% hide_thumbnail ||= false %>
       <% hide_visibility ||= false %>
-      <%= simple_form_for @change_set do |f| %>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="loading-status d-none">Loading...</div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="loading-status d-none">Loading...</div>
 
-            <table
-              id="<%= "members-#{member_type.pluralize.dasherize}" %>"
-              class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize} member-resources-datatable" %>"
-              data-update-url="<%= polymorphic_url([resource]) %>"
-              data-query-url="<%= solr_document_path(id: resource.id) %>"
-              data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-              data-resource-id="<%= resource.id.to_s %>"
-              data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
-              <thead>
-                <tr>
-                  <% unless hide_thumbnail %>
-                    <th>Thumbnail</th>
-                  <% end %>
-                  <th>Title</th>
-                  <th>Date Uploaded</th>
-                  <% unless hide_visibility %>
-                    <th>Visibility</th>
-                  <% end %>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% decorated_members.each do |resource| %>
-                  <% resource_url = solr_document_path(id: resource.id) %>
-                  <tr data-resource-id="<%= resource.id.to_s %>">
-                    <% unless hide_thumbnail %>
-                      <td><%= link_to figgy_thumbnail_path(resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), resource_url %></td>
-                    <% end %>
-                    <td><%= resource.first_title %></td>
-                    <td><%= resource.created_at %></td>
-                    <% unless hide_visibility %>
-                      <td><%= resource.visibility_badge.first.html_safe %></td>
-                    <% end %>
-                    <td>
-                      <%= link_to 'View', resource_url, class: 'btn btn-secondary' %>
-                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-secondary' %>
-                      <span class="input-group-btn">
-                        <%= f.button :button, "Detach", class: ["btn","btn-danger", 'btn-remove-row'] %>
-                      </span>
-                    </td>
-                  </tr>
+          <table
+            id="<%= "members-#{member_type.pluralize.dasherize}" %>"
+            class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize} member-resources-datatable" %>"
+            data-update-url="<%= polymorphic_url([resource]) %>"
+            data-query-url="<%= solr_document_path(id: resource.id) %>"
+            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
+            data-resource-id="<%= resource.id.to_s %>"
+            data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+            <thead>
+              <tr>
+                <% unless hide_thumbnail %>
+                  <th>Thumbnail</th>
                 <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div><!-- row -->
+                <th>Title</th>
+                <th>Date Uploaded</th>
+                <% unless hide_visibility %>
+                  <th>Visibility</th>
+                <% end %>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-        <% if decorated_members.empty? %>
-          <div class="row">
-            <div class="col-md-6">
-              <% empty_text ||= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %>
-              <p><%= empty_text %></p>
-            </div>
-          </div>
-        <% end %>
+            <tbody>
+              <% decorated_members.each do |resource| %>
+                <% resource_url = solr_document_path(id: resource.id) %>
+                <tr data-resource-id="<%= resource.id.to_s %>">
+                  <% unless hide_thumbnail %>
+                    <td><%= link_to figgy_thumbnail_path(resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), resource_url %></td>
+                  <% end %>
+                  <td><%= resource.first_title %></td>
+                  <td><%= resource.created_at %></td>
+                  <% unless hide_visibility %>
+                    <td><%= resource.visibility_badge.first.html_safe %></td>
+                  <% end %>
+                  <td>
+                    <%= link_to 'View', resource_url, class: 'btn btn-secondary' %>
+                    <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-secondary' %>
+                    <span class="input-group-btn">
+                      <button name="button" class="btn btn-danger btn-remove-row">Detach</button>
+                    </span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- row -->
 
+      <% if decorated_members.empty? %>
         <div class="row">
-          <div class="message has-warning hidden col-md-6">
-            <p id="warning-message" class="alert-warning"></p>
+          <div class="col-md-6">
+            <% empty_text ||= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %>
+            <p><%= empty_text %></p>
           </div>
         </div>
+      <% end %>
 
-        <div class="row">
-          <div class="col-md-4">
-            <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
-            <%= f.input :member_ids,
-                        placeholder: placeholder_text,
-                        label: false,
-                        required: false,
-                        input_html: {
-                          id: "child_#{member_type}_id_input",
-                          class: [
-                            'related_resource_ids',
-                            'resource_member_ids',
-                            'form-control'
-                          ],
-                          value: nil
-                        } %>
-          </div>
-          <div class="col-md-2">
-            <span class="input-group-btn">
-              <%= f.button :button, "Attach", id: "child_#{member_type}_button", class: ["btn","btn-primary","btn-add-row"] %>
-            </span>
-          </div>
-        </div><!-- row -->
+      <div class="row">
+        <div class="message has-warning hidden col-md-6">
+          <p id="warning-message" class="alert-warning"></p>
+        </div>
+      </div>
 
-      <% end %><%# simpleform %>
+      <div class="row">
+        <div class="col-md-4">
+          <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
+          <input class="form-control string optional related_resource_ids resource_member_ids form-control" id=<%= "child_#{member_type}_id_input" %> placeholder="<%= placeholder_text %>" type="text">
+        </div>
+        <div class="col-md-2">
+          <span class="input-group-btn">
+            <button name="button" id="child_#{member_type}_button" class="btn btn-primary btn-add-row">Attach</button>
+          </span>
+        </div>
+      </div><!-- row -->
     </div>
   </div><!-- panel -->
