@@ -149,7 +149,7 @@ RSpec.feature "Numismatics::Coins" do
 
   scenario "users can save a new coin" do
     visit solr_document_path numismatic_issue
-    page.click_on "Attach Coin"
+    page.click_on "Attach New Coin"
 
     page.fill_in "numismatics_coin_analysis", with: "test analysis"
 
@@ -159,7 +159,7 @@ RSpec.feature "Numismatics::Coins" do
 
   scenario "users can save a new coin and create another" do
     visit solr_document_path numismatic_issue
-    page.click_on "Attach Coin"
+    page.click_on "Attach New Coin"
 
     page.fill_in "numismatics_coin_analysis", with: "test analysis"
 

@@ -61,7 +61,7 @@
                     <%= link_to 'View', resource_url, class: 'btn btn-secondary' %>
                     <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-secondary' %>
                     <span class="input-group-btn">
-                      <button name="button" class="btn btn-danger btn-remove-row">Detach</button>
+                      <button name="button" id=<%= "child_#{member_type}_detach_button" %> class="btn btn-danger btn-remove-row">Detach</button>
                     </span>
                   </td>
                 </tr>
@@ -89,11 +89,11 @@
       <div class="row">
         <div class="col-md-4">
           <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
-          <input class="form-control string optional related_resource_ids resource_member_ids form-control" id=<%= "child_#{member_type}_id_input" %> placeholder="<%= placeholder_text %>" type="text">
+          <input class="form-control string optional related_resource_ids resource_member_ids form-control" id=<%= "child_#{member_type}_id_input" %> name=<%= "child_#{member_type}_id_input"%> placeholder="<%= placeholder_text %>" type="text">
         </div>
         <div class="col-md-2">
           <span class="input-group-btn">
-            <button name="button" id="child_#{member_type}_button" class="btn btn-primary btn-add-row">Attach</button>
+            <button name="button" id=<%= "child_#{member_type}_attach_button" %> class="btn btn-primary btn-add-row">Attach</button>
           </span>
         </div>
       </div><!-- row -->
