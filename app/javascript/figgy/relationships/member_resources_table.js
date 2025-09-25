@@ -3,6 +3,7 @@
   * Companion to ParentResourcesTable
   * Adapted from the related_works.es6 module in https://github.com/samvera-labs/geo_works
   */
+import { conditionalPagingCallback } from "../datatables/index.js"
 
 export default class MemberResourcesTable {
   constructor(element, form) {
@@ -219,7 +220,9 @@ export default class MemberResourcesTable {
   }
 
   initializeDataTable() {
-    this.datatable = this.element.find('.member-resources-datatable').DataTable()
+    this.datatable = this.element.find('.member-resources-datatable').DataTable({
+      "drawCallback": conditionalPagingCallback
+    })
   }
 
   /**

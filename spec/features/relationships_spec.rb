@@ -17,7 +17,7 @@ RSpec.feature "Related Resources", js: true do
 
       # attach
       visit "/catalog/#{parent.id}"
-      fill_in("scanned_resource[member_ids]", with: child.id.to_s)
+      fill_in("child_scanned_resource_id_input", with: child.id.to_s)
       click_on("button")
 
       # wait for the new row to load so we get through the controller before we
@@ -48,7 +48,7 @@ RSpec.feature "Related Resources", js: true do
 
         # attach
         visit "/catalog/#{new_parent.id}"
-        fill_in("scanned_resource[member_ids]", with: child.id.to_s)
+        fill_in("child_scanned_resource_id_input", with: child.id.to_s)
         click_on("button")
 
         # wait for the new row to load so we get through the controller before we
@@ -73,7 +73,7 @@ RSpec.feature "Related Resources", js: true do
       child_vector_panel = page.find("#members-vector-resources-panel")
 
       within child_vector_panel do
-        fill_in("vector_resource[member_ids]", with: child.id.to_s)
+        fill_in("child_vector_resource_id_input", with: child.id.to_s)
         click_on("button")
       end
 
@@ -198,7 +198,7 @@ RSpec.feature "Related Resources", js: true do
       # attach
       visit "/catalog/#{parent.id}"
       fill_in("child_raster_resource_id_input", with: child.id.to_s)
-      click_on("child_raster_resource_button")
+      click_on("child_raster_resource_attach_button")
 
       # wait for the new row to load so we get through the controller before we
       # look for the new object
@@ -225,8 +225,9 @@ RSpec.feature "Related Resources", js: true do
 
       # attach
       visit "/catalog/#{parent.id}"
+
       fill_in("child_vector_resource_id_input", with: child.id.to_s)
-      click_on("child_vector_resource_button")
+      click_on("child_vector_resource_attach_button")
 
       new_row = page.find("tr[data-resource-id]")
 
@@ -306,7 +307,7 @@ RSpec.feature "Related Resources", js: true do
       # attach
       visit "/catalog/#{parent.id}"
       fill_in("child_scanned_map_id_input", with: child.id.to_s)
-      click_on("child_scanned_map_button")
+      click_on("child_scanned_map_attach_button")
 
       new_row = page.find("tr[data-resource-id]")
 
@@ -332,7 +333,7 @@ RSpec.feature "Related Resources", js: true do
       # attach
       visit "/catalog/#{parent.id}"
       fill_in("child_raster_resource_id_input", with: child.id.to_s)
-      click_on("child_raster_resource_button")
+      click_on("child_raster_resource_attach_button")
 
       # wait for the new row to load so we get through the controller before we
       # look for the new object

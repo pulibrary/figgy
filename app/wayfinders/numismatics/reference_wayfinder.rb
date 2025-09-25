@@ -5,6 +5,7 @@ module Numismatics
     relationship_by_property :numismatic_references, property: :member_ids, model: Numismatics::Reference
     relationship_by_property :authors, property: :author_id
     inverse_relationship_by_property :parents, property: :member_ids, singular: true
+    inverse_relationship_by_property :citations, property: :numismatic_reference, model: Numismatics::Citation
 
     def members_with_parents
       @members_with_parents ||= members.map do |member|
@@ -15,6 +16,16 @@ module Numismatics
 
     def references_count
       @references_count = query_service.custom_queries.count_all_of_model(model: Numismatics::Reference)
+    end
+
+    def related_numismatic_issues
+      @related_numismatic_issues ||= query_service.custom_queries.find_by_property(property: :numismatic_citation, model: Numismatics::Issue,
+                                                                                   value: { numismatic_reference_id: [{ id: resource.id.to_s }] }).map(&:decorate)
+    end
+
+    def related_numismatic_coins
+      @related_numismatic_coins ||= query_service.custom_queries.find_by_property(property: :numismatic_citation, model: Numismatics::Coin,
+                                                                                  value: { numismatic_reference_id: [{ id: resource.id.to_s }] }).map(&:decorate)
     end
   end
 end

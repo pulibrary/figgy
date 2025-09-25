@@ -17,6 +17,7 @@ import Confetti from 'canvas-confetti'
 import DownloadNotifier from './download_notifier'
 import Trix from "trix"
 import "trix/dist/trix.css"
+import { conditionalPagingCallback } from "./datatables/index.js"
 
 export default class Initializer {
   constructor() {
@@ -66,14 +67,18 @@ export default class Initializer {
   // most datatables can be initialized here
   // note that member resources datatables are initialized in that class
   initialize_datatables() {
-    $(".datatable").dataTable()
+    $(".datatable").dataTable({
+      "drawCallback": conditionalPagingCallback
+    })
     // Set an initial sort order of data table for coins
     $(".coin-datatable").dataTable({
-      "order": [[ 2, "asc" ]]
+      "order": [[ 2, "asc" ]],
+      "drawCallback": conditionalPagingCallback
     })
     // Set an initial sort order of data table for ocr requests
     $("#requests-table").dataTable({
       order: [[1, "desc"]],
+      "drawCallback": conditionalPagingCallback
     })
   }
 

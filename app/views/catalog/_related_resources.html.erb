@@ -1,0 +1,77 @@
+<%# partial for the table / form used to display related resources
+    Expected locals:
+      resource_type [String] e.g. "issue"
+      decorated_resources [Array<ResourceDecorator>] the list of related
+        objects to put into the table
+    Optional locals:
+      empty_text [String] the message to show if there are no related resources
+      placeholder_text [String] placeholder value for the id input element
+      hide_thumbnail [Boolean] do not display the thumbnail column
+      hide_visibility [Boolean] do not display the visibility column
+    %>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <% panel_title ||= "Related #{resource_type.titleize.pluralize}" %>
+      <%= panel_title %>
+    </div>
+    <div class="card-body related-resources"
+      id="<%= "related-resources-#{resource_type.pluralize.dasherize}-panel"%>">
+      <% hide_thumbnail ||= false %>
+      <% hide_visibility ||= false %>
+      <%= simple_form_for @change_set do |f| %>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="loading-status d-none">Loading...</div>
+
+            <table
+              id="<%= "related-resources-#{resource_type.pluralize.dasherize}" %>"
+              class="datatable table table-striped related-resources <%= "related-#{resource_type.pluralize.dasherize} related-resources-datatable" %>" >
+              <thead>
+                <tr>
+                  <% unless hide_thumbnail %>
+                    <th>Thumbnail</th>
+                  <% end %>
+                  <th>Title</th>
+                  <th>Date Uploaded</th>
+                  <% unless hide_visibility %>
+                    <th>Visibility</th>
+                  <% end %>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <% decorated_resources.each do |resource| %>
+                  <% resource_url = solr_document_path(id: resource.id) %>
+                  <tr data-resource-id="<%= resource.id.to_s %>">
+                    <% unless hide_thumbnail %>
+                      <td><%= link_to figgy_thumbnail_path(resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), resource_url %></td>
+                    <% end %>
+                    <td><%= resource.first_title %></td>
+                    <td><%= resource.created_at %></td>
+                    <% unless hide_visibility %>
+                      <td><%= resource.visibility_badge.first.html_safe %></td>
+                    <% end %>
+                    <td>
+                      <%= link_to 'View', resource_url, class: 'btn btn-secondary' %>
+                      <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-secondary' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div><!-- row -->
+
+        <% if decorated_resources.empty? %>
+          <div class="row">
+            <div class="col-md-6">
+              <% empty_text ||= "This work has no related #{resource_type.humanize(capitalize: false).pluralize}." %>
+              <p><%= empty_text %></p>
+            </div>
+          </div>
+        <% end %>
+      <% end %><%# simpleform %>
+    </div>
+  </div><!-- panel -->

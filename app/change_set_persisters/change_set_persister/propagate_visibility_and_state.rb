@@ -42,6 +42,7 @@ class ChangeSetPersister
       return if collection_record
       return if ephemera_project
       return if numismatics_issue
+      return if numismatics_reference
       members.each do |member|
         resource_change_set = ChangeSet.for(member)
         resource_change_set = propagate_visibility(resource_change_set)
@@ -137,6 +138,10 @@ class ChangeSetPersister
 
       def numismatics_issue
         change_set.model.is_a?(Numismatics::Issue)
+      end
+
+      def numismatics_reference
+        change_set.model.is_a?(Numismatics::Reference)
       end
   end
 end
