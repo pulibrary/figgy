@@ -1,15 +1,13 @@
-<div class="row">
-  <div id="provenance">
-    <%= f.simple_fields_for :provenance, wrapper: :inline_form do |g| %>
-      <%= render 'provenance_fields', f: g %>
-    <% end %>
-  </div>
-  <div class="links">
-    <%= link_to_add_association f, :provenance, partial: 'provenance_fields', force_non_association_create: true do %>
-      <button type="button" class="btn btn-link add">
-        <span class="glyphicon glyphicon-plus"></span>
-        <span class="controls-add-text">Add another Provenance</span>
-      </button>
-    <% end %>
-  </div>
+<div id="provenance">
+  <%= f.simple_fields_for :provenance, wrapper: :inline_form do |g| %>
+    <%= render 'provenance_fields', f: g %>
+  <% end %>
+</div>
+<div class="links">
+  <%= link_to_add_association f, :provenance, partial: 'provenance_fields', force_non_association_create: true do %>
+    <button type="button" class="btn btn-link add">
+      <span class="glyphicon glyphicon-plus"></span>
+      <span class="controls-add-text">Add another Provenance</span>
+    </button>
+  <% end %>
 </div>
