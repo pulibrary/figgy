@@ -1,6 +1,5 @@
-  <%= render partial: 'member_resources',
-    locals: { member_type: "numismatic_reference", hide_thumbnail: true, hide_visibility: true,
-              decorated_members: decorated_resource.decorated_members } %>
+  <%= render partial: 'member_reference_resources',
+    locals: { decorated_members: decorated_resource.decorated_members } %>
   <%= render partial: 'related_resources',
     locals: { resource_type: "issue",
               decorated_resources: decorated_resource.related_numismatic_issues } %>

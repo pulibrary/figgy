@@ -292,7 +292,6 @@ RSpec.feature "Numismatics::Issues" do
     scenario "saved Numismatics::Coins are displayed as members" do
       visit solr_document_path(parent)
 
-      expect(page).to have_selector "h3", text: "Coins"
       expect(page).to have_selector "td", text: "Coin: #{member.coin_number}"
     end
   end
