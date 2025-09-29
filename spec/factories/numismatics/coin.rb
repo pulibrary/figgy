@@ -3,6 +3,9 @@ FactoryBot.define do
   factory :coin, class: Numismatics::Coin do
     rights_statement { RightsStatements.no_known_copyright }
     read_groups { "public" }
+    size { "100" }
+    weight { "200" }
+    die_axis { "300" }
     to_create do |instance|
       Valkyrie::MetadataAdapter.find(:indexing_persister).persister.save(resource: instance)
     end

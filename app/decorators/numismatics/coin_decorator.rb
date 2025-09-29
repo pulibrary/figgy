@@ -84,6 +84,14 @@ module Numismatics
       numismatic_citation.map { |c| c.decorate.numismatic_reference }
     end
 
+    def primary_reference_uri
+      citations = (decorated_parent.numismatic_citation + numismatic_citation)
+      citation = citations.find { |r| r.uri.present? }
+      return unless citation
+
+      citation.uri.first
+    end
+
     def rendered_accession
       decorated_numismatic_accession&.label
     end
@@ -96,15 +104,15 @@ module Numismatics
       ["#{weight} in grams"] if weight
     end
 
+    def size
+      Array.wrap(super).first
+    end
+
     def size_label
       ["#{size} in mm"] if size
     end
 
     def weight
-      Array.wrap(super).first
-    end
-
-    def size
       Array.wrap(super).first
     end
   end

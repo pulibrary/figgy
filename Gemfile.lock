@@ -845,11 +845,19 @@ GEM
     rdf-ldp (0.1.0)
       deprecation
       rdf
+    rdf-rdfxml (3.3.0)
+      builder (~> 3.2, >= 3.2.4)
+      htmlentities (~> 4.3)
+      rdf (~> 3.3)
+      rdf-xsd (~> 3.3)
     rdf-turtle (3.3.0)
       ebnf (~> 2.4)
       rdf (~> 3.3)
     rdf-vocab (3.3.2)
       rdf (~> 3.3)
+    rdf-xsd (3.3.0)
+      rdf (~> 3.3)
+      rexml (~> 3.2)
     rdoc (6.3.4.1)
     recipient_interceptor (0.3.3)
       mail
@@ -1219,6 +1227,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 7.1.0)
   rails-controller-testing
+  rdf-rdfxml
   recipient_interceptor
   redis (>= 3, < 5)
   redis-namespace

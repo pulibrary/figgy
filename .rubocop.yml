@@ -42,6 +42,7 @@ Metrics/AbcSize:
     - 'app/services/file_appender.rb'
     - 'app/services/cdl/charge_manager.rb'
     - 'app/jobs/cloud_fixity_job.rb'
+    - 'app/services/nomisma.rb'
 Metrics/BlockLength:
   Exclude:
     - '**/*.rake'

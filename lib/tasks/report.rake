@@ -8,6 +8,11 @@ namespace :figgy do
       ArkMismatchReporter.write
     end
 
+    desc "Generate Nomisma RDF document"
+    task nomisma: :environment do
+      Nomisma.generate
+    end
+
     desc "Write a CSV of LAE Subject terms"
     task lae_subjects: :environment do
       output = ENV["OUTPUT"]
