@@ -84,12 +84,9 @@ module Numismatics
       numismatic_citation.map { |c| c.decorate.numismatic_reference }
     end
 
-    def primary_reference_uri
+    def reference_uris
       citations = (decorated_parent.numismatic_citation + numismatic_citation)
-      citation = citations.find { |r| r.uri.present? }
-      return unless citation
-
-      citation.uri.first
+      citations.map { |c| c.uri.try(:first) }.compact
     end
 
     def rendered_accession
@@ -114,6 +111,22 @@ module Numismatics
 
     def weight
       Array.wrap(super).first
+    end
+
+    def cached_file_sets
+      @cached_file_sets ||= decorated_file_sets
+    end
+
+    def obverse_file_set
+      @obverse_file_set ||= cached_file_sets.find do |fs|
+        /O\.jpg|tif/.match(fs.original_file.original_filename[0])
+      end
+    end
+
+    def reverse_file_set
+      @reverse_file_set ||= cached_file_sets.find do |fs|
+        /R\.jpg|tif/.match(fs.original_file.original_filename[0])
+      end
     end
   end
 end

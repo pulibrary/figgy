@@ -130,6 +130,8 @@ Metrics/ClassLength:
     - 'app/services/dpul_success_dashboard_report_generator.rb'
     - 'app/controllers/reports_controller.rb'
     - 'app/derivative_services/av_derivative_service.rb'
+    - 'app/services/nomisma.rb'
+    - 'app/decorators/numismatics/coin_decorator.rb'
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
