@@ -35,6 +35,6 @@ RSpec.describe Collection do
   end
   it "has a tagline" do
     collection.tagline = "test"
-    expect(collection.tagline).to eq ["test"]
+    expect(collection.tagline).to eq "test"
   end
 end
