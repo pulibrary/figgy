@@ -33,4 +33,8 @@ RSpec.describe Collection do
     collection.restricted_viewers = ["miku", "skye"]
     expect(collection.restricted_viewers).to eq ["miku", "skye"]
   end
+  it "has a tagline" do
+    collection.tagline = "test"
+    expect(collection.tagline).to eq "test"
+  end
 end

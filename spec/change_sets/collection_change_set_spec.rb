@@ -37,6 +37,13 @@ RSpec.describe CollectionChangeSet do
     end
   end
 
+  describe "#tagline" do
+    it "is single-valued and not required" do
+      expect(change_set.multiple?(:tagline)).to eq false
+      expect(change_set.required?(:tagline)).to eq false
+    end
+  end
+
   describe "#visibility" do
     it "is single-valued and not required" do
       expect(change_set.multiple?(:description)).to eq false
@@ -46,7 +53,7 @@ RSpec.describe CollectionChangeSet do
 
   describe "#primary_terms" do
     it "returns the primary terms" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :publish, :source_metadata_identifier, :owners, :restricted_viewers, :description]
+      expect(change_set.primary_terms).to eq [:title, :slug, :publish, :source_metadata_identifier, :owners, :restricted_viewers, :description, :tagline]
     end
   end
 
