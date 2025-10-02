@@ -20,7 +20,7 @@ RSpec.feature "Collection" do
     expect(page).to have_field "Refresh metadata from PULFA/Catalog"
     expect(page).to have_content "Owners"
     expect(page).to have_field "Restricted viewers"
-    expect(page).to have_field "Tagline", with: collection.tagline.first
+    expect(page).to have_field "Tagline", with: collection.tagline
 
     # renders rich text editor for description
     element = find("trix-editor > div")

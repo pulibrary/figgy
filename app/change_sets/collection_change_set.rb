@@ -6,8 +6,8 @@ class CollectionChangeSet < ChangeSet
   property :title, multiple: false, required: true
   property :slug, multiple: false, required: true
   property :source_metadata_identifier, required: true, multiple: false
-  property :description, multiple: false, required: false
   property :tagline, multiple: false, required: false
+  property :description, multiple: false, required: false
   property :visibility, multiple: false, required: false
   property :owners, multiple: true, required: false
   property :restricted_viewers, multiple: true, required: false
