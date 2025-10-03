@@ -53,4 +53,10 @@ class GeoWorkflow < BaseWorkflow
   def self.ark_mint_states
     [:complete].map(&:to_s)
   end
+
+  # State at which the resource is considered published
+  # @return Symbol
+  def self.published_state
+    :complete
+  end
 end

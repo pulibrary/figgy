@@ -49,6 +49,14 @@ RSpec.describe ChangeSetPersister do
       expect(auth_token.label).to eq "Anonymous Token"
       expect(auth_token.group).to eq ["anonymous"]
     end
+
+    it "adds a published_at date" do
+      resource = FactoryBot.create(:scanned_resource, state: "final_review")
+      change_set = change_set_class.new(resource)
+      change_set.validate(state: "complete")
+      output = change_set_persister.save(change_set: change_set)
+      expect(output.published_at).to be_a DateTime
+    end
   end
 
   context "when a client requests that an auth. token be renewed" do

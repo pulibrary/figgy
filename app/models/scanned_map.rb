@@ -6,6 +6,7 @@ class ScannedMap < Resource
   attribute :member_of_collection_ids
   attribute :imported_metadata, Valkyrie::Types::Set.of(ImportedMetadata).optional
   attribute :state
+  attribute :published_at, Valkyrie::Types::DateTime
   attribute :logical_structure, Valkyrie::Types::Array.of(Structure.optional).optional
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional

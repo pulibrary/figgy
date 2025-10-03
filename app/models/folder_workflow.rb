@@ -25,7 +25,7 @@ class FolderWorkflow < BaseWorkflow
   end
 
   # States in which the record can be publicly viewable
-  # All states must be included here because any state is viewable if its container allows it
+  # :needs_qa is included for LAE use cases
   # @return array of strings
   def self.public_read_states
     [:needs_qa, :complete].map(&:to_s)
@@ -50,5 +50,11 @@ class FolderWorkflow < BaseWorkflow
   # @return [Array<String>] the states for which an ARK can be minted
   def self.ark_mint_states
     []
+  end
+
+  # State at which the resource is considered published
+  # @return Symbol
+  def self.published_state
+    :complete
   end
 end

@@ -59,4 +59,10 @@ class BaseWorkflow
   def self.ark_mint_states
     []
   end
+
+  # State at which the resource is considered published
+  # @return Symbol
+  def self.published_state
+    nil
+  end
 end

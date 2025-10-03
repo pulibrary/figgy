@@ -25,6 +25,7 @@ class ChangeSetPersister
         RemoveFileMetadata,
         SyncResource,
         MintIdentifier,
+        PopulatePublishedAt,
         ApplyRemoteMetadata,
         ClearRemoteMetadata,
         ExtractArchivalCollectionCode,
