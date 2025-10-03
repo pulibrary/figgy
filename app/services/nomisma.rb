@@ -9,8 +9,7 @@ class Nomisma
     @output_path = output_path
   end
 
-  # Don't recursively resolve resources
-  MAX_DEPTH = 0
+  MAX_DEPTH = 1
 
   # Vocabulary
   NMO = RDF::Vocabulary.new("http://nomisma.org/ontology#")
@@ -50,7 +49,6 @@ class Nomisma
       coin_element = coin_element(coin: coin)
       coin_obverse = coin_element(coin: coin, side: "obverse")
       coin_reverse = coin_element(coin: coin, side: "reverse")
-      primary_side = calculate_primary_side(coin: coin)
 
       graph << RDF::Statement(coin_element, RDF.type, NMO.NumismaticObject)
       graph << RDF::Statement(coin_element, DCTERMS.title, RDF::Literal.new(title(coin)))
@@ -69,12 +67,6 @@ class Nomisma
         graph << RDF::Statement(coin_element, NMO.hasTypeSeriesItem, RDF::URI.new(uri))
       end
 
-      if primary_side
-        # add depiction and thumbnail to coin object
-        graph << RDF::Statement(coin_element, FOAF.depiction, RDF::URI.new(depiction_uri(coin: coin, side: primary_side)))
-        graph << RDF::Statement(coin_element, FOAF.thumbnail, RDF::URI.new(thumbnail_uri(coin: coin, side: primary_side)))
-      end
-
       if coin_obverse
         graph << RDF::Statement(coin_obverse, RDF.type, RDF.Description)
         graph << RDF::Statement(coin_obverse, FOAF.depiction, RDF::URI.new(depiction_uri(coin: coin, side: "obverse")))
@@ -90,7 +82,7 @@ class Nomisma
         primary_side_element = RDF::URI.new(depiction_uri(coin: coin, side: "obverse"))
         graph << RDF::Statement(primary_side_element, RDF.type, EDM.WebResource)
         graph << RDF::Statement(primary_side_element, SVCS.has_service, service_element)
-        graph << RDF::Statement(primary_side_element, DCTERMS.isReferencedBy, RDF::URI.new(iiif_base_path(coin: coin, side: primary_side) + "/info.json"))
+        graph << RDF::Statement(primary_side_element, DCTERMS.isReferencedBy, RDF::URI.new(iiif_base_path(coin: coin, side: "obverse") + "/info.json"))
       end
 
       if coin_reverse
@@ -108,7 +100,7 @@ class Nomisma
         primary_side_element = RDF::URI.new(depiction_uri(coin: coin, side: "reverse"))
         graph << RDF::Statement(primary_side_element, RDF.type, EDM.WebResource)
         graph << RDF::Statement(primary_side_element, SVCS.has_service, service_element)
-        graph << RDF::Statement(primary_side_element, DCTERMS.isReferencedBy, RDF::URI.new(iiif_base_path(coin: coin, side: primary_side) + "/info.json"))
+        graph << RDF::Statement(primary_side_element, DCTERMS.isReferencedBy, RDF::URI.new(iiif_base_path(coin: coin, side: "reverse") + "/info.json"))
       end
 
       coin_element
@@ -117,20 +109,12 @@ class Nomisma
     def coin_element(coin:, side: nil)
       if side == "obverse"
         return nil unless coin.obverse_file_set
-        RDF::URI.new(catalog_link(coin) + "#obverse")
+        RDF::URI.new(ark_link(coin) + "#obverse")
       elsif side == "reverse"
         return nil unless coin.reverse_file_set
-        RDF::URI.new(catalog_link(coin) + "#reverse")
+        RDF::URI.new(ark_link(coin) + "#reverse")
       else
-        RDF::URI.new(catalog_link(coin))
-      end
-    end
-
-    def calculate_primary_side(coin:)
-      if coin.obverse_file_set
-        "obverse"
-      elsif coin.reverse_file_set
-        "reverse"
+        RDF::URI.new(ark_link(coin))
       end
     end
 
@@ -166,8 +150,8 @@ class Nomisma
       "https://catalog.princeton.edu/numismatics"
     end
 
-    def catalog_link(coin)
-      "https://catalog.princeton.edu/catalog/#{coin.orangelight_id}"
+    def ark_link(coin)
+      "http://arks.princeton.edu/#{coin.identifier.first}"
     end
 
     def query_service
