@@ -27,7 +27,12 @@ class Nomisma
       next unless decorated_coin.public_readable_state?
       counter += 1
       logger.info("Processing #{counter}/#{total_coins}: #{coin.title}")
-      add_coin_to_graph(decorated_coin)
+
+      begin
+        add_coin_to_graph(decorated_coin)
+      rescue StandardError => e
+        logger.error("Error processing #{coin.tite}: #{e.message}")
+      end
     end
 
     write_xml
