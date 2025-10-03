@@ -5,7 +5,7 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
   subject(:hook) { described_class.new(change_set_persister: change_set_persister, change_set: change_set) }
   let(:change_set_persister) { instance_double(ChangeSetPersister::Basic, query_service: query_service) }
   let(:change_set) { SimpleChangeSet.new(simple_resource) }
-  let(:simple_resource) { FactoryBot.create(:complete_simple_resource) }
+  let(:simple_resource) { FactoryBot.create(:simple_resource) }
   let(:query_service) { instance_double(Valkyrie::Persistence::Memory::QueryService) }
 
   describe "#run" do
@@ -19,7 +19,8 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
     end
 
     it "mints a new ARK for published SimpleResources" do
-      change_set.validate(state: :complete)
+      change_set.validate(state: "complete")
+      change_set.sync # this happens in a before_save hook right before this one
 
       hook.run
 
@@ -32,6 +33,7 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
       let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: existing_ark) }
       before do
         change_set.validate(creator: "Johann Georg Faust")
+        change_set.sync # this happens in a before_save hook right before this one
       end
 
       it "does not mint a new ARK" do
@@ -45,6 +47,7 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
       let(:simple_resource) { FactoryBot.create(:complete_simple_resource, identifier: existing_ark) }
       before do
         change_set.validate(title: "Doctor Faustens dreyfacher Höllenzwang")
+        change_set.sync # this happens in a before_save hook right before this one
       end
 
       it "updates the existing ARK" do
@@ -58,6 +61,7 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
       let(:collection) { FactoryBot.create_for_repository(:collection) }
       before do
         change_set.validate(member_of_collection_ids: [collection.id])
+        change_set.sync # this happens in a before_save hook right before this one
       end
       it "does not mint a new ARK" do
         expect(hook.run).to be nil
@@ -94,7 +98,8 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
       end
 
       it "mints a new ARK for published SimpleResources" do
-        change_set.validate(state: :complete)
+        change_set.validate(state: "complete")
+        change_set.sync # this happens in a before_save hook right before this one
 
         hook.run
 
