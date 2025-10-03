@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :numismatic_issue, class: Numismatics::Issue do
-    denomination { ["$1"] }
+    denomination { ["40 nummi"] }
+    metal { "Bronze" }
     rights_statement { RightsStatements.no_known_copyright }
     read_groups { "public" }
     to_create do |instance|

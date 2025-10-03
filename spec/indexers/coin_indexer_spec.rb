@@ -62,7 +62,7 @@ RSpec.describe CoinIndexer do
           "issue_master_id_tesim" => [numismatic_person.id.to_s],
           "issue_obverse_attribute_tesim" => ["attribute name, attribute description"],
           "issue_reverse_attribute_tesim" => ["attribute name, attribute description"],
-          "issue_denomination_tesim" => ["$1"],
+          "issue_denomination_tesim" => ["40 nummi"],
           "issue_issue_number_tesim" => ["1"],
           "issue_rights_statement_tesim" => ["http://rightsstatements.org/vocab/NKC/1.0/"],
           "issue_downloadable_tesim" => ["public"],
@@ -72,6 +72,7 @@ RSpec.describe CoinIndexer do
           "issue_place_tesim" => ["city, state, region"],
           "issue_ruler_tesim" => ["name1 name2 epithet (1868 to 1963)"],
           "issue_master_tesim" => ["name1 name2 epithet (1868 to 1963)"],
+          "issue_metal_tesim" => ["Bronze"],
           "issue_monograms_tesim" => ["Alexander"]
         )
       end
