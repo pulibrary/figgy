@@ -101,13 +101,7 @@ GIT
       ttfunk
 
 GEM
-  remote: https://gems.contribsys.com/
-  specs:
-    sidekiq-pro (7.3.3)
-      sidekiq (>= 7.3.0, < 8)
-
-GEM
-  remote: https://rubygems.org/
+  remote: https://gem.coop/
   specs:
     Ascii85 (2.0.1)
     aasm (5.5.0)
@@ -1118,6 +1112,12 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.37)
     zeitwerk (2.7.1)
+
+GEM
+  remote: https://gems.contribsys.com/
+  specs:
+    sidekiq-pro (7.3.3)
+      sidekiq (>= 7.3.0, < 8)
 
 PLATFORMS
   arm64-darwin-21

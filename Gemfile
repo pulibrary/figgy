@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-source "https://rubygems.org"
+source "https://gem.coop"
 
 gem "aasm"
 # TODO: Get rid of this we don't use it.
