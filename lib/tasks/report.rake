@@ -12,7 +12,7 @@ namespace :figgy do
     task nomisma: :environment do
       output = ENV["OUTPUT"]
       abort "usage: OUTPUT=./tmp/princeton-nomisma.rdf rake report:nomisma" unless output
-      Nomisma.generate(output_path: output)
+      Nomisma.new(output_path: output).generate
     end
 
     desc "Write a CSV of LAE Subject terms"

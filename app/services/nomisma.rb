@@ -2,9 +2,9 @@
 
 # Class for generating a nomisma RDF file from numismatics coins.
 class Nomisma
-  attr_reader :graph, :logger, :output_path
+  attr_reader :logger, :output_path
+  attr_accessor :rdf_doc
   def initialize(output_path: Rails.root.join("tmp", "princeton-nomisma.rdf"), logger: Logger.new(STDOUT))
-    @graph = RDF::Graph.new
     @logger = logger
     @output_path = output_path
   end
@@ -20,6 +20,18 @@ class Nomisma
   SVCS = RDF::Vocabulary.new("http://rdfs.org/sioc/services#")
   DOAP = RDF::Vocab::DOAP
 
+  # RDF document prefixes
+  PREFIXES = {
+    nmo: NMO.to_s,
+    void: VOID.to_s,
+    dcterms: DCTERMS.to_s,
+    foaf: FOAF.to_s,
+    rdf: RDF.to_s,
+    edm: EDM.to_s,
+    svcs: SVCS.to_s,
+    doap: DOAP.to_s
+  }.freeze
+
   def generate
     counter = 0
     coins.each do |coin|
@@ -27,7 +39,12 @@ class Nomisma
       next unless decorated_coin.public_readable_state?
       counter += 1
       logger.info("Processing #{counter}/#{total_coins}: #{coin.title}")
-      add_coin_to_graph(decorated_coin)
+
+      begin
+        add_coin_to_document(decorated_coin)
+      rescue StandardError => e
+        logger.error("Error processing #{coin.title}: #{e.message}")
+      end
     end
 
     write_xml
@@ -43,9 +60,9 @@ class Nomisma
       @total_coins ||= query_service.count_all_of_model(model: Numismatics::Coin)
     end
 
-    def add_coin_to_graph(coin)
+    def add_coin_to_document(coin)
+      graph = RDF::Graph.new
       issue = coin.decorated_parent
-
       coin_element = coin_element(coin: coin)
       coin_obverse = coin_element(coin: coin, side: "obverse")
       coin_reverse = coin_element(coin: coin, side: "reverse")
@@ -103,7 +120,8 @@ class Nomisma
         graph << RDF::Statement(primary_side_element, DCTERMS.isReferencedBy, RDF::URI.new(iiif_base_path(coin: coin, side: "reverse") + "/info.json"))
       end
 
-      coin_element
+      # Generate xml from the graph
+      generate_xml(graph)
     end
 
     def coin_element(coin:, side: nil)
@@ -158,22 +176,41 @@ class Nomisma
       @query_service ||= ChangeSetPersister.default.query_service
     end
 
-    def prefixes
-      {
-        nmo: NMO.to_s,
-        void: VOID.to_s,
-        dcterms: DCTERMS.to_s,
-        foaf: FOAF.to_s,
-        rdf: RDF.to_s,
-        edm: EDM.to_s,
-        svcs: SVCS.to_s,
-        doap: DOAP.to_s
-      }
+    def generate_xml(graph)
+      if rdf_doc
+        new_coin_xml(graph).root.children.each do |node|
+          rdf_doc.root.add_child(node) unless node.text? && node.content.strip.empty?
+        end
+      else
+        @rdf_doc = new_coin_xml(graph)
+      end
+    end
+
+    def new_coin_xml(graph)
+      xml = RDF::RDFXML::Writer.buffer(prefixes: PREFIXES, max_depth: MAX_DEPTH) do |writer|
+        graph.each_statement do |statement|
+          writer << statement
+        end
+      end
+
+      Nokogiri::XML(xml)
+    end
+
+    # Clean up XML formatting
+    def formatted_rdf_xml
+      document = REXML::Document.new(rdf_doc.to_xml)
+      formatter = REXML::Formatters::Pretty.new
+      formatter.compact = true
+      output = StringIO.new
+      formatter.write(document, output)
+
+      output.string
     end
 
     def write_xml
-      RDF::RDFXML::Writer.open(output_path, prefixes: prefixes, max_depth: MAX_DEPTH) do |writer|
-        writer << graph
+      return unless rdf_doc
+      File.open(output_path, "w") do |file|
+        file.write(formatted_rdf_xml)
       end
     end
 end

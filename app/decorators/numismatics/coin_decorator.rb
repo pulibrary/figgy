@@ -125,7 +125,7 @@ module Numismatics
 
     def reverse_file_set
       @reverse_file_set ||= cached_file_sets.find do |fs|
-        /R\.jpg|tif/.match(fs.original_file.original_filename[0])
+        /R\.(jpg|tif)/.match(fs.original_file.original_filename[0])
       end
     end
   end
