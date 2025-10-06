@@ -78,7 +78,7 @@ RSpec.describe Nomisma do
         generator.generate
         graph = RDF::Graph.load(output_path)
 
-        # Coin 1 main object
+        ## Coin 1 main object
         values = select_triples(graph, "http://arks.princeton.edu/ark:/88435/testcoin")
         expect(values["http://nomisma.org/ontology#hasObverse"]).to eq "http://arks.princeton.edu/ark:/88435/testcoin#obverse"
         expect(values["http://nomisma.org/ontology#hasReverse"]).to eq "http://arks.princeton.edu/ark:/88435/testcoin#reverse"

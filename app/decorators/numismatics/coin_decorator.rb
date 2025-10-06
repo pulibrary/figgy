@@ -119,7 +119,7 @@ module Numismatics
 
     def obverse_file_set
       @obverse_file_set ||= cached_file_sets.find do |fs|
-        /O\.jpg|tif/.match(fs.original_file.original_filename[0])
+        /O\.(jpg|tif)/.match(fs.original_file.original_filename[0])
       end
     end
 
