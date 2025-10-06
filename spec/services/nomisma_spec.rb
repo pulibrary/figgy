@@ -78,7 +78,7 @@ RSpec.describe Nomisma do
         generator.generate
         graph = RDF::Graph.load(output_path)
 
-        ## Coin 1 main object
+        # Coin 1 main object
         values = select_triples(graph, "http://arks.princeton.edu/ark:/88435/testcoin")
         expect(values["http://nomisma.org/ontology#hasObverse"]).to eq "http://arks.princeton.edu/ark:/88435/testcoin#obverse"
         expect(values["http://nomisma.org/ontology#hasReverse"]).to eq "http://arks.princeton.edu/ark:/88435/testcoin#reverse"
@@ -176,6 +176,8 @@ RSpec.describe Nomisma do
       before do
         issue
         coin
+        issue_no_citation
+        coin_no_citation
       end
 
       let(:coin) { FactoryBot.create_for_repository(:coin, state: "pending", identifier: "ark:/88435/testcoin", numismatic_citation: coin_citation) }
@@ -187,6 +189,23 @@ RSpec.describe Nomisma do
         ## Coin 1 main object
         values = select_triples(graph, "http://arks.princeton.edu/ark:/88435/testcoin")
         expect(values).to be_nil
+      end
+    end
+
+    context "with a coin that raises an error during processing" do
+      before do
+        issue
+        coin
+      end
+
+      it "skips the coin and does not error during processing" do
+        # Stub a coin decorator method that will raise an error
+        decorator = instance_double(Numismatics::CoinDecorator, public_readable_state?: true)
+        allow(Numismatics::Coin).to receive(:new).and_return(coin)
+        allow(coin).to receive(:decorate).and_return(decorator)
+        allow(decorator).to receive(:decorated_parent).and_raise("Error")
+
+        expect { generator.generate }.not_to raise_error
       end
     end
   end
