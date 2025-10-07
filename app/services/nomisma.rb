@@ -2,11 +2,15 @@
 
 # Class for generating a nomisma RDF file from numismatics coins.
 class Nomisma
-  attr_reader :logger, :output_path
+  # @return [string] rdf+xml formatted nomisma dataset
+  def self.generate
+    new(logger: Logger.new(STDOUT)).generate
+  end
+
+  attr_reader :logger
   attr_accessor :rdf_doc
-  def initialize(output_path: Rails.root.join("tmp", "princeton-nomisma.rdf"), logger: Logger.new(STDOUT))
+  def initialize(logger:)
     @logger = logger
-    @output_path = output_path
   end
 
   MAX_DEPTH = 1
@@ -47,7 +51,8 @@ class Nomisma
       end
     end
 
-    write_xml
+    return unless rdf_doc
+    formatted_rdf_xml
   end
 
   private
@@ -205,12 +210,5 @@ class Nomisma
       formatter.write(document, output)
 
       output.string
-    end
-
-    def write_xml
-      return unless rdf_doc
-      File.open(output_path, "w") do |file|
-        file.write(formatted_rdf_xml)
-      end
     end
 end

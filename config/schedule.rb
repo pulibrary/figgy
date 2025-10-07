@@ -11,6 +11,16 @@ every :monday, at: "10am", roles: [:db] do
   rake "figgy:send_collection_reports"
 end
 
+# Regenerate Nomisma RDF once a week
+every :saturday, at: "10am", roles: [:db] do
+  rake "figgy:report:nomisma:generate"
+end
+
+# Clean Nomisma RDF once a week
+every :sunday, at: "10am", roles: [:db] do
+  rake "figgy:report:nomisma:clean"
+end
+
 # We've disabled DAO synchronization until Pulfalight can handle this.
 # every :monday, at: "7am", roles: [:production_db] do
 #   rake "export:pulfa"

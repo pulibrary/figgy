@@ -404,6 +404,38 @@ ALTER SEQUENCE public.delayed_jobs_id_seq OWNED BY public.delayed_jobs.id;
 
 
 --
+-- Name: nomisma_documents; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nomisma_documents (
+    id bigint NOT NULL,
+    state character varying,
+    rdf text,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: nomisma_documents_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.nomisma_documents_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: nomisma_documents_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.nomisma_documents_id_seq OWNED BY public.nomisma_documents.id;
+
+
+--
 -- Name: ocr_requests; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -648,6 +680,13 @@ ALTER TABLE ONLY public.delayed_jobs ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: nomisma_documents id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.nomisma_documents ALTER COLUMN id SET DEFAULT nextval('public.nomisma_documents_id_seq'::regclass);
+
+
+--
 -- Name: ocr_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -761,6 +800,14 @@ ALTER TABLE ONLY public.browse_everything_upload_models
 
 ALTER TABLE ONLY public.delayed_jobs
     ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: nomisma_documents nomisma_documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.nomisma_documents
+    ADD CONSTRAINT nomisma_documents_pkey PRIMARY KEY (id);
 
 
 --
@@ -1073,6 +1120,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251007184231'),
 ('20250123183528'),
 ('20230802152303'),
 ('20230119155402'),

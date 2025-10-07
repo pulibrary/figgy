@@ -43,6 +43,7 @@ Metrics/AbcSize:
     - 'app/services/cdl/charge_manager.rb'
     - 'app/jobs/cloud_fixity_job.rb'
     - 'app/services/nomisma.rb'
+    - 'app/services/nomisma/void.rb'
 Metrics/BlockLength:
   Exclude:
     - '**/*.rake'
