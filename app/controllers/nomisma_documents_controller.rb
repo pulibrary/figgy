@@ -2,6 +2,7 @@
 
 class NomismaDocumentsController < ApplicationController
   before_action :set_nomisma_documents, only: [:index, :void]
+  before_action :set_in_process_documents, only: [:index, :void, :generate_nomisma_document]
   before_action :set_single_nomisma_document, only: [:destroy, :download]
 
   def index; end
@@ -23,6 +24,19 @@ class NomismaDocumentsController < ApplicationController
     head :not_implemented
   end
 
+  def generate_nomisma_document
+    authorize! :update, NomismaDocument.new
+    if @in_process_documents.count.zero?
+      record = NomismaDocument.new(state: "enqueued")
+      record.save
+      NomismaJob.perform_later(record.id)
+      flash[:notice] = "Generating a new Nomisa document in the background."
+    else
+      flash[:alert] = "There is already a Nomisa document in process."
+    end
+    redirect_to nomisma_documents_path
+  end
+
   def void
     respond_to do |format|
       format.rdf { send_data(void_document, type: "application/xml", disposition: :inline) }
@@ -40,6 +54,10 @@ class NomismaDocumentsController < ApplicationController
 
     def set_single_nomisma_document
       @nomisma_document = NomismaDocument.find(params[:id])
+    end
+
+    def set_in_process_documents
+      @in_process_documents = NomismaDocument.where(state: "processing").or(NomismaDocument.where(state: "enqueued"))
     end
 
     def void_document

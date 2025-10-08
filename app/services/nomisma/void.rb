@@ -79,16 +79,5 @@ class Nomisma
           end
         end
       end
-
-    # Clean up XML formatting
-    # def formatted_rdf_xml
-    #   document = REXML::Document.new(rdf_doc.to_xml)
-    #   formatter = REXML::Formatters::Pretty.new
-    #   formatter.compact = true
-    #   output = StringIO.new
-    #   formatter.write(document, output)
-    #
-    #   output.string
-    # end
   end
 end

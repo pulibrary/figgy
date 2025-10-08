@@ -288,7 +288,8 @@ Rails.application.routes.draw do
 
   resources :nomisma_documents, only: [:index, :destroy], path: "nomisma"
   get "/nomisma/:id/princeton-nomisma", to: "nomisma_documents#download", as: :download_nomisma_document
-  get "/nomisma/void", to: "nomisma_documents#void", as: :void
+  get "/nomisma/void", to: "nomisma_documents#void", as: :download_nomisma_void
+  post "/nomisma/generate", to: "nomisma_documents#generate_nomisma_document", as: :generate_nomisma_document
 
   resources :viewer, only: [:index] do
     member do
