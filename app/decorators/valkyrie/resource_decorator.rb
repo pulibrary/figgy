@@ -145,6 +145,14 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
     workflow_class.public_read_states.include? Array.wrap(state).first.underscore
   end
 
+  # Is this resource considered "published"? Regardless of whether it's visible
+  # or publicly readable.
+  # @return [TrueClass, FalseClass]
+  def published_state?
+    return false unless manages_state?
+    Array.wrap(state).include?(workflow_class.published_state.to_s)
+  end
+
   def notice_type
     nts = ControlledVocabulary.for(:notice_type).all
     nts.find { |nt| nt.value == model.notice_type&.first }&.label

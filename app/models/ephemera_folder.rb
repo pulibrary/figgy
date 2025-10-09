@@ -55,6 +55,7 @@ class EphemeraFolder < Resource
   attribute :embargo_date, ::Types::EmbargoDate.optional
   attribute :notice_type
   attribute :content_warning, Valkyrie::Types::String
+  attribute :published_at, Valkyrie::Types::DateTime
 
   def self.can_have_manifests?
     true
