@@ -8,7 +8,7 @@ RSpec.feature "Nomisma Documents" do
     sign_in user
   end
 
-  context "when a user vists the nomisma documents page" do
+  context "when a user visits the nomisma documents page" do
     it "displays action buttons and a documents table" do
       nomisma_document = NomismaDocument.create!({ state: "complete", rdf: "rdf content" })
       visit nomisma_documents_path
