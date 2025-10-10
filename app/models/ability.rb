@@ -27,6 +27,7 @@ class Ability
     can [:create, :read, :download, :update, :manifest, :discover], :all
     can [:destroy], Template
     can [:destroy], OcrRequest
+    can [:destroy], NomismaDocument
     can [:destroy], FileSet do |obj|
       obj.depositor == [current_user.uid] || (obj.persisted? && Wayfinder.for(obj).try(:parent)&.depositor == [current_user.uid])
     end

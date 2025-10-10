@@ -80,6 +80,11 @@ export default class Initializer {
       order: [[1, "desc"]],
       "drawCallback": conditionalPagingCallback
     })
+    // Set an initial sort order of data table for nomisma documents
+    $("#nomisma-documents-table").dataTable({
+      order: [[1, "desc"]],
+      "drawCallback": conditionalPagingCallback
+    })
   }
 
   initialize_form() {

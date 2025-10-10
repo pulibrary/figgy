@@ -8,11 +8,21 @@ namespace :figgy do
       ArkMismatchReporter.write
     end
 
-    desc "Generate Nomisma RDF document"
-    task nomisma: :environment do
-      output = ENV["OUTPUT"]
-      abort "usage: OUTPUT=./tmp/princeton-nomisma.rdf rake report:nomisma" unless output
-      Nomisma.new(output_path: output).generate
+    namespace :nomisma do
+      desc "Generate new Nomisma document record"
+      task generate: :environment do
+        record = NomismaDocument.new(state: "enqueued")
+        record.save
+        NomismaJob.perform_later(record.id.to_s)
+      end
+
+      desc "Clean up old Nomisma document records"
+      task clean: :environment do
+        # Keep the most recent five records.
+        # RDF text fields are likely to be large, so we want to keep the
+        # database as small as we can.
+        NomismaDocument.order(created_at: :desc).offset(5).delete_all
+      end
     end
 
     desc "Write a CSV of LAE Subject terms"
