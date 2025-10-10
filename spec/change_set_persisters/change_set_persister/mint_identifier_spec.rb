@@ -108,5 +108,23 @@ RSpec.describe ChangeSetPersister::MintIdentifier do
         expect(Ezid::Identifier).not_to have_received(:mint)
       end
     end
+
+    context "when in staging" do
+      before do
+        allow(Ezid::Identifier).to receive(:mint)
+        allow(Rails.env).to receive(:staging?).and_return(true)
+      end
+
+      it "mints a new ARK for published SimpleResources" do
+        change_set.validate(state: "complete")
+        change_set.sync # this happens in a before_save hook right before this one
+
+        hook.run
+
+        expect(change_set.model.identifier).not_to be_empty
+        expect(change_set.model.identifier.first).to include "ark:/99999"
+        expect(Ezid::Identifier).not_to have_received(:mint)
+      end
+    end
   end
 end
