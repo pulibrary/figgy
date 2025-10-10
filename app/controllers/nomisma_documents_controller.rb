@@ -18,7 +18,7 @@ class NomismaDocumentsController < ApplicationController
 
   def download
     respond_to do |format|
-      format.rdf { send_data(@nomisma_document.rdf, type: "application/xml", disposition: :inline) }
+      format.rdf { send_data(@nomisma_document.rdf, type: "application/rdf+xml", disposition: :inline) }
     end
   rescue ActionController::UnknownFormat
     head :not_implemented

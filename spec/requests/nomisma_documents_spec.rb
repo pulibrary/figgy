@@ -37,10 +37,11 @@ RSpec.describe "NomismaDocumets requests", type: :request do
 
   describe "GET /nomisma/:id/princeton-nomisma" do
     context "when requesting a file with an rdf extension" do
-      it "returns the rdf document as xml" do
+      it "returns the rdf document as rdf" do
         nomisma_document = NomismaDocument.create! valid_params
         get "/nomisma/#{nomisma_document.to_param}/princeton-nomisma.rdf"
         expect(response.status).to eq 200
+        expect(response.headers["content-type"]).to eq "application/rdf+xml"
         expect(response.body).to eq "rdf content"
       end
     end
