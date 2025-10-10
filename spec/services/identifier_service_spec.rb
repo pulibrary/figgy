@@ -134,6 +134,16 @@ RSpec.describe IdentifierService do
         expect(minter).to have_received(:mint).with(metadata)
       end
     end
+
+    context "with a coin resource" do
+      let(:obj) { FactoryBot.build :open_coin }
+      let(:metadata) { base_metadata.merge(dc_title: obj.title.first, target: "https://catalog.princeton.edu/catalog/coin-#{obj.coin_number}#view") }
+
+      it "links to OrangeLight" do
+        described_class.mint_or_update(resource: obj)
+        expect(minter).to have_received(:mint).with(metadata)
+      end
+    end
   end
 
   context "with a geospatial resource" do
