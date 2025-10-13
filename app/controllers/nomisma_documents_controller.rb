@@ -18,7 +18,7 @@ class NomismaDocumentsController < ApplicationController
 
   def download
     respond_to do |format|
-      format.rdf { send_data(@nomisma_document.rdf, type: "application/rdf+xml", disposition: :inline) }
+      format.rdf { send_data(cached_rdf_document, type: "application/rdf+xml", disposition: :inline) }
     end
   rescue ActionController::UnknownFormat
     head :not_implemented
@@ -39,7 +39,7 @@ class NomismaDocumentsController < ApplicationController
 
   def void
     respond_to do |format|
-      format.rdf { send_data(void_document, type: "application/xml", disposition: :inline) }
+      format.rdf { send_data(cached_void_document, type: "application/xml", disposition: :inline) }
     end
   rescue ActionController::UnknownFormat
     head :not_implemented
@@ -60,9 +60,17 @@ class NomismaDocumentsController < ApplicationController
       @in_process_documents = NomismaDocument.where(state: "processing").or(NomismaDocument.where(state: "enqueued"))
     end
 
-    def void_document
-      download_url = url_helpers.full_url_for(@most_recent) + "/princeton-nomisma.rdf"
-      Nomisma::Void.generate(url: download_url, date: @most_recent.created_at)
+    def cached_void_document
+      Rails.cache.fetch("nomisma-void", expires_in: 600, race_condition_ttl: 60) do
+        download_url = url_helpers.full_url_for(@most_recent) + "/princeton-nomisma.rdf"
+        Nomisma::Void.generate(url: download_url, date: @most_recent.created_at)
+      end
+    end
+
+    def cached_rdf_document
+      Rails.cache.fetch("nomisma-rdf-#{@nomisma_document.id}", expires_in: 600, race_condition_ttl: 60) do
+        @nomisma_document.rdf
+      end
     end
 
     def url_helpers
