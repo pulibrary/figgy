@@ -15,7 +15,7 @@ module GeoDerivatives
         rescue
           # Try without guessing max zoom. Some datasets only have one feature.
           execute "tippecanoe --force --maximum-tile-features=10000 --no-tile-size-limit " \
-            "--coalesce-densest-as-needed --extend-zooms-if-still-dropping -o #{out_path} #{in_path}"
+            "--coalesce-densest-as-needed --extend-zooms-if-still-dropping -o #{out_path} #{in_path}.fgb"
         end
       end
     end
