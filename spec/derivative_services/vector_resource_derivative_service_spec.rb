@@ -78,7 +78,7 @@ RSpec.describe VectorResourceDerivativeService do
     it "stores an error message on the fileset" do
       expect { valid_resource }.to raise_error(RuntimeError)
       file_set = query_service.find_all_of_model(model: FileSet).first
-      expect(file_set.original_file.error_message).to include(/ogr2ogr/)
+      expect(file_set.original_file.error_message).to include(/Unable to execute command/)
     end
   end
 

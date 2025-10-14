@@ -13,7 +13,7 @@ module GeoDerivatives
         def self.reproject(in_path, out_path, options)
           execute "env OGR_ENABLE_PARTIAL_REPROJECTION=YES env SHAPE_ENCODING= ogr2ogr -q "\
                   "-nln #{options[:id]} -f 'ESRI Shapefile' -t_srs #{options[:output_srid]} "\
-                  "-preserve_fid '#{out_path}' '#{in_path}'"
+                  "-skipfailures -preserve_fid '#{out_path}' '#{in_path}'"
         end
 
         # Executes a ogr2ogr command. Used to reproject a
@@ -23,11 +23,8 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         def self.cloud_reproject(in_path, out_path, options)
           execute "env OGR_ENABLE_PARTIAL_REPROJECTION=YES env ogr2ogr -q "\
-                  "-nln #{options[:id]} -f GeoJSON -t_srs EPSG:4326 "\
-                  "-preserve_fid '#{out_path}.tmp' '#{in_path}'"
-
-          # Fix any encoding issues in the geojson file
-          execute "iconv -f ISO-8859-1 -t utf-8 #{out_path}.tmp > #{out_path}"
+                  "-nln #{options[:id]} -f FlatGeobuf -t_srs EPSG:4326 "\
+                  "-skipfailures -preserve_fid '#{out_path}.fgb' '#{in_path}'"
         end
       end
     end
