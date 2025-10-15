@@ -68,9 +68,9 @@ class Nomisma
 
     def add_coin_to_document(coin)
       graph = RDF::Graph.new
-      coin_element = coin_element(coin: coin)
       coin_obverse = coin_element(coin: coin, side: "obverse")
       coin_reverse = coin_element(coin: coin, side: "reverse")
+      coin_element = coin_element(coin: coin)
 
       graph << RDF::Statement(coin_element, RDF.type, NMO.NumismaticObject)
       graph << RDF::Statement(coin_element, DCTERMS.title, RDF::Literal.new(title(coin)))

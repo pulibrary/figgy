@@ -213,7 +213,7 @@ RSpec.describe Nomisma do
         decorator = instance_double(Numismatics::CoinDecorator, public_readable_state?: true, type_system_uris: ["http://numismatics.org/1-2"])
         allow(Numismatics::Coin).to receive(:new).and_return(coin)
         allow(coin).to receive(:decorate).and_return(decorator)
-        allow(decorator).to receive(:decorated_parent).and_raise("Error")
+        allow(decorator).to receive(:obverse_file_set).and_raise("Error")
 
         expect { described_class.generate }.not_to raise_error
       end
