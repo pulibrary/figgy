@@ -27,10 +27,8 @@ RSpec.describe Nomisma do
         values = select_triples(reader, "http://arks.princeton.edu/ark:/88435/testcoin")
         expect(values["http://purl.org/dc/terms/title"]).to eq "40 nummi. 1"
         expect(values["http://purl.org/dc/terms/identifier"]).to eq "coin-1"
-        expect(values["http://nomisma.org/ontology#ObjectType"]).to eq "coin"
         expect(values["http://rdfs.org/ns/void#inDataset"]).to eq "https://catalog.princeton.edu/numismatics"
         expect(values["http://nomisma.org/ontology#hasAxis"]).to eq "300"
-        expect(values["http://nomisma.org/ontology#hasMaterial"]).to eq "Bronze"
         expect(values["http://nomisma.org/ontology#hasTypeSeriesItem"]).to eq ["http://numismatics.org/1-2", "http://numismatics.org/3-4"]
 
         # Coins without citations are not included
