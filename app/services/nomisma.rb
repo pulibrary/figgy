@@ -68,7 +68,6 @@ class Nomisma
 
     def add_coin_to_document(coin)
       graph = RDF::Graph.new
-      issue = coin.decorated_parent
       coin_element = coin_element(coin: coin)
       coin_obverse = coin_element(coin: coin, side: "obverse")
       coin_reverse = coin_element(coin: coin, side: "reverse")
@@ -76,7 +75,8 @@ class Nomisma
       graph << RDF::Statement(coin_element, RDF.type, NMO.NumismaticObject)
       graph << RDF::Statement(coin_element, DCTERMS.title, RDF::Literal.new(title(coin)))
       graph << RDF::Statement(coin_element, DCTERMS.identifier, RDF::Literal.new(coin.orangelight_id))
-      graph << RDF::Statement(coin_element, VOID.inDataset, RDF::URI.new(numismatics_collection_link))
+      graph << RDF::Statement(coin_element, NMO.hasCollection, RDF::URI.new(nomisma_collection_uri))
+      graph << RDF::Statement(coin_element, VOID.inDataset, RDF::URI.new(dataset_uri))
       graph << RDF::Statement(coin_element, NMO.hasDiameter, RDF::Literal.new(coin.size, datatype: RDF::XSD.decimal)) if coin.size
       graph << RDF::Statement(coin_element, NMO.hasWeight, RDF::Literal.new(coin.weight, datatype: RDF::XSD.decimal)) if coin.weight
       graph << RDF::Statement(coin_element, NMO.hasAxis, RDF::Literal.new(coin.die_axis.first, datatype: RDF::XSD.decimal)) if coin.die_axis.present?
@@ -168,7 +168,11 @@ class Nomisma
       end
     end
 
-    def numismatics_collection_link
+    def nomisma_collection_uri
+      "http://nomisma.org/id/princeton_university"
+    end
+
+    def dataset_uri
       "https://catalog.princeton.edu/numismatics"
     end
 
