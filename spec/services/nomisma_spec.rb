@@ -19,7 +19,7 @@ RSpec.describe Nomisma do
         coin_no_citation
       end
 
-      it "generates a nomisma rdf file with all URIs" do
+      it "generates a nomisma rdf file with URIs" do
         document = described_class.generate
         reader = RDF::RDFXML::Reader.new(document)
 
@@ -33,10 +33,9 @@ RSpec.describe Nomisma do
         expect(values["http://nomisma.org/ontology#hasMaterial"]).to eq "Bronze"
         expect(values["http://nomisma.org/ontology#hasTypeSeriesItem"]).to eq ["http://numismatics.org/1-2", "http://numismatics.org/3-4"]
 
-        # Coin-2 wihtout citation and with alternate title
+        # Coins without citations are not included
         values = select_triples(reader, "http://arks.princeton.edu/ark:/88435/testcoin2")
-        expect(values["http://purl.org/dc/terms/title"]).to eq "Coin: 2"
-        expect(values["http://nomisma.org/ontology#hasTypeSeriesItem"]).to be_nil
+        expect(values).to be_nil
       end
     end
 
@@ -55,6 +54,24 @@ RSpec.describe Nomisma do
         # Coin-1 with citation
         values = select_triples(reader, "http://arks.princeton.edu/ark:/88435/testcoin")
         expect(values["http://nomisma.org/ontology#hasTypeSeriesItem"]).to eq "http://numismatics.org/3-4"
+      end
+    end
+
+    context "with a coin that doesn't have a numismatics.org URI in its citations" do
+      before do
+        issue
+        coin
+      end
+
+      let(:issue_citation) { Numismatics::Citation.new(part: "1", number: "2", uri: "http://example.com/1-2", numismatic_reference_id: reference.id) }
+      let(:coin_citation) { Numismatics::Citation.new(part: "3", number: "4", uri: "http://example.com/3-4", numismatic_reference_id: reference.id) }
+
+      it "generates a nomisma rdf file without the coin" do
+        document = described_class.generate
+        reader = RDF::RDFXML::Reader.new(document)
+
+        values = select_triples(reader, "http://arks.princeton.edu/ark:/88435/testcoin")
+        expect(values).to be_nil
       end
     end
 
@@ -194,7 +211,7 @@ RSpec.describe Nomisma do
 
       it "skips the coin and does not error during processing" do
         # Stub a coin decorator method that will raise an error
-        decorator = instance_double(Numismatics::CoinDecorator, public_readable_state?: true)
+        decorator = instance_double(Numismatics::CoinDecorator, public_readable_state?: true, type_system_uris: ["http://numismatics.org/1-2"])
         allow(Numismatics::Coin).to receive(:new).and_return(coin)
         allow(coin).to receive(:decorate).and_return(decorator)
         allow(decorator).to receive(:decorated_parent).and_raise("Error")

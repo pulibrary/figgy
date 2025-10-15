@@ -41,6 +41,7 @@ class Nomisma
     coins.each do |coin|
       decorated_coin = coin.decorate
       next unless decorated_coin.public_readable_state?
+      next if decorated_coin.type_system_uris.blank?
       counter += 1
       logger.info("Processing #{counter}/#{total_coins}: #{coin.title}")
 
@@ -85,7 +86,7 @@ class Nomisma
       graph << RDF::Statement(coin_element, NMO.hasReverse, RDF::URI.new(coin_reverse.to_s)) if coin_reverse
 
       # Add reference URIs as TypeSeriesItems
-      coin.reference_uris.each do |uri|
+      coin.type_system_uris.each do |uri|
         graph << RDF::Statement(coin_element, NMO.hasTypeSeriesItem, RDF::URI.new(uri))
       end
 

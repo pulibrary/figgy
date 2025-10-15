@@ -89,6 +89,11 @@ module Numismatics
       citations.map { |c| c.uri.try(:first) }.compact
     end
 
+    # URIs that link out to numismatics.org type systems
+    def type_system_uris
+      reference_uris.select { |uri| /numismatics\.org/.match(uri) }
+    end
+
     def rendered_accession
       decorated_numismatic_accession&.label
     end

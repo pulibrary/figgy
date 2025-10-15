@@ -75,12 +75,16 @@ RSpec.describe "NomismaDocumets requests", type: :request do
   end
 
   describe "POST /nomisma/generate" do
-    let(:coin) { FactoryBot.create_for_repository(:coin, state: "complete", identifier: "ark:/88435/testcoin") }
-    let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, state: "complete", denomination: nil, member_ids: [coin.id]) }
+    let(:reference) { FactoryBot.create_for_repository(:numismatic_reference) }
+    let(:coin_citation) { Numismatics::Citation.new(part: "3", number: "4", uri: "http://numismatics.org/3-4", numismatic_reference_id: reference.id) }
+    let(:coin1) { FactoryBot.create_for_repository(:coin, state: "complete", identifier: "ark:/88435/testcoin1", numismatic_citation: coin_citation) }
+    let(:coin2) { FactoryBot.create_for_repository(:coin, state: "complete", identifier: "ark:/88435/testcoin2", numismatic_citation: coin_citation) }
+    let(:issue) { FactoryBot.create_for_repository(:numismatic_issue, state: "complete", denomination: nil, member_ids: [coin1.id, coin2.id]) }
 
     before do
       issue
-      coin
+      coin1
+      coin2
     end
 
     it "creates a new NomismaDocument with rdf" do
@@ -90,7 +94,8 @@ RSpec.describe "NomismaDocumets requests", type: :request do
       nomisma_document = NomismaDocument.all.first
 
       expect(nomisma_document.state).to eq "complete"
-      expect(nomisma_document.rdf).to include("rdf:about='http://arks.princeton.edu/ark:/88435/testcoin'")
+      expect(nomisma_document.rdf).to include("rdf:about='http://arks.princeton.edu/ark:/88435/testcoin1'")
+      expect(nomisma_document.rdf).to include("rdf:about='http://arks.princeton.edu/ark:/88435/testcoin2'")
     end
 
     context "when an exisiting in-process NomismaDocument exists" do
