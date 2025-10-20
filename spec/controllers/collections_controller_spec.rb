@@ -157,8 +157,9 @@ RSpec.describe CollectionsController, type: :controller do
 
     describe "GET /concern/collections/:id/manifest" do
       it "returns a IIIF manifest for a collection" do
+        file = fixture_file_upload("files/example.tif", "image/tiff")
         collection = FactoryBot.create_for_repository(:collection)
-        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id, files: [file])
 
         get :manifest, params: { id: collection.id.to_s, format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)
@@ -187,10 +188,13 @@ RSpec.describe CollectionsController, type: :controller do
 
     describe "GET /concern/collections/:id/manifest anonymously" do
       let(:user) { FactoryBot.create(:user) }
-      it "returns a IIIF manifest for publically accessible manifests" do
+      it "returns a IIIF manifest for publically accessible manifests", run_real_characterization: true, run_real_erivatives: true do
+        stub_catalog(bib_id: "991234563506421")
+        stub_ezid
+        file = fixture_file_upload("files/sample.pdf", "application/pdf")
         collection = FactoryBot.create_for_repository(:collection)
         FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: collection.id)
-        scanned_resource2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id)
+        scanned_resource2 = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_of_collection_ids: collection.id, files: [file], source_metadata_identifier: "991234563506421")
 
         get :manifest, params: { id: collection.id.to_s, format: :json }
         manifest_response = MultiJson.load(response.body, symbolize_keys: true)

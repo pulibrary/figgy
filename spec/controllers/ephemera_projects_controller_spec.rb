@@ -238,9 +238,10 @@ RSpec.describe EphemeraProjectsController, type: :controller do
     end
 
     context "when the project has folders" do
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
       let(:ephemera_box1) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder1.id) }
       let(:ephemera_box2) { FactoryBot.create_for_repository(:ephemera_box) }
-      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder) }
+      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, files: [file]) }
       let(:ephemera_project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_box1.id, ephemera_box2.id]) }
 
       before do
