@@ -251,16 +251,18 @@ RSpec.describe ManifestBuilder do
     end
   end
 
-  context "when given a deeply nested serial resource with PDFs", run_real_characterization: true do
+  context "when given a deeply nested serial resource with PDFs and empty resource members", run_real_characterization: true do
     let(:file_1) { fixture_file_upload("files/sample.pdf", "application/pdf") }
     let(:file_2) { fixture_file_upload("files/sample.pdf", "application/pdf") }
     before do
       stub_catalog(bib_id: "991234563506421")
     end
-    it "builds a MVW manifest that leads to a flattened manifest", run_real_characterization: true, run_real_derivatives: true do
+    it "builds a MVW manifest that leads to a flattened manifest without errors", run_real_characterization: true, run_real_derivatives: true do
       part1 = FactoryBot.create_for_repository(:scanned_resource, title: "Part 1", files: [file_1])
       part2 = FactoryBot.create_for_repository(:scanned_resource, title: "Part 2", files: [file_2])
-      issue = FactoryBot.create_for_repository(:scanned_resource, title: "Issue", member_ids: [part1.id, part2.id])
+      empty_resource1 = FactoryBot.create_for_repository(:scanned_resource)
+      empty_resource2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [empty_resource1.id])
+      issue = FactoryBot.create_for_repository(:scanned_resource, title: "Issue", member_ids: [part1.id, part2.id, empty_resource2.id])
       serial = FactoryBot.create_for_repository(:scanned_resource, title: "Serial", member_ids: [issue.id])
       builder = described_class.new(query_service.find_by(id: serial.id))
       output = builder.build
@@ -275,8 +277,8 @@ RSpec.describe ManifestBuilder do
       # Combine both PDFs into one.
       expect(output["sequences"][0]["canvases"].length).to eq 4
 
-      # Two ranges at top level pointing to the parts.
-      expect(output["structures"][0]["ranges"].length).to eq 2
+      # Three ranges at top level pointing to the parts.
+      expect(output["structures"][0]["ranges"].length).to eq 3
       expect(output["structures"][1]["label"]).to eq "Part 1"
       # Point to first non-pdf canvas of the first part.
       expect(output["structures"][1]["canvases"]).to eq ["http://www.example.com/concern/scanned_resources/#{issue.id}/manifest/canvas/#{Wayfinder.for(part1).members.second.id}"]

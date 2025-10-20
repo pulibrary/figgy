@@ -115,7 +115,8 @@ class ManifestBuilder
           end
           # Only grab things that have members or are collections.
           candidates.select do |node|
-            node.try(:collection?) || node.resource.respond_to?(:member_ids)
+            node.try(:collection?) ||
+              (node.resource.respond_to?(:member_ids) && node.resource.member_ids.present?)
           end
         end
     end
@@ -146,9 +147,11 @@ class ManifestBuilder
           Structure.new(
             label: "Logical",
             nodes: work_presenters.map do |work_presenter|
+              file_set = work_presenter.file_set_presenters.find { |x| x.resource.mime_type != ["application/pdf"] }
+              next unless file_set
               StructureNode.new(
                 label: Array.wrap(work_presenter.to_s).first,
-                nodes: flattened_range_work_structure(work_presenter)
+                nodes: flattened_range_work_structure(file_set)
               )
             end
           ),
@@ -157,8 +160,7 @@ class ManifestBuilder
       ]
     end
 
-    def flattened_range_work_structure(work_presenter)
-      file_set = work_presenter.file_set_presenters.find { |x| x.resource.mime_type != ["application/pdf"] }
+    def flattened_range_work_structure(file_set)
       [
         StructureNode.new(label: file_set.to_s, proxy: file_set.id)
       ]

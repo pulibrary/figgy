@@ -55,11 +55,13 @@ RSpec.describe ManifestBuilder do
     let(:ephemera_project) do
       FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, ephemera_term.id, folder2.id])
     end
+    let(:file1) { fixture_file_upload("files/example.tif", "image/tiff") }
+    let(:file2) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:ephemera_term) { FactoryBot.create_for_repository(:ephemera_term) }
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id) }
-    let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+    let(:folder) { FactoryBot.create_for_repository(:ephemera_folder, files: [file1]) }
     let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, member_ids: folder3.id) }
-    let(:folder3) { FactoryBot.create_for_repository(:ephemera_folder) }
+    let(:folder3) { FactoryBot.create_for_repository(:ephemera_folder, files: [file2]) }
     let(:change_set) { EphemeraProjectChangeSet.new(ephemera_project) }
     it "builds a IIIF document" do
       output = manifest_builder.build

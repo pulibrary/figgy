@@ -33,7 +33,7 @@ RSpec.describe ManifestBuilder do
     expect(output["manifests"][0]["thumbnail"]["@id"]).to eq "http://www.example.com/image-service/#{child.member_ids.first}/full/!200,150/0/default.jpg"
   end
   context "when the nested child does't have a valid thumbnail" do
-    let(:child) { FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: ["invalid-id"]) }
+    let(:child) { FactoryBot.create_for_repository(:scanned_resource, files: [file], thumbnail_id: ["invalid-id"]) }
 
     it "does not generate the thumbnail" do
       output = manifest_builder.build
