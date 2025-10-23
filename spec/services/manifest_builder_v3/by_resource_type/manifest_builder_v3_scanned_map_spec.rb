@@ -61,7 +61,7 @@ RSpec.describe ManifestBuilderV3 do
                                          viewing_direction: ["right-to-left"])
       end
 
-      before do
+      it "builds a IIIF Presentation 3 document" do
         stub_catalog(bib_id: "991234563506421")
         change_set = ScannedMapChangeSet.new(resource, files: [file])
         output = change_set_persister.save(change_set: change_set)
@@ -70,9 +70,7 @@ RSpec.describe ManifestBuilderV3 do
         change_set.validate(ocr_language: ocr_language)
         change_set.validate(logical_structure: logical_structure(file_set_id), start_canvas: file_set_id)
         change_set_persister.save(change_set: change_set)
-      end
 
-      it "builds a IIIF Presentation 3 document" do
         output = manifest_builder.build
         expect(output).to be_kind_of Hash
         expect(output["summary"]["eng"]).to eq ["Test Description"]
@@ -94,7 +92,7 @@ RSpec.describe ManifestBuilderV3 do
         # rendering
         expect(output["rendering"][0]["format"]).to eq "application/pdf"
 
-        # thumbnail
+        # manifest thumbnail
         expect(output["thumbnail"][0]["type"]).to eq "Image"
 
         # navPlace
@@ -103,6 +101,9 @@ RSpec.describe ManifestBuilderV3 do
         # No link for downloading original file because downloadable is set to `none`
         expect(output["items"][0]["rendering"].count).to eq 1
         expect(output["items"][0]["rendering"][0]["label"]["en"]).not_to eq ["Download the original file"]
+
+        # canvas thumbnail
+        expect(output["items"][0]["thumbnail"][0]["id"]).to eq "http://www.example.com/image-service/#{file_set_id}/full/!200,150/0/default.jpg"
 
         # Validate manifest
         expect(JSON::Validator.fully_validate(schema, output)).to be_empty
