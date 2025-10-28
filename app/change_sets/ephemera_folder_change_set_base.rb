@@ -46,6 +46,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :keywords, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
   property :featurable, multiple: false, required: false, type: Valkyrie::Types::Bool
+  property :published_at, multiple: false, required: false
 
   property :start_canvas, required: false
   property :viewing_direction, required: false
