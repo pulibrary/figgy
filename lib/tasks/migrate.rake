@@ -182,6 +182,11 @@ namespace :figgy do
       Migrations::DaoMigrator.call
     end
 
+    desc "Add published_at timestamps to all complete non-filesets"
+    task published_at: :environment do
+      Migrations::AddPublishedAtMigrator.call
+    end
+
     private
 
       # Construct or retrieve the memoized logger for STDOUT

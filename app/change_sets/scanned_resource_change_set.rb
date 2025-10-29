@@ -34,6 +34,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
+  property :published_at, multiple: false, required: false
   property :notice_type, multiple: false, required: false
   # Harmful content note
   property :content_warning, multiple: false, required: false
