@@ -33,6 +33,16 @@ RSpec.describe Migrations::AddPublishedAtMigrator do
           end
         end
       end
+
+      context "when given resources that do not have a published_at value" do
+        it "does not error" do
+          FactoryBot.create_for_repository(:simple_resource, state: "complete")
+          FactoryBot.create_for_repository(:complete_vector_resource)
+          FactoryBot.create_for_repository(:complete_raster_resource)
+
+          described_class.call
+        end
+      end
     end
   end
 end
