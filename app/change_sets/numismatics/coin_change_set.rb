@@ -31,6 +31,7 @@ module Numismatics
     property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
     property :append_id, virtual: true, multiple: false, required: true
     property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
+    property :published_at, multiple: false, required: false
 
     # Resources linked by reference
     property :member_of_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)

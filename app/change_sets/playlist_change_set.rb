@@ -16,6 +16,7 @@ class PlaylistChangeSet < ChangeSet
   property :mint_auth_token, virtual: true, multiple: false, type: Valkyrie::Types::Array.of(Valkyrie::Types::Bool), default: false
   property :part_of, multiple: true, required: false, default: []
   property :logical_structure, multiple: true, required: false, type: Types::Strict::Array.of(Structure), default: [Structure.new(label: "Logical", nodes: [])]
+  property :published_at, multiple: false, required: false
 
   validates_with MemberValidator
   validates_with StateValidator

@@ -10,6 +10,7 @@ class RasterResource < Resource
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :pending_uploads, Valkyrie::Types::Array.of(PendingUpload)
+  attribute :published_at, Valkyrie::Types::DateTime
 
   def to_s
     "#{human_readable_type}: #{title.to_sentence}"

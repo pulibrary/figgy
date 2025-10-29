@@ -69,6 +69,7 @@ class SimpleChangeSet < ChangeSet
   property :change_set, require: true, default: "simple"
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
   property :notice_type, multiple: false, required: false
+  property :published_at, multiple: false, required: false
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false
