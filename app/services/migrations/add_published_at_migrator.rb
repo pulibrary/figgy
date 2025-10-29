@@ -18,8 +18,8 @@ module Migrations
         decorator = resource.decorate
         next unless resource.respond_to?(:published_at)
         next unless decorator.respond_to?(:published_state?) && decorator.published_state?
-
         change_set = ChangeSet.for(resource)
+        next unless change_set.respond_to?(:published_at)
         change_set.published_at = change_set.updated_at
         change_set_persister.save(change_set: change_set)
       end
