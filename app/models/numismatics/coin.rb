@@ -50,6 +50,7 @@ module Numismatics
     attribute :identifier
     attribute :claimed_by, Valkyrie::Types::String
     attribute :cached_parent_id, Valkyrie::Types::ID.optional
+    attribute :published_at, Valkyrie::Types::DateTime
 
     # manifest metadata
     attribute :start_canvas
