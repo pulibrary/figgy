@@ -5,7 +5,9 @@ if ENV["CIRCLE_ARTIFACTS"]
   dir = File.join(ENV["CIRCLE_ARTIFACTS"], "coverage")
   SimpleCov.coverage_dir(dir)
 end
-SimpleCov.start "rails"
+SimpleCov.start "rails" do
+  use_merging false
+end
 
 require File.expand_path("../../config/environment", __FILE__)
 abort("DATABASE_URL environment variable is set") if ENV["DATABASE_URL"]
