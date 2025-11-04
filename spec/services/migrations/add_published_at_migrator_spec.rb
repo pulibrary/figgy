@@ -43,6 +43,15 @@ RSpec.describe Migrations::AddPublishedAtMigrator do
           end
         end
       end
+
+      context "when updating a resource raises an error" do
+        it "the migrator rescues and completes without error" do
+          FactoryBot.create_for_repository(:complete_scanned_resource, identifier: "123456")
+          allow(ChangeSet).to receive(:for).and_raise("Error")
+
+          expect { described_class.call }.not_to raise_error
+        end
+      end
     end
   end
 end
