@@ -19,7 +19,7 @@ jobs:
           POSTGRES_USER: figgy
           POSTGRES_DB: figgy_test
           POSTGRES_HOST_AUTH_METHOD: trust
-    resource_class: xlarge
+    resource_class: large
     steps:
       - browser-tools/install-chrome
       - checkout
@@ -79,7 +79,7 @@ jobs:
       - image: solr:7.7-alpine
         command: bin/solr -cloud -noprompt -f -p 8984
       - image: redis:7
-    resource_class: large
+    resource_class: xlarge
     parallelism: 4
     environment:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
