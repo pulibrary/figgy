@@ -6,7 +6,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
     let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
-    let(:fileset) { scanned_resource.member_ids.map { |id| solr.query_service.find_by(id: id) }.first }
+    let(:fileset) { scanned_resource.member_ids.map { |id| ChangeSetPersister.default.query_service.find_by(id: id) }.first }
     let(:document) { solr.resource_factory.from_resource(resource: fileset) }
     let(:solr_document) { SolrDocument.new(document) }
     with_queue_adapter :inline
