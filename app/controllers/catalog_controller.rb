@@ -90,6 +90,8 @@ class CatalogController < ApplicationController
     # Interferes with thumbnail display in FileSet manager
     config.track_search_session = false
 
+    config.repository_class = FilesetFallbackRepository
+
     # Add extra permitted params
     # https://github.com/projectblacklight/blacklight/blob/v7.28.0/lib/blacklight/parameters.rb#L84-L89
     # pul_controller_params aren't used by the search state. We're adding them

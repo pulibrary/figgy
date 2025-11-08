@@ -10,7 +10,8 @@ class IndexingAdapter
   def self.no_index_models
     [
       Event,
-      PreservationObject
+      PreservationObject,
+      FileSet
     ]
   end
   attr_reader :metadata_adapter, :index_adapter
