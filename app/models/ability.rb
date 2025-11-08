@@ -2,6 +2,15 @@
 class Ability
   include Hydra::Ability
 
+  def get_permissions_solr_response_for_doc_id(id = nil, extra_controller_params = {})
+    super
+  rescue Blacklight::Exceptions::RecordNotFound
+    # It might be a FileSet, so let's grab it and convert it live.
+    resource = ChangeSetPersister.default.query_service.find_by(id: id)
+    doc = Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: resource).to_h
+    permissions_document_class.new(doc)
+  end
+
   # Define any customized permissions here.
   self.ability_logic += [:manifest_permissions]
 

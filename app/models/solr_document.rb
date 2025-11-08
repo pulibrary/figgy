@@ -19,6 +19,11 @@ class SolrDocument
   # Add the routes/views for JSON-LD of documents.
   use_extension(LinkedData)
 
+  def more_like_this
+    return [] unless response
+    super
+  end
+
   def resource
     @resource ||= Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_by(id: id)
   end
