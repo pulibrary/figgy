@@ -23,9 +23,11 @@ We don't expect this to happen often.
 
 Our response will depend on how long the event has been ongoing. At each trigger, do the appropriate actions.
 
-### < 1 Hour
+### Immediately
 
-No response necessary - the Research Computing team has been notified by the alert, and they'll likely restart the node. The impact to patrons will be minimal, and no data should be lost in the interim.
+Notify the Research Computing team at `tigerdata@princeton.edu` so that a ticket gets created in their system. Include troubleshooting command/s run, which machine/s we have investigated, and fstab entries (if relied upon by the commands).
+
+The Research Computing will likely restart the node. The impact to patrons will be minimal, and no data should be lost in the interim.
 
 ### 1 - 3 hours
 
