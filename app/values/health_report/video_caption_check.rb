@@ -46,7 +46,7 @@ class HealthReport::VideoCaptionCheck
   end
 
   def summary
-    if resource.respond_to?(:member_ids)
+    if !file_set?
       I18n.t("health_status.video_caption_check.summary.#{status}")
     else
       I18n.t("health_status.video_caption_check.summary.self.#{status}")
