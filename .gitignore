@@ -42,5 +42,8 @@ node_modules
 # https://vitejs.dev/guide/env-and-mode.html#env-files
 *.local
 
-# Someone has devbox running, ignore it.
-devbox.json
+# Some configs ignore these globally on machines, so make sure they're not
+# ignored.
+!devbox.lock
+!.envrc
+!/bin

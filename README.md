@@ -11,6 +11,14 @@ A digital repository application in use at Princeton University Library for stor
 
 Follow these steps the first time you clone this project to run in dev or test.
 
+### Devbox Setup
+
+1. Install devbox (`./bin/first-time-setup.sh`)
+1. `devbox shell`
+1. `devbox run setup`
+
+### Manual Setup:
+
 #### Install Language Dependencies
 
 - We use asdf to manage language dependencies. If you don't have it installed do `brew install asdf`.

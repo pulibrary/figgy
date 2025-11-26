@@ -1,0 +1,92 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
+  "env": {
+    "DEVBOX_COREPACK_ENABLED": "true",
+    "TMPDIR": "/private/tmp/figgy",
+    "LD_LIBRARY_PATH": "$PWD/.devbox/nix/profile/default/lib",
+    "FONTCONFIG_PATH": "$PWD/.devbox/nix/profile/default/etc/fonts"
+  },
+  "packages": {
+    "ruby": "3.2.6",
+    "libffi": "latest",
+    "vips": {
+      "version": "latest",
+      "outputs": [
+        "out",
+        "dev",
+        "bin"
+      ]
+    },
+    "poppler": {
+      "version": "latest",
+      "outputs": [
+        "out",
+        "dev"
+      ]
+    },
+    "fontconfig": {
+      "version": "latest",
+      "outputs": [
+        "lib",
+        "dev",
+        "bin",
+        "out"
+      ]
+    },
+    "imagemagick6": {
+      "version": "latest",
+      "allow_insecure": [
+        "imagemagick-6.9.13-10"
+      ]
+    },
+    "postgresql": {
+      "version": "15.7",
+      "outputs": [
+        "lib",
+        "out"
+      ]
+    },
+    "gdal": "3.6.4",
+    "tesseract_4": "latest",
+    "mediainfo": "latest",
+    "ffmpeg": "4.4.2",
+    "ocrmypdf": "latest",
+    "nodejs": {
+      "version": "22.11.0",
+      "outputs": [
+        "out",
+        "libv8"
+      ]
+    },
+    "python": "3.9.1",
+    "lastpass-cli": "latest",
+    "tippecanoe": "2.35.0",
+    "yarn": "1.22.10",
+    "openjpeg": "latest",
+    "openssh": "latest",
+    "podman": "4.9.3",
+    "podman-compose": "latest",
+    "qemu": "latest",
+    "jdk": "8",
+    "unzip": "latest",
+    "zip": "latest",
+    "lsof": "latest",
+    "clang": "latest"
+  },
+  "shell": {
+    "init_hook": [
+      "mkdir -p $TMPDIR",
+      "echo $FISH_VERSION",
+      "source $VENV_DIR/bin/activate || source $VENV_DIR/bin/activate.fish",
+      "pip install cogeo-mosaic > /dev/null",
+      "gem install ruby-lsp > /dev/null"
+    ],
+    "scripts": {
+      "setup": [
+        "bin/setup_credentials",
+        "bundle install",
+        "yarn install"
+      ]
+    }
+  }
+}
