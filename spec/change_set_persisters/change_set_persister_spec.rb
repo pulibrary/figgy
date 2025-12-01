@@ -978,7 +978,7 @@ RSpec.describe ChangeSetPersister do
 
     context "with boxes and folders" do
       let(:change_set_class) { EphemeraBoxChangeSet }
-      it "doesn't overwrite the folder workflow state" do
+      it "doesn't propagate a non-final workflow state for a folder" do
         folder = FactoryBot.create_for_repository(:ephemera_folder)
         box = FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id)
 
@@ -990,12 +990,24 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.state).not_to eq ["ready_to_ship"]
       end
 
+      it "doesn't propagate state when moving back from final to non-final" do
+        folder = FactoryBot.create_for_repository(:complete_ephemera_folder)
+        box = FactoryBot.create_for_repository(:ephemera_box, state: "all_in_production", member_ids: folder.id)
+
+        change_set = change_set_class.new(box)
+        change_set.validate(state: "received")
+
+        output = change_set_persister.save(change_set: change_set)
+        members = query_service.find_members(resource: output)
+        expect(members.first.state).to eq ["complete"]
+      end
+
       let(:rabbit_connection) { instance_double(MessagingClient, publish: true) }
       before do
         allow(Figgy).to receive(:messaging_client).and_return(rabbit_connection)
       end
 
-      it "doesn't propagate visibility, only state" do
+      it "doesn't propagate visibility, only final state" do
         folder = FactoryBot.create_for_repository(:private_ephemera_folder, state: "needs_qa")
         box = FactoryBot.create_for_repository(:open_ephemera_box, state: "received", member_ids: folder.id)
 
@@ -1008,7 +1020,7 @@ RSpec.describe ChangeSetPersister do
         expect(reloaded_folder.state).to eq ["complete"]
       end
 
-      it "doesn't propagate project visibility or state" do
+      it "doesn't propagate project visibility or state when neither is changed" do
         folder = FactoryBot.create_for_repository(:private_ephemera_folder, state: "needs_qa")
         box = FactoryBot.create_for_repository(:open_ephemera_box, state: "received", member_ids: folder.id)
         ephemera_vocabulary = FactoryBot.create_for_repository(:ephemera_vocabulary)
