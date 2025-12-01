@@ -8,7 +8,8 @@ class MmsReportGenerator::ReportResource
       Sequel[:metadata].pg_jsonb["visibility"][0].as(:visibility),
       Sequel[:metadata].pg_jsonb["portion_note"][0].as(:portion_note),
       Sequel[:metadata].pg_jsonb["state"][0].as(:state),
-      Sequel[:metadata].pg_jsonb["source_metadata_identifier"][0].as(:source_metadata_identifier)
+      Sequel[:metadata].pg_jsonb["source_metadata_identifier"][0].as(:source_metadata_identifier),
+      Sequel[:metadata].pg_jsonb["identifier"][0].as(:identifier)
     ]
   end
 
@@ -29,7 +30,8 @@ class MmsReportGenerator::ReportResource
     {
       visibility: visibility,
       portion_note: resource[:portion_note],
-      iiif_manifest_url: helper.manifest_url(resource[:internal_resource].constantize.new(id: resource[:id]))
+      iiif_manifest_url: helper.manifest_url(resource[:internal_resource].constantize.new(id: resource[:id])),
+      ark: Ark.new(resource[:identifier]).uri
     }
   end
 
