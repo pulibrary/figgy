@@ -36,11 +36,11 @@ RSpec.describe ReportsController, type: :controller do
       stub_catalog(bib_id: "991234563506421")
       stub_catalog(bib_id: "9911606823506421")
       stub_findingaid(pulfa_id: "C1372_c47202-68234")
-      open_mms_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "991234563506421")
-      other_mms_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "9911606823506421", portion_note: "Part")
-      private_mms_record = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421")
+      open_mms_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "991234563506421", identifier: "test1")
+      other_mms_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "9911606823506421", portion_note: "Part", identifier: "test2")
+      private_mms_record = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "991234563506421", identifier: "test3")
       _pending_mms_record = FactoryBot.create_for_repository(:pending_scanned_resource, source_metadata_identifier: "991234563506421")
-      _open_findingaids_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "C1372_c47202-68234")
+      _open_findingaids_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "C1372_c47202-68234", identifier: "test4")
 
       get :mms_records, format: "json"
       json = JSON.parse(response.body)
@@ -50,7 +50,9 @@ RSpec.describe ReportsController, type: :controller do
       # Only one resource for this key.
       expect(json["9911606823506421"].first).to eq(
         {
+          "ark" => "http://arks.princeton.edu/test2",
           "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{other_mms_record.id}/manifest",
+          "label" => "Title",
           "portion_note" => "Part",
           "visibility" => { "value" => "open", "label" => "open", "definition" => "Open to the world. Anyone can view." }
         }
@@ -60,14 +62,18 @@ RSpec.describe ReportsController, type: :controller do
       expect(json["991234563506421"].length).to eq 2
       expect(json["991234563506421"]).to include(
         {
+          "ark" => "http://arks.princeton.edu/test1",
           "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{open_mms_record.id}/manifest",
+          "label" => "Title",
           "portion_note" => nil,
           "visibility" => { "value" => "open", "label" => "open", "definition" => "Open to the world. Anyone can view." }
         }
       )
       expect(json["991234563506421"]).to include(
         {
+          "ark" => "http://arks.princeton.edu/test3",
           "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{private_mms_record.id}/manifest",
+          "label" => "Title",
           "portion_note" => nil,
           "visibility" => { "value" => "restricted", "label" => "private", "definition" => "Only privileged users of this application can view." }
         }
