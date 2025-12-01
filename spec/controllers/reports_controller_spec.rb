@@ -52,6 +52,7 @@ RSpec.describe ReportsController, type: :controller do
         {
           "ark" => "http://arks.princeton.edu/test2",
           "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{other_mms_record.id}/manifest",
+          "label" => "Title",
           "portion_note" => "Part",
           "visibility" => { "value" => "open", "label" => "open", "definition" => "Open to the world. Anyone can view." }
         }
@@ -63,6 +64,7 @@ RSpec.describe ReportsController, type: :controller do
         {
           "ark" => "http://arks.princeton.edu/test1",
           "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{open_mms_record.id}/manifest",
+          "label" => "Title",
           "portion_note" => nil,
           "visibility" => { "value" => "open", "label" => "open", "definition" => "Open to the world. Anyone can view." }
         }
@@ -71,6 +73,7 @@ RSpec.describe ReportsController, type: :controller do
         {
           "ark" => "http://arks.princeton.edu/test3",
           "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{private_mms_record.id}/manifest",
+          "label" => "Title",
           "portion_note" => nil,
           "visibility" => { "value" => "restricted", "label" => "private", "definition" => "Only privileged users of this application can view." }
         }
