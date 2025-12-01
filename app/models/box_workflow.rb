@@ -21,6 +21,9 @@ class BoxWorkflow < BaseWorkflow
     event :release_into_production do
       transitions from: :received, to: :all_in_production
     end
+    event :unpublish do
+      transitions from: :all_in_production, to: :received
+    end
   end
 
   # States in which the record should be publicly viewable
