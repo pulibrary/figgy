@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Types::ViewingDirectionEnum do
   subject(:enum) { described_class }
-  it "can convert to graphql" do
-    expect { enum.to_graphql }.not_to raise_error
+  it "contains the desired keys" do
+    expect(enum.values.keys).to contain_exactly("LEFTTORIGHT", "RIGHTTOLEFT", "TOPTOBOTTOM", "BOTTOMTOTOP")
   end
 end
