@@ -55,7 +55,7 @@ RSpec.describe LocalFixityJob do
       before do
         fs = query_service.find_by(id: file_set_id)
         filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
-        new_file = File.join(fixture_path, "files/color-landscape.tif")
+        new_file = file_fixture("files/color-landscape.tif")
         FileUtils.cp(new_file, filename)
         allow(Honeybadger).to receive(:notify)
         allow(RepairLocalFixityJob).to receive(:perform_later)
@@ -119,7 +119,7 @@ RSpec.describe LocalFixityJob do
 
           fs = query_service.find_by(id: file_set_id)
           filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
-          new_file = File.join(fixture_path, "files/color-landscape.tif")
+          new_file = file_fixture("files/color-landscape.tif")
           FileUtils.cp(new_file, filename)
           described_class.perform_now(file_set_id)
 
@@ -148,7 +148,7 @@ RSpec.describe LocalFixityJob do
 
           fs = query_service.find_by(id: file_set_id)
           filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
-          new_file = File.join(fixture_path, "files/color-landscape.tif")
+          new_file = file_fixture("files/color-landscape.tif")
           FileUtils.cp(new_file, filename)
           described_class.perform_now(file_set_id)
 
