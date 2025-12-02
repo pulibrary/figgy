@@ -13,7 +13,9 @@
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
         {name: 'Paste (Ctrl-.)', component: 'Paste', disabled: isPasteDisabled()},
-        {name: 'Zoom on Selected (Ctrl-o)', component: 'Zoom', disabled: isZoomDisabled()}
+        {name: 'Zoom on Selected (Ctrl-o)', component: 'Zoom', disabled: isZoomDisabled()},
+        {name: 'Move Up (Shift+Ctrl UpArrow)', component: 'MoveUp', disabled: isFirstItem()},
+        {name: 'Move Down (Shift+Ctrl DownArrow)', component: 'MoveDown', disabled: isLastItem()}
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
@@ -82,6 +84,8 @@ export default {
     "delete-folder",
     "group-selected",
     "zoom-on-item",
+    "move-up",
+    "move-down",
   ],
   props: {
     /**
@@ -148,6 +152,14 @@ export default {
         e.preventDefault()
         this.saveHandler(e)
       }
+      if (e.key === 'ArrowUp' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+        e.preventDefault()
+        this.moveUp()
+      }
+      if (e.key === 'ArrowDown' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+        e.preventDefault()
+        this.moveDown()
+      }
     }
 
     document.addEventListener('keydown', this._keyListener.bind(this))
@@ -156,6 +168,18 @@ export default {
     document.removeEventListener('keydown', this._keyListener)
   },
   methods: {
+    moveUp: function() {
+      this.$emit('move-up')
+    },
+    moveDown: function() {
+      this.$emit('move-down')
+    },
+    isFirstItem: function() {
+      return false;
+    },
+    isLastItem: function() {
+      return false;
+    },
     saveHandler: function (event) {
       if (this.isSaveDisabled()) {
         // workaround for a bug in LUX that doesn't style disabled buttons properly

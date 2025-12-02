@@ -38,6 +38,8 @@
       @paste-items="paste"
       @save-structure="saveHandler"
       @zoom-on-item="zoomOnItem"
+      @move-up="moveUp"
+      @move-down="moveDown"
     />
     <deep-zoom
       v-if="zoomed"
@@ -415,6 +417,25 @@ export default {
           this.pasteGalleryItem()
         })
       })
+    },
+    moveUp: function () {
+      console.log('move up!')
+    },
+    moveDown: function () {
+      console.log('move down!')
+      // if (this.gallery.selected.length) {
+      //   // if cards are selected, cut gallery items
+      //   this.$store.commit('CUT', this.gallery.selected)
+      //   this.selectNoneGallery()
+      // } else if (this.tree.selected) {
+      //   // if folder is selected, cut tree items
+      //   if (this.rootNodeSelected) {
+      //     alert('Sorry, you can\'t cut the root node.')
+      //   } else {
+      //     this.$store.commit('CUT_FOLDER', this.tree.selected)
+      //     this.selectNoneTree()
+      //   }
+      // }
     },
     paste: function () {
       // figure out what is currently on the clipboard, a gallery item or a tree item
