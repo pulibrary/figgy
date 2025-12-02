@@ -19,6 +19,14 @@ class SolrDocument
   # Add the routes/views for JSON-LD of documents.
   use_extension(LinkedData)
 
+  # FileSets generate a document from the database, not from a Solr structure
+  # (see FilesetFallbackRepository), which doesn't have a Solr response. Figgy
+  # doesn't use MoreLikeThis, so just return an empty array in those cases.
+  def more_like_this
+    return [] unless response
+    super
+  end
+
   def resource
     @resource ||= Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_by(id: id)
   end
