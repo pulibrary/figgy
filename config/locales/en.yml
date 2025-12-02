@@ -58,6 +58,7 @@ en:
     letter: 'Letter'
     archival_media_collection: 'Archival Media Collection'
     CDL::Resource: 'CDL Resource'
+    selene_resource: 'Selene Resource'
   works:
     progress:
       header: 'Save Work'

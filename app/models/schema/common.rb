@@ -93,7 +93,8 @@ module Schema
           :downloadable, # Determines whether or not users can download a resource
           :electronic_locations,
           :notice_type, # local; click-through agreement
-          :content_warning # local; content warning to display
+          :content_warning, # local; content warning to display
+          :meters_per_pixel # local; how many meters per pixel - used for Selene Resources.
         ]
     end
 
