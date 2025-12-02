@@ -62,6 +62,7 @@ Metrics/BlockLength:
     - 'app/controllers/concerns/resource_relations.rb'
     - 'app/jobs/browse_everything_ingest_job.rb'
     - 'app/derivative_services/geo_derivatives/processors/image.rb'
+    - 'app/derivative_services/geo_derivatives/processors/gdal.rb'
 Metrics/ClassLength:
   Exclude:
     - 'app/change_sets/change_set.rb'
