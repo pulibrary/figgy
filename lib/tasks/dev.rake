@@ -9,6 +9,7 @@ if Rails.env.development? || Rails.env.test?
       system("rake db:create")
       system("rake db:migrate")
       system("rake db:migrate RAILS_ENV=test")
+      system("rake db:environment:set RAILS_ENV=test")
     end
 
     desc "Stop lando solr and postgres servers."
