@@ -39,6 +39,25 @@ module GeoDerivatives
                     "\"#{in_path}\" #{out_path} -co COMPRESS=JPEG -co JPEG_QUALITY=90"
         end
 
+        # Translates three band rgb into single band wth pseudo-color table
+        # @param in_path [String] file input path
+        # @param out_path [String] processor output file path
+        # @param options [Hash] creation options
+        def self.rgb2pct(in_path, out_path, _options)
+          execute "rgb2pct.py \"#{in_path}\" #{out_path}"
+        rescue StandardError
+          # Copy file if it's already a single band
+          execute "cp \"#{in_path}\" #{out_path}"
+        end
+
+        # Translates single band tiff to rbg(a)
+        # @param in_path [String] file input path
+        # @param out_path [String] processor output file path
+        # @param options [Hash] creation options
+        def self.rgba(in_path, out_path, _options)
+          execute "gdal_translate -expand rgba \"#{in_path}\" #{out_path}"
+        end
+
         # Executes gdaladdo and gdal_translate commands. Used to add internal overviews
         # and then compress a previously uncompressed raster.
         # Output will be a Cloud Optimized GeoTIFF.
