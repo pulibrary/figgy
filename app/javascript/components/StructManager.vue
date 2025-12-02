@@ -420,22 +420,25 @@ export default {
     },
     moveUp: function () {
       console.log('move up!')
+      if (this.tree.selected) {
+        // if tree node is selected, move items down
+        if (this.rootNodeSelected) {
+          alert('Sorry, you can\'t cut the root node.')
+        } else {
+          this.$store.commit('MOVE_UP', this.tree.selected)
+        }  
+      }
     },
     moveDown: function () {
       console.log('move down!')
-      // if (this.gallery.selected.length) {
-      //   // if cards are selected, cut gallery items
-      //   this.$store.commit('CUT', this.gallery.selected)
-      //   this.selectNoneGallery()
-      // } else if (this.tree.selected) {
-      //   // if folder is selected, cut tree items
-      //   if (this.rootNodeSelected) {
-      //     alert('Sorry, you can\'t cut the root node.')
-      //   } else {
-      //     this.$store.commit('CUT_FOLDER', this.tree.selected)
-      //     this.selectNoneTree()
-      //   }
-      // }
+      if (this.tree.selected) {
+        // if tree node is selected, move items down
+        if (this.rootNodeSelected) {
+          alert('Sorry, you can\'t cut the root node.')
+        } else {
+          this.$store.commit('MOVE_DOWN', this.tree.selected)
+        }  
+      }
     },
     paste: function () {
       // figure out what is currently on the clipboard, a gallery item or a tree item
