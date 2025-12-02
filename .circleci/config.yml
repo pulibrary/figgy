@@ -120,7 +120,7 @@ jobs:
           name: Run rspec in parallel
           command: |
             mkdir /tmp/test-results
-            bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split)
       - run:
           name: Stash Coverage Results
           command: |
