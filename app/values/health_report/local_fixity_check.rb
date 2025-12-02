@@ -37,7 +37,7 @@ class HealthReport::LocalFixityCheck
   end
 
   def summary
-    if resource.respond_to?(:member_ids)
+    if !resource.is_a?(FileSet)
       I18n.t("health_status.local_fixity_check.summary.#{status}")
     else
       I18n.t("health_status.local_fixity_check.summary.self.#{status}")

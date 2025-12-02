@@ -16,6 +16,7 @@ class FileSet < Resource
   attribute :cached_parent_id, Valkyrie::Types::ID.optional
   attribute :service_targets, Valkyrie::Types::Set
   attribute :captions_required, Valkyrie::Types::Bool.optional
+  attribute :member_ids, Valkyrie::Types::Array
 
   delegate :width,
            :height,

@@ -143,7 +143,7 @@ class FileAppender
     # @param resource [Resource]
     # @return [TrueClass, FalseClass]
     def file_set?(resource)
-      resource.respond_to?(:file_metadata) && !resource.respond_to?(:member_ids)
+      resource.is_a?(FileSet)
     end
 
     # Determines if the parent is viewable
