@@ -82,13 +82,13 @@ RSpec.describe RasterResourceDerivativeService do
     end
   end
 
-  context "with a non-geo tiff" do
-    let(:file) { fixture_file_upload("files/example.tif", "image/tif") }
+  context "with an invalid GeoTiff" do
+    let(:file) { fixture_file_upload("files/raster/invalid-geotiff.tif", "image/tif") }
 
     it "stores an error message on the fileset" do
-      expect { valid_resource }.to raise_error(RuntimeError)
+      expect { valid_resource }.to raise_error(GeoDerivatives::GdalError)
       file_set = query_service.find_all_of_model(model: FileSet).first
-      expect(file_set.original_file.error_message).to include(/gdalwarp -q -t_srs EPSG:3857/)
+      expect(file_set.original_file.error_message).to include(/Error during characterization/)
     end
   end
 
