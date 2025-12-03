@@ -4,7 +4,12 @@ RSpec.configure do |config|
   pg_db_cleaner = DatabaseCleaner[:sequel, db: pg_adapter.connection]
   ar_cleaner = DatabaseCleaner[:active_record]
   config.before(:suite) do
-    pg_db_cleaner.clean_with(:deletion)
+    pg_db_cleaner.clean_with(
+      :deletion,
+      # keep test db environment
+      # see https://stackoverflow.com/a/38209363/341514
+      except: %w(ar_internal_metadata)
+    )
     ar_cleaner.clean_with(:deletion)
   end
 
