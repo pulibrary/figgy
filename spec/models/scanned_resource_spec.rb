@@ -60,4 +60,22 @@ RSpec.describe ScannedResource do
       expect(linked_resource.resource).to eq resource
     end
   end
+
+  describe "scanned resource with selene resource" do
+    it "has a selene resource with attached selene files" do
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+      sr_file_set = scanned_resource.decorate.file_sets.first
+      selene = sr_file_set.decorate.members.first
+      selene_file_sets = selene.decorate.file_sets
+      expect(selene_file_sets.count).to eq 9
+
+      selene_fs1 = selene_file_sets.find { |fs| fs.title == ["1.tif"] }
+      expect(selene_fs1.light_direction).to eq "Top"
+      expect(selene_fs1.light_angle).to eq 45
+
+      selene_fs2 = selene_file_sets.find { |fs| fs.title == ["depthmap_m1_HF_0.03_m.tif"] }
+      expect(selene_fs2.high_frequency_cutoff).to eq 0.03
+      expect(selene_fs2.service_targets).to eq ["depth_map"]
+    end
+  end
 end
