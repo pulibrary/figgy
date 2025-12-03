@@ -110,5 +110,11 @@ FactoryBot.define do
         ]
       end
     end
+
+    factory :selene_file_set do
+      high_frequency_cutoff { 0.03 }
+      light_direction { "top" }
+      light_angle { 45 }
+    end
   end
 end

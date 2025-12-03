@@ -2,33 +2,58 @@
 require "rails_helper"
 
 RSpec.describe "catalog/_resource_attributes_default.html.erb" do
-  context "when given a FileSet" do
-    let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-    let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
-    let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
-    let(:fileset) { scanned_resource.member_ids.map { |id| ChangeSetPersister.default.query_service.find_by(id: id) }.first }
-    let(:document) { solr.resource_factory.from_resource(resource: fileset) }
-    let(:solr_document) { SolrDocument.new(document) }
-    with_queue_adapter :inline
-    before do
-      assign :document, solr_document
-      allow(view).to receive(:has_search_parameters?).and_return(false)
-      allow(view).to receive(:document).and_return(solr_document)
-      stub_blacklight_views
-      render
+  describe "FileSet attributes" do
+    context "when given a book page FileSet" do
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+      let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file]) }
+      let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
+      let(:fileset) { scanned_resource.member_ids.map { |id| ChangeSetPersister.default.query_service.find_by(id: id) }.first }
+      let(:document) { solr.resource_factory.from_resource(resource: fileset) }
+      let(:solr_document) { SolrDocument.new(document) }
+      with_queue_adapter :inline
+      before do
+        assign :document, solr_document
+        allow(view).to receive(:has_search_parameters?).and_return(false)
+        allow(view).to receive(:document).and_return(solr_document)
+        stub_blacklight_views
+        render
+      end
+
+      it "shows technical metadata" do
+        expect(rendered).to have_selector "li.internal_resource", text: "FileSet"
+        expect(rendered).to have_selector "li.height", text: "287"
+        expect(rendered).to have_selector "li.width", text: "200"
+        expect(rendered).to have_selector "li.mime_type", text: "image/tiff"
+        expect(rendered).to have_selector "li.size", text: "196882"
+        expect(rendered).to have_selector "li.md5", text: "2a28fb702286782b2cbf2ed9a5041ab1"
+        expect(rendered).to have_selector "li.sha1", text: "1b95e65efc3aefeac1f347218ab6f193328d70f5"
+        expect(rendered).to have_selector "li.sha256", text: "547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c"
+      end
     end
 
-    it "shows technical metadata" do
-      expect(rendered).to have_selector "li.internal_resource", text: "FileSet"
-      expect(rendered).to have_selector "li.height", text: "287"
-      expect(rendered).to have_selector "li.width", text: "200"
-      expect(rendered).to have_selector "li.mime_type", text: "image/tiff"
-      expect(rendered).to have_selector "li.size", text: "196882"
-      expect(rendered).to have_selector "li.md5", text: "2a28fb702286782b2cbf2ed9a5041ab1"
-      expect(rendered).to have_selector "li.sha1", text: "1b95e65efc3aefeac1f347218ab6f193328d70f5"
-      expect(rendered).to have_selector "li.sha256", text: "547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c"
+    context "when given a selene photograph FileSet" do
+      let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
+      let(:fileset) { FactoryBot.create_for_repository(:selene_file_set, file_metadata: { use: ::PcdmUse::OriginalFile }) }
+      let(:document) { solr.resource_factory.from_resource(resource: fileset) }
+      let(:solr_document) { SolrDocument.new(document) }
+      # with_queue_adapter :inline
+      before do
+        assign :document, solr_document
+        allow(view).to receive(:has_search_parameters?).and_return(false)
+        allow(view).to receive(:document).and_return(solr_document)
+        stub_blacklight_views
+        render
+      end
+
+      it "shows selene-specific fields" do
+        expect(rendered).to have_selector "li.internal_resource", text: "FileSet"
+        expect(rendered).to have_selector "li.high_frequency_cutoff", text: ".03"
+        expect(rendered).to have_selector "li.light_direction", text: "top"
+        expect(rendered).to have_selector "li.light_angle", text: "45"
+      end
     end
   end
+
   context "when given a ScannedResource solr document" do
     let(:scanned_resource) do
       FactoryBot.create_for_repository(
@@ -322,6 +347,7 @@ RSpec.describe "catalog/_resource_attributes_default.html.erb" do
       expect(rendered).to have_selector ".member_of_collections", text: collection.title.first
     end
   end
+
   context "when given an Ephemera Folder" do
     let(:folder) { FactoryBot.create_for_repository(:ephemera_folder, date_range: DateRange.new(start: "1989", end: "2017")) }
     let(:document) { solr.resource_factory.from_resource(resource: folder) }

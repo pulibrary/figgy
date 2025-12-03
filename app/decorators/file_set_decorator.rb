@@ -19,7 +19,10 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :part,
           :transfer_notes,
           :service_targets,
-          :error_message
+          :error_message,
+          :high_frequency_cutoff,
+          :light_direction,
+          :light_angle
 
   delegate :collections, :preservation_objects, to: :wayfinder
 
