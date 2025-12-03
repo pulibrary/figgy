@@ -25,4 +25,5 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: "localhost:3000" }
   config.action_controller.action_on_unpermitted_parameters = false
   config.active_storage.service = :local
+  config.action_view.annotate_rendered_view_with_filenames = true
 end
