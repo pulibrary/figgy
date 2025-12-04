@@ -446,15 +446,23 @@ export default {
         if (this.rootNodeSelected) {
           alert('Sorry, you can\'t move the root node.')
         } else {
+          // ToDo: reorder children of the root node -- currently doesn't work
           const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
           let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
-          // reorder folder in parentOfSelected
-          parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
           
           const structure = {
             id: this.tree.structure.id,
             label: this.tree.structure.label
           }
+
+          // console.log(parentOfSelected)
+          // if(parentOfSelected === null) {
+          //   parentOfSelected = structure
+          // }
+          // reorder folder in parentOfSelected
+          parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
+          
+          
           
           structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
 
