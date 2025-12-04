@@ -569,6 +569,7 @@ RSpec.describe CatalogController, type: :controller do
 
         # Re-save to get member_of to index, not necessary if going through
         #   ChangeSetPersister.
+        persister.save(resource: scanned_resource)
         persister.save(resource: selene_resource)
 
         get :index, params: { q: "" }
@@ -586,6 +587,7 @@ RSpec.describe CatalogController, type: :controller do
 
         # Re-save to get member_of to index, not necessary if going through
         #   ChangeSetPersister.
+        persister.save(resource: scanned_resource)
         persister.save(resource: selene_resource)
 
         get :index, params: { q: "", show_children: "True" }
