@@ -260,22 +260,10 @@ FactoryBot.define do
     end
 
     factory :scanned_resource_with_selene_resource do
-      files do
-        [
-          IngestableFile.new(
-            file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"),
-            mime_type: "image/tif",
-            original_filename: "exmaple.tif"
-          )
-        ]
-      end
-
-      after(:create) do |resource, _evaluator|
-        fs = resource.decorate.file_sets.first
-        selene_resource = FactoryBot.create_for_repository(:selene_resource_with_files)
-        fs.member_ids ||= []
-        fs.member_ids += [selene_resource.id]
-        ChangeSetPersister.default.persister.save(resource: fs)
+      member_ids do
+        selene = FactoryBot.create_for_repository(:selene_resource_with_files)
+        file_set = FactoryBot.create_for_repository(:original_image_file_set, member_ids: [selene.id])
+        [file_set.id]
       end
     end
 
