@@ -561,6 +561,40 @@ RSpec.describe CatalogController, type: :controller do
       end
     end
 
+    context "with a selene resource and without a show_children parameter" do
+      it "displays the scanned resource only" do
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+        sr_file_set = scanned_resource.decorate.file_sets.first
+        selene_resource = sr_file_set.decorate.members.first
+
+        # Re-save to get member_of to index, not necessary if going through
+        #   ChangeSetPersister.
+        persister.save(resource: selene_resource)
+
+        get :index, params: { q: "" }
+
+        expect(assigns(:response).documents.length).to eq 1
+        expect(assigns(:response).documents.first.resource.id).to eq scanned_resource.id
+      end
+    end
+
+    context "with a selene resource and the show_children parameter set to true" do
+      it "displays scanned resource and selene resource" do
+        scanned_resource = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+        sr_file_set = scanned_resource.decorate.file_sets.first
+        selene_resource = sr_file_set.decorate.members.first
+
+        # Re-save to get member_of to index, not necessary if going through
+        #   ChangeSetPersister.
+        persister.save(resource: selene_resource)
+
+        get :index, params: { q: "", show_children: "True" }
+
+        expect(assigns(:response).documents.length).to eq 2
+        expect(assigns(:response).documents.first.resource.id).to eq selene_resource.id
+      end
+    end
+
     context "with a numismatic issue" do
       it "retrieves both issues and coins" do
         child = persister.save(resource: FactoryBot.build(:complete_open_coin))
