@@ -256,6 +256,12 @@ export default {
         case 'Zoom on Selected (Ctrl-o)':
           this.zoomOnItem()
           break
+        case 'Move Up (Shift+Ctrl UpArrow)':
+          this.moveUp()
+          break
+        case 'Move Down (Shift+Ctrl DownArrow)':
+          this.moveDown()
+          break
       }
     },
     createFolder: function () {

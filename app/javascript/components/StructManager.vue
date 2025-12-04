@@ -418,25 +418,71 @@ export default {
         })
       })
     },
+  moveItemById: function (array, id, direction) {
+      const index = array.findIndex(item => item.id === id);
+      if (index === -1) return array; // not found, return unchanged
+
+      const newArray = [...array];
+
+      if (direction === "down" && index < array.length - 1) {
+        // swap with next
+        [newArray[index], newArray[index + 1]] =
+          [newArray[index + 1], newArray[index]];
+      }
+
+      if (direction === "up" && index > 0) {
+        // swap with previous
+        [newArray[index], newArray[index - 1]] =
+          [newArray[index - 1], newArray[index]];
+      }
+
+      return newArray;
+    },
     moveUp: function () {
       console.log('move up!')
+      const rootId = this.tree.structure.id
       if (this.tree.selected) {
         // if tree node is selected, move items down
         if (this.rootNodeSelected) {
-          alert('Sorry, you can\'t cut the root node.')
+          alert('Sorry, you can\'t move the root node.')
         } else {
-          this.$store.commit('MOVE_UP', this.tree.selected)
+          const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+          let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
+          // reorder folder in parentOfSelected
+          parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
+          
+          const structure = {
+            id: this.tree.structure.id,
+            label: this.tree.structure.label
+          }
+          
+          structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+
+          this.$store.commit('MOVE_UP', structure)
         }  
       }
     },
     moveDown: function () {
       console.log('move down!')
+      const rootId = this.tree.structure.id
       if (this.tree.selected) {
         // if tree node is selected, move items down
         if (this.rootNodeSelected) {
-          alert('Sorry, you can\'t cut the root node.')
+          alert('Sorry, you can\'t move the root node.')
         } else {
-          this.$store.commit('MOVE_DOWN', this.tree.selected)
+          const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+          let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
+          // reorder folder in parentOfSelected
+          parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
+          
+          const structure = {
+            id: this.tree.structure.id,
+            label: this.tree.structure.label
+          }
+          
+          structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+
+          this.$store.commit('MOVE_DOWN', structure)
         }  
       }
     },
