@@ -5,6 +5,7 @@ class SeleneResourceChangeSet < ChangeSet
 
   include VisibilityProperty
   property :visibility, multiple: false, required: true, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+  property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
   property :downloadable, multiple: false, require: true, default: "none"
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
   property :read_groups, multiple: true, required: false
