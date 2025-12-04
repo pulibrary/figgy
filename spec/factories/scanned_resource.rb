@@ -162,6 +162,123 @@ FactoryBot.define do
       end
     end
 
+    factory :selene_resource do
+      change_set { "selene_resource" }
+      factory :selene_resource_with_files do
+        files do
+          [
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "1.tif"),
+              mime_type: "image/tiff",
+              original_filename: "1.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                light_direction: "Top",
+                light_angle: 45
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "2.tif"),
+              mime_type: "image/tiff",
+              original_filename: "2.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                light_direction: "Right",
+                light_angle: 45
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "3.tif"),
+              mime_type: "image/tiff",
+              original_filename: "3.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                light_direction: "Bottom",
+                light_angle: 45
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "4.tif"),
+              mime_type: "image/tiff",
+              original_filename: "4.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                light_direction: "Left",
+                light_angle: 45
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "albedo_m1.tif"),
+              mime_type: "image/tiff",
+              original_filename: "albedo_m1.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                service_targets: "albedo"
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "depthmap_m1.tif"),
+              mime_type: "image/tiff",
+              original_filename: "depthmap_m1.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                service_targets: "depth_map"
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "normal_m1.tif"),
+              mime_type: "image/tiff",
+              original_filename: "normal_m1.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                service_targets: "normal"
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "depthmap_m1_HF_0.03_m.tif"),
+              mime_type: "image/tiff",
+              original_filename: "depthmap_m1_HF_0.03_m.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                high_frequency_cutoff: 0.03,
+                service_targets: "depth_map"
+              }
+            ),
+            IngestableFile.new(
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "normal_m1_HF_0.03_m.tif"),
+              mime_type: "image/tiff",
+              original_filename: "normal_m1_HF_0.03_m.tif",
+              use: ::PcdmUse::OriginalFile,
+              container_attributes: {
+                high_frequency_cutoff: 0.03,
+                service_targets: "normal"
+              }
+            )
+          ]
+        end
+      end
+    end
+
+    factory :scanned_resource_with_selene_resource do
+      files do
+        [
+          IngestableFile.new(
+            file_path: Rails.root.join("spec", "fixtures", "files", "example.tif"),
+            mime_type: "image/tif",
+            original_filename: "exmaple.tif"
+          )
+        ]
+      end
+
+      after(:create) do |resource, _evaluator|
+        fs = resource.decorate.file_sets.first
+        selene_resource = FactoryBot.create_for_repository(:selene_resource_with_files)
+        fs.member_ids ||= []
+        fs.member_ids += [selene_resource.id]
+        ChangeSetPersister.default.persister.save(resource: fs)
+      end
+    end
+
     factory :open_scanned_resource do
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     end
