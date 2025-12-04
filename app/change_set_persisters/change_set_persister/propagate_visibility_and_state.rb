@@ -47,6 +47,8 @@ class ChangeSetPersister
         resource_change_set = ChangeSet.for(member)
         resource_change_set = propagate_visibility(resource_change_set)
         resource_change_set = propagate_state_for_related(resource_change_set)
+        propagate_to_file_set_members(member, change_set.resource) if member.is_a? FileSet
+
         # we need to save these through the change set persister so the member
         #   can mint an ark, emit rabbitmq messages, copy access to read_groups, etc.
         if resource_change_set.changed?
@@ -70,6 +72,20 @@ class ChangeSetPersister
         return member_change_set unless member_change_set.respond_to?(:read_groups) && change_set.respond_to?(:read_groups) && change_set.read_groups
         member_change_set.validate(read_groups: change_set.read_groups)
         member_change_set
+      end
+
+      # Apply the parent resource state and visiblity to each of the FileSet
+      # members because FileSets do not these properties on their own.
+      def propagate_to_file_set_members(file_set, parent)
+        members(file_set).each do |member|
+          member_change_set = ChangeSet.for(member)
+          member_change_set.visibility = parent.visibility if member_change_set.respond_to?(:visibility)
+          member_change_set.state = parent.state if member_change_set.respond_to?(:state)
+
+          if member_change_set.changed?
+            change_set_persister.save(change_set: member_change_set)
+          end
+        end
       end
 
       # Construct the workflow for a related resource
@@ -119,8 +135,8 @@ class ChangeSetPersister
 
       # Retrieve the member resource for the resource in the ChangeSet
       # @return [Array<Valkyrie::Resource>]
-      def members
-        wayfinder = Wayfinder.for(change_set.resource)
+      def members(resource = change_set.resource)
+        wayfinder = Wayfinder.for(resource)
         if wayfinder.respond_to?(:members)
           wayfinder.members
         else

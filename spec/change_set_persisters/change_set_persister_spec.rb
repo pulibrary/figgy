@@ -912,6 +912,21 @@ RSpec.describe ChangeSetPersister do
         expect(members.first.updated_at).to eq child.updated_at
       end
     end
+
+    context "with a scanned resource that has an attached selene resource" do
+      it "propagates visiblity" do
+        resource = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+        expect(resource.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC]
+
+        change_set = ChangeSet.for(resource)
+        change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
+        updated = change_set_persister.save(change_set: change_set)
+        fs = updated.decorate.file_sets.first
+        selene = fs.decorate.members.first
+        expect(updated.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE]
+        expect(selene.visibility).to eq [Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE]
+      end
+    end
   end
 
   describe "setting state" do
@@ -1042,6 +1057,21 @@ RSpec.describe ChangeSetPersister do
         # to the child and saving it through the change set persister pipeline so it can get an ark, emit this message, etc.
         # this reindexing behavior should be cleaned up as part of 1405
         expect(rabbit_connection).to have_received(:publish).twice.with(expected_result.to_json)
+      end
+    end
+
+    context "with a scanned resource that has an attached selene resource" do
+      it "propagates state" do
+        resource = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+        expect(resource.state).to eq ["pending"]
+
+        change_set = ChangeSet.for(resource)
+        change_set.validate(state: "metadata_review")
+        updated = change_set_persister.save(change_set: change_set)
+        fs = updated.decorate.file_sets.first
+        selene = fs.decorate.members.first
+        expect(updated.state).to eq ["metadata_review"]
+        expect(selene.state).to eq ["metadata_review"]
       end
     end
   end
