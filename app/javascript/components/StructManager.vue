@@ -439,14 +439,12 @@ export default {
       return newArray;
     },
     moveUp: function () {
-      console.log('move up!')
       const rootId = this.tree.structure.id
       if (this.tree.selected) {
         // if tree node is selected, move items down
         if (this.rootNodeSelected) {
           alert('Sorry, you can\'t move the root node.')
         } else {
-          // ToDo: reorder children of the root node -- currently doesn't work
           const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
           let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
           
@@ -456,27 +454,20 @@ export default {
             folders: null
           }
 
-          // console.log(parentOfSelected)
           if(parentOfSelected === null) {
-            console.log("null!")
-            parentOfSelected = structure
-            parentOfSelected.folders = folderList
-            console.log(parentOfSelected) 
-            console.log(this.tree.selected)
-            parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
-            console.log(parentOfSelected)
+            // this means it was reordered on the root node
+            structure.folders = folderList 
+            structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'up')
           } else {
             // reorder folder in parentOfSelected
             parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
             structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
           }
-          console.log(parentOfSelected)
           this.$store.commit('MOVE_UP', structure)
         }  
       }
     },
     moveDown: function () {
-      console.log('move down!')
       const rootId = this.tree.structure.id
       if (this.tree.selected) {
         // if tree node is selected, move items down
@@ -485,17 +476,23 @@ export default {
         } else {
           const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
           let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
-          // reorder folder in parentOfSelected
-          parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
           
           const structure = {
             id: this.tree.structure.id,
-            label: this.tree.structure.label
+            label: this.tree.structure.label,
+            folders: null
           }
-          
-          structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
 
-          this.$store.commit('MOVE_DOWN', structure)
+          if(parentOfSelected === null) {
+            // this means it was reordered on the root node
+            structure.folders = folderList 
+            structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
+          } else {
+            // reorder folder in parentOfSelected
+            parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
+            structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+          }
+          this.$store.commit('MOVE_UP', structure)
         }  
       }
     },
