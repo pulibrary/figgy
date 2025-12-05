@@ -111,5 +111,16 @@ RSpec.feature "Structure Manager", js: true do
     page.send_keys [:control, "g"]
     expect(page).to have_selector(".lux-card", count: 0)
     expect(page).to have_selector(".lux-structManager .file", count: 2)
+
+    # test moving tree items up and down
+    first_file = find(".file", match: :first)
+    first_file.click
+    expect(first_file).to have_css(".file", text: "Chapter Foo")
+    page.send_keys [:control, :shift, "ArrowDown"]
+    first_file = find(".file", match: :first)
+    expect(first_file).not_to have_css(".file", text: "Chapter Foo")
+    page.send_keys [:control, :shift, "ArrowUp"]
+    first_file = find(".file", match: :first)
+    expect(first_file).to have_css(".file", text: "Chapter Foo")
   end
 end
