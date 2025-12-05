@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Preservation audits" %>
+
+<h1>Preservation audits</h1>
+
+<div id="preservation_audits">
+  <% @preservation_audits.each do |preservation_audit| %>
+    <%= render preservation_audit %>
+    <p>
+      <%= link_to "Show this preservation audit", preservation_audit %>
+    </p>
+  <% end %>
+</div>

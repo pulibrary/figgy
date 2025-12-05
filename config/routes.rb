@@ -312,6 +312,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :preservation_audits, only: [:index, :show]
+
   namespace :file_browser do
     resources :disk, only: [:index, :show], id: /([^\/])+?/
   end

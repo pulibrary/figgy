@@ -313,6 +313,39 @@ CREATE TABLE public.orm_resources (
 
 
 --
+-- Name: preservation_audits; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.preservation_audits (
+    id bigint NOT NULL,
+    status character varying,
+    extent character varying,
+    batch_id character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: preservation_audits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.preservation_audits_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: preservation_audits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.preservation_audits_id_seq OWNED BY public.preservation_audits.id;
+
+
+--
 -- Name: roles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -488,6 +521,13 @@ ALTER TABLE ONLY public.ocr_requests ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
+-- Name: preservation_audits id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.preservation_audits ALTER COLUMN id SET DEFAULT nextval('public.preservation_audits_id_seq'::regclass);
+
+
+--
 -- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -578,6 +618,14 @@ ALTER TABLE ONLY public.ocr_requests
 
 ALTER TABLE ONLY public.orm_resources
     ADD CONSTRAINT orm_resources_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: preservation_audits preservation_audits_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.preservation_audits
+    ADD CONSTRAINT preservation_audits_pkey PRIMARY KEY (id);
 
 
 --
@@ -867,6 +915,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251204175843'),
 ('20251117211722'),
 ('20251007184231'),
 ('20250123183528'),
