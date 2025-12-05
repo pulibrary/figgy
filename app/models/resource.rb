@@ -58,6 +58,12 @@ class Resource < Valkyrie::Resource
     false
   end
 
+  # Determines if this is a selene resource
+  # @return [TrueClass, FalseClass]
+  def selene?
+    false
+  end
+
   # Virtual property used for stashing pre-loaded objects. Populated by a query.
   attr_writer :loaded
   def loaded

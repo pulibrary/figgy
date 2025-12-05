@@ -61,6 +61,10 @@ class ScannedResource < Resource
     change_set == "recording"
   end
 
+  def selene?
+    change_set == "selene_resource"
+  end
+
   def linked_resource
     case change_set
     when "simple"

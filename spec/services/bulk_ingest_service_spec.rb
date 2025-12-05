@@ -92,6 +92,7 @@ RSpec.describe BulkIngestService do
       stub_catalog(bib_id: "9946093213506421")
       stub_ezid
     end
+
     context "with a directory of Scanned TIFFs" do
       it "ingests the resources, skipping dotfiles and ignored files" do
         ingester.attach_dir(
@@ -111,6 +112,7 @@ RSpec.describe BulkIngestService do
         expect(resource.source_metadata_identifier).to include(bib)
         expect(resource.local_identifier).to include(local_id)
       end
+
       it "maintains file names if preserve_file_names is true" do
         ingester.attach_dir(
           base_directory: single_dir,
@@ -290,6 +292,7 @@ RSpec.describe BulkIngestService do
         first_member = Wayfinder.for(resource).members.first
         expect(first_member.title).to eq ["1"]
       end
+
       context "when the figgy_metadata.json file has a source_metadata_identifier" do
         let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single_figgy_metadata_with_id") }
         it "uses it to import metadata" do
@@ -413,6 +416,25 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "when ingesting a Selene package" do
+      let(:dir) { Rails.root.join("spec", "fixtures", "ingest_selene") }
+
+      it "ingests all tifs directly, even though there's a subfolder" do
+        resource = FactoryBot.create_for_repository(:selene_resource)
+        # described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_selene"), property: :id, id: resource.id.to_s)
+        ingester.attach_dir(
+          base_directory: dir,
+          property: :id,
+          id: resource.id.to_s,
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"]
+        )
+
+        reloaded = query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 9
+      end
+    end
+
     context "when ingesting a RasterSet" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: RasterResource) }
       it "ingests a RasterSet with file_sets marked as mosaic service targets" do
@@ -437,6 +459,7 @@ RSpec.describe BulkIngestService do
         expect(sheet2_children.first.service_targets).to eq ["tiles"]
       end
     end
+
     context "with a subdirectory named Raster" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: ScannedMap) }
       it "ingests a RasterSet child" do

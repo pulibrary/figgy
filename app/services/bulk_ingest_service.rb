@@ -171,11 +171,23 @@ class BulkIngestService
     # @return [Array<Pathname>] the paths to any subdirectories
     def dirs(path:, resource: nil)
       return [] unless supports_child_resources?(resource)
+      return [] if flatten_child_directories?(resource)
       path.children.select(&:directory?).sort
     end
 
     def supports_child_resources?(resource)
       resource.class != Numismatics::Coin
+    end
+
+    def flatten_child_directories?(resource)
+      return true if resource.selene?
+      false
+    end
+
+    def get_file_paths(path, parent_resource)
+      return path.children.select(&:file?) unless flatten_child_directories?(parent_resource)
+      contents = Dir.glob("**/*", base: path)
+      contents.map { |str| Pathname.new(File.join(path, str)) }.select(&:file?)
     end
 
     # Retrieve the files within a given directory
@@ -185,7 +197,7 @@ class BulkIngestService
     #   attached to.
     # @return [Array<Pathname>] the paths to any files
     def files(path:, file_filters: [], preserve_file_names: false, parent_resource:)
-      file_paths = path.children.select(&:file?)
+      file_paths = get_file_paths(path, parent_resource)
       if file_filters.present?
         file_paths = file_paths.select do |file|
           results = file_filters.map { |file_filter| file.extname.ends_with?(file_filter) }
