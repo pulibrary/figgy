@@ -28,7 +28,7 @@ class DeletionMarkerService
       attach_to_parent(parent_id: deletion_marker.parent_id, resource: resource)
       restore_members(resource)
       # Characterize and run derivatives on FileSets
-      CharacterizationJob.perform_later(resource.id.to_s) if resource.is_a?(FileSet)
+      CharacterizationJob.perform_later(resource.id.to_s) if resource.is_a?(FileSet) && resource.primary_file
       change_set_persister.delete(change_set: ChangeSet.for(deletion_marker))
     end
 

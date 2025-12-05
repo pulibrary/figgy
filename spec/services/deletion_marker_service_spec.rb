@@ -551,4 +551,30 @@ describe DeletionMarkerService do
       expect(fs.count).to eq 10 # Parent FileSet + Selene FileSets
     end
   end
+
+  context "when restoring a deleted ScannedResource with a SeleneResource" do
+    it "restores the ScannedResource and the SeleneResource" do
+      resource = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+      reloaded_resource = query_service.find_by(id: resource.id)
+      change_set = ChangeSet.for(reloaded_resource)
+      change_set.validate(state: "complete")
+      output = change_set_persister.save(change_set: change_set)
+      change_set = ChangeSet.for(output)
+      change_set_persister.delete(change_set: change_set)
+
+      sr = query_service.find_all_of_model(model: ScannedResource)
+      fs = query_service.find_all_of_model(model: FileSet)
+      expect(sr.count).to eq 0
+      expect(fs.count).to eq 0
+
+      resource_deletion_marker = query_service.custom_queries.find_by_property(property: :resource_id, value: Valkyrie::ID.new(resource.id)).first
+
+      described_class.restore(resource_deletion_marker.id)
+
+      sr = query_service.find_all_of_model(model: ScannedResource)
+      fs = query_service.find_all_of_model(model: FileSet)
+      expect(sr.count).to eq 2 # Parent ScannedResource + SeleneResource
+      expect(fs.count).to eq 10 # Parent FileSet + Selene FileSets
+    end
+  end
 end
