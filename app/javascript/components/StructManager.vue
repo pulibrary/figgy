@@ -452,20 +452,25 @@ export default {
           
           const structure = {
             id: this.tree.structure.id,
-            label: this.tree.structure.label
+            label: this.tree.structure.label,
+            folders: null
           }
 
           // console.log(parentOfSelected)
-          // if(parentOfSelected === null) {
-          //   parentOfSelected = structure
-          // }
-          // reorder folder in parentOfSelected
-          parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
-          
-          
-          
-          structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
-
+          if(parentOfSelected === null) {
+            console.log("null!")
+            parentOfSelected = structure
+            parentOfSelected.folders = folderList
+            console.log(parentOfSelected) 
+            console.log(this.tree.selected)
+            parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
+            console.log(parentOfSelected)
+          } else {
+            // reorder folder in parentOfSelected
+            parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
+            structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+          }
+          console.log(parentOfSelected)
           this.$store.commit('MOVE_UP', structure)
         }  
       }
