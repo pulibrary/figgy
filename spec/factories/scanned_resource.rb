@@ -267,6 +267,15 @@ FactoryBot.define do
       end
     end
 
+    factory :complete_scanned_resource_with_selene_resource do
+      state { "complete" }
+      member_ids do
+        selene = FactoryBot.create_for_repository(:selene_resource_with_files, state: "complete")
+        file_set = FactoryBot.create_for_repository(:original_image_file_set, member_ids: [selene.id])
+        [file_set.id]
+      end
+    end
+
     factory :open_scanned_resource do
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     end

@@ -234,5 +234,24 @@ describe Preserver do
         expect(Wayfinder.for(resource).preservation_object).to be_a PreservationObject
       end
     end
+
+    context "when preserving a Scanned Resource with an attached Selene Resource" do
+      let(:resource) do
+        FactoryBot.create_for_repository(:complete_scanned_resource_with_selene_resource,
+                                         source_metadata_identifier: "991234563506421")
+      end
+      let(:change_set) { ChangeSet.for(resource) }
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+
+      it "saves Selene files nested under the parent scanned resource and FileSet" do
+        preserver.preserve!
+        file_set = resource.decorate.file_sets.first
+        selene = file_set.decorate.members.first
+        selene_file_set = selene.decorate.file_sets.first
+        path = "#{Figgy.config['disk_preservation_path']}/#{resource.id}/data/#{file_set.id}/data/#{selene.id}/data/#{selene_file_set.id}/#{selene_file_set.id}.json"
+
+        expect(File.exist?(path)).to be true
+      end
+    end
   end
 end
