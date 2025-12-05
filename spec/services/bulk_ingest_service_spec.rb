@@ -426,12 +426,40 @@ RSpec.describe BulkIngestService do
           base_directory: dir,
           property: :id,
           id: resource.id.to_s,
-          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"]
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
+          preserve_file_names: true
         )
 
         reloaded = query_service.find_by(id: resource.id)
 
         expect(reloaded.member_ids.length).to eq 9
+        w = Wayfinder.for(reloaded)
+        expect(w.file_sets_count).to eq 9
+        file_sets = w.file_sets
+        fs1 = file_sets.find { |f| f.title == ["1"] }
+        expect(fs1.light_angle).to eq 45
+        expect(fs1.light_direction).to eq "top"
+        fs2 = file_sets.find { |f| f.title == ["2"] }
+        expect(fs2.light_angle).to eq 45
+        expect(fs2.light_direction).to eq "right"
+        fs3 = file_sets.find { |f| f.title == ["3"] }
+        expect(fs3.light_angle).to eq 45
+        expect(fs3.light_direction).to eq "bottom"
+        fs4 = file_sets.find { |f| f.title == ["4"] }
+        expect(fs4.light_angle).to eq 45
+        expect(fs4.light_direction).to eq "left"
+        albedo = file_sets.find { |f| f.title == ["albedo_m1"] }
+        expect(albedo.service_targets).to eq ["albedo"]
+        dm = file_sets.find { |f| f.title == ["depthmap_m1"] }
+        expect(dm.service_targets).to eq ["depth_map"]
+        dm_hf = file_sets.find { |f| f.title == ["depthmap_m1_HF_0.03_m"] }
+        expect(dm_hf.service_targets).to eq ["depth_map"]
+        expect(dm_hf.high_frequency_cutoff).to eq 0.03
+        normal = file_sets.find { |f| f.title == ["normal_m1"] }
+        expect(normal.service_targets).to eq ["normal"]
+        normal_hf = file_sets.find { |f| f.title == ["normal_m1_HF_0.03_m"] }
+        expect(normal_hf.service_targets).to eq ["normal"]
+        expect(normal_hf.high_frequency_cutoff).to eq 0.03
       end
     end
 

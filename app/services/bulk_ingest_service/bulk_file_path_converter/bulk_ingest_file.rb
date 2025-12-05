@@ -18,7 +18,10 @@ class BulkIngestService::BulkFilePathConverter
         copy_before_ingest: true,
         container_attributes: {
           title: file_title,
-          service_targets: service_targets
+          service_targets: service_targets,
+          light_angle: light_angle,
+          light_direction: light_direction,
+          high_frequency_cutoff: high_frequency_cutoff
         }
       )
     end
@@ -89,8 +92,44 @@ class BulkIngestService::BulkFilePathConverter
     end
 
     def service_targets
-      return unless raster_resource_parent? && mosaic_service_target?
-      "tiles"
+      return unless raster_resource_parent? || parent_resource.selene?
+      if mosaic_service_target?
+        "tiles"
+      elsif basename == "albedo_m1.tif"
+        "albedo"
+      elsif basename.match?(/^depthmap.*tif$/)
+        "depth_map"
+      elsif basename.match?(/^normal.*tif$/)
+        "normal"
+      end
+    end
+
+    def light_angle
+      return unless parent_resource.selene? && basename.match?(/^\d\.tif/)
+      45
+    end
+
+    def light_direction
+      return unless parent_resource.selene?
+      match = basename.match(/^([1234])\.tif/)
+      return unless match
+      case match[1].to_i
+      when 1
+        "top"
+      when 2
+        "right"
+      when 3
+        "bottom"
+      when 4
+        "left"
+      end
+    end
+
+    def high_frequency_cutoff
+      return unless parent_resource.selene?
+      match = basename.match(/m1_HF_(.*)_m\.tif/)
+      return unless match
+      match[1].to_f
     end
 
     def mime_type
