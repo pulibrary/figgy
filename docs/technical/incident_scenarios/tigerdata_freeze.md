@@ -48,3 +48,7 @@ Have DLS' Lead message Chuck Bentler on Slack to coordinate recovery efforts and
 If all goes well this will minimize messaging to our patrons, block our users the least, and move incidents along at an appropriate pace.
 
 One risk is this system relies on CheckMK successfully sending a message to the Tigerdata team when the node locks up. If that breaks for whatever reason, we won't know about it until the 3 hour mark.
+
+## Additional info
+
+We use CheckMK to monitor the situation. We've also given research computing a [grafana dashboard](https://grafana-nomad.lib.princeton.edu/public-dashboards/71069bfda1014785a92ebe67de4cb850) that they have used during mount incidents
