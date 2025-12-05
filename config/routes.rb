@@ -314,6 +314,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :preservation_audits, only: [:index, :show]
+
   namespace :file_browser do
     get "/disk/:entry_type", to: "disk#index"
     get "/disk/:entry_type/:id", to: "disk#show", constraints: { id: /([^\/])+?/ }
