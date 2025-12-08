@@ -492,7 +492,7 @@ export default {
             parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
             structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
           }
-          this.$store.commit('MOVE_UP', structure)
+          this.$store.commit('MOVE_DOWN', structure)
         }  
       }
     },
