@@ -113,14 +113,16 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).to have_selector(".lux-structManager .file", count: 2)
 
     # test moving tree items up and down
-    first_file = find(".lux-structManager .file", match: :first)
-    first_file.click
-    expect(page).to have_css(".lux-structManager .file", text: "Chapter Foo")
-    page.send_keys [:control, :shift, "ArrowDown"]
-    first_file = find(".lux-structManager .file", match: :first)
-    expect(first_file).not_to have_css(".lux-structManager .file", text: "Chapter Foo")
-    page.send_keys [:control, :shift, "ArrowUp"]
-    first_file = find(".lux-structManager .file", match: :first)
-    expect(first_file).to have_css(".lux-structManager .file", text: "Chapter Foo")
+    page.all("button.toggle-edit")[1].click
+    expect(page).to have_css "input.folder-label-input"
+    # label it so we can distinguish between the two sub-folders 
+    # and use \n to simulate "enter"
+    find("input.folder-label-input").set("First\n")
+    page.all(".lux-structManager .folder-container")[1].click
+    expect(page.all(".lux-structManager .folder-container")[1]).to have_text("First")
+    page.send_keys [:control, :shift, :arrow_down]
+    expect(page.all(".lux-structManager .folder-container")[1]).not_to have_text("First")
+    page.send_keys [:control, :shift, :arrow_up]
+    expect(page.all(".lux-structManager .folder-container")[1]).to have_text("First")
   end
 end
