@@ -200,7 +200,7 @@ class BulkIngestService
       file_paths = get_file_paths(path, parent_resource)
       if file_filters.present?
         file_paths = file_paths.select do |file|
-          results = file_filters.map { |file_filter| file.extname.ends_with?(file_filter) }
+          results = file_filters.map { |file_filter| file.extname.downcase.ends_with?(file_filter.downcase) }
           results.reduce(:|)
         end
       end

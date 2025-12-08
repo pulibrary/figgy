@@ -180,9 +180,9 @@ RSpec.describe IngestFolderJob do
         described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_selene"), property: :id, id: resource.id.to_s)
 
         resource = ChangeSetPersister.default.query_service.find_by(id: resource.id)
-        expect(resource.member_ids.length).to eq 9
+        expect(resource.member_ids.length).to eq 10
         wayfinder = Wayfinder.for(resource)
-        expect(wayfinder.file_sets_count).to eq 9
+        expect(wayfinder.file_sets_count).to eq 10
       end
     end
   end

@@ -432,9 +432,9 @@ RSpec.describe BulkIngestService do
 
         reloaded = query_service.find_by(id: resource.id)
 
-        expect(reloaded.member_ids.length).to eq 9
+        expect(reloaded.member_ids.length).to eq 10
         w = Wayfinder.for(reloaded)
-        expect(w.file_sets_count).to eq 9
+        expect(w.file_sets_count).to eq 10
         file_sets = w.file_sets
         fs1 = file_sets.find { |f| f.title == ["1"] }
         expect(fs1.light_angle).to eq 45
@@ -448,6 +448,9 @@ RSpec.describe BulkIngestService do
         fs4 = file_sets.find { |f| f.title == ["4"] }
         expect(fs4.light_angle).to eq 45
         expect(fs4.light_direction).to eq "left"
+        composite = file_sets.find { |f| f.title == ["albedo_depthmap_composite"] }
+        expect(composite.light_angle).to be_nil
+        expect(composite.service_targets).to be_empty
         albedo = file_sets.find { |f| f.title == ["albedo_m1"] }
         expect(albedo.service_targets).to eq ["albedo"]
         dm = file_sets.find { |f| f.title == ["depthmap_m1"] }
