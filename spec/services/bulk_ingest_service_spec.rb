@@ -421,7 +421,6 @@ RSpec.describe BulkIngestService do
 
       it "ingests all tifs directly, even though there's a subfolder" do
         resource = FactoryBot.create_for_repository(:selene_resource)
-        # described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_selene"), property: :id, id: resource.id.to_s)
         ingester.attach_dir(
           base_directory: dir,
           property: :id,
