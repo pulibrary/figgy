@@ -115,7 +115,7 @@ RSpec.feature "Structure Manager", js: true do
     # test moving tree items up and down
     page.all("button.toggle-edit")[1].click
     expect(page).to have_css "input.folder-label-input"
-    # label it so we can distinguish between the two sub-folders 
+    # label it so we can distinguish between the two sub-folders
     # and use \n to simulate "enter"
     find("input.folder-label-input").set("First\n")
     page.all(".lux-structManager .folder-container")[1].click
