@@ -92,6 +92,7 @@ RSpec.describe BulkIngestService do
       stub_catalog(bib_id: "9946093213506421")
       stub_ezid
     end
+
     context "with a directory of Scanned TIFFs" do
       it "ingests the resources, skipping dotfiles and ignored files" do
         ingester.attach_dir(
@@ -111,6 +112,7 @@ RSpec.describe BulkIngestService do
         expect(resource.source_metadata_identifier).to include(bib)
         expect(resource.local_identifier).to include(local_id)
       end
+
       it "maintains file names if preserve_file_names is true" do
         ingester.attach_dir(
           base_directory: single_dir,
@@ -290,6 +292,7 @@ RSpec.describe BulkIngestService do
         first_member = Wayfinder.for(resource).members.first
         expect(first_member.title).to eq ["1"]
       end
+
       context "when the figgy_metadata.json file has a source_metadata_identifier" do
         let(:single_dir) { Rails.root.join("spec", "fixtures", "ingest_single_figgy_metadata_with_id") }
         it "uses it to import metadata" do
@@ -413,6 +416,55 @@ RSpec.describe BulkIngestService do
       end
     end
 
+    context "when ingesting a Selene package" do
+      let(:dir) { Rails.root.join("spec", "fixtures", "ingest_selene") }
+
+      it "ingests all tifs directly, even though there's a subfolder" do
+        resource = FactoryBot.create_for_repository(:selene_resource)
+        ingester.attach_dir(
+          base_directory: dir,
+          property: :id,
+          id: resource.id.to_s,
+          file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
+          preserve_file_names: true
+        )
+
+        reloaded = query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 10
+        w = Wayfinder.for(reloaded)
+        expect(w.file_sets_count).to eq 10
+        file_sets = w.file_sets
+        fs1 = file_sets.find { |f| f.title == ["1"] }
+        expect(fs1.light_angle).to eq 45
+        expect(fs1.light_direction).to eq "top"
+        fs2 = file_sets.find { |f| f.title == ["2"] }
+        expect(fs2.light_angle).to eq 45
+        expect(fs2.light_direction).to eq "right"
+        fs3 = file_sets.find { |f| f.title == ["3"] }
+        expect(fs3.light_angle).to eq 45
+        expect(fs3.light_direction).to eq "bottom"
+        fs4 = file_sets.find { |f| f.title == ["4"] }
+        expect(fs4.light_angle).to eq 45
+        expect(fs4.light_direction).to eq "left"
+        composite = file_sets.find { |f| f.title == ["albedo_depthmap_composite"] }
+        expect(composite.light_angle).to be_nil
+        expect(composite.service_targets).to be_empty
+        albedo = file_sets.find { |f| f.title == ["albedo_m1"] }
+        expect(albedo.service_targets).to eq ["albedo"]
+        dm = file_sets.find { |f| f.title == ["depthmap_m1"] }
+        expect(dm.service_targets).to eq ["depth_map"]
+        dm_hf = file_sets.find { |f| f.title == ["depthmap_m1_HF_0.03_m"] }
+        expect(dm_hf.service_targets).to eq ["depth_map"]
+        expect(dm_hf.high_frequency_cutoff).to eq 0.03
+        normal = file_sets.find { |f| f.title == ["normal_m1"] }
+        expect(normal.service_targets).to eq ["normal"]
+        normal_hf = file_sets.find { |f| f.title == ["normal_m1_HF_0.03_m"] }
+        expect(normal_hf.service_targets).to eq ["normal"]
+        expect(normal_hf.high_frequency_cutoff).to eq 0.03
+      end
+    end
+
     context "when ingesting a RasterSet" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: RasterResource) }
       it "ingests a RasterSet with file_sets marked as mosaic service targets" do
@@ -437,6 +489,7 @@ RSpec.describe BulkIngestService do
         expect(sheet2_children.first.service_targets).to eq ["tiles"]
       end
     end
+
     context "with a subdirectory named Raster" do
       subject(:ingester) { described_class.new(change_set_persister: change_set_persister, logger: logger, klass: ScannedMap) }
       it "ingests a RasterSet child" do

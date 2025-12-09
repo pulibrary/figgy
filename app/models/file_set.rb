@@ -17,9 +17,9 @@ class FileSet < Resource
   attribute :service_targets, Valkyrie::Types::Set
   attribute :captions_required, Valkyrie::Types::Bool.optional
   attribute :member_ids, Valkyrie::Types::Array
-  attribute  :high_frequency_cutoff, Valkyrie::Types::Float.optional
-  attribute  :light_direction, Valkyrie::Types::String.optional
-  attribute  :light_angle, Valkyrie::Types::Integer.optional
+  attribute :high_frequency_cutoff, Valkyrie::Types::Float.optional
+  attribute :light_direction, Valkyrie::Types::String.optional
+  attribute :light_angle, Valkyrie::Types::Integer.optional
 
   delegate :width,
            :height,
