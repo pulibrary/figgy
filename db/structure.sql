@@ -346,6 +346,38 @@ ALTER SEQUENCE public.preservation_audits_id_seq OWNED BY public.preservation_au
 
 
 --
+-- Name: preservation_check_failures; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.preservation_check_failures (
+    id bigint NOT NULL,
+    preservation_audit_id bigint,
+    resource_id character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: preservation_check_failures_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.preservation_check_failures_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: preservation_check_failures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.preservation_check_failures_id_seq OWNED BY public.preservation_check_failures.id;
+
+
+--
 -- Name: roles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -528,6 +560,13 @@ ALTER TABLE ONLY public.preservation_audits ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: preservation_check_failures id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.preservation_check_failures ALTER COLUMN id SET DEFAULT nextval('public.preservation_check_failures_id_seq'::regclass);
+
+
+--
 -- Name: roles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -626,6 +665,14 @@ ALTER TABLE ONLY public.orm_resources
 
 ALTER TABLE ONLY public.preservation_audits
     ADD CONSTRAINT preservation_audits_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: preservation_check_failures preservation_check_failures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.preservation_check_failures
+    ADD CONSTRAINT preservation_check_failures_pkey PRIMARY KEY (id);
 
 
 --
@@ -787,6 +834,13 @@ CREATE INDEX index_orm_resources_on_updated_at ON public.orm_resources USING btr
 
 
 --
+-- Name: index_preservation_check_failures_on_preservation_audit_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_preservation_check_failures_on_preservation_audit_id ON public.preservation_check_failures USING btree (preservation_audit_id);
+
+
+--
 -- Name: index_roles_users_on_role_id_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -915,6 +969,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251208215153'),
 ('20251204175843'),
 ('20251117211722'),
 ('20251007184231'),
