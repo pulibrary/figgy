@@ -419,24 +419,24 @@ export default {
       })
     },
   moveItemById: function (array, id, direction) {
-      const index = array.findIndex(item => item.id === id);
-      if (index === -1) return array; // not found, return unchanged
+      const index = array.findIndex(item => item.id === id)
+      if (index === -1) return array // not found, return unchanged
 
-      const newArray = [...array];
+      const newArray = [...array]
 
       if (direction === "down" && index < array.length - 1) {
         // swap with next
         [newArray[index], newArray[index + 1]] =
-          [newArray[index + 1], newArray[index]];
+          [newArray[index + 1], newArray[index]]
       }
 
       if (direction === "up" && index > 0) {
         // swap with previous
         [newArray[index], newArray[index - 1]] =
-          [newArray[index - 1], newArray[index]];
+          [newArray[index - 1], newArray[index]]
       }
 
-      return newArray;
+      return newArray
     },
     moveUp: function () {
       const rootId = this.tree.structure.id
