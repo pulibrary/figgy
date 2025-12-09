@@ -349,8 +349,7 @@ ul.lux-tree li div.lux-item-label {
 }
 
 ul.lux-tree li div.lux-item-label.selected {
-  // background: rgb(210, 202, 173);
-  background: rgb(250, 249, 245);
+  background: #fdf6dc;
 }
 
 ul.lux-tree li div.lux-item-label.disabled {
@@ -449,6 +448,7 @@ ul.lux-tree .lux-item-label {
 .folder-edit .lux-button.icon.small {
   padding: 0px;
   margin: 0px;
+  background: none;
 }
 
 </style>
