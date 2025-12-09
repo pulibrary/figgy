@@ -20,7 +20,7 @@ class ScannedResourcesController < ResourcesController
   def handle_upload_selene_files(obj)
     return unless obj.selene? && params[:ingest_path].present?
     path = Pathname.new(Figgy.config["ingest_folder_path"]).join(params[:ingest_path])
-    IngestFolderJob.perform_later(directory: path.to_s, property: "id", id: obj.id.to_s)
+    IngestFolderJob.perform_later(directory: path.to_s, property: "id", id: obj.id.to_s, preserve_file_names: true)
   end
 
   def struct_manager

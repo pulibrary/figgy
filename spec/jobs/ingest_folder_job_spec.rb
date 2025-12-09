@@ -56,6 +56,7 @@ RSpec.describe IngestFolderJob do
           base_directory: single_dir,
           property: nil,
           file_filters: [],
+          preserve_file_names: false,
           source_metadata_identifier: bib
         )
 
@@ -93,6 +94,7 @@ RSpec.describe IngestFolderJob do
           file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
+          preserve_file_names: false,
           member_of_collection_ids: [coll.id],
           depositor: "tpend"
         )
@@ -146,6 +148,7 @@ RSpec.describe IngestFolderJob do
           file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
+          preserve_file_names: false,
           member_of_collection_ids: [coll.id]
         )
       end
@@ -169,6 +172,7 @@ RSpec.describe IngestFolderJob do
           base_directory: ingest_dir,
           property: nil,
           file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
+          preserve_file_names: false,
           title: "Interview"
         )
       end
