@@ -1,4 +1,7 @@
+# frozen_string_literal: true
 class PreservationAudit < ApplicationRecord
+  has_many :preservation_check_failures, dependent: :destroy
+
   validates :batch_id, presence: true
   validates :status, inclusion: {
     in: %w[in_process success failure], message: "%{value} is not a valid status"
