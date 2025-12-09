@@ -45,4 +45,12 @@ export const treeMutations = {
   SAVED_STRUCTURE_STATE(state, saveStatus) {
     state.saveState = saveStatus
   },
+  MOVE_UP(state, structure) {
+    state.structure = structure
+    state.modified = true
+  },
+  MOVE_DOWN(state, structure) {
+    state.structure = structure
+    state.modified = true
+  },
 }
