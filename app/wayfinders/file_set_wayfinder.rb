@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 class FileSetWayfinder < BaseWayfinder
   relationship_by_property :members, property: :member_ids
+  relationship_by_property :scanned_resources, property: :member_ids, model: ScannedResource
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
   inverse_relationship_by_property :preservation_objects, property: :preserved_object_id, singular: true, model: PreservationObject
 
   def collections
     []
+  end
+
+  def selene_resources
+    scanned_resources.select(&:selene?).map(&:decorate)
   end
 
   alias decorated_members members

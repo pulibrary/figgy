@@ -2,14 +2,15 @@
 # Provides the hash serialization of a local mounted disk for the FileBrowser
 # used for bulk ingest and the file manager.
 class FileBrowserDiskProvider
-  attr_reader :root, :base
+  attr_reader :root, :base, :entry_klass
   # @param root [String] Root file path on the server to return file information
   #   from
   # @param base [String, nil] Relative path from root to return file information
   #   from.
-  def initialize(root:, base: nil)
+  def initialize(root:, base: nil, entry_klass: Entry)
     @root = Pathname.new(root)
     @base = base.to_s
+    @entry_klass = entry_klass
   end
 
   def as_json(*_args)
@@ -20,7 +21,7 @@ class FileBrowserDiskProvider
 
     def files
       @files ||= valid_children.sort_by(&:basename).map do |file|
-        Entry.new(file_path: file, root: root)
+        entry_klass.new(file_path: file, root: root)
       end
     end
 
@@ -94,5 +95,21 @@ class Entry
       file_path.children.select do |child|
         !child.basename.to_s.start_with?(".")
       end
+  end
+end
+
+class SeleneEntry < Entry
+  def selectable?
+    selene_structure.none?(&:nil?)
+  end
+
+  def selene_structure
+    [
+      file_path.children.find { |c| c.basename.to_s == "Selene_Output" },
+      file_path.children.find { |c| c.basename.to_s.match(/1\.(tif|TIF)/) },
+      file_path.children.find { |c| c.basename.to_s.match(/2\.(tif|TIF)/) },
+      file_path.children.find { |c| c.basename.to_s.match(/3\.(tif|TIF)/) },
+      file_path.children.find { |c| c.basename.to_s.match(/4\.(tif|TIF)/) }
+    ]
   end
 end

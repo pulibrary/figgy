@@ -157,5 +157,37 @@ RSpec.describe FileBrowserDiskProvider do
         )
       end
     end
+
+    context "with a Selene entry" do
+      it "marks folders with Selene files and structure as selectable" do
+        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new", entry_klass: SeleneEntry)
+        expect(provider.as_json).to eq(
+          [
+            {
+              label: "DPUL",
+              path: "studio_new/DPUL",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL')}.json",
+              expanded: false,
+              expandable: true,
+              selected: false,
+              selectable: false,
+              loaded: false,
+              children: []
+            },
+            {
+              label: "selene-example",
+              path: "studio_new/selene-example",
+              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/selene-example')}.json",
+              expanded: false,
+              expandable: true,
+              selected: false,
+              selectable: true,
+              loaded: false,
+              children: []
+            }
+          ]
+        )
+      end
+    end
   end
 end
