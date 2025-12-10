@@ -14,6 +14,10 @@ RSpec.describe "catalog/_home_text.html.erb" do
       expect(rendered).to have_link "Fixity Dashboard"
     end
 
+    it "has a link to the preservation audits" do
+      expect(rendered).to have_link "Preservation Audits"
+    end
+
     it "has a links to bulk ingest resources" do
       expect(rendered).to have_link "Bulk Ingest"
     end
@@ -36,6 +40,10 @@ RSpec.describe "catalog/_home_text.html.erb" do
 
     it "does not have a link to the fixity dashboard" do
       expect(rendered).not_to have_link "Fixity Dashboard"
+    end
+
+    it "does not have a link to the preservation audits" do
+      expect(rendered).not_to have_link "PreservationAudits"
     end
   end
 

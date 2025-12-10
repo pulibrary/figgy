@@ -1,3 +1,13 @@
 <p style="color: green"><%= notice %></p>
 
+<h1>Preservation audits</h1>
+
 <%= render @preservation_audit %>
+
+<h2>Preservation Check Failures</h2>
+
+<% @preservation_audit.preservation_check_failures.each do |failure| %>
+  <ul id="<%= dom_id failure %>">
+    <li><%= link_to failure.resource_id, solr_document_path(id: failure.resource_id) %></li>
+  </ul>
+<% end %>
