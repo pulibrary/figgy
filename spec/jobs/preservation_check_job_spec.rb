@@ -138,6 +138,7 @@ RSpec.describe PreservationCheckJob do
     end
   end
 
+  # TODO: move these to a factory
   def create_preserved_resource
     file = fixture_file_upload("files/example.tif", "image/tiff")
     resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])

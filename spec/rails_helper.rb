@@ -16,6 +16,10 @@ Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |file| require
 
 Capybara.server = :puma, { Silent: true }
 
+# Ensure sidekiq jobs aren't added to redis during tests
+# note this puts Sidekiq in "fake" mode by default
+require "sidekiq/testing"
+
 module Features
   # Extend this module in spec/support/features/*.rb
   include Formulaic::Dsl
@@ -36,6 +40,10 @@ RSpec.configure do |config|
   # see https://github.com/drapergem/draper/issues/655
   config.before { Draper::ViewContext.clear! }
   config.after { Draper::ViewContext.clear! }
+
+  # Clear Sidekiq Jobs between tests
+  config.before { Sidekiq::Worker.clear_all }
+  config.after { Sidekiq::Worker.clear_all }
 end
 
 ActiveRecord::Migration.maintain_test_schema!
