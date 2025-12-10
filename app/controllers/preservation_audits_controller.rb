@@ -4,11 +4,14 @@ class PreservationAuditsController < ApplicationController
 
   # GET /preservation_audits or /preservation_audits.json
   def index
+    authorize! :read, :fixity
     @preservation_audits = PreservationAudit.all
   end
 
   # GET /preservation_audits/1 or /preservation_audits/1.json
-  def show; end
+  def show
+    authorize! :read, :fixity
+  end
 
   private
 
