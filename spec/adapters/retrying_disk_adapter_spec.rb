@@ -30,6 +30,17 @@ RSpec.describe RetryingDiskAdapter do
       expect { storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff") }.to raise_error Errno::EPIPE
     end
   end
+  context "when reading io stalls because tigerdata is acting up" do
+    it "raises an error" do
+      uploaded_file = storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff")
+
+      allow(File).to receive(:size) do
+        sleep(2)
+      end
+      file = storage_adapter.find_by(id: uploaded_file.id)
+      expect { file.size }.to raise_error
+    end
+  end
   context "when upload fails because of an Errno::EAGAIN" do
     it "tries again" do
       counts = 0
