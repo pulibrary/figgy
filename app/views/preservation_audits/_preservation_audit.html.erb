@@ -5,13 +5,18 @@
   </p>
 
   <p>
-    <strong>Type:</strong>
-    <%= preservation_audit.type %>
+    <strong>Extent:</strong>
+    <%= preservation_audit.extent %>
   </p>
 
   <p>
     <strong>Batch:</strong>
     <%= preservation_audit.batch_id %>
+  </p>
+
+  <p>
+    <strong>Failures:</strong>
+    <%= preservation_audit.preservation_check_failures.count %>
   </p>
 
 </div>
