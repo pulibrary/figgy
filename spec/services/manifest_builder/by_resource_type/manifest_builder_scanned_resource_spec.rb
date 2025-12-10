@@ -201,7 +201,7 @@ RSpec.describe ManifestBuilder do
     end
   end
 
-  context "when given a selene resource" do 
+  context "when given a selene resource" do
     let(:scanned_resource) do
       FactoryBot.create_for_repository(:scanned_resource, files: [file])
     end
