@@ -16,6 +16,28 @@ RSpec.describe FallbackDiskAdapter do
   let(:file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
 
   describe "#find_by" do
+    context "when IO stalls trying to read from the primary adapter" do
+      it "fails with a timeout" do
+        allow(Rails.logger).to receive(:warn)
+        resource = ScannedResource.new(id: SecureRandom.uuid)
+        # Put the file in both places.
+        uploaded_file = primary_adapter.upload(file: file, original_filename: "foo.jpg", resource: resource)
+        new_path = Pathname.new(uploaded_file.disk_path.to_s.gsub(Figgy.config["repository_path"], Figgy.config["fallback_repository_path"]))
+        FileUtils.mkdir_p(new_path.parent)
+        FileUtils.cp(uploaded_file.disk_path, new_path)
+
+        file_double = instance_double(File)
+        allow(file_double).to receive(:read).with(1) do
+          # This is what happens when tigerdata's frozen up - read never
+          # returns. One byte should return quickly.
+          sleep(2)
+        end
+        allow(File).to receive(:open).and_call_original
+        allow(File).to receive(:open).with(uploaded_file.disk_path, "rb").and_yield(file_double)
+
+        expect { storage_adapter.find_by(id: uploaded_file.id) }.to raise_error Timeout::Error
+      end
+    end
     context "when reading from the primary adapter fails" do
       it "falls back to the fallback adapter" do
         allow(Rails.logger).to receive(:warn)
@@ -23,7 +45,7 @@ RSpec.describe FallbackDiskAdapter do
         # Put the file in both places.
         uploaded_file = primary_adapter.upload(file: file, original_filename: "foo.jpg", resource: resource)
         new_path = Pathname.new(uploaded_file.disk_path.to_s.gsub(Figgy.config["repository_path"], Figgy.config["fallback_repository_path"]))
-        FileUtils.mkdir_p(new_path)
+        FileUtils.mkdir_p(new_path.parent)
         FileUtils.cp(uploaded_file.disk_path, new_path)
 
         file_double = instance_double(File)
@@ -49,7 +71,7 @@ RSpec.describe FallbackDiskAdapter do
         # folder. Check that old folder if the new one doesn't have it yet.
         uploaded_file = primary_adapter.upload(file: file, original_filename: "foo.jpg", resource: resource)
         new_path = Pathname.new(uploaded_file.disk_path.to_s.gsub(Figgy.config["repository_path"], Figgy.config["fallback_repository_path"]))
-        FileUtils.mkdir_p(new_path)
+        FileUtils.mkdir_p(new_path.parent)
         FileUtils.mv(uploaded_file.disk_path, new_path)
 
         reloaded_uploaded_file = storage_adapter.find_by(id: uploaded_file.id)
