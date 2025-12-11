@@ -301,6 +301,26 @@ RSpec.describe ScannedResourcesController, type: :controller do
           expect(file_set.original_file.mime_type).to eq ["image/tiff"]
         end
       end
+
+      context "when creating a new Selene Resource with a path without the correct selene structure" do
+        it "does not create a new resource and redirects with a flash notice" do
+          post :create, params: {
+            scanned_resource: {
+              change_set: "selene_resource",
+              title: "Selene"
+            },
+            ingest_path: "studio_new/DPUL"
+          }
+
+          expect(response).to be_redirect
+          expect(response.location).not_to start_with "http://test.host/catalog/"
+          expect(flash[:notice]).to eq("Selene file structure invalid")
+
+          query_service = ChangeSetPersister.default.query_service
+          resources = query_service.find_all_of_model(model: ScannedResource)
+          expect(resources.count).to eq 0
+        end
+      end
     end
   end
 
