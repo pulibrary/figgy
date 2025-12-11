@@ -75,7 +75,7 @@ Rails.application.routes.draw do
         end
       end
     end
-    get "/file_sets/:parent_id/selene_resource/new", to: "scanned_resources#new", change_set: "selene_resource", as: :new_selene_file_set
+    get "/file_sets/:parent_id/selene_resource/new", to: "scanned_resources#new", change_set: "selene_resource", as: :file_set_new_selene_resource
 
     resources :scanned_resources do
       member do

@@ -6,7 +6,7 @@
     <%= link_to "Attach Caption", new_caption_file_set_file_metadata_path(file_set_id: resource.id), class: "btn btn-primary" %>
   <% end %>
   <% if resource.image? %>
-    <%= link_to "Attach Selene Resource", new_selene_file_set_path(parent_id: resource.id), class: "btn btn-primary" %>
+    <%= link_to "Attach Selene Resource", file_set_new_selene_resource_path(parent_id: resource.id), class: "btn btn-primary" %>
   <% end %>
   <% if can?(:destroy, resource) %>
     <%= link_to "Delete This #{resource.decorate.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
