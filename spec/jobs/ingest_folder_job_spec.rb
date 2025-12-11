@@ -56,7 +56,6 @@ RSpec.describe IngestFolderJob do
           base_directory: single_dir,
           property: nil,
           file_filters: [],
-          preserve_file_names: false,
           source_metadata_identifier: bib
         )
 
@@ -94,7 +93,6 @@ RSpec.describe IngestFolderJob do
           file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          preserve_file_names: false,
           member_of_collection_ids: [coll.id],
           depositor: "tpend"
         )
@@ -148,7 +146,6 @@ RSpec.describe IngestFolderJob do
           file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
           source_metadata_identifier: bib,
           local_identifier: local_id,
-          preserve_file_names: false,
           member_of_collection_ids: [coll.id]
         )
       end
@@ -172,7 +169,6 @@ RSpec.describe IngestFolderJob do
           base_directory: ingest_dir,
           property: nil,
           file_filters: [".tif", ".wav", ".pdf", ".zip", ".jpg", ".mp4"],
-          preserve_file_names: false,
           title: "Interview"
         )
       end
@@ -181,12 +177,13 @@ RSpec.describe IngestFolderJob do
     context "with a SeleneResource" do
       it "ingests files as modeled for Selene Resources" do
         resource = FactoryBot.create_for_repository(:selene_resource)
-        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_selene"), property: :id, id: resource.id.to_s)
+        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_selene"), property: :id, id: resource.id.to_s, preserve_file_names: true)
 
         resource = ChangeSetPersister.default.query_service.find_by(id: resource.id)
         expect(resource.member_ids.length).to eq 10
         wayfinder = Wayfinder.for(resource)
         expect(wayfinder.file_sets_count).to eq 10
+        expect(wayfinder.file_sets.flat_map(&:title)).to include("albedo_depthmap_composite")
       end
     end
   end
