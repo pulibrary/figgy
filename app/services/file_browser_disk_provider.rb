@@ -2,15 +2,15 @@
 # Provides the hash serialization of a local mounted disk for the FileBrowser
 # used for bulk ingest and the file manager.
 class FileBrowserDiskProvider
-  attr_reader :root, :base, :entry_klass
+  attr_reader :root, :base, :entry_type
   # @param root [String] Root file path on the server to return file information
   #   from
   # @param base [String, nil] Relative path from root to return file information
   #   from.
-  def initialize(root:, base: nil, entry_klass: Entry)
+  def initialize(root:, base: nil, entry_type: "default")
     @root = Pathname.new(root)
     @base = base.to_s
-    @entry_klass = entry_klass
+    @entry_type = entry_type
   end
 
   def as_json(*_args)
@@ -18,6 +18,14 @@ class FileBrowserDiskProvider
   end
 
   private
+
+    def entry_klass
+      if entry_type == "selene"
+        SeleneEntry
+      else
+        Entry
+      end
+    end
 
     def files
       @files ||= valid_children.sort_by(&:basename).map do |file|
@@ -53,6 +61,7 @@ class Entry
       label: basename.to_s,
       path: relative_path,
       loadChildrenPath: load_path,
+      entry_type: "default",
       expanded: false,
       expandable: true,
       selected: false,
@@ -72,7 +81,7 @@ class Entry
   end
 
   def load_path
-    "/file_browser/disk/#{CGI.escape(relative_path)}.json"
+    "/file_browser/disk/default/#{CGI.escape(relative_path)}.json"
   end
 
   # Might want to extract this to the disk adapter somehow.
@@ -111,5 +120,24 @@ class SeleneEntry < Entry
       file_path.children.find { |c| c.basename.to_s.match(/3\.(tif|TIF)/) },
       file_path.children.find { |c| c.basename.to_s.match(/4\.(tif|TIF)/) }
     ]
+  end
+
+  def directory_json
+    {
+      label: basename.to_s,
+      path: relative_path,
+      loadChildrenPath: load_path,
+      entry_type: "selene",
+      expanded: false,
+      expandable: true,
+      selected: false,
+      selectable: selectable?,
+      loaded: false,
+      children: []
+    }
+  end
+
+  def load_path
+    "/file_browser/disk/selene/#{CGI.escape(relative_path)}.json"
   end
 end

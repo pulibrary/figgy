@@ -7,7 +7,7 @@
   <%= text_field_tag :ingest_path, nil, class: 'form-control', readonly: true, id: 'ingest_path_field' %>
   <div class="input-group-append">
     <div class="input-group-text input-path-wrapper">
-      <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"], entry_klass: SeleneEntry).to_json %>' input-element-id='ingest_path_field' summary-element-id='ingestDirectorySummary' />
+      <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"], entry_type: "selene").to_json %>' input-element-id='ingest_path_field' summary-element-id='ingestDirectorySummary' />
     </div>
   </div>
 </div>

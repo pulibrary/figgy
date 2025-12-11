@@ -12,7 +12,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "examples",
               path: "examples",
-              loadChildrenPath: "/file_browser/disk/examples.json",
+              loadChildrenPath: "/file_browser/disk/default/examples.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -23,7 +24,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "ingest_scratch",
               path: "ingest_scratch",
-              loadChildrenPath: "/file_browser/disk/ingest_scratch.json",
+              loadChildrenPath: "/file_browser/disk/default/ingest_scratch.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -34,7 +36,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "music",
               path: "music",
-              loadChildrenPath: "/file_browser/disk/music.json",
+              loadChildrenPath: "/file_browser/disk/default/music.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -45,7 +48,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "numismatics",
               path: "numismatics",
-              loadChildrenPath: "/file_browser/disk/numismatics.json",
+              loadChildrenPath: "/file_browser/disk/default/numismatics.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -56,7 +60,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "studio_new",
               path: "studio_new",
-              loadChildrenPath: "/file_browser/disk/studio_new.json",
+              loadChildrenPath: "/file_browser/disk/default/studio_new.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -79,7 +84,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "991234563506421",
               path: "studio_new/DPUL/Santa/ready/991234563506421",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/991234563506421')}.json",
+              loadChildrenPath: "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/Santa/ready/991234563506421')}.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -90,7 +96,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "9917912613506421",
               path: "studio_new/DPUL/Santa/ready/9917912613506421",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/9917912613506421')}.json",
+              loadChildrenPath: "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/Santa/ready/9917912613506421')}.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -101,7 +108,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "9946093213506421",
               path: "studio_new/DPUL/Santa/ready/9946093213506421",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421')}.json",
+              loadChildrenPath: "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421')}.json",
+              entry_type: "default",
               expanded: false,
               expandable: true,
               selected: false,
@@ -146,7 +154,8 @@ RSpec.describe FileBrowserDiskProvider do
           {
             label: "A123456",
             path: "studio_new/DPUL/A123456",
-            loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL/A123456')}.json",
+            loadChildrenPath: "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/A123456')}.json",
+            entry_type: "default",
             expanded: false,
             expandable: true,
             selected: false,
@@ -160,13 +169,14 @@ RSpec.describe FileBrowserDiskProvider do
 
     context "with a Selene entry" do
       it "marks folders with Selene files and structure as selectable" do
-        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new", entry_klass: SeleneEntry)
+        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new", entry_type: "selene")
         expect(provider.as_json).to eq(
           [
             {
               label: "DPUL",
               path: "studio_new/DPUL",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/DPUL')}.json",
+              loadChildrenPath: "/file_browser/disk/selene/#{CGI.escape('studio_new/DPUL')}.json",
+              entry_type: "selene",
               expanded: false,
               expandable: true,
               selected: false,
@@ -177,7 +187,8 @@ RSpec.describe FileBrowserDiskProvider do
             {
               label: "selene-example",
               path: "studio_new/selene-example",
-              loadChildrenPath: "/file_browser/disk/#{CGI.escape('studio_new/selene-example')}.json",
+              loadChildrenPath: "/file_browser/disk/selene/#{CGI.escape('studio_new/selene-example')}.json",
+              entry_type: "selene",
               expanded: false,
               expandable: true,
               selected: false,

@@ -315,6 +315,7 @@ Rails.application.routes.draw do
   end
 
   namespace :file_browser do
-    resources :disk, only: [:index, :show], id: /([^\/])+?/
+    get "/disk/:entry_type", to: "disk#index"
+    get "/disk/:entry_type/:id", to: "disk#show", constraints: { id: /([^\/])+?/ }
   end
 end
