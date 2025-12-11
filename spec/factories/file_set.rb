@@ -17,7 +17,7 @@ FactoryBot.define do
     end
 
     factory :original_image_file_set do
-      file_metadata { FileMetadata.new(use: ::PcdmUse::OriginalFile, mime_type: "image/tiff") }
+      file_metadata { FileMetadata.new(id: Valkyrie::ID.new(SecureRandom.uuid), use: ::PcdmUse::OriginalFile, mime_type: "image/tiff") }
     end
 
     factory :geo_metadata_file_set do

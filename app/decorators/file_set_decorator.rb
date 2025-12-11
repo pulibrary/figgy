@@ -24,7 +24,7 @@ class FileSetDecorator < Valkyrie::ResourceDecorator
           :light_direction,
           :light_angle
 
-  delegate :collections, :members, :preservation_objects, to: :wayfinder
+  delegate :collections, :members, :preservation_objects, :selene_resources, to: :wayfinder
 
   def manageable_files?
     false

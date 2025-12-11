@@ -177,12 +177,13 @@ RSpec.describe IngestFolderJob do
     context "with a SeleneResource" do
       it "ingests files as modeled for Selene Resources" do
         resource = FactoryBot.create_for_repository(:selene_resource)
-        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_selene"), property: :id, id: resource.id.to_s)
+        described_class.perform_now(directory: Rails.root.join("spec", "fixtures", "ingest_selene"), property: :id, id: resource.id.to_s, preserve_file_names: true)
 
         resource = ChangeSetPersister.default.query_service.find_by(id: resource.id)
         expect(resource.member_ids.length).to eq 10
         wayfinder = Wayfinder.for(resource)
         expect(wayfinder.file_sets_count).to eq 10
+        expect(wayfinder.file_sets.flat_map(&:title)).to include("albedo_depthmap_composite")
       end
     end
   end

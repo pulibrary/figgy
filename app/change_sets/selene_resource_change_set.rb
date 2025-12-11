@@ -5,6 +5,7 @@ class SeleneResourceChangeSet < ChangeSet
 
   include VisibilityProperty
   property :visibility, multiple: false, required: true, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+  property :title, multiple: true, required: true, default: ["Selene"]
   property :rights_statement, multiple: false, required: true, default: RightsStatements.copyright_not_evaluated, type: ::Types::URI
   property :downloadable, multiple: false, require: true, default: "none"
   property :member_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID)
@@ -24,13 +25,16 @@ class SeleneResourceChangeSet < ChangeSet
   validates_with StateValidator
   validates_with MemberValidator
   validates_with ProcessedValidator
+  validates_with TitleValidator
   validates :visibility, presence: true
 
   def primary_terms
     [
+      :title,
       :ingest_path,
       :portion_note,
-      :change_set
+      :change_set,
+      :append_id
     ]
   end
 

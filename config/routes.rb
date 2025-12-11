@@ -75,6 +75,8 @@ Rails.application.routes.draw do
         end
       end
     end
+    get "/file_sets/:parent_id/selene_resource/new", to: "scanned_resources#new", change_set: "selene_resource", as: :file_set_new_selene_resource
+
     resources :scanned_resources do
       member do
         get :file_manager
@@ -313,6 +315,7 @@ Rails.application.routes.draw do
   end
 
   namespace :file_browser do
-    resources :disk, only: [:index, :show], id: /([^\/])+?/
+    get "/disk/:entry_type", to: "disk#index"
+    get "/disk/:entry_type/:id", to: "disk#show", constraints: { id: /([^\/])+?/ }
   end
 end

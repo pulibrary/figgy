@@ -8,12 +8,19 @@ class ScannedResourcesController < ResourcesController
   def after_create_success(obj, change_set)
     super
     handle_save_and_ingest(obj)
+    handle_upload_selene_files(obj)
   end
 
   def handle_save_and_ingest(obj)
     return unless params[:save_and_ingest_path].present? && params[:commit] == "Save and Ingest"
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
     IngestFolderJob.perform_later(directory: locator.root_path.join(params[:save_and_ingest_path]).to_s, property: "id", id: obj.id.to_s)
+  end
+
+  def handle_upload_selene_files(obj)
+    return unless obj.selene? && params[:ingest_path].present?
+    path = Pathname.new(Figgy.config["ingest_folder_path"]).join(params[:ingest_path])
+    IngestFolderJob.perform_later(directory: path.to_s, property: "id", id: obj.id.to_s, preserve_file_names: true)
   end
 
   def struct_manager

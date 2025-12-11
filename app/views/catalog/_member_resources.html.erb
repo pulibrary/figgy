@@ -6,8 +6,12 @@
     Optional locals:
       empty_text [String] the message to show if there are no members
       placeholder_text [String] placeholder value for the id input element
+      actions [Array] List of actions to render.
+          Available: [:view, :edit, :detach, :delete]
+          Default: [:view, :edit, :detach]
       hide_thumbnail [Boolean] do not display the thumbnail column
       hide_visibility [Boolean] do not display the visibility column
+      hide_attach [Boolean] do not display input for attaching existing resources
     %>
 
   <div class="card mb-4">
@@ -17,8 +21,10 @@
     </div>
     <div class="card-body member-resources"
       id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
+      <% actions ||= [:view, :edit, :detach] %>
       <% hide_thumbnail ||= false %>
       <% hide_visibility ||= false %>
+      <% hide_attach ||= false %>
       <div class="row">
         <div class="col-md-12">
           <div class="loading-status d-none">Loading...</div>
@@ -58,11 +64,19 @@
                     <td><%= resource.visibility_badge.first.html_safe %></td>
                   <% end %>
                   <td>
-                    <%= link_to 'View', resource_url, class: 'btn btn-secondary' %>
-                    <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-secondary' %>
-                    <span class="input-group-btn">
+                    <% if actions.include?(:view) %>
+                      <%= link_to 'View', resource_url, class: 'btn btn-secondary' %>
+                    <% end %>
+                    <% if actions.include?(:edit) %>
+                        <%= link_to 'Edit', main_app.polymorphic_path([:edit, resource]), class: 'btn btn-secondary' %>
+
+                    <% end %>
+                    <% if actions.include?(:detach) %>
                       <button name="button" id=<%= "child_#{member_type}_detach_button" %> class="btn btn-danger btn-remove-row">Detach</button>
-                    </span>
+                    <% end %>
+                    <% if actions.include?(:delete) %>
+                      <%= link_to "Delete", main_app.polymorphic_path([resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
@@ -71,7 +85,7 @@
         </div>
       </div><!-- row -->
 
-      <% if decorated_members.empty? %>
+      <% if decorated_members.empty? && !hide_attach %>
         <div class="row">
           <div class="col-md-6">
             <% empty_text ||= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %>
@@ -86,16 +100,18 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-4">
-          <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
-          <input class="form-control string optional related_resource_ids resource_member_ids form-control" id=<%= "child_#{member_type}_id_input" %> name=<%= "child_#{member_type}_id_input"%> placeholder="<%= placeholder_text %>" type="text">
-        </div>
-        <div class="col-md-2">
-          <span class="input-group-btn">
-            <button name="button" id=<%= "child_#{member_type}_attach_button" %> class="btn btn-primary btn-add-row">Attach</button>
-          </span>
-        </div>
-      </div><!-- row -->
+      <% if !hide_attach %>
+        <div class="row">
+          <div class="col-md-4">
+            <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
+            <input class="form-control string optional related_resource_ids resource_member_ids form-control" id=<%= "child_#{member_type}_id_input" %> name=<%= "child_#{member_type}_id_input"%> placeholder="<%= placeholder_text %>" type="text">
+          </div>
+          <div class="col-md-2">
+            <span class="input-group-btn">
+              <button name="button" id=<%= "child_#{member_type}_attach_button" %> class="btn btn-primary btn-add-row">Attach</button>
+            </span>
+          </div>
+        </div><!-- row -->
+      <% end %>
     </div>
   </div><!-- panel -->

@@ -154,4 +154,45 @@ RSpec.feature "FileSet" do
       expect(page).not_to have_field "file_set_captions_required_yes"
     end
   end
+
+  context "with an image FileSet" do
+    it "allows users to create a Selene resource" do
+      file = fixture_file_upload("files/example.tif", "image/tiff")
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+      file_set = Wayfinder.for(resource).file_sets.first
+      visit solr_document_path(id: file_set.id)
+
+      expect(page).to have_link "Attach Selene Resource"
+      click_link "Attach Selene Resource"
+      expect(page).to have_field "Title"
+      expect(page).to have_text "Ingest Folder"
+      expect(page).to have_field "Portion Note"
+      expect(page).not_to have_button "Find Ingest Folder"
+    end
+  end
+
+  context "with a non-image FileSet" do
+    it "does not allow users to create a Selene resource" do
+      file = fixture_file_upload("files/audio_file.wav", "audio/x-wav")
+      resource = FactoryBot.create_for_repository(:scanned_resource, files: [file])
+      file_set = Wayfinder.for(resource).file_sets.first
+      visit solr_document_path(id: file_set.id)
+
+      expect(page).not_to have_link "Attach Selene Resource"
+    end
+  end
+
+  context "with an attached SeleneResource" do
+    it "displays the resource in a table" do
+      resource = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+      file_set = Wayfinder.for(resource).file_sets.first
+
+      visit solr_document_path(id: file_set.id)
+
+      row = page.find("tr[data-resource-id]")
+      expect(row).to have_css("td", text: "Selene Resource for FileSet")
+      expect(row).to have_link("View")
+      expect(row).to have_link("Delete")
+    end
+  end
 end

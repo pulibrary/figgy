@@ -276,6 +276,31 @@ RSpec.describe ScannedResourcesController, type: :controller do
           expect(file_set.original_file.mime_type).to eq ["audio/x-wav"]
         end
       end
+
+      context "when creating a new Selene Resource" do
+        it "attaches Selene files to the resource" do
+          post :create, params: {
+            scanned_resource: {
+              change_set: "selene_resource",
+              title: "Selene"
+            },
+            ingest_path: "studio_new/selene-example"
+          }
+
+          expect(response).to be_redirect
+          expect(response.location).to start_with "http://test.host/catalog/"
+          id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+          resource = find_resource(id)
+
+          expect(resource.member_ids.length).to eq 10
+          file_set = find_resource(resource.member_ids.first)
+          expect(file_set.file_metadata.length).to eq 2
+          expect(file_set.title).to eq ["1"]
+          expect(file_set.original_file).not_to be nil
+          expect(file_set.original_file.label).to eq ["1.tif"]
+          expect(file_set.original_file.mime_type).to eq ["image/tiff"]
+        end
+      end
     end
   end
 

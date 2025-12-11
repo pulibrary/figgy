@@ -24,7 +24,7 @@
       <%= f.submit "Save and Duplicate Metadata", class: 'btn btn-primary save' %>
     <% end %>
   </div>
-  <% if f.object.resource.is_a?(ScannedResource) %>
+  <% if f.object.resource.is_a?(ScannedResource) && !f.object.is_a?(SeleneResourceChangeSet) %>
     <div class="card-footer text-center">
       <%= hidden_field_tag "save_and_ingest_path" %>
       <%= f.submit "Find Ingest Folder", class: 'btn btn-primary', data: { save_and_ingest: true } %>

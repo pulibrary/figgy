@@ -163,6 +163,7 @@ FactoryBot.define do
     end
 
     factory :selene_resource do
+      title { "Selene Resource for FileSet" }
       change_set { "selene_resource" }
       factory :selene_resource_with_files do
         files do

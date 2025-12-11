@@ -1,0 +1,55 @@
+<label for="ingest_directory">Ingest Folder&nbsp;<a href="#" data-toggle="modal" data-target="#bulk-structure-example-modal" aria-label="Ingest Folder Info">
+    <lux-icon-base width="18" height="18" icon-name="alert" icon-color="blue">
+      <lux-icon-info></lux-icon-info>
+    </lux-icon-base>
+  </a></label>
+<div class="input-group mb-2">
+  <%= text_field_tag :ingest_path, nil, class: 'form-control', readonly: true, id: 'ingest_path_field' %>
+  <div class="input-group-append">
+    <div class="input-group-text input-path-wrapper">
+      <input-path-selector :start-tree='<%= FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"], entry_type: "selene").to_json %>' input-element-id='ingest_path_field' summary-element-id='ingestDirectorySummary' />
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="bulk-structure-example-modal" tabindex="-1" role="dialog" aria-labelledby="bulk structure example">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><lux-icon-base width="24" height="24" icon-name="alert" icon-color="blue"><lux-icon-info></lux-icon-info></lux-icon-base> Example Selene Directory Structure</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <p>This example shows the structure needed for Selene file ingest:</p>
+        <div class="directory-listing">
+          <ul class="directory-list">
+            <li>new_ingest</li>
+            <ul class="file-list">
+              <li>1.TIF</li>
+              <li>2.TIF</li>
+              <li>3.TIF</li>
+              <li>4.TIF</li>
+              <li>albedo_depthmap_composite.TIF</li>
+            </ul>
+            <ul>
+              <li>Selene_Output</li>
+              <ul class="file-list">
+                <li>albedo_m1.tfw</li>
+                <li>albedo_m1.tif</li>
+                <li>depthmap_m1_HF_0.03_m.tfw</li>
+                <li>depthmap_m1_HF_0.03_m.tif</li>
+                <li>depthmap_m1.tfw</li>
+                <li>depthmap_m1.tif</li>
+                <li>normal_m1_HF_0.03_m.tfw</li>
+                <li>normal_m1_HF_0.03_m.tif</li>
+                <li>normal_m1.tfw</li>
+                <li>normal_m1.tif</li>
+              </ul>
+            </ul>
+          </ul>
+        </div>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
