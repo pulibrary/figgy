@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class IngestFolderJob < ApplicationJob
-  def perform(directory:, property: nil, change_set_param: nil, class_name: "ScannedResource", file_filters: [], preserve_file_names: false, **attributes)
+  def perform(directory:, property: nil, change_set_param: nil, class_name: "ScannedResource", file_filters: [], **attributes)
     Rails.logger.info "Ingesting folder #{directory}"
     change_set_persister = ChangeSetPersister.new(
       metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
@@ -10,7 +10,7 @@ class IngestFolderJob < ApplicationJob
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ingest_service = BulkIngestService.new(change_set_persister: buffered_change_set_persister, change_set_param: change_set_param, klass: class_name.constantize, logger: Rails.logger)
       file_filters = typed_file_filter(class_name) if file_filters.empty?
-      ingest_service.attach_dir(base_directory: directory, property: property, file_filters: file_filters, **attributes, preserve_file_names: preserve_file_names)
+      ingest_service.attach_dir(base_directory: directory, property: property, file_filters: file_filters, **attributes)
     end
     Rails.logger.info "Imported #{directory}"
   end
