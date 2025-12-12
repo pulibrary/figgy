@@ -20,6 +20,10 @@ module Bagit
       false
     end
 
+    def protocol
+      "bag://"
+    end
+
     class Instance
       attr_reader :base_path, :bag_id
       def initialize(base_path:, bag_id:)
@@ -32,6 +36,10 @@ module Bagit
       end
 
       def file_mover; end
+
+      def protocol
+        "bag://"
+      end
 
       def upload(file:, original_filename:, resource: nil, **_extra_args)
         FileUtils.mkdir_p(data_path)
