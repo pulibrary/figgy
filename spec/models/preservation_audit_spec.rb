@@ -18,6 +18,10 @@ RSpec.describe PreservationAudit, type: :model do
     expect(audit).to be_valid
     audit.status = "failure"
     expect(audit).to be_valid
+    audit.status = "complete"
+    expect(audit).to be_valid
+    audit.status = "dead"
+    expect(audit).to be_valid
     audit.status = "something_else"
     expect(audit).not_to be_valid
   end

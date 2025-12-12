@@ -91,6 +91,7 @@ RSpec.describe PreservationAuditRunner do
       end
     end
 
+    # TODO: initiate retries
     context "when there are failures on the audit" do
       it "updates audit status and emails failure message to the libanswers queue" do
         stub_ezid
@@ -112,7 +113,65 @@ RSpec.describe PreservationAuditRunner do
     end
   end
 
-  # TODO: retry failed jobs if failures in a "successful" batch
+  describe "Callbacks.complete" do
+    it "updates audit status and emails the libanswers queue" do
+      stub_ezid
+      resource = create_resource_bad_metadata_checksum
+      batch = Sidekiq::Batch.new
+      audit = PreservationAudit.create(
+        status: "in_process",
+        extent: "full",
+        batch_id: batch.bid
+      )
+      batch.on(:complete, PreservationAuditRunner::Callbacks, audit_id: audit.id)
+
+      batch.jobs do
+        PreservationCheckJob.perform_async(resource.id.to_s, audit.id)
+      end
+
+      PreservationAuditRunner::Callbacks.new.on_complete(
+        Sidekiq::Batch::Status.new(batch.bid),
+        { "audit_id" => audit.id }
+      )
+
+      expect(audit.reload.status).to eq "complete"
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      expect(ActionMailer::Base.deliveries.first.subject).to eq "Preservation audit: all jobs have run once"
+      expect(ActionMailer::Base.deliveries.first.html_part.body.decoded).to match(
+        "Preservation Audit batch is complete, but some jobs failed."
+      )
+    end
+  end
+
+  describe "Callbacks.death" do
+    it "updates audit status and emails the libanswers queue" do
+      stub_ezid
+      resource = create_resource_bad_metadata_checksum
+      batch = Sidekiq::Batch.new
+      audit = PreservationAudit.create(
+        status: "in_process",
+        extent: "full",
+        batch_id: batch.bid
+      )
+      batch.on(:death, PreservationAuditRunner::Callbacks, audit_id: audit.id)
+
+      batch.jobs do
+        PreservationCheckJob.perform_async(resource.id.to_s, audit.id)
+      end
+
+      PreservationAuditRunner::Callbacks.new.on_death(
+        Sidekiq::Batch::Status.new(batch.bid),
+        { "audit_id" => audit.id }
+      )
+
+      expect(audit.reload.status).to eq "dead"
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      expect(ActionMailer::Base.deliveries.first.subject).to eq "Preservation audit: dead queue"
+      expect(ActionMailer::Base.deliveries.first.html_part.body.decoded).to match(
+        "At least one job from the Preservation Audit batch has been moved to the dead queue."
+      )
+    end
+  end
 
   def create_preserved_resource
     file = fixture_file_upload("files/example.tif", "image/tiff")
