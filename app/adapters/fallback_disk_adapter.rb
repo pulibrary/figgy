@@ -24,11 +24,6 @@ class FallbackDiskAdapter
     # This'll only work for disk adapters, but that's our use case.
     new_id = id.to_s.gsub(primary_adapter.base_path.to_s, fallback_adapter.base_path.to_s)
     file = fallback_adapter.find_by(id: new_id)
-    # Make sure this one's okay, also gets tests to pass unfortunately.
-    File.open(file.disk_path, "rb") do |f|
-      # Read just one byte.
-      f.read(1)
-    end
     Rails.logger.warn("Disk adapter used fallback for #{id}")
     file.new(id: id)
   end
