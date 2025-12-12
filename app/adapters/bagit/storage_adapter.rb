@@ -16,14 +16,6 @@ module Bagit
       false
     end
 
-    def supports?(_feature)
-      false
-    end
-
-    def protocol
-      "bag://"
-    end
-
     class Instance
       attr_reader :base_path, :bag_id
       def initialize(base_path:, bag_id:)
@@ -46,10 +38,10 @@ module Bagit
         new_path = data_path.join("#{generate_id}-#{original_filename}")
         old_path = file.try(:disk_path) || file.path
         FileUtils.cp(old_path, new_path)
-        output_file = find_by(id: Valkyrie::ID.new("bag://#{new_path.relative_path_from(base_path)}"))
+        output_file = find_by(id: Valkyrie::ID.new("#{protocol}#{new_path.relative_path_from(base_path)}"))
         create_manifests(output_file, original_filename, resource)
         output_file.io.close
-        find_by(id: Valkyrie::ID.new("bag://#{new_path.relative_path_from(base_path)}"))
+        find_by(id: Valkyrie::ID.new("#{protocol}#{new_path.relative_path_from(base_path)}"))
       end
 
       def create_manifests(file, original_filename, resource)
@@ -99,7 +91,7 @@ module Bagit
       end
 
       def handles?(id:)
-        id.to_s.start_with?("bag://")
+        id.to_s.start_with?(protocol)
       end
 
       def delete(id:)
