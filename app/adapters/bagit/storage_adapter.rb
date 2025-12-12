@@ -6,11 +6,17 @@ module Bagit
       @base_path = Pathname.new(base_path)
     end
 
+    def file_mover; end
+
     def for(bag_id:)
       Instance.new(base_path: base_path, bag_id: bag_id.to_s)
     end
 
     def handles?(*_args)
+      false
+    end
+
+    def supports?(_feature)
       false
     end
 
@@ -20,6 +26,12 @@ module Bagit
         @base_path = base_path
         @bag_id = bag_id
       end
+
+      def supports?(_feature)
+        false
+      end
+
+      def file_mover; end
 
       def upload(file:, original_filename:, resource: nil, **_extra_args)
         FileUtils.mkdir_p(data_path)
