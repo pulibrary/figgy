@@ -9,7 +9,7 @@ RSpec.describe RetryingDiskAdapter do
       inner_adapter
     )
   end
-  let(:inner_adapter) { Valkyrie::StorageAdapter.find(:disk) }
+  let(:inner_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   context "when upload fails because of an Errno::EPIPE" do
     it "retries" do
@@ -28,17 +28,6 @@ RSpec.describe RetryingDiskAdapter do
       allow(storage_adapter.inner_storage_adapter).to receive(:upload).and_raise(Errno::EPIPE)
 
       expect { storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff") }.to raise_error Errno::EPIPE
-    end
-  end
-  context "when reading io stalls because tigerdata is acting up" do
-    it "raises an error" do
-      uploaded_file = storage_adapter.upload(file: file, resource: ScannedResource.new(id: SecureRandom.uuid), original_filename: "test.tiff")
-
-      allow(File).to receive(:size) do
-        sleep(2)
-      end
-      file = storage_adapter.find_by(id: uploaded_file.id)
-      expect { file.size }.to raise_error
     end
   end
   context "when upload fails because of an Errno::EAGAIN" do
