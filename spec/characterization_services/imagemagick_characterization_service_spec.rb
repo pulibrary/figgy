@@ -125,6 +125,19 @@ RSpec.describe ImagemagickCharacterizationService do
     end
   end
 
+  context "when characterizing a 64bit tiff" do
+    let(:file) { fixture_file_upload("files/example-64-bit.tif", "image/tiff") }
+    let(:test_file_set) { book_members.first }
+    it "assigns generic binary metadata without errors" do
+      described_class.new(file_set: test_file_set, persister: persister).characterize
+      file_set = query_service.find_by(id: test_file_set.id)
+      expect(file_set.file_metadata[0].mime_type).to eq ["application/octet-stream"]
+      expect(file_set.file_metadata[0].height).to be_empty
+      expect(file_set.file_metadata[0].width).to be_empty
+      expect(file_set.file_metadata[0].error_message).to be_empty
+    end
+  end
+
   describe "#valid?" do
     context "when provided with a scanned resource fileset" do
       it "returns true" do

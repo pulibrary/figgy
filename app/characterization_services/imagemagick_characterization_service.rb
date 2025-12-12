@@ -60,6 +60,16 @@ class ImagemagickCharacterizationService
       size: file_size,
       error_message: [] # Ensure any previous error messages are removed
     }
+  rescue Vips::Error => e
+    # Return generic binary file metadata if the
+    # bit depth of the image is unsupported.
+    raise e unless e.message.include?("samples out of range")
+    {
+      mime_type: "application/octet-stream",
+      checksum: MultiChecksum.for(@file_object),
+      size: file_size,
+      error_message: []
+    }
   end
 
   def file_size
