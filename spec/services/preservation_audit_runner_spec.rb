@@ -6,7 +6,7 @@ RSpec.describe PreservationAuditRunner do
   let(:change_set_persister) { ChangeSetPersister.default }
   let(:query_service) { change_set_persister.query_service }
 
-  describe "#run" do
+  describe ".run" do
     it "creates a PreservationAudit with PreservationCheckFailure" do
       stub_ezid
       create_preserved_resource
@@ -71,35 +71,48 @@ RSpec.describe PreservationAuditRunner do
     end
   end
 
-  # TODO: test audit status values get set as desired
+  describe "Callbacks.success" do
+    Sidekiq::Testing.server_middleware.add Sidekiq::Batch::Server
+    context "when there are no failures on the audit" do
+      it "updates audit status and emails success message to the libanswers queue" do
+        stub_ezid
+        create_preserved_resource
 
-  # TODO: run with initial batch_id, i.e. run using only the failures from a
-  # previous audit
+        Sidekiq::Testing.inline! do
+          described_class.run
+        end
 
-  # TODO: retries if any jobs errored
-  # it "retries file fetch if there's an ssl error for a metadata file" do
-  #   stub_ezid
-  #   # - a scannedresource with a metadata node that has the wrong checksum
-  #   resource = create_resource_bad_metadata_checksum
-  #   # error the first time, but not subsequent times
-  #   values = [proc { raise OpenSSL::SSL::SSLError }]
-  #   # Binary is fine
-  #   allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
-  #     .to receive(:find_by)
-  #     .and_call_original
-  #   # metadata errors
-  #   allow(Valkyrie::StorageAdapter.find(:google_cloud_storage))
-  #     .to receive(:find_by)
-  #     .with(id: Wayfinder.for(resource).preservation_objects.first.metadata_node.file_identifiers.first)
-  #     .and_wrap_original do |original, **args|
-  #     values.empty? ? original.call(**args) : values.shift.call
-  #   end
-  #
-  #   reporter = described_class.new(suppress_progress: true, io_directory: io_dir)
-  #   expect(reporter.cloud_audit_failures.to_a.map(&:id)).to eq([resource.id])
-  # end
+        audit = PreservationAudit.last
 
-  # TODO: emails us if the batch succeeded
+        expect(audit.status).to eq "success"
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(ActionMailer::Base.deliveries.first.subject).to eq "Preservation audit successful"
+        expect(ActionMailer::Base.deliveries.first.html_part.body.decoded).to match("No preservation failures were found")
+      end
+    end
+
+    context "when there are failures on the audit" do
+      it "updates audit status and emails failure message to the libanswers queue" do
+        stub_ezid
+        create_resource_unpreserved_metadata
+
+        Sidekiq::Testing.inline! do
+          described_class.run
+        end
+
+        audit = PreservationAudit.last
+
+        expect(audit.status).to eq "failure"
+        expect(ActionMailer::Base.deliveries.size).to eq 1
+        expect(ActionMailer::Base.deliveries.first.subject).to eq "Preservation audit found failures"
+        expect(ActionMailer::Base.deliveries.first.html_part.body.decoded).to match(
+          "Preservation Audit batch completed and all jobs ran. 1 preservation failures were found. 0 of 3 retries have been run on this audit."
+        )
+      end
+    end
+  end
+
+  # TODO: retry failed jobs if failures in a "successful" batch
 
   def create_preserved_resource
     file = fixture_file_upload("files/example.tif", "image/tiff")
