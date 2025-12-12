@@ -9,14 +9,15 @@ class ScannedResourcesController < ResourcesController
   def after_create_success(obj, change_set)
     super
     handle_save_and_ingest(obj)
+    handle_extract_selene_data(obj)
     handle_upload_selene_files(obj)
   end
 
   def validate_selene_ingest_path
-    return if params[:ingest_path].blank?
+    return if params[:ingest_path].blank? || change_set_param != "selene_resource"
     base = Pathname.new(Figgy.config["ingest_folder_path"])
     ingest_path = base.join(params[:ingest_path])
-    return if SelenePathValidator.validate(ingest_path)
+    return if SeleneIngestPathService.new(ingest_path).validate
     redirect_back(fallback_location: root_path, notice: "Selene file structure invalid")
   end
 
@@ -24,6 +25,19 @@ class ScannedResourcesController < ResourcesController
     return unless params[:save_and_ingest_path].present? && params[:commit] == "Save and Ingest"
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
     IngestFolderJob.perform_later(directory: locator.root_path.join(params[:save_and_ingest_path]).to_s, property: "id", id: obj.id.to_s)
+  end
+
+  def handle_extract_selene_data(obj)
+    return unless obj.selene? && params[:ingest_path].present?
+    base = Pathname.new(Figgy.config["ingest_folder_path"])
+    ingest_path = base.join(params[:ingest_path])
+    mpp = SeleneIngestPathService.new(ingest_path).meters_per_pixel
+    change_set = ChangeSet.for(obj)
+    change_set.validate(meters_per_pixel: mpp)
+    return unless change_set.valid?
+    change_set_persister.buffer_into_index do |buffered_changeset_persister|
+      buffered_changeset_persister.save(change_set: change_set)
+    end
   end
 
   def handle_upload_selene_files(obj)

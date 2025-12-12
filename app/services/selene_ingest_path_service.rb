@@ -1,9 +1,5 @@
 # frozen_string_literal: true
-class SelenePathValidator
-  def self.validate(path)
-    new(path).validate
-  end
-
+class SeleneIngestPathService
   attr_reader :path
   # @param path [Pathname] Full path to the selene directory
   def initialize(path)
@@ -14,11 +10,16 @@ class SelenePathValidator
     selene_structure.none?(&:nil?)
   end
 
+  # Extract meters per pixel from a tfw file
+  def meters_per_pixel
+    File.open(tfw_file, &:gets)
+  end
+
   private
 
     def selene_structure
       [
-        depthmap_tfw,
+        tfw_file,
         path.children.find { |c| c.basename.to_s.match(/1\.(tif|TIF)/) },
         path.children.find { |c| c.basename.to_s.match(/2\.(tif|TIF)/) },
         path.children.find { |c| c.basename.to_s.match(/3\.(tif|TIF)/) },
@@ -26,9 +27,9 @@ class SelenePathValidator
       ]
     end
 
-    def depthmap_tfw
+    def tfw_file
       output_dir = path.children.find { |c| c.basename.to_s == "Selene_Output" }
       return nil unless output_dir
-      output_dir.children.find { |c| c.basename.to_s == "depthmap_m1.tfw" }
+      output_dir.children.find { |c| c.basename.to_s.match(/.*\.(tfw|TFW)/) }
     end
 end
