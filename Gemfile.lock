@@ -1079,7 +1079,7 @@ GEM
       rdf-vocab
       reform (~> 2.2)
       reform-rails
-    valkyrie-sequel (3.0.1)
+    valkyrie-sequel (3.0.0)
       oj (~> 3.0)
       sequel (~> 5.0)
       sequel_pg (~> 1.0)
@@ -1268,7 +1268,7 @@ DEPENDENCIES
   tus-server (~> 2.3)
   valkyrie (~> 3.3.0)
   valkyrie-derivatives!
-  valkyrie-sequel (~> 3.0.0)
+  valkyrie-sequel (= 3.0.0)
   valkyrie-shrine
   view_component
   vite_rails (= 3.0.17)
