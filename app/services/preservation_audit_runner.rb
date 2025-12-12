@@ -27,7 +27,7 @@ class PreservationAuditRunner
       extent: determine_extent,
       batch_id: batch.bid
     )
-    # batch.on(:success, MyCallback, :to => user.email)
+    batch.on(:success, Callbacks, audit_id: audit.id)
     batch.jobs do
       # TODO: think about sending these in slices to another job that adds the jobs
       ids.each do |id|
@@ -71,5 +71,22 @@ class PreservationAuditRunner
 
     def query_service
       Valkyrie.config.metadata_adapter.query_service
+    end
+
+    class Callbacks
+      def on_success(_status, options)
+        audit = PreservationAudit.find(options["audit_id"])
+        failure_count = audit.preservation_check_failures.count
+        case failure_count
+        when 0
+          audit.status = "success"
+          audit.save
+          PreservationAuditMailer.with(audit: audit).success.deliver_later
+        else
+          audit.status = "failure"
+          audit.save
+          PreservationAuditMailer.with(audit: audit, failure_count: failure_count).failure.deliver_later
+        end
+      end
     end
 end
