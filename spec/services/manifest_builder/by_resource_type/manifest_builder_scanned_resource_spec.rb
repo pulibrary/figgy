@@ -201,17 +201,11 @@ RSpec.describe ManifestBuilder do
     end
   end
 
-  context "when given a selene resource" do
+  context "when given a scanned resource with a selene resource" do
     let(:scanned_resource) do
-      FactoryBot.create_for_repository(:scanned_resource, files: [file])
-    end
-    let(:child) { FactoryBot.create_for_repository(:selene_resource, files: [file]) }
-
-    before do
-      reloaded_resource = query_service.find_by(id: scanned_resource.id)
-      change_set = ScannedResourceChangeSet.new(reloaded_resource)
-      change_set.member_ids << child.id
-      change_set_persister.save(change_set: change_set)
+      parent = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource, files: [file])
+      file_set = parent.decorate.file_sets.first
+      file_set.decorate.members.first
     end
 
     it "it generates a valid manifest" do
@@ -219,7 +213,7 @@ RSpec.describe ManifestBuilder do
       expect(output).to be_kind_of Hash
       expect(output["@type"]).to eq "sc:Manifest"
       expect(output["manifests"]).to eq nil
-      expect(output["sequences"].first["canvases"].length).to eq 2
+      expect(output["sequences"].first["canvases"].length).to eq 9
     end
   end
 
