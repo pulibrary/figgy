@@ -1,9 +1,5 @@
 # frozen_string_literal: true
-class SelenePathValidator
-  def self.validate(path)
-    new(path).validate
-  end
-
+class SeleneIngestPathService
   attr_reader :path
   # @param path [Pathname] Full path to the selene directory
   def initialize(path)
@@ -12,6 +8,11 @@ class SelenePathValidator
 
   def validate
     selene_structure.none?(&:nil?)
+  end
+
+  # Extract meters per pixel from depthmap tfw file
+  def meters_per_pixel
+    File.open(depthmap_tfw, &:gets)
   end
 
   private

@@ -278,7 +278,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
 
       context "when creating a new Selene Resource" do
-        it "attaches Selene files to the resource" do
+        it "attaches Selene files to the resource and extracts data from tfw file" do
           post :create, params: {
             scanned_resource: {
               change_set: "selene_resource",
@@ -292,6 +292,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
           id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
           resource = find_resource(id)
 
+          expect(resource.meters_per_pixel).to eq [1.14932126696833e-05]
           expect(resource.member_ids.length).to eq 10
           file_set = find_resource(resource.member_ids.first)
           expect(file_set.file_metadata.length).to eq 2

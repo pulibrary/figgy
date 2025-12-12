@@ -109,7 +109,7 @@ end
 
 class SeleneEntry < Entry
   def selectable?
-    SelenePathValidator.validate(file_path)
+    SeleneIngestPathService.new(file_path).validate
   end
 
   def directory_json
