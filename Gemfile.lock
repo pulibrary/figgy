@@ -1065,7 +1065,7 @@ GEM
     uri (1.0.2)
     useragent (0.16.11)
     validatable (1.6.7)
-    valkyrie (3.5.0)
+    valkyrie (3.3.0)
       activemodel
       activesupport
       dry-struct
@@ -1266,9 +1266,9 @@ DEPENDENCIES
   timecop
   title
   tus-server (~> 2.3)
-  valkyrie (~> 3.5.0)
+  valkyrie (~> 3.3.0)
   valkyrie-derivatives!
-  valkyrie-sequel (~> 3.0.1)
+  valkyrie-sequel (~> 3.0.0)
   valkyrie-shrine
   view_component
   vite_rails (= 3.0.17)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class FallbackDiskAdapter
   attr_reader :primary_adapter, :fallback_adapter
-  delegate :handles?, :supports?, :find_by, :delete, :upload, :base_path, :file_path, to: :primary_adapter
+  delegate :handles?, :supports?, :find_by, :delete, :upload, :base_path, :file_path, :file_mover, to: :primary_adapter
   def initialize(primary_adapter:, fallback_adapter:)
     @primary_adapter = primary_adapter
     @fallback_adapter = fallback_adapter
