@@ -2,6 +2,7 @@
 class ScannedResourcesController < ResourcesController
   self.resource_class = ScannedResource
   self.change_set_persister = ChangeSetPersister.default
+  before_action :validate_selene_ingest_path, only: [:create]
 
   include Pdfable
 
@@ -9,6 +10,14 @@ class ScannedResourcesController < ResourcesController
     super
     handle_save_and_ingest(obj)
     handle_upload_selene_files(obj)
+  end
+
+  def validate_selene_ingest_path
+    return if params[:ingest_path].blank?
+    base = Pathname.new(Figgy.config["ingest_folder_path"])
+    ingest_path = base.join(params[:ingest_path])
+    return if SelenePathValidator.validate(ingest_path)
+    redirect_back(fallback_location: root_path, notice: "Selene file structure invalid")
   end
 
   def handle_save_and_ingest(obj)

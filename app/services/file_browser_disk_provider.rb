@@ -109,17 +109,7 @@ end
 
 class SeleneEntry < Entry
   def selectable?
-    selene_structure.none?(&:nil?)
-  end
-
-  def selene_structure
-    [
-      file_path.children.find { |c| c.basename.to_s == "Selene_Output" },
-      file_path.children.find { |c| c.basename.to_s.match(/1\.(tif|TIF)/) },
-      file_path.children.find { |c| c.basename.to_s.match(/2\.(tif|TIF)/) },
-      file_path.children.find { |c| c.basename.to_s.match(/3\.(tif|TIF)/) },
-      file_path.children.find { |c| c.basename.to_s.match(/4\.(tif|TIF)/) }
-    ]
+    SelenePathValidator.validate(file_path)
   end
 
   def directory_json
