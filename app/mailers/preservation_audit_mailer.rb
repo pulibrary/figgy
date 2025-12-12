@@ -14,6 +14,18 @@ class PreservationAuditMailer < ApplicationMailer
          subject: "Preservation audit found failures")
   end
 
+  def complete
+    @audit = params[:audit]
+    mail(to: libanswers,
+         subject: "Preservation audit: all jobs have run once")
+  end
+
+  def dead
+    @audit = params[:audit]
+    mail(to: libanswers,
+         subject: "Preservation audit: dead queue")
+  end
+
   def libanswers
     "digital-library@princeton.libanswers.com"
   end
