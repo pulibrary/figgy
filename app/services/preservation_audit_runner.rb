@@ -28,6 +28,7 @@ class PreservationAuditRunner
       batch_id: batch.bid
     )
     batch.on(:success, Callbacks, audit_id: audit.id)
+    batch.on(:complete, Callbacks, audit_id: audit.id)
     batch.jobs do
       # TODO: think about sending these in slices to another job that adds the jobs
       ids.each do |id|
@@ -87,6 +88,22 @@ class PreservationAuditRunner
           audit.save
           PreservationAuditMailer.with(audit: audit, failure_count: failure_count).failure.deliver_later
         end
+      end
+
+      def on_complete(status, options)
+        # if it was successful, it'll run the success callback and we don't want both
+        return if status.callbacks.keys.include?("success")
+        audit = PreservationAudit.find(options["audit_id"])
+        audit.status = "complete"
+        audit.save
+        PreservationAuditMailer.with(audit: audit).complete.deliver_later
+      end
+
+      def on_death(_status, options)
+        audit = PreservationAudit.find(options["audit_id"])
+        audit.status = "dead"
+        audit.save
+        PreservationAuditMailer.with(audit: audit).dead.deliver_later
       end
     end
 end
