@@ -321,6 +321,7 @@ CREATE TABLE public.preservation_audits (
     status character varying,
     extent character varying,
     batch_id character varying,
+    ids_from_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -834,6 +835,13 @@ CREATE INDEX index_orm_resources_on_updated_at ON public.orm_resources USING btr
 
 
 --
+-- Name: index_preservation_audits_on_ids_from_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_preservation_audits_on_ids_from_id ON public.preservation_audits USING btree (ids_from_id);
+
+
+--
 -- Name: index_preservation_check_failures_on_preservation_audit_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -952,6 +960,14 @@ ALTER TABLE ONLY public.ocr_requests
 
 ALTER TABLE ONLY public.active_storage_variant_records
     ADD CONSTRAINT fk_rails_993965df05 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: preservation_audits fk_rails_ac138c01a9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.preservation_audits
+    ADD CONSTRAINT fk_rails_ac138c01a9 FOREIGN KEY (ids_from_id) REFERENCES public.preservation_audits(id);
 
 
 --
