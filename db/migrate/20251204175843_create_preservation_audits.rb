@@ -5,6 +5,7 @@ class CreatePreservationAudits < ActiveRecord::Migration[7.2]
       t.string :status
       t.string :extent
       t.string :batch_id
+      t.belongs_to :ids_from, foreign_key: { to_table: :preservation_audits }
 
       t.timestamps
     end
