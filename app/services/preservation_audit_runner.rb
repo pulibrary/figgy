@@ -10,14 +10,14 @@ class PreservationAuditRunner
 
   # run a new audit over the failed checks of a given audit
   def self.rerun(audit)
-    new(rerun_audit: audit).run
+    new(ids_from: audit).run
   end
 
-  attr_reader :skip_metadata_checksum, :rerun_audit
+  attr_reader :skip_metadata_checksum, :ids_from
 
-  def initialize(skip_metadata_checksum: false, rerun_audit: nil)
+  def initialize(skip_metadata_checksum: false, ids_from: nil)
     @skip_metadata_checksum = skip_metadata_checksum
-    @rerun_audit = rerun_audit
+    @ids_from = ids_from
   end
 
   def run
@@ -25,7 +25,8 @@ class PreservationAuditRunner
     audit = PreservationAudit.create(
       status: "in_process",
       extent: determine_extent,
-      batch_id: batch.bid
+      batch_id: batch.bid,
+      ids_from: ids_from
     )
     batch.on(:success, Callbacks, audit_id: audit.id)
     batch.on(:complete, Callbacks, audit_id: audit.id)
@@ -40,7 +41,7 @@ class PreservationAuditRunner
   private
 
     def determine_extent
-      if @rerun_audit
+      if @ids_from
         "partial"
       else
         "full"
@@ -48,8 +49,8 @@ class PreservationAuditRunner
     end
 
     def ids
-      if @rerun_audit
-        @rerun_audit.preservation_check_failures.map(&:resource_id)
+      if @ids_from
+        @ids_from.preservation_check_failures.map(&:resource_id)
       else
         query_service.custom_queries.all_ids(except_models: unpreserved_models)
       end
