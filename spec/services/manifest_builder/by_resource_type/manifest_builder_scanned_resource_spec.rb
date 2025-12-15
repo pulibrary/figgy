@@ -203,7 +203,21 @@ RSpec.describe ManifestBuilder do
 
   context "when given a scanned resource with a selene resource" do
     let(:scanned_resource) do
-      parent = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource, files: [file])
+      FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+    end
+
+    it "it generates a valid manifest" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["@type"]).to eq "sc:Manifest"
+      expect(output["manifests"]).to eq nil
+      expect(output["sequences"].first["canvases"].length).to eq 1
+    end
+  end
+
+  context "when given a selene resource with a scanned resource grandparent" do
+    let(:scanned_resource) do
+      parent = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
       file_set = parent.decorate.file_sets.first
       file_set.decorate.members.first
     end
