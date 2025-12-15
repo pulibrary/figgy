@@ -2,7 +2,7 @@
 require "rails_helper"
 
 RSpec.describe "preservation_audits/index.html.erb" do
-  it "has a link to the fixity dashboard" do
+  it "has audit info and details links" do
     audit = FactoryBot.create(:preservation_audit)
     FactoryBot.create(:preservation_check_failure, preservation_audit: audit)
     sign_in FactoryBot.create(:admin)

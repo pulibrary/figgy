@@ -19,4 +19,11 @@
     <%= preservation_audit.preservation_check_failures.count %>
   </p>
 
+  <% if preservation_audit.ids_from %>
+    <p>
+      <strong>This audit only ran on ids from</strong>
+      <%= link_to "audit #{preservation_audit.ids_from.id}", preservation_audit.ids_from %>
+    </p>
+  <% end %>
+
 </div>
