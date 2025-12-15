@@ -260,9 +260,6 @@ export default {
       return result
     },
     select: function (id, event) {
-      if (!this.isOpen) {
-        this.isOpen = !this.isOpen
-      }
       store.commit('SELECT_TREEITEM', id)
       // tree and gallery items cannot be selected simultaneously, so deselect the gallery
       store.commit('SELECT', [])
