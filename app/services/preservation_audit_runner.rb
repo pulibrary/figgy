@@ -33,8 +33,13 @@ class PreservationAuditRunner
     batch.jobs do
       # This only gets IDs and does not instantiate, but if it's too slow
       # we could look at https://github.com/sidekiq/sidekiq/wiki/Batches#huge-batches
-      ids.each do |id|
-        PreservationCheckJob.perform_async(id, audit.id, job_opts)
+      ids.each_slice(1000) do |ids|
+        # push in bulk; reduces round trips to redis and keeps it from timing out
+        # @see https://github.com/sidekiq/sidekiq/wiki/Bulk-Queueing
+        Sidekiq::Client.push_bulk(
+          "class" => PreservationCheckJob,
+          "args" => ids.map { |id| [id, audit.id, job_opts] }
+        )
       end
     end
   end
