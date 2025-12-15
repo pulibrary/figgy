@@ -31,7 +31,8 @@ class PreservationAuditRunner
     batch.on(:success, Callbacks, audit_id: audit.id)
     batch.on(:complete, Callbacks, audit_id: audit.id)
     batch.jobs do
-      # TODO: think about sending these in slices to another job that adds the jobs
+      # This only gets IDs and does not instantiate, but if it's too slow
+      # we could look at https://github.com/sidekiq/sidekiq/wiki/Batches#huge-batches
       ids.each do |id|
         PreservationCheckJob.perform_async(id, audit.id, job_opts)
       end
