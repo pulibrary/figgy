@@ -93,7 +93,6 @@ RSpec.describe PreservationAuditRunner do
       end
     end
 
-    # TODO: initiate retries
     context "when there are failures on the audit" do
       it "updates audit status and emails failure message to the libanswers queue" do
         stub_ezid
