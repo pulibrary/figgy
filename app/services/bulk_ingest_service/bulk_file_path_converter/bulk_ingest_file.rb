@@ -95,23 +95,23 @@ class BulkIngestService::BulkFilePathConverter
       return unless raster_resource_parent? || parent_resource.selene?
       if mosaic_service_target?
         "tiles"
-      elsif basename == "albedo_m1.tif"
+      elsif basename.match?(/albedo_m1\.(tif|TIF)/)
         "albedo"
-      elsif basename.match?(/^depthmap.*tif$/)
+      elsif basename.match?(/^depthmap.*(tif|TIF)/)
         "depth_map"
-      elsif basename.match?(/^normal.*tif$/)
+      elsif basename.match?(/^normal.*(tif|TIF)/)
         "normal"
       end
     end
 
     def light_angle
-      return unless parent_resource.selene? && basename.match?(/^\d\.tif/)
+      return unless parent_resource.selene? && basename.match?(/^\d\.(tif|TIF)/)
       45
     end
 
     def light_direction
       return unless parent_resource.selene?
-      match = basename.match(/^([1234])\.tif/)
+      match = basename.match(/^([1234])\.(tif|TIF)/)
       return unless match
       case match[1].to_i
       when 1
@@ -127,7 +127,7 @@ class BulkIngestService::BulkFilePathConverter
 
     def high_frequency_cutoff
       return unless parent_resource.selene?
-      match = basename.match(/m1_HF_(.*)_m\.tif/)
+      match = basename.match(/m1_HF_(.*)_m\.(tif|TIF)/)
       return unless match
       match[1].to_f
     end

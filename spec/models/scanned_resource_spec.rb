@@ -73,7 +73,7 @@ RSpec.describe ScannedResource do
       expect(selene_fs1.light_direction).to eq "Top"
       expect(selene_fs1.light_angle).to eq 45
 
-      selene_fs2 = selene_file_sets.find { |fs| fs.title == ["depthmap_m1_HF_0.03_m.tif"] }
+      selene_fs2 = selene_file_sets.find { |fs| fs.title == ["depthmap_m1_HF_0.03_m.TIF"] }
       expect(selene_fs2.high_frequency_cutoff).to eq 0.03
       expect(selene_fs2.service_targets).to eq ["depth_map"]
     end
