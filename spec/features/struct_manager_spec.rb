@@ -86,9 +86,15 @@ RSpec.feature "Structure Manager", js: true do
     find(".folder-container > div:first-child", match: :first).click
     expect(page).to have_selector(".folder-container.selected", count: 4)
 
-    # test expand and collapse of the tree
+    # test collapse of a tree node
     find("button.expand-collapse", match: :first).click
     expect(page).not_to have_selector(".lux-tree-sub")
+
+    # test that selecting does not expand/collapse
+    find(".folder-container > div:first-child").click
+    expect(page).not_to have_selector(".lux-tree-sub", visible: true)
+
+    # test expand of a tree node
     find("button.expand-collapse", match: :first).click
     expect(page).to have_selector(".lux-tree-sub", visible: true)
 
