@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 require "rails_helper"
+require "support/preserved_objects"
 
 RSpec.describe PreservationAuditRunner do
   with_queue_adapter :inline
-  let(:change_set_persister) { ChangeSetPersister.default }
-  let(:query_service) { change_set_persister.query_service }
 
   describe ".run" do
     it "creates a PreservationAudit with PreservationCheckFailure" do
@@ -174,34 +173,5 @@ RSpec.describe PreservationAuditRunner do
         "At least one job from the Preservation Audit batch has been moved to the dead queue."
       )
     end
-  end
-
-  def create_preserved_resource
-    file = fixture_file_upload("files/example.tif", "image/tiff")
-    resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
-    reloaded_resource = query_service.find_by(id: resource.id)
-    change_set = ChangeSet.for(reloaded_resource)
-    change_set_persister.save(change_set: change_set)
-  end
-
-  def create_resource_unpreserved_metadata
-    resource = FactoryBot.create_for_repository(:complete_scanned_resource)
-    reloaded_resource = query_service.find_by(id: resource.id)
-    change_set = ChangeSet.for(reloaded_resource)
-    resource = change_set_persister.save(change_set: change_set)
-    po = Wayfinder.for(resource).preservation_objects.first
-    po.metadata_node = nil
-    ChangeSetPersister.default.save(change_set: ChangeSet.for(po))
-    resource
-  end
-
-  def create_resource_bad_metadata_checksum
-    resource = FactoryBot.create_for_repository(:complete_scanned_resource)
-    reloaded_resource = query_service.find_by(id: resource.id)
-    change_set = ChangeSet.for(reloaded_resource)
-    resource = change_set_persister.save(change_set: change_set)
-    po = Wayfinder.for(resource).preservation_objects.first
-    modify_file(po.metadata_node.file_identifiers.first)
-    resource
   end
 end
