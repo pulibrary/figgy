@@ -201,6 +201,36 @@ RSpec.describe ManifestBuilder do
     end
   end
 
+  context "when given a scanned resource with a selene resource" do
+    let(:scanned_resource) do
+      FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+    end
+
+    it "it generates a valid manifest" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["@type"]).to eq "sc:Manifest"
+      expect(output["manifests"]).to eq nil
+      expect(output["sequences"].first["canvases"].length).to eq 1
+    end
+  end
+
+  context "when given a selene resource with a scanned resource grandparent" do
+    let(:scanned_resource) do
+      parent = FactoryBot.create_for_repository(:scanned_resource_with_selene_resource)
+      file_set = parent.decorate.file_sets.first
+      file_set.decorate.members.first
+    end
+
+    it "it generates a valid manifest" do
+      output = manifest_builder.build
+      expect(output).to be_kind_of Hash
+      expect(output["@type"]).to eq "sc:Manifest"
+      expect(output["manifests"]).to eq nil
+      expect(output["sequences"].first["canvases"].length).to eq 9
+    end
+  end
+
   context "when given a scanned resource which was ingested with its mets file as an attached member" do
     let(:file) { fixture_file_upload("mets/pudl0001-9946125963506421.mets", "application/xml; schema=mets") }
     before do
