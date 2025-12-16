@@ -215,6 +215,7 @@ class CatalogController < ApplicationController
     config.add_sort_field "updated_at_dtsi asc", label: "date modified \u25B2"
 
     # index fields
+    config.add_index_field "parent_title_ssi", label: "Parent Title"
     config.add_index_field "imported_creator_tesim", label: "Creator"
     config.add_index_field "source_metadata_identifier_ssim", label: "Source Metadata Identifier"
     config.add_index_field "identifier_ssim", label: "Identifier"

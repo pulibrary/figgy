@@ -86,4 +86,29 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_css ".blacklight-resource_identifier_ssi", text: resource.identifier
     end
   end
+
+  describe "selene search results behavior" do
+    let(:change_set_persister) { ChangeSetPersister.default }
+    let(:query_service) { change_set_persister.query_service }
+    let(:resource) do
+      FactoryBot.create_for_repository(:scanned_resource_with_selene_resource, source_metadata_identifier: "991234563506421", title: "Scanned Resource with Selene")
+    end
+
+    before do
+      stub_catalog(bib_id: "991234563506421")
+      stub_ezid
+      reloaded_resource = query_service.find_by(id: resource.id)
+      change_set = ChangeSet.for(reloaded_resource)
+      change_set.validate(state: "complete")
+      change_set_persister.save(change_set: change_set)
+    end
+
+    it "returns results with selene index fields" do
+      visit "/catalog?f[human_readable_type_ssim][]=Selene+Resource&show_children=True&q="
+      expect(page).to have_css "dt.blacklight-parent_title_ssi", text: "Parent Title:"
+      expect(page).to have_css "dd.blacklight-parent_title_ssi", text: "Scanned Resource with Selene"
+      expect(page).to have_css "dt.blacklight-source_metadata_identifier_ssim", text: "Source Metadata Identifier:"
+      expect(page).to have_css "dd.blacklight-source_metadata_identifier_ssim", text: "991234563506421"
+    end
+  end
 end
