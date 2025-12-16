@@ -25,7 +25,7 @@ class ResourcesController < ApplicationController
   end
 
   def new
-    @change_set = ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param).prepopulate!
+    @change_set ||= ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param).prepopulate!
     authorize_create!(change_set: @change_set)
   rescue ChangeSet::NotFoundError
     Valkyrie.logger.error("Failed to find the ChangeSet class for #{change_set_param}.")

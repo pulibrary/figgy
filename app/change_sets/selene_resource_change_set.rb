@@ -34,7 +34,8 @@ class SeleneResourceChangeSet < ChangeSet
       :ingest_path,
       :portion_note,
       :change_set,
-      :append_id
+      :append_id,
+      :state
     ]
   end
 
