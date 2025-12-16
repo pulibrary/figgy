@@ -130,5 +130,7 @@ RSpec.feature "Structure Manager", js: true do
     expect(page.all(".lux-structManager .folder-container")[1]).not_to have_text("First")
     page.send_keys [:control, :shift, :arrow_up]
     expect(page.all(".lux-structManager .folder-container")[1]).to have_text("First")
+    # test to make sure that file labels cannot be edited
+    expect(page).not_to have_selector(".file-edit.toggle-edit")
   end
 end

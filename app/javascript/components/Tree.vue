@@ -61,13 +61,14 @@
           </template>
           <template v-else>
             <div
-              class="folder-label"
+              :class="isFile ? 'file-label' : 'folder-label'"
               :dir="viewDir"
             >
               {{ structureData.label }}
             </div>
-            <div class="folder-edit">
+            <div :class="isFile ? 'file-edit' : 'folder-edit'">
               <lux-input-button
+                v-if="!isFile"
                 class="toggle-edit"
                 type="button"
                 variation="icon"
@@ -420,6 +421,9 @@ ul.lux-tree .lux-item-label {
   display: inline-block;
 }
 
+.folder-menu,
+.file-menu,
+.file-label,
 .folder-label {
   flex: 1;
   line-height: 1.4em;
@@ -432,6 +436,7 @@ ul.lux-tree .lux-item-label {
   line-height: 22px;
 }
 
+.file-label[dir='rtl'],
 .folder-label[dir='rtl'] {
     text-align: right;
     list-style-type: none;
@@ -442,10 +447,11 @@ ul.lux-tree .lux-item-label {
     font-size: 12px;
 }
 
+.file-edit .lux-button.icon.small,
 .folder-edit .lux-button.icon.small {
   padding: 0px;
   margin: 0px;
-  background: none;
+  background: transparent;
 }
 
 </style>
