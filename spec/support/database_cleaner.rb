@@ -10,22 +10,25 @@ RSpec.configure do |config|
       # see https://stackoverflow.com/a/38209363/341514
       except: %w(ar_internal_metadata)
     )
-    ar_cleaner.clean_with(:deletion)
+    ar_cleaner.clean_with(
+      :deletion,
+      except: %w(ar_internal_metadata)
+    )
   end
 
   config.before(:each) do
-    pg_db_cleaner.strategy = :transaction
+    pg_db_cleaner.strategy = [:transaction]
     ar_cleaner.strategy = :transaction
   end
 
   config.before(:each, js: true) do
-    pg_db_cleaner.strategy = :deletion
-    ar_cleaner.strategy = :deletion
+    pg_db_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
+    ar_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
   end
 
   config.before(:each, db_cleaner_deletion: true) do
-    pg_db_cleaner.strategy = :deletion
-    ar_cleaner.strategy = :deletion
+    pg_db_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
+    ar_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
   end
 
   config.before(:each) do
