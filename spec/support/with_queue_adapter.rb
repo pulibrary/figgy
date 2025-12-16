@@ -15,7 +15,6 @@ module WithQueueAdapter
   end
 end
 
-
 RSpec.configure do |config|
   config.extend WithQueueAdapter
 end

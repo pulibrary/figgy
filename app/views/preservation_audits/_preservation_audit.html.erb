@@ -1,0 +1,29 @@
+<div id="<%= dom_id preservation_audit %>">
+  <p>
+    <strong>Status:</strong>
+    <%= preservation_audit.status %>
+  </p>
+
+  <p>
+    <strong>Extent:</strong>
+    <%= preservation_audit.extent %>
+  </p>
+
+  <p>
+    <strong>Batch:</strong>
+    <%= preservation_audit.batch_id %>
+  </p>
+
+  <p>
+    <strong>Failures:</strong>
+    <%= preservation_audit.preservation_check_failures.count %>
+  </p>
+
+  <% if preservation_audit.ids_from %>
+    <p>
+      <strong>This audit only ran on ids from</strong>
+      <%= link_to "audit #{preservation_audit.ids_from.id}", preservation_audit.ids_from %>
+    </p>
+  <% end %>
+
+</div>

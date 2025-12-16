@@ -1,0 +1,7 @@
+<h1>PreservationAudit#complete</h1>
+
+<p>
+Preservation Audit batch is complete, but some jobs failed due to errors. Check the sidekiq UI for failures. They will retry and another email will be delivered if they all succeed, or if any of them is moved to the dead queue.
+
+<%= link_to("Show this preservation audit", @audit) %>
+</p>
