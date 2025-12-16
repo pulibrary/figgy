@@ -179,9 +179,9 @@ FactoryBot.define do
               }
             ),
             IngestableFile.new(
-              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "2.tif"),
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "2.TIF"),
               mime_type: "image/tiff",
-              original_filename: "2.tif",
+              original_filename: "2.TIF",
               use: ::PcdmUse::OriginalFile,
               container_attributes: {
                 light_direction: "Right",
@@ -199,9 +199,9 @@ FactoryBot.define do
               }
             ),
             IngestableFile.new(
-              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "4.tif"),
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "4.TIF"),
               mime_type: "image/tiff",
-              original_filename: "4.tif",
+              original_filename: "4.TIF",
               use: ::PcdmUse::OriginalFile,
               container_attributes: {
                 light_direction: "Left",
@@ -236,9 +236,9 @@ FactoryBot.define do
               }
             ),
             IngestableFile.new(
-              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "depthmap_m1_HF_0.03_m.tif"),
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "depthmap_m1_HF_0.03_m.TIF"),
               mime_type: "image/tiff",
-              original_filename: "depthmap_m1_HF_0.03_m.tif",
+              original_filename: "depthmap_m1_HF_0.03_m.TIF",
               use: ::PcdmUse::OriginalFile,
               container_attributes: {
                 high_frequency_cutoff: 0.03,
@@ -246,9 +246,9 @@ FactoryBot.define do
               }
             ),
             IngestableFile.new(
-              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "normal_m1_HF_0.03_m.tif"),
+              file_path: Rails.root.join("spec", "fixtures", "ingest_selene", "Selene_Output", "normal_m1_HF_0.03_m.TIF"),
               mime_type: "image/tiff",
-              original_filename: "normal_m1_HF_0.03_m.tif",
+              original_filename: "normal_m1_HF_0.03_m.TIF",
               use: ::PcdmUse::OriginalFile,
               container_attributes: {
                 high_frequency_cutoff: 0.03,
