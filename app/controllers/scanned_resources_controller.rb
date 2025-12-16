@@ -2,6 +2,7 @@
 class ScannedResourcesController < ResourcesController
   self.resource_class = ScannedResource
   self.change_set_persister = ChangeSetPersister.default
+  before_action :set_selene_visiblity_and_state, only: [:new]
   before_action :validate_selene_ingest_path, only: [:create]
 
   include Pdfable
@@ -11,6 +12,15 @@ class ScannedResourcesController < ResourcesController
     handle_save_and_ingest(obj)
     handle_extract_selene_data(obj)
     handle_upload_selene_files(obj)
+  end
+
+  # Pre-fills the visibilty and state of a new Selene Resource edit form so that
+  # they match the grandparent ScannedResource values.
+  def set_selene_visiblity_and_state
+    return if params[:parent_id].blank? || change_set_param != "selene_resource"
+    file_set = query_service.find_by(id: params[:parent_id])
+    grandparent = file_set.decorate.parent.model
+    @change_set = ChangeSet.for(new_resource, append_id: params[:parent_id], change_set_param: change_set_param, visibility: grandparent.visibility, state: grandparent.state).prepopulate!
   end
 
   def validate_selene_ingest_path

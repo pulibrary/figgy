@@ -58,4 +58,18 @@ RSpec.feature "Scanned Resource" do
     expect(page).to have_css(".disable-final-state")
     expect(page).to have_text("Resource can't be completed while derivatives are in-process")
   end
+
+  scenario "creating a selene resource from a scanned resource with file set" do
+    file = fixture_file_upload("files/example.tif", "image/tiff")
+    scanned_resource = FactoryBot.create_for_repository(:final_review_scanned_resource, visibility: AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_ON_CAMPUS, files: [file])
+    file_set = scanned_resource.decorate.file_sets.first
+    visit file_set_new_selene_resource_path(parent_id: file_set.id)
+
+    click_button "Save"
+
+    id = page.current_url.split("/").last
+    selene = ChangeSetPersister.default.query_service.find_by(id: id)
+    expect(selene.visibility).to eq scanned_resource.visibility
+    expect(selene.state).to eq scanned_resource.state
+  end
 end
