@@ -108,7 +108,7 @@ RSpec.describe PreservationAuditRunner do
         expect(ActionMailer::Base.deliveries.size).to eq 1
         expect(ActionMailer::Base.deliveries.first.subject).to eq "Preservation audit found failures"
         expect(ActionMailer::Base.deliveries.first.html_part.body.decoded).to match(
-          "Preservation Audit batch completed and all jobs ran. 1 preservation failures were found. 0 of 3 retries have been run on this audit."
+          "Preservation Audit batch completed and all jobs ran without errors. 1 preservation failures were found"
         )
       end
     end

@@ -104,7 +104,7 @@ do `PreservationAuditRunner.run; nil`
 You will see the batch at /sidekiq/batches. Jobs queue to super_low.
 You will see the audit at /preservation_audits.
 
-We will get an email notification via our libanswers queue when the batch succeeds with all check correct, succeeds with preservation check failures, completes but with job failures (that will be rerun, since they are sidekiq jobs), or sends any job to the dead queue.
+We will get an email notification via our libanswers queue when the batch succeeds with all check correct, succeeds with preservation check failures, completes but with job failures (which will be rerun, since they are sidekiq jobs), or sends any job to the dead queue.
 
 ## Run a recheck report - old way
 
