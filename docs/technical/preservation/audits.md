@@ -2,17 +2,16 @@
 
 In order to ensure resources are consistently and successfully preserved, we use our optional DLS discussion time every 4 months to ensemble kick off the preservation audit, and then the one two weeks after to review the results. Calendar events are created each year for this set of meetings, with a agenda item after the last one to review the process and potentially set up the next set of meetings.
 
-## Run a recheck report - new way
+## Run an initial audit - new way
 
-Start another audit using the `rerun` method and passing in the audit you want to check failures from. Get the audit id from the figgy UI.
+ssh to a worker box, open a tmux session, and go into the rails console
 
-ssh to the box, open a tmux session, and go into the rails console
+do `PreservationAuditRunner.run; nil`
 
-```
-id = get_from_figgy_ui
-audit = PreservationAudit.find(id)
-PreservationAuditRunner.rerun
-```
+You will see the batch at /sidekiq/batches. Jobs queue to super_low.
+You will see the audit at /preservation_audits.
+
+We will get an email notification via our libanswers queue when the batch succeeds with all check correct, succeeds with preservation check failures, completes but with job failures (which will be rerun, since they are sidekiq jobs), or sends any job to the dead queue.
 
 ## Run an initial audit - old way
 
@@ -95,16 +94,17 @@ the resources that failed the audit. Use something like the following:
 File.readlines(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt"), chomp: true).each { |id| PreserveResourceJob.set(queue: :super_low).perform_later(id: id.to_s, force_preservation: true) }
 ```
 
-## Run an initial audit - new way
+## Run a recheck report - new way
 
-ssh to the box, open a tmux session, and go into the rails console
+Start another audit using the `rerun` method and passing in the audit you want to check failures from. Get the audit id from the figgy UI.
 
-do `PreservationAuditRunner.run; nil`
+ssh to a worker box, open a tmux session, and go into the rails console
 
-You will see the batch at /sidekiq/batches. Jobs queue to super_low.
-You will see the audit at /preservation_audits.
-
-We will get an email notification via our libanswers queue when the batch succeeds with all check correct, succeeds with preservation check failures, completes but with job failures (which will be rerun, since they are sidekiq jobs), or sends any job to the dead queue.
+```
+id = get_from_figgy_ui
+audit = PreservationAudit.find(id)
+PreservationAuditRunner.rerun
+```
 
 ## Run a recheck report - old way
 
