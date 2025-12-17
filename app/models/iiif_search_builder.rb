@@ -15,6 +15,6 @@ class IiifSearchBuilder < Blacklight::SearchBuilder
     solr_parameters[:qf] = blacklight_config.iiif_search[:full_text_field]
     # catalog controller puts params here when you call search_results
     solr_parameters[:fq] = solr_parameters[:fq] || []
-    solr_parameters[:fq] += (blacklight_params || {})[:fq]
+    solr_parameters[:fq] += Array.wrap((blacklight_params || {})[:fq])
   end
 end
