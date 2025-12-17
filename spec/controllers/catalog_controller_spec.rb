@@ -74,6 +74,19 @@ RSpec.describe CatalogController, type: :controller do
       expect(json_response["resources"].length).to eq 1
       expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=1,2,2,2"
     end
+
+    it "doesn't error when there's no query" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html><body><span class='ocrx_word' title='bbox 1 2 3 4'>Content</span></body></html>")
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save_all(resources: [child, parent])
+
+      get :iiif_search, params: { solr_document_id: parent.id }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["within"]["total"]).to eq 0
+    end
   end
 
   describe "#index" do
