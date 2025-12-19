@@ -179,6 +179,8 @@ To set these up in development, do the following:
 
 ### Read-only Maintenance Windows
 
+Please also refer to [Scheduled downtime](/docs/technical/incident_scenarios/scheduled_downtime.md).
+
 There are two types of read-only mode.
 
 ##### Read-only Mode
