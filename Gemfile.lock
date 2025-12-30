@@ -1082,7 +1082,7 @@ GEM
     unf (0.2.0)
     unicode-display_width (2.6.0)
     unicode-types (1.10.0)
-    uri (1.0.2)
+    uri (1.0.4)
     useragent (0.16.11)
     validatable (1.6.7)
     valkyrie-sequel (3.0.0)
