@@ -30,7 +30,7 @@
     "postcss-import": "^16.1.0",
     "rollup-plugin-gzip": "^3.1.0",
     "sass": "^1.74.1",
-    "trix": "^2.1.15",
+    "trix": "^2.1.16",
     "unfetch": "^4.0.1",
     "uppy": "^3.9.1",
     "vue": "^3.4.21",
