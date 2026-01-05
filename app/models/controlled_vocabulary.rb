@@ -405,7 +405,9 @@ class ControlledVocabulary
     # Query and retrieve for the holding location from PULFA over the HTTP
     # @return [Hash] the HTTP response body retrieved and parsed from the JSON
     def json
-      @json ||= MultiJson.load(Faraday.get(url).body, symbolize_keys: true)
+      response = Faraday.get(url)
+      raise MultiJson::ParseError unless response.status == 200
+      @json ||= MultiJson.load(response.body, symbolize_keys: true)
     end
   end
 
