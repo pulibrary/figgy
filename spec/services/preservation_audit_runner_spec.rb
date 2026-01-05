@@ -64,7 +64,7 @@ RSpec.describe PreservationAuditRunner do
       )
       FactoryBot.create(:preservation_check_failure, resource_id: unpreserved_metadata_resource.id, preservation_audit: audit)
 
-      expect { described_class.rerun(audit) }.to change(PreservationCheckJob.jobs, :size).by(1)
+      expect { described_class.rerun(ids_from: audit) }.to change(PreservationCheckJob.jobs, :size).by(1)
       expect(PreservationAudit.count).to eq 2
       expect(PreservationAudit.all.map(&:extent)).to contain_exactly("full", "partial")
       # the new audit holds a link to the previous audit
