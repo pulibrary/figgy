@@ -34,9 +34,10 @@ jobs:
           keys:
             - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20241209
       # Install Bundler
-      - run: gem install bundler -v '2.3.18'
+      - run: gem install bundler -v '2.4.19'
       # Bundle install dependencies
-      - run: bundle install --path vendor/bundle
+      - run: bundle config set path 'vendor/bundle'
+      - run: bundle install
       - save_cache:
           key: figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20241209
           paths:
@@ -97,9 +98,10 @@ jobs:
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       # Install Bundler
-      - run: gem install bundler -v '2.3.18'
+      - run: gem install bundler -v '2.4.19'
       # Bundle install dependencies
-      - run: bundle install --path vendor/bundle
+      - run: bundle config set path 'vendor/bundle'
+      - run: bundle install
       - run: yarn test
       - run:
           name: Run Cloud Fixity tests
@@ -175,8 +177,9 @@ jobs:
       - run:
           name: Check current version of node
           command: node -v
-      - run: gem install bundler -v '2.3.18'
-      - run: bundle install --path vendor/bundle
+      - run: gem install bundler -v '2.4.19'
+      - run: bundle config set path 'vendor/bundle'
+      - run: bundle install
       - run: bundle exec spring stop
       - run: bundle exec rake rubocop
       - run: yarn lint
