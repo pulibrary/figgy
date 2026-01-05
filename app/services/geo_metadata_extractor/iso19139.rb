@@ -47,7 +47,6 @@ class GeoMetadataExtractor
         s = node.at_xpath("gmd:southBoundLatitude/gco:Decimal", NS).text.to_f
         return GeoCoverage.new(n, e, s, w).to_s
       end
-      nil
     end
 
     def description
