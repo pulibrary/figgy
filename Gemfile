@@ -8,7 +8,7 @@ gem "arabic-letter-connector"
 gem "archivesspace-client"
 gem "autoprefixer-rails"
 gem "aws-sdk-s3"
-gem "bagit", "~> 0.4"
+gem "bagit", "~> 0.6"
 # Pin to prevent passenger error
 gem "base64", "0.1.1"
 gem "blacklight", "~> 7.33"
@@ -35,7 +35,7 @@ gem "faker"
 gem "filewatcher", "~> 1.0"
 gem "flutie"
 gem "font-awesome-rails"
-gem "google-cloud-pubsub"
+gem "google-cloud-pubsub", "2.23.0"
 # This breaks PreserveResourceJob somewhere between 1.39 and 1.44.
 gem "google-cloud-storage", "1.38.0"
 gem "graphiql-rails", "1.4.10", group: :development
