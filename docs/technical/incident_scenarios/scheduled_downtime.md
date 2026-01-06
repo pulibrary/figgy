@@ -1,18 +1,18 @@
 ## Scheduled downtime
 
 ### Identified areas and contacted stakeholders
-- Mudd (Chista Cleeton, Will Clements, Emma Paradies, Brianna Garden)
-- Marquand (Holly Hatheway, Rachael Nutt, Jessica Dagci)
-- Ephemera Stakeholders (DK, Pakistan Posters, SAE, LAE, MENAE, Slavic, LGBTQAI, Industrial Relations, NEH Project)
-- Microforms (Colleen Burlingham, Natalie Lau)
-- Mendel (Brittney Nielson)
-- Digital Studio (all)
-- SCPS (AnnaLee Pauls, Emma Sarconi - who is also checking with Sara Logue)
-- Lewis/PPPL (Willow Dressel - asking Alex, Kelee Pacion)
-- EAL (Tom Ventimilia)
-- External Partners (Ellen Ambrosone is covering this - Pakistan, India)
-- Cotsen (Minjie Chen, Andrea Immel)
+- Mudd (#digital_library, Chista Cleeton, Will Clements, Emma Paradies, Brianna Garden)
+- Marquand (#digital_library, Holly Hatheway, Rachael Nutt)
+- Ephemera Stakeholders (#ephemera_projects)
+- Mendel (#digital_library, Lisa Read, Brittney Nielson)
+- Digital Studio (#digital_library - @photographers)
+- SC (#digital-library, Sara Logue, AnnaLee Pauls, Lexy deGraffenreid)
+- Lewis/PPPL (#digital-library, Willow Dressel - asking Alex, Kelee Pacion)
+- EAL (#digital-library, Martin Heijdra, Tom Ventimilia)
+- External Partners (Ellen Ambrosone, Fernando Acosta-Rodriguez, etc. are covering this - Pakistan, India; LAE)
+- Cotsen (#digital_library)
 - Curators of Forthcoming Library Exhibitions (depends on the lineup)
+- Numismatics (#digital_library, Alan Stahl, Elena Baldi) 
 
 ### Requested lead time
 One Week
