@@ -24,28 +24,38 @@ RSpec.describe PreservationAuditRunner do
       FactoryBot.create_for_repository(:event)
       FactoryBot.create_for_repository(:scanned_resource)
 
-      expect { described_class.run }.to change(PreservationCheckJob.jobs, :size).by(1)
+      expect do
+        described_class.run
+        PreservationAuditRunner::Loader.drain
+      end.to change(PreservationCheckJob.jobs, :size).by(1)
     end
 
     it "enqueues jobs to super_low" do
       FactoryBot.create_for_repository(:scanned_resource)
+      FactoryBot.create_for_repository(:scanned_resource)
 
+      # runner enqueues loader
       described_class.run
 
       expect(Sidekiq::Queues["super_low"].size).to eq 1
+
+      # loader enqueues checkers
+      PreservationAuditRunner::Loader.drain
+
+      expect(Sidekiq::Queues["super_low"].size).to eq 2
     end
-  end
 
-  it "can skip checking for bad metadata checksums if requested" do
-    stub_ezid
-    create_resource_bad_metadata_checksum
+    it "can skip checking for bad metadata checksums if requested" do
+      stub_ezid
+      create_resource_bad_metadata_checksum
 
-    Sidekiq::Testing.inline! do
-      described_class.run(skip_metadata_checksum: true)
+      Sidekiq::Testing.inline! do
+        described_class.run(skip_metadata_checksum: true)
 
-      audit = PreservationAudit.last
+        audit = PreservationAudit.last
 
-      expect(audit.preservation_check_failures).to be_empty
+        expect(audit.preservation_check_failures).to be_empty
+      end
     end
   end
 
