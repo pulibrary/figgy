@@ -130,6 +130,7 @@ class PreservationAuditRunner
       sidekiq_options queue: "super_low"
 
       def perform(idx, audit_id, job_opts)
+        query_service = Valkyrie.config.metadata_adapter.query_service
         id_slice = query_service.custom_queries.all_ids(
           except_models: UNPRESERVED_MODELS,
           limit_offset_tuple: [BATCH_SIZE, idx * BATCH_SIZE]
