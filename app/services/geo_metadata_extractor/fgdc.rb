@@ -38,7 +38,6 @@ class GeoMetadataExtractor
           coverage_coordinate(node, "west")
         ).to_s
       end
-      nil
     end
 
     def coverage_coordinate(node, direction)
@@ -49,7 +48,6 @@ class GeoMetadataExtractor
       doc.at_xpath("//idinfo/citation/citeinfo/pubdate").tap do |node|
         return node.text[0..3].to_i unless node.nil? # extract year only
       end
-      nil
     end
 
     def timeperiods

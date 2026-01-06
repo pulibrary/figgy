@@ -19,4 +19,10 @@ describe BaseWorkflow do
       expect(described_class.ark_mint_states).to eq []
     end
   end
+
+  describe ".published_state" do
+    it "returns a nil valie" do
+      expect(described_class.published_state).to be_nil
+    end
+  end
 end

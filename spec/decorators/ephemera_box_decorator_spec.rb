@@ -126,4 +126,13 @@ RSpec.describe EphemeraBoxDecorator do
       end
     end
   end
+
+  describe EphemeraBoxDecorator::NullProject do
+    it "has default values" do
+      decorator = EphemeraBoxDecorator::NullProject.new
+      expect(decorator.title).to be_nil
+      expect(decorator.header).to be_nil
+      expect(decorator.templates).to eq []
+    end
+  end
 end
