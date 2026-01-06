@@ -6,9 +6,9 @@
 - Ephemera Stakeholders (#ephemera_projects)
 - Mendel (#digital_library, Lisa Read, Brittney Nielson)
 - Digital Studio (#digital_library - @photographers)
-- SC (#digital-library, Sara Logue, AnnaLee Pauls, Lexy deGraffenreid)
-- Lewis/PPPL (#digital-library, Willow Dressel - asking Alex, Kelee Pacion)
-- EAL (#digital-library, Martin Heijdra, Tom Ventimilia)
+- SC (#digital_library, Sara Logue, AnnaLee Pauls, Lexy deGraffenreid)
+- Lewis/PPPL (#digital_library, Willow Dressel - asking Alex, Kelee Pacion)
+- EAL (#digital_library, Martin Heijdra, Tom Ventimilia)
 - External Partners (Ellen Ambrosone, Fernando Acosta-Rodriguez, etc. are covering this - Pakistan, India; LAE)
 - Cotsen (#digital_library)
 - Curators of Forthcoming Library Exhibitions (depends on the lineup)
@@ -25,11 +25,14 @@ Fridays
 Fridays are scheduled ingest times for Branch libraries dependent on structured workflows to get the jobs done like Lewis and larger scanning operations, Like Microforms. 
 
 ### Where to distribute information for Read Only?
-- Email to affected stakeholders (see above)
-- #digital_library Slack Channel
+- Email affected stakeholders (anyone named in the list above)
+- Message the following slack channels:
+  - #digital_library (mention @photographers)
+  - #ephemera_projects
 
 ### What to include in message
 - Date / time/ expectation
 - What does Read Only Mean? What can/can't you do in Figgy?
-- Where to post questions/comments/concerns: #digital_library Slack channel. 
+  - In read only mode, search and view of resources continue to function. Ingest and metadata updates will not work. PDFs cannot be generated, so only PDFs that have previously been generated are downloadable.
+- Post questions/comments/concerns in the #digital_library Slack channel.
 - Please tell your friends and colleagues who may want to know! Sharing is caring.
