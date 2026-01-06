@@ -11,7 +11,6 @@
 - Lewis/PPPL (Willow Dressel - asking Alex, Kelee Pacion)
 - EAL (Tom Ventimilia)
 - External Partners (Ellen Ambrosone is covering this - Pakistan, India)
-- CDL folks (Liza Scherff-Nesarikar, Nick Reynolds)
 - Cotsen (Minjie Chen, Andrea Immel)
 - Curators of Forthcoming Library Exhibitions (depends on the lineup)
 
@@ -28,7 +27,6 @@ Fridays are scheduled ingest times for Branch libraries dependent on structured 
 ### Where to distribute information for Read Only?
 - Email to affected stakeholders (see above)
 - #digital_library Slack Channel
-- Banner in the Catalog re: CDL downtime (coordinate with DACs)
 
 ### What to include in message
 - Date / time/ expectation
