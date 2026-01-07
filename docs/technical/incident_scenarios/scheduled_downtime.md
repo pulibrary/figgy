@@ -1,19 +1,5 @@
 ## Scheduled downtime
 
-### Identified areas and contacted stakeholders
-- Mudd (#digital_library - `@Christa`, `@Will Clements (he/him)`, `@Emma Paradies`, `@Brianna Garden`)
-- Marquand (#digital_library - `@Holly Hatheway`, `@Rachael`)
-- Ephemera Stakeholders (#ephemera_projects)
-- Mendel (#digital_library - `@Lisa`, `@Brittany Nielson`)
-- Digital Studio (#digital_library - `@photographers`)
-- SC (#digital_library - `@slogue (she/her)`, `@AnnaLee Pauls`, `@Lexy deGraffenreid`)
-- Lewis/PPPL (#digital_library - `@Willow Dressel` - asking Alex, Kelee Pacion)
-- EAL (#digital_library - `@Martin H`, `@Tom Ventimiglia`)
-- External Partners (Ellen Ambrosone, Fernando Acosta-Rodriguez, etc. are covering this - Pakistan, India; LAE)
-- Cotsen (#digital_library)
-- Curators of Forthcoming Library Exhibitions (depends on the lineup)
-- Numismatics (#digital_library - `@Alan Stahl`, `@Elena Baldi`)
-- Maps (#digital_library - `@Wangyal`, `@Berta`, `@Moloud`) 
 ### Requested lead time
 One Week
 
@@ -25,10 +11,13 @@ Fridays
 Fridays are scheduled ingest times for Branch libraries dependent on structured workflows to get the jobs done like Lewis and larger scanning operations, Like Microforms. 
 
 ### Where to distribute information for Read Only?
-- Email affected stakeholders (anyone named in the list above)
+
+Everyone who needs to be notified about downtime is on slack or works very closely with someone on slack.
+
 - Message the following slack channels:
-  - #digital_library (mention `@photographers`)
-  - #ephemera_projects
+  - #digital_library (mention `@channel` to ensure everyone sees the message)
+  - #ephemera_projects (mention `@channel` to ensure everyone sees the message)
+
 
 ### What to include in message
 - Date / time/ expectation
