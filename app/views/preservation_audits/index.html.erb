@@ -6,9 +6,9 @@
 
 <div id="preservation_audits">
   <% @preservation_audits.each do |preservation_audit| %>
+    <h2>
+      <%= link_to "Audit #{preservation_audit.id}", preservation_audit %>
+    </h2>
     <%= render preservation_audit %>
-    <p>
-      <%= link_to "Show this preservation audit", preservation_audit %>
-    </p>
   <% end %>
 </div>

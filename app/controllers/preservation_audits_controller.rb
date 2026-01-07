@@ -5,7 +5,7 @@ class PreservationAuditsController < ApplicationController
   # GET /preservation_audits or /preservation_audits.json
   def index
     authorize! :read, :fixity
-    @preservation_audits = PreservationAudit.all
+    @preservation_audits = PreservationAudit.order(created_at: :desc)
   end
 
   # GET /preservation_audits/1 or /preservation_audits/1.json

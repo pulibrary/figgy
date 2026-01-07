@@ -13,6 +13,14 @@ RSpec.describe PreservationAuditsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
+    it "sorts newer audits first" do
+      audit1 = FactoryBot.create(:preservation_audit)
+      audit2 = FactoryBot.create(:preservation_audit)
+
+      get :index
+      expect(assigns[:preservation_audits]).to eq [audit2, audit1]
+    end
+
     context "for non-admin users" do
       let(:user) { FactoryBot.create(:campus_patron) }
 

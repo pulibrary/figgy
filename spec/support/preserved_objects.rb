@@ -2,6 +2,9 @@
 
 # Note to use these in your test you'll need to set with_queue_adapter :inline
 def create_preserved_resource
+  change_set_persister = ChangeSetPersister.default
+  query_service = change_set_persister.query_service
+
   file = fixture_file_upload("files/example.tif", "image/tiff")
   resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
   reloaded_resource = query_service.find_by(id: resource.id)
@@ -10,17 +13,23 @@ def create_preserved_resource
 end
 
 def create_resource_unpreserved_metadata
+  change_set_persister = ChangeSetPersister.default
+  query_service = change_set_persister.query_service
+
   resource = FactoryBot.create_for_repository(:complete_scanned_resource)
   reloaded_resource = query_service.find_by(id: resource.id)
   change_set = ChangeSet.for(reloaded_resource)
   resource = change_set_persister.save(change_set: change_set)
   po = Wayfinder.for(resource).preservation_objects.first
   po.metadata_node = nil
-  ChangeSetPersister.default.save(change_set: ChangeSet.for(po))
+  change_set_persister.save(change_set: ChangeSet.for(po))
   resource
 end
 
 def create_file_set_bad_binary_checksum
+  change_set_persister = ChangeSetPersister.default
+  query_service = change_set_persister.query_service
+
   file = fixture_file_upload("files/example.tif", "image/tiff")
   resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
   reloaded_resource = query_service.find_by(id: resource.id)
@@ -33,6 +42,9 @@ def create_file_set_bad_binary_checksum
 end
 
 def create_resource_bad_metadata_checksum
+  change_set_persister = ChangeSetPersister.default
+  query_service = change_set_persister.query_service
+
   resource = FactoryBot.create_for_repository(:complete_scanned_resource)
   reloaded_resource = query_service.find_by(id: resource.id)
   change_set = ChangeSet.for(reloaded_resource)
@@ -43,6 +55,9 @@ def create_resource_bad_metadata_checksum
 end
 
 def create_resource_bad_metadata_lock_token
+  change_set_persister = ChangeSetPersister.default
+  query_service = change_set_persister.query_service
+
   resource = FactoryBot.create_for_repository(:complete_scanned_resource)
   reloaded_resource = query_service.find_by(id: resource.id)
   change_set = ChangeSet.for(reloaded_resource)
@@ -54,6 +69,9 @@ def create_resource_bad_metadata_lock_token
 end
 
 def create_resource_no_metadata_file
+  change_set_persister = ChangeSetPersister.default
+  query_service = change_set_persister.query_service
+
   resource = FactoryBot.create_for_repository(:complete_scanned_resource)
   reloaded_resource = query_service.find_by(id: resource.id)
   change_set = ChangeSet.for(reloaded_resource)
@@ -65,6 +83,9 @@ def create_resource_no_metadata_file
 end
 
 def create_file_set_no_binary_file
+  change_set_persister = ChangeSetPersister.default
+  query_service = change_set_persister.query_service
+
   file = fixture_file_upload("files/example.tif", "image/tiff")
   resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
   reloaded_resource = query_service.find_by(id: resource.id)
@@ -85,12 +106,4 @@ def create_recording_unpreserved_binary
   fs_po.binary_nodes = fs_po.binary_nodes.find { |node| node.preservation_copy_of_id != intermediate_file.id }
   ChangeSetPersister.default.save(change_set: ChangeSet.for(fs_po))
   recording_file_set
-end
-
-def change_set_persister
-  ChangeSetPersister.default
-end
-
-def query_service
-  Valkyrie.config.metadata_adapter.query_service
 end

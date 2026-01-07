@@ -9,7 +9,7 @@ RSpec.describe "preservation_audits/index.html.erb" do
     assign :preservation_audits, [audit]
     render
 
-    expect(rendered).to have_link("Show this preservation audit", href: preservation_audit_path(audit.id))
+    expect(rendered).to have_link("Audit #{audit.id}", href: preservation_audit_path(audit.id))
     expect(rendered).to have_text("Failures: 1", normalize_ws: true)
   end
 end
