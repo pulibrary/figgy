@@ -24,6 +24,8 @@ gem "capistrano-rails"
 gem "capistrano-rails-console"
 gem "cocoon"
 gem "coffee-rails"
+# pinning connection_pool due to https://github.com/rails/rails/pull/56292
+gem "connection_pool", "< 3"
 gem "dalli"
 gem "datadog", "~> 2.7.1"
 gem "devise", ">= 4.6.0"
