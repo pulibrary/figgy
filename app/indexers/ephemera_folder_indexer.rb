@@ -11,7 +11,9 @@ class EphemeraFolderIndexer
     {
       Hydra.config[:permissions][:read].group => read_groups,
       folder_label_tesim: folder_label
-    }
+    }.tap do |h|
+      h[:parent_box_id_ssi] = box_id if box_id
+    end
   end
 
   private
@@ -22,6 +24,10 @@ class EphemeraFolderIndexer
 
     def box_number
       Array.wrap(decorated.parent.box_number).first if decorated.parent.respond_to?(:box_number)
+    end
+
+    def box_id
+      decorated.ephemera_box&.id&.to_s
     end
 
     def folder_number
