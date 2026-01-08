@@ -50,6 +50,17 @@ module ApplicationHelper
     "#{root_path}?#{query}"
   end
 
+  # URL for directly querying Figgy for a multiple specific field / value pairs
+  # @param arr Array[Hash] array of hashes like {field: [String], value: [String]}
+  # @return [String]
+  def multi_facet_search_url(arr)
+    query = arr.map do |hsh|
+      ["f[#{hsh[:field]}][]", hsh[:value]]
+    end.to_h
+    query = Rack::Utils.build_query(query)
+    "#{root_path}?#{query}"
+  end
+
   # Returns index page content class
   # @return [String]
   def main_content_classes
