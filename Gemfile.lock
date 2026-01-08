@@ -343,7 +343,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.0)
+    csv (3.3.5)
     dalli (3.2.8)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
@@ -571,7 +571,7 @@ GEM
       ostruct
     htmlentities (4.3.4)
     http_logger (0.7.0)
-    httparty (0.22.0)
+    httparty (0.24.0)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -716,8 +716,8 @@ GEM
     modernizr-rails (2.7.1)
     msgpack (1.8.0)
     multi_json (1.19.1)
-    multi_xml (0.7.1)
-      bigdecimal (~> 3.1)
+    multi_xml (0.8.1)
+      bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
     net-http (0.9.1)
