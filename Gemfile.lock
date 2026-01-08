@@ -566,8 +566,9 @@ GEM
     hashie (3.6.0)
     health-monitor-rails (12.4.0)
       railties (>= 6.1)
-    honeybadger (5.26.0)
+    honeybadger (6.2.0)
       logger
+      ostruct
     htmlentities (4.3.4)
     http_logger (0.7.0)
     httparty (0.22.0)
@@ -880,7 +881,7 @@ GEM
     recipient_interceptor (0.3.3)
       mail
     redis (4.8.1)
-    redis-client (0.22.2)
+    redis-client (0.26.3)
       connection_pool
     redis-namespace (1.11.0)
       redis (>= 4)
@@ -998,11 +999,12 @@ GEM
       addressable
       google-cloud-storage (~> 1.6)
       shrine (~> 3.0)
-    sidekiq (7.3.6)
-      connection_pool (>= 2.3.0)
-      logger
-      rack (>= 2.2.4)
-      redis-client (>= 0.22.2)
+    sidekiq (8.0.10)
+      connection_pool (>= 2.5.0)
+      json (>= 2.9.0)
+      logger (>= 1.6.2)
+      rack (>= 3.1.0)
+      redis-client (>= 0.23.2)
     signet (0.21.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -1129,8 +1131,8 @@ GEM
 GEM
   remote: https://gems.contribsys.com/
   specs:
-    sidekiq-pro (7.3.3)
-      sidekiq (>= 7.3.0, < 8)
+    sidekiq-pro (8.0.3)
+      sidekiq (>= 8.0.8, < 9)
 
 PLATFORMS
   arm64-darwin-21
@@ -1168,6 +1170,7 @@ DEPENDENCIES
   capybara-screenshot
   cocoon
   coffee-rails
+  connection_pool (< 3)
   dalli
   database_cleaner
   database_cleaner-sequel
