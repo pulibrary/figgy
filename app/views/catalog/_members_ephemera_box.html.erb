@@ -21,3 +21,15 @@
     <% end %>
     </tbody>
   </table>
+
+  <% if decorated_resource.is_a?(EphemeraBox) %>
+    <%= link_to(
+      "View all #{decorated_resource.folders_count} items in this box",
+        multi_facet_search_url(
+          [{field: "parent_box_id_ssi", value: decorated_resource.id.to_s},
+           {field: "ephemera_project_ssim", value: decorated_resource.ephemera_project.title}
+          ]
+        ),
+        class: "btn btn-secondary"
+    )%>
+  <% end %>

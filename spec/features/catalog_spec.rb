@@ -111,4 +111,16 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_css "dd.blacklight-source_metadata_identifier_ssim", text: "991234563506421"
     end
   end
+
+  describe "ephemera box facet" do
+    it "does not show on the search result page" do
+      folder = FactoryBot.create_for_repository(:ephemera_folder)
+      box = FactoryBot.create_for_repository(:ephemera_box, member_ids: folder.id)
+      change_set_persister.save(change_set: ChangeSet.for(folder))
+      change_set_persister.save(change_set: ChangeSet.for(box))
+
+      visit "/catalog?q="
+      expect(page).not_to have_css("#facet-parent_box_id_ssi-header")
+    end
+  end
 end
