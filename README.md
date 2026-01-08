@@ -3,6 +3,7 @@
 A digital repository application in use at Princeton University Library for storing and managing digital representations of manuscripts, ephemera, vector, and raster data for export into a variety of front-end displays.
 
 [![CircleCI](https://circleci.com/gh/pulibrary/figgy.svg?style=svg)](https://circleci.com/gh/pulibrary/figgy)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/pulibrary/figgy)
 [![Browserstack](./browserstack-logo.svg)](https://www.browserstack.com/)
 
 ## Project Setup for Development and Test environments
