@@ -14,7 +14,7 @@ gem "base64", "0.1.1"
 gem "blacklight", "~> 7.33"
 # This will get backported soon, switch to 2.x when it does.
 gem "blacklight_iiif_search", github: "pulibrary/blacklight_iiif_search", branch: "backport-ffi"
-gem "blacklight_range_limit"
+gem "blacklight_range_limit", "8.5.0"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
