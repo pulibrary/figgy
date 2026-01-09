@@ -11,6 +11,7 @@ RSpec.describe "preservation_audits/show.html.erb" do
     render
 
     expect(rendered).to have_text("Failures: 2", normalize_ws: true)
+    expect(rendered).to have_text("Created at")
     expect(rendered).to have_css("h2", text: "Failures")
     expect(rendered).to have_link(fail1.resource_id, text: fail1.resource_id)
   end
