@@ -1237,9 +1237,6 @@ DEPENDENCIES
   mime-types
   mini_magick
   modernizr-rails
-  net-imap
-  net-pop
-  net-smtp
   net-ssh (~> 7.1.0)
   normalize-rails
   oai
