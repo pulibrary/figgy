@@ -4,7 +4,7 @@ require "rails_helper"
 RSpec.describe FindResourcesWithoutMembers do
   subject(:query) { described_class.new(query_service: query_service) }
   let(:coin1) { FactoryBot.create_for_repository(:coin) }
-  let(:coin2) { FactoryBot.create_for_repository(:coin, member_ids: [Valkyrie::ID.new("foo")]) }
+  let(:coin2) { FactoryBot.create_for_repository(:coin, member_ids: [Valkyrie::ID.new(SecureRandom.uuid)]) }
   let(:query_service) { Valkyrie.config.metadata_adapter.query_service }
 
   describe "#find_by_property_and_model" do

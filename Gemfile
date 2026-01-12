@@ -99,6 +99,7 @@ gem "shrine-google_cloud_storage"
 gem "simple_form"
 gem "sprockets"
 gem "string_rtl"
+gem "sys-filesystem", "~> 1.5"
 gem "title"
 gem "tus-server", "~> 2.3"
 gem "valkyrie", "~> 3.5.0", git: "https://github.com/samvera/valkyrie", branch: "main"
@@ -109,11 +110,6 @@ gem "view_component", require: "view_component/engine"
 gem "vite_rails", "3.0.17"
 gem "vite_ruby", "3.8.0"
 gem "whenever", "~> 1.0"
-
-# Required for deployment under ruby 3.1
-gem "net-imap", require: false
-gem "net-pop", require: false
-gem "net-smtp", require: false
 
 source "https://gems.contribsys.com/" do
   gem "sidekiq-pro"
@@ -151,6 +147,7 @@ group :development, :staging do
 end
 
 group :test do
+  gem "axe-core-rspec"
   gem "capybara-screenshot"
   gem "database_cleaner"
   gem "database_cleaner-sequel"
@@ -162,5 +159,3 @@ group :test do
   gem "timecop"
   gem "webmock"
 end
-
-gem "sys-filesystem", "~> 1.5"

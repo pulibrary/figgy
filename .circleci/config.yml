@@ -34,7 +34,7 @@ jobs:
           keys:
             - figgy-{{ checksum "Gemfile.lock" }}-{{ checksum "yarn.lock" }}-20241209
       # Install Bundler
-      - run: gem install bundler -v '2.4.19'
+      - run: gem install bundler -v '2.6.9'
       # Bundle install dependencies
       - run: bundle config set path 'vendor/bundle'
       - run: bundle install
@@ -98,7 +98,7 @@ jobs:
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
       # Install Bundler
-      - run: gem install bundler -v '2.4.19'
+      - run: gem install bundler -v '2.6.9'
       # Bundle install dependencies
       - run: bundle config set path 'vendor/bundle'
       - run: bundle install
@@ -177,7 +177,7 @@ jobs:
       - run:
           name: Check current version of node
           command: node -v
-      - run: gem install bundler -v '2.4.19'
+      - run: gem install bundler -v '2.6.9'
       - run: bundle config set path 'vendor/bundle'
       - run: bundle install
       - run: bundle exec spring stop
