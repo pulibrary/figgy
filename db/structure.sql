@@ -779,6 +779,13 @@ CREATE INDEX index_ocr_requests_on_user_id ON public.ocr_requests USING btree (u
 
 
 --
+-- Name: index_orm_resources_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_created_at ON public.orm_resources USING btree (created_at);
+
+
+--
 -- Name: index_orm_resources_on_current_event; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -985,6 +992,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260109173200'),
 ('20251208215153'),
 ('20251204175843'),
 ('20251117211722'),
