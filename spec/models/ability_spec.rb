@@ -284,6 +284,7 @@ describe Ability do
   end
 
   let(:ocr_request) { FactoryBot.create(:ocr_request) }
+  let(:report) { Report.new }
 
   let(:admin_user) { FactoryBot.create(:admin) }
   let(:staff_user) { FactoryBot.create(:staff) }
@@ -310,6 +311,7 @@ describe Ability do
       is_expected.to be_able_to(:read, contributor_ephemera_project)
       is_expected.to be_able_to(:read, contributor_ephemera_folder)
       is_expected.to be_able_to(:read, ocr_request)
+      is_expected.to be_able_to(:show, report)
       is_expected.to be_able_to(:pdf, open_scanned_resource)
       is_expected.to be_able_to(:color_pdf, open_scanned_resource)
       is_expected.to be_able_to(:edit, open_scanned_resource)
@@ -387,6 +389,7 @@ describe Ability do
         is_expected.to be_able_to(:read, flagged_scanned_resource)
         is_expected.to be_able_to(:read, flagged_scanned_resource)
         is_expected.to be_able_to(:read, ocr_request)
+        is_expected.to be_able_to(:show, report)
         is_expected.not_to be_able_to(:pdf, open_scanned_resource)
         is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
         is_expected.not_to be_able_to(:edit, open_scanned_resource)
@@ -428,6 +431,7 @@ describe Ability do
         is_expected.to be_able_to(:read, flagged_scanned_resource)
         is_expected.to be_able_to(:read, flagged_scanned_resource)
         is_expected.to be_able_to(:read, ocr_request)
+        is_expected.to be_able_to(:show, report)
         is_expected.not_to be_able_to(:pdf, open_scanned_resource)
         is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
         is_expected.not_to be_able_to(:edit, open_scanned_resource)
@@ -470,6 +474,7 @@ describe Ability do
       is_expected.to be_able_to(:read, takedown_scanned_resource)
       is_expected.to be_able_to(:read, flagged_scanned_resource)
       is_expected.to be_able_to(:read, ocr_request)
+      is_expected.to be_able_to(:show, report)
       is_expected.to be_able_to(:pdf, open_scanned_resource)
       is_expected.to be_able_to(:color_pdf, open_scanned_resource)
       is_expected.to be_able_to(:edit, open_scanned_resource)
@@ -550,6 +555,7 @@ describe Ability do
         is_expected.to be_able_to(:read, takedown_scanned_resource)
         is_expected.to be_able_to(:read, flagged_scanned_resource)
         is_expected.to be_able_to(:read, ocr_request)
+        is_expected.to be_able_to(:show, report)
         is_expected.not_to be_able_to(:pdf, open_scanned_resource)
         is_expected.not_to be_able_to(:color_pdf, open_scanned_resource)
         is_expected.not_to be_able_to(:edit, open_scanned_resource)
@@ -614,6 +620,7 @@ describe Ability do
       is_expected.not_to be_able_to(:read, takedown_scanned_resource)
       is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
       is_expected.not_to be_able_to(:read, ocr_request)
+      is_expected.not_to be_able_to(:show, report)
       is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.not_to be_able_to(:read, campus_ip_scanned_resource)
       is_expected.not_to be_able_to(:manifest, campus_ip_scanned_resource)
@@ -812,6 +819,7 @@ describe Ability do
         is_expected.not_to be_able_to(:read, final_review_scanned_resource)
         is_expected.not_to be_able_to(:read, takedown_scanned_resource)
         is_expected.not_to be_able_to(:read, ocr_request)
+        is_expected.not_to be_able_to(:show, report)
         is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
         is_expected.not_to be_able_to(:update, open_scanned_resource)
         is_expected.not_to be_able_to(:create, ScannedResource.new)
@@ -962,6 +970,7 @@ describe Ability do
       is_expected.not_to be_able_to(:read, takedown_scanned_resource)
       is_expected.not_to be_able_to(:read, reading_room_scanned_resource)
       is_expected.not_to be_able_to(:read, ocr_request)
+      is_expected.not_to be_able_to(:show, report)
       is_expected.not_to be_able_to(:manifest, reading_room_scanned_resource)
       is_expected.not_to be_able_to(:manifest, ephemera_folder)
       is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
