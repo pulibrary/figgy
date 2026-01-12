@@ -39,6 +39,17 @@ class HealthReport
       end.select(&:valid?)
   end
 
+  def to_h
+    {
+      status: status,
+      checks: checks.map do |check|
+        { type: check.type,
+          status: check.status,
+          summary: check.summary }
+      end
+    }
+  end
+
   private
 
     # Assign each status a weight for sorting, if one check is needs_attention

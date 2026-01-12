@@ -320,4 +320,6 @@ Rails.application.routes.draw do
     get "/disk/:entry_type", to: "disk#index"
     get "/disk/:entry_type/:id", to: "disk#show", constraints: { id: /([^\/])+?/ }
   end
+
+  get "/health_report/:id", to: "health_reports#check", defaults: { format: :json }
 end

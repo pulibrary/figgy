@@ -10,8 +10,20 @@ RSpec.describe HealthReport do
         report = described_class.for(resource)
 
         expect(report.status).to eq :healthy
+        expect(report.to_h).to eq(
+          {
+            status: :healthy,
+            checks:
+            [
+              { type: "Local Fixity", status: :healthy, summary: "All local file checksums are verified." },
+              { type: "Cloud Fixity", status: :healthy, summary: "All files are preserved and their checksums verified." },
+              { type: "Derivative", status: :healthy, summary: "Derivatives are processed and healthy." }
+            ]
+          }
+        )
       end
     end
+
     context "for a resource not yet marked complete" do
       it "only checks local fixity and derivatives" do
         resource = FactoryBot.create_for_repository(:pending_scanned_resource)
