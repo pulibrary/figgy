@@ -147,6 +147,7 @@ group :development, :staging do
 end
 
 group :test do
+  gem "axe-core-rspec"
   gem "capybara-screenshot"
   gem "database_cleaner"
   gem "database_cleaner-sequel"

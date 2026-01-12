@@ -19,6 +19,7 @@ Capybara.server = :puma, { Silent: true }
 # Ensure sidekiq jobs aren't added to redis during tests
 # note this puts Sidekiq in "fake" mode by default
 require "sidekiq/testing"
+require "axe-rspec"
 
 module Features
   # Extend this module in spec/support/features/*.rb
