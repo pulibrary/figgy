@@ -11,5 +11,6 @@ RSpec.describe "preservation_audits/index.html.erb" do
 
     expect(rendered).to have_link("Audit #{audit.id}", href: preservation_audit_path(audit.id))
     expect(rendered).to have_text("Failures: 1", normalize_ws: true)
+    expect(rendered).to have_text("Created at")
   end
 end
