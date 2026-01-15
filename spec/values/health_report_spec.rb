@@ -12,7 +12,10 @@ RSpec.describe HealthReport do
         expect(report.status).to eq :healthy
         expect(report.to_h).to eq(
           {
-            status: :healthy,
+            status: {
+              icon_color: "green",
+              label: "Healthy"
+            },
             checks:
             [
               { type: "Local Fixity", status: :healthy, summary: "All local file checksums are verified." },

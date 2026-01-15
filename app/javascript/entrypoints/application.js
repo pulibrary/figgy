@@ -16,6 +16,7 @@ import { setupAjaxSelect, setupCocoonLinks } from '../helpers/setup_ajax_select'
 import FileUploader from '../components/file-uploader.vue'
 import Initializer from '../figgy/figgy_boot'
 import LocalUploader from '../components/local_uploader.vue'
+import HealthReport from '../components/health_report.vue'
 
 const app = {
     data () {
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .component('embedded-file-browser', EmbeddedFileBrowser)
       .component('local-uploader', LocalUploader)
       .component('struct-manager', StructManager)
+      .component('health-report', HealthReport)
       .mount(elements[i])
   }
 
