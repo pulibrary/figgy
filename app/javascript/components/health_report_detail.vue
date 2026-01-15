@@ -21,7 +21,7 @@
             @click="toggleList($event)"
             :aria-expanded="isOpen"
             :aria-controls="`problematic-resources-list-%{check.name}`">
-          Show Problematic Resources
+          {{ buttonText }}
         </button>
         <div class="problematic-resources-list"
               v-show="isOpen"
@@ -57,6 +57,12 @@ export default {
         return 'arrow-down'
       }
       return 'arrow-right'
+    },
+    buttonText: function () {
+      if (this.isOpen) {
+        return 'Hide Problematic Resources'
+      }
+      return 'Show Problematic Resources'
     }
   },
   methods: {
