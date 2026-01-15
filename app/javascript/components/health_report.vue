@@ -79,15 +79,9 @@ export default {
 </script>
 
 <style scope>
-#health-status {
-  flex-grow: 1;
-  text-align: right;
-  align-self: end;
-}
 #healthModal {
   img {
     height: 60px;
   }
 }
-
 </style>

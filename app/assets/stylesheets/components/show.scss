@@ -146,6 +146,12 @@ h2.card-title {
   margin-top: .75em;
 }
 
+#health-status-container {
+  flex-grow: 1;
+  text-align: right;
+  align-self: end;
+}
+
 div.admin-controls a.btn, div.admin-controls input {
   margin-right: .3em;
 }
