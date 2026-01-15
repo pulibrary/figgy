@@ -12,15 +12,14 @@ RSpec.describe HealthReport do
         expect(report.status).to eq :healthy
         expect(report.to_h).to eq(
           {
-            status: {
-              icon_color: "green",
-              label: "Healthy"
-            },
-            checks:
-            [
-              { type: "Local Fixity", status: :healthy, summary: "All local file checksums are verified." },
-              { type: "Cloud Fixity", status: :healthy, summary: "All files are preserved and their checksums verified." },
-              { type: "Derivative", status: :healthy, summary: "Derivatives are processed and healthy." }
+            status: { icon: "report-healthy", icon_color: "green", label: "Healthy" },
+            checks: [
+              { display_unhealthy_resources: false, icon: "report-healthy", icon_color: "green", label: "Healthy", name: "local_fixity", status: :healthy,
+                summary: "All local file checksums are verified.", type: "Local Fixity", unhealthy_resources: [] },
+              { display_unhealthy_resources: false, icon: "report-healthy", icon_color: "green", label: "Healthy", name: "cloud_fixity", status: :healthy,
+                summary: "All files are preserved and their checksums verified.", type: "Cloud Fixity", unhealthy_resources: [] },
+              { display_unhealthy_resources: false, icon: "report-healthy", icon_color: "green", label: "Healthy", name: "derivative", status: :healthy,
+                summary: "Derivatives are processed and healthy.", type: "Derivative", unhealthy_resources: [] }
             ]
           }
         )

@@ -9,7 +9,7 @@
       </a>
     </div>
     <div v-else>
-      <img src="@/images/health-report-graphic.svg" width=40 height=40>
+      <img src="@/images/health-report-graphic.svg" width=40 height=40 />
         Health Status: Loading...
     </div>
 
