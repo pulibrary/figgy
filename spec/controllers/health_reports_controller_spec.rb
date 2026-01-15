@@ -15,15 +15,34 @@ RSpec.describe HealthReportsController, type: :controller do
       expect(response).to be_successful
 
       expect(response.body).to eq(
-          {
-            status: :healthy,
-            checks:
-            [
-              { type: "Local Fixity", status: :healthy, summary: "All local file checksums are verified." },
-              { type: "Derivative", status: :healthy, summary: "Derivatives are processed and healthy." }
-            ]
-          }.to_json
-        )
+        {
+          status: {
+            icon_color: "green",
+            label: "Healthy",
+            icon: "report-healthy"
+          },
+          checks: [
+            { type: "Local Fixity",
+              status: "healthy",
+              icon_color: "green",
+              label: "Healthy",
+              icon: "report-healthy",
+              display_unhealthy_resources: false,
+              name: "local_fixity",
+              unhealthy_resources: [],
+              summary: "All local file checksums are verified." },
+            { type: "Derivative",
+              status: "healthy",
+              icon_color: "green",
+              label: "Healthy",
+              icon: "report-healthy",
+              display_unhealthy_resources: false,
+              name: "derivative",
+              unhealthy_resources: [],
+              summary: "Derivatives are processed and healthy." }
+          ]
+        }.to_json
+      )
     end
   end
 end

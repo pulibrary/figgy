@@ -57,6 +57,7 @@ RSpec.feature "Heath Status" do
 
     visit solr_document_path(id: resource.id)
     expect(page).to have_selector("#health-status")
+    expect(page).to have_text("Health Status: Needs Attention")
 
     find('a[data-target="#healthModal"]').click
     expect(page).to have_selector("div", text: "Cloud Fixity Status: Needs Attention")
@@ -65,7 +66,7 @@ RSpec.feature "Heath Status" do
     expect(page).to have_link(resource.title.first, href: /concern\/scanned_resources\/#{resource.id}\/file_manager/, target: "_blank")
   end
 
-  scenario "resource with failed cloud fixity event on it's metadata displays problematic resources", js: true do
+  scenario "resource with failed cloud fixity event on its metadata displays problematic resources", js: true do
     file = fixture_file_upload("files/example.tif", "image/tiff")
     resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file])
     create_preservation_object(resource_id: resource.id, event_status: Event::FAILURE, event_type: :cloud_fixity)
