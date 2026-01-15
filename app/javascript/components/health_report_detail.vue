@@ -28,7 +28,8 @@
               :id="`problematic-resources-list-%{check.name}`">
           <ul
             >
-            <li v-for="resource in check.unhealthy_resources">
+            <li v-for="resource in check.unhealthy_resources"
+                       :key="resource.url">
               <a :href="resource.url" target="_blank">{{ resource.title }}</a>
             </li>
           </ul>

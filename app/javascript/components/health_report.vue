@@ -26,7 +26,7 @@
           </div>
 
           <div class="modal-body">
-            <template v-for="check in report.checks">
+            <template v-for="check in report.checks" :key="check.type">
               <health-report-detail :check="check" />
             </template>
           </div>
@@ -72,7 +72,6 @@ export default {
         { credentials: 'include' }
       )
         .then((response) => response.json())
-      console.log(report)
       this.report = report
     }
   }
