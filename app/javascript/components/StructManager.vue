@@ -344,11 +344,23 @@ export default {
         }
       }
     },
+    sortFoldersAndFiles: function (node) {
+    
+      if (!Array.isArray(node.folders)) return
+
+      // Stable partition: folders first, files last
+      node.folders.sort((a, b) => {
+        return Number(a.file === true) - Number(b.file === true)
+      })
+
+      // Recurse into subfolders
+      node.folders.forEach(this.sortFoldersAndFiles)
+    },
     filterGallery: function (newVal) {
       if (this.structure.nodes) {
         // If structure prop is provided,
         // convert to tree-friendly structure
-        const structureFolders = this.renamePropertiesForLoad(this.structure.nodes)
+        let structureFolders = this.normalizeForLoad(this.structure.nodes)
 
         // Reconcile unstructured_objects with structured
         // Loop through each galleryItem object and
@@ -393,8 +405,14 @@ export default {
 
         // Call the function to replace matching objects
         replaceObjects()
+
         // Sort the structure to push all files to the bottom of their folders
-        // this.sortTreeFoldersFirst(tree_structure);
+        // this.sortTreeFoldersFirst(structureFolders)
+        // No, instead, create two arrays. Strip out the files from the folders 
+        // into their own array that gets displayed.
+        console.log(structureFolders)
+        // const normalizedTree = this.sortFoldersAndFiles(structureFolders)
+        // console.log(normalizedTree)
 
         // setting the newly filtered values as component data properties makes this
         // function much easier to test
@@ -617,7 +635,7 @@ export default {
         return newObj
       })
     },
-    renamePropertiesForLoad: function (arr) {
+    normalizeForLoad: function (arr) {
       const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file']
       return arr.map(obj => {
         const newObj = {}
@@ -631,7 +649,7 @@ export default {
               newObj.file = false
             }
             newObj.label = obj.label[0]
-            newObj.folders = this.renamePropertiesForLoad(obj[key])
+            newObj.folders = this.normalizeForLoad(obj[key])
           } else {
             if (!allowedProperties.includes(key)) {
               delete obj[key]
@@ -641,6 +659,10 @@ export default {
           }
         }
         return newObj
+      })
+      .sort((a, b) => { // this ensures that the files are at the bottom of the folders
+        if (a.file === b.file) return 0;
+        return a.file ? 1 : -1;
       })
     },
     replaceObjectById: function (root, idToReplace, replacementObject) {
