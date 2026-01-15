@@ -64,9 +64,6 @@ export default {
   },
   methods: {
     async loadReport() {
-      // TODO: remove this sleep, it's just for checking that data fills in as
-      // desired
-      //await new Promise(r => setTimeout(r, 2000));
       let report = await fetch(
         this.loadPath,
         { credentials: 'include' }
