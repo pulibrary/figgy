@@ -344,11 +344,23 @@ export default {
         }
       }
     },
+    sortFoldersAndFiles: function (node) {
+    
+      if (!Array.isArray(node.folders)) return
+
+      // Stable partition: folders first, files last
+      node.folders.sort((a, b) => {
+        return Number(a.file === true) - Number(b.file === true)
+      })
+
+      // Recurse into subfolders
+      node.folders.forEach(this.sortFoldersAndFiles)
+    },
     filterGallery: function (newVal) {
       if (this.structure.nodes) {
         // If structure prop is provided,
         // convert to tree-friendly structure
-        const structureFolders = this.renamePropertiesForLoad(this.structure.nodes)
+        let structureFolders = this.normalizeForLoad(this.structure.nodes)
 
         // Reconcile unstructured_objects with structured
         // Loop through each galleryItem object and
@@ -378,6 +390,7 @@ export default {
             delete structureFolder.proxy
             // Replace the object in structure_folders with the galleryItem
             Object.assign(structureFolder, galleryItem)
+            // TODO: Move it to the bottom of the folder
             return true // Indicate that a match is found
           } else {
             // Continue searching in nested folders
@@ -392,6 +405,14 @@ export default {
 
         // Call the function to replace matching objects
         replaceObjects()
+
+        // Sort the structure to push all files to the bottom of their folders
+        // this.sortTreeFoldersFirst(structureFolders)
+        // No, instead, create two arrays. Strip out the files from the folders 
+        // into their own array that gets displayed.
+        console.log(structureFolders)
+        // const normalizedTree = this.sortFoldersAndFiles(structureFolders)
+        // console.log(normalizedTree)
 
         // setting the newly filtered values as component data properties makes this
         // function much easier to test
@@ -418,7 +439,7 @@ export default {
         })
       })
     },
-  moveItemById: function (array, id, direction) {
+    moveItemById: function (array, id, direction) {
       const index = array.findIndex(item => item.id === id)
       if (index === -1) return array // not found, return unchanged
 
@@ -441,29 +462,32 @@ export default {
     moveUp: function () {
       const rootId = this.tree.structure.id
       if (this.tree.selected) {
-        // if tree node is selected, move items down
+        // if tree node folder is selected, move items down
         if (this.rootNodeSelected) {
           alert('Sorry, you can\'t move the root node.')
         } else {
           const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-          let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
-          
-          const structure = {
-            id: this.tree.structure.id,
-            label: this.tree.structure.label,
-            folders: null
-          }
+          const selected = this.findFolderById(folderList, this.tree.selected)
+          if(!selected.file) { // don't allow ordering if it's a file, only allow for folders
+            let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
+            
+            const structure = {
+              id: this.tree.structure.id,
+              label: this.tree.structure.label,
+              folders: null
+            }
 
-          if(parentOfSelected === null) {
-            // this means it was reordered on the root node
-            structure.folders = folderList 
-            structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'up')
-          } else {
-            // reorder folder in parentOfSelected
-            parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
-            structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+            if(parentOfSelected === null) {
+              // this means it was reordered on the root node
+              structure.folders = folderList 
+              structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'up')
+            } else {
+              // reorder folder in parentOfSelected
+              parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'up')
+              structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+            }
+            this.$store.commit('MOVE_UP', structure)
           }
-          this.$store.commit('MOVE_UP', structure)
         }  
       }
     },
@@ -475,24 +499,27 @@ export default {
           alert('Sorry, you can\'t move the root node.')
         } else {
           const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-          let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
-          
-          const structure = {
-            id: this.tree.structure.id,
-            label: this.tree.structure.label,
-            folders: null
-          }
+          const selected = this.findFolderById(folderList, this.tree.selected)
+          if(!selected.file) { // don't allow ordering if it's a file, only allow for folders
+            let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
+            
+            const structure = {
+              id: this.tree.structure.id,
+              label: this.tree.structure.label,
+              folders: null
+            }
 
-          if(parentOfSelected === null) {
-            // this means it was reordered on the root node
-            structure.folders = folderList 
-            structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
-          } else {
-            // reorder folder in parentOfSelected
-            parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
-            structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+            if(parentOfSelected === null) {
+              // this means it was reordered on the root node
+              structure.folders = folderList 
+              structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
+            } else {
+              // reorder folder in parentOfSelected
+              parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
+              structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+            }
+            this.$store.commit('MOVE_DOWN', structure)
           }
-          this.$store.commit('MOVE_DOWN', structure)
         }  
       }
     },
@@ -608,7 +635,7 @@ export default {
         return newObj
       })
     },
-    renamePropertiesForLoad: function (arr) {
+    normalizeForLoad: function (arr) {
       const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file']
       return arr.map(obj => {
         const newObj = {}
@@ -622,7 +649,7 @@ export default {
               newObj.file = false
             }
             newObj.label = obj.label[0]
-            newObj.folders = this.renamePropertiesForLoad(obj[key])
+            newObj.folders = this.normalizeForLoad(obj[key])
           } else {
             if (!allowedProperties.includes(key)) {
               delete obj[key]
@@ -632,6 +659,10 @@ export default {
           }
         }
         return newObj
+      })
+      .sort((a, b) => { // this ensures that the files are at the bottom of the folders
+        if (a.file === b.file) return 0;
+        return a.file ? 1 : -1;
       })
     },
     replaceObjectById: function (root, idToReplace, replacementObject) {
@@ -714,6 +745,17 @@ export default {
     selectTreeItemById: function (id) {
       this.$store.commit('SELECT_TREEITEM', id)
       this.selectNoneGallery()
+    },
+    sortTreeFoldersFirst: function (node) {
+      if (!Array.isArray(node.folders)) return;
+
+      // folders (file === false) first
+      node.folders.sort((a, b) => {
+        return Number(a.file === true) - Number(b.file === true);
+      });
+
+      // recurse
+      node.folders.forEach(sortTreeFoldersFirst);
     },
     zoomFile: function (fileId) {
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))

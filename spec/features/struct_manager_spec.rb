@@ -12,6 +12,12 @@ RSpec.feature "Structure Manager", js: true do
   end
 
   before do
+    query_service = adapter.query_service
+    r = query_service.find_by(id: resource.id)
+    fileset = query_service.find_by(id: r.member_ids.last)
+    fileset_changeset = ChangeSet.for(fileset)
+    fileset_changeset.validate(title: "example2.tif")
+    ChangeSetPersister.default.save(change_set: fileset_changeset)
     sign_in user
   end
 
@@ -118,7 +124,7 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).to have_selector(".lux-card", count: 0)
     expect(page).to have_selector(".lux-structManager .file", count: 2)
 
-    # test moving tree items up and down
+    # test moving folders up and down to reorder them
     page.all("button.toggle-edit")[1].click
     expect(page).to have_css "input.folder-label-input"
     # label it so we can distinguish between the two sub-folders
@@ -130,7 +136,20 @@ RSpec.feature "Structure Manager", js: true do
     expect(page.all(".lux-structManager .folder-container")[1]).not_to have_text("First")
     page.send_keys [:control, :shift, :arrow_up]
     expect(page.all(".lux-structManager .folder-container")[1]).to have_text("First")
+
     # test to make sure that file labels cannot be edited
     expect(page).not_to have_selector(".file-edit.toggle-edit")
+
+    # test to make sure that file items cannot be reordered 
+    # note: example2.tif is the first hit because it has been reordered through the 
+    test_file = find(".file-label", match: :first)
+    test_file.click
+    expect(test_file).to have_text("example2.tif")
+    page.send_keys [:control, :shift, :arrow_down]
+    test_file2 = find(".file-label", match: :first)
+    expect(test_file2).to have_text("example2.tif")
+
+    # todo: write a test to make sure that grouped files are always ordered according 
+    # to their resource member list
   end
 end
