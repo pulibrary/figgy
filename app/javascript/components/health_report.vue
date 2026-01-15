@@ -26,49 +26,9 @@
           </div>
 
           <div class="modal-body">
-            <div v-for="check in report.checks" class="check">
-              <lux-icon-base width="50" height="50" :icon-color="check.icon_color">
-                <component :is="`lux-icon-${check.icon}`"></component>
-              </lux-icon-base>
-              <div class="check-status">
-                <h6>{{ check.type }} Status: {{ check.label }}</h6>
-                <small>{{ check.summary }}</small>
-                <div v-if="check.display_unhealthy_resources"
-                     class="problematic-resources-accordion accordion"
-                     id="`problematic-resources-accordion-%{check.name}-files`">
-                  <span class="problematic-resources-arrow-right">
-                    <lux-icon-base width="20" height="20" :icon-color="check.icon_color">
-                      <lux-icon-arrow-right></lux-icon-arrow-right>
-                    </lux-icon-base>
-                  </span>
-                  <span class="problematic-resources-arrow-down">
-                    <lux-icon-base width="20" height="20" :icon-color="check.icon_color">
-                      <lux-icon-arrow-down></lux-icon-arrow-down>
-                    </lux-icon-base>
-                  </span>
-                  <button class="btn btn-link text-left collapsed" type="button"
-                    data-toggle="collapse"
-                    :data-target="`#problematic-resources-collapse-${check.name}`"
-                    aria-expanded="true"
-                    aria-controls="collapseOne">
-                    Show Problematic Resources
-                  </button>
-                  <div
-
-                      class="problematic-resources collapse"
-                      loaded="true"
-                      :id="`#problematic-resources-collapse-${check.name}`"
-                      aria-labelledby="headingOne"
-                      data-parent="`problematic-resources-accordion-%{check.name}-files`">
-                    <div class="problematic-resources-list"
-                         :id="`problematic-resources-list-%{check.name}`">
-                      <ul>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <template v-for="check in report.checks">
+              <health-report-detail :check="check" />
+            </template>
           </div>
         </div>
       </div>
@@ -77,8 +37,12 @@
 </template>
 
 <script>
+import HealthReportDetail from './health_report_detail.vue'
 export default {
   name: 'HealthReport',
+  components: {
+    HealthReportDetail
+  },
   props: {
     loadPath: {
       type: String,
@@ -102,7 +66,7 @@ export default {
     async loadReport() {
       // TODO: remove this sleep, it's just for checking that data fills in as
       // desired
-      await new Promise(r => setTimeout(r, 2000));
+      //await new Promise(r => setTimeout(r, 2000));
       let report = await fetch(
         this.loadPath,
         { credentials: 'include' }
@@ -116,4 +80,15 @@ export default {
 </script>
 
 <style scope>
+#health-status {
+  flex-grow: 1;
+  text-align: right;
+  align-self: end;
+}
+#healthModal {
+  img {
+    height: 60px;
+  }
+}
+
 </style>
