@@ -39,6 +39,27 @@ class HealthReport
       end.select(&:valid?)
   end
 
+  def to_h
+    {
+      status: {
+        icon_color: I18n.t("health_status.status.#{status}.icon_color"),
+        label: I18n.t("health_status.status.#{status}.label"),
+        icon: I18n.t("health_status.status.#{status}.icon")
+      },
+      checks: checks.map do |check|
+        { type: check.type,
+          status: check.status,
+          icon_color: I18n.t("health_status.status.#{check.status}.icon_color"),
+          label: I18n.t("health_status.status.#{check.status}.label"),
+          icon: I18n.t("health_status.status.#{check.status}.icon"),
+          display_unhealthy_resources: check.display_unhealthy_resources,
+          name: check.name,
+          unhealthy_resources: check.display_unhealthy_resources ? check.unhealthy_resources : [],
+          summary: check.summary }
+      end
+    }
+  end
+
   private
 
     # Assign each status a weight for sorting, if one check is needs_attention

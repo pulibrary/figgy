@@ -93,10 +93,9 @@ GIT
 
 GIT
   remote: https://github.com/samvera/valkyrie
-  revision: 66c2845552351a6690035a3907332259e07c3e4c
-  branch: main
+  revision: 40dc581f7e944825ceac59845cf60a16d5ac235c
   specs:
-    valkyrie (3.5.0)
+    valkyrie (3.5.1)
       activemodel
       activesupport
       dry-struct
@@ -1309,7 +1308,7 @@ DEPENDENCIES
   timecop
   title
   tus-server (~> 2.3)
-  valkyrie (~> 3.5.0)!
+  valkyrie (~> 3.5.1)!
   valkyrie-derivatives!
   valkyrie-sequel (= 3.0.0)
   valkyrie-shrine

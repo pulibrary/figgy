@@ -6,7 +6,7 @@ import TakedownLogo from '../images/copyright.svg'
 import LeafletViewer from './leaflet_viewer'
 import TabManager from './tab_manager'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom/client'
 import Viewer from '@samvera/clover-iiif/viewer'
 
 export default class UVManager {

@@ -26,7 +26,6 @@ Rails.application.routes.draw do
   default_url_options Rails.application.config.action_mailer.default_url_options
 
   get "catalog/:solr_document_id/pdf", to: "catalog#pdf", as: "pdf"
-  get "catalog/:solr_document_id/health_report/:name", to: "catalog#health_report", as: "health_report"
 
   resources :bookmarks do
     concerns :exportable
@@ -320,4 +319,6 @@ Rails.application.routes.draw do
     get "/disk/:entry_type", to: "disk#index"
     get "/disk/:entry_type/:id", to: "disk#show", constraints: { id: /([^\/])+?/ }
   end
+
+  get "/health_report/:id", to: "health_reports#check", defaults: { format: :json }
 end
