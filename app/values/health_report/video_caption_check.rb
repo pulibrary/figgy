@@ -50,10 +50,10 @@ class HealthReport::VideoCaptionCheck
   end
 
   def summary
-    if !file_set?
-      I18n.t("health_status.video_caption_check.summary.#{status}")
-    else
+    if file_set?
       I18n.t("health_status.video_caption_check.summary.self.#{status}")
+    else
+      I18n.t("health_status.video_caption_check.summary.#{status}")
     end
   end
 
