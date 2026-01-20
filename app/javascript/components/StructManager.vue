@@ -406,14 +406,6 @@ export default {
         // Call the function to replace matching objects
         replaceObjects()
 
-        // Sort the structure to push all files to the bottom of their folders
-        // this.sortTreeFoldersFirst(structureFolders)
-        // No, instead, create two arrays. Strip out the files from the folders 
-        // into their own array that gets displayed.
-        console.log(structureFolders)
-        // const normalizedTree = this.sortFoldersAndFiles(structureFolders)
-        // console.log(normalizedTree)
-
         // setting the newly filtered values as component data properties makes this
         // function much easier to test
         this.ga = ga
@@ -491,6 +483,14 @@ export default {
         }  
       }
     },
+    isNextItemAFile: function (array, id) {
+      const index = array.findIndex(item => item.id == id);
+      // If item is not found or there is no next item, return false
+      if (index === -1 || index + 1 >= array.length) {
+        return false;
+      }
+      return array[index + 1].file === true;
+    },
     moveDown: function () {
       const rootId = this.tree.structure.id
       if (this.tree.selected) {
@@ -500,6 +500,7 @@ export default {
         } else {
           const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
           const selected = this.findFolderById(folderList, this.tree.selected)
+          
           if(!selected.file) { // don't allow ordering if it's a file, only allow for folders
             let parentOfSelected = this.findParentFolderById(folderList, this.tree.selected)
             
@@ -508,15 +509,20 @@ export default {
               label: this.tree.structure.label,
               folders: null
             }
+            
+            structure.folders = folderList 
 
-            if(parentOfSelected === null) {
-              // this means it was reordered on the root node
-              structure.folders = folderList 
-              structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
+            if(parentOfSelected === null) { // this means it was reordered on the root node
+              // if the next item is a file, prevent move down console.log(parentOfSelected.folders)
+              if(!this.isNextItemAFile(structure.folders, this.tree.selected)){
+                structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
+              }
             } else {
-              // reorder folder in parentOfSelected
-              parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
-              structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+              // if the next item is a file, prevent move down
+              if(!this.isNextItemAFile(parentOfSelected.folders, this.tree.selected)){
+                parentOfSelected.folders = this.moveItemById(parentOfSelected.folders, this.tree.selected, 'down')
+                structure.folders = this.replaceObjectById(folderList, parentOfSelected.id, parentOfSelected)
+              }
             }
             this.$store.commit('MOVE_DOWN', structure)
           }

@@ -149,6 +149,13 @@ RSpec.feature "Structure Manager", js: true do
     test_file2 = find(".file-label", match: :first)
     expect(test_file2).to have_text("example2.tif")
 
+    # todo: write a test to make sure that files are always displayed at the bottom of the folder contents
+
+    # todo: write a test to make sure that if a file is the next item in the folder array, after a selected folder, 
+    # then MoveDown is disabled. 
+    # Example implementation with VueDraggable: https://codepen.io/naffarn/pen/KKdVRRE
+    
+
     # todo: write a test to make sure that grouped files are always ordered according 
     # to their resource member list
   end
