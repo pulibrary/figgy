@@ -49,7 +49,7 @@
     "gdal": "3.6.4",
     "tesseract_4": "latest",
     "mediainfo": "latest",
-    "ffmpeg": "4.4.2",
+    "ffmpeg": "8.0",
     "ocrmypdf": "latest",
     "nodejs": {
       "version": "22.11.0",

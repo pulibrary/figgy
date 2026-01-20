@@ -69,6 +69,18 @@ class AvDerivativeService
     end
   end
 
+  def type_specific_flags
+    if resource.video?
+      ["-c:v", "libx264"] # encode video with H.264
+    else
+      # Audio sometimes has cover art - just ignore it.
+      [
+        "-map", "0:a", # First stream is audio.
+        "-vn" # Disable video (the album art)
+      ]
+    end
+  end
+
   # rubocop:disable Metrics/MethodLength
   def generate_hls_derivatives(dir)
     _stdout, _stderr, status =
@@ -77,14 +89,13 @@ class AvDerivativeService
                      "-f", "hls", # HTTP Live Streaming output format
                      "-hls_list_size", "0", # playlist will contain all entries
                      "-hls_time", "10", # segments are 10s in length
-                     "-c:v", "libx264", # encode video with H.264
+                     *type_specific_flags,
                      "-preset", "slow", # slow encoding for better compression
                      "-crf", "20", # video quality from 0-51
                      "-vf", "format=yuv420p", # needed for Firefox. See: https://trac.ffmpeg.org/wiki/Encode/H.264#Encodingfordumbplayers
                      "-movflags", "+faststart", # good option for web video
                      "-c:a", "aac", # encode audio with AAC
                      "-b:a", "160k", # audio bitrate
-                     "-muxdelay", "0",
                      dir.join("hls.m3u8").to_s)
     return unless status.success?
     change_set.files = Dir[dir.join("*.ts")].map do |file|

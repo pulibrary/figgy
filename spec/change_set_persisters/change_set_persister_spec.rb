@@ -387,6 +387,7 @@ RSpec.describe ChangeSetPersister do
         members = query_service.find_members(resource: output)
 
         expect(members.first.original_file.duration).not_to be_blank
+        expect(members.first.original_file.duration).to eq ["23.123"]
         expect(members.first.original_file.mime_type).to eq ["audio/x-wav"]
         expect(members.first.original_file.checksum).not_to be_blank
       end

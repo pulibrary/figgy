@@ -49,6 +49,21 @@ RSpec.describe AvDerivativeService do
   end
 
   describe "#create_derivatives" do
+    context "when given an mp3 with album art", run_real_characterization: true do
+      let(:file) { fixture_file_upload("files/album_art_mp3.mp3", "audio/mpeg") }
+      it "creates HLS partials, ignoring the album art" do
+        derivative_service.new(id: valid_change_set.id).create_derivatives
+        reloaded = query_service.find_by(id: valid_resource.id)
+        derivative = reloaded.derivative_file
+
+        expect(derivative).to be_present
+        expect(derivative.mime_type).to eq ["application/x-mpegURL"]
+        derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
+        content = derivative_file.read
+        playlist = M3u8::Playlist.read(content)
+        expect(playlist.target).to eq 1
+      end
+    end
     context "when given a resource with a video", run_real_characterization: true do
       let(:file) { fixture_file_upload("files/city.mp4", "video/mp4") }
       it "creates HLS partials and attaches it to the fileset" do
@@ -59,7 +74,8 @@ RSpec.describe AvDerivativeService do
         expect(derivative).to be_present
         expect(derivative.mime_type).to eq ["application/x-mpegURL"]
         derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
-        expect(derivative_file.read).not_to be_blank
+        content = derivative_file.read
+        expect(content).not_to be_blank
 
         derivative_partials = reloaded.derivative_partial_files
         expect(derivative_partials.length).to eq 1
