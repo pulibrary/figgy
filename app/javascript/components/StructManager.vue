@@ -470,7 +470,7 @@ export default {
             }
 
             if(parentOfSelected === null) {
-              // this means it was reordered on the root node
+              // this means the root node is being re-ordered
               structure.folders = folderList 
               structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'up')
             } else {
