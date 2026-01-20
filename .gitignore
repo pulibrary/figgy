@@ -47,3 +47,4 @@ node_modules
 !devbox.lock
 !.envrc
 !/bin
+!/spec/fixtures/files/*
