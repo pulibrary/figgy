@@ -84,7 +84,6 @@ class AvDerivativeService
                      "-movflags", "+faststart", # good option for web video
                      "-c:a", "aac", # encode audio with AAC
                      "-b:a", "160k", # audio bitrate
-                     "-muxdelay", "0",
                      dir.join("hls.m3u8").to_s)
     return unless status.success?
     change_set.files = Dir[dir.join("*.ts")].map do |file|

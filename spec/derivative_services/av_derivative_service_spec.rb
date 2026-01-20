@@ -59,7 +59,8 @@ RSpec.describe AvDerivativeService do
         expect(derivative).to be_present
         expect(derivative.mime_type).to eq ["application/x-mpegURL"]
         derivative_file = Valkyrie::StorageAdapter.find_by(id: derivative.file_identifiers.first)
-        expect(derivative_file.read).not_to be_blank
+        content = derivative_file.read
+        expect(content).not_to be_blank
 
         derivative_partials = reloaded.derivative_partial_files
         expect(derivative_partials.length).to eq 1
