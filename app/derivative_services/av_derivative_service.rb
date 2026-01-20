@@ -80,7 +80,6 @@ class AvDerivativeService
     else
       # Audio sometimes has cover art - just ignore it.
       [
-        "-map", "0:a", # First stream is audio.
         "-vn" # Disable video (the album art)
       ]
     end
