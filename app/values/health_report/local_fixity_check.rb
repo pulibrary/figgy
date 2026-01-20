@@ -87,7 +87,7 @@ class HealthReport::LocalFixityCheck
 
     def generate_resources_hash(resources)
       resources.map do |resource|
-        title = resource.title.first.truncate(40)
+        title = resource.title.first.to_s.truncate(40)
         {
           title: title,
           url: polymorphic_path([:file_manager, resource])
