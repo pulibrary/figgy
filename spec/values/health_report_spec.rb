@@ -188,6 +188,24 @@ RSpec.describe HealthReport do
         expect(list[0][:url]).to include "catalog/#{resource.id}"
       end
     end
+
+    context "for a resource with a failed cloud fixity event and an RDF::Literal title" do
+      it "does not error listing unhealthy resources" do
+        fs1 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, member_ids: [fs1.id], title: RDF::Literal("Hungary around the clock", language: "en"))
+        create_preservation_object(resource_id: resource.id, event_status: Event::FAILURE, event_type: :cloud_fixity)
+
+        report = described_class.for(resource)
+        # Second check is cloud fixity
+        cloud_fixity_report = report.checks.second
+
+        list = cloud_fixity_report.unhealthy_resources
+        expect(list.count).to eq 1
+        expect(list[0][:title]).to eq "Hungary around the clock"
+        expect(list[0][:url]).to include "catalog/#{resource.id}"
+      end
+    end
+
     context "for a resource with a failed cloud fixity event on it's file set" do
       it "returns :needs_attention" do
         fs1 = create_file_set(cloud_fixity_status: Event::FAILURE)

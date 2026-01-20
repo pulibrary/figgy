@@ -109,7 +109,7 @@ class HealthReport::CloudFixityCheck
 
     def generate_resources_hash(resources)
       resources.map do |resource, klass|
-        title = resource.title.first.truncate(40)
+        title = resource.title.first.to_s.truncate(40)
         url = if klass == FileSet
                 polymorphic_path([:file_manager, resource])
               else
