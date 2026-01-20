@@ -4,6 +4,9 @@ require "rails_helper"
 RSpec.feature "Ephemera Boxes" do
   let(:user) { FactoryBot.create(:admin) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+  let(:change_set_persister) do
+    ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
+  end
   let(:ephemera_box) do
     res = FactoryBot.create_for_repository(:ephemera_box)
     adapter.persister.save(resource: res)
@@ -21,9 +24,6 @@ RSpec.feature "Ephemera Boxes" do
   context "when an ephemera box has been persisted with invalid data" do
     let(:change_set) do
       EphemeraBoxChangeSet.new(ephemera_box)
-    end
-    let(:change_set_persister) do
-      ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: Valkyrie.config.storage_adapter)
     end
 
     before do
