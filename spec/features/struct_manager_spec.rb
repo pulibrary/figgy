@@ -120,10 +120,14 @@ RSpec.feature "Structure Manager", js: true do
     page.all("button.toggle-edit")[1].click
     find("input.folder-label-input", match: :first).set("MyFolder")
     page.send_keys [:enter]
-    # page.all(".lux-structManager .folder-container")[1].click
     page.all("button.create-folder")[0].click
-    # expect(page.all(".folder-container .folder-label")[1]).to have_text("Untitled")
     expect(page.all(".lux-structManager .folder-container")[1]).to have_text("Untitled")
+    # TODO: do this for pasted folders as well
+    page.all(".lux-structManager .folder-container")[2].click
+    page.send_keys [:control, "x"]
+    page.all("button.create-folder")[0].click
+    page.send_keys [:control, "."]
+    expect(page.all(".lux-structManager .folder-container")[1]).to have_text("MyFolder")
 
     # test paste group of selected gallery items into new folder
     find(".lux-card", match: :first).click
@@ -149,8 +153,8 @@ RSpec.feature "Structure Manager", js: true do
     # test to make sure that file labels cannot be edited
     expect(page).not_to have_selector(".file-edit.toggle-edit")
 
-    # test to make sure that file items cannot be reordered 
-    # note: example2.tif is the first hit because it has been reordered through the 
+    # test to make sure that file items cannot be reordered
+    # note: example2.tif is the first hit because it has been reordered through the
     test_file = find(".file-label", match: :first)
     test_file.click
     expect(test_file).to have_text("example2.tif")
@@ -158,8 +162,8 @@ RSpec.feature "Structure Manager", js: true do
     test_file2 = find(".file-label", match: :first)
     expect(test_file2).to have_text("example2.tif")
 
-    # todo: write a test to make sure that if a file is the next item in the folder array, after a selected folder, 
-    # then MoveDown is does not change the item's position. 
+    # TODO: write a test to make sure that if a file is the next item in the folder array, after a selected folder,
+    # then MoveDown is does not change the item's position.
     # (Example DnD implementation with VueDraggable: https://codepen.io/naffarn/pen/KKdVRRE)
   end
 end

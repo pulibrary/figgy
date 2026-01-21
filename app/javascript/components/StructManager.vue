@@ -596,10 +596,10 @@ export default {
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
 
       if (this.tree.selected === rootId) {
-        folders.push(cutTreeStructure)
+        folders.unshift(cutTreeStructure)
         structure.folders = folders
       } else {
-        selectedFolderObject.folders.push(cutTreeStructure)
+        selectedFolderObject.folders.unshift(cutTreeStructure)
         structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject)
       }
 
