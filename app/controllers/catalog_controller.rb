@@ -144,6 +144,7 @@ class CatalogController < ApplicationController
     config.index.display_type_field = "human_readable_type_ssim"
     config.show.display_type_field = "human_readable_type_ssim"
     config.add_facet_field "member_of_collection_titles_ssim", label: "Collections", limit: 5
+    config.add_facet_field "parent_box_id_ssi", label: "Ephemera Box", limit: 0 # limit 0 makes it not visible on the search results page
     config.add_facet_field "human_readable_type_ssim", label: "Type of Work", limit: 5
     config.add_facet_field "ephemera_project_ssim", label: "Ephemera Project", limit: 5
     config.add_facet_field "display_subject_ssim", label: "Subject", limit: 5
