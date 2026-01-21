@@ -285,14 +285,14 @@ export default {
         folders: folderList
       }
       if (parentId === rootId) {
-        structure.folders.push(newFolder)
+        structure.folders.unshift(newFolder)
       } else {
         const parentFolderObject = this.findFolderById(folderList, parentId)
         if (parentFolderObject.file) {
           alert('Oops, looks like you tried to add a folder to a file. You can only add a new folder to another folder.')
           return false
         } else {
-          const newParent = parentFolderObject.folders.push(newFolder)
+          const newParent = parentFolderObject.folders.unshift(newFolder)
           structure.folders = this.addNewNode(folderList, newParent)
         }
       }
