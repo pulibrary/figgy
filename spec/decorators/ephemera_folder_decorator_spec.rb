@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe EphemeraFolderDecorator do
@@ -82,7 +81,6 @@ RSpec.describe EphemeraFolderDecorator do
     end
   end
 
-  # rubocop:disable RSpec/NestedGroups
   context "within a box" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: resource.id, state: "new") }
@@ -151,7 +149,6 @@ RSpec.describe EphemeraFolderDecorator do
       end
     end
   end
-  # rubocop:enable RSpec/NestedGroups
 
   context "within a project" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_folder) }

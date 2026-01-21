@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class IngestMETSJob < ApplicationJob
   attr_reader :mets
 

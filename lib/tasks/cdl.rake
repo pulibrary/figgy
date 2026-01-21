@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   namespace :cdl do
     desc "Active/Expire all CDL Holds"

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SourceMetadataIdentifierValidator < ActiveModel::Validator
   class InvalidMetadataIdentifierError < StandardError; end
 

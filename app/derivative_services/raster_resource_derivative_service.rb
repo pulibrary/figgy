@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class RasterResourceDerivativeService
   class Factory
     attr_reader :change_set_persister
@@ -79,7 +78,7 @@ class RasterResourceDerivativeService
   end
 
   def filename
-    return Pathname.new(file_object.disk_path) if file_object.respond_to?(:disk_path) && File.exist?(file_object.disk_path)
+    Pathname.new(file_object.disk_path) if file_object.respond_to?(:disk_path) && File.exist?(file_object.disk_path)
   end
 
   def instructions_for_cloud

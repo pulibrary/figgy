@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BulkIngestService::BulkFilePathConverter
   class BulkIngestFile
     attr_reader :file_path, :path_converter, :previous

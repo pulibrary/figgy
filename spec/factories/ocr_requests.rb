@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :ocr_request, class: OcrRequest do
     filename { "sample.pdf" }

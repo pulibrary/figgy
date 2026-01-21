@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SeleneIngestPathService
   attr_reader :path
   # @param path [Pathname] Full path to the selene directory

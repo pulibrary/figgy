@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CDL
   class Hold < Valkyrie::Resource
     attribute :netid, Valkyrie::Types::String

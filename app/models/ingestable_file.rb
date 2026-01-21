@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class IngestableFile < Valkyrie::Resource
   delegate_missing_to :opened_file
   attribute :file_path, Valkyrie::Types::String

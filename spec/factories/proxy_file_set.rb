@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 FactoryBot.define do
   factory :proxy_file_set do
     sequence(:label) { |x| "File Set #{x}" }

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe "records/edit_fields/_ocr_language.html.erb" do

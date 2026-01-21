@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileSetDecorator < Valkyrie::ResourceDecorator
   display :height,
           :width,

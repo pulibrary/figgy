@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Events track preservation fixity check activities.
 # Multiple current Events will correspond to a given PreservationObject if that preservation object has both metadata and binary files.
 class Event < Valkyrie::Resource

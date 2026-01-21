@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class OrangelightReindexer
   # Reindexes resources indexed into Orangelight by sending record updated messages
   # for all complete resources.

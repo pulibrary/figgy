@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CaptionChangeSet < Valkyrie::ChangeSet
   property :caption_language, multiple: true, type: Valkyrie::Types::Set, required: true
   property :change_set, required: true, default: "caption"

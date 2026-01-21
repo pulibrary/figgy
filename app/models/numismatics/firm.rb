@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class Firm < Resource
     include Valkyrie::Resource::AccessControls

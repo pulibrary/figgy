@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 ##
 # Defining a common superset of attributes for Resources
 module Schema

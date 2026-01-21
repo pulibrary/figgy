@@ -1,11 +1,8 @@
-# frozen_string_literal: true
 class CloudFixityJob < ApplicationJob
   queue_as :super_low
   delegate :query_service, to: :change_set_persister
 
   attr_reader :preservation_object_id, :child_property, :child_id, :fixity_status
-  # rubocop:disable Style/GuardClause
-  # rubocop:disable Metrics/MethodLength
   def perform(status:, preservation_object_id:, child_property:, child_id:)
     @fixity_status = status
     @preservation_object_id = preservation_object_id
@@ -34,8 +31,6 @@ class CloudFixityJob < ApplicationJob
       RepairCloudFixityJob.perform_later(event_id: event.id.to_s)
     end
   end
-  # rubocop:enable Style/GuardClause
-  # rubocop:enable Metrics/MethodLength
 
   private
 

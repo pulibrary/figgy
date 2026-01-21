@@ -10,11 +10,11 @@ def select_triples(reader, value)
                         # There are multiple terms with the same predicate
                         # so add object values to an array
                         Array.wrap(acc[predicate]) << object
-                      else
+    else
                         # the is only only a single term with this predicate
                         # so it's is a single object value
                         object
-                      end
+    end
 
     acc
   end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class JP2Creator
   attr_reader :filename
   def initialize(filename:)

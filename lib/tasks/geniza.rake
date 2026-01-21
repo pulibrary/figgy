@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   namespace :geniza do
     desc "Consolidate a Geniza item into a mvw"

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ApplicationController < ActionController::Base
   # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
@@ -62,7 +61,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Named as such due to namespace conflict with Hydra::Controller::DownloadBehavior
-  def render_figgy_404 # rubocop:disable Naming/VariableNumber
+  def render_figgy_404
     respond_to do |format|
       format.html { render "errors/not_found", status: :not_found }
       format.json { head :not_found }
@@ -120,9 +119,9 @@ class ApplicationController < ActionController::Base
 
     config = if resource.decorate.downloadable?
                default_exhibit_uv_config
-             else
+    else
                downloads_disabled_exhibit_uv_config
-             end
+    end
 
     respond_to do |format|
       format.html { render json: config }

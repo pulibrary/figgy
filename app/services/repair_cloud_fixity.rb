@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Fixes cloud files by represerving local files if they are good
 class RepairCloudFixity
   def self.run(event:)

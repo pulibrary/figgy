@@ -1,5 +1,5 @@
 # lazy define (i.e. with `let`) in the including spec:
-#  factory 
+#  factory
 #  extra_params (beyond id)
 RSpec.shared_examples "an access controlled update request" do
   context "when not logged in" do

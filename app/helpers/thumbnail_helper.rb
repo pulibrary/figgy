@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module ThumbnailHelper
   include ::BlacklightHelper
 
@@ -65,8 +64,6 @@ module ThumbnailHelper
     image_tag url, image_options.merge(onerror: default_icon_fallback)
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   def iiif_thumbnail_path(document, image_options = {})
     if document.thumbnail_id.blank?
       return unless document.respond_to?(:member_ids)
@@ -78,8 +75,6 @@ module ThumbnailHelper
 
       return nil
     end
-    # rubocop:enable Metrics/CyclomaticComplexity
-    # rubocop:enable Metrics/PerceivedComplexity
 
     id = Array(document.thumbnail_id).first
     return build_iiif_thumbnail_path(document, image_options) if id == document.id

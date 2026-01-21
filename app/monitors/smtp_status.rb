@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SmtpStatus < HealthMonitor::Providers::Base
   class << self
     attr_writer :next_check_timestamp

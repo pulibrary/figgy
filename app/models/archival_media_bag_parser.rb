@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # get all the data files, provide lookups based on component and barcode
 class ArchivalMediaBagParser
   BARCODE_WITH_SIDE_REGEX = /(\d{14}_\d+)_.*/

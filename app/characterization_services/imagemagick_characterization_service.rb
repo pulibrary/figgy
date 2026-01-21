@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for ImageMagick based file characterization service
 # defines the ImageMagick based characterization service a ValkyrieFileCharacterization service
 class ImagemagickCharacterizationService
@@ -48,7 +46,7 @@ class ImagemagickCharacterizationService
   # Determines the location of the file on disk for the file_set
   # @return Pathname
   def filename
-    return Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
+    Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
   end
 
   def file_characterization_attributes

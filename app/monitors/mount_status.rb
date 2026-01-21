@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class MountStatus < HealthMonitor::Providers::Base
   def check!
     system_mounts = Sys::Filesystem.mounts.map(&:mount_point)

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindVideoMembers
   def self.queries
     [:find_video_members]

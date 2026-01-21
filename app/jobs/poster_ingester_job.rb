@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PosterIngesterJob < ApplicationJob
   def perform(file, project_label)
     file = File.open(file)

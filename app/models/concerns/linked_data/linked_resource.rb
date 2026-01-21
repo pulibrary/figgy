@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Superclass for most LinkedData resources. Provides a generic implementation
 # for `#to_jsonld` and `#as_jsonld`. Subclasses are expected to override
 # `#properties`

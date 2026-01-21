@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CDL
   class ChargedItem < Valkyrie::Resource
     attribute :item_id, Valkyrie::Types::String

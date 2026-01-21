@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindDeepChildrenWithProperty
   def self.queries
     [:find_deep_children_with_property]

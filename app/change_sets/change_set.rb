@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "reform/form/active_model/form_builder_methods"
 class ChangeSet < Valkyrie::ChangeSet
   class NotFoundError < RuntimeError; end

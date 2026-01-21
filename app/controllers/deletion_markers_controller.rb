@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class DeletionMarkersController < ResourcesController
   self.resource_class = DeletionMarker
   self.change_set_persister = ::ChangeSetPersister.new(

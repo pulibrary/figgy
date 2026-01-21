@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ScannedResourcesController < ResourcesController
   self.resource_class = ScannedResource
   self.change_set_persister = ChangeSetPersister.default
@@ -88,9 +87,9 @@ class ScannedResourcesController < ResourcesController
     Rails.cache.fetch("#{ManifestKey.for(resource)}/#{flatten}/#{auth_token_param}") do
       builder_klass = if Wayfinder.for(resource).first_member.try(:av?)
                         ManifestBuilderV3
-                      else
+      else
                         ManifestBuilder
-                      end
+      end
       builder_klass.new(resource, auth_token_param, nil, flatten).build.to_json
     end
   end
@@ -109,9 +108,9 @@ class ScannedResourcesController < ResourcesController
     # Only allow deleting recordings whose tracks are not in playlists.
     playlists = if @change_set.is_a?(RecordingChangeSet)
                   Wayfinder.for(@change_set.resource).playlists
-                else
+    else
                   []
-                end
+    end
     if playlists.count.positive?
       playlist_ids = playlists.map(&:id).join(", ")
       flash[:alert] = "Unable to delete a recording with tracks in a playlist. Please remove this recording's tracks from the following playlists: #{playlist_ids}"

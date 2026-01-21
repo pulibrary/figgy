@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ProcessedValidator < ActiveModel::Validator
   def validate(record)
     workflow = record.workflow_class.new(record.old_state)

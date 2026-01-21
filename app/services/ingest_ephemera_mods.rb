@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class IngestEphemeraMODS
   attr_accessor :project_id, :mods, :dir, :change_set_persister, :logger
   delegate :query_service, to: :change_set_persister

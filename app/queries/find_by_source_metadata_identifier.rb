@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindBySourceMetadataIdentifier
   def self.queries
     [:find_by_source_metadata_identifier, :find_by_source_metadata_identifiers]

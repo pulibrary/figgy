@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 Rails.application.routes.draw do
   mount HealthMonitor::Engine, at: "/"
   concern :searchable, Blacklight::Routes::Searchable.new

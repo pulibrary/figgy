@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraProject < Resource
   include Valkyrie::Resource::AccessControls
   attribute :member_ids, Valkyrie::Types::Array

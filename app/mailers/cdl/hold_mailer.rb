@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CDL
   class HoldMailer < ApplicationMailer
     layout "holds/mailer"

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CDL
   class CompleteMailer < ApplicationMailer
     def resources_completed

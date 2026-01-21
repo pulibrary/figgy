@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class PeopleController < ResourcesController
     self.resource_class = Numismatics::Person
@@ -24,7 +23,7 @@ module Numismatics
 
       def load_numismatic_people
         @numismatic_people = query_service.find_all_of_model(model: Numismatics::Person).map(&:decorate)
-        return [] if @numismatic_people.to_a.blank?
+        [] if @numismatic_people.to_a.blank?
       end
   end
 end

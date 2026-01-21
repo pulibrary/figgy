@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class DeepCloudFixityCount
   def self.queries
     [:deep_cloud_fixity_count, :deep_cloud_fixity_member_ids]

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   attr_reader :resource, :services
 

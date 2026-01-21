@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PDFGenerator
   class CoverPageGenerator
     attr_reader :pdf_generator
@@ -82,9 +81,9 @@ class PDFGenerator
         resource_link = if resource.decorate.public_readable_state? && resource.identifier
                           identifier = Ark.new(resource.identifier.first)
                           identifier.uri
-                        else
+        else
                           IdentifierService.url_for(resource)
-                        end
+        end
 
         prawn_document.text "Available Online at: <u><a href='#{resource_link}'>#{resource_link}</a></u>", inline_format: true
       end

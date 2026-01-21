@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 ##
 # Defines the attributes migrated from MARC Relators
 module Schema

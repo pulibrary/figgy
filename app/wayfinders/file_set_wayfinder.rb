@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileSetWayfinder < BaseWayfinder
   relationship_by_property :members, property: :member_ids
   relationship_by_property :scanned_resources, property: :member_ids, model: ScannedResource

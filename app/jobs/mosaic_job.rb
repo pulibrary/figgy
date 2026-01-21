@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class MosaicJob < ApplicationJob
   class JobRunning < StandardError; end
   discard_on TileMetadataService::Error

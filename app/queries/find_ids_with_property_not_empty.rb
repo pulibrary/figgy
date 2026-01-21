@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindIdsWithPropertyNotEmpty
   def self.queries
     [:find_ids_with_property_not_empty]

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Updates an s3 object ACL based on resource visibilty
 class CloudFilePermissionsService
   attr_reader :resource, :key, :region, :bucket

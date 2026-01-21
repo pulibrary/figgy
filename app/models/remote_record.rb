@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class RemoteRecord
   # Factory method for Catalog and PulfaRecord objects
   # @param source_metadata_identifier [String]

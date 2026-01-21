@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 FactoryBot.define do
   factory :numismatic_place, class: Numismatics::Place do
     city { "city" }

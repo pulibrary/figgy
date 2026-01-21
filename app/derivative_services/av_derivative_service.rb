@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Generates MP3s from uploaded WAV files.
 # @note This will not generate files for any Resource that stores its primary
 # file as a PreservationFile instead of an original file.
@@ -85,7 +84,6 @@ class AvDerivativeService
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
   def generate_hls_derivatives(dir)
     _stdout, _stderr, status =
       Open3.capture3("ffmpeg", "-y",
@@ -110,7 +108,6 @@ class AvDerivativeService
     end.inject(&:merge)
     [output, built_files]
   end
-  # rubocop:enable Metrics/MethodLength
 
   def helper
     @helper ||= ManifestBuilder::ManifestHelper.new

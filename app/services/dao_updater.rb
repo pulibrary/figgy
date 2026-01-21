@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DaoUpdater
   attr_reader :change_set, :change_set_persister
   def initialize(change_set:, change_set_persister:)

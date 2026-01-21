@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Remove stale PDFs from ScannedResources when the resource has changed
 class ChangeSetPersister
   class CleanupPdfs

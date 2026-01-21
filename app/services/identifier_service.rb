@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class IdentifierService
   def self.mint_or_update(resource:)
     if resource.respond_to?(:geo_resource?) && resource.geo_resource?

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Figgy
   def config
     @config ||= config_yaml.with_indifferent_access

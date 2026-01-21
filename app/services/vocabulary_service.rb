@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class VocabularyService
   attr_accessor :change_set_persister, :persist_if_not_found, :imported_vocabulary
   delegate :metadata_adapter, to: :change_set_persister

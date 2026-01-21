@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module CDL
   class Status
     attr_reader :charge_manager, :user

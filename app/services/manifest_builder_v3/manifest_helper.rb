@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   # Class providing helper methods for the IIIF::Presentation::Manifest
   class ManifestHelper

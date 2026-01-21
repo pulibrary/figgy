@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   desc "Installs ASpace access key into .env via lastpass."
   task setup_keys: :environment do

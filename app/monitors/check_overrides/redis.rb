@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CheckOverrides::Redis < HealthMonitor::Providers::Base
   def check!
     redis.with(&:ping)

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Migrations
   class MapCopyrightMigrator
     def self.call

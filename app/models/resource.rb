@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Resource < Valkyrie::Resource
   enable_optimistic_locking
   def self.human_readable_type

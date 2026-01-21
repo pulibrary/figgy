@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BoxlessEphemeraFolderChangeSet < EphemeraFolderChangeSetBase
   def self.new(record, *args)
     return ChangeSet.for(record, *args) unless record.is_a?(EphemeraFolder)

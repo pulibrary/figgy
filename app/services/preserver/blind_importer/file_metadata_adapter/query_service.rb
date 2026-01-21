@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Preserver::BlindImporter::FileMetadataAdapter
   # This is a small version of a Valkyrie QueryService purely used to support
   # the read-only requirements of Preserver::BlindImporter.

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Decorates geo resources for generation of geoblacklight document.
 # Forwards geo attributes to an object containing merged direct and imported attribute values.
 class GeoblacklightMetadataDecorator < SimpleDelegator

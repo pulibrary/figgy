@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Generated with `rails generate valkyrie:model ProxyResource`
 class ProxyFileSet < Resource
   include Valkyrie::Resource::AccessControls

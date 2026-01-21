@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # config valid only for current version of Capistrano
 # lock '3.4.0'
 
@@ -51,7 +49,7 @@ task :write_version do
     end
   end
 end
-after 'deploy:log_revision', 'write_version'
+after "deploy:log_revision", "write_version"
 namespace :sidekiq do
   task :quiet do
     # Horrible hack to get PID without having to use terrible PID files
@@ -150,7 +148,7 @@ namespace :deploy do
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       within release_path do
-        execute :rake, 'figgy:cache:clear'
+        execute :rake, "figgy:cache:clear"
       end
     end
   end

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 FactoryBot.define do
   factory :scanned_resource do
     title { "Title" }

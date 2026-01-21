@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class FiggyUtils
   def self.with_rescue(exceptions, retries: 5)
     try = 0

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "json-schema"
 
 module GeoDiscovery
@@ -42,7 +41,6 @@ module GeoDiscovery
         document_hash_required.merge(document_hash_optional)
       end
 
-      # rubocop:disable Metrics/MethodLength
       def document_hash_optional
         {
           dc_description_s: description,
@@ -66,7 +64,6 @@ module GeoDiscovery
           rights_statement_s: rendered_rights_statement
         }
       end
-      # rubocop:enable Metrics/MethodLength
 
       def document_hash_required
         {
@@ -117,7 +114,6 @@ module GeoDiscovery
 
       # Builds the dct_references hash.
       # @return [Hash] geoblacklight references as a hash
-      # rubocop:disable Metrics/MethodLength
       def references
         {
           "http://schema.org/url" => url,
@@ -134,7 +130,6 @@ module GeoDiscovery
           "https://github.com/cogeotiff/cog-spec" => cog_path
         }
       end
-      # rubocop:enable Metrics/MethodLength
 
       def restricted_visibility
         Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED

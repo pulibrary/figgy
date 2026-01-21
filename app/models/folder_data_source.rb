@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FolderDataSource
   attr_reader :resource, :helper
   delegate :decorated_folders_with_genres, to: :resource

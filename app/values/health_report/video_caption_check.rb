@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class HealthReport::VideoCaptionCheck
   def self.for(resource)
     new(resource: resource)

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Factories in Factory Bot doesn't return the value returned via `to_create`.
 # This custom strategy is necessary to enable data mapper patterns in Factory
 # Bot.

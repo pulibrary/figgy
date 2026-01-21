@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraFoldersController < ResourcesController
   self.resource_class = EphemeraFolder
   self.change_set_persister = ::ChangeSetPersister.new(
@@ -73,9 +72,9 @@ class EphemeraFoldersController < ResourcesController
     Rails.cache.fetch("#{ManifestKey.for(resource)}/#{auth_token_param}") do
       builder_klass = if Wayfinder.for(resource).first_member.try(:av?)
                         ManifestBuilderV3
-                      else
+      else
                         ManifestBuilder
-                      end
+      end
       builder_klass.new(resource, auth_token_param).build.to_json
     end
   end

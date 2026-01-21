@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateOcrRequestJob < ApplicationJob
   queue_as :high
 

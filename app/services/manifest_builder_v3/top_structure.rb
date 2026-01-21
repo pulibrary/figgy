@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   # Presenter modeling the top node of nested structure resource trees
   class TopStructure

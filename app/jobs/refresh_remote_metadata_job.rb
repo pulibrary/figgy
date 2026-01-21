@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class RefreshRemoteMetadataJob < ApplicationJob
   queue_as :low
   delegate :query_service, to: :change_set_persister

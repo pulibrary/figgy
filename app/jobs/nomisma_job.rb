@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class NomismaJob < ApplicationJob
   discard_on ActiveRecord::RecordNotFound
 

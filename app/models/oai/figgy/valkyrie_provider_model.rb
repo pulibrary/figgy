@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module OAI::Figgy
   class ValkyrieProviderModel < OAI::Provider::Model
     def self.limit

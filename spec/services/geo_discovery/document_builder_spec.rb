@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 # See https://github.com/geoblacklight/geoblacklight/wiki/Schema

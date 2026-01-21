@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CollectionWayfinder < BaseWayfinder
   inverse_relationship_by_property :members, property: :member_of_collection_ids
 

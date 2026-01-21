@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require_relative "figgy"
 
 Rails.application.config.to_prepare do

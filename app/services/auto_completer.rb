@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Finds resources which are marked to be completed when processed, makes sure
 # they have files, and makes sure those files are processed, then completes them
 # if so.

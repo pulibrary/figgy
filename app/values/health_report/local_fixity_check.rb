@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Checks that local fixity checks for all sub-files are reporting success.
 class HealthReport::LocalFixityCheck
   include ActionDispatch::Routing::PolymorphicRoutes

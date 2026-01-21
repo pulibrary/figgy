@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module GeoDerivatives
   module Processors
     module BaseGeoProcessor
@@ -16,7 +15,6 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param method_queue [Array] set of commands to run
         # @param options [Hash] creation options to pass
-        # rubocop:disable Metrics/MethodLength
         def self.run_commands(in_path, out_path, method_queue, options)
           next_step = method_queue.shift
           temp = temp_path(out_path)
@@ -34,7 +32,6 @@ module GeoDerivatives
             raise e
           end
         end
-        # rubocop:enable Metrics/MethodLength
 
         # Returns a path to an intermediate temp file or directory.
         # @param path [String] input file path to base temp path on

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Please do not make direct changes to this file!
 # This generator is maintained by the community around simple_form-bootstrap:
 # https://github.com/rafaelfranca/simple_form-bootstrap

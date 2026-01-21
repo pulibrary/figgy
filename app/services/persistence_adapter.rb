@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PersistenceAdapter
   def initialize(change_set_persister:, model:, change_set: nil)
     @change_set_persister = change_set_persister

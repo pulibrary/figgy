@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "find"
 namespace :figgy do
   namespace :migrate do

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe CatalogController, type: :controller do
@@ -961,9 +960,7 @@ RSpec.describe CatalogController, type: :controller do
 
     context "when accessing from a campus IP" do
       before do
-        # rubocop:disable RSpec/AnyInstance
         allow_any_instance_of(ActionController::TestRequest).to receive(:remote_ip).and_return("128.112.64.224")
-        # rubocop:enable RSpec/AnyInstance
       end
 
       it "allows access to jsonld for an on-campus resource" do

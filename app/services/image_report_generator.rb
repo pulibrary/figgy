@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Generates a report of image and resource counts for the given collections over
 # the given date range, split by visibility. This report is used for informing
 # Special Collections about how many images were taken for them.

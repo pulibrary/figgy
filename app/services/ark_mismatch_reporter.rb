@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ArkMismatchReporter
   def self.write(output_path: Rails.root.join("tmp", "ark_mismatch_report.csv"))
     new(output_path: output_path, logger: Logger.new(STDOUT)).write

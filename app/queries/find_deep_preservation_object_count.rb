@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindDeepPreservationObjectCount
   def self.queries
     [:find_deep_preservation_object_count]

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class WorkflowActionsPresenter
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper
@@ -46,7 +45,6 @@ class WorkflowActionsPresenter
       end
     end
 
-    # rubocop:disable Rails/OutputSafety
     def update_final_state_message
       index = collection.find_index { |s| s.value == final_state }
       return collection unless index
@@ -55,7 +53,6 @@ class WorkflowActionsPresenter
       collection[index] = term
       collection
     end
-    # rubocop:enable Rails/OutputSafety
 
     def in_process_message
       "Resource can't be completed while derivatives are in-process"

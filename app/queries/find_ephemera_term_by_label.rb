@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindEphemeraTermByLabel
   def self.queries
     [:find_ephemera_term_by_label]

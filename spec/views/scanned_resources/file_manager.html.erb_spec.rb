@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe "base/file_manager.html.erb", type: :view do
@@ -7,7 +6,7 @@ RSpec.describe "base/file_manager.html.erb", type: :view do
   let(:member) { FileSetChangeSet.new(Wayfinder.for(scanned_resource).members_with_parents.first) }
   let(:parent) { ScannedResourceChangeSet.new(scanned_resource) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
-  let(:event) {}
+  let(:event) { }
 
   before do
     stub_ezid

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class OrangelightCoinBuilder
   include ThumbnailHelper
 
@@ -26,8 +25,6 @@ class OrangelightCoinBuilder
       end
     end
 
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/MethodLength
     def document_hash
       document_coin_hash.merge(document_parent_hash) if document_parent_hash.present?
     end
@@ -143,8 +140,6 @@ class OrangelightCoinBuilder
         document_id: monogram.id.to_s
       }
     end
-    # rubocop:enable Metrics/MethodLength
-    # rubocop:enable Metrics/AbcSize
 
     def coin_location_code
       "rare$num"
@@ -160,7 +155,7 @@ class OrangelightCoinBuilder
 
     def initial_capital(value)
       return unless value
-      return value.map(&:upcase_first) if value.is_a? Array
+      value.map(&:upcase_first) if value.is_a? Array
     end
 
     class NoParentException < StandardError; end

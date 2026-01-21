@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Preserver
   class Importer
     attr_reader :metadata_file_identifier, :binary_file_identifiers, :storage_adapter, :change_set_persister
@@ -94,7 +92,7 @@ class Preserver
 
       def filename_from_metadata(file_identifier)
         file_metadata = file_set.file_metadata.find { |fm| file_identifier.id.include? fm.id.id }
-        return file_metadata.original_filename.first if file_metadata
+        file_metadata.original_filename.first if file_metadata
       end
 
       def default_storage_adapter

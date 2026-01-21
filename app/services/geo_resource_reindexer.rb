@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class GeoResourceReindexer
   # Reindexes GeoBlacklight by sending record updated messages
   # for all complete geo resources.

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for Apache Tika based file characterization service
 # defines the Apache Tika based characterization service a ValkyrieFileCharacterization service
 class DefaultCharacterizationService

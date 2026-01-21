@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Calculates a unique cache key for use with `Rails.cache.fetch` which
 # auto-invalidates when the resource or its children change.
 class ManifestKey

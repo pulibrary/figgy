@@ -1,4 +1,3 @@
-# frozen_string_literal: false
 class ScannedMapDecorator < Valkyrie::ResourceDecorator
   display Schema::Geo.attributes,
           :ark,

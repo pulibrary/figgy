@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BulkIngestIntermediateService
   # @param [Symbol] property the metadata property used to link the file to an existing resource
   # @param [Logger] logger for the jobs

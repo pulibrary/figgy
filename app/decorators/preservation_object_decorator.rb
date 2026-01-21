@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PreservationObjectDecorator < Valkyrie::ResourceDecorator
   def preserved_resources
     wayfinder.decorated_preserved_resources

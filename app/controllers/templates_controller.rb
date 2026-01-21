@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class TemplatesController < ResourcesController
   self.resource_class = Template
   self.change_set_persister = ::ChangeSetPersister.new(

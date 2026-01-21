@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class OCRRequestsController < ApplicationController
   before_action :set_ocr_request, only: [:destroy, :show]
 

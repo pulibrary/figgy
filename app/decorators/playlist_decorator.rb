@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PlaylistDecorator < Valkyrie::ResourceDecorator
   display :title,
           :visibility

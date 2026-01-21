@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Note to use these in your test you'll need to set with_queue_adapter :inline
 def create_preserved_resource
   change_set_persister = ChangeSetPersister.default

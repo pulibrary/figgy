@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class MonogramsController < ResourcesController
     self.resource_class = Numismatics::Monogram
@@ -34,7 +33,7 @@ module Numismatics
 
       def load_numismatic_monograms
         @numismatic_monograms = query_service.find_all_of_model(model: Numismatics::Monogram).map(&:decorate)
-        return [] if @numismatic_monograms.to_a.blank?
+        [] if @numismatic_monograms.to_a.blank?
       end
   end
 end

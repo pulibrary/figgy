@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindMissingThumbnailResources
   # Access the list of methods exposed for the query
   # @return [Array<Symbol>] query method signatures

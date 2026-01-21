@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class MmsReportGenerator::ReportResource
   # Database fields we need to generate the fields for this report
   def self.resource_fields

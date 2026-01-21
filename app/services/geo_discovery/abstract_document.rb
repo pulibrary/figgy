@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-# frozen_string_literal: true
 module GeoDiscovery
   class AbstractDocument
     attr_accessor :access_rights, :all_subject, :call_number, :cog_path, :creator,

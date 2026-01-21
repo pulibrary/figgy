@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Bagit
   class BagFactory
     attr_reader :adapter

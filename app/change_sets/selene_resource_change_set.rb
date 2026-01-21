@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SeleneResourceChangeSet < ChangeSet
   apply_workflow(BookWorkflow)
   delegate :human_readable_type, to: :resource

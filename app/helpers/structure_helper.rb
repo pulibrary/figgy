@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module StructureHelper
   def structure_page_header
     h = tag.h1("Structure Manager")

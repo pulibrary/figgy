@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class HlsManifest::Caption
   # Creates an HLS manifest for the caption VTT file given in file_metadata.
   attr_reader :file_set, :file_metadata, :auth_token

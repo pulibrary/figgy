@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BulkEditController < ApplicationController
   include Blacklight::Searchable
   include ::Hydra::Catalog

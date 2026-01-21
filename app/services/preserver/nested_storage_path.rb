@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Preserver
   class NestedStoragePath
     attr_reader :base_path
@@ -13,7 +12,7 @@ class Preserver
 
     def nested_path(resource)
       parent = Wayfinder.for(resource).try(:parent)
-      return(nested_path(parent) + ["data", resource.id.to_s]) if parent
+      return (nested_path(parent) + ["data", resource.id.to_s]) if parent
       [resource.id.to_s]
     end
   end

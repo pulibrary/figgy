@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   # See: https://iiif.io/api/presentation/3.0/#seealso
   class SeeAlsoBuilder < ManifestBuilder::SeeAlsoBuilder

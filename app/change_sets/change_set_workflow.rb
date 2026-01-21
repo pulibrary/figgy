@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module ChangeSetWorkflow
   extend ActiveSupport::Concern
   included do

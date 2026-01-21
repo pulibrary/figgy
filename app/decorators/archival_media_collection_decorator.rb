@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ArchivalMediaCollectionDecorator < CollectionDecorator
   display Schema::Common.attributes
   suppress :source_jsonld, :source_metadata

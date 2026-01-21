@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindProjectFolders
   def self.queries
     [:find_project_folders]

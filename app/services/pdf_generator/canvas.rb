@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PDFGenerator
   class Canvas
     # Letter width/height in points for a PDF.

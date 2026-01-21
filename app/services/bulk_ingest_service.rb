@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BulkIngestService
   attr_reader :change_set_persister, :logger, :change_set_param
   delegate :metadata_adapter, to: :change_set_persister
@@ -150,9 +149,9 @@ class BulkIngestService
     def find_by(property:, value:)
       results = if property.to_sym == :id
                   [query_service.find_by(id: Valkyrie::ID.new(value.to_s))]
-                else
+      else
                   property_query_service.find_by_property(property: property, value: value).to_a
-                end
+      end
       raise "Failed to find the resource for #{property}:#{value}" if results.empty?
       results.first
     rescue => error

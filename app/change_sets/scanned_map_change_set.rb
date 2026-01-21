@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # TODO: don't inherit from scanned resource, just copy properties?
 class ScannedMapChangeSet < ScannedResourceChangeSet
   include GeoChangeSetProperties
@@ -11,7 +10,6 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
   property :gbl_suppressed_override, multiple: false, required: false
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 
-  # rubocop:disable Metrics/MethodLength
   def primary_terms
     [
       :title,
@@ -39,5 +37,4 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :embargo_date
     ]
   end
-  # rubocop:enable Metrics/MethodLength
 end

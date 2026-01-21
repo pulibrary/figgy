@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class VocabularyValidator < ActiveModel::Validator
   def validate(record)
     validate_vocabulary record

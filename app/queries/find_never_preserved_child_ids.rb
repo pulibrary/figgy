@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindNeverPreservedChildIds
   def self.queries
     [:find_never_preserved_child_ids]

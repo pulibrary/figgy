@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class PdfOcrJob < ApplicationJob
   queue_as :high
   attr_reader :blob, :out_path, :resource

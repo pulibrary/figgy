@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "json"
 
 # Generates a report of DPUL success metrics given a date range

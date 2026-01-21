@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class modeling METS Documents
 # @see https://www.loc.gov/standards/mets/
 class METSDocument
@@ -107,7 +105,7 @@ class METSDocument
   # @return [String]
   def label_for_volume(volume_id)
     volume_node = volume_nodes.find { |vol| vol.attribute("ID").value == volume_id }
-    return volume_node.attribute("LABEL").value if volume_node
+    volume_node.attribute("LABEL").value if volume_node
   end
 
   # For a given volume ID, retrieve the information for each file associated
@@ -188,7 +186,6 @@ class METSDocument
 
   # Generate the metadata attributes for the resource being described
   # @return [Hash]
-  # rubocop:disable Metrics/AbcSize
   def attributes
     return {} if mods.nil?
     {
@@ -225,7 +222,6 @@ class METSDocument
       publisher: mods.publisher
     }
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 

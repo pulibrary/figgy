@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This is a null object
 module LinkedData
   class Literal

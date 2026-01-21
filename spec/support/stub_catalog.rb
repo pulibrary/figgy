@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module CatalogStubbing
   BIBDATA_SCHEME = "https"
   BIBDATA_HOST = "catalog.princeton.edu"

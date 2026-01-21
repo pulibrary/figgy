@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FallbackDiskAdapter
   attr_reader :primary_adapter, :fallback_adapter
   delegate :handles?, :supports?, :find_by, :delete, :upload, :base_path, :file_path, :protocol, :file_mover, to: :primary_adapter

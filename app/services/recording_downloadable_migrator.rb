@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class RecordingDownloadableMigrator
   def self.call
     recordings = query_service.custom_queries.find_by_property(property: :change_set, value: "recording")

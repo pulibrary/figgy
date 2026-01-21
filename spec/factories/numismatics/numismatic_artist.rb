@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 FactoryBot.define do
   factory :numismatic_artist, class: Numismatics::Artist do
     signature { "signature" }

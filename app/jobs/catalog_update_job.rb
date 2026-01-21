@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CatalogUpdateJob < ApplicationJob
   # Update all resources with Catalog metadata
   # @param ids [Array<String>]

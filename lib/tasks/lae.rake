@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   namespace :lae do
     desc "Ingest one or more LAE folders"

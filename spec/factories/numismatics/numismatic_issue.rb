@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 FactoryBot.define do
   factory :numismatic_issue, class: Numismatics::Issue do
     denomination { ["40 nummi"] }

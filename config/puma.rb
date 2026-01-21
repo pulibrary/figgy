@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server
 
 # The environment variable WEB_CONCURRENCY may be set to a default value based

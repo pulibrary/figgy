@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class IngestMapFolderJob < ApplicationJob
   def perform(directory:, **attributes)
     Rails.logger.info "Ingesting folder #{directory}"

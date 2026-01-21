@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module ApplicationHelper
   include ::BlacklightHelper
   include ::Blacklight::LayoutHelperBehavior
@@ -228,11 +227,11 @@ module ApplicationHelper
 
     link_url = if query_params.blank?
                  search_action_path(only_path: true)
-               else
+    else
                  # This handles cases where the previous query has been cleared
                  query_params[:q] = "" unless query_params.key?("q")
                  scope.url_for(query_params)
-               end
+    end
 
     label = opts.delete(:label)
     label ||= t("blacklight.back_to_bookmarks") if /bookmarks/.match?(link_url)

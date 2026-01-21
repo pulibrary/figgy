@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Types::RasterResourceType < Types::BaseObject
   implements Types::Resource
 

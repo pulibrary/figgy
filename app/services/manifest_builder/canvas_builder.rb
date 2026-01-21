@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilder
   class CanvasBuilder < IIIFManifest::ManifestBuilder::CanvasBuilder
     def apply_record_properties

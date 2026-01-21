@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileMetadata < Valkyrie::Resource
   def self.supports_save_and_duplicate?
     false
@@ -141,9 +140,9 @@ class FileMetadata < Valkyrie::Resource
   def caption_language_label
     label = if caption_language.count > 1
               "Multilingual"
-            else
+    else
               ControlledVocabulary.for(:language).label(caption_language&.first)
-            end
+    end
 
     return label unless original_language_caption
     "#{label} (Original)"

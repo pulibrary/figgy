@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class IssueWayfinder < BaseWayfinder
     relationship_by_property :masters, property: :master_id, singular: true

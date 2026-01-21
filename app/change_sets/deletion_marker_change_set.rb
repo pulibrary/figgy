@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DeletionMarkerChangeSet < ChangeSet
   property :resource_title
   property :resource_type

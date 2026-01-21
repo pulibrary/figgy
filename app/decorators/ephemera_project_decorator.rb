@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
   display :title
   delegate :members, :query_service, :decorated_folders_with_genres, to: :wayfinder

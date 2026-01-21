@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class DownloadsController < ApplicationController
   include TokenAuth
   include Hydra::Controller::DownloadBehavior

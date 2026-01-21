@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for characterizing exeternal geo metadata files
 class ExternalMetadataCharacterizationService
   attr_reader :file_set, :persister

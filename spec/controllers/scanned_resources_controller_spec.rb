@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe ScannedResourcesController, type: :controller do
@@ -118,9 +117,7 @@ RSpec.describe ScannedResourcesController, type: :controller do
     context "when not logged, but in a reading room" do
       let(:config_hash) { { "access_control" => { "reading_room_ips" => ["1.2.3"] } } }
       before do
-        # rubocop:disable RSpec/InstanceVariable
         @request.remote_addr = "1.2.3"
-        # rubocop:enable RSpec/InstanceVariable
         allow(Figgy).to receive(:config).and_return(config_hash)
       end
       it "returns a 401" do

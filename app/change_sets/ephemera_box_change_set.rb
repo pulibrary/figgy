@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraBoxChangeSet < ChangeSet
   apply_workflow(BoxWorkflow)
 

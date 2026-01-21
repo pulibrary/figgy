@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Runs preservation checks as background jobs, grouping failures under a
 # PreservationAudit object
 class PreservationAuditRunner

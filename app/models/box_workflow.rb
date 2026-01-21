@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class BoxWorkflow < BaseWorkflow
   aasm do
     state :new, initial: true

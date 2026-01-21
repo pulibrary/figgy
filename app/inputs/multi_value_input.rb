@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class MultiValueInput < SimpleForm::Inputs::CollectionInput
   def input(_wrapper_options)
     @rendered_first_element = false

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Base Class for controlled vocabularies for local authorities
 # Terms within these vocabularies are stored within YAML files
 # *Please* note that this class is distinct from EphemeraVocabulary

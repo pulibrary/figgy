@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraFolderWayfinder < BaseWayfinder
   inverse_relationship_by_property :parents, property: :member_ids, singular: true
   inverse_relationship_by_property :ephemera_boxes, property: :member_ids, singular: true, model: EphemeraBox

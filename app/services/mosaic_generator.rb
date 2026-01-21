@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A class to wrap a call to cogeo-mosaic
 class MosaicGenerator
   attr_reader :output_path, :raster_paths

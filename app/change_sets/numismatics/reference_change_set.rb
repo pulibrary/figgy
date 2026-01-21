@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class ReferenceChangeSet < Valkyrie::ChangeSet
     delegate :human_readable_type, to: :model

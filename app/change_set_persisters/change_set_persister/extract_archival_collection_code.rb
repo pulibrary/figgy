@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ChangeSetPersister
   class ExtractArchivalCollectionCode
     attr_reader :change_set_persister, :change_set

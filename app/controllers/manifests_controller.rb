@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestsController < ApplicationController
   # Render the V3 IIIF presentation manifest for a given repository resource
   def v3

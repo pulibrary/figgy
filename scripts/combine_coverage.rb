@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # spec/simplecov_helper.rb
 require "active_support/inflector"
 require "simplecov"

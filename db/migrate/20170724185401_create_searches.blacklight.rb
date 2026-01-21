@@ -1,5 +1,4 @@
 # This migration comes from blacklight (originally 20140202020201)
-# frozen_string_literal: true
 class CreateSearches < ActiveRecord::Migration[4.2]
   def self.up
     create_table :searches do |t|

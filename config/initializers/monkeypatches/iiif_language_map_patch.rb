@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Monkey patch the language_map method so that the language is set in IIIF
 # Presentation 3 manifests.
 # See: https://github.com/samvera/iiif_manifest/blob/main/lib/iiif_manifest/v3/manifest_builder.rb#L31

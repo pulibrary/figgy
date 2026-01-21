@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class GenerateFileNotificationChannel < ApplicationCable::Channel
   include Rails.application.routes.url_helpers
   after_subscribe :send_initial_status

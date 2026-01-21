@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for Apache Tika based file characterization service
 # defines the Apache Tika based characterization service a ValkyrieFileCharacterization service
 class TikaFileCharacterizationService
@@ -59,7 +57,7 @@ class TikaFileCharacterizationService
   # Determines the location of the file on disk for the file_set
   # @return Pathname
   def filename
-    return Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
+    Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
   end
 
   def tika_config

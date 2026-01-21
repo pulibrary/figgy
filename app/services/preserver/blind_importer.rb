@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # The BlindImporter is used to recover a resource from a given preservation storage path without the use of a deletion_marker or PreservationObject.
 class Preserver::BlindImporter
   # @param change_set_persister [ChangeSetPersister] Where you want to save the

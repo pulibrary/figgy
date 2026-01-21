@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class MessagingClient
   attr_reader :amqp_url
   def initialize(amqp_url)

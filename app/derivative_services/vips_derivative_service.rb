@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class VipsDerivativeService
   # Pixel width or height at which point it cuts the size in half for
   # performance.

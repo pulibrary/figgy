@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindingAidIdMigrator
   attr_reader :csv_path
   def initialize(csv_path:)

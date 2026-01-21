@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
 
@@ -29,9 +28,7 @@ RSpec.describe PDFDerivativeService do
 
     context "when given a tiff mime_type" do
       it "is not valid" do
-        # rubocop:disable RSpec/SubjectStub
         allow(valid_file).to receive(:mime_type).and_return(["image/tiff"])
-        # rubocop:enable RSpec/SubjectStub
         is_expected.not_to be_valid
       end
     end

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class NomismaDocumentsController < ApplicationController
   before_action :set_nomisma_documents, only: [:index, :void]
   before_action :set_in_process_documents, only: [:index, :void, :generate_nomisma_document]

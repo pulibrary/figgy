@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for generating a nomisma RDF file from numismatics coins.
 class Nomisma
   # @return [string] rdf+xml formatted nomisma dataset

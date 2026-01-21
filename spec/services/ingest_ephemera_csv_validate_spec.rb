@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 describe IngestEphemeraCSV do
@@ -80,7 +79,6 @@ describe IngestEphemeraCSV do
                                      label: ["Pamphlet"],
                                      member_of_vocabulary_id: genres.id)
   end
-  # rubocop:disable Layout/LineLength
 
   context "validate" do
     it "handles validation" do

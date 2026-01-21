@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 RSpec.shared_examples "a set of raster derivatives" do
   it "creates display raster and thumbnail derivatives" do
     expect do

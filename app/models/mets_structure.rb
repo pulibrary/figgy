@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module MetsStructure
   def structure
     structure_type("Logical") || default_structure

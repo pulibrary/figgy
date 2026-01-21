@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class WorkflowNoteDecorator < Valkyrie::ResourceDecorator
   def note
     super.first

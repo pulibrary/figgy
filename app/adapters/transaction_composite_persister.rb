@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 #
 # Modification of Valkyrie::Persistence::CompositePersister to wrap everything
 # up in the first adapter's transaction, so if subsequent persisters fail then

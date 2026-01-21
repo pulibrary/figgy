@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Errors for honeybadger to ignore.
 # https://docs.honeybadger.io/ruby/getting-started/ignoring-errors.html#ignore-programmatically
 Honeybadger.configure do |config|

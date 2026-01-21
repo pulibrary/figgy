@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class HlsManifest::Primary
   # Primary HLS manifests include the video HLS manifest as well as any caption
   # manifests. In the future it would also allow us to attach streams at

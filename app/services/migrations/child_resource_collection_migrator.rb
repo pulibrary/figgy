@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Migrations
   class ChildResourceCollectionMigrator
     delegate :query_service, to: :change_set_persister

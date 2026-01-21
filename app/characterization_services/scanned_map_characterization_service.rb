@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for characterizatizing scanned maps. Adds processing note.
 class ScannedMapCharacterizationService
   attr_reader :file_set, :persister

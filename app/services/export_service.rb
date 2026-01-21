@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ExportService
   def self.export(resource)
     export_members(resource.decorate)

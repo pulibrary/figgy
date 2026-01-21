@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Convert an enumerable of resources into a CSV by converting it to a hash,
 # merging in imported properties, and selecting each property as a field. Right
 # now useful for ad-hoc reports, but could be used as a tool for generic report

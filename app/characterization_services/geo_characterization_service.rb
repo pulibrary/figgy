@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for geo resource file characterization service
 class GeoCharacterizationService
   attr_reader :file_set, :persister

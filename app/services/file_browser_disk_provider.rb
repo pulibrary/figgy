@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Provides the hash serialization of a local mounted disk for the FileBrowser
 # used for bulk ingest and the file manager.
 class FileBrowserDiskProvider

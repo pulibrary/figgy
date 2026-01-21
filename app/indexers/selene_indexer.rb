@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SeleneIndexer
   attr_reader :resource
   def initialize(resource:)

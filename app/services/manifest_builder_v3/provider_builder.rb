@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   # This class makes one small changes from ManifestBuilder::LogoBuilder, but we
   # do not inherit from that class because it will likely be deleted as part of

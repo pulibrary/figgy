@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ScannedResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Common.attributes,
           :rendered_date_range,

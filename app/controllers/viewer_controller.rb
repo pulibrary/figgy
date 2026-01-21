@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ViewerController < ApplicationController
   layout "viewer_layout"
   after_action :allow_iframe

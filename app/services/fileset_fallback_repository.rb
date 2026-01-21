@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 #
 # Allow Blacklight to display a show page for a FileSet even though it isn't
 # indexed.

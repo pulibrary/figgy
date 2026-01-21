@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   namespace :pulfalight do
     # Time output from running the task on 3/23/23

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class AllMmsResourcesQuery
   def self.queries
     [:all_mms_resources, :mms_title_resources]

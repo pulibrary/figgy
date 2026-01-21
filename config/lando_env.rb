@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 if Rails.env.development? || Rails.env.test?
   begin
     # Skip lando loading if we're running in parallel and the info's cached in

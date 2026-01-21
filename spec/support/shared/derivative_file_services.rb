@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class LocalFileService
   def self.call(file_name, _options, &_block)
     yield File.open(file_name)

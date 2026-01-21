@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module GeoDerivatives
   module Runners
     class RasterDerivatives < Hydra::Derivatives::Runner

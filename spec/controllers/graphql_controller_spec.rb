@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe GraphqlController do
@@ -6,7 +5,7 @@ RSpec.describe GraphqlController do
     let(:query_string) { %|{ resource(id: "#{id}") { viewingHint } }| }
     let(:scanned_resource) { FactoryBot.create_for_repository(:scanned_resource, viewing_hint: "individuals") }
     let(:id) { scanned_resource.id }
-    let(:user) {}
+    let(:user) { }
     before do
       sign_in user if user
     end
