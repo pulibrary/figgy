@@ -116,6 +116,15 @@ RSpec.feature "Structure Manager", js: true do
     find(".lux-tree button.create-folder").click
     expect(page).to have_css(".folder-label", text: "Untitled")
 
+    # test that new folders are placed at top, not the bottom of the parent folder
+    page.all("button.toggle-edit")[1].click
+    find("input.folder-label-input", match: :first).set("MyFolder")
+    page.send_keys [:enter]
+    # page.all(".lux-structManager .folder-container")[1].click
+    page.all("button.create-folder")[0].click
+    # expect(page.all(".folder-container .folder-label")[1]).to have_text("Untitled")
+    expect(page.all(".lux-structManager .folder-container")[1]).to have_text("Untitled")
+
     # test paste group of selected gallery items into new folder
     find(".lux-card", match: :first).click
     all(".lux-card").last.click(:shift)
@@ -149,17 +158,8 @@ RSpec.feature "Structure Manager", js: true do
     test_file2 = find(".file-label", match: :first)
     expect(test_file2).to have_text("example2.tif")
 
-    # todo: write a test to make sure that files are always displayed at the bottom of the folder contents
-    # implemented
-
     # todo: write a test to make sure that if a file is the next item in the folder array, after a selected folder, 
-    # then MoveDown is disabled. 
-    # implemented
+    # then MoveDown is does not change the item's position. 
     # (Example DnD implementation with VueDraggable: https://codepen.io/naffarn/pen/KKdVRRE)
-
-    # todo: write a test to make sure that when a folder is created, it is ordered as first rather than last in the list
-
-    # todo: write a test to make sure that grouped files are always ordered according 
-    # to their resource member list
   end
 end
