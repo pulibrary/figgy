@@ -74,12 +74,12 @@ class AvDerivativeService
       [
         "-c:v", "libx264", # encode video with H.264
         "-vf", "format=yuv420p", # needed for Firefox. See: https://trac.ffmpeg.org/wiki/Encode/H.264#Encodingfordumbplayers
-        "-crf", "20" # video quality from 0-51
+        "-crf", "20", # video quality from 0-51
+        "-preset", "slow" # slow encoding for better compression of video
       ] # encode video with H.264
     else
       # Audio sometimes has cover art - just ignore it.
       [
-        "-map", "0:a", # First stream is audio.
         "-vn" # Disable video (the album art)
       ]
     end
@@ -94,8 +94,6 @@ class AvDerivativeService
                      "-hls_list_size", "0", # playlist will contain all entries
                      "-hls_time", "10", # segments are 10s in length
                      *type_specific_flags,
-                     "-preset", "slow", # slow encoding for better compression
-                     "-movflags", "+faststart", # good option for web video
                      "-c:a", "aac", # encode audio with AAC
                      "-b:a", "160k", # audio bitrate
                      dir.join("hls.m3u8").to_s)
