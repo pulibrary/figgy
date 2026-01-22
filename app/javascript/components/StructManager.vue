@@ -390,7 +390,6 @@ export default {
             delete structureFolder.proxy
             // Replace the object in structure_folders with the galleryItem
             Object.assign(structureFolder, galleryItem)
-            // TODO: Move it to the bottom of the folder
             return true // Indicate that a match is found
           } else {
             // Continue searching in nested folders
