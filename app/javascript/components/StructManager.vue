@@ -596,10 +596,18 @@ export default {
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
 
       if (this.tree.selected === rootId) {
-        folders.unshift(cutTreeStructure)
+        if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
+          folders.push(cutTreeStructure)
+        } else {
+          folders.unshift(cutTreeStructure) // if it's a folder, stick it at the top
+        }
         structure.folders = folders
       } else {
-        selectedFolderObject.folders.unshift(cutTreeStructure)
+        if(cutTreeStructure.file){
+          selectedFolderObject.folders.push(cutTreeStructure)
+        } else {
+          selectedFolderObject.folders.unshift(cutTreeStructure)
+        }
         structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject)
       }
 
@@ -753,15 +761,14 @@ export default {
       this.selectNoneGallery()
     },
     sortTreeFoldersFirst: function (node) {
-      if (!Array.isArray(node.folders)) return;
+      if (!Array.isArray(node.folders)) return
 
-      // folders (file === false) first
       node.folders.sort((a, b) => {
-        return Number(a.file === true) - Number(b.file === true);
+        return Number(a.file === true) - Number(b.file === true)
       });
 
       // recurse
-      node.folders.forEach(sortTreeFoldersFirst);
+      node.folders.forEach(this.sortTreeFoldersFirst)
     },
     zoomFile: function (fileId) {
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))

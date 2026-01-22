@@ -216,7 +216,7 @@ export default {
       if (this.gallery.selected.length === 1) {
         return false
       } else if (this.tree.selected && !this.rootNodeSelected) {
-        if(!this.tree.structure.folders === null) {
+        if(this.tree.structure.folders != null) {
           const nodeToBeZoomed = this.findFolderById(this.tree.structure.folders, this.tree.selected)
           
           const hasService = !!nodeToBeZoomed.service
