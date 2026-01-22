@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "bagit"
 
 # Job for ingesting Collection (ArchivalMediaCollections) objects as Bags

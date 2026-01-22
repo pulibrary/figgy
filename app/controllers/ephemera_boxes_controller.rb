@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraBoxesController < ResourcesController
   self.resource_class = EphemeraBox
   self.change_set_persister = ::ChangeSetPersister.new(

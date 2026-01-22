@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class modeling the MODS metadata within a METS Document
 # @see https://www.loc.gov/standards/mods/
 class METSDocument
@@ -34,7 +32,7 @@ class METSDocument
     end
 
     def sort_title
-      return normalize_whitespace(value_from(xpath: "mods:titleInfo/mods:title")).join(",") unless non_sort.empty?
+      normalize_whitespace(value_from(xpath: "mods:titleInfo/mods:title")).join(",") unless non_sort.empty?
     end
 
     def non_sort

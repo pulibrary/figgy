@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Class responsible for converting an HLS manifest (.m3u8) file from ffmpeg to
 # include an auth token in its file references, if appropriate.
 class HlsManifest

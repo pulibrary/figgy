@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class DeleteArchivalCollectionJob < ApplicationJob
   def perform(id:)
     qs = Valkyrie::MetadataAdapter.find(:indexing_persister).query_service

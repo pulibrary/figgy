@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CleanDeletedSubjectJob < ApplicationJob
   def perform(subject_id, logger: Logger.new(STDOUT))
     adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

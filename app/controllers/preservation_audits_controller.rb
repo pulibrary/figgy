@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PreservationAuditsController < ApplicationController
   before_action :set_preservation_audit, only: %i[show]
 

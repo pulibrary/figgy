@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class AddUniquePreservationObjectIndex < ActiveRecord::Migration[6.1]
   # Add a unique index to PreservationObjects so there can only ever be one per
   # resource.

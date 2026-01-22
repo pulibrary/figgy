@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "mini_magick"
 
 Rails.application.config.to_prepare do

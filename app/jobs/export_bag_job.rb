@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ExportBagJob < ApplicationJob
   def perform(resource_id, destination = :bags)
     logger.info "Exporting #{resource_id} to BagIt bag in '#{destination}'"

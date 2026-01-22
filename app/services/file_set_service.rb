@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileSetService
   def self.delete_all_from(resource_id)
     new.delete_all_from(resource_id: resource_id)

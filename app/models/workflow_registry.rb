@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Provides access to a workflow given a resource class and
 #   provides data about workflows in agregate
 class WorkflowRegistry

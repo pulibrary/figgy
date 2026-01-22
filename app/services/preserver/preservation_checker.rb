@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Preserver
   # Encapsulate logic for converting a binary node to a preservation node.
   class PreservationChecker

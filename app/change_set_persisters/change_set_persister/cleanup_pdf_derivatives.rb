@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ChangeSetPersister
   class CleanupPDFDerivatives
     attr_reader :resource, :change_set

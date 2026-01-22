@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DeletionMarker < Resource
   include Valkyrie::Resource::AccessControls
   attribute :resource_id, Valkyrie::Types::ID

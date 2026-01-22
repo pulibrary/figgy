@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Model for exposing a IIIF Manifest describing all Collection resources
 class IndexCollection
   # Decorates the object (as this is not a Valkyrie::Resource)

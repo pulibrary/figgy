@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Creates file sets to be added to resources via a changeset
 class FileAppender
   class FileUploadFailed < StandardError; end

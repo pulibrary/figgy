@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This class provides uris for mosaic manifests and cloud rasters.
 # It calls out to the MosaicGenerator as needed.
 class TileMetadataService

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class DeepLocalFixityCount
   def self.queries
     [:deep_local_fixity_count, :deep_local_fixity_member_ids]

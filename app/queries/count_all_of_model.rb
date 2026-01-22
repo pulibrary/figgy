@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CountAllOfModel
   def self.queries
     [:count_all_of_model]

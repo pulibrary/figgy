@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class MosaicFingerprintQuery
   def self.queries
     [:mosaic_fingerprint_for]

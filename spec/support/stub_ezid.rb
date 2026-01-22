@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module EzidStubbing
   def stub_ezid(shoulder: "99999/fk4", blade: "123456", location: "http://example.com")
     stub_request(:post, "https://ezid.cdlib.org/shoulder/ark:/#{shoulder}")

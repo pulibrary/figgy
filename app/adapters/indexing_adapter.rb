@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 ##
 # The {IndexingAdapter} enables a choice between indexing into another
 # persister concurrently (via `#save`), or by doing a series of actions with the

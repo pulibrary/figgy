@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class GeoblacklightMessagingClient
   attr_reader :amqp_url
   def initialize(amqp_url)

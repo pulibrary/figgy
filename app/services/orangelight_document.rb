@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class OrangelightDocument
   attr_reader :resource
   delegate :to_json, :to_h, to: :document

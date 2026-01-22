@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ChangeSetPersister
   class CreateDeletionMarker
     attr_reader :resource, :change_set, :change_set_persister

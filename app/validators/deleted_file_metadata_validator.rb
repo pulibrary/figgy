@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class DeletedFileMetadataValidator < ActiveModel::Validator
   def validate(record)
     return if record.delete_file_metadata_ids.blank?

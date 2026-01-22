@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   # Class modeling the terminal nodes of IIIF Manifest structures
   class LeafStructureNode

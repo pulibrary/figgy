@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Checks resource preservation status. If it should be preserved, then checks
 # that all its files and its metadata are preserved and have the correct
 # MD5 checksums.
@@ -9,7 +7,6 @@
 require "ruby-progressbar"
 require "ruby-progressbar/outputs/null"
 
-# rubocop:disable Metrics/ClassLength
 class PreservationStatusReporter
   FULL_AUDIT_OUTPUT_FILE = "bad_resources.txt"
   RECHECK_OUTPUT_FILE = "bad_resources_recheck.txt"
@@ -40,7 +37,6 @@ class PreservationStatusReporter
 
   attr_reader :since, :suppress_progress, :records_per_group, :parallel_threads, :skip_metadata_checksum, :io_directory, :recheck_ids
 
-  # rubocop:disable Metrics/ParameterLists
   def initialize(suppress_progress: false, records_per_group: 100, parallel_threads: 10, skip_metadata_checksum: false, io_directory:, recheck_ids: false)
     @suppress_progress = suppress_progress
     @records_per_group = records_per_group
@@ -50,7 +46,6 @@ class PreservationStatusReporter
     @recheck_ids = recheck_ids
     initialize_io_directory(io_directory)
   end
-  # rubocop:enable Metrics/ParameterLists
 
   # @return [Array<Valkyrie::ID>]
   def cloud_audit_failures
@@ -164,4 +159,3 @@ class PreservationStatusReporter
         end
     end
 end
-# rubocop:enable Metrics/ClassLength

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 Rails.application.configure do
   config.action_dispatch.cookies_same_site_protection = :none
   config.cache_classes = true

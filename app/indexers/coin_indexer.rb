@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CoinIndexer
   delegate :query_service, to: :metadata_adapter
   attr_reader :resource

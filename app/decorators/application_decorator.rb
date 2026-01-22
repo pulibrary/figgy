@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ApplicationDecorator < Draper::Decorator
   class_attribute :displayed_attributes, :iiif_manifest_attributes
   self.displayed_attributes = []

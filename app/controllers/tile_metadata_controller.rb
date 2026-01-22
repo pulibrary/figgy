@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class TileMetadataController < ApplicationController
   # If the tile metadata service finds no raster file sets, it will raise
   # a TileMetadataService::Error exception. This ensures we don't run an expensive

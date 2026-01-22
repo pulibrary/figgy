@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class AccessionChangeSet < ChangeSet
     delegate :human_readable_type, to: :model
@@ -20,7 +19,6 @@ module Numismatics
     validates_with AutoIncrementValidator, property: :accession_number
     validates_with AccessionDateValidator
 
-    # rubocop:disable Metrics/MethodLength
     def primary_terms
       {
         "" => [
@@ -39,7 +37,6 @@ module Numismatics
         ]
       }
     end
-    # rubocop:enable Metrics/MethodLength
 
     def build_numismatic_citation
       schema["numismatic_citation"][:nested].new(model_type_for(property: :numismatic_citation)[[{}]].first)

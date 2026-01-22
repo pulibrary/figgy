@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class LocalFixity
   class FixityRequestor
     def self.queue_daily_check!(annual_percent:)

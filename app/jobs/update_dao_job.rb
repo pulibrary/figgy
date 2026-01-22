@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UpdateDaoJob < ApplicationJob
   def perform(id)
     change_set = ChangeSet.for(change_set_persister.metadata_adapter.query_service.find_by(id: id))

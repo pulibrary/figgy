@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ImportedMetadataIndexer
   attr_reader :resource
   def initialize(resource:)
@@ -33,7 +32,7 @@ class ImportedMetadataIndexer
 
     def format_values(value)
       return value.map(&:to_s) if value.is_a?(Array)
-      return value.to_s if value
+      value.to_s if value
     end
 
     def suppressed_keys

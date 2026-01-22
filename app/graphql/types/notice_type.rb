@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Types::NoticeType < Types::BaseObject
   field :heading, String, null: false
   field :accept_label, String, null: false

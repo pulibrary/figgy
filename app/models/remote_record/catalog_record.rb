@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class RemoteRecord::CatalogRecord
   attr_reader :source_metadata_identifier
   delegate :success?, to: :jsonld_request

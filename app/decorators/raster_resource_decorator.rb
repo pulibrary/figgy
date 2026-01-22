@@ -1,4 +1,3 @@
-# frozen_string_literal: false
 class RasterResourceDecorator < Valkyrie::ResourceDecorator
   display Schema::Geo.attributes, :ark, :rendered_holding_location, :rendered_coverage, :member_of_collections
   suppress :coverage, :identifier, :source_jsonld, :thumbnail_id

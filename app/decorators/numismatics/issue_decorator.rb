@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class IssueDecorator < Valkyrie::ResourceDecorator
     display :object_type,

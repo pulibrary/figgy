@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ExternalMetadataDerivativeService
   class Factory
     attr_reader :change_set_persister

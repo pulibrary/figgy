@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BreadcrumbComponent < ViewComponent::Base
   renders_one :root_breadcrumb
   attr_reader :decorated_resource

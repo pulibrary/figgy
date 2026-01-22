@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileSetsSortedByUpdated
   def self.queries
     [:file_sets_sorted_by_updated]

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "csv"
 
 class IngestEphemeraCSV
@@ -46,9 +45,6 @@ class IngestEphemeraCSV
   end
 end
 
-# rubocop:disable Metrics/ClassLength
-# rubocop:disable Metrics/AbcSize
-
 class FolderData
   attr_accessor :image_path, :fields, :change_set_persister, :vocab_service, :logger
   delegate :metadata_adapter, to: :change_set_persister
@@ -63,7 +59,6 @@ class FolderData
                                                                       persist_if_not_found: persist_p)
   end
 
-  # rubocop:disable Metrics/MethodLength
   def attributes
     {
       member_ids: Array(fields[:member_ids]),
@@ -99,8 +94,6 @@ class FolderData
       append_collection_ids: member_of_collection_ids
     }
   end
-
-  # rubocop:enable Metrics/MethodLength
 
   def date_range
     return unless fields[:date_range_start].present? && fields[:date_range_end].present?
@@ -227,8 +220,6 @@ class FolderData
   def genre
     return if fields[:genre].blank?
     term = vocab_service.find_term(label: fields[:genre])
-    return term.id unless term.nil?
+    term.id unless term.nil?
   end
 end
-# rubocop:enable Metrics/ClassLength
-# rubocop:enable Metrics/AbcSize

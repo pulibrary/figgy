@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 RSpec.configure do |config|
   pg_adapter = Valkyrie::MetadataAdapter.find(:postgres)
   pg_db_cleaner = DatabaseCleaner[:sequel, db: pg_adapter.connection]
@@ -8,11 +7,11 @@ RSpec.configure do |config|
       :deletion,
       # keep test db environment
       # see https://stackoverflow.com/a/38209363/341514
-      except: %w(ar_internal_metadata)
+      except: %w[ar_internal_metadata]
     )
     ar_cleaner.clean_with(
       :deletion,
-      except: %w(ar_internal_metadata)
+      except: %w[ar_internal_metadata]
     )
   end
 
@@ -22,13 +21,13 @@ RSpec.configure do |config|
   end
 
   config.before(:each, js: true) do
-    pg_db_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
-    ar_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
+    pg_db_cleaner.strategy = [:deletion, except: %w[ar_internal_metadata]]
+    ar_cleaner.strategy = [:deletion, except: %w[ar_internal_metadata]]
   end
 
   config.before(:each, db_cleaner_deletion: true) do
-    pg_db_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
-    ar_cleaner.strategy = [:deletion, except: %w(ar_internal_metadata)]
+    pg_db_cleaner.strategy = [:deletion, except: %w[ar_internal_metadata]]
+    ar_cleaner.strategy = [:deletion, except: %w[ar_internal_metadata]]
   end
 
   config.before(:each) do

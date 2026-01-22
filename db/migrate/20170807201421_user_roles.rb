@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class UserRoles < ActiveRecord::Migration[4.2]
   def up
     create_table :roles do |t|

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module OAI::Figgy
   class OAIWrapper < SimpleDelegator
     def to_marc21

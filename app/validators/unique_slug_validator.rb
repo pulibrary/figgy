@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class UniqueSlugValidator < ActiveModel::Validator
   def validate(record)
     unless Slug.new(Array.wrap(record.slug).first).valid?

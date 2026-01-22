@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindIdUsageByModel
   def self.queries
     [:find_id_usage_by_model]

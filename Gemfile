@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 source "https://gem.coop"
 
 gem "aasm"
@@ -128,7 +127,6 @@ end
 group :development, :test do
   gem "awesome_print"
   gem "bcrypt_pbkdf"
-  gem "bixby", "~> 5.0"
   gem "bundler-audit", require: false
   gem "debug"
   gem "dotenv-rails"
@@ -140,6 +138,7 @@ group :development, :test do
   gem "pry-rails"
   gem "rails-controller-testing"
   gem "rspec-rails"
+  gem "rubocop-rails-omakase"
 end
 
 group :development, :staging do

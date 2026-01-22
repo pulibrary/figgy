@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ImageReportGenerator::CollectionReport
   attr_reader :collection_id, :date_range, :filter_microfilm
   # Microfilm digitization is usually excluded from these reports.

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "json"
 
 class PreservationCheckJob
@@ -6,7 +5,6 @@ class PreservationCheckJob
   include Sidekiq::Job
   sidekiq_options queue: "super_low"
 
-  # rubocop:disable Style/GuardClause
   def perform(resource_id, audit_id, opts = {})
     resource = query_service.find_by(id: resource_id)
 
@@ -20,7 +18,6 @@ class PreservationCheckJob
       )
     end
   end
-  # rubocop:enable Style/GuardClause
 
   def prepare_opts(opts)
     return opts if opts.is_a?(Hash)

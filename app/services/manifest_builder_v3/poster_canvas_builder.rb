@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   # Adds posterCanvas element for compatibility with older UV.
   # Remove this class once we upgrade UV or migrate to another viewer.

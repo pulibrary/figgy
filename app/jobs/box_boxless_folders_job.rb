@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class BoxBoxlessFoldersJob < ApplicationJob
   def perform(project_id:, box_id:)
     project = query_service.find_by(id: project_id)

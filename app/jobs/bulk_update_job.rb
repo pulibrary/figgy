@@ -1,6 +1,4 @@
-# frozen_string_literal: true
 class BulkUpdateJob < ApplicationJob
-  # rubocop:disable Lint/NonLocalExitFromIterator
   def perform(ids:, email:, args:, time:, search_params:)
     change_set_persister.buffer_into_index do |buffered_change_set_persister|
       ids.each do |id|
@@ -17,7 +15,6 @@ class BulkUpdateJob < ApplicationJob
     end
     BulkUpdateMailer.with(email: email, ids: ids, time: time, search_params: search_params).update_status.deliver_later
   end
-  # rubocop:enable Lint/NonLocalExitFromIterator
 
   # Fields that can be bulk-edited
   def self.supported_attributes

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ChangeSetPersister
   def self.new(metadata_adapter:, storage_adapter:, transaction: false, characterize: true, queue: :default)
     Basic.new(metadata_adapter: metadata_adapter,
@@ -17,7 +16,6 @@ class ChangeSetPersister
     )
   end
 
-  # rubocop:disable Metrics/MethodLength
   def self.registered_handlers
     {
       before_save: [
@@ -87,7 +85,6 @@ class ChangeSetPersister
       ]
     }
   end
-  # rubocop:enable Metrics/MethodLength
 
   class Basic
     attr_reader :metadata_adapter, :storage_adapter, :handlers

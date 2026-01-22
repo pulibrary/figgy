@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindHighestValue
   def self.queries
     [:find_highest_value]

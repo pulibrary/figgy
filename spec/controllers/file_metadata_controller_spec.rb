@@ -1,9 +1,8 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe FileMetadataController do
   include ActiveJob::TestHelper
-  let(:user) {}
+  let(:user) { }
   before do
     sign_in user if user
   end

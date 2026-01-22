@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for jobs which ingest files as intermediate files and append them todo
 #   an existing resource
 class IngestIntermediateFileJob < ApplicationJob

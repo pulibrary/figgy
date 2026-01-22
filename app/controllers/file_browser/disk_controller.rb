@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileBrowser::DiskController < ApplicationController
   def index
     authorize! :create, ScannedResource

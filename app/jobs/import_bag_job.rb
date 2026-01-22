@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ImportBagJob < ApplicationJob
   def perform(resource_id, destination = :bags)
     logger.info "Importing #{resource_id} to BagIt bag in '#{destination}'"

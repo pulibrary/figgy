@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ViewingDirectionValidator < ActiveModel::Validator
   delegate :validate, to: :inclusivity_validator
 

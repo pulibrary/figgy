@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Migrations::AddPreservationObjectIdsMigrator
   def self.call
     new.call

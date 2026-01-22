@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Class for locating folders using for file ingestion
 require "find"
 class IngestFolderLocator

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class Person < Resource
     include Valkyrie::Resource::AccessControls

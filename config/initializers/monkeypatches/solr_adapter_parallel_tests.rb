@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module RackBuilderConfig
   def adapter(*args)
     if ENV["TEST_ENV_NUMBER"]

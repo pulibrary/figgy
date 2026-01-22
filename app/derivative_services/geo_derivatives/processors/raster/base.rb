@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module GeoDerivatives
   module Processors
     module Raster
@@ -45,7 +44,7 @@ module GeoDerivatives
         end
 
         def output_file(file_suffix, working_dir)
-          Dir::Tmpname.create(["raster_derivative", ".#{file_suffix}"], working_dir) {}
+          Dir::Tmpname.create(["raster_derivative", ".#{file_suffix}"], working_dir) { }
         end
       end
     end

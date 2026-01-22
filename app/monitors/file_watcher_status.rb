@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileWatcherStatus < HealthMonitor::Providers::Base
   class FileWatcherStatusCheckError < StandardError; end
 

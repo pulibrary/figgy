@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DeletionMarkerService
   def self.restore(deletion_marker_id)
     new(deletion_marker_id: deletion_marker_id).restore

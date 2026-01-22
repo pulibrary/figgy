@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileSet < Resource
   include Valkyrie::Resource::AccessControls
   attribute :title, Valkyrie::Types::Set

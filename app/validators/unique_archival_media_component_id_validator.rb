@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class UniqueArchivalMediaComponentIdValidator < ActiveModel::Validator
   def validate(record)
     duplicates = find_duplicates(record)

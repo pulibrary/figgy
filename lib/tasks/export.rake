@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   namespace :export do
     desc "Exports an object to disk in a BagIt bag"

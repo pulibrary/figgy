@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Reindexer
   def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, solr_adapter: :index_solr)
     new(

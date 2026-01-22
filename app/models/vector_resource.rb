@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class VectorResource < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Geo

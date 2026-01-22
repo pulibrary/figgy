@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SimpleChangeSet < ChangeSet
   delegate :human_readable_type, to: :model
 

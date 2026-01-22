@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require_relative "redis_config"
 
 # `Redis.current` is deprecated. We need to establish a connection in

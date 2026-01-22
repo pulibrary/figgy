@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class GenerateChecksumJob < ApplicationJob
   delegate :query_service, :persister, to: :metadata_adapter
 

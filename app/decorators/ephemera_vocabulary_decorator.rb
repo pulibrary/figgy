@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraVocabularyDecorator < Valkyrie::ResourceDecorator
   display :label, :uri, :definition, :categories, :terms
 

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class RetryingDiskAdapter
   attr_reader :inner_storage_adapter
   delegate :handles?, :supports?, :find_by, :delete, :upload, :base_path, :file_path, :file_mover, :protocol, to: :inner_storage_adapter

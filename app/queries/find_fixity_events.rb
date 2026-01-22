@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindFixityEvents
   def self.queries
     [:find_fixity_events]

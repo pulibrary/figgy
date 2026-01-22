@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Base class for GDAL/OGR characterization services from GeoDerivatives
 class GdalCharacterizationService
   attr_reader :file_set, :persister
@@ -17,7 +15,6 @@ class GdalCharacterizationService
   #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize
   # @example characterize a file and do not persist the changes
   #   Valkyrie::FileCharacterizationService.for(file_set, persister).characterize(save: false)
-  # rubocop:disable Metrics/MethodLength
   def characterize(save: true)
     [:original_file, :intermediate_file, :preservation_file].each do |type|
       @target_file = @file_set.try(type)
@@ -39,7 +36,6 @@ class GdalCharacterizationService
     raise @characterization_error if @characterization_error
     @file_set
   end
-  # rubocop:enable Metrics/MethodLength
 
   # Removes unzipped files
   def clean_up_zip_directory
@@ -49,7 +45,7 @@ class GdalCharacterizationService
   # Determines the location of the file on disk for the file_set
   # @return [Pathname]
   def filename
-    return Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
+    Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
   end
 
   # Gets a file's 'geo mime type' by looking up the format's driver in a controlled vocabulary.

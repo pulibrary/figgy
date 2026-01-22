@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilder
   # Collections have fewer builders (notably the thumbnail builder) to improve
   # performance.

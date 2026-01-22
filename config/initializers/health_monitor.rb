@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 Rails.application.config.after_initialize do
   # Adds a patch a check is always critical if it's filtered for, otherwise fall
   # back to configured value.

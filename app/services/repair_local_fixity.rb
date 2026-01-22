@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Replaces files with the preservation copy from Google Cloud.
 class RepairLocalFixity
   def self.run(file_set)

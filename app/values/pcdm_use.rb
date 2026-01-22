@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PcdmUse
   OriginalFile = RDF::URI.new("http://pcdm.org/use#OriginalFile")
   PreservationFile = RDF::URI.new("http://pcdm.org/use#PreservationFile")

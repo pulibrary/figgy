@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # these methods created for use in rake tasks and db/seeds.rb
 require "faker"
 

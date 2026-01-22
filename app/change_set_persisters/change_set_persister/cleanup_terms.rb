@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 #
 # A persistence handler for deleting references to an EphemeraTerm on delete.
 class ChangeSetPersister

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class AutoIncrementValidatorIndex < ActiveRecord::Migration[5.1]
   def change
     [:find_number, :issue_number, :coin_number, :accession_number].each do |property|

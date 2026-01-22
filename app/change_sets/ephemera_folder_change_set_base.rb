@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraFolderChangeSetBase < ChangeSet
   apply_workflow(FolderWorkflow)
   enable_claiming

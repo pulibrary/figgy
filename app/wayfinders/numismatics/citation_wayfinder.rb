@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class CitationWayfinder < BaseWayfinder
     define_singular_relation(:numismatic_references)

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class TitleIndexer
   attr_reader :resource
   def initialize(resource:)
@@ -20,8 +19,8 @@ class TitleIndexer
     # NumismaticReference is an example. Needed for user requested drop down values.
     @title_strings ||= if resource.decorate.respond_to?(:indexed_title) && resource.decorate.indexed_title.present?
                          Array.wrap(resource.decorate.indexed_title).map(&:to_s)
-                       else
+    else
                          Array.wrap(resource.decorate.title).map(&:to_s)
-                       end
+    end
   end
 end

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe FileSetDecorator do
@@ -83,7 +82,7 @@ RSpec.describe FileSetDecorator do
     end
 
     context "when there is a preservation object and no events for a file" do
-      let(:cloud_good_event) {}
+      let(:cloud_good_event) { }
       it "returns success" do
         expect(decorator.cloud_fixity_success_of(good_file.id)).to eq("SUCCESS")
         expect(decorator.cloud_fixity_last_success_date_of(good_file.id)).to include("Sep 25, 2023")

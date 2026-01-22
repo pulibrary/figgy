@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ReprocessMetsJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
   def perform(collection_id:)

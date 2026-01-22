@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindDeepErroredFileSets
   def self.queries
     [:deep_errored_file_sets_count, :find_deep_errored_file_sets]

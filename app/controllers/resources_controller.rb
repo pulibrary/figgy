@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A base controller for resources, intended for inheritance
 class ResourcesController < ApplicationController
   class_attribute :resource_class, :change_set_persister

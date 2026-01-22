@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # A StorageAdapter for use in development and test environments that more
 # closely replicates some behaviors of the Google Cloud Storage adapter.
 # It uses SimpleDelegators quite heavily because gcs has lots of nested objects.

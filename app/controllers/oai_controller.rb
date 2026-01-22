@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class OaiController < ApplicationController
   def index
     provider = OAI::Figgy::Provider.new

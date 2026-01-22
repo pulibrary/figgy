@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module OsdModalHelper
   include ::BlacklightHelper
   def osd_modal_for(resource)

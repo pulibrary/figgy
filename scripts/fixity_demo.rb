@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # This script aids in demo'ing automatic repair of files that fail fixity
 # checks. You can find the documentation in
 # docs/technical/preservation/file_repair.md

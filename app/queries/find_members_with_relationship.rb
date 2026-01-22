@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 #
 # This is a custom query which finds all members of an object as well as
 # populates `loaded` with a hash of objects eager loaded from a relationship.

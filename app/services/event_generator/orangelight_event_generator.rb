@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EventGenerator
   class OrangelightEventGenerator
     attr_reader :rabbit_exchange

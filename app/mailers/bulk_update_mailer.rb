@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BulkUpdateMailer < ApplicationMailer
   def update_status
     email = params[:email]

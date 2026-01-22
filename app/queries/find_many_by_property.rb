@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindManyByProperty
   def self.queries
     [:find_many_by_property]

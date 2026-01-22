@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   namespace :bulk do
     desc "Move a box to a new project"
@@ -164,10 +163,10 @@ namespace :figgy do
       resources = if model.present?
                     @logger.info "linking missing thumbnails for #{model.to_s.titleize}"
                     query.find_missing_thumbnail_resources(model: model)
-                  else
+      else
                     @logger.info "linking missing thumbnails for Scanned Resources"
                     query.find_missing_thumbnail_resources
-                  end
+      end
       resources.each do |resource|
         if background
           MissingThumbnailJob.set(queue: :low).perform_later(resource.id)
@@ -190,10 +189,10 @@ namespace :figgy do
       resources = if model.present?
                     @logger.info "linking thumbnails for #{model.to_s.titleize}"
                     query.find_invalid_thumbnail_resources(model: model)
-                  else
+      else
                     @logger.info "linking thumbnails for Scanned Resources"
                     query.find_invalid_thumbnail_resources
-                  end
+      end
       # Handle these cases as if they were missing thumbnails
       resources.each do |resource|
         if background

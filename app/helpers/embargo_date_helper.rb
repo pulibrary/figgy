@@ -1,5 +1,3 @@
-# frozen_string_literal: false
-
 module EmbargoDateHelper
   def default_embargo_date(date)
     month, day, year = date.split("/")

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Preserver::BlindImporter::FileMetadataAdapter::QueryService
   # Wayfinder so that FileMetadataResources can return a parent used by
   # Preserver::NestedStoragePath, as a way to figure out where a JSON or binary file would

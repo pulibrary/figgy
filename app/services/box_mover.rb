@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BoxMover
   attr_reader :box, :target_project, :change_set_persister
   def initialize(box:, target_project:, change_set_persister: ChangeSetPersister.default)

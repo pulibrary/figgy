@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Controlled Digital Lending
 module CDL
   class ResourceChargeList < Valkyrie::Resource

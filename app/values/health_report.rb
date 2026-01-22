@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # HealthReport represents a summary of checks on a given resource reporting the
 # overall health of the object.
 class HealthReport

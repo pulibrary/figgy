@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class GeneratePyramidalTiffJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 

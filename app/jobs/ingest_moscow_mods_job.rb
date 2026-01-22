@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class IngestMoscowMODSJob < ApplicationJob
   def perform(project, mods, dir)
     logger.info "Ingesting GNIB item #{dir}"

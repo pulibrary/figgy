@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Nomisma
   class Void
     # @param url [String] URL of the most recent RDF document
@@ -54,11 +52,9 @@ class Nomisma
         "The Princeton University Numismatic Collection"
       end
 
-      # rubocop:disable Metrics/LineLength
       def description
         "With about 125,000 coins, medals, tokens, decorations, and banknotes, the Princeton University Numismatic Collection (comprising the collections of Firestone Library, the Princeton University Art Museum, the Department of Near Eastern Studies, and the Antioch Excavation coin finds) ranks as one of the largest and most comprehensive academic numismatic collections in the world. It is open to the public by appointment with the curator. About ten percent of the collection has been digitized to date."
       end
-      # rubocop:enable Metrics/LineLength
 
       def publisher
         "Princeton University Library"

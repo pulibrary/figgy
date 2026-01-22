@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module CloudFixity
   require "google/cloud/pubsub"
   class Worker

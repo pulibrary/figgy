@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "rails_helper"
 
 RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_characterization: true do

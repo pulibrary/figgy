@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # You can't create these but you can build them.
 FactoryBot.define do
   factory :file_metadata do

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class RecharacterizeJob < ApplicationJob
   def perform(id)
     @metadata_adapter = Valkyrie::MetadataAdapter.find(:indexing_persister)

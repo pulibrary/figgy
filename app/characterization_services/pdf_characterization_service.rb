@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class PDFCharacterizationService
   def self.supported_formats
     ["application/pdf"]

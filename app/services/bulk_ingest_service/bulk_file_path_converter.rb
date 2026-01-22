@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BulkIngestService
   # Converts file paths to IngestableFiles to attach to a parent.
   class BulkFilePathConverter

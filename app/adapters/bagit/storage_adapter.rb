@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Bagit
   class StorageAdapter
     attr_reader :base_path

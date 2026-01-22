@@ -1,8 +1,6 @@
-# frozen_string_literal: false
 module BoundingBoxHelper
   include ::BlacklightHelper
 
-  # rubocop:disable Rails/OutputSafety
   def bbox_input(property, change_set)
     markup = ""
     markup << %(<div id='bbox' data-coverage='#{change_set.resource.coverage}' data-input-id='#{bbox_input_id(property, change_set)}'></div>)
@@ -19,7 +17,6 @@ module BoundingBoxHelper
     markup << %(</ul></td></tr>)
     markup.html_safe
   end
-  # rubocop:enable Rails/OutputSafety
 
   def toggle_button
     %(
@@ -35,7 +32,6 @@ module BoundingBoxHelper
   ##
   # Returns markup for a row of read only bounding box inputs.
   # @return[String]
-  # rubocop:disable Metrics/MethodLength
   def bbox_display_inputs
     %(
       <div class="row bbox-inputs">
@@ -79,5 +75,4 @@ module BoundingBoxHelper
       </div>
     )
   end
-  # rubocop:enable Metrics/MethodLength
 end

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class AddEphemeraToCollectionJob < ApplicationJob
   def perform(project_id, collection_id)
     logger.info "starting job"

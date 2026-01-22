@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class PreservationAuditMailer < ApplicationMailer
   def success
     @audit = params[:audit]

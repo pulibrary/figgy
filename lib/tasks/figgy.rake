@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 namespace :figgy do
   desc "emails collection owners"
   task send_collection_reports: :environment do

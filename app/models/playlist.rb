@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Generated with `rails generate valkyrie:model Playlist`
 class Playlist < Resource
   include Valkyrie::Resource::AccessControls

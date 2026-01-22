@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class IngestEphemeraService
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
@@ -299,7 +298,6 @@ class IngestEphemeraService
       @query_service = query_service
     end
 
-    # rubocop:disable Metrics/MethodLength
     def attributes
       {
         title: title,
@@ -322,7 +320,6 @@ class IngestEphemeraService
         page_count: page_count
       }
     end
-    # rubocop:enable Metrics/MethodLength
 
     def date_range
       return unless date_start && date_end

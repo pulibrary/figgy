@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PDFService
   attr_reader :change_set_persister
   delegate :storage_adapter, to: :change_set_persister
@@ -20,7 +19,6 @@ class PDFService
         change_set_persister.buffer_into_index do |buffered_changeset_persister|
           change_set.validate(file_metadata: [pdf_file])
           buffered_changeset_persister.save(change_set: change_set)
-          # rubocop:disable Lint/SuppressedException
         rescue
           # TODO: This behavior needs to be udpated; just suppressing the
           # exception isn't enough. see
@@ -29,7 +27,6 @@ class PDFService
           # We want to serve the generated PDF whether or not it saved, e.g. if
           # there's an OptimisticLockError or we're in Read Only mode
         end
-        # rubocop:enable Lint/SuppressedException
       end
     end
 

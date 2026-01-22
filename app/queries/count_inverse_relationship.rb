@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CountInverseRelationship
   def self.queries
     [:count_inverse_relationship]

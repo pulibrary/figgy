@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class BulkEditService
   # Update all members of a Collection to have the given attributes
   def self.perform(collection_id:, attributes:, metadata_adapter: Valkyrie.config.metadata_adapter, logger: Valkyrie.logger)
@@ -20,11 +19,11 @@ class BulkEditService
     incorporated_attributes = {}
     proposed_attributes.each_key do |key|
       incorporated_attributes[key] = case key
-                                     when :append_collection_ids
+      when :append_collection_ids
                                        existing_attributes[:member_of_collection_ids] << proposed_attributes[key]
-                                     else
+      else
                                        proposed_attributes[key]
-                                     end
+      end
     end
     incorporated_attributes
   end

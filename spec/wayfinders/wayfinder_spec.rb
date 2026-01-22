@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe Wayfinder do
@@ -165,7 +164,6 @@ RSpec.describe Wayfinder do
       end
     end
 
-    # rubocop:disable Metrics/MethodLength
     def create_file_set(cloud_fixity_event: nil)
       file_set = FactoryBot.create_for_repository(:file_set)
       metadata_node = FileMetadata.new(id: SecureRandom.uuid)
@@ -214,7 +212,6 @@ RSpec.describe Wayfinder do
       end
       file_set
     end
-    # rubocop:enable Metrics/MethodLength
 
     describe "#members_with_parents" do
       it "returns undecorated members with parents pre-loaded" do

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ModifyFile
   # change the file on disk so it has a different checksum
   def modify_file(file_identifier)

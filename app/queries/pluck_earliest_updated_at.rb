@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PluckEarliestUpdatedAt
   def self.queries
     [:pluck_earliest_updated_at]

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 RSpec.shared_examples "a set of vector derivatives" do
   it "creates display vector and thumbnail derivatives" do
     expect do

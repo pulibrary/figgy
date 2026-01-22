@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class RasterResourcesController < ResourcesController
   include GeoResourceController
   include GeoblacklightDocumentController

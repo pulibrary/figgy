@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SubstringMmsIdx < ActiveRecord::Migration[7.1]
   disable_ddl_transaction!
   def up

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module BlacklightStubbing
   def stub_blacklight_views
     allow(view).to receive(:action_name).and_return('show')

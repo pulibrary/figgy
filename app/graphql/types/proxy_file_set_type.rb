@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Types::ProxyFileSetType < Types::BaseObject
   implements Types::Resource
   def viewing_hint; end

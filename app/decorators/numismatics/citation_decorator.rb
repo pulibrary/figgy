@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class CitationDecorator < Valkyrie::ResourceDecorator
     display :part,

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class PlaceWayfinder < BaseWayfinder
     def places_count

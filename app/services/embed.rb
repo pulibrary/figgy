@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Use this class to provide the correct embed hashes for a given resource with
 # the appropriate permissions enforced.
 class Embed

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PDFGenerator
   class CanvasDownloader
     attr_reader :canvas

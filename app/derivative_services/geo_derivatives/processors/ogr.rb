@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module GeoDerivatives
   module Processors
     module Ogr

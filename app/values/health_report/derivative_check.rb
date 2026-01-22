@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class HealthReport::DerivativeCheck
   include ActionDispatch::Routing::PolymorphicRoutes
   include Rails.application.routes.url_helpers

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe ManifestBuilder do
@@ -26,7 +25,7 @@ RSpec.describe ManifestBuilder do
     )
   end
   let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file]) }
-  let(:logical_structure) {}
+  let(:logical_structure) { }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: metadata_adapter, storage_adapter: Valkyrie.config.storage_adapter) }
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }

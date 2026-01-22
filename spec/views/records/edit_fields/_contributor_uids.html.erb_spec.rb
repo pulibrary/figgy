@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe "records/edit_fields/_contributor_uids.html.erb" do

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class MmsReportGenerator
   def self.json_report
     new.records.to_json

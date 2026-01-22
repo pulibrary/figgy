@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Implements a service for characterizing audiovisual media resources
 class MediainfoCharacterizationService
   # Retrieve the supported media types specified in the config.
@@ -90,7 +88,7 @@ class MediainfoCharacterizationService
     # Determines the location of the file on disk for the file_set
     # @return [String]
     def filename
-      return @file_object.io.path if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
+      @file_object.io.path if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
     end
 
     # Extract the MediaInfo tracks for the binary file stored on the FileSet

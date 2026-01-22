@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CicognaraMarc
   attr_reader :collection_id
   attr_accessor :out_dir

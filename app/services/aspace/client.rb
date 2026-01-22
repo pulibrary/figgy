@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Aspace
   class Client < ArchivesSpace::Client
     class ArchivalObjectNotFound < StandardError

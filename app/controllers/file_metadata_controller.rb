@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FileMetadataController < ApplicationController
   delegate :query_service, to: :change_set_persister
 

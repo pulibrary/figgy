@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Types::Resource
   include Types::BaseInterface
   description "A resource in the system."

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class to short-circuit characterization if desired
 class NullCharacterizationService
   attr_reader :file_set, :persister

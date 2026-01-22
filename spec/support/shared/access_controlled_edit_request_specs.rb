@@ -1,5 +1,5 @@
 # lazy define (i.e. with `let`) in the including spec:
-#   factory 
+#   factory
 RSpec.shared_examples "an access controlled edit request" do
   context "when not logged in" do
     let(:user) { nil }

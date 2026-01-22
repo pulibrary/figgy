@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 #
 # A persistence handler for removing StructureNode objects from a resource's logical_structure
 class ChangeSetPersister

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 RSpec.describe PDFGenerator do
@@ -31,9 +30,7 @@ RSpec.describe PDFGenerator do
       end
       it "raises a PDFGeneratorError and logs an error for each attempted download" do
         expect { generator.render }.to raise_error(PDFGenerator::Error)
-        # rubocop:disable Layout/LineLength
         expect(Valkyrie.logger).to have_received(:error).exactly(5).times.with("PDFGenerator: Failed to download a PDF using the following URI as a base: http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg: 500 ")
-        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -203,7 +200,8 @@ RSpec.describe PDFGenerator do
     context "when set to gray" do
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/287,/0/gray.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-landscape-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-landscape-pdf.jpg")), status: 200)
         stub_request(:any, "http://www.example.com/concern/file_sets/#{file_set.id}/text")
           .to_return(body: "Test Text", status: 200)
         file_set.primary_file.width = 287
@@ -227,7 +225,8 @@ RSpec.describe PDFGenerator do
       let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"]) }
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
       end
       it "will do a color PDF" do
         file_node = generator.render
@@ -236,10 +235,12 @@ RSpec.describe PDFGenerator do
       end
     end
     context "when it's an arabic manifest" do
-      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], language: "ara", title: "المفاتيح") }
+      let(:resource) {
+ FactoryBot.create_for_repository(:scanned_resource, files: [file], language: "ara", title: "المفاتيح") }
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
       end
       it "renders" do
         file_node = generator.render
@@ -251,7 +252,8 @@ RSpec.describe PDFGenerator do
       let(:resource) { FactoryBot.create_for_repository(:simple_resource, files: [file], pdf_type: ["color"]) }
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
       end
       it "renders" do
         file_node = generator.render
@@ -261,12 +263,15 @@ RSpec.describe PDFGenerator do
     end
 
     context "when a resource is complete and has an ARK for identifier" do
-      let(:resource) { FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file], pdf_type: ["color"], identifier: "ark:/99999/fk4") }
+      let(:resource) {
+ FactoryBot.create_for_repository(:complete_open_scanned_resource, files: [file], pdf_type: ["color"],
+identifier: "ark:/99999/fk4") }
       let(:ark) { instance_double(Ark) }
 
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
         stub_ezid
         allow(Ark).to receive(:new).and_return(ark)
         allow(ark).to receive(:uri)
@@ -282,12 +287,15 @@ RSpec.describe PDFGenerator do
     end
 
     context "when a resource is complete and has no ARK" do
-      let(:resource) { FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"], source_metadata_identifier: "991234563506421") }
+      let(:resource) {
+ FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"],
+source_metadata_identifier: "991234563506421") }
 
       before do
         stub_catalog(bib_id: "991234563506421")
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
         allow(IdentifierService).to receive(:url_for).and_call_original
       end
 
@@ -306,11 +314,13 @@ RSpec.describe PDFGenerator do
           :scanned_resource,
           files: [file],
           source_metadata_identifier: "991234563506421",
-          holding_location: ControlledVocabulary.for(:holding_location).all.find { |v| v.label == "Plasma Physics Library" }.value
+          holding_location: ControlledVocabulary.for(:holding_location).all.find { |v|
+ v.label == "Plasma Physics Library" }.value
         )
         file_set = Wayfinder.for(resource).file_sets.first
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/gray.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
         generator = described_class.new(resource: resource, storage_adapter: storage_adapter)
         file_node = generator.render
 
@@ -331,11 +341,14 @@ RSpec.describe PDFGenerator do
     context "when a resource is a volume in a MVW" do
       it "renders metadata from the parent MVW" do
         stub_catalog(bib_id: "991234563506421")
-        resource = FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"], title: "Volume 1")
-        FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource.id], source_metadata_identifier: "991234563506421", import_metadata: true)
+        resource = FactoryBot.create_for_repository(:scanned_resource, files: [file], pdf_type: ["color"],
+title: "Volume 1")
+        FactoryBot.create_for_repository(:scanned_resource, member_ids: [resource.id],
+source_metadata_identifier: "991234563506421", import_metadata: true)
         file_set = Wayfinder.for(resource).file_sets.first
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
 
         generator = described_class.new(resource: resource, storage_adapter: storage_adapter)
         file_node = generator.render
@@ -361,7 +374,8 @@ RSpec.describe PDFGenerator do
 
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
         allow(IdentifierService).to receive(:url_for).and_call_original
       end
 
@@ -378,7 +392,8 @@ RSpec.describe PDFGenerator do
 
       before do
         stub_request(:any, "http://www.example.com/image-service/#{file_set.id}/full/200,/0/default.jpg")
-          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives", "grey-pdf.jpg")), status: 200)
+          .to_return(body: File.open(Rails.root.join("spec", "fixtures", "files", "derivatives",
+"grey-pdf.jpg")), status: 200)
         allow(IdentifierService).to receive(:url_for).and_call_original
       end
 

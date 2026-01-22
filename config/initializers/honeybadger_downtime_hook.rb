@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # We have a maintenance window every Monday for Staging and Tuesday for
 # production, from 5:30 AM to 8:30 AM.
 class HoneybadgerCheck

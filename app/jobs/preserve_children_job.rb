@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class PreserveChildrenJob < ApplicationJob
   delegate :metadata_adapter, to: :change_set_persister
   delegate :query_service, to: :metadata_adapter
@@ -7,9 +6,9 @@ class PreserveChildrenJob < ApplicationJob
     resource = query_service.find_by(id: id)
     ids = if unpreserved_only
             query_service.custom_queries.find_never_preserved_child_ids(resource: resource)
-          else
+    else
             resource.member_ids || []
-          end
+    end
     ids.each do |member_id|
       member = query_service.find_by(id: member_id)
       lock_tokens = member[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK] || []

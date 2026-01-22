@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class JsonIngester
   attr_reader :json_path, :logger
   def initialize(json_path:, logger: Rails.logger)

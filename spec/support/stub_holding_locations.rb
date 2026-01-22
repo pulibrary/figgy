@@ -4,7 +4,7 @@ RSpec.configure do |config|
       to_return(
         status: 200,
         body: File.read(Rails.root.join("spec", "fixtures", "files", "holding_locations.json")),
-        headers: {"Content-Type" => "application/json" }
+        headers: { "Content-Type" => "application/json" }
     )
   end
 end

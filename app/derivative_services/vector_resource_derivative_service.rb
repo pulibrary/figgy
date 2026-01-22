@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class VectorResourceDerivativeService
   class Factory
     attr_reader :change_set_persister
@@ -78,7 +77,7 @@ class VectorResourceDerivativeService
   end
 
   def filename
-    return Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
+    Pathname.new(file_object.io.path) if file_object.io.respond_to?(:path) && File.exist?(file_object.io.path)
   end
 
   def instructions_for_cloud

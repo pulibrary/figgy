@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilder
   class ChildRecordPropertyBuilder
     attr_reader :record, :path

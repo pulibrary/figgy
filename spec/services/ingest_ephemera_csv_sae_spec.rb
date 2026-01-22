@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "rails_helper"
 
 describe IngestEphemeraCSV do
@@ -80,7 +79,7 @@ describe IngestEphemeraCSV do
                                      label: ["Pamphlet"],
                                      member_of_vocabulary_id: genres.id)
   end
-  # rubocop:disable Layout/LineLength
+
   context "ingest" do
     let(:output) { service.ingest }
     let(:folder) { output.first }
@@ -137,7 +136,6 @@ describe IngestEphemeraCSV do
         expect(folder.fields[:subject]).to eq("Politics and government--Constitutions/ Politics and government--Politics and government/ Politics and government--Decentralization in government/ Human and civil rights--Human rights advocacy/ Human and civil rights--Civil Rights")
       end
     end
-    # rubocop:enable Layout/LineLength
 
     describe "#date_range" do
       it "handles date ranges" do

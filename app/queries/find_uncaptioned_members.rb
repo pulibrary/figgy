@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class FindUncaptionedMembers
   def self.queries
     [:find_uncaptioned_members]

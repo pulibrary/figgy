@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ChangeSetPersister
   class CleanupDeletedFiles
     attr_reader :change_set

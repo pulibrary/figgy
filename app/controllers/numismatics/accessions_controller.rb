@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Numismatics
   class AccessionsController < ResourcesController
     self.resource_class = Numismatics::Accession

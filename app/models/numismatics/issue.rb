@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # An abstraction of coins that were minted at the same time, similar to an edition of a book.  Includes
 # metadata about properties that are shared between all coins that are minted together, such as their place
 # of origin, denomination, composition, design, creator, etc.
@@ -87,7 +86,7 @@ module Numismatics
 
     def initial_capital(value)
       return unless value
-      return value.map(&:upcase_first) if value.is_a? Array
+      value.map(&:upcase_first) if value.is_a? Array
     end
   end
 end

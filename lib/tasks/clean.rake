@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 namespace :figgy do
   namespace :clean do
     desc "Clean Blacklight searches older than a given number of days."

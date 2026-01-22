@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilder
   attr_reader :resource, :services
 
@@ -639,13 +638,13 @@ class ManifestBuilder
     def manifest
       @manifest ||= if av_collection? || av?
                       IIIFManifest::V3::ManifestFactory.new(@resource, manifest_service_locator: ManifestBuilderV3::ManifestServiceLocator).to_h
-                    # If not multi-part and a collection, it's not a MVW
-                    elsif @resource.viewing_hint.blank? && @resource.collection?
+      # If not multi-part and a collection, it's not a MVW
+      elsif @resource.viewing_hint.blank? && @resource.collection?
                       IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: CollectionManifestServiceLocator).to_h
-                    else
+      else
                       # NOTE: this assumes audio resources use flat modeling
                       IIIFManifest::ManifestFactory.new(@resource, manifest_service_locator: ManifestServiceLocator).to_h
-                    end
+      end
     end
 
     # resource is a RootNode.

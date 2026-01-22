@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateOCRRequests < ActiveRecord::Migration[5.2]
   def change
     create_table :ocr_requests do |t|

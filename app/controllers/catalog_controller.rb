@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CatalogController < ApplicationController
   include BlacklightRangeLimit::ControllerOverride
   # @note If you're looking for the JSON-LD generation code, please see the

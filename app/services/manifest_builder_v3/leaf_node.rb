@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class ManifestBuilderV3
   # Presenter for Resource instances (usually FileSets) modeled as leaf nodes
   class LeafNode

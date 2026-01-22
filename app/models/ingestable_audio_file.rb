@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Decorates the Pathname with some convenience parsing methods
 # Provides methods needed by FileMetadata.for
 class IngestableAudioFile

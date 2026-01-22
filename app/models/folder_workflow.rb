@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # State-based workflow for folders: Start at requiring QA (will be visible, but
 # not able to view the manifest.) When complete, the manifest is visible.
 class FolderWorkflow < BaseWorkflow

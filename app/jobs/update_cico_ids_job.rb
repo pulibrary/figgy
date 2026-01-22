@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class UpdateCicoIdsJob < ApplicationJob
   def perform(collection_id:, logger: Logger.new(STDOUT))
     collection = query_service.find_by(id: collection_id)

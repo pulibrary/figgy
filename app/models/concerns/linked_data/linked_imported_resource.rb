@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module LinkedData
   class LinkedImportedResource < LinkedResource
     def as_jsonld

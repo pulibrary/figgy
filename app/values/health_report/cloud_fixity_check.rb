@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # Checks that cloud fixity has run for all sub-files and that preservation is complete.
 class HealthReport::CloudFixityCheck
   include ActionDispatch::Routing::PolymorphicRoutes
@@ -112,9 +111,9 @@ class HealthReport::CloudFixityCheck
         title = resource.title.first.to_s.truncate(40)
         url = if klass == FileSet
                 polymorphic_path([:file_manager, resource])
-              else
+        else
                 solr_document_url(resource)
-              end
+        end
         {
           title: title,
           url: url

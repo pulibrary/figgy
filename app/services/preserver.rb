@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Preserver
   # Provided as a mechanism for switching preservation strategies depending on
   # the profile. For now, there's only one, so fall down to new.

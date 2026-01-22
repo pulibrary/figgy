@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Simple draft / completed state-based workflow: Start as draft (will be
 # visible, but not able to view the manifest.) When completed, the
 # manifest is visible.

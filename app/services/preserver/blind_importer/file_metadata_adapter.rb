@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Preserver::BlindImporter
   # This provides the interface for a MetadataAdapter, powered by a storage adapter.
   # It knows how to use a storage adapter to find things for a query_service.

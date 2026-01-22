@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class AccessionDateValidator < ::ActiveModel::Validator
   def validate(record)
     return if record.date.blank?

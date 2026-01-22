@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class RefreshArchivalCollectionJob < ApplicationJob
   queue_as :low
   delegate :query_service, to: :metadata_adapter

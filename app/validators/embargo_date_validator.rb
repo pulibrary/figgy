@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EmbargoDateValidator < ActiveModel::Validator
   def validate(record)
     value = record.embargo_date

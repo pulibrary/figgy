@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class EphemeraBoxDecorator < Valkyrie::ResourceDecorator
   display :barcode,
           :box_number,

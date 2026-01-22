@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module Migrations
   # Re-preserve all FileSets with attached PreservationFiles.
   class PreservationFilePreserver

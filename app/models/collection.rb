@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Collection < Resource
   include Valkyrie::Resource::AccessControls
   include Schema::Common

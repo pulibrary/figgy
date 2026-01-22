@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require "pathname"
 require "erb"
 require "mini_magick"

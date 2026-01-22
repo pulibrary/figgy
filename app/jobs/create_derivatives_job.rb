@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CreateDerivativesJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
