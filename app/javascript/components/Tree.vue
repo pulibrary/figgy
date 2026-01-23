@@ -111,17 +111,19 @@
         v-show="isOpen"
         class="lux-tree-sub"
       >
-        <tree
-          v-for="(folder) in jsonData.folders"
-          :id="folder.id"
-          :key="folder.id"
-          :json-data="folder"
-          :root="false"
-          :viewing-direction="viewingDirection"
-          @delete-folder="deleteFolder"
-          @create-folder="createFolder"
-          @zoom-file="zoomFile"
-        />
+        <VueDraggable class="lux-dnd-tree" v-model="jsonData.folders" tag="div" @click="deselect($event)" ref="el">
+          <tree
+            v-for="(folder) in jsonData.folders"
+            :id="folder.id"
+            :key="folder.id"
+            :json-data="folder"
+            :root="false"
+            :viewing-direction="viewingDirection"
+            @delete-folder="deleteFolder"
+            @create-folder="createFolder"
+            @zoom-file="zoomFile"
+          />
+        </VueDraggable>
       </ul>
     </li>
   </ul>
@@ -132,6 +134,7 @@ import store from '../store'
 import { mapState } from 'vuex'
 import IconEndNode from './IconEndNode.vue'
 import mixin from './structMixins.js'
+import { VueDraggable } from "vue-draggable-plus"
 /**
  * TreeItems are the building blocks of hierarchical navigation.
  */
@@ -141,7 +144,8 @@ export default {
   release: '1.0.0',
   type: 'Element',
   components: {
-    'lux-icon-end-node': IconEndNode
+    'lux-icon-end-node': IconEndNode,
+    VueDraggable,
   },
   mixins: [mixin],
   emits: ["create-folder", "delete-folder", "zoom-file"],
