@@ -163,6 +163,5 @@ RSpec.feature "Structure Manager", js: true do
 
     # TODO: write a test to make sure that if a file is the next item in the folder array, after a selected folder,
     # then MoveDown is does not change the item's position.
-    # (Example DnD implementation with VueDraggable: https://codepen.io/naffarn/pen/KKdVRRE)
   end
 end
