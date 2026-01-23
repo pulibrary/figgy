@@ -12,8 +12,11 @@ class Preserver
       ]
     end
 
+    # wrap the resource file metadata and its preservation object together
     def self.binaries_for(resource:, preservation_object:)
-      (resource.try(:preservation_targets) || []).map { |file_metadata| Binary.new(file_metadata: file_metadata, preservation_object: preservation_object) }
+      (resource.try(:preservation_targets) || []).map do |file_metadata|
+        Binary.new(file_metadata: file_metadata, preservation_object: preservation_object)
+      end
     end
 
     class Metadata

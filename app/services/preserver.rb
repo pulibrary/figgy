@@ -34,8 +34,10 @@ class Preserver
       # Initialize so it saves early - if two Preservers are running at the
       # same time somehow, this will make one of them error with a database
       # constraint error before uploading anything.
+      # it's essentially empty at this point
       preservation_object
       # These are PreservationChecker::Binary instances
+      # They just wrap the file_metadata with its preservation_object
       binary_checkers(preservation_object).each do |binary_checker|
         if force || !binary_checker.preserved?
           preserve_binary_node(binary_checker)
@@ -75,28 +77,28 @@ class Preserver
 
     def preserve_binary_node(binary_checker)
       return unless binary_checker.local_files?
-      file_metadata = binary_checker.preservation_node || build_preservation_node(binary_checker.file_metadata)
-      local_checksum = file_metadata.checksum.first
+      binary_node = binary_checker.preservation_node || build_preservation_node(binary_checker.file_metadata)
+      local_checksum = binary_node.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
       f = File.open(Valkyrie::StorageAdapter.find_by(id: binary_checker.file_identifiers.first).disk_path)
       uploaded_file = storage_adapter.upload(
         file: f,
-        original_filename: file_metadata.label.first,
+        original_filename: binary_node.label.first,
         resource: resource,
         md5: local_md5_checksum,
         metadata: preservation_metadata
       )
       f.close
       # The FileSet or its parent resource has moved and is now under a different resource hierarchy
-      if file_metadata.file_identifiers.present? && !file_metadata.file_identifiers.include?(uploaded_file.id)
-        CleanupFilesJob.perform_later(file_identifiers: file_metadata.file_identifiers.map(&:to_s))
+      if binary_node.file_identifiers.present? && !binary_node.file_identifiers.include?(uploaded_file.id)
+        CleanupFilesJob.perform_later(file_identifiers: binary_node.file_identifiers.map(&:to_s))
       end
-      file_metadata.file_identifiers = uploaded_file.id
+      binary_node.file_identifiers = uploaded_file.id
       # the preservation object is saved after the metdata_node is added
-      preservation_object.binary_nodes += [file_metadata] unless file_metadata.persisted?
+      preservation_object.binary_nodes += [binary_node] unless binary_node.persisted?
       # mark it as persisted for future checks
-      file_metadata.new_record = false
+      binary_node.new_record = false
     end
 
     def preservation_object
