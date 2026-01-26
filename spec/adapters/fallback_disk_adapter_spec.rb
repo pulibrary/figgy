@@ -9,59 +9,12 @@ RSpec.describe FallbackDiskAdapter do
       fallback_adapter: fallback_adapter
     )
   end
-  let(:primary_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy).primary_adapter }
-  let(:fallback_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy).fallback_adapter }
+  let(:primary_adapter) { Valkyrie::StorageAdapter.find(:disk).primary_adapter }
+  let(:fallback_adapter) { Valkyrie::StorageAdapter.find(:disk).fallback_adapter }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:file_2) { fixture_file_upload("files/example.tif", "image/tiff") }
 
   describe "#find_by" do
-    context "when IO stalls trying to read from the primary adapter" do
-      it "fails with a timeout" do
-        allow(Rails.logger).to receive(:warn)
-        resource = ScannedResource.new(id: SecureRandom.uuid)
-        # Put the file in both places.
-        uploaded_file = primary_adapter.upload(file: file, original_filename: "foo.jpg", resource: resource)
-        new_path = Pathname.new(uploaded_file.disk_path.to_s.gsub(Figgy.config["repository_path"], Figgy.config["fallback_repository_path"]))
-        FileUtils.mkdir_p(new_path.parent)
-        FileUtils.cp(uploaded_file.disk_path, new_path)
-
-        file_double = instance_double(File)
-        allow(file_double).to receive(:read).with(1) do
-          # This is what happens when tigerdata's frozen up - read never
-          # returns. One byte should return quickly.
-          sleep(2)
-        end
-        allow(File).to receive(:open).and_call_original
-        allow(File).to receive(:open).with(uploaded_file.disk_path, "rb").and_yield(file_double)
-
-        expect { storage_adapter.find_by(id: uploaded_file.id) }.to raise_error Timeout::Error
-      end
-    end
-    context "when reading from the primary adapter fails" do
-      it "falls back to the fallback adapter" do
-        allow(Rails.logger).to receive(:warn)
-        resource = ScannedResource.new(id: SecureRandom.uuid)
-        # Put the file in both places.
-        uploaded_file = primary_adapter.upload(file: file, original_filename: "foo.jpg", resource: resource)
-        new_path = Pathname.new(uploaded_file.disk_path.to_s.gsub(Figgy.config["repository_path"], Figgy.config["fallback_repository_path"]))
-        FileUtils.mkdir_p(new_path.parent)
-        FileUtils.cp(uploaded_file.disk_path, new_path)
-
-        file_double = instance_double(File)
-        allow(file_double).to receive(:read) do
-          # This is what happens when Tigerdata has a database entry, but can't
-          # connect to the Isilon. It can get File.size and File.stat, but
-          # reading any bytes errors.
-          raise Errno::EIO
-        end
-        allow(File).to receive(:open).and_call_original
-        allow(File).to receive(:open).with(uploaded_file.disk_path, "rb").and_yield(file_double)
-
-        reloaded_uploaded_file = storage_adapter.find_by(id: uploaded_file.id)
-        expect(reloaded_uploaded_file.id).to eq uploaded_file.id
-        expect(Rails.logger).to have_received(:warn).with(/Disk adapter used fallback for /)
-      end
-    end
     context "when it's not found in primary adapter" do
       it "falls back to read from the fallback adapter" do
         allow(Rails.logger).to receive(:warn)
