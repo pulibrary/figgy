@@ -1,6 +1,15 @@
 <template>
-  <ul :class="root ? 'lux-tree root' : 'lux-tree-sub'">
-    <li>
+  <VueDraggable 
+    :class="root ? 'lux-tree root' : 'lux-tree-sub'" 
+    class="drag-area" 
+    tag="ul" 
+    v-model="jsonData.folders" 
+    ref="folder" 
+    group="g1" 
+    @start="onStart" 
+    @end="onEnd"
+    filter=".file">
+    <li :class="isFile ? 'file' : 'folder'">
       <div class="container">
         <div
           v-if="!jsonData.file"
@@ -40,7 +49,7 @@
             :alt="structureData.label"
             :src="thumbnail"
             height="30px"
-            class="file"
+            class="filethumb"
             style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
           />
           <template v-if="editedFieldId === id">
@@ -111,7 +120,6 @@
         v-show="isOpen"
         class="lux-tree-sub"
       >
-        <VueDraggable class="lux-dnd-tree" v-model="jsonData.folders" tag="div" @click="deselect($event)" ref="el">
           <tree
             v-for="(folder) in jsonData.folders"
             :id="folder.id"
@@ -123,10 +131,9 @@
             @create-folder="createFolder"
             @zoom-file="zoomFile"
           />
-        </VueDraggable>
       </ul>
     </li>
-  </ul>
+  </VueDraggable>
 </template>
 
 <script>
@@ -134,6 +141,7 @@ import store from '../store'
 import { mapState } from 'vuex'
 import IconEndNode from './IconEndNode.vue'
 import mixin from './structMixins.js'
+import { ref } from 'vue'
 import { VueDraggable } from "vue-draggable-plus"
 /**
  * TreeItems are the building blocks of hierarchical navigation.
@@ -180,7 +188,7 @@ export default {
       isOpen: true,
       editedFieldId: null,
       isFile: this.jsonData.file,
-      structureData: this.jsonData
+      structureData: ref(this.jsonData)
     }
   },
   computed: {
@@ -237,6 +245,12 @@ export default {
     })
   },
   methods: {
+    onStart: function (event) {
+      console.log('start drag' + event)
+    },
+    onEnd: function (event) {
+      console.log('end drag:' + event)
+    },
     createFolder: function (folderId) {
       this.$emit('create-folder', folderId)
     },
