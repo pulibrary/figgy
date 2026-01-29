@@ -81,6 +81,10 @@ class Preserver
       local_checksum = binary_node.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
+      # If we haven't characterized yet then don't preserve. Generating derivatives
+      # will do this anyways as part of saving it, or marking it complete.
+      # Prevents mismatches between file content and preserved content.
+      return unless binary_checker.file_metadata.checksum.present?
       f = File.open(Valkyrie::StorageAdapter.find_by(id: binary_checker.file_identifiers.first).disk_path)
       uploaded_file = storage_adapter.upload(
         file: f,

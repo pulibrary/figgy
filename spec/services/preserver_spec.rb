@@ -234,6 +234,35 @@ describe Preserver do
       end
     end
 
+    context "when preserving a ScannedResource" do
+      with_queue_adapter :inline
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+
+      it "doesn't preserve if Characterization hasn't run yet, but preserves after" do
+        # Make the checksum generated via the preserver wrong, it should be
+        # right for proper characterization.
+        call_count = 0
+        original = MultiChecksum.method(:for)
+        allow(MultiChecksum).to receive(:for) do |args|
+          if call_count == 0 && args.try(:id).to_s.include?("example.tif")
+            call_count += 1
+            MultiChecksum.new(md5: "bla")
+          else
+            original.call(*args)
+          end
+        end
+
+        preserver.preserve!
+
+        file_set = Wayfinder.for(unpreserved_resource).file_sets.first
+        expect(file_set.primary_file.checksum).to be_present
+
+        po = Wayfinder.for(file_set).preservation_object
+        expect(po).to be_present
+        expect(po.binary_node_for(file_set.primary_file).checksum.first.md5).to eq file_set.primary_file.checksum.first.md5
+      end
+    end
+
     context "when preserving a Scanned Resource with an attached Selene Resource" do
       let(:resource) do
         FactoryBot.create_for_repository(:complete_scanned_resource_with_selene_resource,
@@ -241,6 +270,7 @@ describe Preserver do
       end
       let(:change_set) { ChangeSet.for(resource) }
       let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+
 
       it "saves Selene files nested under the parent scanned resource and FileSet" do
         preserver.preserve!
