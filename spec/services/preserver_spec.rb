@@ -1,6 +1,7 @@
 require "rails_helper"
 
 describe Preserver do
+  include ActiveJob::TestHelper
   with_queue_adapter :inline
 
   subject(:preserver) { described_class.new(change_set: change_set, change_set_persister: change_set_persister, storage_adapter: storage_adapter) }
@@ -239,20 +240,12 @@ describe Preserver do
       let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
 
       it "doesn't preserve if Characterization hasn't run yet, but preserves after" do
-        # Make the checksum generated via the preserver wrong, it should be
-        # right for proper characterization.
-        call_count = 0
-        original = MultiChecksum.method(:for)
-        allow(MultiChecksum).to receive(:for) do |args|
-          if call_count == 0 && args.try(:id).to_s.include?("example.tif")
-            call_count += 1
-            MultiChecksum.new(md5: "bla")
-          else
-            original.call(*args)
-          end
-        end
-
+        allow(storage_adapter).to receive(:upload).and_call_original
         preserver.preserve!
+
+        expect(storage_adapter).to have_received(:upload).with(
+          hash_including(md5: "Kij7cCKGeCssvy7ZpQQasQ==")
+        )
 
         file_set = Wayfinder.for(unpreserved_resource).file_sets.first
         expect(file_set.primary_file.checksum).to be_present
@@ -260,6 +253,37 @@ describe Preserver do
         po = Wayfinder.for(file_set).preservation_object
         expect(po).to be_present
         expect(po.binary_node_for(file_set.primary_file).checksum.first.md5).to eq file_set.primary_file.checksum.first.md5
+      end
+    end
+
+    # To ensure we're sending the file we know about we send the MD5 we
+    # calculated during characterization, so this makes sure that if we don't have
+    # it when preservation initially runs that it still preserves eventually.
+    # This would only happen if a resource is ingested directly to complete, or
+    # a file is added to a complete resource.
+    context "when Characterization runs after preservation", run_real_characterization: true do
+      with_queue_adapter :test
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+      context "for non-image files" do
+        let(:file2) { fixture_file_upload("files/ephemera.csv", "text/csv") }
+        it "uploads the binary nodes" do
+          allow(storage_adapter).to receive(:upload).and_call_original
+
+          unpreserved_resource
+          # Runs the preservation jobs and preserve children job.
+          perform_enqueued_jobs(only: [PreserveResourceJob, PreserveChildrenJob]) do
+            perform_enqueued_jobs(only: PreserveResourceJob)
+          end
+          # Runs characterization/derivatives
+          perform_enqueued_jobs do
+            perform_enqueued_jobs(only: CharacterizationJob)
+          end
+
+          expect(storage_adapter).to have_received(:upload).with(
+            # MD5 of the CSV.
+            hash_including(md5: "QyXPzJmbg0ehHmjCjXn8/Q==")
+          )
+        end
       end
     end
 
