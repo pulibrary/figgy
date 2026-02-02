@@ -7,8 +7,15 @@ class FallbackDiskAdapter
   end
 
   def find_by(id:)
-    primary_adapter.find_by(id: id)
-  rescue Valkyrie::StorageAdapter::FileNotFound
+    resource = primary_adapter.find_by(id: id)
+    # Check to see if the file's readable, fallback if not.
+    # If Tigerdata doesn't have a solid connection to the Isilon, this will fail
+    File.open(resource.disk_path, "rb") do |file|
+      # Read just one byte.
+      file.read(1)
+    end
+    resource
+  rescue Valkyrie::StorageAdapter::FileNotFound, Errno::EIO
     # This'll only work for disk adapters, but that's our use case.
     new_id = id.to_s.gsub(primary_adapter.base_path.to_s, fallback_adapter.base_path.to_s)
     file = fallback_adapter.find_by(id: new_id)
