@@ -3,7 +3,7 @@
 ### Requested lead time
 One Week
 
-One week allows folks the time to reschedule students who may be normally working in figgy in that three hour window.  It also allows folks time to know when not to kick off large ingests. For SC and Mudd Colleagues, it allows them to plan for no PDF downloads during that time, until ticket #2866 is closed.
+One week allows folks the time to reschedule students who may be normally working in figgy.  It also allows folks time to know when not to kick off large ingests. For SC and Mudd Colleagues, it allows them to plan for no PDF downloads during that time, until ticket #2866 is closed.
 
 ### Bad day(s) for Read Only Figgy mode
 Fridays
