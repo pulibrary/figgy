@@ -50,11 +50,11 @@ class ChangeSetPersister
         PublishMessage::Factory.new(operation: :update),
         ReindexChildrenOnState::Factory.new(model: EphemeraBox, state: "all_in_production"),
         IngestBag,
-        PreserveResource,
         ReorganizeCollection,
         UpdateAspaceDao,
         CleanupDeletedFiles,
-        Characterize
+        Characterize,
+        PreserveResource
       ],
       after_update_commit: [
         ReindexCollectionMembers,
