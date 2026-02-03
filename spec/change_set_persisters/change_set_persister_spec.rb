@@ -1365,7 +1365,7 @@ RSpec.describe ChangeSetPersister do
 
         change_set_persister.save(change_set: change_set)
         expect(PreserveChildrenJob).to have_received(:perform_later).exactly(1).times
-        expect(Preserver).to have_received(:new).exactly(5).times
+        expect(Preserver).to have_received(:new).exactly(4).times
         expect(CleanupFilesJob).not_to have_received(:perform_later)
       end
     end
@@ -1428,6 +1428,7 @@ RSpec.describe ChangeSetPersister do
         expect(modified_file).to eq new_modified_file
       end
     end
+
     context "when preserving a FileSet with an intermediate/preservation file" do
       it "preserves them" do
         file_set = FactoryBot.create_for_repository(:audio_file_set)
@@ -1435,10 +1436,13 @@ RSpec.describe ChangeSetPersister do
         storage_adapter = Valkyrie::StorageAdapter.find(:disk_via_copy)
         intermediate = storage_adapter.upload(file: file, original_filename: "intermediate", resource: file_set.intermediate_files.first)
         preservation = storage_adapter.upload(file: file, original_filename: "preservation", resource: file_set.preservation_file)
+        checksum = MultiChecksum.for(intermediate)
         file_set.intermediate_files.first.file_identifiers = intermediate.id
         file_set.intermediate_files.first.label = "example.tif"
+        file_set.intermediate_files.first.checksum = checksum
         file_set.preservation_file.file_identifiers = preservation.id
         file_set.preservation_file.label = "example.tif"
+        file_set.preservation_file.checksum = checksum
         change_set_persister.persister.save(resource: file_set)
         resource = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: [file_set.id])
 

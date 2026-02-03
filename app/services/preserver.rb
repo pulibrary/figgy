@@ -78,15 +78,20 @@ class Preserver
     def preserve_binary_node(binary_checker)
       return unless binary_checker.local_files?
       binary_node = binary_checker.preservation_node || build_preservation_node(binary_checker.file_metadata)
-      local_checksum = binary_node.checksum.first
-      local_checksum_hex = [local_checksum.md5].pack("H*")
-      local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
+      # When a file is added to a complete resource it might preserve
+      # immediately, but we haven't generated a checksum yet. To ensure we're
+      # only sending files that are the same as what we have on disk, only
+      # preserve binary nodes after characterization is done.
+      #
+      # If this gets skipped, preservation will run again when the
+      # CreateDerivativesJob is run and updates the processed state, via ChangeSetPersister::PreserveResource.
+      return unless binary_checker.file_metadata.checksum.present?
       f = File.open(Valkyrie::StorageAdapter.find_by(id: binary_checker.file_identifiers.first).disk_path)
       uploaded_file = storage_adapter.upload(
         file: f,
         original_filename: binary_node.label.first,
         resource: resource,
-        md5: local_md5_checksum,
+        md5: binary_checker.compact_local_md5,
         metadata: preservation_metadata
       )
       f.close
