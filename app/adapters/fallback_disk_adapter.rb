@@ -9,14 +9,10 @@ class FallbackDiskAdapter
   def find_by(id:)
     resource = primary_adapter.find_by(id: id)
     # Check to see if the file's readable, fallback if not.
-    # If Tigerdata doesn't have a solid connection to the Isilon, this will
-    # fail. If it takes a long time, Tigerdata's frozen up, fail generally and
-    # don't fallback.
-    Timeout.timeout(1) do
-      File.open(resource.disk_path, "rb") do |file|
-        # Read just one byte.
-        file.read(1)
-      end
+    # If Tigerdata doesn't have a solid connection to the Isilon, this will fail
+    File.open(resource.disk_path, "rb") do |file|
+      # Read just one byte.
+      file.read(1)
     end
     resource
   rescue Valkyrie::StorageAdapter::FileNotFound, Errno::EIO
