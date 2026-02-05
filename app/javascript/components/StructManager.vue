@@ -57,13 +57,14 @@
           Logical Structure
         </lux-heading>
       </div>
-      <tree
+      <tree-dnd 
         :id="tree.structure.id"
-        :json-data="tree.structure"
+        :json-data="tree.structure.folders"
         :viewing-direction="viewingDirection"
         @delete-folder="deleteFolder"
         @create-folder="createFolder"
         @zoom-file="zoomFile"
+        @drop-tree-item="dropTreeItem"
       />
     </div>
     <div
@@ -91,7 +92,7 @@
 <script>
 import { mapState } from 'vuex'
 import Toolbar from './StructManagerToolbar.vue'
-import Tree from './Tree.vue'
+import TreeDnd from './TreeDnd.vue'
 import StructGallery from './StructGallery.vue'
 import DeepZoom from './DeepZoom.vue'
 import mixin from './structMixins.js'
@@ -110,7 +111,7 @@ export default {
   type: 'Pattern',
   components: {
     toolbar: Toolbar,
-    tree: Tree,
+    TreeDnd,
     'deep-zoom': DeepZoom,
     'struct-gallery': StructGallery
   },
@@ -579,6 +580,11 @@ export default {
         this.clearClipboard()
         this.selectNoneGallery()
       }
+    },
+    dropTreeItem: function (structure) {
+      console.log(structure)
+      // this.$store.commit('SET_STRUCTURE', structure)
+      // this.$store.commit('SET_MODIFIED', true)
     },
     pasteTreeItem: function () {
       const rootId = this.tree.structure.id

@@ -111,7 +111,7 @@
         v-show="isOpen"
         class="lux-tree-sub"
       >
-        <VueDraggable class="lux-dnd-tree" v-model="jsonData.folders" tag="div" @click="deselect($event)" ref="el">
+        <VueDraggable class="lux-dnd-tree" v-model="jsonData.folders" tag="div" ref="el">
           <tree
             v-for="(folder) in jsonData.folders"
             :id="folder.id"
