@@ -1,13 +1,14 @@
 <template>
-  <VueDraggable class="drag-area" tag="ul" v-model="list" group="g1" @start="onStart" @end="onEnd">
-    <li v-for="el in jsonData" :key="el.label">
+  <VueDraggable class="drag-area" tag="ul" :id="generateId()" v-model="list" group="g1" @end="onEnd">
+    <li v-for="el in jsonData" :key="el.label" :id="generateId()">
       <p>{{ el.label }}</p>
-      <tree-dnd :json-data="el.folders" />
+      <tree-dnd :json-data="el.folders" @drop-tree-item="$emit('drop-tree-item', $event)" />
     </li>
   </VueDraggable>
 </template>
 <script>
 import { VueDraggable } from 'vue-draggable-plus'
+import mixin from './structMixins.js'
 
 export default {
   name: 'TreeDnd',
@@ -17,7 +18,8 @@ export default {
   components: {
     VueDraggable,
   },
-  emits: ["create-folder", "delete-folder", "zoom-file"],
+  mixins: [mixin],
+  emits: ["drop-tree-item"],
   props: {
     /**
      * id identifies the node in the tree.
@@ -29,9 +31,9 @@ export default {
     jsonData: {
       type: Array,
       required: true,
-      // default () {
-      //   return []
-      // }
+      default () {
+        return []
+      }
     },
   },
   data: function () {
@@ -41,8 +43,7 @@ export default {
   },
   methods: {
     onEnd: function (event) {
-      console.log(JSON.parse(JSON.stringify(event.item)))
-      this.$emit('drop-tree-item', event.item)
+      this.$emit('drop-tree-item', event)
     }
   }
 }

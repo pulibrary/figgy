@@ -336,6 +336,17 @@ export default {
         this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
+    dropTreeItem: function (event) {
+      console.log('hello!')
+      console.log('to: ' + event.to.id)
+      console.log('from: ' + event.from.id)
+      console.log('item: ' + event.item.id)
+      // Remove Element
+      // Paste/Sort Element
+
+      // this.$store.commit('SET_STRUCTURE', structure)
+      // this.$store.commit('SET_MODIFIED', true)
+    },
     findAllFilesInStructure: function (array) {
       for (const item of array) {
         if (item.file) this.end_nodes.push(item)
@@ -580,11 +591,6 @@ export default {
         this.clearClipboard()
         this.selectNoneGallery()
       }
-    },
-    dropTreeItem: function (structure) {
-      console.log(structure)
-      // this.$store.commit('SET_STRUCTURE', structure)
-      // this.$store.commit('SET_MODIFIED', true)
     },
     pasteTreeItem: function () {
       const rootId = this.tree.structure.id
