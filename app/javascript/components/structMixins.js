@@ -2,6 +2,8 @@ export default {
   methods: {
     findFolderById: function (array, id) {
       id= id.toString()
+      console.log('id: ' + id)
+      console.log(JSON.parse(JSON.stringify(array)))
       if (!Array.isArray(array)) return null;
 
       for (const item of array) {
