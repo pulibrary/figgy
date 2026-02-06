@@ -36,7 +36,7 @@ class Reindexer
   end
 
   def reindex_works
-    reindex_all(except_models: excluded_models + ["FileSet", "PreservationObject"])
+    reindex_all(except_models: excluded_models + ["DeletionMarker"])
   end
 
   def wipe_records
