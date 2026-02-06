@@ -65,6 +65,7 @@
         @create-folder="createFolder"
         @zoom-file="zoomFile"
         @drop-tree-item="dropTreeItem"
+        @drag-tree-item="dragTreeItem"
       />
     </div>
     <div
@@ -336,11 +337,18 @@ export default {
         this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
+    dragTreeItem: function (event) {
+      console.log(event.item.id)
+      this.$store.commit('CUT_FOLDER', event.item.id)
+      this.selectNoneTree()
+      console.log(this.tree.cut)
+    },
     dropTreeItem: function (event) {
       console.log('hello!')
       console.log('to: ' + event.to.id)
       console.log('from: ' + event.from.id)
       console.log('item: ' + event.item.id)
+      this.pasteTreeItem(event.to.id)
       // Remove Element
       // Paste/Sort Element
 
@@ -356,8 +364,8 @@ export default {
         }
       }
     },
-    sortFoldersAndFiles: function (node) {
-    
+    sortFoldersAndFiles: function (node) { // makes sure files sink to the bottom of each folder's contents
+      
       if (!Array.isArray(node.folders)) return
 
       // Stable partition: folders first, files last
@@ -549,7 +557,7 @@ export default {
         if (this.gallery.cut.length) {
           this.pasteGalleryItem()
         } else if (this.tree.cut) {
-          this.pasteTreeItem()
+          this.pasteTreeItem(this.tree.selected)
         }
       }
     },
@@ -592,10 +600,16 @@ export default {
         this.selectNoneGallery()
       }
     },
-    pasteTreeItem: function () {
+    pasteTreeItem: function (paste_into) {
+      // Todo - with copy/paste the paste_into value is the selected item
+      // for drag/drop we need to get the parent_id so we can get the ul value ... 
+      // OR lookup the parent_id (li) for the ul tag
+      console.log('cut: ' + this.tree.cut)
       const rootId = this.tree.structure.id
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
+
+      console.log(cutTreeStructure)
 
       const structure = {
         id: this.tree.structure.id,
@@ -603,10 +617,10 @@ export default {
       }
 
       // remove the folder if it currently exists
-      const selectedFolderObject = this.findFolderById(folderList, this.tree.selected)
+      const selectedFolderObject = this.findFolderById(folderList, paste_into)
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
 
-      if (this.tree.selected === rootId) {
+      if (paste_into === rootId) {
         if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
           folders.push(cutTreeStructure)
         } else {
@@ -619,7 +633,7 @@ export default {
         } else {
           selectedFolderObject.folders.unshift(cutTreeStructure)
         }
-        structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject)
+        structure.folders = this.replaceObjectById(folders, paste_into, selectedFolderObject)
       }
 
       this.$store.commit('SET_STRUCTURE', structure)
