@@ -2,6 +2,10 @@ require "rails_helper"
 
 RSpec.describe RegenerateDerivativesJob do
   describe "#perform" do
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:query_service) { adapter.query_service }
+    let(:storage_adapter) { Valkyrie.config.storage_adapter }
+
     context "with a valid file set id" do
       let(:derivatives_service) { instance_double(Valkyrie::Derivatives::DerivativeService) }
       let(:file_set) { FactoryBot.create_for_repository(:file_set) }
@@ -18,6 +22,25 @@ RSpec.describe RegenerateDerivativesJob do
         described_class.perform_now(file_set.id)
         expect(derivatives_service).to have_received(:cleanup_derivatives)
         expect(derivatives_service).to have_received(:create_derivatives)
+      end
+    end
+
+    context "when a file set was 'in process'" do
+      with_queue_adapter :inline
+      let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+      let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+      let(:scanned_resource) do
+        change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
+      end
+
+      it "sets processing_status to 'processed'" do
+        file_set = Wayfinder.for(scanned_resource).file_sets.first
+        change_set = ChangeSet.for(file_set)
+        change_set.validate(processing_status: "in process")
+        change_set_persister.save(change_set: change_set)
+        described_class.perform_now(file_set.id)
+        fs = query_service.find_by(id: file_set.id)
+        expect(fs.processing_status).to eq ("processed")
       end
     end
 
@@ -38,10 +61,7 @@ RSpec.describe RegenerateDerivativesJob do
     context "with a pdf preservation file", run_real_characterization: true, run_real_derivatives: true do
       with_queue_adapter :inline
       let(:file) { fixture_file_upload("files/sample.pdf", "application/pdf") }
-      let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
-      let(:storage_adapter) { Valkyrie.config.storage_adapter }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-      let(:query_service) { adapter.query_service }
       let(:scanned_resource) do
         change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
       end
