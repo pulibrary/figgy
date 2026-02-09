@@ -1,5 +1,5 @@
 <template>
-  <VueDraggable class="drag-area" tag="ul" :id="list.id" v-model="list" group="g1" @start="onStart" @end="onEnd">
+  <VueDraggable class="drag-area" tag="ul" :id="generateId()" v-model="list" group="g1" @start="onStart" @end="onEnd">
     <li v-for="el in jsonData" :key="el.label" :id="el.id">
       <p>{{ el.label }}</p>
       <tree-dnd :json-data="el.folders" @drop-tree-item="$emit('drop-tree-item', $event)" @drag-tree-item="$emit('drag-tree-item', $event)"/>
@@ -47,7 +47,7 @@ export default {
     },
     onStart: function (event) {
       this.$emit('drag-tree-item', event)
-    },
+    }
   }
 }
 </script>
