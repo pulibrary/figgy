@@ -39,6 +39,10 @@
 
   <dataDir>${solr.figgy-core.data.dir:}</dataDir>
 
+  <requestDispatcher handleSelect="true" >
+    <requestParsers enableRemoteStreaming="false" multipartUploadLimitInKB="2048000" />
+  </requestDispatcher>
+
   <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />
 
   <!-- config for the admin interface --> 
@@ -68,7 +72,7 @@
        of SearchComponents (see below) and supports distributed
        queries across multiple shards
     -->
-  <requestHandler name="/select" class="solr.SearchHandler" default="true">
+  <requestHandler name="search" class="solr.SearchHandler" default="true">
     <!-- default values for query parameters can be specified, these
          will be overridden by parameters in the request
       -->
