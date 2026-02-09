@@ -55,7 +55,6 @@ class CatalogController < ApplicationController
   include BlacklightIiifSearch::Controller
 
   def enforce_show_permissions
-    binding.pry
     super
   end
 
