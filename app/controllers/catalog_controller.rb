@@ -54,6 +54,11 @@ class CatalogController < ApplicationController
   # CatalogController-scope behavior and configuration for BlacklightIiifSearch
   include BlacklightIiifSearch::Controller
 
+  def enforce_show_permissions
+    binding.pry
+    super
+  end
+
   def set_id
     params["id"] = params["solr_document_id"]
   end

@@ -5,6 +5,7 @@ class Ability
     super
   rescue Blacklight::Exceptions::RecordNotFound
     # It might be a FileSet, so let's grab it and convert it live.
+    binding.pry
     resource = ChangeSetPersister.default.query_service.find_by(id: id)
     doc = Valkyrie::MetadataAdapter.find(:index_solr).resource_factory.from_resource(resource: resource).to_h
     permissions_document_class.new(doc)

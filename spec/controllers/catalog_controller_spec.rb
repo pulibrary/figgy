@@ -68,6 +68,7 @@ RSpec.describe CatalogController, type: :controller do
 
       get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 
+      binding.pry
       expect(response).to be_successful
       json_response = JSON.parse(response.body)
       expect(json_response["resources"].length).to eq 1
