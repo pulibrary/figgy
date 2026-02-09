@@ -338,22 +338,13 @@ export default {
       }
     },
     dragTreeItem: function (event) {
-      console.log(event.item.id)
       this.$store.commit('CUT_FOLDER', event.item.id)
       this.selectNoneTree()
-      console.log(this.tree.cut)
     },
     dropTreeItem: function (event) {
-      console.log('hello!')
-      console.log('to: ' + event.to.id)
-      console.log('from: ' + event.from.id)
-      console.log('item: ' + event.item.id)
-      this.pasteTreeItem(event.to.id)
-      // Remove Element
-      // Paste/Sort Element
-
-      // this.$store.commit('SET_STRUCTURE', structure)
-      // this.$store.commit('SET_MODIFIED', true)
+      // parent of the to element is what we need
+      const parentId = event.to.parentElement?.id || null
+      this.pasteTreeItem(parentId)
     },
     findAllFilesInStructure: function (array) {
       for (const item of array) {
@@ -532,7 +523,7 @@ export default {
             structure.folders = folderList 
 
             if(parentOfSelected === null) { // this means it was reordered on the root node
-              // if the next item is a file, prevent move down console.log(parentOfSelected.folders)
+              // if the next item is a file, prevent move down 
               if(!this.isNextItemAFile(structure.folders, this.tree.selected)){
                 structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
               }
@@ -601,15 +592,9 @@ export default {
       }
     },
     pasteTreeItem: function (paste_into) {
-      // Todo - with copy/paste the paste_into value is the selected item
-      // for drag/drop we need to get the parent_id so we can get the ul value ... 
-      // OR lookup the parent_id (li) for the ul tag
-      console.log('cut: ' + this.tree.cut)
       const rootId = this.tree.structure.id
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
-
-      console.log(cutTreeStructure)
 
       const structure = {
         id: this.tree.structure.id,
