@@ -22,6 +22,9 @@ class LocalIngester
   def find_attributes
     if resource_class_name == "EphemeraFolder"
       { property: :barcode }
+    elsif resource_class_name == "Numismatics::Coin"
+      # Find exising resource by coin number
+      { property: :coin_number }
     else
       {}
     end
@@ -30,6 +33,8 @@ class LocalIngester
   def file_filters
     if resource_class_name == "EphemeraFolder"
       [".tif", ".mp4", ".jpg", ".pdf", ".wav", ".mp3"]
+    elsif resource_class_name == "Numismatics::Coin"
+      [".tif", ".jpg"]
     else
       []
     end
