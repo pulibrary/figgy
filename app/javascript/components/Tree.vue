@@ -107,24 +107,18 @@
           </template>
         </div>
       </div>
-      <ul
-        v-show="isOpen"
-        class="lux-tree-sub"
-      >
-        <VueDraggable class="lux-dnd-tree" v-model="jsonData.folders" tag="div" ref="el">
-          <tree
-            v-for="(folder) in jsonData.folders"
-            :id="folder.id"
-            :key="folder.id"
-            :json-data="folder"
-            :root="false"
-            :viewing-direction="viewingDirection"
-            @delete-folder="deleteFolder"
-            @create-folder="createFolder"
-            @zoom-file="zoomFile"
-          />
-        </VueDraggable>
-      </ul>
+      <tree-dnd 
+        :id="tree.structure.id"
+        :json-data="tree.structure.folders"
+        :viewing-direction="viewingDirection"
+        :is-open="isOpen"
+        :root="false"
+        @delete-folder="deleteFolder"
+        @create-folder="createFolder"
+        @zoom-file="zoomFile"
+        @drop-tree-item="dropTreeItem"
+        @drag-tree-item="dragTreeItem"
+      />
     </li>
   </ul>
 </template>
@@ -135,6 +129,7 @@ import { mapState } from 'vuex'
 import IconEndNode from './IconEndNode.vue'
 import mixin from './structMixins.js'
 import { VueDraggable } from "vue-draggable-plus"
+import TreeDnd from './TreeDnd.vue'
 /**
  * TreeItems are the building blocks of hierarchical navigation.
  */
@@ -146,9 +141,10 @@ export default {
   components: {
     'lux-icon-end-node': IconEndNode,
     VueDraggable,
+    'tree-dnd': TreeDnd,
   },
   mixins: [mixin],
-  emits: ["create-folder", "delete-folder", "zoom-file"],
+  emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item"],
   props: {
     /**
      * id identifies the node in the tree.
@@ -243,6 +239,12 @@ export default {
     deleteFolder: function (folderId) {
       this.$emit('delete-folder', folderId)
     },
+    dropTreeItem: function (event) {
+      this.$emit('drop-tree-item', event)
+    },
+    dragTreeItem: function (event) {
+      this.$emit('drop-tree-item', event)
+    },
     zoomFile: function (fileId) {
       this.$emit('zoom-file', fileId)
     },
@@ -324,9 +326,6 @@ export default {
 
 <style lang="scss" scoped>
 
-.lux-tree {
-  margin-left: -50px;
-}
 .lux-tree.lux-button.icon.small {
   padding: 0px;
 }
