@@ -348,6 +348,24 @@ RSpec.describe BulkIngestController do
       file_sets = query_service.find_members(resource: reloaded2)
       expect(file_sets.flat_map(&:title).to_a).to eq ["1", "2"]
     end
+
+    context "when there is not an ephemera folder with a matching barcode" do
+      let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+
+      it "doesn't error" do
+        attributes =
+          {
+            resource_type: "ephemera_folder",
+            ingest_directory: "examples/lae"
+          }
+
+        post :bulk_ingest, params: { resource_type: "ephemera_folder", **attributes }
+        reloaded = query_service.find_by(id: folder.id)
+
+        # does not attach any files
+        expect(reloaded.member_ids.length).to eq 0
+      end
+    end
   end
 
   describe "a coin image ingest" do
@@ -361,7 +379,7 @@ RSpec.describe BulkIngestController do
       coin
     end
 
-    it "ingests images into the existing ephemera resources" do
+    it "ingests images into the existing coin resources" do
       attributes =
         {
           resource_type: "numismatics/coin",

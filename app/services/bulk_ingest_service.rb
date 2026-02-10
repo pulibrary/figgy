@@ -167,8 +167,8 @@ class BulkIngestService
     def find_or_create_by(property:, value:, **attributes)
       resource = find_by(property: property, value: value)
       return resource unless resource.nil?
-      # Don't create a new resource if a coin resource is not found
-      return unless @klass == Numismatics::Coin
+      # Don't create a new resource if a coin or ephemera folder is not found
+      return if @klass == Numismatics::Coin || @klass ==  EphemeraFolder
       new_resource(klass: @klass, **attributes)
     end
 
