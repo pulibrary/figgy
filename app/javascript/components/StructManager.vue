@@ -57,7 +57,7 @@
           Logical Structure
         </lux-heading>
       </div>
-      <tree-dnd 
+      <tree 
         :id="tree.structure.id"
         :json-data="tree.structure.folders"
         :viewing-direction="viewingDirection"
@@ -93,7 +93,7 @@
 <script>
 import { mapState } from 'vuex'
 import Toolbar from './StructManagerToolbar.vue'
-import TreeDnd from './TreeDnd.vue'
+import Tree from './Tree.vue'
 import StructGallery from './StructGallery.vue'
 import DeepZoom from './DeepZoom.vue'
 import mixin from './structMixins.js'
@@ -112,7 +112,7 @@ export default {
   type: 'Pattern',
   components: {
     toolbar: Toolbar,
-    TreeDnd,
+    Tree,
     'deep-zoom': DeepZoom,
     'struct-gallery': StructGallery
   },
