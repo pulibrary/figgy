@@ -14,20 +14,6 @@ Sidekiq will show the loader jobs running and the checker jobs enqueuing.
 
 We will get an email notification via our libanswers queue when the batch succeeds with all check correct, succeeds with preservation check failures, completes but with job failures (which will be rerun, since they are sidekiq jobs), or sends any job to the dead queue.
 
-## Run an initial audit - old way
-
-Audit files are saved in the capistrano shared directory to ensure they persist
-between deploys, however they are not shared between machines, so all tasks for
-a given audit must be run on the same machine.
-
-A full audit takes more than a week, and needs to be regularly checked in order to resume it if it is interrupted.
-
-The following full audit tasks can be found in `lib/tasks/preservation.rake`:
-  * figgy:preservation:full_audit_restart - Use this task to run the initial full audit
-  * figgy:preservation:full_audit_resume - Use this task if the full audit process is interrupted
-
-In 10 minutes or so you will see a progress bar. Check on it every once in a while; it will take maybe a week to generate the full report. See the tasks in that file for the location to access the reports.
-
 ## Investigate failures
 
 Analyze the audit report and investigate the failures to identify patterns, create tickets, and fix bugs.
@@ -138,11 +124,3 @@ id = get_from_figgy_ui
 audit = PreservationAudit.find(id)
 PreservationAuditRunner.rerun
 ```
-
-## Run a recheck report - old way
-
-The following recheck audit tasks can be found in `lib/tasks/preservation.rake`:
-  * figgy:preservation:recheck_restart - Use this task to audit just the contents of a full audit report
-  * figgy:preservation:recheck_again - Use this task to audit the contents of the most recent recheck report
-
-Resolving failures and running a recheck report can continue as needed until all preservation issues are resolved.
