@@ -30,54 +30,84 @@ In 10 minutes or so you will see a progress bar. Check on it every once in a whi
 
 ## Investigate failures
 
-Look through the audit report and investigate the resources that failed to identify patterns, create tickets, and fix bugs.
+Analyze the audit report and investigate the failures to identify patterns, create tickets, and fix bugs.
 
-Here are some code examples that may be useful for investigation
+### Create a CSV
 
-```
-# count resources with no preservation object at all
+Here is code for generating a csv report from the failures. Use tmux; this can take a long time.
+
+```ruby
+audit = PreservationAudit.find(audit_id)
 qs = ChangeSetPersister.default.query_service
-File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt")).count do |line|
-  resource = qs.find_by(id: line.chomp)
-  preservation_object = Wayfinder.for(resource).preservation_object
-  preservation_object.nil?
+failures = audit.preservation_check_failures
+rows = failures.map { |failure| failure.details_hash }
+path = Rails.root.join("tmp", "failure-report.csv")
+CSV.open(path, "w") do |csv|
+  csv << rows.first.keys
+  rows.each do |row|
+    csv << row.values
+  end
 end
 ```
 
+### Ad hoc investigation
+
+Here are code samples for direct investigations. Use tmux.
+```ruby
+# grab all the preservation objects
+audit = PreservationAudit.find(audit_id)
+qs = ChangeSetPersister.default.query_service
+resources_missing_po = []
+pos = audit.preservation_check_failures.map do |failure|
+  po = qs.custom_queries.find_by_property(model: PreservationObject, property: :preserved_object_id, value: Valkyrie::ID.new(failure.resource_id))
+  resources_missing_po << failure.resource_id if po.empty?
+  po.first
+end.compact
 ```
+After this, any resource without a PO will have its id in that `resources_missing_po` array, and everything else will have a preservation object in the `pos` list.
+
+Turns out some of the things in `resources_missing_po` just don't have a resource at all, you can do something like this to split it out if you want
+
+```ruby
+no_po = resources_missing_po.map do |id|
+  qs.find_by(id: id)
+rescue Valkyrie::Persistence::ObjectNotFoundError
+  resources_missing << id
+  nil
+end.compact
+```
+
+```ruby
 # count resources for which preservation object has no metadata node
-File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt")).count do |line|
-  resource = qs.find_by(id: line.chomp)
-  preservation_object = Wayfinder.for(resource).preservation_object
-  next unless preservation_object
+pos.count do |preservation_object|
   preservation_object.metadata_node.nil?
 end
 ```
 
-You can run the above also with `preservation_object.binary_nodes.empty?` to find resources where preservation has no binary nodes.
-
+```ruby
+# count resources for which preservation object has no binary node
+pos.count do |preservation_object|
+  preservation_object.binary_nodes.empty?
+end
 ```
+
+```ruby
 # count resources for which metadata isn't properly preserved
-skip_metadata_checksum = false
-File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt")).count do |line|
-  resource = qs.find_by(id: line.chomp)
-  preservation_object = Wayfinder.for(resource).preservation_object
-  next unless preservation_object
+pos.count do |preservation_object|
+  resource = qs.find_by(id: preservation_object.preserved_object_id)
   # pull first checker because there's always only one; it's just wrapped in an array for consistency with the binary checkers
-  md_checker = Preserver::PreservationChecker.metadata_for(resource: resource, preservation_object: preservation_object, skip_checksum: skip_metadata_checksum).first
+  md_checker = Preserver::PreservationChecker.metadata_for(resource: resource, preservation_object: preservation_object).first
   !md_checker.preserved?
 end
 ```
 
-If count above is > 0, you can run again using `!checker.recorded_versions_match?` and `!checker.preservation_ids_match?` to see which part of preservation is wrong
+If count above is > 0, you can run again using `!md_checker.recorded_versions_match?` and `!md_checker.preservation_ids_match?` to see which part of preservation is wrong
 
-```
+```ruby
 # count resources for which at least one binary isn't properly preserved
-File.foreach(Rails.root.join("tmp", "rake_preservation_audit", "sample.txt")).count do |line|
-  resource = qs.find_by(id: line.chomp)
-  preservation_object = Wayfinder.for(resource).preservation_object
-  next unless preservation_object
-  bin_checkers = Preserver::PreservationChecker.metadata_for(resource: resource, preservation_object: preservation_object)
+pos.count do |preservation_object|
+  resource = qs.find_by(id: preservation_object.preserved_object_id)
+  bin_checkers = Preserver::PreservationChecker.binaries_for(resource: resource, preservation_object: preservation_object)
   bin_checkers.any?{ |checker| !checker.preserved? }
 end
 ```
@@ -88,11 +118,13 @@ This is just some examples of things we've done before. You may need to investig
 
 ## Repair resources that failed to preserve
 
-Once a bug has been resolved, use the audit report as an input to re-preserve
-the resources that failed the audit. Use something like the following:
+Once bugs have been resolved or analysis is otherwise done, re-preserve
+the resources that failed the audit.
 
-```
-File.readlines(Rails.root.join("tmp", "rake_preservation_audit", "bad_resources.txt"), chomp: true).each { |id| PreserveResourceJob.set(queue: :super_low).perform_later(id: id.to_s, force_preservation: true) }
+```ruby
+audit.preservation_check_failures.each do |failure|
+  PreserveResourceJob.set(queue: :super_low).perform_later(id: failure.resource_id.to_s, force_preservation: true)
+end
 ```
 
 ## Run a recheck report - new way
@@ -101,7 +133,7 @@ Start another audit using the `rerun` method and passing in the audit you want t
 
 ssh to a worker box, open a tmux session, and go into the rails console
 
-```
+```ruby
 id = get_from_figgy_ui
 audit = PreservationAudit.find(id)
 PreservationAuditRunner.rerun
