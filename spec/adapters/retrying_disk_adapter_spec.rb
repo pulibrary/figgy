@@ -8,7 +8,7 @@ RSpec.describe RetryingDiskAdapter do
       inner_adapter
     )
   end
-  let(:inner_adapter) { Valkyrie::StorageAdapter.find(:disk) }
+  let(:inner_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   context "when upload fails because of an Errno::EPIPE" do
     it "retries" do

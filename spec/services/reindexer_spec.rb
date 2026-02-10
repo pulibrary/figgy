@@ -24,6 +24,29 @@ RSpec.describe Reindexer do
         expect { solr_adapter.query_service.find_by(id: output.id) }.not_to raise_error
       end
     end
+    context "when asked to reindex records updated in the last day" do
+      it "only indexes those" do
+        # Recently created item.
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        # resource2 won't be updated in the last day.
+        resource2 = Timecop.travel(Time.current - 2.days) do
+          FactoryBot.create_for_repository(:scanned_resource)
+        end
+        resource3 = Timecop.travel(Time.current - 3.days) do
+          FactoryBot.create_for_repository(:scanned_resource)
+        end
+        # Update resource3 to have a more recent updated_at
+        ChangeSetPersister.default.save(change_set: ChangeSet.for(resource3))
+
+        # Wipe out Solr so we can count indexed records.
+        described_class.reindex_all(logger: logger, wipe: false, updated_since: 1.day.ago)
+
+        solr_resources = solr_adapter.query_service.find_all.to_a
+        expect(solr_resources.length).to eq 2
+        expect(solr_resources.map(&:id)).to include resource.id, resource3.id
+        expect(solr_resources.map(&:id)).not_to include resource2.id
+      end
+    end
     it "reindexes multiple records" do
       5.times do
         postgres_adapter.persister.save(resource: FactoryBot.build(:scanned_resource))

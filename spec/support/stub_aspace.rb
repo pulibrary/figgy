@@ -128,6 +128,7 @@ module AspaceStubbing
     File.open(path, "w") do |f|
       f.write(result.body)
     end
+  ensure
     WebMock.enable!
   end
 end

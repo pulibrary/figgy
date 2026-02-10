@@ -18,13 +18,15 @@ namespace :figgy do
   desc "Reindexes everything without wiping Solr."
   task reindex: :environment do
     batch_size = ENV["BATCH_SIZE"] || 500
-    Reindexer.reindex_all(wipe: false, solr_adapter: reindexer_solr_adapter, batch_size: batch_size.to_i)
+    days_to_update = (ENV["DAYS_TO_UPDATE"] && ENV["DAYS_TO_UPDATE"].to_i.days.ago) || nil
+    Reindexer.reindex_all(wipe: false, solr_adapter: reindexer_solr_adapter, batch_size: batch_size.to_i, updated_since: days_to_update)
   end
 
   desc "Reindexes everything but FileSets without wiping Solr."
   task reindex_works: :environment do
     batch_size = ENV["BATCH_SIZE"] || 500
-    Reindexer.reindex_works(wipe: false, solr_adapter: reindexer_solr_adapter, batch_size: batch_size.to_i)
+    days_to_update = (ENV["DAYS_TO_UPDATE"] && ENV["DAYS_TO_UPDATE"].to_i.days.ago) || nil
+    Reindexer.reindex_works(wipe: false, solr_adapter: reindexer_solr_adapter, batch_size: batch_size.to_i, updated_since: days_to_update)
   end
 
   namespace :geoblacklight do
