@@ -13,12 +13,13 @@ class MemoryEfficientAllQuery
     @query_service = query_service
   end
 
-  def memory_efficient_all(except_models: [], order: false, since: nil)
+  def memory_efficient_all(except_models: [], order: false, since: nil, updated_since: nil)
     connection.transaction(savepoint: true) do
       relation = orm_class.use_cursor
       relation = relation.exclude(internal_resource: Array(except_models).map(&:to_s)) if except_models.present?
       relation = relation.order(Sequel.asc(:created_at)) if order
       relation = relation.where { created_at > since } if since
+      relation = relation.where { updated_at > updated_since } if updated_since
       relation.lazy.map do |object|
         resource_factory.to_resource(object: object)
       end
@@ -36,11 +37,12 @@ class MemoryEfficientAllQuery
     end.compact
   end
 
-  def count_all_except_models(except_models: [], since: nil)
+  def count_all_except_models(except_models: [], since: nil, updated_since: nil)
     connection.transaction(savepoint: true) do
       relation = orm_class.use_cursor
       relation = relation.exclude(internal_resource: Array(except_models).map(&:to_s)) if except_models.present?
       relation = relation.where { created_at > since } if since
+      relation = relation.where { updated_at > updated_since } if updated_since
       relation.count
     end
   end

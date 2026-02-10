@@ -1,31 +1,34 @@
 class Reindexer
-  def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, solr_adapter: :index_solr)
+  def self.reindex_all(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, updated_since: nil, solr_adapter: :index_solr)
     new(
       solr_adapter: Valkyrie::MetadataAdapter.find(solr_adapter),
       query_service: Valkyrie::MetadataAdapter.find(:postgres).query_service,
       logger: logger,
       wipe: wipe,
-      batch_size: batch_size
+      batch_size: batch_size,
+      updated_since: updated_since
     ).reindex_all
   end
 
-  def self.reindex_works(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, solr_adapter: :index_solr)
+  def self.reindex_works(logger: Logger.new(STDOUT), wipe: false, batch_size: 500, solr_adapter: :index_solr, updated_since: nil)
     new(
       solr_adapter: Valkyrie::MetadataAdapter.find(solr_adapter),
       query_service: Valkyrie::MetadataAdapter.find(:postgres).query_service,
       logger: logger,
       wipe: wipe,
-      batch_size: batch_size
+      batch_size: batch_size,
+      updated_since: updated_since
     ).reindex_works
   end
 
-  attr_reader :solr_adapter, :query_service, :logger, :wipe, :batch_size
-  def initialize(solr_adapter:, query_service:, logger:, wipe: false, batch_size: 500)
+  attr_reader :solr_adapter, :query_service, :logger, :wipe, :batch_size, :updated_since
+  def initialize(solr_adapter:, query_service:, logger:, updated_since: nil, wipe: false, batch_size: 500)
     @solr_adapter = solr_adapter
     @query_service = query_service
     @logger = logger
     @wipe = wipe
     @batch_size = batch_size
+    @updated_since = updated_since
   end
 
   def reindex_all(except_models: excluded_models)
@@ -50,7 +53,7 @@ class Reindexer
 
   class FilteredIndexer
     attr_reader :indexer, :except_models
-    delegate :solr_adapter, :query_service, :logger, :batch_size, to: :indexer
+    delegate :solr_adapter, :query_service, :logger, :batch_size, :updated_since, to: :indexer
     def initialize(indexer:, except_models:)
       @indexer = indexer
       @except_models = except_models
@@ -95,11 +98,11 @@ class Reindexer
     end
 
     def all_resources
-      query_service.custom_queries.memory_efficient_all(except_models: except_models)
+      query_service.custom_queries.memory_efficient_all(except_models: except_models, updated_since: updated_since)
     end
 
     def total
-      query_service.custom_queries.count_all_except_models(except_models: except_models)
+      query_service.custom_queries.count_all_except_models(except_models: except_models, updated_since: updated_since)
     end
   end
 end
