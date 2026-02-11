@@ -135,5 +135,5 @@
     "gbl_suppressed_b": { "type": "boolean" },
     "gbl_georeferenced_b": { "type": "boolean" }
   },
-  "required": ["id", "dct_title_s", "gbl_resourceClass_sm", "dct_accessRights_s", "gbl_mdVersion_s"]
+  "required": ["id", "dct_title_s", "gbl_resourceClass_sm", "dct_accessRights_s", "gbl_mdVersion_s", "locn_geometry"]
 }

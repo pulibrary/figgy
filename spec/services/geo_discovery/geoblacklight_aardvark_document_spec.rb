@@ -151,12 +151,10 @@ describe GeoDiscovery::GeoblacklightAardvarkDocument, skip_fixity: true do
     context "with missing coverage" do
       let(:coverage) { nil }
 
-      # Unlike GBL 1.0, locn_geometry is not required in Aardvark,
-      # so a nil coverage still produces a valid document.
-      it "returns a valid document without geometry fields" do
-        expect(document["locn_geometry"]).to be_nil
-        expect(document["dcat_bbox"]).to be_nil
-        expect(document).not_to have_key("error")
+      it "returns an error document" do
+        expect(document["error"][0]).to include("locn_geometry")
+        expect(document["error"].size).to eq(1)
+        expect(document_builder.to_hash[:error].size).to eq(1)
       end
     end
 
