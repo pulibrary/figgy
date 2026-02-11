@@ -68,7 +68,7 @@ class GeoResourceReindexer
 
     def create_directory(identifier:)
       base = base_document_path(identifier: identifier)
-      directory = "#{ogm_repo_path}/#{base}"
+      directory = "#{ogm_repo_path}/metadata-aardvark/#{base}"
       FileUtils.mkdir_p directory
       directory
     end
@@ -88,7 +88,7 @@ class GeoResourceReindexer
     end
 
     def save_document(resource:)
-      document = GeoDiscovery::DocumentBuilder.new(resource, GeoDiscovery::GeoblacklightDocument.new).to_hash
+      document = GeoDiscovery::DocumentBuilder.new(resource, GeoDiscovery::GeoblacklightAardvarkDocument.new).to_hash
       return if document_has_errors?(document: document)
       directory = create_directory(identifier: resource.identifier.first)
       file_path = "#{directory}/geoblacklight.json"
