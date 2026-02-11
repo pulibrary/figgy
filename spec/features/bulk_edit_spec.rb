@@ -84,10 +84,44 @@ RSpec.feature "Bulk edit", js: true do
       expect(uri.query).to eq "f%5Bhuman_readable_type_ssim%5D%5B%5D=Raster+Resource&q="
       expect(uri.path).to eq "/bulk_edit"
     end
+    it "will display when an emphemera project is selected" do
+      visit root_path("q" => "", "f[ephemera_project_ssim][]" => "Industrial Relations Ephemera")
+
+      expect(page).to have_css("#bulk-edit")
+      link = page.find_link("Bulk Edit")
+      uri = URI(link["href"])
+      expect(uri.query).to eq "f%5Bephemera_project_ssim%5D%5B%5D=Industrial+Relations+Ephemera&q="
+      expect(uri.path).to eq "/bulk_edit"
+    end
   end
 
   context "submit form" do
     with_queue_adapter :inline
+
+    context "with an emphemera project" do
+      let(:box) { FactoryBot.create_for_repository(:open_ephemera_box) }
+      let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id]) }
+
+      before do
+        [box, project].each do |resource|
+          change_set = ChangeSet.for(resource)
+          change_set_persister.save(change_set: change_set)
+        end
+      end
+
+      it "updates the resources" do
+        visit bulk_edit_resources_edit_path("q" => "", "f[ephemera_project_ssim][]" => "Test Project")
+        expect(page).to have_content "Bulk edit 1 resources"
+        page.select "private", from: "visibility", visible: false
+        accept_alert do
+          click_button("Apply Edits")
+        end
+        expect(page).to have_content "1 resources were queued for bulk update."
+        expect(current_path).to eq root_path
+        updated = adapter.query_service.find_by(id: box.id)
+        expect(updated.visibility).to eq ["restricted"]
+      end
+    end
 
     context "adding new embargo date" do
       let(:new_date) { (Time.zone.today + 12) }
