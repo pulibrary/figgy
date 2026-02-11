@@ -29,6 +29,12 @@ RSpec.describe PreservationCheckJob do
       end
     end
 
+    context "when the resource no longer exists" do
+      it "avoids endless retries by silencing ObjectNotFoundError" do
+        expect { described_class.new.perform("deleted resource id", audit.id) }.not_to raise_error(Valkyrie::Persistence::ObjectNotFoundError)
+      end
+    end
+
     context "with a resource that should not be preserved" do
       it "does not write a PreservationCheckFailure" do
         no_preserving_resource = FactoryBot.create_for_repository(:pending_scanned_resource)
