@@ -229,6 +229,27 @@ RSpec.describe RasterResourcesController, type: :controller do
     end
   end
 
+  describe "GET /raster_resources/:id/aardvark" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource) }
+    let(:builder) { instance_double(GeoDiscovery::DocumentBuilder) }
+
+    before do
+      allow(GeoDiscovery::DocumentBuilder).to receive(:new).and_return(builder)
+    end
+
+    context "with a valid geoblacklight document" do
+      before do
+        allow(builder).to receive(:to_hash).and_return(id: "test")
+      end
+
+      it "renders the document" do
+        get :aardvark, params: { id: raster_resource.id, format: :json }
+        expect(response).to be_successful
+      end
+    end
+  end
+
   describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:child) { FactoryBot.create_for_repository(:raster_resource) }

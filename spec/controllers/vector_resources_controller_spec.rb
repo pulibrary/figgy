@@ -235,6 +235,38 @@ RSpec.describe VectorResourcesController, type: :controller do
     end
   end
 
+  describe "GET /vector_resources/:id/aardvark" do
+    let(:user) { FactoryBot.create(:admin) }
+    let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }
+    let(:builder) { instance_double(GeoDiscovery::DocumentBuilder) }
+
+    before do
+      allow(GeoDiscovery::DocumentBuilder).to receive(:new).and_return(builder)
+    end
+
+    context "with a valid geoblacklight document" do
+      before do
+        allow(builder).to receive(:to_hash).and_return(id: "test")
+      end
+
+      it "renders the document" do
+        get :aardvark, params: { id: vector_resource.id, format: :json }
+        expect(response).to be_successful
+      end
+    end
+
+    context "with an invalid geoblacklight document" do
+      before do
+        allow(builder).to receive(:to_hash).and_return(error: "problem")
+      end
+
+      it "returns an error message" do
+        get :aardvark, params: { id: vector_resource.id, format: :json }
+        expect(response.body).to include("problem")
+      end
+    end
+  end
+
   describe "#remove_from_parent" do
     let(:user) { FactoryBot.create(:admin) }
     let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource) }

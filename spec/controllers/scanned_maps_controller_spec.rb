@@ -148,7 +148,17 @@ RSpec.describe ScannedMapsController, type: :controller do
         builder = GeoDiscovery::DocumentBuilder.new(resource, GeoDiscovery::GeoblacklightDocument.new)
         expect(builder.to_hash[:dc_title_s]).to eq "Mount Holly, N.J. [map]."
       end
+
+      it "generates a resource with a valid aardvark document" do
+        post :create, params: { scanned_map: params }
+
+        id = response.location.gsub("http://test.host/catalog/", "").gsub("%2F", "/")
+        resource = find_resource(id)
+        builder = GeoDiscovery::DocumentBuilder.new(resource, GeoDiscovery::GeoblacklightAardvarkDocument.new)
+        expect(builder.to_hash[:dct_title_s]).to eq "Mount Holly, N.J. [map]."
+      end
     end
+
     it "renders the form if it doesn't create a map image" do
       post :create, params: { scanned_map: invalid_params }
       expect(response).to render_template "base/new"
