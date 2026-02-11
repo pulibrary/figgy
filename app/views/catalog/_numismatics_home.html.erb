@@ -4,7 +4,18 @@
     <div class="card card-classify-work">
       <div class="card-header">Numismatics</div>
       <div class="card-body">
-        <%= link_to 'Manage Numismatics', numismatics_dashboard_path, class: "btn btn-primary"%>
+        <div class="row">
+          <div class="col-md-12 pb-3">
+            <%= link_to 'Bulk Ingest',
+              bulk_ingest_show_path(Numismatics::Coin.to_s.underscore),
+              class: "add-button btn btn-primary #{dom_class(Numismatics::Coin)}" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 pb-3">
+            <%= link_to 'Manage Numismatics', numismatics_dashboard_path, class: "btn btn-primary"%>
+          </div>
+        </div>
       </div>
     </div>
   </div>

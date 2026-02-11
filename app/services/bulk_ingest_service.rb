@@ -47,7 +47,12 @@ class BulkIngestService
     attributes.merge!(figgy_metadata_file_attributes(base_path: directory_path))
     file_name = attributes[:id] || base_name
     attributes[:title] = title if attributes.fetch(:title, []).blank? && attributes.fetch(:source_metadata_identifier, []).blank?
-    resource = find_or_create_by(property: property, value: file_name, **attributes)
+    # Set the resouce property value
+    property_value = file_name
+    #  Cast to integer for Numismatics::Coin
+    property_value = property_value.to_i if @klass == Numismatics::Coin
+    resource = find_or_create_by(property: property, value: property_value, **attributes)
+    return unless resource
     child_attributes = attributes.reject { |k, _v| k == :source_metadata_identifier }
     attach_children(path: directory_path, resource: resource, file_filters: file_filters, preserve_file_names: preserve_file_names, **child_attributes)
   end
@@ -162,6 +167,8 @@ class BulkIngestService
     def find_or_create_by(property:, value:, **attributes)
       resource = find_by(property: property, value: value)
       return resource unless resource.nil?
+      # Don't create a new resource if a coin or ephemera folder is not found
+      return if @klass == Numismatics::Coin || @klass ==  EphemeraFolder
       new_resource(klass: @klass, **attributes)
     end
 
@@ -179,7 +186,7 @@ class BulkIngestService
     end
 
     def flatten_child_directories?(resource)
-      return true if resource.selene?
+      return true if resource.try(:selene?)
       false
     end
 

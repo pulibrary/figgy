@@ -53,8 +53,19 @@ RSpec.describe BulkIngestController do
         get :show, params: { resource_type: "scanned_maps" }
         expect(assigns(:collections)).to eq [[collection.title.first, collection.id.to_s]]
       end
+
       it "doesn't display extra options for ephemera folders" do
         get :show, params: { resource_type: "ephemera_folder" }
+
+        expect(response.body).not_to have_select "workflow_state"
+        expect(response.body).not_to have_select "collections"
+        expect(response.body).not_to have_select "rights-statement"
+        expect(response.body).not_to have_select "holding-location"
+        expect(response.body).not_to have_content "Visibility"
+      end
+
+      it "doesn't display extra options for coins" do
+        get :show, params: { resource_type: "numismatics/coin" }
 
         expect(response.body).not_to have_select "workflow_state"
         expect(response.body).not_to have_select "collections"
@@ -336,6 +347,75 @@ RSpec.describe BulkIngestController do
 
       file_sets = query_service.find_members(resource: reloaded2)
       expect(file_sets.flat_map(&:title).to_a).to eq ["1", "2"]
+    end
+
+    context "when there is not an ephemera folder with a matching barcode" do
+      let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+
+      it "doesn't error" do
+        attributes =
+          {
+            resource_type: "ephemera_folder",
+            ingest_directory: "examples/lae"
+          }
+
+        post :bulk_ingest, params: { resource_type: "ephemera_folder", **attributes }
+        reloaded = query_service.find_by(id: folder.id)
+
+        # does not attach any files
+        expect(reloaded.member_ids.length).to eq 0
+      end
+    end
+  end
+
+  describe "a coin image ingest" do
+    with_queue_adapter :inline
+    let(:coin_number) { 1234 }
+    let(:coin) { FactoryBot.create_for_repository(:coin, coin_number: coin_number) }
+    let(:query_service) { metadata_adapter.query_service }
+    let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+
+    before do
+      coin
+    end
+
+    it "ingests images into the existing coin resources" do
+      attributes =
+        {
+          resource_type: "numismatics/coin",
+          ingest_directory: "numismatics/CoinImages",
+          preserve_file_names: "1"
+        }
+
+      post :bulk_ingest, params: { resource_type: "numismatics/coin", **attributes }
+      reloaded = query_service.find_by(id: coin.id)
+
+      # attaches obverse and reverse images
+      expect(reloaded.member_ids.length).to eq 2
+
+      file_sets = query_service.find_members(resource: reloaded)
+      expect(file_sets.flat_map(&:mime_type).to_a).to eq ["image/tiff", "image/tiff"]
+
+      expect(file_sets.flat_map(&:title).to_a).to eq ["obv", "rev"]
+    end
+
+    context "when there is not a coin number that matches an image folder" do
+      let(:coin_number) { 2345 }
+
+      it "doesn't error" do
+        attributes =
+          {
+            resource_type: "numismatics/coin",
+            ingest_directory: "numismatics/CoinImages",
+            preserve_file_names: "1"
+          }
+
+        post :bulk_ingest, params: { resource_type: "numismatics/coin", **attributes }
+        reloaded = query_service.find_by(id: coin.id)
+
+        # does not attach any files
+        expect(reloaded.member_ids.length).to eq 0
+      end
     end
   end
 
