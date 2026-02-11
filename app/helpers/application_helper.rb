@@ -176,7 +176,7 @@ module ApplicationHelper
   end
 
   def bulk_edit?
-    collection_present? || bulk_editable_types_present?
+    collection_present? || ephemera_project_present? || bulk_editable_types_present?
   end
 
   def bulk_editable_types
@@ -197,6 +197,10 @@ module ApplicationHelper
 
   def collection_present?
     params[:f] && params[:f]["member_of_collection_titles_ssim"].present?
+  end
+
+  def ephemera_project_present?
+    params[:f] && params[:f]["ephemera_project_ssim"].present?
   end
 
   # Create a link back to the index screen, keeping the user's facet, query and paging choices intact by using session.
