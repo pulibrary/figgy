@@ -3,31 +3,8 @@ require "json-schema"
 module GeoDiscovery
   # Generates GeoBlacklight documents following the Aardvark schema.
   # @see https://opengeometadata.org/ogm-aardvark/
-  class GeoblacklightAardvarkDocument < AbstractDocument
-    def to_hash(_args = nil)
-      return document unless build_private_document?
-      private_document
-    end
-
-    def to_json(_args = nil)
-      return document.to_json unless build_private_document?
-      private_document.to_json
-    end
-
+  class GeoblacklightAardvarkDocument < BaseDocument
     private
-
-      def document
-        clean = clean_document(document_hash)
-        if valid?(clean)
-          clean
-        else
-          schema_errors(clean)
-        end
-      end
-
-      def document_hash
-        document_hash_required.merge(document_hash_optional)
-      end
 
       def document_hash_required
         {
@@ -66,36 +43,6 @@ module GeoDiscovery
         }
       end
 
-      def private_document
-        clean = clean_document(private_document_hash)
-        if valid?(clean)
-          clean
-        else
-          schema_errors(clean)
-        end
-      end
-
-      def private_document_hash
-        optional = document_hash_optional
-        optional[:dct_references_s] = clean_document(private_references).to_json.to_s
-        document_hash_required.merge(optional)
-      end
-
-      def build_private_document?
-        return true if geom_types.include?("Image") && access_rights == restricted_visibility
-        return true if access_rights == private_visibility
-        false
-      end
-
-      def rights
-        case access_rights
-        when public_visibility
-          "Public"
-        else
-          "Restricted"
-        end
-      end
-
       def references
         {
           "http://schema.org/url" => url,
@@ -122,8 +69,7 @@ module GeoDiscovery
         }
       end
 
-      # Maps geometry types to Aardvark resource classes.
-      # Image → Maps, Raster/Vector → Datasets.
+      # Maps geometry types to Aardvark resource classes
       def resource_class
         classes = []
         classes << "Maps" if geom_types.include?("Image")
@@ -131,29 +77,19 @@ module GeoDiscovery
         classes.presence || ["Datasets"]
       end
 
-      # Extracts a 4-digit year from the issued string (which may be XMLSchema datetime).
+      # Extracts a 4-digit year from the issued string
       def issued_year
         return unless issued.present?
         match = issued.to_s.match(/(\d{4})/)
         match ? match[1] : nil
       end
 
-      def private_visibility
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-      end
-
-      def public_visibility
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-      end
-
-      def restricted_visibility
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-      end
-
       def schema
         JSON.parse(File.read(schema_path))
       end
 
+      # Returns a path to the geoblackligh schema document
+      # @return [String]
       def schema_path
         Rails.root.join("config", "discovery", "geoblacklight-schema-aardvark.json")
       end

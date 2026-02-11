@@ -9,7 +9,7 @@ module GeoDiscovery
       end
 
       # Builds service reference fields such as thumbnail and download url.
-      # @param [AbstractDocument] discovery document
+      # @param [BaseDocument] discovery document
       def build(document)
         build_metadata_refs(document)
         build_download_refs(document)
@@ -18,7 +18,7 @@ module GeoDiscovery
       private
 
         # Builds geospatial file download references.
-        # @param [AbstractDocument] discovery document
+        # @param [BaseDocument] discovery document
         def build_download_refs(document)
           document.cog_path = cog_path
           document.download = download
@@ -30,7 +30,7 @@ module GeoDiscovery
         end
 
         # Builds metadata file references.
-        # @param [AbstractDocument] discovery document
+        # @param [BaseDocument] discovery document
         def build_metadata_refs(document)
           document.fgdc = fgdc
           document.iso19139 = iso19139

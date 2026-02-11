@@ -8,7 +8,7 @@ module GeoDiscovery
       end
 
       # Runs each builder service to build a discovery document.
-      # @param [AbstractDocument] discovery document
+      # @param [BaseDocument] discovery document
       def build(document)
         services.each do |service|
           service.build(document)

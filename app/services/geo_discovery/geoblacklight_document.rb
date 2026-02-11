@@ -3,43 +3,8 @@ require "json-schema"
 module GeoDiscovery
   # For details on the schema,
   # @see 'https://github.com/geoblacklight/geoblacklight/wiki/Schema'
-  class GeoblacklightDocument < AbstractDocument
-    # Implements the to_hash method on the abstract document.
-    # @param _args [Array<Object>] arguments needed for the renderer, unused here
-    # @return [Hash] geoblacklight document as a hash
-    def to_hash(_args = nil)
-      return document unless build_private_document?
-      private_document
-    end
-
-    # Implements the to_json method on the abstract document.
-    # @param _args [Array<Object>] arguments needed for the json renderer, unused here
-    # @return [String] geoblacklight document as a json string
-    def to_json(_args = nil)
-      return document.to_json unless build_private_document?
-      private_document.to_json
-    end
-
+  class GeoblacklightDocument < BaseDocument
     private
-
-      # Cleans the geoblacklight document hash by removing unused fields,
-      # then validates it again a json schema. If there are errors, an
-      # error hash is returned, otherwise, the cleaned doc is returned.
-      # @return [Hash] geoblacklight document hash or error hash
-      def document
-        clean = clean_document(document_hash)
-        if valid?(clean)
-          clean
-        else
-          schema_errors(clean)
-        end
-      end
-
-      # Builds the geoblacklight document hash.
-      # @return [Hash] geoblacklight document as a hash
-      def document_hash
-        document_hash_required.merge(document_hash_optional)
-      end
 
       def document_hash_optional
         {
@@ -78,22 +43,6 @@ module GeoDiscovery
         }
       end
 
-      def private_document
-        clean = clean_document(private_document_hash)
-        if valid?(clean)
-          clean
-        else
-          schema_errors(clean)
-        end
-      end
-
-      # Insert special dct references for works with private visibility
-      def private_document_hash
-        optional = document_hash_optional
-        optional[:dct_references_s] = clean_document(private_references).to_json.to_s
-        document_hash_required.merge(optional)
-      end
-
       # Dct references hash with download, WxS, and IIIF refs removed
       def private_references
         {
@@ -102,14 +51,6 @@ module GeoDiscovery
           "http://www.isotc211.org/schemas/2005/gmd/" => iso19139,
           "http://schema.org/thumbnailUrl" => thumbnail
         }
-      end
-
-      def private_visibility
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-      end
-
-      def public_visibility
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
       end
 
       # Builds the dct_references hash.
@@ -131,49 +72,10 @@ module GeoDiscovery
         }
       end
 
-      def restricted_visibility
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-      end
-
-      # Returns the geoblacklight rights field based on work visibility.
-      # @return [String] geoblacklight access rights
-      def rights
-        case access_rights
-        when public_visibility
-          "Public"
-        else
-          "Restricted"
-        end
-      end
-
-      # Returns the content of geoblacklight JSON-Schema document.
-      # @return [Hash] geoblacklight json schema
-      def schema
-        JSON.parse(File.read(schema_path))
-      end
-
-      # Returns a hash of errors from json schema validation.
-      # @return [Hash] json schema validation errors
-      def schema_errors(doc)
-        { error: JSON::Validator.fully_validate(schema, doc, fragment: "#/definitions/layer") }
-      end
-
       # Returns a path to the geoblackligh schema document
       # @return [String]
       def schema_path
         Rails.root.join("config", "discovery", "geoblacklight-schema.json")
-      end
-
-      def build_private_document?
-        return true if geom_types.include?("Image") && access_rights == restricted_visibility
-        return true if access_rights == private_visibility
-        false
-      end
-
-      # Validates the geoblacklight document against the json schema.
-      # @return [Boolean] is the document valid?
-      def valid?(doc)
-        JSON::Validator.validate(schema, doc, fragment: "#/definitions/layer")
       end
   end
 end

@@ -8,7 +8,7 @@ module GeoDiscovery
       end
 
       # Builds fields such as id, subject, and publisher.
-      # @param [AbstractDocument] discovery document
+      # @param [BaseDocument] discovery document
       def build(document)
         build_simple_attributes(document)
         build_complex_attributes(document)
@@ -17,7 +17,7 @@ module GeoDiscovery
       private
 
         # Builds more complex metadata attributes.
-        # @param [AbstractDocument] discovery document
+        # @param [BaseDocument] discovery document
         def build_complex_attributes(document)
           document.access_rights = resource_decorator.model.visibility.first
           document.call_number = call_number
@@ -29,7 +29,7 @@ module GeoDiscovery
         end
 
         # Builds simple metadata attributes.
-        # @param [AbstractDocument] discovery document
+        # @param [BaseDocument] discovery document
         def build_simple_attributes(document)
           simple_attributes.each do |a|
             value = resource_decorator.send(a.to_s)

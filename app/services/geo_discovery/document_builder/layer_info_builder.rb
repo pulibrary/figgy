@@ -8,7 +8,7 @@ module GeoDiscovery
       end
 
       # Builds fields about the geospatial file such as geometry and format.
-      # @param [AbstractDocument] discovery document
+      # @param [BaseDocument] discovery document
       def build(document)
         document.geom_types = geom_types
         document.format = format
