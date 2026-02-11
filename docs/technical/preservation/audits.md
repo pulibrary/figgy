@@ -2,7 +2,7 @@
 
 In order to ensure resources are consistently and successfully preserved, we use our optional DLS discussion time every 4 months to ensemble kick off the preservation audit, and then the one two weeks after to review the results. Calendar events are created each year for this set of meetings, with a agenda item after the last one to review the process and potentially set up the next set of meetings.
 
-## Run an initial audit - new way
+## Run an initial audit
 
 ssh to a worker box and go into the rails console
 
@@ -20,7 +20,7 @@ Analyze the audit report and investigate the failures to identify patterns, crea
 
 ### Create a CSV
 
-Here is code for generating a csv report from the failures. Use tmux; this can take a long time.
+Here is code for generating a csv report from the failures. Use tmux; this can take a long time. For exapmle, when run on 1029 failures it took 13 min.
 
 ```ruby
 audit = PreservationAudit.find(audit_id)
@@ -113,14 +113,13 @@ audit.preservation_check_failures.each do |failure|
 end
 ```
 
-## Run a recheck report - new way
+## Run a recheck report
 
 Start another audit using the `rerun` method and passing in the audit you want to check failures from. Get the audit id from the figgy UI.
 
 ssh to a worker box, open a tmux session, and go into the rails console
 
 ```ruby
-id = get_from_figgy_ui
-audit = PreservationAudit.find(id)
-PreservationAuditRunner.rerun
+audit = PreservationAudit.find(audit_id)
+PreservationAuditRunner.rerun(ids_from: audit)
 ```

@@ -23,7 +23,7 @@ RSpec.describe "preservation_audits/show.html.erb" do
     assign :preservation_audit, rerun
     render
 
-    expect(rendered).to have_text("This audit only ran on ids from", normalize_ws: true)
+    expect(rendered).to have_text("This audit only ran on ids from audit #{audit.id}", normalize_ws: true)
     expect(rendered).to have_link("audit #{audit.id}", href: preservation_audit_path(audit.id))
   end
 end

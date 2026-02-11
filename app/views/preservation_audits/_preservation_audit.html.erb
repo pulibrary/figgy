@@ -26,8 +26,7 @@
 
   <% if preservation_audit.ids_from %>
     <li>
-      <strong>This audit only ran on ids from</strong>
-      <%= link_to "audit #{preservation_audit.ids_from.id}", preservation_audit.ids_from %>
+      This audit only ran on ids from <%= link_to "audit #{preservation_audit.ids_from.id}", preservation_audit.ids_from %>
     </li>
   <% end %>
 
