@@ -6,7 +6,11 @@ class PreservationCheckJob
   sidekiq_options queue: "super_low"
 
   def perform(resource_id, audit_id, opts = {})
-    resource = query_service.find_by(id: resource_id)
+    begin
+      resource = query_service.find_by(id: resource_id)
+    rescue Valkyrie::Persistence::ObjectNotFoundError
+      return
+    end
 
     # if it should't preserve we don't care about it
     return unless ChangeSet.for(resource).preserve?
