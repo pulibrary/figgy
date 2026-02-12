@@ -130,7 +130,7 @@ describe Preserver do
       end
     end
 
-    context "when retrieving Preservation from a Scanned Resource" do
+    context "when preserving a Scanned Resource" do
       let(:file_set) do
         resource.decorate.file_sets.first
       end
@@ -168,7 +168,7 @@ describe Preserver do
       end
     end
 
-    context "when retrieving Preservation from a ScannedMap" do
+    context "when preserving a ScannedMap" do
       let(:resource) do
         FactoryBot.create_for_repository(:complete_scanned_map,
                                          source_metadata_identifier: "991234563506421",
@@ -189,6 +189,7 @@ describe Preserver do
         expect(preservation_object.binary_nodes.first).not_to eq file_set.file_metadata.first
       end
     end
+
     context "when preserving an EphemeraProject" do
       let(:resource) do
         FactoryBot.create_for_repository(:ephemera_project,
@@ -304,6 +305,27 @@ describe Preserver do
         path = "#{Figgy.config['disk_preservation_path']}/#{resource.id}/data/#{file_set.id}/data/#{selene.id}/data/#{selene_file_set.id}/#{selene_file_set.id}.json"
 
         expect(File.exist?(path)).to be true
+      end
+    end
+
+    context "when preserving a video with captions" do
+      with_queue_adapter :inline
+      let(:resource) do
+          FactoryBot.create_for_repository(
+            :scanned_resource_with_video_and_captions,
+            state: "complete"
+          )
+      end
+      let(:change_set) { ChangeSet.for(resource) }
+      let(:storage_adapter) { Valkyrie::StorageAdapter.find(:google_cloud_storage) }
+
+      it "gives each binary node the checksum corresponding to its file metadata" do
+        preserver.preserve!
+
+        resource = query_service.find_by(id: change_set.resource.id)
+        file_set = Wayfinder.for(resource).file_sets.first
+        preservation_object = Wayfinder.for(file_set).preservation_object
+        expect(file_set.preservation_targets.flat_map(&:checksum).map(&:sha1)).to eq(preservation_object.binary_nodes.flat_map(&:checksum).map(&:sha1))
       end
     end
   end

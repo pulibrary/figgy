@@ -87,7 +87,7 @@ FactoryBot.define do
                   }
                 ),
                 IngestableFile.new(
-                  file_path: Rails.root.join("spec", "fixtures", "files", "caption.vtt"),
+                  file_path: Rails.root.join("spec", "fixtures", "files", "caption_und.vtt"),
                   mime_type: "text/vtt",
                   original_filename: "caption.vtt",
                   use: ::PcdmUse::Caption,
@@ -98,7 +98,7 @@ FactoryBot.define do
                 ),
 
                 IngestableFile.new(
-                  file_path: Rails.root.join("spec", "fixtures", "files", "caption.vtt"),
+                  file_path: Rails.root.join("spec", "fixtures", "files", "caption_zgh_alg.vtt"),
                   mime_type: "text/vtt",
                   original_filename: "caption.vtt",
                   use: ::PcdmUse::Caption,
