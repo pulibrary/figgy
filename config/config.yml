@@ -22,7 +22,6 @@ defaults: &defaults
   disk_preservation_path: <%= Rails.root.join("tmp", "cloud_backup") %>
   locations_url: https://bibdata.princeton.edu/locations/digital_locations.json
   derivative_path: <%= Rails.root.join("tmp", "derivatives") %>
-  fallback_derivative_path: <%= Rails.root.join("tmp", "fallback_derivatives") %>
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "pyramidal_derivatives") %>
   stream_derivatives_path: <%= Rails.root.join("tmp", "stream_derivatives") %>
   fallback_stream_derivatives_path: <%= Rails.root.join("tmp", "fallback_stream_derivatives") %>
@@ -262,7 +261,6 @@ test:
   repository_path: <%= Rails.root.join("tmp", "test_files#{ENV["TEST_ENV_NUMBER"]}") %>
   fallback_repository_path: <%= Rails.root.join("tmp", "test_files_fallback#{ENV["TEST_ENV_NUMBER"]}") %>
   derivative_path: <%= Rails.root.join("tmp", "test_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
-  fallback_derivative_path: <%= Rails.root.join("tmp", "fallback_test_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   pyramidal_derivative_path: <%= Rails.root.join("tmp", "test_pyramidal_derivatives#{ENV["TEST_ENV_NUMBER"]}") %>
   bag_path: <%= Rails.root.join("tmp", "test_bags#{ENV["TEST_ENV_NUMBER"]}") %>
   export_base: <%= Rails.root.join("tmp", "test_export#{ENV["TEST_ENV_NUMBER"]}") %>
@@ -287,7 +285,6 @@ production:
   repository_path: "/opt/repository/files"
   fallback_repository_path: "/opt/repository/fallback_files"
   derivative_path: "/opt/repository/derivatives"
-  fallback_derivative_path: "/opt/repository/fallback_derivatives"
   stream_derivatives_path: "/opt/repository/stream_derivatives"
   fallback_stream_derivatives_path: "/opt/repository/fallback_stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
@@ -311,7 +308,6 @@ staging:
   repository_path: "/opt/repository/files"
   fallback_repository_path: "/opt/repository/fallback_files"
   derivative_path: "/opt/repository/derivatives"
-  fallback_derivative_path: "/opt/repository/fallback_derivatives"
   cloud_geo_bucket: "figgy-geo-staging"
   pyramidal_derivative_path: "/opt/repository/derivatives/pyramidals"
   stream_derivatives_path: "/opt/repository/stream_derivatives"

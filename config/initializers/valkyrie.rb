@@ -153,30 +153,15 @@ Rails.application.config.to_prepare do
   # The file system in the server environment was overriding this, specifically for cases where files were saved to...
   # ...the IIIF image server network file share (libimages1) with a file access control octal value of 600 (globally-unreadable)
   # @see https://help.ubuntu.com/community/FilePermissions
-  primary_derivatives = RetryingDiskAdapter.new(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["derivative_path"],
-      file_mover: lambda { |old_path, new_path|
-        FileUtils.mv(old_path, new_path)
-        FileUtils.chmod(0o644, new_path)
-      }
-    )
-  )
-
-  fallback_derivatives = RetryingDiskAdapter.new(
-    Valkyrie::Storage::Disk.new(
-      base_path: Figgy.config["fallback_derivative_path"],
-      file_mover: lambda { |old_path, new_path|
-        FileUtils.mv(old_path, new_path)
-        FileUtils.chmod(0o644, new_path)
-      }
-    )
-  )
-
   Valkyrie::StorageAdapter.register(
-    FallbackDiskAdapter.new(
-      primary_adapter: primary_derivatives,
-      fallback_adapter: fallback_derivatives
+    RetryingDiskAdapter.new(
+      Valkyrie::Storage::Disk.new(
+        base_path: Figgy.config["derivative_path"],
+        file_mover: lambda { |old_path, new_path|
+          FileUtils.mv(old_path, new_path)
+          FileUtils.chmod(0o644, new_path)
+        }
+      )
     ),
     :derivatives
   )
