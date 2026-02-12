@@ -8,7 +8,7 @@ module GeoDiscovery
       end
 
       # Builds date fields such as layer year and modified date.
-      # @param [AbstractDocument] discovery document
+      # @param [BaseDocument] discovery document
       def build(document)
         document.layer_year = layer_year
         document.layer_modified = layer_modified

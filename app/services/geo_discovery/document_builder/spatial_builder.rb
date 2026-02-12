@@ -8,7 +8,7 @@ module GeoDiscovery
       end
 
       # Builds spatial fields such as bounding box and solr geometry.
-      # @param [AbstractDocument] discovery document
+      # @param [BaseDocument] discovery document
       def build(document)
         document.solr_coverage = to_solr
       end

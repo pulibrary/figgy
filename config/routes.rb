@@ -207,6 +207,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
+        get :aardvark, defaults: { format: :json }
         get :manifest, defaults: { format: :json }
         get :order_manager
         get :pdf
@@ -223,6 +224,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
+        get :aardvark, defaults: { format: :json }
         post :server_upload
       end
     end
@@ -234,6 +236,7 @@ Rails.application.routes.draw do
       member do
         get :file_manager
         get :geoblacklight, defaults: { format: :json }
+        get :aardvark, defaults: { format: :json }
         post :server_upload
       end
     end

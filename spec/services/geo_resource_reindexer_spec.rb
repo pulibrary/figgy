@@ -59,7 +59,7 @@ RSpec.describe GeoResourceReindexer do
       it "creates an OpenGeoMetadata repository and a layers.json file" do
         described_class.reindex_ogm(logger: logger, ogm_repo_path: ogm_repo_path)
         layers = JSON.parse(File.read("#{ogm_repo_path}/layers.json"))
-        expect(File).to exist("#{ogm_repo_path}/fk/4/geoblacklight.json")
+        expect(File).to exist("#{ogm_repo_path}/metadata-aardvark/fk/4/geoblacklight.json")
         expect(layers["ark:/99999/fk4"]).to eq("fk/4")
       end
     end
