@@ -61,7 +61,7 @@ class Preserver
     end
 
     def calculate_checksum(file_metadata)
-      @calculated_checksum ||= MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first))
+      MultiChecksum.for(Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first))
     end
 
     # Creates the binary name for a preserved copy of a file by setting the
