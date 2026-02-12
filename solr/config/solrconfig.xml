@@ -26,12 +26,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>7.0.0</luceneMatchVersion>
-  
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
-  <lib dir="${solr.install.dir:../../../..}/contrib/extraction/lib" regex=".*\.jar" />
-  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />
+  <luceneMatchVersion>9.11.1</luceneMatchVersion>
 
   <directoryFactory name="DirectoryFactory" 
                     class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}">
@@ -47,7 +42,7 @@
   <requestDispatcher handleSelect="true" >
     <requestParsers enableRemoteStreaming="false" multipartUploadLimitInKB="2048000" />
   </requestDispatcher>
-  
+
   <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />
 
   <!-- config for the admin interface --> 
@@ -157,11 +152,6 @@
         edit_access_group_ssim,edit_access_person_ssim,
         depositor_ti,
         embargo_release_date_dtsi
-        inheritable_access_ssim,
-        inheritable_discover_access_group_ssim,inheritable_discover_access_person_ssim,
-        inheritable_read_access_group_ssim,inheritable_read_access_person_ssim,
-        inheritable_edit_access_group_ssim,inheritable_edit_access_person_ssim,
-        inheritable_embargo_release_date_dtsi
       </str>
     </lst>
   </requestHandler>
@@ -276,18 +266,4 @@
        </lst>
       -->
   </searchComponent>
-
-  <requestHandler name="/update/extract" class="org.apache.solr.handler.extraction.ExtractingRequestHandler">
-    <lst name="defaults">
-      <str name="fmap.Last-Modified">last_modified</str>
-      <str name="uprefix">ignored_</str>
-    </lst>
-    <!--Optional.  Specify a path to a tika configuration file. See the Tika docs for details.-->
-    <!-- <str name="tika.config">/my/path/to/tika.config</str> -->
-    <!-- Optional. Specify one or more date formats to parse. See DateUtil.DEFAULT_DATE_FORMATS
-         for default date formats -->
-    <!-- <lst name="date.formats"> -->
-    <!--   <str>yyyy&#45;MM&#45;dd</str> -->
-    <!-- </lst> -->
-  </requestHandler>
 </config>
