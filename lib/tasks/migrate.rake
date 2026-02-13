@@ -186,6 +186,11 @@ namespace :figgy do
       Migrations::AddPublishedAtMigrator.call
     end
 
+    desc "Set is_portion property to true for resources with portion note"
+    task is_portion: :environment do
+      Migrations::IsPortionMigrator.call
+    end
+
     private
 
       # Construct or retrieve the memoized logger for STDOUT
