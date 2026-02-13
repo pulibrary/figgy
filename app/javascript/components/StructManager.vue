@@ -64,8 +64,8 @@
         @delete-folder="deleteFolder"
         @create-folder="createFolder"
         @zoom-file="zoomFile"
-        @drop-tree-item="dropTreeItem"
-        @drag-tree-item="dragTreeItem"
+        @drop-tree-item="dropTreeItemHandler"
+        @drag-tree-item="dragTreeItemHandler"
       />
     </div>
     <div
@@ -337,14 +337,14 @@ export default {
         this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
-    dragTreeItem: function (event) {
+    dragTreeItemHandler: function (event) {
       this.$store.commit('CUT_FOLDER', event.item.id)
       this.selectNoneTree()
     },
-    dropTreeItem: function (event) {
+    dropTreeItemHandler: function (event) {
       // parent of the to element is what we need
       const parentId = event.to.parentElement?.id || null
-      this.pasteTreeItem(parentId)
+      this.dropTreeItem(parentId, event.newIndex)
     },
     findAllFilesInStructure: function (array) {
       for (const item of array) {
@@ -591,6 +591,42 @@ export default {
         this.selectNoneGallery()
       }
     },
+    dropTreeItem: function (new_parent_id, new_index) {
+      const rootId = this.tree.structure.id
+      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
+
+      const structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label
+      }
+
+      const selectedFolderObject = this.findFolderById(folderList, new_parent_id)
+      const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
+
+      if (new_parent_id === rootId) {
+        if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
+          folders.push(cutTreeStructure)
+        } else {
+          folders.unshift(cutTreeStructure) // if it's a folder, stick it at the top
+        }
+        structure.folders = folders
+      } else {
+        selectedFolderObject.folders.splice(new_index, 0, cutTreeStructure)
+        // Todo: Deal with the reordering rules wrt files and folders
+        // if(cutTreeStructure.file){
+        //   selectedFolderObject.folders.push(cutTreeStructure)
+        // } else {
+        //   selectedFolderObject.folders.unshift(cutTreeStructure)
+        // }
+        structure.folders = this.replaceObjectById(folders, new_parent_id, selectedFolderObject)
+      }
+
+      this.$store.commit('SET_STRUCTURE', structure)
+      this.$store.commit('SET_MODIFIED', true)
+      this.selectNoneTree()
+      this.clearClipboard()
+    },
     pasteTreeItem: function (paste_into) {
       const rootId = this.tree.structure.id
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
@@ -601,7 +637,6 @@ export default {
         label: this.tree.structure.label
       }
 
-      // remove the folder if it currently exists
       const selectedFolderObject = this.findFolderById(folderList, paste_into)
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
 
