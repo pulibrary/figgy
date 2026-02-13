@@ -26,6 +26,7 @@ class ScannedResource < Resource
   attribute :sender, Valkyrie::Types::Array.of(NameWithPlace).meta(ordered: true)
   attribute :recipient, Valkyrie::Types::Array.of(NameWithPlace).meta(ordered: true)
   attribute :upload_set_id, Valkyrie::Types::ID
+  attribute :is_portion, Valkyrie::Types::Bool
 
   def self.can_have_manifests?
     true

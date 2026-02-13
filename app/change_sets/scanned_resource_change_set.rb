@@ -15,6 +15,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :holding_location, multiple: false, required: false, type: ::Types::URI
   property :location, multiple: true, required: false, default: []
   property :viewing_direction, multiple: false, required: false
+  property :is_portion, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :portion_note, multiple: false, required: false
   property :nav_date, multiple: false, required: false
   property :local_identifier, multiple: true, required: false, default: []
@@ -79,6 +80,7 @@ class ScannedResourceChangeSet < ChangeSet
       :pdf_type,
       :downloadable,
       :ocr_language,
+      :is_portion,
       :portion_note,
       :nav_date,
       :append_id,

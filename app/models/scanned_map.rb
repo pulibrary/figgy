@@ -11,6 +11,7 @@ class ScannedMap < Resource
   attribute :workflow_note, Valkyrie::Types::Array.of(WorkflowNote).optional
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :relation
+  attribute :is_portion, Valkyrie::Types::Bool
 
   def self.can_have_manifests?
     true
