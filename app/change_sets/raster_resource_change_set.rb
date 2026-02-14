@@ -18,6 +18,7 @@ class RasterResourceChangeSet < ChangeSet
   property :read_groups, multiple: true, required: false
   property :file_metadata, multiple: true, required: false, default: []
   property :depositor, multiple: false, require: false
+  property :is_portion, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :portion_note, multiple: false, required: false
   property :downloadable, multiple: false, require: true, default: "public"
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
@@ -48,6 +49,7 @@ class RasterResourceChangeSet < ChangeSet
         :rights_note,
         :notice_type,
         :thumbnail_id,
+        :is_portion,
         :portion_note,
         :local_identifier,
         :holding_location,

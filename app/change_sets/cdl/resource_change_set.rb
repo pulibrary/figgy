@@ -6,6 +6,7 @@ module CDL
     enable_claiming
     property :ocr_language, multiple: true, require: false, default: []
     property :downloadable, multiple: false, require: true, default: "none"
+    property :is_portion, multiple: false, required: false, type: Valkyrie::Types::Bool
     property :portion_note, multiple: false, required: false
     property :visibility, multiple: false, default: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
     property :rights_statement, multiple: false, required: true, default: RightsStatements.in_copyright, type: ::Types::URI
@@ -25,6 +26,7 @@ module CDL
         :rights_note,
         :downloadable,
         :ocr_language,
+        :is_portion,
         :portion_note,
         :append_id,
         :change_set

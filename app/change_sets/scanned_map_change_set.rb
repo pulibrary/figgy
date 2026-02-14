@@ -20,6 +20,7 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
       :rights_note,
       :thumbnail_id,
       :pdf_type,
+      :is_portion,
       :portion_note,
       :local_identifier,
       :holding_location,

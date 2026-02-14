@@ -14,6 +14,7 @@ RSpec.feature "VectorResources" do
     expect(page).to have_field "Source Metadata ID"
     expect(page).to have_css ".select[for='vector_resource_rights_statement']", text: "Rights Statement"
     expect(page).to have_field "Rights Note"
+    expect(page).to have_field "Is Portion"
     expect(page).to have_field "Portion Note"
     expect(page).to have_field "Local identifier"
     expect(page).to have_css ".select[for='vector_resource_holding_location']", text: "Holding Location"

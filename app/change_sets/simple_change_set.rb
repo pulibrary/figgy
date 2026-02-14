@@ -13,6 +13,7 @@ class SimpleChangeSet < ChangeSet
   property :viewing_hint, multiple: false, required: false, default: "individuals"
   property :pdf_type, multiple: false, required: false, default: "color"
   property :viewing_direction, multiple: false, required: false
+  property :is_portion, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :portion_note, multiple: false, required: false
   property :nav_date, multiple: false, required: false
   property :local_identifier, multiple: true, required: false, default: []
@@ -94,6 +95,7 @@ class SimpleChangeSet < ChangeSet
       :pdf_type,
       :downloadable,
       :ocr_language,
+      :is_portion,
       :portion_note,
       :nav_date,
       :member_of_collection_ids,

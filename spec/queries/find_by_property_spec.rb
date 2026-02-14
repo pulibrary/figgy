@@ -56,4 +56,53 @@ RSpec.describe FindByProperty do
       end
     end
   end
+
+  describe "#find_by_property_not_empty" do
+    it "returns records where the property has values" do
+      FactoryBot.create_for_repository(:scanned_resource, title: "with portion note", portion_note: "a note")
+      FactoryBot.create_for_repository(:scanned_resource, title: "no portion note")
+
+      output = query.find_by_property_not_empty(property: :portion_note)
+      expect(output.to_a.length).to eq 1
+      expect(output.first.portion_note).to eq ["a note"]
+    end
+
+    it "can filter by model" do
+      FactoryBot.create_for_repository(:scanned_resource, portion_note: "note 1")
+      FactoryBot.create_for_repository(:scanned_map, portion_note: "note 2")
+
+      output = query.find_by_property_not_empty(property: :portion_note, model: ScannedResource)
+      expect(output.to_a.length).to eq 1
+      expect(output.first.portion_note).to eq ["note 1"]
+    end
+
+    it "can filter by created_at" do
+      Timecop.travel(2021, 6, 30) do
+        FactoryBot.create_for_repository(:scanned_resource, portion_note: "note 1")
+      end
+      FactoryBot.create_for_repository(:scanned_resource, portion_note: "note 2")
+
+      output = query.find_by_property_not_empty(property: :portion_note, created_at: DateTime.new(2021, 3, 30)..DateTime.new(2021, 8, 30))
+      expect(output.to_a.length).to eq 1
+      expect(output.first.portion_note).to eq ["note 1"]
+    end
+
+    it "can return a lazy result set" do
+      FactoryBot.create_for_repository(:scanned_resource, portion_note: ["note 1"])
+      FactoryBot.create_for_repository(:scanned_resource, portion_note: ["note 2"])
+
+      allow(query_service.resource_factory).to receive(:to_resource).and_call_original
+      output = query.find_by_property_not_empty(property: :portion_note, lazy: true)
+      output.first
+      expect(query_service.resource_factory).to have_received(:to_resource).exactly(1).times
+    end
+
+    it "excludes records where the property is an empty array" do
+      FactoryBot.create_for_repository(:scanned_resource, title: "empty portion note", portion_note: [])
+
+      output = query.find_by_property_not_empty(property: :portion_note)
+      barcoded = output.select { |r| r.title.first == "empty portion note" }
+      expect(barcoded).to be_empty
+    end
+  end
 end

@@ -33,6 +33,7 @@ RSpec.shared_examples "a ResourcesController" do |*flags|
         expect(response.body).to have_field "Rights Statement"
         expect(response.body).to have_field "Rights Note"
         expect(response.body).to have_field "Local identifier"
+        expect(response.body).to have_field "Is Portion"
         expect(response.body).to have_field "Portion Note"
         expect(response.body).to have_field "Navigation Date", class: "timepicker"
         expect(response.body).to have_selector "##{model_name}_append_id[value='#{parent.id}']", visible: false

@@ -1,6 +1,6 @@
 class FindByProperty
   def self.queries
-    [:find_by_property]
+    [:find_by_property, :find_by_property_not_empty]
   end
 
   attr_reader :query_service
@@ -25,6 +25,20 @@ class FindByProperty
       value = Hash[value.map { |k, v| [k, Array.wrap(v)] }]
       relation = orm_class.where(Sequel[:metadata].pg_jsonb.contains(value))
     end
+    relation = relation.where(internal_resource: model.to_s) if model
+    relation = relation.where(created_at: created_at) if created_at
+    relation = relation.lazy if lazy
+    relation.map do |object|
+      resource_factory.to_resource(object: object)
+    end
+  end
+
+  # Find resource where an arbitrary  property is not an empty array or null.
+  def find_by_property_not_empty(property:, model: nil, created_at: nil, lazy: false)
+    relation = orm_class.use_cursor
+    relation = relation.where(
+      Sequel.lit("metadata->? IS NOT NULL AND metadata->? != '[]'::jsonb", property.to_s, property.to_s)
+    )
     relation = relation.where(internal_resource: model.to_s) if model
     relation = relation.where(created_at: created_at) if created_at
     relation = relation.lazy if lazy
