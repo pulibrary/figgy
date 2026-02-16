@@ -16,22 +16,20 @@ class ChangeSetPersister
       cs = change_set.class.new(reload(post_save_resource))
       return unless cs.try(:preserve?)
 
-      # If this resource was just added to a new parent, preserve the parent. It
-      # will trigger preservation on this resource after it's done.
-      if append_id
+      # If this resource was just added to a new parent, preserve the parent.
+      if append_id.present?
         lock_tokens = new_parent.optimistic_lock_token.map(&:serialize)
         PreserveResourceJob.perform_later(id: append_id.to_s, lock_tokens: lock_tokens)
       end
 
-      # preserve the resource itself if there was no parent, or the parent
-      # doesn't preserve children (like an ephemera box)
-      if append_id.blank? || ChangeSet.for(new_parent).try(:preserve_children?) == false
-        # Pass the current lock tokens to the job so we can ensure we only
-        # preserve the resource in that job if it hasn't changed since then.
-        lock_tokens = cs[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK] || []
-        lock_tokens = lock_tokens.map(&:serialize)
-        PreserveResourceJob.perform_later(id: cs.id.to_s, lock_tokens: lock_tokens)
-      end
+      # Even if the resource has a new parent, preserve it, because the parent
+      # only preserves its children if they've never been preserved before.
+
+      # Pass the current lock tokens to the job so we can ensure we only
+      # preserve the resource in that job if it hasn't changed since then.
+      lock_tokens = cs[Valkyrie::Persistence::Attributes::OPTIMISTIC_LOCK] || []
+      lock_tokens = lock_tokens.map(&:serialize)
+      PreserveResourceJob.perform_later(id: cs.id.to_s, lock_tokens: lock_tokens)
     end
 
     def new_parent
