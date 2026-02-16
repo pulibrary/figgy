@@ -33,7 +33,7 @@ class ChangeSetPersister
     def add_to_new_parent
       new_parent.thumbnail_id = post_save_resource.id if new_parent.respond_to?(:thumbnail_id=) && new_parent.member_ids.blank?
       new_parent.member_ids = new_parent.member_ids + [post_save_resource.id]
-      change_set_persister.save(change_set: ChangeSet.for(new_parent))
+      change_set_persister.persister.save(resource: new_parent)
     end
 
     def old_parent
