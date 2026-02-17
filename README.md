@@ -116,12 +116,13 @@ correctly generated.
 
 ##### Background workers
 
-Some tasks are performed by background workers. To run a Sidekiq background worker process to execute
-background jobs that are queued:
+Some tasks are performed by background workers. To run a Sidekiq background worker process to execute background jobs that are queued:
 
 ```
-bundle exec sidekiq
+bundle exec sidekiq -q default -q low -q super_low
 ```
+
+There are other queues - check the sidekiq ui to see them - but they aren't as commonly used so you aren't as likely to need them in development
 
 ##### Loading controlled vocabularies
 
