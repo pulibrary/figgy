@@ -48,7 +48,7 @@ class ChangeSetPersister
       return unless old_parent
       old_parent.thumbnail_id = nil if old_parent.respond_to?(:thumbnail_id) && (old_parent.thumbnail_id == post_save_resource.id)
       old_parent.member_ids = old_parent.member_ids - [post_save_resource.id]
-      persister.save(resource: old_parent)
+      change_set_persister.save(change_set: ChangeSet.for(old_parent))
     end
 
     delegate :append_id, to: :change_set

@@ -122,4 +122,28 @@ RSpec.describe ChangeSetPersister::AppendToParent do
       expect(output.member_ids).to eq []
     end
   end
+
+  context "when moving an ephemera folder from one box to another" do
+    with_queue_adapter :inline
+    it "triggers preservation on both boxes" do
+        folder = FactoryBot.create_for_repository(:ephemera_folder)
+        parent1 = FactoryBot.create_for_repository(:ephemera_box, member_ids: [folder.id])
+        ChangeSetPersister.default.save(
+          change_set: ChangeSet.for(parent1)
+        )
+        parent2 = FactoryBot.create_for_repository(:ephemera_box)
+        ChangeSetPersister.default.save(
+          change_set: ChangeSet.for(parent2)
+        )
+
+        change_set = ChangeSet.for(folder)
+        change_set.validate(append_id: parent2.id.to_s)
+
+        change_set_persister.save(change_set: change_set)
+        parent1 = query_service.find_by(id: parent1.id)
+        parent2 = query_service.find_by(id: parent2.id)
+        expect(parent1.optimistic_lock_token.first.token).to eq Wayfinder.for(parent1).preservation_object.metadata_version
+        expect(parent2.optimistic_lock_token.first.token).to eq Wayfinder.for(parent2).preservation_object.metadata_version
+    end
+  end
 end
