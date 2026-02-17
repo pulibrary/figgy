@@ -57,16 +57,19 @@
           Logical Structure
         </lux-heading>
       </div>
-      <tree-dnd 
-        :id="tree.structure.id"
-        :json-data="tree.structure.folders"
-        :viewing-direction="viewingDirection"
-        @delete-folder="deleteFolder"
-        @create-folder="createFolder"
-        @zoom-file="zoomFile"
-        @drop-tree-item="dropTreeItemHandler"
-        @drag-tree-item="dragTreeItemHandler"
-      />
+      <div :id="tree.structure.id">
+        {{ tree.structure.label }}
+        <tree-dnd 
+          :id="generateId()"
+          :json-data="tree.structure.folders"
+          :viewing-direction="viewingDirection"
+          @delete-folder="deleteFolder"
+          @create-folder="createFolder"
+          @zoom-file="zoomFile"
+          @drop-tree-item="dropTreeItemHandler"
+          @drag-tree-item="dragTreeItemHandler"
+        />
+      </div>
     </div>
     <div
       class="lux-galleryPanel"
@@ -596,6 +599,9 @@ export default {
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
 
+      console.log('new_parent_id: ' + new_parent_id)
+      console.log('new_index: ' + new_index)
+
       const structure = {
         id: this.tree.structure.id,
         label: this.tree.structure.label
@@ -603,13 +609,14 @@ export default {
 
       const selectedFolderObject = this.findFolderById(folderList, new_parent_id)
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
-
+    
       if (new_parent_id === rootId) {
-        if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
-          folders.push(cutTreeStructure)
-        } else {
-          folders.unshift(cutTreeStructure) // if it's a folder, stick it at the top
-        }
+        // if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
+        //   folders.push(cutTreeStructure)
+        // } else {
+        //   folders.unshift(cutTreeStructure) // if it's a folder, stick it at the top
+        // }
+        folders.splice(new_index, 0, cutTreeStructure)
         structure.folders = folders
       } else {
         selectedFolderObject.folders.splice(new_index, 0, cutTreeStructure)
