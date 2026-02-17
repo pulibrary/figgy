@@ -1,7 +1,18 @@
 <template>
-  <VueDraggable class="drag-area" tag="ul" :id="generateId()" v-model="list" group="g1" @start="onStart" @end="onEnd">
+  <VueDraggable handle=".handle" class="drag-area" tag="ul" :id="generateId()" v-model="list" group="g1" @start="onStart" @end="onEnd">
     <li v-for="el in jsonData" :key="el.label" :id="el.id">
-      <p>{{ el.label }}</p>
+      <div class="folder-container">
+        <lux-icon-base
+          class="handle cursor-move"
+          width="20"
+          height="20"
+          icon-name="End Node"
+          icon-color="gray"
+        >
+          <lux-icon-unsorted></lux-icon-unsorted>
+        </lux-icon-base>
+        <p>{{ el.label }}</p>
+      </div>
       <tree-dnd 
         :json-data="el.folders" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
@@ -59,5 +70,12 @@ export default {
 .drag-area {
   min-height: 50px;
   outline: 1px dashed;
+  list-style: none;
+}
+.folder-container {
+  display: flex;
+}
+.cursor-move {
+  cursor: grab;
 }
 </style>
