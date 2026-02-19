@@ -1,43 +1,51 @@
 <template>
   <lux-wrapper
-    type="div"
-    class="lux-gallery"
-    @click="deselect($event)"
-  >
-    <lux-card
-      v-for="(item) in items"
-      :id="item.id"
-      :key="item.id"
-      class="lux-galleryCard"
-      :card-pixel-width="cardPixelWidth"
-      size="medium"
-      :selected="isSelected(item)"
-      :disabled="isDisabled(item)"
-      :edited="hasChanged(item.id)"
-      @click.capture="select(item.id, $event)"
+      type="div"
+      class="lux-gallery"
+      @click="deselect($event)"
     >
-      <lux-media-image :src="item.mediaUrl" />
-      <lux-heading level="h2">
-        {{ item.title }}
-      </lux-heading>
-      <lux-text-style variation="default">
-        {{ item.caption }}
-      </lux-text-style>
-      <lux-input-button
-        class="zoom-icon"
-        type="button"
-        variation="icon"
-        size="small"
-        icon="search"
-        @button-clicked="zoomOnItem(item)"
-      />
-    </lux-card>
+    <VueDraggable 
+      class="lux-gallery" 
+      v-model="items" 
+      :group="{name: 'g1', put:false}" 
+      tag="div" 
+      @click="deselect($event)"
+    >
+      <lux-card
+          v-for="(item) in items"
+          :id="item.id"
+          :key="item.id"
+          class="lux-galleryCard"
+          :card-pixel-width="cardPixelWidth"
+          size="medium"
+          :selected="isSelected(item)"
+          :disabled="isDisabled(item)"
+          :edited="hasChanged(item.id)"
+          @click.capture="select(item.id, $event)"
+        >
+          <lux-media-image :src="item.mediaUrl" />
+          <lux-heading level="h2">
+            {{ item.title }}
+          </lux-heading>
+          <lux-text-style variation="default">
+            {{ item.caption }}
+          </lux-text-style>
+          <lux-input-button
+            class="zoom-icon"
+            type="button"
+            variation="icon"
+            size="small"
+            icon="search"
+            @button-clicked="zoomOnItem(item)"
+          />
+        </lux-card>
+    </VueDraggable>
   </lux-wrapper>
 </template>
-
 <script>
 import store from '../store'
 import { mapState } from 'vuex'
+import { VueDraggable } from "vue-draggable-plus"
 /*
  * Gallery is a grid of images with captions.
  */
@@ -46,6 +54,9 @@ export default {
   status: 'ready',
   release: '1.0.0',
   type: 'Pattern',
+  components: {
+    VueDraggable,
+  },
   props: {
     /**
      * Gallery items to be displayed in the gallery.

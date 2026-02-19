@@ -1,5 +1,13 @@
 <template>
-  <VueDraggable handle=".handle" class="drag-area" tag="ul" :id="generateId()" v-model="list" group="g1" @start="onStart" @end="onEnd">
+  <VueDraggable 
+    handle=".handle"
+    class="drag-area"
+    tag="ul" 
+    :id="generateId()" 
+    v-model="list" 
+    group="g1" 
+    @start="onStart" 
+    @end="onEnd">
     <!-- The el.id is generated into the data structure at load time in normalizeForLoad() -->
     <li v-for="el in jsonData" :key="el.id" :id="el.id">
       <div class="folder-container">
