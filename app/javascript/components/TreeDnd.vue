@@ -1,7 +1,7 @@
 <template>
   <VueDraggable handle=".handle" class="drag-area" tag="ul" :id="generateId()" v-model="list" group="g1" @start="onStart" @end="onEnd">
     <!-- The el.id is generated into the data structure at load time in normalizeForLoad() -->
-    <li v-for="el in jsonData" :key="el.label" :id="el.id">
+    <li v-for="el in jsonData" :key="el.id" :id="el.id">
       <div class="folder-container">
         <lux-icon-base
           class="handle cursor-move"
@@ -24,7 +24,7 @@
             v-model="el.label"
             type="text"
             class="folder-label-input"
-            @keyup="saveLabel(el.id)"
+            @keyup="saveLabel(el)"
             @keydown.enter="hideLabelInput()"
             @blur="hideLabelInput()"
           >
@@ -220,23 +220,30 @@ export default {
       // tree and gallery items cannot be selected simultaneously, so deselect the gallery
       store.commit('SELECT', [])
     },
-    saveLabel: function (id) {
-      console.log('saveLabel id:' + id)
-      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+    saveLabel: function (el) {
       // need to stringify and parse to drop the observer that comes with Vue reactive data
+      // folderList is the entire structure for the tree
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
 
-      let structure = {
-        id: this.tree.structure.id,
-        folders: folderList,
-        label: this.list.label
-      }
+      // we have to send the entire tree structure
+      // we either need to update the label for the root element and send the tree as folderList 
+      // in its unchanged form
+      // or we need to send back the tree as an updated folderList
+      let structure
 
-      if (id !== this.tree.structure.id) {
-        const selectedFolder = this.findFolderById(folderList, parentId)
+      if (el.id == this.tree.structure.id) {
+
         structure = {
           id: this.tree.structure.id,
-          folders: this.updateFolderLabel(folderList, selectedFolder),
+          folders: folderList,
+          label: el.label
+        }
+
+      } else {
+        const focusedFolder = this.findFolderById(folderList, el.id)
+        structure = {
+          id: this.tree.structure.id,
+          folders: this.updateFolderLabel(folderList, focusedFolder),
           label: this.tree.structure.label
         }
       }
@@ -248,7 +255,7 @@ export default {
     updateFolderLabel: function (array, selectedFolder) {
       for (const item of array) {
         if (item.id === selectedFolder.id) {
-          item.label = this.structureData.label
+          item.label = selectedFolder.label
         } else if (item.folders?.length) {
           this.updateFolderLabel(item.folders, selectedFolder)
         }
