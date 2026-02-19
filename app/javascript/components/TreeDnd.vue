@@ -32,14 +32,14 @@
       </template>
       <template v-else>
         <div
-          :class="isFile ? 'file-label' : 'folder-label'"
+          :class="el.file ? 'file-label' : 'folder-label'"
           :dir="viewDir"
         >
           {{ el.label }}
         </div>
-        <div :class="isFile ? 'file-edit' : 'folder-edit'">
+        <div :class="el.file ? 'file-edit' : 'folder-edit'">
           <lux-input-button
-            v-if="!isFile"
+            v-if="!el.file"
             class="toggle-edit"
             type="button"
             variation="icon"
@@ -48,7 +48,7 @@
             @button-clicked="toggleEdit(el.id)"
           />
           <lux-input-button
-            v-if="!isFile"
+            v-if="!el.file"
             class="create-folder"
             type="button"
             variation="icon"
@@ -124,14 +124,13 @@ export default {
     viewingDirection: {
       type: String,
       default: 'LEFTTORIGHT'
-    }
+    },
   },
   data: function () {
     return {
       list: JSON.parse(JSON.stringify(this.jsonData)),
       editedFieldId: null,
       isOpen: true,
-      isFile: this.jsonData.file
     }
   },
   computed: {
