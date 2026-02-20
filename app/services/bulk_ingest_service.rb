@@ -166,10 +166,19 @@ class BulkIngestService
 
     def find_or_create_by(property:, value:, **attributes)
       resource = find_by(property: property, value: value)
-      return resource unless resource.nil?
-      # Don't create a new resource if a coin or ephemera folder is not found
-      return if @klass == Numismatics::Coin || @klass ==  EphemeraFolder
-      new_resource(klass: @klass, **attributes)
+      if resource
+        resource = update_for_complete_when_processed(resource) if attributes[:complete_when_processed]
+        resource
+      elsif @klass != Numismatics::Coin || @klass !=  EphemeraFolder
+        # Don't create a new resource if a coin or ephemera folder is not found
+        new_resource(klass: @klass, **attributes)
+      end
+    end
+
+    def update_for_complete_when_processed(resource)
+      cs = ChangeSet.for(resource)
+      cs.state = "complete_when_processed"
+      change_set_persister.save(change_set: cs)
     end
 
     # Retrieve the files within a given directory
