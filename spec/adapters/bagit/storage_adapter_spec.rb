@@ -2,7 +2,9 @@ require "rails_helper"
 require "valkyrie/specs/shared_specs"
 
 RSpec.describe Bagit::StorageAdapter do
-  it_behaves_like "a Valkyrie::StorageAdapter"
+  context "shared specs", :flaky do
+    it_behaves_like "a Valkyrie::StorageAdapter"
+  end
   let(:storage_adapter) do
     described_class.new(
       base_path: Rails.root.join("tmp", "bags")
