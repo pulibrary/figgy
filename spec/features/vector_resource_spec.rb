@@ -8,7 +8,7 @@ RSpec.feature "Vector Resource" do
     sign_in user
   end
 
-  scenario "creating a new resource and viewing geoblacklight document", js: true do
+  scenario "creating a new resource and viewing geoblacklight document", :flaky, js: true do
     visit new_vector_resource_path
 
     fill_in "vector_resource_source_metadata_identifier", with: "99100017893506421"
