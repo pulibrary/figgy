@@ -85,6 +85,7 @@
       </template>
       </div>
       <tree-dnd 
+        v-if="!el.file"
         :json-data="el.folders" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
         @drag-tree-item="$emit('drag-tree-item', $event)"
