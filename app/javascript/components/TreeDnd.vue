@@ -280,8 +280,6 @@ export default {
         this.editedFieldId = id
         this.$nextTick(() => {
           let fieldId = 'field'+id 
-          console.log(fieldId)
-          console.log(this.$refs)
           if (this.$refs['field' + id]) {
             this.$refs['field' + id][0].focus()
           }

@@ -5,11 +5,14 @@
       @click="deselect($event)"
     >
     <VueDraggable 
-      class="lux-gallery" 
+      class="lux-gallery"
+      :sort="false"
       v-model="items" 
-      :group="{name: 'g1', put:false}" 
+      :group="{ name: 'g1', put: false }" 
       tag="div" 
       @click="deselect($event)"
+      @start="onStart" 
+      @end="onEnd"
     >
       <lux-card
           v-for="(item) in items"
@@ -54,6 +57,7 @@ export default {
   status: 'ready',
   release: '1.0.0',
   type: 'Pattern',
+  emits: ["drop-gallery-item", "drag-gallery-item"],
   components: {
     VueDraggable,
   },
@@ -126,6 +130,18 @@ export default {
     },
     isSelected: function (item) {
       return this.gallery.selected.indexOf(item) > -1
+    },
+    onEnd: function (event) {
+      if(event.from === event.to){
+        this.selectNoneGallery()
+        this.$store.commit('CUT', [])
+      } else {
+        this.$emit('drop-gallery-item', event)
+      }   
+    },
+    onStart: function (event) {
+      this.select(event.item.id, event)
+      this.$emit('drag-gallery-item', event)
     },
     zoomOnItem: function (item) {
       this.$store.commit('ZOOM', item)
