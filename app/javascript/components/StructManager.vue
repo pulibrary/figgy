@@ -88,6 +88,8 @@
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
         @card-clicked="galleryClicked()"
+        @drop-gallery-item="dropGalleryItemHandler"
+        @drag-gallery-item="dragGalleryItemHandler"
       />
     </div>
   </div>
@@ -340,6 +342,14 @@ export default {
         this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
+    dragGalleryItemHandler: function (event) {
+      this.$store.commit('CUT', this.gallery.selected)
+    },
+    dropGalleryItemHandler: function (event) {
+      // parent of the to element is what we need
+      const parentId = event.to.parentElement?.id || null
+      this.dropGalleryItem(parentId, event.newIndex)
+    },
     dragTreeItemHandler: function (event) {
       this.$store.commit('CUT_FOLDER', event.item.id)
       this.selectNoneTree()
@@ -555,6 +565,46 @@ export default {
         }
       }
     },
+    dropGalleryItem: function (parentId, newIndex) {
+      // todo write the logic - something between dropTreeItem and pasteGalleryItem
+      const rootId = this.tree.structure.id
+      let items = this.gallery.items
+      items = items.filter(val => !this.gallery.cut.includes(val))
+      let resources = JSON.parse(JSON.stringify(this.gallery.cut))
+      
+      // we will need to loop this to convert multiple cut gallery items into tree items
+      const newItems = resources.map((resource, index) => {
+        resource.label = resource.caption
+        resource.file = true
+        resource.folders = []
+        return resource
+      })
+
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      const structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label
+      }
+
+      if (parentId === rootId) {
+        alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
+      } else {
+        const parentFolderObject = this.findFolderById(folderList, parentId)
+        
+        const parentFolders = parentFolderObject.folders.concat(newItems)
+        parentFolderObject.folders = parentFolders
+        structure.folders = this.addNewNode(folderList, parentFolderObject)
+
+        this.$store.commit('ADD_FILES', structure)
+
+        this.$store.commit('PASTE', items)
+
+        this.$store.commit('SET_MODIFIED', true)
+        this.clearClipboard()
+        this.selectNoneGallery()
+      }
+    },
     pasteGalleryItem: function () {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
       const rootId = this.tree.structure.id
@@ -598,10 +648,6 @@ export default {
       const rootId = this.tree.structure.id
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
-
-      console.log('new_parent_id: ' + new_parent_id)
-      console.log('new_index: ' + new_index)
-
       const structure = {
         id: this.tree.structure.id,
         label: this.tree.structure.label
