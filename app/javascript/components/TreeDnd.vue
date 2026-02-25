@@ -20,7 +20,7 @@
       @click.capture="select(el.id, $event)">
 
       <div
-          v-if="!jsonData.file"
+          v-if="!el.file"
           class="lux-item"
         >
         <lux-input-button
