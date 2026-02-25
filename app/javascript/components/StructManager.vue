@@ -59,8 +59,9 @@
       </div>
       <div :id="tree.structure.id"
         :class="[
-         // { selected: isSelected(tree.structure.id) },
+          { selected: rootNodeSelected },
         ]" 
+        @click.capture="select(tree.structure.id, $event)"
       >
         <template v-if="editedFieldId === tree.structure.id">
           <div
@@ -210,6 +211,9 @@ export default {
     }
   },
   computed: {
+    rootNodeSelected: function () {
+      return this.tree.selected === this.tree.structure.id
+    },
     galleryItems () {
       return this.resource.members.map(member => ({
         id: member.id,
@@ -919,6 +923,11 @@ export default {
     selectNoneTree: function () {
       this.$store.commit('SELECT_TREEITEM', null)
     },
+    select: function (id, event) {
+      this.$store.commit('SELECT_TREEITEM', id)
+      // tree and gallery items cannot be selected simultaneously, so deselect the gallery
+      this.$store.commit('SELECT', [])
+    },
     selectTreeItemById: function (id) {
       this.$store.commit('SELECT_TREEITEM', id)
       this.selectNoneGallery()
@@ -1116,5 +1125,9 @@ export default {
 
   // $border-color: var(--color-white);
   border-color: rgb(231, 117, 0);
+}
+
+div.selected {
+  background: #fdf6dc;
 }
 </style>
