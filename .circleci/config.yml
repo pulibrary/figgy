@@ -3,6 +3,30 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.6
   node: circleci/node@5.0.2
+executors:
+  rspec-executor:
+    working_directory: ~/figgy
+    docker:
+      - image: ghcr.io/pulibrary/figgy:ci
+        environment:
+          RAILS_ENV: test
+          FIGGY_DB_HOST: localhost
+          FIGGY_DB_USERNAME: figgy
+          FIGGY_DB_PASSWORD: ""
+          MEDIAINFO_PATH: /usr/bin/mediainfo
+          PSQL_PAGER: ''
+      - image: cimg/postgres:15.2
+        environment:
+          POSTGRES_USER: figgy
+          POSTGRES_DB: figgy_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+      - image: quay.io/pulibrary/ci-solr:9.9-v1.0.0
+        command: server/scripts/ci-start.sh
+      - image: redis:7
+    resource_class: large
+    environment:
+      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+      COVERALLS_PARALLEL: true
 jobs:
   build:
     working_directory: ~/figgy
@@ -62,29 +86,8 @@ jobs:
           root: '~/figgy'
           paths: '*'
   test:
-    working_directory: ~/figgy
-    docker:
-      - image: ghcr.io/pulibrary/figgy:ci
-        environment:
-          RAILS_ENV: test
-          FIGGY_DB_HOST: localhost
-          FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD: ""
-          MEDIAINFO_PATH: /usr/bin/mediainfo
-          PSQL_PAGER: ''
-      - image: cimg/postgres:15.2
-        environment:
-          POSTGRES_USER: figgy
-          POSTGRES_DB: figgy_test
-          POSTGRES_HOST_AUTH_METHOD: trust
-      - image: quay.io/pulibrary/ci-solr:9.9-v1.0.0
-        command: server/scripts/ci-start.sh
-      - image: redis:7
-    resource_class: large
+    executor: rspec-executor
     parallelism: 4
-    environment:
-      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
-      COVERALLS_PARALLEL: true
     steps:
       - browser-tools/install-chrome
       - attach_workspace:
@@ -141,28 +144,7 @@ jobs:
           path: tmp/capybara
 
   test_flaky:
-    working_directory: ~/figgy
-    docker:
-      - image: ghcr.io/pulibrary/figgy:ci
-        environment:
-          RAILS_ENV: test
-          FIGGY_DB_HOST: localhost
-          FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD: ""
-          MEDIAINFO_PATH: /usr/bin/mediainfo
-          PSQL_PAGER: ''
-      - image: cimg/postgres:15.2
-        environment:
-          POSTGRES_USER: figgy
-          POSTGRES_DB: figgy_test
-          POSTGRES_HOST_AUTH_METHOD: trust
-      - image: quay.io/pulibrary/ci-solr:9.9-v1.0.0
-        command: server/scripts/ci-start.sh
-      - image: redis:7
-    resource_class: large
-    environment:
-      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
-      COVERALLS_PARALLEL: true
+    executor: rspec-executor
     steps:
       - browser-tools/install-chrome
       - attach_workspace:
