@@ -99,6 +99,7 @@ class BulkIngestController < ApplicationController
         state: workflow_state,
         visibility: params[:visibility],
         preserve_file_names: params[:preserve_file_names] == "1",
+        complete_when_processed: params[:complete_when_processed] == "1",
         depositor: current_user&.uid,
         holding_location: params[:holding_location],
         rights_statement: params[:rights_statement]

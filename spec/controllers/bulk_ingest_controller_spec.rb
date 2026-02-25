@@ -64,9 +64,10 @@ RSpec.describe BulkIngestController do
         expect(response.body).not_to have_content "Visibility"
       end
 
-      it "doesn't display extra options for coins" do
+      it "displays complete_when_processed, but not extra options for coins" do
         get :show, params: { resource_type: "numismatics/coin" }
 
+        expect(response.body).to have_css("input#complete_when_processed")
         expect(response.body).not_to have_select "workflow_state"
         expect(response.body).not_to have_select "collections"
         expect(response.body).not_to have_select "rights-statement"
@@ -384,7 +385,8 @@ RSpec.describe BulkIngestController do
         {
           resource_type: "numismatics/coin",
           ingest_directory: "numismatics/CoinImages",
-          preserve_file_names: "1"
+          preserve_file_names: "1",
+          complete_when_processed: "1"
         }
 
       post :bulk_ingest, params: { resource_type: "numismatics/coin", **attributes }
@@ -397,6 +399,9 @@ RSpec.describe BulkIngestController do
       expect(file_sets.flat_map(&:mime_type).to_a).to eq ["image/tiff", "image/tiff"]
 
       expect(file_sets.flat_map(&:title).to_a).to eq ["obv", "rev"]
+
+      # Coin resource is marked as complete_when_processed
+      expect(reloaded.state).to eq ["complete_when_processed"]
     end
 
     context "when there is not a coin number that matches an image folder" do
