@@ -1,5 +1,6 @@
 <template>
   <VueDraggable 
+    v-if="showing"
     handle=".handle"
     class="drag-area"
     tag="ul" 
@@ -17,6 +18,21 @@
         { disabled: isDisabled(el.id) },
       ]" 
       @click.capture="select(el.id, $event)">
+
+      <div
+          v-if="!jsonData.file"
+          class="lux-item"
+        >
+        <lux-input-button
+          class="expand-collapse"
+          type="button"
+          variation="icon"
+          size="small"
+          :icon="expandCollapseIcon(el.id)"
+          block
+          @button-clicked="toggleFolderClickHandler($event, el.id)"
+        />
+      </div>
       <div class="folder-container">
         <lux-icon-base
           class="handle cursor-move"
@@ -92,10 +108,13 @@
       </template>
       </div>
       <tree-dnd 
+        :showing="isShowing(el.id)"
+        :collapse-list="collapseList"
         v-if="!el.file"
         :json-data="el.folders" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
         @drag-tree-item="$emit('drag-tree-item', $event)"
+        @toggle-folder="toggleFolderEventHandler"
         @delete-folder="deleteFolder"
         @create-folder="createFolder"
         @zoom-file="zoomFile"
@@ -120,7 +139,7 @@ export default {
     'lux-icon-end-node': IconEndNode,
   },
   mixins: [mixin],
-  emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item"],
+  emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item", "toggle-folder"],
   props: {
     /**
      * id identifies the node in the tree.
@@ -129,12 +148,20 @@ export default {
       type: String,
       default: ''
     },
+    collapseList: {
+      type: Set, 
+      required: true, 
+    },
     jsonData: {
       type: Array,
       required: true,
       default () {
         return []
       }
+    },
+    showing: {
+      type: Boolean,
+      default: true
     },
     // Whether text should be displayed Left-to-Right or Right-to-Left
     viewingDirection: {
@@ -146,7 +173,6 @@ export default {
     return {
       list: JSON.parse(JSON.stringify(this.jsonData)),
       editedFieldId: null,
-      isOpen: true,
     }
   },
   computed: {
@@ -160,12 +186,6 @@ export default {
       } else {
         return false
       }
-    },
-    expandCollapseIcon: function () {
-      if (this.isOpen) {
-        return 'arrow-down'
-      }
-      return 'arrow-right'
     },
     viewDir: function () {
       if (this.viewingDirection === 'RIGHTTOLEFT') {
@@ -185,6 +205,12 @@ export default {
     },
     deleteFolder: function (folderId) {
       this.$emit('delete-folder', folderId)
+    },
+    expandCollapseIcon: function (id) {
+      if (this.collapseList.has(id)) {
+        return 'arrow-right'
+      }
+      return 'arrow-down'
     },
     isDisabled: function (id) {
       if (this.tree.cut) {
@@ -209,6 +235,12 @@ export default {
         return selectedTreeItems.includes(id)
       }
       return false
+    },
+    isShowing: function (id) {
+      if (this.collapseList.has(id)) {
+        return false
+      }
+      return true
     },
     zoomFile: function (fileId) {
       this.$emit('zoom-file', fileId)
@@ -283,6 +315,13 @@ export default {
     },
     onStart: function (event) {
       this.$emit('drag-tree-item', event)
+    },
+    toggleFolderClickHandler: function (event, id) {
+      event.collapseId = id
+      this.$emit('toggle-folder', event)
+    },
+    toggleFolderEventHandler: function (event) {
+      this.$emit('toggle-folder', event)
     },
     toggleEdit: function (id) {
       if (id) {
