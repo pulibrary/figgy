@@ -61,6 +61,7 @@
         {{ tree.structure.label }}
         <tree-dnd 
           :id="generateId()"
+          :collapse-list="collapseList"
           :json-data="tree.structure.folders"
           :viewing-direction="viewingDirection"
           @delete-folder="deleteFolder"
@@ -68,6 +69,7 @@
           @zoom-file="zoomFile"
           @drop-tree-item="dropTreeItemHandler"
           @drag-tree-item="dragTreeItemHandler"
+          @toggle-folder="toggleFolderHandler"
         />
       </div>
     </div>
@@ -156,7 +158,8 @@ export default {
       captionPixelPadding: 9,
       ga: null,
       s: null,
-      id: this.resourceId
+      id: this.resourceId,
+      collapseList: new Set()
     }
   },
   computed: {
@@ -831,6 +834,13 @@ export default {
 
         return cleanedObj
       })
+    },
+    toggleFolderHandler: function (event) {
+      if(this.collapseList.has(event.collapseId)){
+        this.collapseList.delete(event.collapseId)
+      } else {
+        this.collapseList.add(event.collapseId)
+      }
     },
     saveHandler: function (event) {
       let structureNodes = this.renamePropertiesForSave(this.tree.structure.folders)

@@ -30,7 +30,7 @@
           size="small"
           :icon="expandCollapseIcon(el.id)"
           block
-          @button-clicked="toggleFolder($event, el.id)"
+          @button-clicked="toggleFolderClickHandler($event, el.id)"
         />
       </div>
       <div class="folder-container">
@@ -109,10 +109,12 @@
       </div>
       <tree-dnd 
         :showing="isShowing(el.id)"
+        :collapse-list="collapseList"
         v-if="!el.file"
         :json-data="el.folders" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
         @drag-tree-item="$emit('drag-tree-item', $event)"
+        @toggle-folder="toggleFolderEventHandler"
         @delete-folder="deleteFolder"
         @create-folder="createFolder"
         @zoom-file="zoomFile"
@@ -137,7 +139,7 @@ export default {
     'lux-icon-end-node': IconEndNode,
   },
   mixins: [mixin],
-  emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item"],
+  emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item", "toggle-folder"],
   props: {
     /**
      * id identifies the node in the tree.
@@ -145,6 +147,10 @@ export default {
     id: {
       type: String,
       default: ''
+    },
+    collapseList: {
+      type: Set, 
+      required: true, 
     },
     jsonData: {
       type: Array,
@@ -167,7 +173,6 @@ export default {
     return {
       list: JSON.parse(JSON.stringify(this.jsonData)),
       editedFieldId: null,
-      collapseList: new Set(),
     }
   },
   computed: {
@@ -311,12 +316,12 @@ export default {
     onStart: function (event) {
       this.$emit('drag-tree-item', event)
     },
-    toggleFolder: function (event, id) {
-      if(this.collapseList.has(id)){
-        this.collapseList.delete(id)
-      } else {
-        this.collapseList.add(id)
-      }
+    toggleFolderClickHandler: function (event, id) {
+      event.collapseId = id
+      this.$emit('toggle-folder', event)
+    },
+    toggleFolderEventHandler: function (event) {
+      this.$emit('toggle-folder', event)
     },
     toggleEdit: function (id) {
       if (id) {
