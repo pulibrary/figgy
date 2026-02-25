@@ -3,6 +3,72 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.6
   node: circleci/node@5.0.2
+executors:
+  rspec-executor:
+    working_directory: ~/figgy
+    docker:
+      - image: ghcr.io/pulibrary/figgy:ci
+        environment:
+          RAILS_ENV: test
+          FIGGY_DB_HOST: localhost
+          FIGGY_DB_USERNAME: figgy
+          FIGGY_DB_PASSWORD: ""
+          MEDIAINFO_PATH: /usr/bin/mediainfo
+          PSQL_PAGER: ''
+      - image: cimg/postgres:15.2
+        environment:
+          POSTGRES_USER: figgy
+          POSTGRES_DB: figgy_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+      - image: quay.io/pulibrary/ci-solr:9.9-v1.0.0
+        command: server/scripts/ci-start.sh
+      - image: redis:7
+    resource_class: large
+    environment:
+      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+      COVERALLS_PARALLEL: true
+commands:
+  pre-test-steps:
+    steps:
+      - browser-tools/install-chrome
+      - attach_workspace:
+          at: '~/figgy'
+      - node/install:
+          install-yarn: true
+          node-version: '22.11.0'
+      - run:
+          name: Check current version of node
+          command: node -v
+      # Wait for DB
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      # Install Bundler
+      - run: gem install bundler -v '2.6.9'
+      # Bundle install dependencies
+      - run: bundle config set path 'vendor/bundle'
+      - run: bundle install
+      - run:
+          name: Load config into solr
+          command: |
+            cd solr/config
+            zip -1 -r solr_config.zip ./*
+            curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://solr:SolrRocks@127.0.0.1:8984/solr/admin/configs?action=UPLOAD&name=figgy"
+            curl -H 'Content-type: application/json' http://solr:SolrRocks@127.0.0.1:8984/api/collections/  -d '{"name": "figgy-core-test", "config": "figgy", "numShards": 1}'
+      - run: bundle exec rake db:environment:set
+      - run: bundle exec rake db:migrate
+  post-test-steps:
+    steps:
+      - persist_to_workspace:
+          root: '~/figgy'
+          paths: 'coverage_results'
+      # collect reports
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+      - store_artifacts:
+          path: tmp/capybara
+
 jobs:
   build:
     working_directory: ~/figgy
@@ -62,46 +128,10 @@ jobs:
           root: '~/figgy'
           paths: '*'
   test:
-    working_directory: ~/figgy
-    docker:
-      - image: ghcr.io/pulibrary/figgy:ci
-        environment:
-          RAILS_ENV: test
-          FIGGY_DB_HOST: localhost
-          FIGGY_DB_USERNAME: figgy
-          FIGGY_DB_PASSWORD: ""
-          MEDIAINFO_PATH: /usr/bin/mediainfo
-          PSQL_PAGER: ''
-      - image: cimg/postgres:15.2
-        environment:
-          POSTGRES_USER: figgy
-          POSTGRES_DB: figgy_test
-          POSTGRES_HOST_AUTH_METHOD: trust
-      - image: quay.io/pulibrary/ci-solr:9.9-v1.0.0
-        command: server/scripts/ci-start.sh
-      - image: redis:7
-    resource_class: large
+    executor: rspec-executor
     parallelism: 4
-    environment:
-      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
-      COVERALLS_PARALLEL: true
     steps:
-      - browser-tools/install-chrome
-      - attach_workspace:
-          at: '~/figgy'
-      - node/install:
-          install-yarn: true
-          node-version: '22.11.0'
-      - run:
-          name: Check current version of node
-          command: node -v
-      # Wait for DB
-      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
-      # Install Bundler
-      - run: gem install bundler -v '2.6.9'
-      # Bundle install dependencies
-      - run: bundle config set path 'vendor/bundle'
-      - run: bundle install
+      - pre-test-steps
       - run: yarn test
       - run:
           name: Run Cloud Fixity tests
@@ -110,35 +140,33 @@ jobs:
             yarn install
             yarn test
       - run:
-          name: Load config into solr
-          command: |
-            cd solr/config
-            zip -1 -r solr_config.zip ./*
-            curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://solr:SolrRocks@127.0.0.1:8984/solr/admin/configs?action=UPLOAD&name=figgy"
-            curl -H 'Content-type: application/json' http://solr:SolrRocks@127.0.0.1:8984/api/collections/  -d '{"name": "figgy-core-test", "config": "figgy", "numShards": 1}'
-      - run: bundle exec rake db:environment:set
-      - run: bundle exec rake db:migrate
-      - run:
           name: Run rspec in parallel
           command: |
             mkdir /tmp/test-results
-            bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split)
+            bundle exec rspec --tag "~flaky" $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split)
       - run:
           name: Stash Coverage Results
           command: |
             mkdir coverage_results
             cp -R coverage/.resultset.json coverage_results/.resultset-${CIRCLE_NODE_INDEX}.json
-      - persist_to_workspace:
-          root: '~/figgy'
-          paths: 'coverage_results'
-      # collect reports
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
-      - store_artifacts:
-          path: tmp/capybara
+      - post-test-steps
+
+  test_flaky:
+    executor: rspec-executor
+    steps:
+      - pre-test-steps
+      - run:
+          name: Run rspec
+          command: |
+            mkdir /tmp/test-results
+            bundle exec rspec --tag "flaky"
+      - run:
+          name: Stash Coverage Results
+          command: |
+            mkdir coverage_results
+            cp -R coverage/.resultset.json coverage_results/.resultset-flaky.json
+      - post-test-steps
+
   coverage_report:
     working_directory: ~/figgy
     docker:
@@ -191,12 +219,16 @@ workflows:
       - test:
           requires:
             - build
+      - test_flaky:
+          requires:
+            - build
       - rubocop:
           requires:
             - build
       - coverage_report:
           requires:
             - test
+            - test_flaky
 
   nightly:
     triggers:
@@ -211,9 +243,13 @@ workflows:
       - test:
           requires:
             - build
+      - test_flaky:
+          requires:
+            - build
       - rubocop:
           requires:
             - build
       - coverage_report:
           requires:
             - test
+            - test_flaky
