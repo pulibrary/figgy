@@ -9,7 +9,14 @@
     @start="onStart" 
     @end="onEnd">
     <!-- The el.id is generated into the data structure at load time in normalizeForLoad() -->
-    <li v-for="el in jsonData" :key="el.id" :id="el.id">
+    <li v-for="el in jsonData" 
+      :key="el.id" 
+      :id="el.id"
+      :class="[
+        { selected: isSelected(el.id) },
+        { disabled: isDisabled(el.id) },
+      ]" 
+      @click.capture="select(el.id, $event)">
       <div class="folder-container">
         <lux-icon-base
           class="handle cursor-move"
@@ -160,29 +167,6 @@ export default {
       }
       return 'arrow-right'
     },
-    isSelected: function () {
-      if (this.rootNodeSelected) {
-        return true
-      }
-      if (this.tree.selected) {
-        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        const selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
-        const selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
-        // return true if id matches any of the ids in selectedTreeItems array
-        return selectedTreeItems.includes(this.id)
-      }
-      return false
-    },
-    isDisabled: function () {
-      if (this.tree.cut) {
-        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
-        const disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
-        // return true if id matches any of the ids in cutTreeStructure
-        return disabledTreeItems.includes(this.id)
-      }
-      return false
-    },
     viewDir: function () {
       if (this.viewingDirection === 'RIGHTTOLEFT') {
         return 'rtl'
@@ -201,6 +185,30 @@ export default {
     },
     deleteFolder: function (folderId) {
       this.$emit('delete-folder', folderId)
+    },
+    isDisabled: function (id) {
+      if (this.tree.cut) {
+        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
+        const disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
+        // return true if id matches any of the ids in cutTreeStructure
+        return disabledTreeItems.includes(id)
+      }
+      return false
+    },
+    isSelected: function (id) {
+      // To-Do: get Tree Items selected
+      if (this.rootNodeSelected) {
+        return true
+      }
+      if (this.tree.selected) {
+        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        const selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
+        const selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
+        // return true if id matches any of the ids in selectedTreeItems array
+        return selectedTreeItems.includes(id)
+      }
+      return false
     },
     zoomFile: function (fileId) {
       this.$emit('zoom-file', fileId)
@@ -303,5 +311,13 @@ export default {
 }
 .cursor-move {
   cursor: grab;
+}
+li.selected {
+  background: #fdf6dc;
+}
+
+li.disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
 }
 </style>
