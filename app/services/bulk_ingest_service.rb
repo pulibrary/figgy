@@ -170,7 +170,8 @@ class BulkIngestService
         resource = update_for_complete_when_processed(resource) if attributes[:complete_when_processed]
         resource
       elsif @klass != Numismatics::Coin || @klass !=  EphemeraFolder
-        # Don't create a new resource if a coin or ephemera folder is not found
+        # Create a new resource it's not a coin or ephemera folder
+        # (Coins and ephemera items only ingest to existing resources)
         new_resource(klass: @klass, **attributes)
       end
     end
