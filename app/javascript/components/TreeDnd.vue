@@ -28,9 +28,9 @@
           type="button"
           variation="icon"
           size="small"
-          :icon="expandCollapseIcon"
+          :icon="expandCollapseIcon(el.id)"
           block
-          @button-clicked="toggleFolder($event)"
+          @button-clicked="toggleFolder($event, el.id)"
         />
       </div>
       <div class="folder-container">
@@ -108,7 +108,7 @@
       </template>
       </div>
       <tree-dnd 
-        :showing="expanded"
+        :showing="isShowing(el.id)"
         v-if="!el.file"
         :json-data="el.folders" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
@@ -167,7 +167,7 @@ export default {
     return {
       list: JSON.parse(JSON.stringify(this.jsonData)),
       editedFieldId: null,
-      expanded: true
+      collapseList: new Set(),
     }
   },
   computed: {
@@ -181,12 +181,6 @@ export default {
       } else {
         return false
       }
-    },
-    expandCollapseIcon: function () {
-      if (this.expanded) {
-        return 'arrow-down'
-      }
-      return 'arrow-right'
     },
     viewDir: function () {
       if (this.viewingDirection === 'RIGHTTOLEFT') {
@@ -206,6 +200,12 @@ export default {
     },
     deleteFolder: function (folderId) {
       this.$emit('delete-folder', folderId)
+    },
+    expandCollapseIcon: function (id) {
+      if (this.collapseList.has(id)) {
+        return 'arrow-right'
+      }
+      return 'arrow-down'
     },
     isDisabled: function (id) {
       if (this.tree.cut) {
@@ -230,6 +230,12 @@ export default {
         return selectedTreeItems.includes(id)
       }
       return false
+    },
+    isShowing: function (id) {
+      if (this.collapseList.has(id)) {
+        return false
+      }
+      return true
     },
     zoomFile: function (fileId) {
       this.$emit('zoom-file', fileId)
@@ -305,8 +311,12 @@ export default {
     onStart: function (event) {
       this.$emit('drag-tree-item', event)
     },
-    toggleFolder: function () {
-      this.expanded = !this.expanded
+    toggleFolder: function (event, id) {
+      if(this.collapseList.has(id)){
+        this.collapseList.delete(id)
+      } else {
+        this.collapseList.add(id)
+      }
     },
     toggleEdit: function (id) {
       if (id) {
