@@ -1,5 +1,6 @@
 <template>
   <VueDraggable 
+    v-if="showing"
     handle=".handle"
     class="drag-area"
     tag="ul" 
@@ -17,6 +18,21 @@
         { disabled: isDisabled(el.id) },
       ]" 
       @click.capture="select(el.id, $event)">
+
+      <div
+          v-if="!jsonData.file"
+          class="lux-item"
+        >
+        <lux-input-button
+          class="expand-collapse"
+          type="button"
+          variation="icon"
+          size="small"
+          :icon="expandCollapseIcon"
+          block
+          @button-clicked="toggleFolder($event)"
+        />
+      </div>
       <div class="folder-container">
         <lux-icon-base
           class="handle cursor-move"
@@ -92,6 +108,7 @@
       </template>
       </div>
       <tree-dnd 
+        :showing="expanded"
         v-if="!el.file"
         :json-data="el.folders" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
@@ -136,6 +153,10 @@ export default {
         return []
       }
     },
+    showing: {
+      type: Boolean,
+      default: true
+    },
     // Whether text should be displayed Left-to-Right or Right-to-Left
     viewingDirection: {
       type: String,
@@ -146,7 +167,7 @@ export default {
     return {
       list: JSON.parse(JSON.stringify(this.jsonData)),
       editedFieldId: null,
-      isOpen: true,
+      expanded: true
     }
   },
   computed: {
@@ -162,7 +183,7 @@ export default {
       }
     },
     expandCollapseIcon: function () {
-      if (this.isOpen) {
+      if (this.expanded) {
         return 'arrow-down'
       }
       return 'arrow-right'
@@ -283,6 +304,9 @@ export default {
     },
     onStart: function (event) {
       this.$emit('drag-tree-item', event)
+    },
+    toggleFolder: function () {
+      this.expanded = !this.expanded
     },
     toggleEdit: function (id) {
       if (id) {

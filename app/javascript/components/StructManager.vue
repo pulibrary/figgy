@@ -748,7 +748,7 @@ export default {
       })
     },
     normalizeForLoad: function (arr) {
-      const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file']
+      const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file', 'expanded']
       return arr.map(obj => {
         const newObj = {}
         for (const key in obj) {
@@ -769,6 +769,8 @@ export default {
               newObj[key] = obj[key]
             }
           }
+          // onLoad every item in the tree should be showing
+          newObj.expanded = true
         }
         return newObj
       })
