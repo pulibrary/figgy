@@ -273,28 +273,13 @@ export default {
       // folderList is the entire structure for the tree
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
 
-      // we have to send the entire tree structure
-      // we either need to update the label for the root element and send the tree as folderList 
-      // in its unchanged form
-      // or we need to send back the tree as an updated folderList
-      let structure
-
-      if (el.id == this.tree.structure.id) {
-
-        structure = {
-          id: this.tree.structure.id,
-          folders: folderList,
-          label: el.label
-        }
-
-      } else {
-        const focusedFolder = this.findFolderById(folderList, el.id)
-        structure = {
-          id: this.tree.structure.id,
-          folders: this.updateFolderLabel(folderList, focusedFolder),
-          label: this.tree.structure.label
-        }
+      const focusedFolder = this.findFolderById(folderList, el.id)
+      let structure = {
+        id: this.tree.structure.id,
+        folders: this.updateFolderLabel(folderList, focusedFolder),
+        label: this.tree.structure.label
       }
+
       store.commit('SAVE_LABEL', structure)
     },
     hideLabelInput: function () {

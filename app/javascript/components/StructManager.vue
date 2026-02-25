@@ -57,8 +57,54 @@
           Logical Structure
         </lux-heading>
       </div>
-      <div :id="tree.structure.id">
-        {{ tree.structure.label }}
+      <div :id="tree.structure.id"
+        :class="[
+         // { selected: isSelected(tree.structure.id) },
+        ]" 
+      >
+        <template v-if="editedFieldId === tree.structure.id">
+          <div
+            class="folder-label"
+            :dir="viewDir"
+          >
+            <input
+              :ref="`field${tree.structure.id}`"
+              :id="`input${tree.structure.id}`"
+              v-model="tree.structure.label"
+              type="text"
+              class="folder-label-input"
+              @keyup="saveLabel"
+              @keydown.enter="hideLabelInput()"
+              @blur="hideLabelInput()"
+            >
+          </div>
+        </template>
+        <template v-else>
+          <div
+            class="folder-label"
+            :dir="viewDir"
+          >
+            {{ tree.structure.label }}
+          </div>
+          <div class="folder-edit">
+            <lux-input-button
+              class="toggle-edit"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="edit"
+              @button-clicked="toggleEdit(tree.structure.id)"
+            />
+            <lux-input-button
+              class="create-folder"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="add"
+              @button-clicked="createFolder(tree.structure.id)"
+            />
+          </div> 
+        </template>
         <tree-dnd 
           :id="generateId()"
           :collapse-list="collapseList"
@@ -159,7 +205,8 @@ export default {
       ga: null,
       s: null,
       id: this.resourceId,
-      collapseList: new Set()
+      collapseList: new Set(),
+      editedFieldId: null,
     }
   },
   computed: {
@@ -717,6 +764,9 @@ export default {
       this.selectNoneTree()
       this.clearClipboard()
     },
+    hideLabelInput: function () {
+      this.editedFieldId = null
+    },
     removeNestedObjectById: function (nestedArray, idToRemove) {
       return nestedArray.map(item => {
         // Check if the current item's id matches the id parameter
@@ -857,6 +907,9 @@ export default {
 
       this.$store.dispatch('saveStructureAJAX', this.resourceToSave)
     },
+    saveLabel: function () {
+      this.$store.commit('SAVE_LABEL', this.tree.structure)
+    },
     selectAllGallery: function () {
       this.$store.commit('SELECT', this.gallery.items)
     },
@@ -879,6 +932,19 @@ export default {
 
       // recurse
       node.folders.forEach(this.sortTreeFoldersFirst)
+    },
+    toggleEdit: function (id) {
+      if (id) {
+        this.editedFieldId = id
+        this.$nextTick(() => {
+          let fieldId = 'field'+id 
+          if (this.$refs['field' + id]) {
+            this.$refs['field' + id].focus()
+          }
+        })
+      } else {
+        this.editedFieldId = null
+      }
     },
     zoomFile: function (fileId) {
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
