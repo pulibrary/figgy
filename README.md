@@ -111,6 +111,8 @@ If there are flaky tests in CI, they can be quarantined. The following process i
 - While there's failure data in CI, attempt to replicate the failing test using the seed and file list from a filed run in CI. If this is unsuccessful locally, it can be tried on the CI box as well via rerun with SSH. There's a [helpful code sample for parsing the rspec.xml into a filename list](). Put the resulting minimum replication in the ticket. If it can't be replicated this way, it may be a non-deterministic test (fails sometimes when run in isolation) or it may involve a race condition when run as part of the parallel test suite.
 - Quarantine the test by marking it with the `:flaky` tag. This has to go before any key / value test (like `js: true`).
 
+When you want to run a test repeatedly to see if it will fail nondeterministically, you can use the until_failure script. Run `./bin/until_failure.sh bundle exec rspec [filename]:[line_number]`.
+
 ### Development Environment
 
 - Run `bundle exec rails s` in a terminal window you can keep open
