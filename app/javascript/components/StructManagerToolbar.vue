@@ -13,9 +13,7 @@
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
         {name: 'Paste (Ctrl-.)', component: 'Paste', disabled: isPasteDisabled()},
-        {name: 'Zoom on Selected (Ctrl-o)', component: 'Zoom', 
-          // disabled: isZoomDisabled()
-        },
+        {name: 'Zoom on Selected (Ctrl-o)', component: 'Zoom', disabled: isZoomDisabled()},
         {name: 'Move Up (Shift+Ctrl UpArrow)', component: 'MoveUp', disabled: isFirstItem()},
         {name: 'Move Down (Shift+Ctrl DownArrow)', component: 'MoveDown', disabled: isLastItem()}
       ]"
