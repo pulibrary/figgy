@@ -151,7 +151,6 @@ export default {
   type: 'Element',
   components: {
     VueDraggable,
-    'lux-icon-end-node': IconEndNode,
   },
   mixins: [mixin],
   emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item", "toggle-folder"],
