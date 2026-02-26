@@ -110,7 +110,7 @@
             </div> 
           </template>
         </div>
-        <tree-dnd 
+        <tree  
           class="firstul"
           :id="generateId()"
           :collapse-list="collapseList"
@@ -152,7 +152,7 @@
 <script>
 import { mapState } from 'vuex'
 import Toolbar from './StructManagerToolbar.vue'
-import TreeDnd from './TreeDnd.vue'
+import Tree from './Tree.vue'
 import StructGallery from './StructGallery.vue'
 import DeepZoom from './DeepZoom.vue'
 import mixin from './structMixins.js'
@@ -171,7 +171,7 @@ export default {
   type: 'Pattern',
   components: {
     toolbar: Toolbar,
-    TreeDnd,
+    Tree,
     'deep-zoom': DeepZoom,
     'struct-gallery': StructGallery
   },
