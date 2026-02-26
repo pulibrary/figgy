@@ -57,56 +57,61 @@
           Logical Structure
         </lux-heading>
       </div>
-      <div :id="tree.structure.id"
+      <div 
+        :id="tree.structure.id"
+        class="lux-tree"
         :class="[
           { selected: rootNodeSelected },
         ]" 
         @click.capture="select(tree.structure.id, $event)"
       >
-        <template v-if="editedFieldId === tree.structure.id">
-          <div
-            class="folder-label"
-            :dir="viewDir"
-          >
-            <input
-              :ref="`field${tree.structure.id}`"
-              :id="`input${tree.structure.id}`"
-              v-model="tree.structure.label"
-              type="text"
-              class="folder-label-input"
-              @keyup="saveLabel"
-              @keydown.enter="hideLabelInput()"
-              @blur="hideLabelInput()"
+        <div class="root-container">
+          <template v-if="editedFieldId === tree.structure.id">
+            <div
+              class="folder-label"
+              :dir="viewDir"
             >
-          </div>
-        </template>
-        <template v-else>
-          <div
-            class="folder-label"
-            :dir="viewDir"
-          >
-            {{ tree.structure.label }}
-          </div>
-          <div class="folder-edit">
-            <lux-input-button
-              class="toggle-edit"
-              type="button"
-              variation="icon"
-              size="small"
-              icon="edit"
-              @button-clicked="toggleEdit(tree.structure.id)"
-            />
-            <lux-input-button
-              class="create-folder"
-              type="button"
-              variation="icon"
-              size="small"
-              icon="add"
-              @button-clicked="createFolder(tree.structure.id)"
-            />
-          </div> 
-        </template>
+              <input
+                :ref="`field${tree.structure.id}`"
+                :id="`input${tree.structure.id}`"
+                v-model="tree.structure.label"
+                type="text"
+                class="folder-label-input"
+                @keyup="saveLabel"
+                @keydown.enter="hideLabelInput()"
+                @blur="hideLabelInput()"
+              >
+            </div>
+          </template>
+          <template v-else>
+            <div
+              class="folder-label"
+              :dir="viewDir"
+            >
+              {{ tree.structure.label }}
+            </div>
+            <div class="folder-edit">
+              <lux-input-button
+                class="toggle-edit"
+                type="button"
+                variation="icon"
+                size="small"
+                icon="edit"
+                @button-clicked="toggleEdit(tree.structure.id)"
+              />
+              <lux-input-button
+                class="create-folder"
+                type="button"
+                variation="icon"
+                size="small"
+                icon="add"
+                @button-clicked="createFolder(tree.structure.id)"
+              />
+            </div> 
+          </template>
+        </div>
         <tree-dnd 
+          class="firstul"
           :id="generateId()"
           :collapse-list="collapseList"
           :json-data="tree.structure.folders"
@@ -1049,8 +1054,9 @@ export default {
   width: 28.5%;
   border: 1px solid #ddd;
   border-radius: 4px;
+  padding: 0;
 
-  padding: 0 5px 0 5px;
+  // padding: 0 5px 0 5px;
   // height: 100%;
   overflow-y: scroll;
 }
@@ -1127,7 +1133,33 @@ export default {
   border-color: rgb(231, 117, 0);
 }
 
-div.selected {
+div.selected .root-container {
   background: #fdf6dc;
 }
+.root-container {
+  display: flex;
+}
+
+.folder-label {
+  flex-grow: 1; /* Set the middle element to grow and stretch */
+  min-height: 36px;
+}
+
+.lux-tree {
+  margin: 6px;
+  padding-right: 6px;
+}
+
+.root-container {
+  display: flex;
+  flex-grow: 1; 
+  min-height: 36px;
+  background: #f5f5f5;
+  width: 100%;
+  padding: .5em .5em .5em 1em;
+  align-items: baseline;
+  margin: 4px;
+  position: relative;
+}
+
 </style>

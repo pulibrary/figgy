@@ -18,101 +18,118 @@
         { disabled: isDisabled(el.id) },
       ]" 
       @click.capture="select(el.id, $event)">
-
-      <div
-          v-if="!el.file"
-          class="lux-item"
+      <div 
+        class="item-container"
+        :class="[
+          { file: el.file },
+        ]" 
         >
-        <lux-input-button
-          class="expand-collapse"
-          type="button"
-          variation="icon"
-          size="small"
-          :icon="expandCollapseIcon(el.id)"
-          block
-          @button-clicked="toggleFolderClickHandler($event, el.id)"
-        />
-      </div>
-      <div class="folder-container">
-        <lux-icon-base
-          class="handle cursor-move"
-          width="20"
-          height="20"
-          icon-name="End Node"
-          icon-color="gray"
-        >
-          <lux-icon-unsorted></lux-icon-unsorted>
-        </lux-icon-base>
-        <lux-media-image
-            v-if="thumbnail(el)"
-            :alt="el.label"
-            :src="thumbnail(el)"
-            height="30px"
-            class="file"
-            style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
-          />
-        <template v-if="editedFieldId === el.id">
+        <div class="folder-container">
           <div
-            class="folder-label"
-            :dir="viewDir"
+            v-if="!el.file"
+            class="lux-icon"
           >
-            <input
-              :ref="`field${el.id}`"
-              :id="`input${el.id}`"
-              v-model="el.label"
-              type="text"
-              class="folder-label-input"
-              @keyup="saveLabel(el)"
-              @keydown.enter="hideLabelInput()"
-              @blur="hideLabelInput()"
+            <lux-input-button
+              class="expand-collapse"
+              type="button"
+              variation="icon"
+              size="small"
+              :icon="expandCollapseIcon(el.id)"
+              block
+              @button-clicked="toggleFolderClickHandler($event, el.id)"
+            />
+          </div>
+          <div class="container-content">
+            <!-- <lux-icon-base
+              v-if="!thumbnail(el)"
+              width="30"
+              height="30"
+              icon-name="End Node"
+              icon-color="gray"
             >
+              <lux-icon-end-node />
+            </lux-icon-base> -->
+            <lux-icon-base
+              class="handle cursor-move"
+              width="20"
+              height="20"
+              icon-name="End Node"
+              icon-color="gray"
+            >
+              <lux-icon-unsorted></lux-icon-unsorted>
+            </lux-icon-base>
+            <lux-media-image
+                v-if="thumbnail(el)"
+                :alt="el.label"
+                :src="thumbnail(el)"
+                height="30px"
+                class="file"
+                style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
+              />
+            <template v-if="editedFieldId === el.id">
+              <div
+                class="folder-label"
+                :dir="viewDir"
+              >
+                <input
+                  :ref="`field${el.id}`"
+                  :id="`input${el.id}`"
+                  v-model="el.label"
+                  type="text"
+                  class="folder-label-input"
+                  @keyup="saveLabel(el)"
+                  @keydown.enter="hideLabelInput()"
+                  @blur="hideLabelInput()"
+                >
+              </div>
+            </template>
+            <template v-else>
+              <div
+                :class="el.file ? 'file-label' : 'folder-label'"
+                :dir="viewDir"
+              >
+                {{ el.label }}
+              </div>
+              <div :class="el.file ? 'file-edit' : 'folder-edit'">
+                <lux-input-button
+                  v-if="!el.file"
+                  class="toggle-edit"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="edit"
+                  @button-clicked="toggleEdit(el.id)"
+                />
+                <lux-input-button
+                  v-if="!el.file"
+                  class="create-folder"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="add"
+                  @button-clicked="createFolder(el.id)"
+                />
+                <lux-input-button
+                  v-else
+                  class="zoom-file"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="search"
+                  @button-clicked="zoomFile(el.id)"
+                />
+                <lux-input-button
+                  class="delete-folder"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="denied"
+                  @button-clicked="deleteFolder(el.id)"
+                />
+              </div> 
+            </template>
           </div>
-        </template>
-        <template v-else>
-          <div
-            :class="el.file ? 'file-label' : 'folder-label'"
-            :dir="viewDir"
-          >
-            {{ el.label }}
-          </div>
-          <div :class="el.file ? 'file-edit' : 'folder-edit'">
-            <lux-input-button
-              v-if="!el.file"
-              class="toggle-edit"
-              type="button"
-              variation="icon"
-              size="small"
-              icon="edit"
-              @button-clicked="toggleEdit(el.id)"
-            />
-            <lux-input-button
-              v-if="!el.file"
-              class="create-folder"
-              type="button"
-              variation="icon"
-              size="small"
-              icon="add"
-              @button-clicked="createFolder(el.id)"
-            />
-            <lux-input-button
-              v-else
-              class="zoom-file"
-              type="button"
-              variation="icon"
-              size="small"
-              icon="search"
-              @button-clicked="zoomFile(el.id)"
-            />
-            <lux-input-button
-              class="delete-folder"
-              type="button"
-              variation="icon"
-              size="small"
-              icon="denied"
-              @button-clicked="deleteFolder(el.id)"
-            />
-          </div> 
-        </template>
+        </div>
       </div>
       <tree-dnd 
         :showing="isShowing(el.id)"
@@ -333,17 +350,15 @@ export default {
 </script>
 <style scoped>
 .drag-area {
-  min-height: 50px;
-  outline: 1px dashed;
+  min-height: 2px;
   list-style: none;
 }
-.folder-container {
-  display: flex;
-}
+
 .cursor-move {
   cursor: grab;
 }
-li.selected {
+
+li.selected .folder-container {
   background: #fdf6dc;
 }
 
@@ -351,4 +366,70 @@ li.disabled {
   opacity: 0.2;
   cursor: not-allowed;
 }
+.folder-container {
+  display: flex;
+  flex-grow: 1; 
+  min-height: 36px;
+  background: #f5f5f5;
+  width: 100%;
+  padding: .5em .5em .5em 1em;
+  align-items: baseline;
+  margin: 4px;
+  position: relative;
+}
+/* .lux-icon {
+  margin: auto;
+} */
+
+.expand-collapse {
+  position: absolute;
+  top: 0;
+  left: -42px;
+  width: 36px;
+  height: 36px;
+  margin: auto;
+}
+
+.container-content {
+  top: 0;
+  left: 0px;
+  display: flex;
+  background: none;
+  width: 100%;
+  align-items: baseline;
+  position: relative;
+}
+
+.file-label, .folder-label {
+  flex-grow: 1; 
+  min-height: 36px;
+}
+
+/* 
+
+.folder-container {
+  display: flex;
+}
+.lux-item, .item-container {
+  display: flex;
+}
+.folder-container, .folder-label, .file-label {
+  flex-grow: 1; 
+  min-height: 36px;
+}
+
+.lux-tree ul.drag-area {
+  padding:0;
+}
+.lux-tree li {
+  margin-left: 40px;
+}
+.lux-tree .lux-item .lux-button {
+  background: rgb(245, 245, 245);
+  width: 36px;
+  height: 36px;
+  border-radius: 0;
+  margin: 0;
+} */
+
 </style>
