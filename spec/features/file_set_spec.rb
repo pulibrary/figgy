@@ -121,7 +121,7 @@ RSpec.feature "FileSet" do
 
   context "in the edit form" do
     with_queue_adapter :inline
-    it "can mark a video fileset as not requiring captions", :flaky, js: true do
+    it "can mark a video fileset as not requiring captions", js: true do
       resource = FactoryBot.create_for_repository(:scanned_resource_with_video)
       file_set = Wayfinder.for(resource).file_sets.first
       expect(file_set.captions_required).to be true
@@ -138,6 +138,7 @@ RSpec.feature "FileSet" do
 
       choose("file_set_captions_required_no")
       click_button "Save"
+      expect(page).to have_css(".table-heading", text: "Attributes")
 
       file_set = ChangeSetPersister.default.query_service.find_by(id: file_set.id)
       expect(file_set.captions_required).to be false
