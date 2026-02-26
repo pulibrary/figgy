@@ -43,69 +43,76 @@
         >
           <lux-icon-unsorted></lux-icon-unsorted>
         </lux-icon-base>
-      
-      <template v-if="editedFieldId === el.id">
-        <div
-          class="folder-label"
-          :dir="viewDir"
-        >
-          <input
-            :ref="`field${el.id}`"
-            :id="`input${el.id}`"
-            v-model="el.label"
-            type="text"
-            class="folder-label-input"
-            @keyup="saveLabel(el)"
-            @keydown.enter="hideLabelInput()"
-            @blur="hideLabelInput()"
+        <lux-media-image
+            v-if="thumbnail(el)"
+            :alt="el.label"
+            :src="thumbnail(el)"
+            height="30px"
+            class="file"
+            style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
+          />
+        <template v-if="editedFieldId === el.id">
+          <div
+            class="folder-label"
+            :dir="viewDir"
           >
-        </div>
-      </template>
-      <template v-else>
-        <div
-          :class="el.file ? 'file-label' : 'folder-label'"
-          :dir="viewDir"
-        >
-          {{ el.label }}
-        </div>
-        <div :class="el.file ? 'file-edit' : 'folder-edit'">
-          <lux-input-button
-            v-if="!el.file"
-            class="toggle-edit"
-            type="button"
-            variation="icon"
-            size="small"
-            icon="edit"
-            @button-clicked="toggleEdit(el.id)"
-          />
-          <lux-input-button
-            v-if="!el.file"
-            class="create-folder"
-            type="button"
-            variation="icon"
-            size="small"
-            icon="add"
-            @button-clicked="createFolder(el.id)"
-          />
-          <lux-input-button
-            v-else
-            class="zoom-file"
-            type="button"
-            variation="icon"
-            size="small"
-            icon="search"
-            @button-clicked="zoomFile(el.id)"
-          />
-          <lux-input-button
-            class="delete-folder"
-            type="button"
-            variation="icon"
-            size="small"
-            icon="denied"
-            @button-clicked="deleteFolder(el.id)"
-          />
-        </div> 
-      </template>
+            <input
+              :ref="`field${el.id}`"
+              :id="`input${el.id}`"
+              v-model="el.label"
+              type="text"
+              class="folder-label-input"
+              @keyup="saveLabel(el)"
+              @keydown.enter="hideLabelInput()"
+              @blur="hideLabelInput()"
+            >
+          </div>
+        </template>
+        <template v-else>
+          <div
+            :class="el.file ? 'file-label' : 'folder-label'"
+            :dir="viewDir"
+          >
+            {{ el.label }}
+          </div>
+          <div :class="el.file ? 'file-edit' : 'folder-edit'">
+            <lux-input-button
+              v-if="!el.file"
+              class="toggle-edit"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="edit"
+              @button-clicked="toggleEdit(el.id)"
+            />
+            <lux-input-button
+              v-if="!el.file"
+              class="create-folder"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="add"
+              @button-clicked="createFolder(el.id)"
+            />
+            <lux-input-button
+              v-else
+              class="zoom-file"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="search"
+              @button-clicked="zoomFile(el.id)"
+            />
+            <lux-input-button
+              class="delete-folder"
+              type="button"
+              variation="icon"
+              size="small"
+              icon="denied"
+              @button-clicked="deleteFolder(el.id)"
+            />
+          </div> 
+        </template>
       </div>
       <tree-dnd 
         :showing="isShowing(el.id)"
@@ -178,14 +185,6 @@ export default {
   computed: {
     rootNodeSelected: function () {
       return this.tree.selected === this.tree.structure.id
-    },
-    thumbnail: function () {
-      const hasService = !!this.jsonData.service
-      if (hasService) {
-        return this.jsonData.service + '/full/30,/0/default.jpg'
-      } else {
-        return false
-      }
     },
     viewDir: function () {
       if (this.viewingDirection === 'RIGHTTOLEFT') {
@@ -284,6 +283,14 @@ export default {
     },
     hideLabelInput: function () {
       this.editedFieldId = null
+    },
+    thumbnail: function (file) {
+      const hasService = !!file.service
+      if (hasService) {
+        return file.service + '/full/30,/0/default.jpg'
+      } else {
+        return false
+      }
     },
     updateFolderLabel: function (array, selectedFolder) {
       for (const item of array) {
