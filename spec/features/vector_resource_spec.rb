@@ -8,12 +8,13 @@ RSpec.feature "Vector Resource" do
     sign_in user
   end
 
-  scenario "creating a new resource and viewing geoblacklight document", :flaky, js: true do
+  scenario "creating a new resource and viewing geoblacklight document", js: true do
     visit new_vector_resource_path
 
     fill_in "vector_resource_source_metadata_identifier", with: "99100017893506421"
     fill_in "Local identifier", with: "local_id"
     click_button "Save"
+    expect(page).to have_css(".table-heading", text: "Attributes")
 
     qs = ChangeSetPersister.default.query_service
     id = qs.find_all_of_model(model: VectorResource).first.id.to_s
