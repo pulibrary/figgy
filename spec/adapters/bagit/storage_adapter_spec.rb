@@ -2,6 +2,11 @@ require "rails_helper"
 require "valkyrie/specs/shared_specs"
 
 RSpec.describe Bagit::StorageAdapter do
+  # This spec is marked flaky because sometimes when run in parallel in CI
+  # the file handle count expectation fails, presumably due to a race condition
+  # between parallel tests on that system resource. The failure doesn't impact
+  # production functionality, and it's easier to rerun on failure when it's
+  # quarantined.
   context "shared specs", :flaky do
     it_behaves_like "a Valkyrie::StorageAdapter"
   end
