@@ -59,7 +59,7 @@
       </div>
       <div 
         :id="tree.structure.id"
-        class="lux-tree"
+        class="lux-tree root"
         :class="[
           { selected: rootNodeSelected },
         ]" 
