@@ -243,6 +243,10 @@ describe("StructManager.vue", () => {
     expect(wrapper.vm.saveError).toBe(false)
   })
 
+  it("renders with a root that has the root class", () => {
+    expect(wrapper.findAll('div.root').length).toEqual(1)
+  })
+
   it("has the right selectedTotal", () => {
     expect(wrapper.vm.selectedTotal).toBe(0)
   })

@@ -1,150 +1,161 @@
 <template>
-  <ul :class="root ? 'lux-tree root' : 'lux-tree-sub'">
-    <li>
-      <div class="container">
-        <div
-          v-if="!jsonData.file"
-          class="lux-item"
+  <VueDraggable 
+    v-show="showing"
+    handle=".handle"
+    class="drag-area"
+    tag="ul" 
+    :id="generateId()" 
+    v-model="list" 
+    group="g1" 
+    @start="onStart" 
+    @end="onEnd">
+    <!-- The el.id is generated into the data structure at load time in normalizeForLoad() -->
+    <li v-for="el in jsonData" 
+      :key="el.id" 
+      :id="el.id"
+      :class="[
+        { selected: isSelected(el.id) },
+        { disabled: isDisabled(el.id) },
+      ]" 
+      @click.capture="select(el.id, $event)">
+      <div 
+        class="item-container"
+        :class="[
+          { file: el.file },
+        ]" 
         >
-          <lux-input-button
-            class="expand-collapse"
-            type="button"
-            variation="icon"
-            size="small"
-            :icon="expandCollapseIcon"
-            block
-            @button-clicked="toggleFolder($event)"
-          />
-        </div>
-        <div
-          :id="id"
-          class="folder-container"
-          :class="[
-            'lux-item-label', 'branchnode',
-            { selected: isSelected },
-            { disabled: isDisabled },
-          ]"
-          @click.capture="select(id, $event)"
-        >
-          <lux-icon-base
-            v-if="jsonData.file && !thumbnail"
-            width="30"
-            height="30"
-            icon-name="End Node"
-            icon-color="gray"
+        <div class="folder-container">
+          <div
+            v-if="!el.file"
+            class="lux-icon"
           >
-            <lux-icon-end-node />
-          </lux-icon-base>
-          <lux-media-image
-            v-if="thumbnail"
-            :alt="structureData.label"
-            :src="thumbnail"
-            height="30px"
-            class="file"
-            style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
-          />
-          <template v-if="editedFieldId === id">
-            <div
-              class="folder-label"
-              :dir="viewDir"
+            <lux-input-button
+              class="expand-collapse"
+              type="button"
+              variation="icon"
+              size="small"
+              :icon="expandCollapseIcon(el.id)"
+              block
+              @button-clicked="toggleFolderClickHandler($event, el.id)"
+            />
+          </div>
+          <div class="container-content">
+            <lux-icon-base
+              class="handle cursor-move"
+              width="20"
+              height="20"
+              icon-name="End Node"
+              icon-color="gray"
             >
-              <input
-                :ref="`field${id}`"
-                v-model="structureData.label"
-                type="text"
-                class="folder-label-input"
-                @keyup="saveLabel(id)"
-                @keydown.enter="hideLabelInput()"
-                @blur="hideLabelInput()"
+              <icon-drag-handle></icon-drag-handle>
+            </lux-icon-base>
+            <lux-media-image
+                v-if="thumbnail(el)"
+                :alt="el.label"
+                :src="thumbnail(el)"
+                height="30px"
+                class="file"
+                style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
+              />
+            <template v-if="editedFieldId === el.id">
+              <div
+                class="folder-label"
+                :dir="viewDir"
               >
-            </div>
-          </template>
-          <template v-else>
-            <div
-              :class="isFile ? 'file-label' : 'folder-label'"
-              :dir="viewDir"
-            >
-              {{ structureData.label }}
-            </div>
-            <div :class="isFile ? 'file-edit' : 'folder-edit'">
-              <lux-input-button
-                v-if="!isFile"
-                class="toggle-edit"
-                type="button"
-                variation="icon"
-                size="small"
-                icon="edit"
-                @button-clicked="toggleEdit(id)"
-              />
-
-              <lux-input-button
-                v-if="!isFile"
-                class="create-folder"
-                type="button"
-                variation="icon"
-                size="small"
-                icon="add"
-                @button-clicked="createFolder(id)"
-              />
-              <lux-input-button
-                v-else
-                class="zoom-file"
-                type="button"
-                variation="icon"
-                size="small"
-                icon="search"
-                @button-clicked="zoomFile(id)"
-              />
-              <lux-input-button
-                class="delete-folder"
-                type="button"
-                variation="icon"
-                size="small"
-                icon="denied"
-                @button-clicked="deleteFolder(id)"
-              />
-            </div>
-          </template>
+                <input
+                  :ref="`field${el.id}`"
+                  :id="`input${el.id}`"
+                  v-model="el.label"
+                  type="text"
+                  class="folder-label-input"
+                  @keyup="saveLabel(el)"
+                  @keydown.enter="hideLabelInput()"
+                  @blur="hideLabelInput()"
+                >
+              </div>
+            </template>
+            <template v-else>
+              <div
+                :class="el.file ? 'file-label' : 'folder-label'"
+                :dir="viewDir"
+              >
+                {{ el.label }}
+              </div>
+              <div :class="el.file ? 'file-edit' : 'folder-edit'">
+                <lux-input-button
+                  v-if="!el.file"
+                  class="toggle-edit"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="edit"
+                  @button-clicked="toggleEdit(el.id)"
+                />
+                <lux-input-button
+                  v-if="!el.file"
+                  class="create-folder"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="add"
+                  @button-clicked="createFolder(el.id)"
+                />
+                <lux-input-button
+                  v-else
+                  class="zoom-file"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="search"
+                  @button-clicked="zoomFile(el.id)"
+                />
+                <lux-input-button
+                  class="delete-folder"
+                  type="button"
+                  variation="icon"
+                  size="small"
+                  icon="denied"
+                  @button-clicked="deleteFolder(el.id)"
+                />
+              </div> 
+            </template>
+          </div>
         </div>
       </div>
-      <ul
-        v-show="isOpen"
-        class="lux-tree-sub"
-      >
-        <tree
-          v-for="(folder) in jsonData.folders"
-          :id="folder.id"
-          :key="folder.id"
-          :json-data="folder"
-          :root="false"
-          :viewing-direction="viewingDirection"
-          @delete-folder="deleteFolder"
-          @create-folder="createFolder"
-          @zoom-file="zoomFile"
-        />
-      </ul>
+      <tree  
+        :showing="isShowing(el.id)"
+        :collapse-list="collapseList"
+        v-if="!el.file"
+        :json-data="el.folders"
+        :viewing-direction="viewDir" 
+        @drop-tree-item="$emit('drop-tree-item', $event)" 
+        @drag-tree-item="$emit('drag-tree-item', $event)"
+        @toggle-folder="toggleFolderEventHandler"
+        @delete-folder="deleteFolder"
+        @create-folder="createFolder"
+        @zoom-file="zoomFile"
+      />
     </li>
-  </ul>
+  </VueDraggable>
 </template>
-
 <script>
-import store from '../store'
-import { mapState } from 'vuex'
-import IconEndNode from './IconEndNode.vue'
+import { VueDraggable } from 'vue-draggable-plus'
 import mixin from './structMixins.js'
-/**
- * TreeItems are the building blocks of hierarchical navigation.
- */
+import store from '../store/index.js'
+import { mapState } from 'vuex'
+import IconDragHandle from './IconDragHandle.vue'
+
 export default {
   name: 'Tree',
   status: 'prototype',
   release: '1.0.0',
   type: 'Element',
   components: {
-    'lux-icon-end-node': IconEndNode
+    VueDraggable,
+    'icon-drag-handle': IconDragHandle,
   },
   mixins: [mixin],
-  emits: ["create-folder", "delete-folder", "zoom-file"],
+  emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item", "toggle-folder"],
   props: {
     /**
      * id identifies the node in the tree.
@@ -153,15 +164,18 @@ export default {
       type: String,
       default: ''
     },
+    collapseList: {
+      type: Set, 
+      required: true, 
+    },
     jsonData: {
-      type: Object,
+      type: Array,
       required: true,
       default () {
-        return {}
+        return []
       }
     },
-    // Whether this is the root node
-    root: {
+    showing: {
       type: Boolean,
       default: true
     },
@@ -169,56 +183,17 @@ export default {
     viewingDirection: {
       type: String,
       default: 'LEFTTORIGHT'
-    }
+    },
   },
   data: function () {
     return {
-      isOpen: true,
+      list: JSON.parse(JSON.stringify(this.jsonData)),
       editedFieldId: null,
-      isFile: this.jsonData.file,
-      structureData: this.jsonData
     }
   },
   computed: {
     rootNodeSelected: function () {
       return this.tree.selected === this.tree.structure.id
-    },
-    thumbnail: function () {
-      const hasService = !!this.jsonData.service
-      if (hasService) {
-        return this.jsonData.service + '/full/30,/0/default.jpg'
-      } else {
-        return false
-      }
-    },
-    expandCollapseIcon: function () {
-      if (this.isOpen) {
-        return 'arrow-down'
-      }
-      return 'arrow-right'
-    },
-    isSelected: function () {
-      if (this.rootNodeSelected) {
-        return true
-      }
-      if (this.tree.selected) {
-        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        const selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
-        const selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
-        // return true if id matches any of the ids in selectedTreeItems array
-        return selectedTreeItems.includes(this.id)
-      }
-      return false
-    },
-    isDisabled: function () {
-      if (this.tree.cut) {
-        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
-        const disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
-        // return true if id matches any of the ids in cutTreeStructure
-        return disabledTreeItems.includes(this.id)
-      }
-      return false
     },
     viewDir: function () {
       if (this.viewingDirection === 'RIGHTTOLEFT') {
@@ -238,6 +213,42 @@ export default {
     },
     deleteFolder: function (folderId) {
       this.$emit('delete-folder', folderId)
+    },
+    expandCollapseIcon: function (id) {
+      if (this.collapseList.has(id)) {
+        return 'arrow-right'
+      }
+      return 'arrow-down'
+    },
+    isDisabled: function (id) {
+      if (this.tree.cut) {
+        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
+        const disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
+        // return true if id matches any of the ids in cutTreeStructure
+        return disabledTreeItems.includes(id)
+      }
+      return false
+    },
+    isSelected: function (id) {
+      // To-Do: get Tree Items selected
+      if (this.rootNodeSelected) {
+        return true
+      }
+      if (this.tree.selected) {
+        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        const selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
+        const selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
+        // return true if id matches any of the ids in selectedTreeItems array
+        return selectedTreeItems.includes(id)
+      }
+      return false
+    },
+    isShowing: function (id) {
+      if (this.collapseList.has(id)) {
+        return false
+      }
+      return true
     },
     zoomFile: function (fileId) {
       this.$emit('zoom-file', fileId)
@@ -265,49 +276,61 @@ export default {
       // tree and gallery items cannot be selected simultaneously, so deselect the gallery
       store.commit('SELECT', [])
     },
-    saveLabel: function (id) {
-      const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
+    saveLabel: function (el) {
       // need to stringify and parse to drop the observer that comes with Vue reactive data
+      // folderList is the entire structure for the tree
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
 
+      const focusedFolder = this.findFolderById(folderList, el.id)
       let structure = {
         id: this.tree.structure.id,
-        folders: folderList,
-        label: this.structureData.label
+        folders: this.updateFolderLabel(folderList, focusedFolder),
+        label: this.tree.structure.label
       }
 
-      if (id !== this.tree.structure.id) {
-        const selectedFolder = this.findFolderById(folderList, parentId)
-        structure = {
-          id: this.tree.structure.id,
-          folders: this.updateFolderLabel(folderList, selectedFolder),
-          label: this.tree.structure.label
-        }
-      }
       store.commit('SAVE_LABEL', structure)
     },
     hideLabelInput: function () {
       this.editedFieldId = null
     },
+    thumbnail: function (file) {
+      const hasService = !!file.service
+      if (hasService) {
+        return file.service + '/full/30,/0/default.jpg'
+      } else {
+        return false
+      }
+    },
     updateFolderLabel: function (array, selectedFolder) {
       for (const item of array) {
         if (item.id === selectedFolder.id) {
-          item.label = this.structureData.label
+          item.label = selectedFolder.label
         } else if (item.folders?.length) {
           this.updateFolderLabel(item.folders, selectedFolder)
         }
       }
       return array
     },
-    toggleFolder: function () {
-      this.isOpen = !this.isOpen
+    onEnd: function (event) {
+      this.$emit('drop-tree-item', event)
+    },
+    onStart: function (event) {
+      this.$emit('drag-tree-item', event)
+    },
+    toggleFolderClickHandler: function (event, id) {
+      event.collapseId = id
+      this.$emit('toggle-folder', event)
+    },
+    toggleFolderEventHandler: function (event) {
+      this.$emit('toggle-folder', event)
     },
     toggleEdit: function (id) {
       if (id) {
         this.editedFieldId = id
         this.$nextTick(() => {
+          let fieldId = 'field'+id 
           if (this.$refs['field' + id]) {
-            this.$refs['field' + id].focus()
+            this.$refs['field' + id][0].focus()
           }
         })
       } else {
@@ -317,141 +340,70 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-.lux-tree {
-  margin-left: -50px;
-}
-.lux-tree.lux-button.icon.small {
-  padding: 0px;
+<style scoped>
+.drag-area {
+  min-height: 2px;
+  list-style: none;
 }
 
-ul.lux-tree li {
-  list-style-type: none;
-  font-family: sans-serif;
-  margin: 0px;
-  line-height: 25px;
-  font-size: 12px;
+.cursor-move {
+  cursor: grab;
 }
 
-ul.lux-tree-sub li {
-  margin-left: -40px;
-}
-
-ul.lux-tree li div.lux-item-label {
-  // background: rgb(186, 175, 130);
-  background: rgb(245, 245, 245);
-  width: 100%;
-  padding: 0.5em 0.5em .5em 1em;
-}
-
-ul.lux-tree li div.lux-item-label.selected {
+li.selected .folder-container {
   background: #fdf6dc;
 }
 
-ul.lux-tree li div.lux-item-label.disabled {
+li.disabled {
   opacity: 0.2;
   cursor: not-allowed;
 }
-
-ul.lux-tree .container {
+.folder-container {
   display: flex;
+  flex-grow: 1; 
+  min-height: 36px;
+  background: #f5f5f5;
+  width: 100%;
+  padding: .5em .5em .5em 0;
+  align-items: baseline;
   margin: 4px;
+  position: relative;
 }
 
-ul.lux-tree .lux-item {
-  flex: 1 auto;
-  margin-right: 4px;
-}
+.handle {
+  padding-right: .5em;
+} 
 
-.lux-tree .lux-item .lux-button {
-  // position: absolute;
-  // top: -2px;
-  // left: -7px;
-  // background: rgb(186, 175, 130);
-  background: rgb(245, 245, 245);
+.expand-collapse {
+  position: absolute;
+  top: 0;
+  left: -42px;
   width: 36px;
   height: 36px;
-  border-radius: 0;
-  margin: 0;
+  margin: auto;
 }
 
-ul.lux-tree .lux-item-label {
-  flex-grow: 1; /* Set the middle element to grow and stretch */
+.container-content {
+  top: 0;
+  left: 0px;
+  display: flex;
+  background: none;
+  width: 100%;
+  align-items: baseline;
+  position: relative;
+}
+
+.file-label, .folder-label {
+  flex-grow: 1; 
   min-height: 36px;
 }
 
-.lux-tree .lux-item-label .lux-icon {
-  align-self: start;
-  height: 16px;
+.lux-button.icon.small {
+  padding: 2px 4px;
 }
 
-.expand-collapse {
-  background: transparent;
-}
-
-.leafnode {
-  display: flex;
-  align-items: center;
-  margin-left: 0px;
-  hyphens: auto;
-  padding-left: 2em;
-}
-
-.branchnode {
-  hyphens: auto;
-  padding-left: 1em;
-}
-
-.lux-expanded {
-  width: initial;
-}
-.lux-tree .lux-button.icon.small {
-  padding: 4px;
-}
-
-.folder-container {
-  display: flex;
-}
-
-.folder-new,
-.folder-edit,
-.folder-delete {
-  display: inline-block;
-}
-
-.folder-menu,
-.file-menu,
-.file-label,
-.folder-label {
-  flex: 1;
-  line-height: 1.4em;
-}
-
-.folder-label input[type=text]  {
-  background: transparent;
-  border: none;
-  width: 80%;
-  line-height: 22px;
-}
-
-.file-label[dir='rtl'],
-.folder-label[dir='rtl'] {
-    text-align: right;
-    list-style-type: none;
-    font-family: sans-serif;
-    margin: 0px;
-    padding-right: 1em;
-    line-height: 25px;
-    font-size: 12px;
-}
-
-.file-edit .lux-button.icon.small,
-.folder-edit .lux-button.icon.small {
-  padding: 0px;
-  margin: 0px;
-  background: transparent;
+.folder-label-input {
+  width: 95%;
 }
 
 </style>

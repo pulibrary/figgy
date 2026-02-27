@@ -4,6 +4,21 @@ import { mount, shallowMount } from "@vue/test-utils"
 import Tree from "../components/Tree.vue"
 import mixin from "../components/structMixins"
 import store from "../store"
+import { VueDraggable, useSortable } from 'vue-draggable-plus'
+
+vi.mock('vue-draggable-plus', () => ({
+  useSortable: vi.fn(() => ({
+    start: vi.fn(),
+    stop: vi.fn(),
+    pause: vi.fn(),
+    resume: vi.fn(),
+  })),
+
+  VueDraggable: {
+    name: 'VueDraggable',
+    template: '<div><slot /></div>',
+  },
+}))
 
 let wrapper
 const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -44,9 +59,11 @@ describe("Tree.vue", () => {
       global: {
         plugins: [store],
         stubs: [
+          "vue-draggable",
           "lux-media-image",
           "lux-icon-base",
           "lux-icon-end-node",
+          "lux-icon-file"
         ],
         mixins: [mixin]
       },
@@ -58,12 +75,10 @@ describe("Tree.vue", () => {
     })
   })
 
-  test('renders with a root that has the root class', () => {
-    expect(wrapper.find('ul').classes()).toEqual([ 'lux-tree', 'root' ])
-    expect(wrapper.findAll('ul.root').length).toEqual(1)
-  })
-
   test('clicking createFolder emits a create-folder event', () => {
+    // Simulate what happens when a drag ends
+    global.triggerSortableUpdate(0, 1)
+
     wrapper.findAll('lux-input-button.create-folder')[0].trigger('button-clicked')
     expect(wrapper.emitted()).toHaveProperty('create-folder')
   })

@@ -57,14 +57,73 @@
           Logical Structure
         </lux-heading>
       </div>
-      <tree
+      <div 
         :id="tree.structure.id"
-        :json-data="tree.structure"
-        :viewing-direction="viewingDirection"
-        @delete-folder="deleteFolder"
-        @create-folder="createFolder"
-        @zoom-file="zoomFile"
-      />
+        class="lux-tree root"
+        :class="[
+          { selected: rootNodeSelected },
+        ]" 
+        @click.capture="select(tree.structure.id, $event)"
+      >
+        <div class="root-container">
+          <template v-if="editedFieldId === tree.structure.id">
+            <div
+              class="folder-label"
+              :dir="viewDir"
+            >
+              <input
+                :ref="`field${tree.structure.id}`"
+                :id="`input${tree.structure.id}`"
+                v-model="tree.structure.label"
+                type="text"
+                class="folder-label-input"
+                @keyup="saveLabel"
+                @keydown.enter="hideLabelInput()"
+                @blur="hideLabelInput()"
+              >
+            </div>
+          </template>
+          <template v-else>
+            <div
+              class="folder-label"
+              :dir="viewDir"
+            >
+              {{ tree.structure.label }}
+            </div>
+            <div class="folder-edit">
+              <lux-input-button
+                class="toggle-edit"
+                type="button"
+                variation="icon"
+                size="small"
+                icon="edit"
+                @button-clicked="toggleEdit(tree.structure.id)"
+              />
+              <lux-input-button
+                class="create-folder"
+                type="button"
+                variation="icon"
+                size="small"
+                icon="add"
+                @button-clicked="createFolder(tree.structure.id)"
+              />
+            </div> 
+          </template>
+        </div>
+        <tree  
+          class="firstul"
+          :id="generateId()"
+          :collapse-list="collapseList"
+          :json-data="tree.structure.folders"
+          :viewing-direction="viewingDirection"
+          @delete-folder="deleteFolder"
+          @create-folder="createFolder"
+          @zoom-file="zoomFile"
+          @drop-tree-item="dropTreeItemHandler"
+          @drag-tree-item="dragTreeItemHandler"
+          @toggle-folder="toggleFolderHandler"
+        />
+      </div>
     </div>
     <div
       class="lux-galleryPanel"
@@ -83,6 +142,8 @@
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
         @card-clicked="galleryClicked()"
+        @drop-gallery-item="dropGalleryItemHandler"
+        @drag-gallery-item="dragGalleryItemHandler"
       />
     </div>
   </div>
@@ -110,7 +171,7 @@ export default {
   type: 'Pattern',
   components: {
     toolbar: Toolbar,
-    tree: Tree,
+    Tree,
     'deep-zoom': DeepZoom,
     'struct-gallery': StructGallery
   },
@@ -149,10 +210,15 @@ export default {
       captionPixelPadding: 9,
       ga: null,
       s: null,
-      id: this.resourceId
+      id: this.resourceId,
+      collapseList: new Set(),
+      editedFieldId: null,
     }
   },
   computed: {
+    rootNodeSelected: function () {
+      return this.tree.selected === this.tree.structure.id
+    },
     galleryItems () {
       return this.resource.members.map(member => ({
         id: member.id,
@@ -335,6 +401,23 @@ export default {
         this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
+    dragGalleryItemHandler: function (event) {
+      this.$store.commit('CUT', this.gallery.selected)
+    },
+    dropGalleryItemHandler: function (event) {
+      // parent of the to element is what we need
+      const parentId = event.to.parentElement?.id || null
+      this.dropGalleryItem(parentId, event.newIndex)
+    },
+    dragTreeItemHandler: function (event) {
+      this.$store.commit('CUT_FOLDER', event.item.id)
+      this.selectNoneTree()
+    },
+    dropTreeItemHandler: function (event) {
+      // parent of the to element is what we need
+      const parentId = event.to.parentElement?.id || null
+      this.dropTreeItem(parentId, event.newIndex)
+    },
     findAllFilesInStructure: function (array) {
       for (const item of array) {
         if (item.file) this.end_nodes.push(item)
@@ -344,8 +427,8 @@ export default {
         }
       }
     },
-    sortFoldersAndFiles: function (node) {
-    
+    sortFoldersAndFiles: function (node) { // makes sure files sink to the bottom of each folder's contents
+      
       if (!Array.isArray(node.folders)) return
 
       // Stable partition: folders first, files last
@@ -512,7 +595,7 @@ export default {
             structure.folders = folderList 
 
             if(parentOfSelected === null) { // this means it was reordered on the root node
-              // if the next item is a file, prevent move down console.log(parentOfSelected.folders)
+              // if the next item is a file, prevent move down 
               if(!this.isNextItemAFile(structure.folders, this.tree.selected)){
                 structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
               }
@@ -537,8 +620,48 @@ export default {
         if (this.gallery.cut.length) {
           this.pasteGalleryItem()
         } else if (this.tree.cut) {
-          this.pasteTreeItem()
+          this.pasteTreeItem(this.tree.selected)
         }
+      }
+    },
+    dropGalleryItem: function (parentId, newIndex) {
+      // todo write the logic - something between dropTreeItem and pasteGalleryItem
+      const rootId = this.tree.structure.id
+      let items = this.gallery.items
+      items = items.filter(val => !this.gallery.cut.includes(val))
+      let resources = JSON.parse(JSON.stringify(this.gallery.cut))
+      
+      // we will need to loop this to convert multiple cut gallery items into tree items
+      const newItems = resources.map((resource, index) => {
+        resource.label = resource.caption
+        resource.file = true
+        resource.folders = []
+        return resource
+      })
+
+      // need to stringify and parse to drop the observer that comes with Vue reactive data
+      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      const structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label
+      }
+
+      if (parentId === rootId) {
+        alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
+      } else {
+        const parentFolderObject = this.findFolderById(folderList, parentId)
+        
+        const parentFolders = parentFolderObject.folders.concat(newItems)
+        parentFolderObject.folders = parentFolders
+        structure.folders = this.addNewNode(folderList, parentFolderObject)
+
+        this.$store.commit('ADD_FILES', structure)
+
+        this.$store.commit('PASTE', items)
+
+        this.$store.commit('SET_MODIFIED', true)
+        this.clearClipboard()
+        this.selectNoneGallery()
       }
     },
     pasteGalleryItem: function () {
@@ -580,7 +703,43 @@ export default {
         this.selectNoneGallery()
       }
     },
-    pasteTreeItem: function () {
+    dropTreeItem: function (new_parent_id, new_index) {
+      const rootId = this.tree.structure.id
+      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+      const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
+      const structure = {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label
+      }
+
+      const selectedFolderObject = this.findFolderById(folderList, new_parent_id)
+      const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
+    
+      if (new_parent_id === rootId) {
+        // if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
+        //   folders.push(cutTreeStructure)
+        // } else {
+        //   folders.unshift(cutTreeStructure) // if it's a folder, stick it at the top
+        // }
+        folders.splice(new_index, 0, cutTreeStructure)
+        structure.folders = folders
+      } else {
+        selectedFolderObject.folders.splice(new_index, 0, cutTreeStructure)
+        // Todo: Deal with the reordering rules wrt files and folders
+        // if(cutTreeStructure.file){
+        //   selectedFolderObject.folders.push(cutTreeStructure)
+        // } else {
+        //   selectedFolderObject.folders.unshift(cutTreeStructure)
+        // }
+        structure.folders = this.replaceObjectById(folders, new_parent_id, selectedFolderObject)
+      }
+
+      this.$store.commit('SET_STRUCTURE', structure)
+      this.$store.commit('SET_MODIFIED', true)
+      this.selectNoneTree()
+      this.clearClipboard()
+    },
+    pasteTreeItem: function (paste_into) {
       const rootId = this.tree.structure.id
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
@@ -590,11 +749,10 @@ export default {
         label: this.tree.structure.label
       }
 
-      // remove the folder if it currently exists
-      const selectedFolderObject = this.findFolderById(folderList, this.tree.selected)
+      const selectedFolderObject = this.findFolderById(folderList, paste_into)
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
 
-      if (this.tree.selected === rootId) {
+      if (paste_into === rootId) {
         if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
           folders.push(cutTreeStructure)
         } else {
@@ -607,13 +765,16 @@ export default {
         } else {
           selectedFolderObject.folders.unshift(cutTreeStructure)
         }
-        structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject)
+        structure.folders = this.replaceObjectById(folders, paste_into, selectedFolderObject)
       }
 
       this.$store.commit('SET_STRUCTURE', structure)
       this.$store.commit('SET_MODIFIED', true)
       this.selectNoneTree()
       this.clearClipboard()
+    },
+    hideLabelInput: function () {
+      this.editedFieldId = null
     },
     removeNestedObjectById: function (nestedArray, idToRemove) {
       return nestedArray.map(item => {
@@ -649,7 +810,7 @@ export default {
       })
     },
     normalizeForLoad: function (arr) {
-      const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file']
+      const allowedProperties = ['id', 'label', 'folders', 'proxy', 'file', 'expanded']
       return arr.map(obj => {
         const newObj = {}
         for (const key in obj) {
@@ -670,6 +831,8 @@ export default {
               newObj[key] = obj[key]
             }
           }
+          // onLoad every item in the tree should be showing
+          newObj.expanded = true
         }
         return newObj
       })
@@ -731,6 +894,13 @@ export default {
         return cleanedObj
       })
     },
+    toggleFolderHandler: function (event) {
+      if(this.collapseList.has(event.collapseId)){
+        this.collapseList.delete(event.collapseId)
+      } else {
+        this.collapseList.add(event.collapseId)
+      }
+    },
     saveHandler: function (event) {
       let structureNodes = this.renamePropertiesForSave(this.tree.structure.folders)
       structureNodes = this.cleanNestedArrayForSave(structureNodes)
@@ -746,6 +916,9 @@ export default {
 
       this.$store.dispatch('saveStructureAJAX', this.resourceToSave)
     },
+    saveLabel: function () {
+      this.$store.commit('SAVE_LABEL', this.tree.structure)
+    },
     selectAllGallery: function () {
       this.$store.commit('SELECT', this.gallery.items)
     },
@@ -754,6 +927,11 @@ export default {
     },
     selectNoneTree: function () {
       this.$store.commit('SELECT_TREEITEM', null)
+    },
+    select: function (id, event) {
+      this.$store.commit('SELECT_TREEITEM', id)
+      // tree and gallery items cannot be selected simultaneously, so deselect the gallery
+      this.$store.commit('SELECT', [])
     },
     selectTreeItemById: function (id) {
       this.$store.commit('SELECT_TREEITEM', id)
@@ -768,6 +946,19 @@ export default {
 
       // recurse
       node.folders.forEach(this.sortTreeFoldersFirst)
+    },
+    toggleEdit: function (id) {
+      if (id) {
+        this.editedFieldId = id
+        this.$nextTick(() => {
+          let fieldId = 'field'+id 
+          if (this.$refs['field' + id]) {
+            this.$refs['field' + id].focus()
+          }
+        })
+      } else {
+        this.editedFieldId = null
+      }
     },
     zoomFile: function (fileId) {
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
@@ -863,8 +1054,9 @@ export default {
   width: 28.5%;
   border: 1px solid #ddd;
   border-radius: 4px;
+  padding: 0;
 
-  padding: 0 5px 0 5px;
+  // padding: 0 5px 0 5px;
   // height: 100%;
   overflow-y: scroll;
 }
@@ -940,4 +1132,34 @@ export default {
   // $border-color: var(--color-white);
   border-color: rgb(231, 117, 0);
 }
+
+div.selected .root-container {
+  background: #fdf6dc;
+}
+.root-container {
+  display: flex;
+}
+
+.folder-label {
+  flex-grow: 1; /* Set the middle element to grow and stretch */
+  min-height: 36px;
+}
+
+.lux-tree {
+  margin: 6px;
+  padding-right: 6px;
+}
+
+.root-container {
+  display: flex;
+  flex-grow: 1; 
+  min-height: 36px;
+  background: #f5f5f5;
+  width: 100%;
+  padding: .5em .5em .5em 1em;
+  align-items: baseline;
+  margin: 4px;
+  position: relative;
+}
+
 </style>
