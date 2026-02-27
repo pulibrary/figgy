@@ -1,9 +1,17 @@
 <template>
-  <ul :class="root ? 'lux-tree root' : 'lux-tree-sub'">
-    <li>
+  <VueDraggable 
+    :class="root ? 'lux-tree root' : 'lux-tree-sub'"
+    class="drag-area" 
+    tag="ul" 
+    :id="generateId()" 
+    v-model="list" 
+    group="g1" 
+    @start="onStart" 
+    @end="onEnd">
+    <li v-for="el in jsonData" :key="el.label" :id="el.id">
       <div class="container">
         <div
-          v-if="!jsonData.file"
+          v-if="!el.file"
           class="lux-item"
         >
           <lux-input-button
@@ -27,7 +35,7 @@
           @click.capture="select(id, $event)"
         >
           <lux-icon-base
-            v-if="jsonData.file && !thumbnail"
+            v-if="el.file && !thumbnail"
             width="30"
             height="30"
             icon-name="End Node"
@@ -37,7 +45,7 @@
           </lux-icon-base>
           <lux-media-image
             v-if="thumbnail"
-            :alt="structureData.label"
+            :alt="el.label"
             :src="thumbnail"
             height="30px"
             class="file"
@@ -50,7 +58,7 @@
             >
               <input
                 :ref="`field${id}`"
-                v-model="structureData.label"
+                v-model="el.label"
                 type="text"
                 class="folder-label-input"
                 @keyup="saveLabel(id)"
@@ -64,7 +72,7 @@
               :class="isFile ? 'file-label' : 'folder-label'"
               :dir="viewDir"
             >
-              {{ structureData.label }}
+              {{ el.label }}
             </div>
             <div :class="isFile ? 'file-edit' : 'folder-edit'">
               <lux-input-button
@@ -107,41 +115,24 @@
           </template>
         </div>
       </div>
-      <tree-dnd 
-        :id="tree.structure.id"
-        :json-data="tree.structure.folders"
-        :viewing-direction="viewingDirection"
-        :is-open="isOpen"
-        :root="false"
-        @delete-folder="deleteFolder"
-        @create-folder="createFolder"
-        @zoom-file="zoomFile"
-        @drop-tree-item="dropTreeItem"
-        @drag-tree-item="dragTreeItem"
-      />
+      <tree-dnd :json-data="el.folders" @drop-tree-item="$emit('drop-tree-item', $event)" @drag-tree-item="$emit('drag-tree-item', $event)"/>
     </li>
-  </ul>
+  </VueDraggable>
 </template>
-
 <script>
 import store from '../store'
 import { mapState } from 'vuex'
 import IconEndNode from './IconEndNode.vue'
+import { VueDraggable } from 'vue-draggable-plus'
 import mixin from './structMixins.js'
-import { VueDraggable } from "vue-draggable-plus"
-import TreeDnd from './TreeDnd.vue'
-/**
- * TreeItems are the building blocks of hierarchical navigation.
- */
+
 export default {
-  name: 'Tree',
+  name: 'TreeDnd',
   status: 'prototype',
   release: '1.0.0',
   type: 'Element',
   components: {
-    'lux-icon-end-node': IconEndNode,
     VueDraggable,
-    'tree-dnd': TreeDnd,
   },
   mixins: [mixin],
   emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item"],
@@ -154,12 +145,20 @@ export default {
       default: ''
     },
     jsonData: {
-      type: Object,
+      type: Array,
       required: true,
       default () {
-        return {}
+        return []
       }
     },
+    // OLD PROP
+    // jsonData: {
+    //   type: Object,
+    //   required: true,
+    //   default () {
+    //     return {}
+    //   }
+    // },
     // Whether this is the root node
     root: {
       type: Boolean,
@@ -173,13 +172,14 @@ export default {
   },
   data: function () {
     return {
+      list: JSON.parse(JSON.stringify(this.jsonData)),
       isOpen: true,
       editedFieldId: null,
       isFile: this.jsonData.file,
-      structureData: this.jsonData
+      // structureData: this.jsonData
     }
   },
-  computed: {
+    computed: {
     rootNodeSelected: function () {
       return this.tree.selected === this.tree.structure.id
     },
@@ -233,6 +233,12 @@ export default {
     })
   },
   methods: {
+    onEnd: function (event) {
+      this.$emit('drop-tree-item', event)
+    },
+    onStart: function (event) {
+      this.$emit('drag-tree-item', event)
+    },
     createFolder: function (folderId) {
       this.$emit('create-folder', folderId)
     },
@@ -323,7 +329,6 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 
 .lux-tree.lux-button.icon.small {
@@ -339,7 +344,7 @@ ul.lux-tree li {
 }
 
 ul.lux-tree-sub li {
-  margin-left: -40px;
+  margin-left: 0px;
 }
 
 ul.lux-tree li div.lux-item-label {
@@ -458,3 +463,4 @@ ul.lux-tree .lux-item-label {
 }
 
 </style>
+

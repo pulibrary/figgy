@@ -57,13 +57,15 @@
           Logical Structure
         </lux-heading>
       </div>
-      <tree
+      <tree 
         :id="tree.structure.id"
-        :json-data="tree.structure"
+        :json-data="tree.structure.folders"
         :viewing-direction="viewingDirection"
         @delete-folder="deleteFolder"
         @create-folder="createFolder"
         @zoom-file="zoomFile"
+        @drop-tree-item="dropTreeItem"
+        @drag-tree-item="dragTreeItem"
       />
     </div>
     <div
@@ -110,7 +112,7 @@ export default {
   type: 'Pattern',
   components: {
     toolbar: Toolbar,
-    tree: Tree,
+    Tree,
     'deep-zoom': DeepZoom,
     'struct-gallery': StructGallery
   },
@@ -335,6 +337,15 @@ export default {
         this.commitRemoveFolder(folderList, folderToBeRemoved)
       }
     },
+    dragTreeItem: function (event) {
+      this.$store.commit('CUT_FOLDER', event.item.id)
+      this.selectNoneTree()
+    },
+    dropTreeItem: function (event) {
+      // parent of the to element is what we need
+      const parentId = event.to.parentElement?.id || null
+      this.pasteTreeItem(parentId)
+    },
     findAllFilesInStructure: function (array) {
       for (const item of array) {
         if (item.file) this.end_nodes.push(item)
@@ -344,8 +355,8 @@ export default {
         }
       }
     },
-    sortFoldersAndFiles: function (node) {
-    
+    sortFoldersAndFiles: function (node) { // makes sure files sink to the bottom of each folder's contents
+      
       if (!Array.isArray(node.folders)) return
 
       // Stable partition: folders first, files last
@@ -512,7 +523,7 @@ export default {
             structure.folders = folderList 
 
             if(parentOfSelected === null) { // this means it was reordered on the root node
-              // if the next item is a file, prevent move down console.log(parentOfSelected.folders)
+              // if the next item is a file, prevent move down 
               if(!this.isNextItemAFile(structure.folders, this.tree.selected)){
                 structure.folders = this.moveItemById(structure.folders, this.tree.selected, 'down')
               }
@@ -537,7 +548,7 @@ export default {
         if (this.gallery.cut.length) {
           this.pasteGalleryItem()
         } else if (this.tree.cut) {
-          this.pasteTreeItem()
+          this.pasteTreeItem(this.tree.selected)
         }
       }
     },
@@ -580,7 +591,7 @@ export default {
         this.selectNoneGallery()
       }
     },
-    pasteTreeItem: function () {
+    pasteTreeItem: function (paste_into) {
       const rootId = this.tree.structure.id
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
       const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
@@ -591,10 +602,10 @@ export default {
       }
 
       // remove the folder if it currently exists
-      const selectedFolderObject = this.findFolderById(folderList, this.tree.selected)
+      const selectedFolderObject = this.findFolderById(folderList, paste_into)
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
 
-      if (this.tree.selected === rootId) {
+      if (paste_into === rootId) {
         if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
           folders.push(cutTreeStructure)
         } else {
@@ -607,7 +618,7 @@ export default {
         } else {
           selectedFolderObject.folders.unshift(cutTreeStructure)
         }
-        structure.folders = this.replaceObjectById(folders, this.tree.selected, selectedFolderObject)
+        structure.folders = this.replaceObjectById(folders, paste_into, selectedFolderObject)
       }
 
       this.$store.commit('SET_STRUCTURE', structure)
