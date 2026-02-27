@@ -63,6 +63,7 @@ describe("Tree.vue", () => {
           "lux-media-image",
           "lux-icon-base",
           "lux-icon-end-node",
+          "lux-icon-file"
         ],
         mixins: [mixin]
       },
