@@ -1,6 +1,6 @@
 <template>
   <VueDraggable 
-    v-if="showing"
+    v-show="showing"
     handle=".handle"
     class="drag-area"
     tag="ul" 
@@ -47,7 +47,7 @@
               icon-name="End Node"
               icon-color="gray"
             >
-              <lux-icon-unsorted></lux-icon-unsorted>
+              <icon-drag-handle></icon-drag-handle>
             </lux-icon-base>
             <lux-media-image
                 v-if="thumbnail(el)"
@@ -126,7 +126,8 @@
         :showing="isShowing(el.id)"
         :collapse-list="collapseList"
         v-if="!el.file"
-        :json-data="el.folders" 
+        :json-data="el.folders"
+        :viewing-direction="viewDir" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
         @drag-tree-item="$emit('drag-tree-item', $event)"
         @toggle-folder="toggleFolderEventHandler"
@@ -142,7 +143,7 @@ import { VueDraggable } from 'vue-draggable-plus'
 import mixin from './structMixins.js'
 import store from '../store/index.js'
 import { mapState } from 'vuex'
-import IconEndNode from './IconEndNode.vue'
+import IconDragHandle from './IconDragHandle.vue'
 
 export default {
   name: 'Tree',
@@ -151,6 +152,7 @@ export default {
   type: 'Element',
   components: {
     VueDraggable,
+    'icon-drag-handle': IconDragHandle,
   },
   mixins: [mixin],
   emits: ["create-folder", "delete-folder", "zoom-file", "drop-tree-item", "drag-tree-item", "toggle-folder"],
@@ -362,14 +364,15 @@ li.disabled {
   min-height: 36px;
   background: #f5f5f5;
   width: 100%;
-  padding: .5em .5em .5em 1em;
+  padding: .5em .5em .5em 0;
   align-items: baseline;
   margin: 4px;
   position: relative;
 }
-/* .lux-icon {
-  margin: auto;
-} */
+
+.handle {
+  padding-right: .5em;
+} 
 
 .expand-collapse {
   position: absolute;
@@ -395,31 +398,12 @@ li.disabled {
   min-height: 36px;
 }
 
-/* 
-
-.folder-container {
-  display: flex;
-}
-.lux-item, .item-container {
-  display: flex;
-}
-.folder-container, .folder-label, .file-label {
-  flex-grow: 1; 
-  min-height: 36px;
+.lux-button.icon.small {
+  padding: 2px 4px;
 }
 
-.lux-tree ul.drag-area {
-  padding:0;
+.folder-label-input {
+  width: 95%;
 }
-.lux-tree li {
-  margin-left: 40px;
-}
-.lux-tree .lux-item .lux-button {
-  background: rgb(245, 245, 245);
-  width: 36px;
-  height: 36px;
-  border-radius: 0;
-  margin: 0;
-} */
 
 </style>
