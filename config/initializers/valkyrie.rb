@@ -479,7 +479,8 @@ Rails.application.config.to_prepare do
     FindNeverPreservedChildIds,
     FindDeepErroredFileSets,
     FindUncaptionedMembers,
-    FindVideoMembers
+    FindVideoMembers,
+    FullTextSearch
   ].each do |query_handler|
     Valkyrie.config.metadata_adapter.query_service.custom_queries.register_query_handler(query_handler)
   end
