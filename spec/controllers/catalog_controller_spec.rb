@@ -50,7 +50,9 @@ RSpec.describe CatalogController, type: :controller do
       child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html></html>")
       parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
 
-      persister.save_all(resources: [child, parent, file_set])
+      persister.save(resource: child)
+      persister.save(resource: parent)
+      persister.save(resource: file_set)
 
       get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 
@@ -64,7 +66,8 @@ RSpec.describe CatalogController, type: :controller do
       child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html><body><span class='ocrx_word' title='bbox 1 2 3 4'>Content</span></body></html>")
       parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
 
-      persister.save_all(resources: [child, parent])
+      persister.save(resource: child)
+      persister.save(resource: parent)
 
       get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 

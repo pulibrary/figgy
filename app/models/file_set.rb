@@ -19,6 +19,8 @@ class FileSet < Resource
   attribute :high_frequency_cutoff, Valkyrie::Types::Float.optional
   attribute :light_direction, Valkyrie::Types::String.optional
   attribute :light_angle, Valkyrie::Types::Integer.optional
+  # Virtual attribute for highlights from full text search.
+  attribute :highlights, Valkyrie::Types::Array
 
   delegate :width,
            :height,
