@@ -77,8 +77,8 @@ RSpec.describe CatalogController, type: :controller do
       expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=1,2,2,2"
     end
 
-    let(:hocr_content) { File.read(Rails.root.join("spec", "fixtures", "hocr.hocr")) }
-    let(:ocr_content) { File.read(Rails.root.join("spec", "fixtures", "ocr.txt")) }
+    let(:hocr_content) { File.read(Rails.root.join("spec", "fixtures", "hocr2.hocr")) }
+    let(:ocr_content) { File.read(Rails.root.join("spec", "fixtures", "ocr2.txt")) }
 
     it "can do phrase hit highlighting" do
       child = FactoryBot.create_for_repository(:file_set, ocr_content: ocr_content, hocr_content: hocr_content)
@@ -87,12 +87,12 @@ RSpec.describe CatalogController, type: :controller do
       persister.save(resource: child)
       persister.save(resource: parent)
 
-      get :iiif_search, params: { solr_document_id: parent.id, q: "Fixation of Belief" }
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Class of 1906" }
 
       expect(response).to be_successful
       json_response = JSON.parse(response.body)
-      expect(json_response["resources"].length).to eq 2
-      expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=749,2958,972,80"
+      expect(json_response["resources"].length).to eq 3
+      expect(json_response["resources"][1]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2930,4093,586,84"
     end
 
     it "doesn't error when there's no query" do

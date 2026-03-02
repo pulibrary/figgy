@@ -57,19 +57,16 @@ class IIIFSearchResults
       end
   end
 
-  # Convert the hOCR into a text -> bbox lookup table.
-  def text_lookup(file_set)
-    @text_lookup ||= {}
-    @text_lookup[file_set] ||=
+  def bbox_array(file_set)
+    @bbox_array ||= {}
+    @bbox_array[file_set] ||=
       begin
-        lookup = {}
-        file_set.hocr_content.first.scan(/title='(bbox(?:\s\d+){4}).*?'>(.*?)<\/span>/).each do |bbox, text|
-          clean_text = text.gsub(/<(\/?)(.*?)>/, "")
+        file_set.hocr_content.first.scan(/title='(bbox(?:\s\d+){4}).*?'>(.*?)<\/span>/).each_with_index.map do |bbox_and_text, idx|
+          bbox, text = bbox_and_text
+          clean_text = CGI.unescapeHTML(text.gsub(/<(\/?)(.*?)>/, ""))
           bbox = bbox.gsub("bbox ", "").split(" ").map(&:to_i)
-          lookup[clean_text] ||= []
-          lookup[clean_text].push(bbox)
+          { text: clean_text, bbox: bbox, idx: idx }
         end
-        lookup
       end
   end
 
@@ -77,24 +74,66 @@ class IIIFSearchResults
     @hits ||=
       begin
         matching_file_sets.map do |file_set|
-          # Highlights are returned surrounded by <em> - find those words in the
-          # hOCR to get their bounding boxes. If one highlight has multiple
-          # <em>, we should find the first word and the last one, then combine
-          # their bounding boxes.
-          hits = file_set.highlights.each_with_index.map do |highlight, idx|
-            matches = highlight.scan(/<em>(.*?)<\/em>/).flatten
-            # Find the box for the first hit.
-            first_match_box = text_lookup(file_set).dig(matches.first, idx) || [0, 0, 0, 0]
-            # Find the box for the last hit.
-            last_match_box = text_lookup(file_set).dig(matches.last, idx) || [0, 0, 0, 0]
-            # Combine the boxes into a phrase box!
+          word_iterator = bbox_array(file_set).to_enum
+          hits = file_set.highlights.map do |highlight|
+            no_break_highlight = highlight.gsub("\n", "")
+            clean_highlight = no_break_highlight.gsub(/<(\/?)(.*?)>/, "")
+            test_highlight = clean_highlight
+            highlights = []
+            highlight_last = nil
+            # Loop through the whole document, finding the phrases returned by
+            # SQL in order. There's some optimization here so it only does one
+            # pass of each hocr.
+            begin
+              loop do
+                # Don't consume the iterator, just get the next token.
+                text = word_iterator.peek
+
+                if highlights == []
+                  if test_highlight.start_with?(text[:text])
+                    # We might be on the start of the phrase. Record it.
+                    highlights << text
+                    highlight_last = text[:idx]
+                    test_highlight = test_highlight.delete_prefix(text[:text])
+                    word_iterator.next
+                  else
+                    word_iterator.next
+                  end
+                else
+                  # If the next token is ALSO part of the phrase, record it and
+                  # keep going.
+                  if text[:idx] == (highlight_last + 1) && test_highlight.start_with?(text[:text])
+                    highlights << text
+                    highlight_last = text[:idx]
+                    test_highlight = test_highlight.delete_prefix(text[:text])
+                    word_iterator.next
+
+                    break if test_highlight.blank?
+                  else
+                    # This wasn't the phrase - reset and keep looking.
+                    # Don't do "next" - that word might be part of the next
+                    # phrase.
+                    highlights = []
+                    test_highlight = clean_highlight
+                  end
+                end
+              end
+            rescue StopIteration
+            end
+            # Now we have a list of tokens, get the ones that match to phrase
+            # highlight.
+            matches = highlight.scan(/<em>(.*?)<\/em>/).flatten.map do |match|
+              highlights.find { |x| x[:text].start_with?(match) }
+            end
+            first_match_box = matches&.dig(0, :bbox) || [0, 0, 0, 0]
+            last_match_box = matches&.dig(-1, :bbox) || [0, 0, 0, 0]
             combined_box = [
               [first_match_box[0], last_match_box[0]].min, # Minimum x1
               [first_match_box[1], last_match_box[1]].min, # Minimum y1
               [first_match_box[2], last_match_box[2]].max, # Maximum x2
               [first_match_box[3], last_match_box[3]].max  # Maximum y2
             ]
-            { text: highlight, bbox: combined_box }
+            { text: highlight.gsub("\n", " "), bbox: combined_box }
           end
           { file_set: file_set, hits: hits }
         end
