@@ -68,67 +68,11 @@ class CatalogController < ApplicationController
     }, label: "Claimed"
   end
 
-    class Word
-      attr_reader :text, :bbox
-      def initialize(text, bbox)
-        @text = text
-        @bbox = bbox
-      end
-    end
-
-    class BoundingBox
-      attr_reader :x, :y, :w, :h
-      def initialize(box_array)
-        @x = box_array[0].to_i
-        @y = box_array[1].to_i
-        @w = box_array[2].to_i - @x
-        @h = box_array[3].to_i - @y
-      end
-    end
-
   def iiif_search
     resource = query_service.find_by(id: params[:solr_document_id])
     authorize! :iiif_search, resource
-    results = IIIFSearchResults.new(resource: resource, query: params[:q])
-    anno_list = IIIF::Presentation::AnnotationList.new("@id" => request.original_url)
-    anno_list["@context"] = %w[
-        http://iiif.io/api/presentation/2/context.json
-        http://iiif.io/api/search/1/context.json
-    ]
-    parent_manifest_node = ManifestBuilder::RootNode.for(resource)
-    resources = ChangeSetPersister.default.query_service.custom_queries.full_text_search(id: resource.id, text: params[:q]).map do |file_set, idx|
-      words =
-        begin
-          highlights = file_set.highlights
-          marked_words = highlights.map { |x| x.scan(/<em>(.*)<\/em>/) }.flatten.map(&:downcase).uniq
-
-          file_set.hocr_content.first.scan(/title='(bbox(?:\s\d+){4}).*?'>(.*)<\/span>/).filter_map do |bbox, text|
-            clean = text.strip.downcase
-            next unless marked_words.include?(clean)
-            coords = bbox.sub("bbox ", "").split(" ").map(&:to_i)
-            Word.new(clean, BoundingBox.new(coords))
-          end
-        end
-      child_manifest_node = ManifestBuilder::LeafNode.new(
-        file_set,
-        parent_manifest_node
-      )
-      file_set.highlights.each_with_index.map do |text, idx|
-        annotation = IIIF::Presentation::Annotation.new("@id" => "#{solr_document_url(resource.id)}/canvas/#{file_set.id}/annotation/#{idx}")
-        word = words[idx] || Word.new(text, BoundingBox.new([0, 0, 0, 0]))
-        annotation["on"] = "#{parent_manifest_node.manifest_url}/canvas/#{child_manifest_node.id}#xywh=#{word.bbox.x},#{word.bbox.y},#{word.bbox.w},#{word.bbox.h}"
-        annotation.resource = IIIF::Presentation::Resource.new(
-          "@type" => "cnt:ContentAsText",
-          "chars" => word.text
-        )
-        annotation
-      end
-    end
-    anno_list.resources = resources.flatten
-    within_hash = IIIF::Presentation::Layer.new
-    within_hash["total"] = anno_list.resources.length
-    anno_list.within = within_hash
-    render json: anno_list.to_ordered_hash(force: true, include_context: false),
+    results = IIIFSearchResults.new(resource: resource, request: request, query: params[:q])
+    render json: results,
       content_type: "application/json"
   end
 
