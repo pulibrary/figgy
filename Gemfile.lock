@@ -6,16 +6,6 @@ GIT
       devise
 
 GIT
-  remote: https://github.com/pulibrary/blacklight_iiif_search.git
-  revision: ca953f706bb669a6ebd8800bd565545558b80a9e
-  branch: backport-ffi
-  specs:
-    blacklight_iiif_search (2.1.0)
-      blacklight (~> 7.0)
-      iiif-presentation
-      rails (>= 6, < 7.3)
-
-GIT
   remote: https://github.com/pulibrary/mediainfo.git
   revision: 58f3e304f01009b459954b82d0675562106b1ac8
   branch: further_sanitize_track_names
@@ -494,7 +484,6 @@ GEM
       googleapis-common-protos-types (~> 1.15)
       googleauth (~> 1.12)
       grpc (~> 1.66)
-    geo_coord (0.2.0)
     globalid (1.3.0)
       activesupport (>= 6.1)
     google-apis-core (1.0.2)
@@ -604,11 +593,6 @@ GEM
     ice_nine (0.11.2)
     iiif-image-api (0.3.0)
       activesupport
-    iiif-presentation (1.4.2)
-      activesupport (>= 3.2.18)
-      faraday (~> 2.7)
-      geo_coord
-      json
     iiif_manifest (1.6.0)
       activesupport (>= 4)
     image_processing (1.14.0)
@@ -1197,7 +1181,6 @@ DEPENDENCIES
   bcrypt_pbkdf
   benchmark-ips
   blacklight (~> 7.33)
-  blacklight_iiif_search!
   blacklight_range_limit (= 8.5.0)
   bootsnap
   bootstrap (~> 4.0)
