@@ -87,8 +87,9 @@ class CatalogController < ApplicationController
     end
 
   def iiif_search
-    _, @document = search_service.fetch(params[:solr_document_id])
+    resource = query_service.find_by(id: params[:solr_document_id])
     authorize! :iiif_search, resource
+    results = IIIFSearchResults.new(resource: resource, query: params[:q])
     anno_list = IIIF::Presentation::AnnotationList.new("@id" => request.original_url)
     anno_list["@context"] = %w[
         http://iiif.io/api/presentation/2/context.json
@@ -99,14 +100,12 @@ class CatalogController < ApplicationController
       words =
         begin
           highlights = file_set.highlights
-          marked_words = highlights.map { |x| x.scan(/<em>([^<]+)<\/em>/) }.flatten.map(&:downcase).uniq
+          marked_words = highlights.map { |x| x.scan(/<em>(.*)<\/em>/) }.flatten.map(&:downcase).uniq
 
-          pattern = /\A(#{marked_words.map { |w| Regexp.escape(w) }.join("|")})[,.!;:)']?\z/i
-
-          file_set.hocr_content.first.scan(/title='(bbox \d+ \d+ \d+ \d+)[^']*'[^>]*>([^<]+)<\/span>/).filter_map do |title, text|
-            clean = text.strip
-            next unless clean.downcase.gsub(/[^a-z0-9]/, "") =~ pattern
-            coords = title.sub("bbox ", "").split(" ").map(&:to_i)
+          file_set.hocr_content.first.scan(/title='(bbox(?:\s\d+){4}).*?'>(.*)<\/span>/).filter_map do |bbox, text|
+            clean = text.strip.downcase
+            next unless marked_words.include?(clean)
+            coords = bbox.sub("bbox ", "").split(" ").map(&:to_i)
             Word.new(clean, BoundingBox.new(coords))
           end
         end
