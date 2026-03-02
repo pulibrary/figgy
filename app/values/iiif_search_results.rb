@@ -7,35 +7,41 @@ class IIIFSearchResults
   end
 
   def as_json(*_args)
-    resources =
-      hits.flat_map do |file_set_hits|
-        file_set_hits[:hits].each_with_index.map do |hit, idx|
-         {
-           "@id" => "#{parent_manifest_node.manifest_url}/canvas/#{file_set_hits[:file_set].id}/annotation/#{idx}",
-           "@type" => "oa:Annotation",
-           "motivation" => "sc:painting",
-           "on" => "#{parent_manifest_node.manifest_url}/canvas/#{file_set_hits[:file_set].id}#xywh=#{hit[:bbox][0]},#{hit[:bbox][1]},#{hit[:bbox][2]-hit[:bbox][0]},#{hit[:bbox][3]-hit[:bbox][1]}",
-           "resource" => {
-             "@type" => "cnt:ContentAsText",
-             "chars" => hit[:text]
-           }
-         }
-        end
-      end.flatten
-
-
-    { "@context"=>
-      ["http://iiif.io/api/presentation/2/context.json",
-       "http://iiif.io/api/search/1/context.json"],
-       "@id"=> request.original_url,
-       "@type"=>"sc:AnnotationList",
-       "within"=>
-        {
-          "@type"=>"sc:Layer",
-          "total"=>resources.length
-        },
-       "resources" => resources
+    {
+      "@context"=>
+      [
+        "http://iiif.io/api/presentation/2/context.json",
+        "http://iiif.io/api/search/1/context.json"
+      ],
+      "@id"=> request.original_url,
+      "@type"=>"sc:AnnotationList",
+      "within"=>
+      {
+        "@type"=>"sc:Layer",
+        "total"=> resources.length
+      },
+      "resources" => resources
     }
+  end
+
+  def resources
+    @resources ||=
+      begin
+        hits.flat_map do |file_set_hits|
+          file_set_hits[:hits].each_with_index.map do |hit, idx|
+            {
+              "@id" => "#{parent_manifest_node.manifest_url}/canvas/#{file_set_hits[:file_set].id}/annotation/#{idx}",
+              "@type" => "oa:Annotation",
+              "motivation" => "sc:painting",
+              "on" => "#{parent_manifest_node.manifest_url}/canvas/#{file_set_hits[:file_set].id}#xywh=#{hit[:bbox][0]},#{hit[:bbox][1]},#{hit[:bbox][2]-hit[:bbox][0]},#{hit[:bbox][3]-hit[:bbox][1]}",
+              "resource" => {
+                "@type" => "cnt:ContentAsText",
+                "chars" => hit[:text]
+              }
+            }
+          end
+        end.flatten
+      end
   end
 
   private
