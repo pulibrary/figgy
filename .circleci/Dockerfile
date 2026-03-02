@@ -12,7 +12,7 @@ RUN sudo sh ./bin/ci_free_tds_install.sh
 RUN sudo sh ./bin/ci_openjpeg_install.sh
 RUN sudo sh ./bin/ci_vips_install.sh
 RUN sudo pip3 install pip -U \
-  && sudo pip3 install setuptools -U \
+  && sudo pip3 install "setuptools==68.1.2" \
   && sudo pip3 install -U numpy \
   && sudo pip3 install cogeo-mosaic
 RUN sudo rm -rf bin
