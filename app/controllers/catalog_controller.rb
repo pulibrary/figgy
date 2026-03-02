@@ -126,6 +126,9 @@ class CatalogController < ApplicationController
       end
     end
     anno_list.resources = resources.flatten
+    within_hash = IIIF::Presentation::Layer.new
+    within_hash["total"] = anno_list.resources.length
+    anno_list.within = within_hash
     render json: anno_list.to_ordered_hash(force: true, include_context: false),
       content_type: "application/json"
   end
