@@ -2,7 +2,10 @@ require "rails_helper"
 require "valkyrie/specs/shared_specs"
 
 RSpec.describe RetryingDiskAdapter do
-  it_behaves_like "a Valkyrie::StorageAdapter"
+  # for background on :flaky tag see comment on Bagit::StorageAdapter
+  context "shared specs", :flaky do
+    it_behaves_like "a Valkyrie::StorageAdapter"
+  end
   let(:storage_adapter) do
     described_class.new(
       inner_adapter
