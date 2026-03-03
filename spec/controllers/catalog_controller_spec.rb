@@ -112,6 +112,21 @@ RSpec.describe CatalogController, type: :controller do
       expect(json_response["resources"][1]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2930,4093,586,84"
     end
 
+    it "can highlight when spaces aren't in hocr" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content:  File.read(Rails.root.join("spec", "fixtures", "ocr4.txt")), hocr_content:  File.read(Rails.root.join("spec", "fixtures", "hocr4.hocr")))
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save(resource: child)
+      persister.save(resource: parent)
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Pyne" }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 1
+      expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2361,3000,174,66"
+    end
+
     it "can do phrase highlighting if the highlight ends before the word tokens" do
       child = FactoryBot.create_for_repository(:file_set, ocr_content:  File.read(Rails.root.join("spec", "fixtures", "ocr3.txt")), hocr_content:  File.read(Rails.root.join("spec", "fixtures", "hocr3.hocr")))
       parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)

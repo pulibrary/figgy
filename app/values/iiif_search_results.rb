@@ -61,11 +61,11 @@ class IIIFSearchResults
     @bbox_array ||= {}
     @bbox_array[file_set] ||=
       begin
-        file_set.hocr_content.first.scan(/title='(bbox(?:\s\d+){4}).*?'>(.*?)<\/span>/).each_with_index.map do |bbox_and_text, idx|
+        file_set.hocr_content.first.scan(/title='(bbox(?:\s\d+){4}).*?'>(.*?)<\/span>/).each_with_index.filter_map do |bbox_and_text, idx|
           bbox, text = bbox_and_text
-          clean_text = CGI.unescapeHTML(text.gsub(/<(\/?)(.*?)>/, ""))
+          clean_text = CGI.unescapeHTML(text.gsub(/<(\/?)(.*?)>/, "")).strip
           bbox = bbox.gsub("bbox ", "").split(" ").map(&:to_i)
-          { text: clean_text, bbox: bbox, idx: idx }
+          { text: clean_text, bbox: bbox, idx: idx } if clean_text.present?
         end
       end
   end
@@ -94,7 +94,7 @@ class IIIFSearchResults
                     # We might be on the start of the phrase. Record it.
                     highlights << text
                     highlight_last = text[:idx]
-                    test_highlight = test_highlight.delete_prefix(text[:text])
+                    test_highlight = test_highlight.delete_prefix(text[:text]).strip
                     word_iterator.next
                   else
                     word_iterator.next
@@ -105,7 +105,7 @@ class IIIFSearchResults
                   if text[:idx] == (highlight_last + 1) && (test_highlight.start_with?(text[:text]) || text[:text].start_with?(test_highlight))
                     highlights << text
                     highlight_last = text[:idx]
-                    test_highlight = test_highlight.delete_prefix(text[:text])
+                    test_highlight = test_highlight.delete_prefix(text[:text]).strip
                     word_iterator.next
 
                     # We're done if we've found every token or if the last token
