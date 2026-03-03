@@ -50,6 +50,8 @@ class IIIFSearchResults
     ManifestBuilder::RootNode.for(resource)
   end
 
+  # All file sets from the parent resource that has the given text in its OCR,
+  # according to postgres.
   def matching_file_sets
     @matching_file_sets ||=
       begin
@@ -57,6 +59,9 @@ class IIIFSearchResults
       end
   end
 
+  # Parse the hOCR to generate a walkable array of text and associated bounding boxes.
+  # This gets used to find the bounding boxes given the highlight returns from
+  # postgres.
   def bbox_array(file_set)
     @bbox_array ||= {}
     @bbox_array[file_set] ||=
@@ -70,6 +75,15 @@ class IIIFSearchResults
       end
   end
 
+  # Walks the OCR for each file set that has a match and for every
+  # matching text string attempts to find where exactly in the hOCR that phrase
+  # is, which allows us to get the bounding boxes for that match but still have
+  # good full text phrase search against plain text.
+  #
+  # If we start using a Solr plugin like
+  # https://dbmdz.github.io/solr-ocrhighlighting/latest/, that would be much
+  # more efficient (as it associates bbox payloads with each token),
+  # but this is less implementation work.
   def hits
     @hits ||=
       begin
@@ -82,8 +96,25 @@ class IIIFSearchResults
             highlights = []
             highlight_last = nil
             # Loop through the whole document, finding the phrases returned by
-            # SQL in order. There's some optimization here so it only does one
-            # pass of each hocr.
+            # SQL in order. Uses an enum so that we only ever walk the hOCR
+            # once, no matter how many highlights we're trying to match up.
+            #
+            # Postgres returns highlights like "<em>Dogs</em> are really
+            # awesome" - we want to highlight Dogs in the search result, but use
+            # the rest of that phrase to make sure we're highlighting the
+            # correct 'Dogs'
+            #
+            # The algorithm is basically:
+            #
+            # 1. Go through every token in the hOCR, does the highlight start
+            # with that word? If so, save it, remove that word from the
+            # highlight.
+            # 2. Does the next token match the next part of the highlight? If
+            # so, store it. If not, reset the test to the original highlight and
+            # keep traversing.
+            # 3. If we consume the entire test highlight from postgres (so all tokens have
+            # matched), then those tokens we've saved are the bounding boxes we
+            # need. Use them to generate a bounding box.
             begin
               loop do
                 # Don't consume the iterator, just get the next token.
@@ -132,6 +163,7 @@ class IIIFSearchResults
             matches = highlight.scan(/<em>(.*?)<\/em>/).flatten.map do |match|
               highlights.find { |x| x[:text].start_with?(match) }
             end
+            # Fall back to 0,0,0,0 if we can't find a bbox.
             first_match_box = matches&.dig(0, :bbox) || [0, 0, 0, 0]
             last_match_box = matches&.dig(-1, :bbox) || [0, 0, 0, 0]
             combined_box = [
