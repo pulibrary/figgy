@@ -1,5 +1,6 @@
 {
   "name": "lux-rails",
+  "type": "module",
   "private": true,
   "scripts": {
     "test": "vitest run",
