@@ -112,6 +112,21 @@ RSpec.describe CatalogController, type: :controller do
       expect(json_response["resources"][1]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2930,4093,586,84"
     end
 
+    it "can do phrase highlighting if the highlight ends before the word tokens" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content:  File.read(Rails.root.join("spec", "fixtures", "ocr3.txt")), hocr_content:  File.read(Rails.root.join("spec", "fixtures", "hocr3.hocr")))
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save(resource: child)
+      persister.save(resource: parent)
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Schuyler" }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 2
+      expect(json_response["resources"][1]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2055,6157,349,69"
+    end
+
     it "doesn't error when there's no query" do
       child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html><body><span class='ocrx_word' title='bbox 1 2 3 4'>Content</span></body></html>")
       parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)

@@ -102,17 +102,24 @@ class IIIFSearchResults
                 else
                   # If the next token is ALSO part of the phrase, record it and
                   # keep going.
-                  if text[:idx] == (highlight_last + 1) && test_highlight.start_with?(text[:text])
+                  if text[:idx] == (highlight_last + 1) && (test_highlight.start_with?(text[:text]) || text[:text].start_with?(test_highlight))
                     highlights << text
                     highlight_last = text[:idx]
                     test_highlight = test_highlight.delete_prefix(text[:text])
                     word_iterator.next
 
-                    break if test_highlight.blank?
+                    # We're done if we've found every token or if the last token
+                    # contains all of the highlight. The last test is necessary
+                    # because Postgres will remove puncutation in the highlight
+                    # sometimes, but it'll be in the word token in the hOCR.
+                    break if test_highlight.blank? || text[:text].start_with?(test_highlight)
                   else
                     # This wasn't the phrase - reset and keep looking.
                     # Don't do "next" - that word might be part of the next
                     # phrase.
+                    # This shouldn't happen often - this is often a good place
+                    # for a breakpoint to debug hit highlighting not returning
+                    # good phrase matches.
                     highlights = []
                     test_highlight = clean_highlight
                   end
