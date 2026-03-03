@@ -77,6 +77,23 @@ RSpec.describe CatalogController, type: :controller do
       expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=1,2,2,2"
     end
 
+    it "can highlight even if missing some data" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content: "Dogs and Cats", hocr_content: "<html><body><span class='ocrx_word' title='bbox 1 2 3 4'>Dogs</span><span class='ocrx_word' title='bbox 3 4 5 6'>Dogs and Cats</span></body></html>")
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save(resource: child)
+      persister.save(resource: parent)
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Dogs and Cats" }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 1
+      # This isn't quite right, but this is also a strange error condition -
+      # it's just here to prevent an infinite loop.
+      expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=0,0,5,6"
+    end
+
     let(:hocr_content) { File.read(Rails.root.join("spec", "fixtures", "hocr2.hocr")) }
     let(:ocr_content) { File.read(Rails.root.join("spec", "fixtures", "ocr2.txt")) }
 
