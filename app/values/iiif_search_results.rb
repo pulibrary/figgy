@@ -27,20 +27,18 @@ class IIIFSearchResults
   def resources
     @resources ||=
       begin
-        hits.flat_map do |file_set_hits|
-          file_set_hits[:hits].each_with_index.map do |hit, idx|
-            {
-              "@id" => "#{parent_manifest_node.manifest_url}/canvas/#{file_set_hits[:file_set].id}/annotation/#{idx}",
-              "@type" => "oa:Annotation",
-              "motivation" => "sc:painting",
-              "on" => "#{parent_manifest_node.manifest_url}/canvas/#{file_set_hits[:file_set].id}#xywh=#{hit[:bbox][0]},#{hit[:bbox][1]},#{hit[:bbox][2]-hit[:bbox][0]},#{hit[:bbox][3]-hit[:bbox][1]}",
-              "resource" => {
-                "@type" => "cnt:ContentAsText",
-                "chars" => hit[:text]
-              }
+        hits.each_with_index.map do |hit, idx|
+          {
+            "@id" => "#{parent_manifest_node.manifest_url}/canvas/#{hit.file_set.id}/annotation/#{idx}",
+            "@type" => "oa:Annotation",
+            "motivation" => "sc:painting",
+            "on" => "#{parent_manifest_node.manifest_url}/canvas/#{hit.file_set.id}#xywh=#{hit.bbox[0]},#{hit.bbox[1]},#{hit.bbox[2]-hit.bbox[0]},#{hit.bbox[3]-hit.bbox[1]}",
+            "resource" => {
+              "@type" => "cnt:ContentAsText",
+              "chars" => hit.text
             }
-          end
-        end.flatten
+          }
+        end
       end
   end
 
@@ -59,9 +57,12 @@ class IIIFSearchResults
       end
   end
 
+  HocrToken = Struct.new(:text, :bbox, :idx, keyword_init: true)
+
   # Parse the hOCR to generate a walkable array of text and associated bounding boxes.
   # This gets used to find the bounding boxes given the highlight returns from
   # postgres.
+  # @return [Array<HocrToken>]
   def bbox_array(file_set)
     @bbox_array ||= {}
     @bbox_array[file_set] ||=
@@ -70,10 +71,12 @@ class IIIFSearchResults
           bbox, text = bbox_and_text
           clean_text = CGI.unescapeHTML(text.gsub(/<(\/?)(.*?)>/, "")).strip
           bbox = bbox.gsub("bbox ", "").split(" ").map(&:to_i)
-          { text: clean_text, bbox: bbox, idx: idx } if clean_text.present?
+          HocrToken.new(text: clean_text, bbox: bbox, idx: idx) if clean_text.present?
         end
       end
   end
+
+  Hit = Struct.new(:file_set, :text, :bbox, keyword_init: true)
 
   # Walks the OCR for each file set that has a match and for every
   # matching text string attempts to find where exactly in the hOCR that phrase
@@ -83,13 +86,14 @@ class IIIFSearchResults
   # If we start using a Solr plugin like
   # https://dbmdz.github.io/solr-ocrhighlighting/latest/, that would be much
   # more efficient (as it associates bbox payloads with each token),
-  # but this is less implementation work.
+  # but we'd have to index FileSets and this is less implementation work.
+  # @return [Array<Hit>]
   def hits
     @hits ||=
       begin
-        matching_file_sets.map do |file_set|
+        matching_file_sets.flat_map do |file_set|
           word_iterator = bbox_array(file_set).to_enum
-          hits = file_set.highlights.map do |highlight|
+          file_set.highlights.map do |highlight|
             no_break_highlight = highlight.gsub("\n", "")
             clean_highlight = no_break_highlight.gsub(/<(\/?)(.*?)>/, "")
             test_highlight = clean_highlight
@@ -118,14 +122,14 @@ class IIIFSearchResults
             begin
               loop do
                 # Don't consume the iterator, just get the next token.
-                text = word_iterator.peek
+                hocr_token = word_iterator.peek
 
                 if highlights == []
-                  if test_highlight.start_with?(text[:text])
+                  if test_highlight.start_with?(hocr_token.text)
                     # We might be on the start of the phrase. Record it.
-                    highlights << text
-                    highlight_last = text[:idx]
-                    test_highlight = test_highlight.delete_prefix(text[:text]).strip
+                    highlights << hocr_token
+                    highlight_last = hocr_token.idx
+                    test_highlight = test_highlight.delete_prefix(hocr_token.text).strip
                     word_iterator.next
                   else
                     word_iterator.next
@@ -133,17 +137,17 @@ class IIIFSearchResults
                 else
                   # If the next token is ALSO part of the phrase, record it and
                   # keep going.
-                  if text[:idx] == (highlight_last + 1) && (test_highlight.start_with?(text[:text]) || text[:text].start_with?(test_highlight))
-                    highlights << text
-                    highlight_last = text[:idx]
-                    test_highlight = test_highlight.delete_prefix(text[:text]).strip
+                  if hocr_token.idx == (highlight_last + 1) && (test_highlight.start_with?(hocr_token.text) || hocr_token.text.start_with?(test_highlight))
+                    highlights << hocr_token
+                    highlight_last = hocr_token.idx
+                    test_highlight = test_highlight.delete_prefix(hocr_token.text).strip
                     word_iterator.next
 
                     # We're done if we've found every token or if the last token
                     # contains all of the highlight. The last test is necessary
                     # because Postgres will remove puncutation in the highlight
                     # sometimes, but it'll be in the word token in the hOCR.
-                    break if test_highlight.blank? || text[:text].start_with?(test_highlight)
+                    break if test_highlight.blank? || hocr_token.text.start_with?(test_highlight)
                   else
                     # This wasn't the phrase - reset and keep looking.
                     # Don't do "next" - that word might be part of the next
@@ -161,7 +165,7 @@ class IIIFSearchResults
             # Now we have a list of tokens, get the ones that match to phrase
             # highlight.
             matches = highlight.scan(/<em>(.*?)<\/em>/).flatten.map do |match|
-              highlights.find { |x| x[:text].start_with?(match) }
+              highlights.find { |hocr_token| hocr_token.text.start_with?(match) }
             end
             # Fall back to 0,0,0,0 if we can't find a bbox.
             first_match_box = matches&.dig(0, :bbox) || [0, 0, 0, 0]
@@ -172,9 +176,8 @@ class IIIFSearchResults
               [first_match_box[2], last_match_box[2]].max, # Maximum x2
               [first_match_box[3], last_match_box[3]].max  # Maximum y2
             ]
-            { text: highlight.gsub("\n", " "), bbox: combined_box }
+            Hit.new(file_set: file_set, text: highlight.gsub("\n", " "), bbox: combined_box)
           end
-          { file_set: file_set, hits: hits }
         end
       end
   end
