@@ -52,7 +52,6 @@ class CatalogController < ApplicationController
   before_action :claimed_by_facet
 
   # CatalogController-scope behavior and configuration for BlacklightIiifSearch
-  include BlacklightIiifSearch::Controller
 
   def set_id
     params["id"] = params["solr_document_id"]
@@ -69,9 +68,11 @@ class CatalogController < ApplicationController
   end
 
   def iiif_search
-    _, @document = search_service.fetch(params[:solr_document_id])
+    resource = query_service.find_by(id: params[:id])
     authorize! :iiif_search, resource
-    super
+    results = IIIFSearchResults.new(resource: resource, request: request, query: params[:q])
+    render json: results,
+      content_type: "application/json"
   end
 
   configure_blacklight do |config|
@@ -121,15 +122,6 @@ class CatalogController < ApplicationController
       :visibility
     ]
     config.search_state_fields = config.search_state_fields + [:id] + pul_controller_params
-
-    # configuration for Blacklight IIIF Content Search
-    config.iiif_search = {
-      full_text_field: "ocr_content_tsim",
-      object_relation_field: "is_page_of_s",
-      supported_params: %w[q page],
-      autocomplete_handler: "iiif_suggest",
-      suggester_name: "iiifSuggester"
-    }
 
     config.default_solr_params = {
       qf: search_config["qf"],

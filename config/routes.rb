@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   mount HealthMonitor::Engine, at: "/"
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
-  concern :iiif_search, BlacklightIiifSearch::Routes.new
   concern :exportable, Blacklight::Routes::Exportable.new
 
   if Rails.env.development?
@@ -53,7 +52,7 @@ Rails.application.routes.draw do
   # serve opensearch requests as a solr document id
   resources :solr_documents, only: [:show], path: "/catalog", controller: "catalog" do
     concerns :exportable
-    concerns :iiif_search
+    get :iiif_search
   end
 
   get "/downloads/:resource_id/file/:id(/:as)", to: "downloads#show", as: :download

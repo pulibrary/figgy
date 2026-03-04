@@ -50,7 +50,9 @@ RSpec.describe CatalogController, type: :controller do
       child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html></html>")
       parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
 
-      persister.save_all(resources: [child, parent, file_set])
+      persister.save(resource: child)
+      persister.save(resource: parent)
+      persister.save(resource: file_set)
 
       get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 
@@ -64,7 +66,8 @@ RSpec.describe CatalogController, type: :controller do
       child = FactoryBot.create_for_repository(:file_set, ocr_content: "Content", hocr_content: "<html><body><span class='ocrx_word' title='bbox 1 2 3 4'>Content</span></body></html>")
       parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
 
-      persister.save_all(resources: [child, parent])
+      persister.save(resource: child)
+      persister.save(resource: parent)
 
       get :iiif_search, params: { solr_document_id: parent.id, q: "Content" }
 
@@ -72,6 +75,73 @@ RSpec.describe CatalogController, type: :controller do
       json_response = JSON.parse(response.body)
       expect(json_response["resources"].length).to eq 1
       expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=1,2,2,2"
+    end
+
+    it "can highlight even if missing some data" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content: "Dogs and Cats", hocr_content: "<html><body><span class='ocrx_word' title='bbox 1 2 3 4'>Dogs</span><span class='ocrx_word' title='bbox 3 4 5 6'>Dogs and Cats</span></body></html>")
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save(resource: child)
+      persister.save(resource: parent)
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Dogs and Cats" }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 1
+      # This isn't quite right, but this is also a strange error condition -
+      # it's just here to prevent an infinite loop.
+      expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=0,0,5,6"
+    end
+
+    let(:hocr_content) { File.read(Rails.root.join("spec", "fixtures", "hocr2.hocr")) }
+    let(:ocr_content) { File.read(Rails.root.join("spec", "fixtures", "ocr2.txt")) }
+
+    it "can do phrase hit highlighting" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content: ocr_content, hocr_content: hocr_content)
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save(resource: child)
+      persister.save(resource: parent)
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Class of 1906" }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 3
+      expect(json_response["resources"][1]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2930,4093,586,84"
+    end
+
+    it "can highlight when spaces aren't in hocr" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content:  File.read(Rails.root.join("spec", "fixtures", "ocr4.txt")), hocr_content:  File.read(Rails.root.join("spec", "fixtures", "hocr4.hocr")))
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save(resource: child)
+      persister.save(resource: parent)
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Pyne" }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 1
+      expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2361,3000,174,66"
+    end
+
+    # This happens because Postgres strips punctuation, so the token might be
+    # "Banana." but Postgres returns "Banana" as the end of the highlight.
+    it "can do phrase highlighting if postgres cuts off its highlight in the middle of an HocrToken" do
+      child = FactoryBot.create_for_repository(:file_set, ocr_content:  File.read(Rails.root.join("spec", "fixtures", "ocr3.txt")), hocr_content:  File.read(Rails.root.join("spec", "fixtures", "hocr3.hocr")))
+      parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
+
+      persister.save(resource: child)
+      persister.save(resource: parent)
+
+      get :iiif_search, params: { solr_document_id: parent.id, q: "Schuyler" }
+
+      expect(response).to be_successful
+      json_response = JSON.parse(response.body)
+      expect(json_response["resources"].length).to eq 2
+      expect(json_response["resources"][1]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2055,6157,349,69"
     end
 
     it "doesn't error when there's no query" do
