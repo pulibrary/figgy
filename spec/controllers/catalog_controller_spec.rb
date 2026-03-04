@@ -127,7 +127,9 @@ RSpec.describe CatalogController, type: :controller do
       expect(json_response["resources"][0]["on"]).to eq "http://www.example.com/concern/scanned_resources/#{parent.id}/manifest/canvas/#{child.id}#xywh=2361,3000,174,66"
     end
 
-    it "can do phrase highlighting if the highlight ends before the word tokens" do
+    # This happens because Postgres strips punctuation, so the token might be
+    # "Banana." but Postgres returns "Banana" as the end of the highlight.
+    it "can do phrase highlighting if postgres cuts off its highlight in the middle of an HocrToken" do
       child = FactoryBot.create_for_repository(:file_set, ocr_content:  File.read(Rails.root.join("spec", "fixtures", "ocr3.txt")), hocr_content:  File.read(Rails.root.join("spec", "fixtures", "hocr3.hocr")))
       parent = FactoryBot.create_for_repository(:complete_scanned_resource, member_ids: child.id, ocr_language: :eng)
 
