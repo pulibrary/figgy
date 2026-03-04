@@ -15,7 +15,7 @@ module GeoDerivatives
         end
 
         def self.mapnik_command(width, height, shape_path, out_path)
-          "bin/mapnik_thumbnail #{width} #{height} #{out_path} '#{stylesheet(shape_path)}'"
+          "bin/mapnik_thumbnail.cjs #{width} #{height} #{out_path} '#{stylesheet(shape_path)}'"
         end
 
         def self.stylesheet(shapefile_path)
