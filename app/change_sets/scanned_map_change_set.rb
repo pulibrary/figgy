@@ -11,31 +11,36 @@ class ScannedMapChangeSet < ScannedResourceChangeSet
   property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 
   def primary_terms
-    [
-      :title,
-      :source_metadata_identifier,
-      :gbl_suppressed_override,
-      :downloadable,
-      :rights_statement,
-      :rights_note,
-      :thumbnail_id,
-      :pdf_type,
-      :is_portion,
-      :portion_note,
-      :local_identifier,
-      :holding_location,
-      :member_of_collection_ids,
-      :append_id,
-      :description,
-      :subject,
-      :spatial,
-      :temporal,
-      :issued,
-      :creator,
-      :language,
-      :cartographic_scale,
-      :coverage,
-      :embargo_date
-    ]
+    {
+      "" => [
+        :title,
+        :source_metadata_identifier,
+        :gbl_suppressed_override,
+        :downloadable,
+        :rights_statement,
+        :rights_note,
+        :thumbnail_id,
+        :pdf_type,
+        :is_portion,
+        :portion_note,
+        :local_identifier,
+        :holding_location,
+        :member_of_collection_ids,
+        :append_id,
+        :description,
+        :subject,
+        :spatial,
+        :temporal,
+        :issued,
+        :creator,
+        :language,
+        :cartographic_scale,
+        :coverage
+      ],
+      "Access and Display" => [
+        :featurable,
+        :embargo_date
+      ]
+    }
   end
 end

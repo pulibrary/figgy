@@ -8,6 +8,16 @@ RSpec.feature "Scanned Map" do
     sign_in user
   end
 
+  scenario "edit a scanned map", js: true do
+    resource = FactoryBot.create_for_repository(:scanned_map)
+    visit edit_scanned_map_path(id: resource.id)
+
+    # Access and display section
+    expect(page).to have_content "Access and Display"
+    expect(page).to have_checked_field "Feature in Digital Collections"
+    expect(page).to have_content "Embargo Date"
+  end
+
   scenario "edit page has a button that can clear form-entered bounding boxes", js: true do
     file = fixture_file_upload("files/example.tif", "image/tiff")
     coverage = GeoCoverage.new(43.039, -69.856, 42.943, -71.032)

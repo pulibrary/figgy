@@ -12,6 +12,7 @@ class ScannedMap < Resource
   attribute :file_metadata, Valkyrie::Types::Set.of(FileMetadata.optional)
   attribute :relation
   attribute :is_portion, Valkyrie::Types::Bool
+  attribute :featurable, Valkyrie::Types::Bool.optional
 
   def self.can_have_manifests?
     true
