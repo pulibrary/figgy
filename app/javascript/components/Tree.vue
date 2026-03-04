@@ -14,6 +14,7 @@
       :key="el.id" 
       :id="el.id"
       :class="[
+        'tree-node',
         { selected: isSelected(el.id) },
         { disabled: isDisabled(el.id) },
       ]" 
@@ -54,7 +55,7 @@
                 :alt="el.label"
                 :src="thumbnail(el)"
                 height="30px"
-                class="file"
+                class="thumbnail"
                 style="border: 1px solid #001123; margin-top: .5em; margin-right: .5em;"
               />
             <template v-if="editedFieldId === el.id">

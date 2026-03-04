@@ -65,7 +65,7 @@
         ]" 
         @click.capture="select(tree.structure.id, $event)"
       >
-        <div class="root-container">
+        <div class="root-container folder-container">
           <template v-if="editedFieldId === tree.structure.id">
             <div
               class="folder-label"

@@ -25,8 +25,8 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).to have_css ".lux-structManager"
 
     # test select root node
-    find(".folder-container > div:first-child").click
-    expect(page).to have_css ".folder-container.selected"
+    find(".root-container").click
+    expect(page).to have_css ".root.selected"
 
     # test create new folder
     find("button.lux-dropdown-button").click
@@ -62,16 +62,16 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).to have_css("div.folder-label", text: "Untitled")
 
     # test cutting a folder using keyboard commands
-    first_node = find("ul.lux-tree-sub", match: :first)
-    expect(first_node).to have_css(".folder-label", text: "Chapter Foo")
+    foo_node = find_all("li.tree-node")[1]
+    expect(foo_node).to have_css(".folder-label", text: "Chapter Foo")
     find("div.folder-label", text: "Chapter Foo").click
     page.send_keys [:control, "x"]
-    expect(page).to have_selector(".folder-container.disabled", count: 2)
+    expect(page).to have_selector("li.tree-node.disabled", count: 2)
 
     # test paste of a cut folder into another folder using keyboard commands
     find("div.folder-label", text: "Untitled").click
     page.send_keys [:control, "."]
-    first_node = find("ul.lux-tree-sub", match: :first)
+    first_node = find("li.tree-node", match: :first)
     expect(first_node).to have_css(".folder-label", text: "Untitled")
 
     # test zoom on item in gallery
@@ -88,27 +88,29 @@ RSpec.feature "Structure Manager", js: true do
     expect(page).not_to have_css ".lux-modal"
 
     # test select all nodes by clicking on the root
-    find(".folder-container > div:first-child", match: :first).click
-    expect(page).to have_selector(".folder-container.selected", count: 4)
+    find(".root-container").click
+    expect(page).to have_selector(".selected", count: 4)
 
     # test collapse of a tree node
     find("button.expand-collapse", match: :first).click
-    expect(page).not_to have_selector(".lux-tree-sub")
+    expect(page).not_to have_selector("li.tree-node", text: "Chapter Foo")
 
     # test that selecting does not expand/collapse
-    find(".folder-container > div:first-child").click
-    expect(page).not_to have_selector(".lux-tree-sub", visible: true)
+    find("div.folder-label", text: "Untitled").click
+    expect(page).not_to have_selector("li.tree-node", text: "Chapter Foo")
 
     # test expand of a tree node
     find("button.expand-collapse", match: :first).click
-    expect(page).to have_selector(".lux-tree-sub", visible: true)
+    expect(page).to have_selector("li.tree-node", text: "Chapter Foo")
 
     # test delete folder with subfolders/items
     expect(page).to have_selector(".lux-card", count: 1)
     accept_confirm do
-      find("ul.lux-tree-sub button.delete-folder", match: :first).click
+      find("li.tree-node button.delete-folder", match: :first).click
     end
     expect(page).to have_selector(".lux-card", count: 2)
+
+    # Note, here it's empty again
 
     # test create folder with button click
     expect(page).not_to have_css(".folder-label", text: "Untitled")
@@ -127,6 +129,12 @@ RSpec.feature "Structure Manager", js: true do
     page.all("button.create-folder")[0].click
     page.send_keys [:control, "."]
     expect(page.all(".lux-structManager .folder-container")[1]).to have_text("MyFolder")
+
+    # Now:
+    # Table of contents
+    #   - MyFolder
+    #   - Untitled
+    #   - Untitled
 
     # test paste group of selected gallery items into new folder
     find(".lux-card", match: :first).click
@@ -149,10 +157,11 @@ RSpec.feature "Structure Manager", js: true do
     page.send_keys [:control, :shift, :arrow_up]
     expect(page.all(".lux-structManager .folder-container")[1]).to have_text("First")
 
-    # test to make sure that file labels cannot be edited
-    expect(page).not_to have_selector(".file-edit.toggle-edit")
+    # file labels cannot be edited
+    expect(page).to have_selector(".item-container.file .zoom-file")
+    expect(page).not_to have_selector(".item-container.file .toggle-edit")
 
-    # test to make sure that file items cannot be reordered
+    # file items cannot be reordered
     # note: example2.tif is the first hit because it has been reordered through the
     test_file = find(".file-label", match: :first)
     test_file.click
