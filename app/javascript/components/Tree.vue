@@ -344,7 +344,10 @@ export default {
 <style scoped>
 .drag-area {
   min-height: 2px;
+  padding-bottom: 25px;
   list-style: none;
+  border-style: dashed;
+  border-width: 1px;
 }
 
 .cursor-move {
@@ -364,7 +367,7 @@ li.disabled {
   flex-grow: 1; 
   min-height: 36px;
   background: #f5f5f5;
-  width: 100%;
+  width: calc(100% - 8px);
   padding: .5em .5em .5em 0;
   align-items: baseline;
   margin: 4px;

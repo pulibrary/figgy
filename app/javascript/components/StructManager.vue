@@ -402,6 +402,7 @@ export default {
       }
     },
     dragGalleryItemHandler: function (event) {
+      // TODO: if multiple things are selected, they should all be moved to CUT
       this.$store.commit('CUT', this.gallery.selected)
     },
     dropGalleryItemHandler: function (event) {
@@ -629,6 +630,7 @@ export default {
       if (parentId === rootId) {
         // place the item back in the gallery.
         // Make it easy to find by leavng it selected
+        // TODO: This is buggy, follow up
         this.$store.commit('UPDATE_ITEMS', this.gallery.items.concat(this.gallery.cut))
         this.clearClipboard()
         alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
@@ -718,8 +720,9 @@ export default {
 
       const selectedFolderObject = this.findFolderById(folderList, new_parent_id)
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
-    
+
       if (new_parent_id === rootId) {
+        // TODO: Don't allow drop if it's a file
         // if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
         //   folders.push(cutTreeStructure)
         // } else {
