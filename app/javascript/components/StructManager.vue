@@ -625,30 +625,34 @@ export default {
       }
     },
     dropGalleryItem: function (parentId, newIndex) {
-      // todo write the logic - something between dropTreeItem and pasteGalleryItem
       const rootId = this.tree.structure.id
-      let items = this.gallery.items
-      items = items.filter(val => !this.gallery.cut.includes(val))
-      let resources = JSON.parse(JSON.stringify(this.gallery.cut))
-      
-      // we will need to loop this to convert multiple cut gallery items into tree items
-      const newItems = resources.map((resource, index) => {
-        resource.label = resource.caption
-        resource.file = true
-        resource.folders = []
-        return resource
-      })
-
-      // need to stringify and parse to drop the observer that comes with Vue reactive data
-      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      const structure = {
-        id: this.tree.structure.id,
-        label: this.tree.structure.label
-      }
-
       if (parentId === rootId) {
+        // place the item back in the gallery.
+        // Make it easy to find by leavng it selected
+        this.$store.commit('UPDATE_ITEMS', this.gallery.items.concat(this.gallery.cut))
+        this.clearClipboard()
         alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
       } else {
+
+        let items = this.gallery.items
+        items = items.filter(val => !this.gallery.cut.includes(val))
+        let resources = JSON.parse(JSON.stringify(this.gallery.cut))
+
+        // we will need to loop this to convert multiple cut gallery items into tree items
+        const newItems = resources.map((resource, index) => {
+          resource.label = resource.caption
+          resource.file = true
+          resource.folders = []
+          return resource
+        })
+
+        // need to stringify and parse to drop the observer that comes with Vue reactive data
+        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        const structure = {
+          id: this.tree.structure.id,
+          label: this.tree.structure.label
+        }
+
         const parentFolderObject = this.findFolderById(folderList, parentId)
         
         const parentFolders = parentFolderObject.folders.concat(newItems)
