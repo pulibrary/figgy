@@ -4,21 +4,6 @@ import { mount, shallowMount } from "@vue/test-utils"
 import Tree from "../components/Tree.vue"
 import mixin from "../components/structMixins"
 import store from "../store"
-import { VueDraggable, useSortable } from 'vue-draggable-plus'
-
-vi.mock('vue-draggable-plus', () => ({
-  useSortable: vi.fn(() => ({
-    start: vi.fn(),
-    stop: vi.fn(),
-    pause: vi.fn(),
-    resume: vi.fn(),
-  })),
-
-  VueDraggable: {
-    name: 'VueDraggable',
-    template: '<div><slot /></div>',
-  },
-}))
 
 let wrapper
 const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -38,7 +23,7 @@ let tree_structure = {
       "folders": [
         {
           "id": "3",
-          "label": "c",
+          "label": "File c",
           "file": true,
           "folders": [],
           "service": "c3_service",
@@ -59,7 +44,6 @@ describe("Tree.vue", () => {
       global: {
         plugins: [store],
         stubs: [
-          "vue-draggable",
           "lux-media-image",
           "lux-icon-base",
           "lux-icon-end-node",
@@ -69,16 +53,14 @@ describe("Tree.vue", () => {
       },
       props: {
         id: tree_structure.id,
-        jsonData: tree_structure,
+        jsonData: tree_structure.folders,
+        collapseList: new Set(),
       },
       sync: false,
     })
   })
 
   test('clicking createFolder emits a create-folder event', () => {
-    // Simulate what happens when a drag ends
-    global.triggerSortableUpdate(0, 1)
-
     wrapper.findAll('lux-input-button.create-folder')[0].trigger('button-clicked')
     expect(wrapper.emitted()).toHaveProperty('create-folder')
   })
@@ -94,11 +76,11 @@ describe("Tree.vue", () => {
   })
 
   test('toggling the expand-collapse button shows and hides the children', async () => {
-    await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
-    expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(false)
-    await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
+    await wrapper.findAll('lux-input-button.expand-collapse')[1].trigger('button-clicked')
+    expect(wrapper.find('.file').isVisible()).toBe(false)
+    await wrapper.findAll('lux-input-button.expand-collapse')[1].trigger('button-clicked')
     await nextTick()
-    expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(true)
+    expect(wrapper.find('.file').isVisible()).toBe(true)
   })
 
   test('Viewing direction is implemented by the viewingDirection prop', async () => {
