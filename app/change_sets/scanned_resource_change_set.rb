@@ -34,6 +34,7 @@ class ScannedResourceChangeSet < ChangeSet
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
+  property :featurable, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :published_at, multiple: false, required: false
   property :notice_type, multiple: false, required: false
   # Harmful content note
@@ -67,25 +68,30 @@ class ScannedResourceChangeSet < ChangeSet
   end
 
   def primary_terms
-    [
-      :title,
-      :source_metadata_identifier,
-      :member_of_collection_ids,
-      :rights_statement,
-      :rights_note,
-      :notice_type,
-      :content_warning,
-      :local_identifier,
-      :holding_location,
-      :pdf_type,
-      :downloadable,
-      :ocr_language,
-      :is_portion,
-      :portion_note,
-      :nav_date,
-      :append_id,
-      :embargo_date
-    ]
+    {
+      "" => [
+        :title,
+        :source_metadata_identifier,
+        :member_of_collection_ids,
+        :rights_statement,
+        :rights_note,
+        :notice_type,
+        :content_warning,
+        :local_identifier,
+        :holding_location,
+        :pdf_type,
+        :downloadable,
+        :ocr_language,
+        :is_portion,
+        :portion_note,
+        :nav_date,
+        :append_id
+      ],
+      "Access and Display" => [
+        :featurable,
+        :embargo_date
+      ]
+    }
   end
 
   private

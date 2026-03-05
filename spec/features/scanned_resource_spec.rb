@@ -9,6 +9,16 @@ RSpec.feature "Scanned Resource" do
     sign_in user
   end
 
+  scenario "edit a resource", js: true do
+    resource = FactoryBot.create_for_repository(:scanned_resource)
+    visit edit_scanned_resource_path(id: resource.id)
+
+    # Access and display section
+    expect(page).to have_content "Access and Display"
+    expect(page).to have_checked_field "Feature in Digital Collections"
+    expect(page).to have_content "Embargo Date"
+  end
+
   scenario "creating a new resource", js: true do
     visit new_scanned_resource_path
 
