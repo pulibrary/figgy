@@ -75,12 +75,11 @@ describe("Tree.vue", () => {
     expect(wrapper.emitted()).toHaveProperty('zoom-file')
   })
 
-  test('toggling the expand-collapse button shows and hides the children', async () => {
+  // The list of collapsed folders is maintained in the StructManager;
+  // expand/collapse is end-to-end tested in the capypbara spec
+  test('clicking the expand-collapse button emits a toggle-folder event', async () => {
     await wrapper.findAll('lux-input-button.expand-collapse')[1].trigger('button-clicked')
-    expect(wrapper.find('.file').isVisible()).toBe(false)
-    await wrapper.findAll('lux-input-button.expand-collapse')[1].trigger('button-clicked')
-    await nextTick()
-    expect(wrapper.find('.file').isVisible()).toBe(true)
+    expect(wrapper.emitted()).toHaveProperty('toggle-folder')
   })
 
   test('Viewing direction is implemented by the viewingDirection prop', async () => {
