@@ -348,6 +348,7 @@ export default {
   list-style: none;
   border-style: dashed;
   border-width: 1px;
+  margin-left: 6px;
 }
 
 .cursor-move {
