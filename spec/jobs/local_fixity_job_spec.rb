@@ -7,7 +7,7 @@ RSpec.describe LocalFixityJob do
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:scanned_resource) do
-    change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
+    change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file], state: "complete"))
   end
   let(:file_set) { scanned_resource.decorate.file_sets.first }
   let(:file_set_id) { file_set.id }
@@ -20,12 +20,13 @@ RSpec.describe LocalFixityJob do
   end
 
   before do
+    stub_ezid
     scanned_resource
     CharacterizationJob.perform_now(file_set_id.to_s)
   end
 
   describe "#perform" do
-    it "creates a local_fixity Event" do
+    it "creates a successful local_fixity Event" do
       described_class.perform_now(file_set_id)
       fs = query_service.find_by(id: file_set_id)
 
@@ -52,6 +53,10 @@ RSpec.describe LocalFixityJob do
 
     context "when the new checksum doesn't match" do
       before do
+        # The code checks that the file set should be preserved; it's false unless
+        # the parent resource is complete and preserved
+        PreserveResourceJob.perform_now(id: scanned_resource.id)
+        # Then change the local copy
         fs = query_service.find_by(id: file_set_id)
         filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
         new_file = file_fixture("files/color-landscape.tif")
@@ -102,11 +107,46 @@ RSpec.describe LocalFixityJob do
           expect(RepairLocalFixityJob).to have_received(:perform_later)
         end
       end
+
+      context "when the resource isn't preserved to the cloud" do
+        let(:scanned_resource) do
+          # The CDL change set returns preserved? false
+          change_set_persister.save(change_set: CDL::ResourceChangeSet.new(ScannedResource.new, files: [file]))
+        end
+
+        before do
+          fs = query_service.find_by(id: file_set_id)
+          filename = fs.primary_file.file_identifiers[0].to_s.gsub("disk://", "")
+          new_file = file_fixture("files/color-landscape.tif")
+          FileUtils.cp(new_file, filename)
+          allow(Honeybadger).to receive(:notify)
+          allow(RepairLocalFixityJob).to receive(:perform_later)
+        end
+
+        it "creates a failed event and notifies Honeybadger" do
+          described_class.perform_now(file_set_id)
+          fs = query_service.find_by(id: file_set_id)
+
+          events = query_service.find_all_of_model(model: Event)
+          expect(events.to_a.length).to eq 1
+          event = events.first
+          expect(event.type).to eq "local_fixity"
+          expect(event.resource_id).to eq fs.id
+          expect(event).to be_failed
+          expect(JSON.parse(event.message).keys).to eq [
+            "id", "internal_resource", "created_at", "updated_at",
+            "new_record", "sha256", "md5", "sha1"
+          ]
+          expect(Honeybadger).to have_received(:notify)
+          expect(RepairLocalFixityJob).not_to have_received(:perform_later)
+        end
+      end
     end
 
     context "with a preservation file and an intermediate file and one checksum doesn't match" do
       let(:file) { fixture_file_with_use("files/example.tif", "image/tiff", ::PcdmUse::PreservationFile) }
       before do
+        PreserveResourceJob.perform_now(id: scanned_resource.id)
         allow(RepairLocalFixityJob).to receive(:perform_later)
       end
 
