@@ -42,12 +42,22 @@ class LocalFixityJob < ApplicationJob
         build_success_change_set
       else
         Honeybadger.notify("Local fixity failure on file set #{file_set_id} at location #{file_object.id}")
-        if previous_event&.repairing?
+        if mark_failure?
           build_failure_change_set(new_checksum)
         else
           build_repairing_change_set(new_checksum)
         end
       end
+    end
+
+    def mark_failure?
+      !repair? || previous_event&.repairing?
+    end
+
+    def repair?
+      # you can't repair the local file from the cloud copy if it was never
+      # preserved
+      ChangeSet.for(file_set).preserve?
     end
 
     def build_success_change_set
