@@ -20,7 +20,7 @@ RSpec.feature "Structure Manager", js: true do
     sign_in user
   end
 
-  scenario "users visit the structure manager interface" do
+  scenario "keyboard interactions with the structure manager interface" do
     visit polymorphic_path [:structure, resource]
     expect(page).to have_css ".lux-structManager"
 
@@ -172,5 +172,14 @@ RSpec.feature "Structure Manager", js: true do
 
     # TODO: write a test to make sure that if a file is the next item in the folder array, after a selected folder,
     # then MoveDown is does not change the item's position.
+  end
+
+  scenario "keyboard interactions with the structure manager interface" do
+    visit polymorphic_path [:structure, resource]
+
+    source = find(".lux-card", match: :first)
+    target = find(".firstul")
+    source.drag_to(target)
+    expect(page).to have_css("li.tree-node")
   end
 end
