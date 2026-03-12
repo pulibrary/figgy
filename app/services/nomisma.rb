@@ -45,7 +45,7 @@ class Nomisma
         logger.info("Processing #{counter}/#{total_coins}: #{coin.title}")
         add_coin_to_document(decorated_coin)
       rescue StandardError => e
-        logger.error("Error processing #{coin.title}: #{e.message}")
+        Honeybadger.notify("Error processing #{coin.title}: #{e.message}")
       end
     end
 
