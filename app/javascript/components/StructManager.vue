@@ -642,28 +642,30 @@ export default {
 
       // need to stringify and parse to drop the observer that comes with Vue reactive data
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-      const structure = {
+      let structure = {
         id: this.tree.structure.id,
         label: this.tree.structure.label
       }
 
-      if (parentId === rootId) {
-        alert('Sorry, you can\'t do that. You must paste a resource into a sub-folder.')
+      if (parentId === rootId) { 
+        const parentFolderObject = this.tree.structure
+        const newFolderList = parentFolderObject.folders.concat(newItems)
+        structure.folders = newFolderList
       } else {
         const parentFolderObject = this.findFolderById(folderList, parentId)
-        
-        const parentFolders = parentFolderObject.folders.concat(newItems)
-        parentFolderObject.folders = parentFolders
+        const newFolderList = parentFolderObject.folders.concat(newItems)
+        parentFolderObject.folders = newFolderList
         structure.folders = this.addNewNode(folderList, parentFolderObject)
-
-        this.$store.commit('ADD_FILES', structure)
-
-        this.$store.commit('PASTE', items)
-
-        this.$store.commit('SET_MODIFIED', true)
-        this.clearClipboard()
-        this.selectNoneGallery()
       }
+      
+      this.$store.commit('ADD_FILES', structure)
+
+      this.$store.commit('PASTE', items)
+
+      this.$store.commit('SET_MODIFIED', true)
+      this.clearClipboard()
+      this.selectNoneGallery()
+      
     },
     pasteGalleryItem: function () {
       const parentId = this.tree.selected ? this.tree.selected : this.tree.structure.id
