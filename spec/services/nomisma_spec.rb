@@ -217,5 +217,17 @@ RSpec.describe Nomisma do
         expect { described_class.generate }.not_to raise_error
       end
     end
+
+    context "with a coin that has no parent" do
+      before do
+        coin
+        allow(Honeybadger).to receive(:notify)
+      end
+
+      it "skips the coin and notifies Honeybadger" do
+        expect { described_class.generate }.not_to raise_error
+        expect(Honeybadger).to have_received(:notify).with(/Error processing/)
+      end
+    end
   end
 end

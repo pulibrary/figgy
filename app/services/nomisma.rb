@@ -37,16 +37,15 @@ class Nomisma
   def generate
     counter = 0
     coins.each do |coin|
-      decorated_coin = coin.decorate
-      next unless decorated_coin.public_readable_state?
-      next if decorated_coin.type_system_uris.blank?
-      counter += 1
-      logger.info("Processing #{counter}/#{total_coins}: #{coin.title}")
-
       begin
+        decorated_coin = coin.decorate
+        next unless decorated_coin.public_readable_state?
+        next if decorated_coin.type_system_uris.blank?
+        counter += 1
+        logger.info("Processing #{counter}/#{total_coins}: #{coin.title}")
         add_coin_to_document(decorated_coin)
       rescue StandardError => e
-        logger.error("Error processing #{coin.title}: #{e.message}")
+        Honeybadger.notify("Error processing #{coin.title}: #{e.message}")
       end
     end
 
