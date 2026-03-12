@@ -177,9 +177,20 @@ RSpec.feature "Structure Manager", js: true do
   scenario "keyboard interactions with the structure manager interface" do
     visit polymorphic_path [:structure, resource]
 
+    # Test to ensure gallery item can be dragged and dropped to root node
+    # NOTE: this behavior is different than the keyboard commands, 
+    # which will not allow the root node to have a child that is a file. 
+    # See: 
     source = find(".lux-card", match: :first)
     target = find(".firstul")
     source.drag_to(target)
     expect(page).to have_css("li.tree-node")
+
+    # Test to ensure tree items can be dragged and dropped
+    source = find("li.tree-node", match: :first)
+    find(".lux-tree button.create-folder").click
+    target = find("li.tree-node ul.drag-area")
+    source.drag_to(target)
+    expect(page).to have_css(".drag-area>.tree-node>.file")
   end
 end
