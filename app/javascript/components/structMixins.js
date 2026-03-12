@@ -1,5 +1,11 @@
 export default {
   methods: {
+    enforceOrder: function (original_order, file_list) {
+      // To-Do
+      // this function will put items from the file_list array into the 
+      // order in which they are found in the original_order array
+
+    },
     findFolderById: function (array, id) {
       id= id.toString()
       if (!Array.isArray(array)) return null;
