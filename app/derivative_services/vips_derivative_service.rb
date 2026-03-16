@@ -144,8 +144,8 @@ class VipsDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    pyramidal_derivatives = resource.file_metadata.select { |file| file.derivative? && file.mime_type.include?("image/tiff") }
-    pyramidal_derivatives.each do |file|
+    target_derivatives = resource.file_metadata.select { |file| file.derivative? && (file.mime_type.include?("image/tiff") || file.mime_type.include?("image/jp2")) }
+    target_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end

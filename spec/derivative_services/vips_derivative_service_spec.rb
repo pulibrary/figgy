@@ -206,4 +206,18 @@ RSpec.describe VipsDerivativeService do
       expect(resource.original_file.error_message).to be_empty
     end
   end
+
+  describe "#cleanup_derivatives" do
+    it "deletes attached jp2 files when the resource is deleted" do
+      derivative_service.new(id: valid_resource.id).create_derivatives
+      resource = query_service.find_by(id: valid_resource.id)
+      derivative = resource.file_metadata.find { |f| f.use.include?(PcdmUse::ServiceFile) }
+      derivative.mime_type = ["image/jp2"]
+      persister.save(resource: resource)
+      derivative_service.new(id: resource.id).cleanup_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.file_metadata.select { |file| file.derivative? && file.mime_type.include?("image/jp2") }).to be_empty
+    end
+  end
 end
