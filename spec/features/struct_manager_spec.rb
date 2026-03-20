@@ -76,7 +76,7 @@ RSpec.feature "Structure Manager", js: true do
 
     # test zoom on item in gallery
     expect(page).not_to have_css ".lux-modal"
-    find(".lux-gallery button.zoom-icon", match: :first).click
+    find(".struct-gallery button.zoom-icon", match: :first).click
     expect(page).to have_css ".lux-modal"
     find("button.close-zoom").click
     expect(page).not_to have_css ".lux-modal"
