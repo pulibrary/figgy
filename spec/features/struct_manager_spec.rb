@@ -178,9 +178,9 @@ RSpec.feature "Structure Manager", js: true do
     visit polymorphic_path [:structure, resource]
 
     # Test to ensure gallery item can be dragged and dropped to root node
-    # NOTE: this behavior is different than the keyboard commands, 
-    # which will not allow the root node to have a child that is a file. 
-    # See: 
+    # NOTE: this behavior is different than the keyboard commands,
+    # which will not allow the root node to have a child that is a file.
+    # See:
     source = find(".lux-card", match: :first)
     target = find(".firstul")
     source.drag_to(target)
