@@ -404,9 +404,11 @@ export default {
       }
     },
     deselect: function (event) {
-      if(event.target.className.includes('lux-sidePanel') || event.target.className.includes('struct-gallery')) {
-        this.selectNoneGallery()
-        this.selectNoneTree()
+      if(event.target.className){
+        if(event.target.className.includes('lux-sidePanel') || event.target.className.includes('struct-gallery')) {
+          this.selectNoneGallery()
+          this.selectNoneTree()
+        }
       }
     },
     dragGalleryItemHandler: function (event) {
