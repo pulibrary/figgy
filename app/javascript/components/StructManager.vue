@@ -48,6 +48,7 @@
     />
     <div
       class="lux-sidePanel"
+      @click="deselect($event)"
     >
       <div class="panelHeader">
         <lux-heading
@@ -141,9 +142,10 @@
         :viewing-direction="viewingDirection"
         :card-pixel-width="cardPixelWidth"
         :gallery-items="galleryItems"
-        @card-clicked="galleryClicked()"
+        @card-clicked="galleryClicked"
         @drop-gallery-item="dropGalleryItemHandler"
         @drag-gallery-item="dragGalleryItemHandler"
+        @deselect="deselect"
       />
     </div>
   </div>
@@ -399,6 +401,12 @@ export default {
       } else {
         this.findAllFilesInStructure([folderToBeRemoved])
         this.commitRemoveFolder(folderList, folderToBeRemoved)
+      }
+    },
+    deselect: function (event) {
+      if(event.target.className.includes('lux-sidePanel') || event.target.className.includes('struct-gallery')) {
+        this.selectNoneGallery()
+        this.selectNoneTree()
       }
     },
     dragGalleryItemHandler: function (event) {
@@ -719,22 +727,10 @@ export default {
       const folders = this.removeNestedObjectById(folderList, cutTreeStructure.id)
 
       if (new_parent_id === rootId) {
-        // TODO: Don't allow drop if it's a file
-        // if(cutTreeStructure.file){ // if it's a file, stick it at the bottom
-        //   folders.push(cutTreeStructure)
-        // } else {
-        //   folders.unshift(cutTreeStructure) // if it's a folder, stick it at the top
-        // }
         folders.splice(new_index, 0, cutTreeStructure)
         structure.folders = folders
       } else {
         selectedFolderObject.folders.splice(new_index, 0, cutTreeStructure)
-        // Todo: Deal with the reordering rules wrt files and folders
-        // if(cutTreeStructure.file){
-        //   selectedFolderObject.folders.push(cutTreeStructure)
-        // } else {
-        //   selectedFolderObject.folders.unshift(cutTreeStructure)
-        // }
         structure.folders = this.replaceObjectById(folders, new_parent_id, selectedFolderObject)
       }
 
@@ -1007,8 +1003,6 @@ export default {
 }
 
 .deep-zoom {
-  // position: absolute;
-  // z-index: 3; /* put .gold-box above .green-box and .dashed-box */
   max-width: 100%;
   display: flex;
   justify-content: center;

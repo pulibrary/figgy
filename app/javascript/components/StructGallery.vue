@@ -1,11 +1,11 @@
 <template>
   <lux-wrapper
       type="div"
-      class="lux-gallery"
+      class="struct-gallery"
       @click="deselect($event)"
     >
     <VueDraggable 
-      class="lux-gallery"
+      class="struct-gallery"
       :sort="false"
       v-model="items" 
       :group="{ name: 'g1', put: false }" 
@@ -57,7 +57,7 @@ export default {
   status: 'ready',
   release: '1.0.0',
   type: 'Pattern',
-  emits: ["drop-gallery-item", "drag-gallery-item"],
+  emits: ["drop-gallery-item", "drag-gallery-item", "deselect"],
   components: {
     VueDraggable,
   },
@@ -102,11 +102,7 @@ export default {
   },
   methods: {
     deselect: function (event) {
-      if (
-        event.target.className === 'lux-gallery lux-galleryWrapper lux-wrapper'
-      ) {
-        this.selectNoneGallery()
-      }
+      this.$emit('deselect', event)
     },
     selectNoneGallery: function () {
       this.$store.commit('SELECT', [])
@@ -182,7 +178,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.lux-gallery {
+.struct-gallery {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
