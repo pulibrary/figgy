@@ -7,7 +7,7 @@ export default {
 
     },
     findFolderById: function (array, id) {
-      id= id.toString()
+      id = id.toString()
       if (!Array.isArray(array)) return null;
 
       for (const item of array) {
@@ -20,8 +20,8 @@ export default {
 
       return null // Return null if the ID is not found in the array
     },
-    findParentFolderById: function (array, id) {   
-      id= id.toString()   
+    findParentFolderById: function (array, id) { 
+      id = id.toString()   
       for (const item of array) {
         // If this item contains the target as one of its children, 
         // return this item
