@@ -35,7 +35,13 @@ class ApplicationDecorator < Draper::Decorator
   # @param attribute [Symbol] the symbolized name of the attribute
   # @return [Object, nil] value of the attribute in the resource
   def [](attribute)
-    __send__(attribute)
+    # format attribute conflicts with the Kernel#format method.
+    # We need an alternate method for retreiving the fomat value
+    if attribute == :format
+      self.model.format
+    else
+      __send__(attribute)
+    end
   end
 
   # Display the resource attributes
