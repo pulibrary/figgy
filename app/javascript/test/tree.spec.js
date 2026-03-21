@@ -23,7 +23,7 @@ let tree_structure = {
       "folders": [
         {
           "id": "3",
-          "label": "c",
+          "label": "File c",
           "file": true,
           "folders": [],
           "service": "c3_service",
@@ -47,20 +47,17 @@ describe("Tree.vue", () => {
           "lux-media-image",
           "lux-icon-base",
           "lux-icon-end-node",
+          "lux-icon-file"
         ],
         mixins: [mixin]
       },
       props: {
         id: tree_structure.id,
-        jsonData: tree_structure,
+        jsonData: tree_structure.folders,
+        collapseList: new Set(),
       },
       sync: false,
     })
-  })
-
-  test('renders with a root that has the root class', () => {
-    expect(wrapper.find('ul').classes()).toEqual([ 'lux-tree', 'root' ])
-    expect(wrapper.findAll('ul.root').length).toEqual(1)
   })
 
   test('clicking createFolder emits a create-folder event', () => {
@@ -78,12 +75,11 @@ describe("Tree.vue", () => {
     expect(wrapper.emitted()).toHaveProperty('zoom-file')
   })
 
-  test('toggling the expand-collapse button shows and hides the children', async () => {
-    await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
-    expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(false)
-    await wrapper.findAll('lux-input-button.expand-collapse')[0].trigger('button-clicked')
-    await nextTick()
-    expect(wrapper.find('.lux-tree-sub').isVisible()).toBe(true)
+  // The list of collapsed folders is maintained in the StructManager;
+  // expand/collapse is end-to-end tested in the capypbara spec
+  test('clicking the expand-collapse button emits a toggle-folder event', async () => {
+    await wrapper.findAll('lux-input-button.expand-collapse')[1].trigger('button-clicked')
+    expect(wrapper.emitted()).toHaveProperty('toggle-folder')
   })
 
   test('Viewing direction is implemented by the viewingDirection prop', async () => {

@@ -8,14 +8,14 @@
       button-label="Actions"
       :menu-items="[
         {name: 'Create New Folder (Ctrl-/)', component: 'FolderCreate'},
-        {name: 'Group Selected into New Folder (Ctrl-g)', component: 'SelectedCreate', disabled: isCutDisabled()},
-        {name: 'Delete Folder (Ctrl-d)', component: 'FolderDelete', disabled: rootNodeSelected},
+        {name: 'Group Selected into New Folder (Ctrl-g)', component: 'SelectedCreate', disabled: isGroupToFolderDisabled()},
+        {name: 'Delete Item (Ctrl-d)', component: 'FolderDelete', disabled: isDeleteDisabled()},
         {name: 'Undo Cut (Ctrl-z)', component: 'UndoCut', disabled: !isCutDisabled()},
         {name: 'Cut (Ctrl-x)', component: 'Cut', disabled: isCutDisabled()},
         {name: 'Paste (Ctrl-.)', component: 'Paste', disabled: isPasteDisabled()},
         {name: 'Zoom on Selected (Ctrl-o)', component: 'Zoom', disabled: isZoomDisabled()},
-        {name: 'Move Up (Shift+Ctrl UpArrow)', component: 'MoveUp', disabled: isFirstItem()},
-        {name: 'Move Down (Shift+Ctrl DownArrow)', component: 'MoveDown', disabled: isLastItem()}
+        {name: 'Move Up (Shift+Ctrl UpArrow)', component: 'MoveUp', disabled: !canMoveUp()},
+        {name: 'Move Down (Shift+Ctrl DownArrow)', component: 'MoveDown', disabled: !canMoveDown()}
       ]"
       @menu-item-clicked="menuSelection($event)"
     />
@@ -116,7 +116,10 @@ export default {
     },
     rootNodeSelected: function () {
       return this.tree.selected === this.tree.structure.id
-    }
+    },
+    treeNodeSelected: function () {
+      return !this.rootNodeSelected && this.tree.selected
+    },
   },
   mounted: function () {
     this._keyListener = function (e) {
@@ -174,11 +177,46 @@ export default {
     moveDown: function() {
       this.$emit('move-down')
     },
-    isFirstItem: function() {
-      return false;
+    canMoveUp: function() {
+      if(!this.tree.selected) {
+        return false
+      } else {
+        let folders = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        let parent = this.findParentFolderById(folders, this.tree.selected)
+        let pos = null
+        if (parent) {
+          pos = parent.folders.indexOf(this.tree.selected)
+        } else { // if it's null that means the parent is the root node
+          let selected = this.findFolderById(folders, this.tree.selected)
+          pos = folders.indexOf(selected)
+        }
+        if ((pos) === 0) {
+          return false
+        }
+      }
+      return true
     },
-    isLastItem: function() {
-      return false;
+    canMoveDown: function() {
+      if(!this.tree.selected) {
+        return false
+      } else {
+        let folders = JSON.parse(JSON.stringify(this.tree.structure.folders))
+        let parent = this.findParentFolderById(folders, this.tree.selected)
+        let pos = null
+        let item_count = null 
+        if (parent) {
+          item_count = parent.folders.length 
+          pos = parent.folders.indexOf(this.tree.selected)
+        } else {
+          item_count = folders.length 
+          let selected = this.findFolderById(folders, this.tree.selected)
+          pos = folders.indexOf(selected)
+        }
+        if (pos === (item_count - 1)) {
+          return false
+        }
+      }
+      return true
     },
     saveHandler: function (event) {
       if (this.isSaveDisabled()) {
@@ -186,6 +224,13 @@ export default {
         alert('The structure has not changed, nothing to save.')
       } else {
         this.$emit('save-structure', event)
+      }
+    },
+    isDeleteDisabled: function () {
+      if (!this.treeNodeSelected) {
+        return true
+      } else {
+        return false
       }
     },
     cutSelected: function () {
@@ -199,6 +244,9 @@ export default {
         return false
       }
       return true
+    },
+    isGroupToFolderDisabled: function () {
+      return !this.gallery.selected.length
     },
     isPasteDisabled: function () {
       return !(this.gallery.cut.length || this.tree.cut)
@@ -244,7 +292,7 @@ export default {
         case 'Group Selected into New Folder (Ctrl-g)':
           this.groupSelectedIntoFolder()
           break
-        case 'Delete Folder (Ctrl-d)':
+        case 'Delete Item (Ctrl-d)':
           this.deleteFolder(this.tree.selected)
           break
         case 'Undo Cut (Ctrl-z)':
