@@ -51,4 +51,4 @@ One risk is this system relies on CheckMK successfully sending a message to the 
 
 ## Additional info
 
-We use CheckMK to monitor the situation. We've also given research computing a [grafana dashboard](https://grafana-nomad.lib.princeton.edu/public-dashboards/71069bfda1014785a92ebe67de4cb850) that they have used during mount incidents
+We use CheckMK to monitor the situation. We've also given research computing a [grafana dashboard](https://grafana-nomad.lib.princeton.edu/public-dashboards/68c634493c294c739da7fab61a5bc19f?from=now-24h&to=now&timezone=browser) that they have used during mount incidents
