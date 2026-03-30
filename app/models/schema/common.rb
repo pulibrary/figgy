@@ -35,6 +35,7 @@ module Schema
           :date_created, # http://purl.org/dc/terms/created
           :extent, # http://purl.org/dc/terms/extent
           :genre, # http://purl.org/dc/terms/type
+          :format, # http://purl.org/dc/terms/format
           :geo_subject, # http://purl.org/dc/terms/coverage
           :identifier, # http://purl.org/dc/terms/identifier
           :license, # http://purl.org/dc/terms/rights

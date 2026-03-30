@@ -30,13 +30,14 @@ RSpec.describe Schema::Common do
       resource.ocr_language = "test value4"
       resource.resource_type = "test format"
       resource.embargo_date = "8/29/2022"
+      resource.format = ["Manuscript", "Book"]
     end
 
     it "mixes in the module" do
       expect(resource.class.ancestors).to include(described_class)
     end
 
-    it "defines the schema attributes common for a Resource subclass instances" do
+    it "defines the schema attributes common for a Resource subclass instance" do
       expect(resource.title).to include "test title1"
       expect(resource.actor).to include "test person"
       expect(resource.sort_title).to include "test title2"
@@ -52,6 +53,7 @@ RSpec.describe Schema::Common do
       expect(resource.ocr_language).to include "test value4"
       expect(resource.resource_type).to include "test format"
       expect(resource.embargo_date).to eq "8/29/2022"
+      expect(resource.format).to eq ["Manuscript", "Book"]
     end
   end
 end
