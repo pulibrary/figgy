@@ -107,4 +107,12 @@ RSpec.describe "ViewerConfiguration requests", type: :request do
       end
     end
   end
+
+  describe "/uv.html" do
+    it "renders the viewer" do
+      get "/uv.html#manifest=bla"
+
+      expect(response.status).to eq 200
+    end
+  end
 end
