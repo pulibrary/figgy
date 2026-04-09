@@ -299,6 +299,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Universal Viewer generates this as an embed hard-coded, so fix it here.
+  get "/uv.html", to: "viewer#index"
+
   resources :cdl, controller: "cdl/cdl", only: [] do
     member do
       get :status, defaults: { format: :json }
