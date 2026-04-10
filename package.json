@@ -23,7 +23,7 @@
     "graphql-tag": "^2.9.2",
     "hls.js": "1.5.18",
     "leaflet": "^1.7.1",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "lux-design-system": "^5.1.3",
     "npm": "^9.8",
     "openseadragon": "^2.3.1",
