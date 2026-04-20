@@ -113,12 +113,12 @@ jobs:
           command: "npm config set //npm.pkg.github.com/:_authToken ${GITHUB_PACKAGE_TOKEN} && npm config set @mapnik:registry https://npm.pkg.github.com"
       - run:
           name: Install NPM Dependencies via Yarn
-          command: yarn install --frozen-lockfile
+          command: yarn install --frozen-lockfile --ignore-scripts
       - run:
           name: Install Cloud Fixity NPM Dependencies via Yarn
           command: |
             cd cloud_fixity
-            yarn install --frozen-lockfile
+            yarn install --frozen-lockfile --ignore-scripts
       - save_cache:
           name: Save Yarn Package Cache
           key: figgy-yarn-{{ checksum "yarn.lock" }}-20241209
@@ -137,7 +137,7 @@ jobs:
           name: Run Cloud Fixity tests
           command: |
             cd cloud_fixity
-            yarn install
+            yarn install --ignore-scripts
             yarn test
       - run:
           name: Run rspec in parallel
