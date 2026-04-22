@@ -18,6 +18,8 @@ class ExternalMetadataCharacterizationService
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
     primary_file.mime_type = geo_mime_type
+    primary_file.checksum = MultiChecksum.for(file_object)
+    primary_file.size = File.size(file_object.disk_path)
     @file_set = @persister.save(resource: @file_set) if save
     @file_set
   end
@@ -45,15 +47,15 @@ class ExternalMetadataCharacterizationService
     @document ||= Nokogiri::XML(file_object.read)
   end
 
-  def file_object
-    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
-  end
-
   def primary_file
     @file_set.primary_file
   end
 
+  def file_object
+    @file_object ||= Valkyrie::StorageAdapter.find_by(id: primary_file.file_identifiers[0])
+  end
+
   def valid?
-    mime_type == ["application/xml"]
+    primary_file.extname == ".xml"
   end
 end

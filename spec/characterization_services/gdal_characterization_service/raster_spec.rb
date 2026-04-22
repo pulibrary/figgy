@@ -24,6 +24,29 @@ RSpec.describe GdalCharacterizationService::Raster do
       new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
       expect(new_file_set.original_file.mime_type).to eq ["image/tiff; gdal-format=GTiff"]
     end
+
+    it "populates checksum, size, height, width, and bounds" do
+      info = instance_double(
+        GeoDerivatives::Processors::Raster::Info,
+        driver: "GTiff",
+        height: "388",
+        width: "733",
+        bounds: { north: 1.0, east: 2.0, south: -1.0, west: -2.0 }
+      )
+      allow(GeoDerivatives::Processors::Raster::Info).to receive(:new).and_return(info)
+
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      original_file = new_file_set.original_file
+      geotiff_size = File.size(Rails.root.join("spec", "fixtures", "files", "raster", "geotiff.tif"))
+
+      expect(original_file.height).to eq ["388"]
+      expect(original_file.width).to eq ["733"]
+      expect(original_file.bounds).to eq [{ north: 1.0, east: 2.0, south: -1.0, west: -2.0 }]
+      expect(original_file.size).to eq [geotiff_size]
+      expect(original_file.checksum.first).to be_a(MultiChecksum)
+      expect(original_file.error_message).to be_empty
+    end
   end
 
   context "with a geotiff containing a single quote in the name" do
@@ -96,6 +119,22 @@ RSpec.describe GdalCharacterizationService::Raster do
       let(:parent) { ScannedResource.new }
       it "isn't valid" do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
+      end
+    end
+
+    context "with a raster resource parent and an xml primary file" do
+      let(:parent) { RasterResource.new }
+      let(:file) { fixture_file_upload("files/geo_metadata/iso.xml", "application/xml") }
+      it "isn't valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
+      end
+    end
+
+    context "with a raster resource parent and a geotiff primary file" do
+      let(:parent) { RasterResource.new }
+      let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
       end
     end
   end

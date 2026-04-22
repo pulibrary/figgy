@@ -27,6 +27,12 @@ module GeoDerivatives
           @doc ||= JSON.parse(gdalinfo(path))
         end
 
+        # Returns the height of the raster.
+        # @return [String] height in pixels
+        def height
+          size.split(" ")[1]
+        end
+
         # Returns the min and max values for a raster.
         # @return [String] computed min and max values
         def min_max
@@ -37,6 +43,12 @@ module GeoDerivatives
         # @return [Array] raster size
         def size
           @size ||= raster_size
+        end
+
+        # Returns the width of the raster.
+        # @return [String] width in pixels
+        def width
+          size.split(" ")[0]
         end
 
         private

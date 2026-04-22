@@ -147,4 +147,8 @@ class FileMetadata < Valkyrie::Resource
     return label unless original_language_caption
     "#{label} (Original)"
   end
+
+  def extname
+    File.extname(file_identifiers[0].to_s)
+  end
 end

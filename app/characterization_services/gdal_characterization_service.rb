@@ -69,10 +69,15 @@ class GdalCharacterizationService
     @dataset_path = zip_file_directory
   end
 
+  # Tests if primary file is an xml file
+  def xml_file?
+    primary_file.extname == ".xml"
+  end
+
   # Tests if primary file is a zip file
   # @return [Boolean]
   def zip_file?
-    @target_file.mime_type == ["application/zip"]
+    File.extname(filename) == ".zip"
   end
 
   # Path to directory in which to extract zip file
@@ -94,8 +99,13 @@ class GdalCharacterizationService
     # @return [Hash]
     def file_characterization_attributes
       {
+        checksum: MultiChecksum.for(@file_object),
+        height: info_service.height,
+        width: info_service.width,
+        size: File.size(@dataset_path),
         bounds: info_service.bounds,
-        mime_type: mime_type
+        mime_type: mime_type,
+        error_message: [] # Ensure any previous error messages are removed
       }
     end
 
@@ -106,7 +116,7 @@ class GdalCharacterizationService
     end
 
     def valid?
-      parent.is_a?(RasterResource) && primary_file.mime_type != ["application/xml"]
+      parent.is_a?(RasterResource) && !xml_file?
     end
   end
 
@@ -121,8 +131,11 @@ class GdalCharacterizationService
     # @return [Hash]
     def file_characterization_attributes
       {
+        checksum: MultiChecksum.for(@file_object),
+        size: File.size(@dataset_path),
         geometry: info_service.geom,
-        mime_type: mime_type
+        mime_type: mime_type,
+        error_message: [] # Ensure any previous error messages are removed
       }
     end
 
@@ -133,7 +146,7 @@ class GdalCharacterizationService
     end
 
     def valid?
-      parent.is_a?(VectorResource) && primary_file.mime_type != ["application/xml"]
+      parent.is_a?(VectorResource) && !xml_file?
     end
   end
 end
