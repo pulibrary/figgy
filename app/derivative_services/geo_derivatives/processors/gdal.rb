@@ -59,19 +59,17 @@ module GeoDerivatives
                   "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=IF_SAFER"
         end
 
-        # Executes gdaladdo and gdal_translate commands. Used to add internal overviews
-        # and then compress a previously uncompressed raster.
-        # Output will be a Cloud Optimized GeoTIFF.
+        # Executes a single gdalwarp command that both reprojects and writes
+        # a Cloud Optimized GeoTIFF in one step. Combining the steps avoids
+        # writing a full-size warped intermediate to the working directory.
         # @param in_path [String] file input path
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
-        def self.cloud_optimized_geotiff(in_path, out_path, _options)
-          execute("gdal_translate -q -expand rgb \"#{in_path}\" #{out_path} -ot Byte -of COG "\
-                    "-a_nodata 256 -co COMPRESS=LZW -co TILING_SCHEME=GoogleMapsCompatible")
-        rescue StandardError
-          # Try without expanding rgb
-          execute("gdal_translate -q \"#{in_path}\" #{out_path} -ot Byte -of COG "\
-                    "-a_nodata 256 -co COMPRESS=LZW -co TILING_SCHEME=GoogleMapsCompatible")
+        def self.warp_to_cog(in_path, out_path, options)
+          execute "gdalwarp -q -t_srs #{options[:output_srid]} "\
+                  "\"#{in_path}\" #{out_path} -of COG -ot Byte "\
+                  "-co COMPRESS=LZW -co BLOCKSIZE=256 "\
+                  "-co TILING_SCHEME=GoogleMapsCompatible"
         end
 
         # Executes a gdal_rasterize command. Used to rasterize vector

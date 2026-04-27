@@ -79,6 +79,17 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
       end
     end
 
+    describe "#warp_to_cog" do
+      it "reprojects and writes a COG in a single gdalwarp command" do
+        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png " \
+                  "-of COG -ot Byte " \
+                  "-co COMPRESS=LZW -co BLOCKSIZE=256 " \
+                  "-co TILING_SCHEME=GoogleMapsCompatible"
+        processor.class.warp_to_cog(file_name, output_file, options)
+        expect(processor.class).to have_received(:execute).with command
+      end
+    end
+
     describe "#compress" do
       it "returns a gdal_translate command with a compress option" do
         command = "gdal_translate -q -ot Byte -a_srs EPSG:4326 \"files/geo.tif\" output/geo.png -co COMPRESS=JPEG -co JPEG_QUALITY=90"
