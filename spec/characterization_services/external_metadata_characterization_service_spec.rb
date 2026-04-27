@@ -27,6 +27,16 @@ RSpec.describe ExternalMetadataCharacterizationService do
       new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
       expect(new_file_set.original_file.mime_type).to eq ["application/xml; schema=fgdc"]
     end
+
+    it "populates checksum and size" do
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      original_file = new_file_set.original_file
+      fgdc_size = File.size(Rails.root.join("spec", "fixtures", "files", "geo_metadata", "fgdc.xml"))
+
+      expect(original_file.size).to eq [fgdc_size]
+      expect(original_file.checksum.first).to be_a(MultiChecksum)
+    end
   end
 
   context "with an iso metadata file" do
@@ -56,6 +66,22 @@ RSpec.describe ExternalMetadataCharacterizationService do
       file_set = valid_file_set
       new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
       expect(new_file_set.original_file.mime_type).to eq ["application/xml"]
+    end
+  end
+
+  describe "#valid?" do
+    context "with an xml primary file" do
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
+      end
+    end
+
+    context "with a non-xml primary file" do
+      let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
+
+      it "is not valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
+      end
     end
   end
 end

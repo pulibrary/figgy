@@ -25,6 +25,25 @@ RSpec.describe GdalCharacterizationService::Vector do
       expect(new_file_set.original_file.mime_type).to eq ["application/vnd.geo+json"]
       expect(new_file_set.original_file.geometry).to eq ["Multi Polygon"]
     end
+
+    it "populates checksum, size, and geometry" do
+      info = instance_double(
+        GeoDerivatives::Processors::Vector::Info,
+        driver: "GeoJSON",
+        geom: "Multi Polygon"
+      )
+      allow(GeoDerivatives::Processors::Vector::Info).to receive(:new).and_return(info)
+
+      file_set = valid_file_set
+      new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
+      original_file = new_file_set.original_file
+      geojson_size = File.size(Rails.root.join("spec", "fixtures", "files", "vector", "geo.json"))
+
+      expect(original_file.geometry).to eq ["Multi Polygon"]
+      expect(original_file.size).to eq [geojson_size]
+      expect(original_file.checksum.first).to be_a(MultiChecksum)
+      expect(original_file.error_message).to be_empty
+    end
   end
 
   context "with a geojson file containing a single quote in the name" do
@@ -96,6 +115,22 @@ RSpec.describe GdalCharacterizationService::Vector do
       let(:parent) { ScannedResource.new }
       it "isn't valid" do
         expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
+      end
+    end
+
+    context "with a vector resource parent and an xml primary file" do
+      let(:parent) { VectorResource.new }
+      let(:file) { fixture_file_upload("files/geo_metadata/iso.xml", "application/xml") }
+      it "isn't valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be false
+      end
+    end
+
+    context "with a vector resource parent and a geojson primary file" do
+      let(:parent) { VectorResource.new }
+      let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
+      it "is valid" do
+        expect(described_class.new(file_set: valid_file_set, persister: persister).valid?).to be true
       end
     end
   end

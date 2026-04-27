@@ -16,8 +16,11 @@ class GeoCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    @file_set = TikaFileCharacterizationService.new(file_set: file_set, persister: persister).characterize
-    @file_set = scanned_map_characterization_service.characterize if scanned_map_characterization_service.valid?
+    if scanned_map_characterization_service.valid?
+      # Run tika on scanned maps only
+      @file_set = TikaFileCharacterizationService.new(file_set: file_set, persister: persister).characterize
+      @file_set = scanned_map_characterization_service.characterize
+    end
     @file_set = vector_characterization_service.characterize if vector_characterization_service.valid?
     @file_set = raster_characterization_service.characterize if raster_characterization_service.valid?
     @file_set = external_metadata_service.characterize if external_metadata_service.valid?
