@@ -5,16 +5,16 @@ module GeoDerivatives
 
       included do
         # Executes a gdal_translate command. Used to translate a raster
-        # format into a different format. Also used in generating thumbnails
-        # from vector data.
+        # format into a different format.
         # @param in_path [String] file input path
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
-        def self.translate(in_path, out_path, _options)
-          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -expand rgb -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
+        def self.translate(in_path, out_path, options)
+          outsize = "-outsize #{options[:output_size].split(' ').first} 0"
+          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES #{outsize} -expand rgb -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
         rescue StandardError
           # Try without expanding rgb
-          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
+          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES #{outsize} -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
         end
 
         # Executes a gdalwarp command. Used to transform a raster

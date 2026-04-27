@@ -63,8 +63,8 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
     let(:options) { { output_size: "150 150", output_srid: "EPSG:4326" } }
 
     describe "#translate" do
-      it "executes a gdal_translate command" do
-        command = "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -expand rgb -co COMPRESS=DEFLATE \"files/geo.tif\" output/geo.png"
+      it "executes a gdal_translate command, scaling the intermediate to the thumbnail width" do
+        command = "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -outsize 150 0 -expand rgb -co COMPRESS=DEFLATE \"files/geo.tif\" output/geo.png"
         processor.class.translate(file_name, output_file, options)
         expect(processor.class).to have_received(:execute).with command
       end
