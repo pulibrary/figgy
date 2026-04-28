@@ -10,6 +10,7 @@ RSpec.describe GeoDerivatives::Runners::RasterDerivatives do
           label: :display_raster,
           id: "file_set_id",
           format: "tif",
+          srid: "EPSG:3857",
           url: display_raster_uri
         },
         {

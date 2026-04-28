@@ -5,26 +5,28 @@ module GeoDerivatives
 
       included do
         # Executes a gdal_translate command. Used to translate a raster
-        # format into a different format. Also used in generating thumbnails
-        # from vector data.
+        # format into a different format.
         # @param in_path [String] file input path
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
-        def self.translate(in_path, out_path, _options)
-          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -expand rgb -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
+        def self.translate(in_path, out_path, options)
+          outsize = "-outsize #{options[:output_size].split(' ').first} 0"
+          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES #{outsize} -expand rgb -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
         rescue StandardError
           # Try without expanding rgb
-          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
+          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES #{outsize} -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
         end
 
         # Executes a gdalwarp command. Used to transform a raster
-        # from one projection into another.
+        # from one projection into another. Intermediate is tiled and LZW-compressed
+        # to keep working-directory disk usage manageable for large rasters.
         # @param in_path [String] file input path
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.warp(in_path, out_path, options)
           execute "gdalwarp -q -t_srs #{options[:output_srid]} "\
-                  "\"#{in_path}\" #{out_path} -co COMPRESS=NONE"
+                  "\"#{in_path}\" #{out_path} "\
+                  "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=IF_SAFER"
         end
 
         # Executes a gdal_translate command. Used to compress
@@ -53,22 +55,21 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.rgba(in_path, out_path, _options)
-          execute "gdal_translate -expand rgba \"#{in_path}\" #{out_path}"
+          execute "gdal_translate -expand rgba \"#{in_path}\" #{out_path} "\
+                  "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=IF_SAFER"
         end
 
-        # Executes gdaladdo and gdal_translate commands. Used to add internal overviews
-        # and then compress a previously uncompressed raster.
-        # Output will be a Cloud Optimized GeoTIFF.
+        # Executes a single gdalwarp command that both reprojects and writes
+        # a Cloud Optimized GeoTIFF in one step. Combining the steps avoids
+        # writing a full-size warped intermediate to the working directory.
         # @param in_path [String] file input path
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
-        def self.cloud_optimized_geotiff(in_path, out_path, _options)
-          execute("gdal_translate -q -expand rgb \"#{in_path}\" #{out_path} -ot Byte -of COG "\
-                    "-a_nodata 256 -co COMPRESS=LZW -co TILING_SCHEME=GoogleMapsCompatible")
-        rescue StandardError
-          # Try without expanding rgb
-          execute("gdal_translate -q \"#{in_path}\" #{out_path} -ot Byte -of COG "\
-                    "-a_nodata 256 -co COMPRESS=LZW -co TILING_SCHEME=GoogleMapsCompatible")
+        def self.warp_to_cog(in_path, out_path, options)
+          execute "gdalwarp -q -t_srs #{options[:output_srid]} "\
+                  "\"#{in_path}\" #{out_path} -of COG -ot Byte "\
+                  "-co COMPRESS=LZW -co BLOCKSIZE=256 "\
+                  "-co TILING_SCHEME=GoogleMapsCompatible"
         end
 
         # Executes a gdal_rasterize command. Used to rasterize vector

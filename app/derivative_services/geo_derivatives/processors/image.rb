@@ -14,7 +14,7 @@ module GeoDerivatives
         # @option options [String] `:output_size` as "w h" or "wxh"
         def self.convert(in_path, out_path, options)
           size = options[:output_size].tr(" ", "x")
-          convert = MiniMagick::Tool::Convert.new(whiny: false)
+          convert = MiniMagick::Tool::Convert.new
           convert << in_path
           convert << "-resize"
           convert << size

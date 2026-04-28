@@ -63,17 +63,29 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
     let(:options) { { output_size: "150 150", output_srid: "EPSG:4326" } }
 
     describe "#translate" do
-      it "executes a gdal_translate command" do
-        command = "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -expand rgb -co COMPRESS=DEFLATE \"files/geo.tif\" output/geo.png"
+      it "executes a gdal_translate command, scaling the intermediate to the thumbnail width" do
+        command = "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -outsize 150 0 -expand rgb -co COMPRESS=DEFLATE \"files/geo.tif\" output/geo.png"
         processor.class.translate(file_name, output_file, options)
         expect(processor.class).to have_received(:execute).with command
       end
     end
 
     describe "#warp" do
-      it "executes a reproject command" do
-        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png -co COMPRESS=NONE"
+      it "executes a reproject command with a compressed intermediate" do
+        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png " \
+                  "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=IF_SAFER"
         processor.class.warp(file_name, output_file, options)
+        expect(processor.class).to have_received(:execute).with command
+      end
+    end
+
+    describe "#warp_to_cog" do
+      it "reprojects and writes a COG in a single gdalwarp command" do
+        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png " \
+                  "-of COG -ot Byte " \
+                  "-co COMPRESS=LZW -co BLOCKSIZE=256 " \
+                  "-co TILING_SCHEME=GoogleMapsCompatible"
+        processor.class.warp_to_cog(file_name, output_file, options)
         expect(processor.class).to have_received(:execute).with command
       end
     end

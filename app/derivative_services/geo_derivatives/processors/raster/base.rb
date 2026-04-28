@@ -25,7 +25,7 @@ module GeoDerivatives
         # Set of commands to run to reproject the raster.
         # @return [Array] set of command name symbols
         def self.reproject_queue
-          [:rgb2pct, :rgba, :warp, :cloud_optimized_geotiff]
+          [:rgb2pct, :rgba, :warp_to_cog]
         end
 
         def self.encode_raster(in_path, out_path, options)
