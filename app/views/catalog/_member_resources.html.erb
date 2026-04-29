@@ -1,10 +1,11 @@
 <%# partial for the table / form used to attach and detach member resources
     Expected locals:
-      member_type [String] e.g. "scanned_resource"
+      member_type [String] e.g. "scanned_resource" or "numismatics/coin"
       decorated_members [Array<ResourceDecorator>] the list of member
         objects to put into the table
     Optional locals:
       empty_text [String] the message to show if there are no members
+      member_label [String] label for members different than member_type
       placeholder_text [String] placeholder value for the id input element
       actions [Array] List of actions to render.
           Available: [:view, :edit, :detach, :delete]
@@ -14,13 +15,14 @@
       hide_attach [Boolean] do not display input for attaching existing resources
     %>
 
+  <% member_label ||= member_type %>
   <div class="card mb-4">
     <div class="card-header">
-      <% panel_title ||= "Child #{member_type.titleize.pluralize}" %>
+      <% panel_title ||= "Child #{member_label.titleize.pluralize}" %>
       <%= panel_title %>
     </div>
     <div class="card-body member-resources"
-      id="<%= "members-#{member_type.pluralize.dasherize}-panel"%>">
+      id="<%= "members-#{member_label.pluralize.dasherize}-panel"%>">
       <% actions ||= [:view, :edit, :detach] %>
       <% hide_thumbnail ||= false %>
       <% hide_visibility ||= false %>
@@ -30,13 +32,15 @@
           <div class="loading-status d-none">Loading...</div>
 
           <table
-            id="<%= "members-#{member_type.pluralize.dasherize}" %>"
-            class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize} member-resources-datatable" %>"
+            id="<%= "members-#{member_label.pluralize.dasherize}" %>"
+            class="table table-striped member-resources <%= "member-#{member_label.pluralize.dasherize} member-resources-datatable" %>"
             data-update-url="<%= polymorphic_url([resource]) %>"
+            data-child-update-url="<%= polymorphic_url(member_type.camelize.constantize) %>"
             data-query-url="<%= solr_document_path(id: resource.id) %>"
+            data-resource-type="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>"
+            data-member-type="<%= member_type %>"
             data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-            data-resource-id="<%= resource.id.to_s %>"
-            data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+          >
             <thead>
               <tr>
                 <% unless hide_thumbnail %>
@@ -72,7 +76,7 @@
 
                     <% end %>
                     <% if actions.include?(:detach) %>
-                      <button name="button" id=<%= "child_#{member_type}_detach_button" %> class="btn btn-danger btn-remove-row">Detach</button>
+                      <button name="button" id=<%= "child_#{member_label}_detach_button" %> class="btn btn-danger btn-remove-row">Detach</button>
                     <% end %>
                     <% if actions.include?(:delete) %>
                       <%= link_to "Delete", main_app.polymorphic_path([resource]), class: 'btn btn-danger', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
@@ -88,7 +92,7 @@
       <% if decorated_members.empty? && !hide_attach %>
         <div class="row">
           <div class="col-md-6">
-            <% empty_text ||= "This work has no #{member_type.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_type.humanize(capitalize: false).pluralize}." %>
+            <% empty_text ||= "This work has no #{member_label.humanize(capitalize: false).pluralize} attached. Click \"Attach\" to attach #{member_label.humanize(capitalize: false).pluralize}." %>
             <p><%= empty_text %></p>
           </div>
         </div>
@@ -103,12 +107,12 @@
       <% if !hide_attach %>
         <div class="row">
           <div class="col-md-4">
-            <% placeholder_text ||= "Child #{member_type.humanize(capitalize: false)} identifier..." %>
-            <input class="form-control string optional related_resource_ids resource_member_ids form-control" id=<%= "child_#{member_type}_id_input" %> name=<%= "child_#{member_type}_id_input"%> placeholder="<%= placeholder_text %>" type="text">
+            <% placeholder_text ||= "Child #{member_label.humanize(capitalize: false)} identifier..." %>
+            <input class="form-control string optional related_resource_ids resource_member_ids form-control" id=<%= "child_#{member_label}_id_input" %> name=<%= "child_#{member_label}_id_input"%> placeholder="<%= placeholder_text %>" type="text">
           </div>
           <div class="col-md-2">
             <span class="input-group-btn">
-              <button name="button" id=<%= "child_#{member_type}_attach_button" %> class="btn btn-primary btn-add-row">Attach</button>
+              <button name="button" id=<%= "child_#{member_label}_attach_button" %> class="btn btn-primary btn-add-row">Attach</button>
             </span>
           </div>
         </div><!-- row -->

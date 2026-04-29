@@ -23,10 +23,11 @@
             id="<%= "members-#{member_type.pluralize.dasherize}" %>"
             class="table table-striped member-resources <%= "member-#{member_type.pluralize.dasherize} member-resources-datatable" %>"
             data-update-url="<%= polymorphic_url([resource]) %>"
+            data-child-update-url="<%= polymorphic_url(Numismatics::Reference) %>"
             data-query-url="<%= solr_document_path(id: resource.id) %>"
-            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
-            data-resource-id="<%= resource.id.to_s %>"
-            data-param-key="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>">
+            data-resource-type="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>"
+            data-member-type="numismatics/reference"
+            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>">
             <thead>
               <tr>
                 <th>Title</th>

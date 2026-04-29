@@ -28,7 +28,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -83,7 +83,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -110,7 +110,7 @@ RSpec.feature "Related Resources", js: true do
 
         # detach
         within new_row do
-          click_on("button")
+          click_on("Detach")
         end
 
         # wait for page change
@@ -151,7 +151,7 @@ RSpec.feature "Related Resources", js: true do
 
         # detach
         within parent_row do
-          click_on("button")
+          click_on("Detach")
         end
 
         # wait for page change
@@ -178,7 +178,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -208,7 +208,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -235,7 +235,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -261,7 +261,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -287,7 +287,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -315,7 +315,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -343,7 +343,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -369,7 +369,7 @@ RSpec.feature "Related Resources", js: true do
 
       # detach
       within new_row do
-        click_on("button")
+        click_on("Detach")
       end
 
       # wait for page change
@@ -377,6 +377,36 @@ RSpec.feature "Related Resources", js: true do
 
       parent = adapter.query_service.find_by(id: parent.id)
       expect(Wayfinder.for(parent).members).to be_empty
+    end
+  end
+
+  context "on a numismatics issue show page" do
+    it "can attach and detach a child coin when there is a monogram" do
+      FactoryBot.create_for_repository(:numismatic_monogram)
+      issue = FactoryBot.create_for_repository(:numismatic_issue)
+      coin = FactoryBot.create_for_repository(:coin)
+
+      visit "/catalog/#{issue.id}"
+
+      # attach
+      fill_in("child_coin_id_input", with: coin.id.to_s)
+      click_on("child_coin_attach_button")
+
+      new_row = page.find("tr[data-resource-id]")
+
+      issue = adapter.query_service.find_by(id: issue.id)
+      expect(Wayfinder.for(issue).members.map(&:id)).to eq [coin.id]
+
+      # detach
+      within new_row do
+        click_on("Detach")
+      end
+
+      # wait for page change
+      expect(page).not_to have_selector("tr[data-resource-id]")
+
+      issue = adapter.query_service.find_by(id: issue.id)
+      expect(Wayfinder.for(issue).members).to be_empty
     end
   end
 end
