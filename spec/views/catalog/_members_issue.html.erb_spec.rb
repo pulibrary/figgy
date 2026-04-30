@@ -36,7 +36,7 @@ RSpec.describe "catalog/_members_issue" do
     end
 
     it "prompts user to attach one" do
-      expect(rendered).to have_selector "p", text: "This work has no numismatic coins attached. Click \"Attach\" to attach numismatic coins."
+      expect(rendered).to have_selector "p", text: "This work has no coins attached. Click \"Attach\" to attach coins."
     end
   end
 end

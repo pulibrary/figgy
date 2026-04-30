@@ -16,6 +16,7 @@ export default class MemberResourcesTable {
     this.initializeDataTable()
 
     this.update_url = this.table.data('update-url')
+    this.child_update_url = this.table.data('child-update-url')
     this.query_url = this.table.data('query-url')
     if (!this.query_url) {
       return
@@ -26,8 +27,8 @@ export default class MemberResourcesTable {
     this.$authenticityToken = this.$form.find('input[name="authenticity_token"]');
     this.authenticityToken = this.$authenticityToken.val();
 
-    this.model = this.table.data('param-key');
-    this.resourceId = this.table.data('resource-id')
+    this.resourceType = this.table.data('resource-type');
+    this.memberType = this.table.data('member-type').replace(/\//g, '_');
 
     this.loading = false
     this.$loading = this.table.prev('.loading-status')
@@ -88,7 +89,7 @@ export default class MemberResourcesTable {
     let parentId = this.update_url.split("/").pop()
     return {
       'authenticity_token': this.authenticityToken,
-      [this.model]: {
+      [this.memberType]: {
         ["append_id"]: parentId
       }
     };
@@ -96,8 +97,7 @@ export default class MemberResourcesTable {
 
   // replace parent id with new member Id
   get_child_update_url(attachedId) {
-    let stuff = this.update_url.split("/")
-    stuff.pop()
+    let stuff = this.child_update_url.split("/")
     stuff.push(attachedId)
     return stuff.join("/")
   }
@@ -139,7 +139,7 @@ export default class MemberResourcesTable {
   buildRemoveFormData() {
     return {
       'authenticity_token': this.authenticityToken,
-      [this.model]: {
+      [this.resourceType]: {
         ['member_ids']: this.members
       }
     };
