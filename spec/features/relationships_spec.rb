@@ -11,8 +11,8 @@ RSpec.feature "Related Resources", js: true do
 
   context "on a scanned resource show page" do
     it "can attach and detach a member" do
-      parent = persister.save(resource: FactoryBot.create_for_repository(:scanned_resource))
-      child = persister.save(resource: FactoryBot.create_for_repository(:scanned_resource))
+      parent = FactoryBot.create_for_repository(:scanned_resource)
+      child = FactoryBot.create_for_repository(:scanned_resource)
 
       # attach
       visit "/catalog/#{parent.id}"
@@ -40,9 +40,9 @@ RSpec.feature "Related Resources", js: true do
 
     describe "when a resource is moved from one parent to another" do
       it "only has one parent at the end" do
-        new_parent = persister.save(resource: FactoryBot.create_for_repository(:scanned_resource))
-        child = persister.save(resource: FactoryBot.create_for_repository(:scanned_resource))
-        old_parent = persister.save(resource: FactoryBot.create_for_repository(:scanned_resource, member_ids: [child.id]))
+        new_parent = FactoryBot.create_for_repository(:scanned_resource)
+        child = FactoryBot.create_for_repository(:scanned_resource)
+        old_parent = FactoryBot.create_for_repository(:scanned_resource, member_ids: [child.id])
         expect(Wayfinder.for(old_parent).members.map(&:id)).to eq [child.id]
 
         # attach
@@ -64,8 +64,8 @@ RSpec.feature "Related Resources", js: true do
 
   context "on a vector resource show page" do
     it "can attach and detach a child vector" do
-      parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
-      child = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
+      parent = FactoryBot.create_for_repository(:vector_resource)
+      child = FactoryBot.create_for_repository(:vector_resource)
 
       # attach
       visit "/catalog/#{parent.id}"
@@ -95,8 +95,8 @@ RSpec.feature "Related Resources", js: true do
 
     describe "when attaching a parent vector" do
       it "can attach and detach a parent vector" do
-        resource = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
-        parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
+        resource = FactoryBot.create_for_repository(:vector_resource)
+        parent = FactoryBot.create_for_repository(:vector_resource)
 
         # attach
         visit "/catalog/#{resource.id}"
@@ -121,9 +121,9 @@ RSpec.feature "Related Resources", js: true do
       end
 
       it "only has one parent at the end" do
-        new_parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource, title: "New Parent"))
-        resource = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
-        old_parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource, member_ids: [resource.id]))
+        new_parent = FactoryBot.create_for_repository(:vector_resource, title: "New Parent")
+        resource = FactoryBot.create_for_repository(:vector_resource)
+        old_parent = FactoryBot.create_for_repository(:vector_resource, member_ids: [resource.id])
         expect(Wayfinder.for(old_parent).members.map(&:id)).to eq [resource.id]
 
         # attach
@@ -142,9 +142,9 @@ RSpec.feature "Related Resources", js: true do
 
     describe "when removing a parent vector" do
       it "retains other children on the parent" do
-        resource = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
-        sibling = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
-        parent = persister.save(resource: FactoryBot.create_for_repository(:vector_resource, title: "New Parent", member_ids: [sibling.id, resource.id]))
+        resource = FactoryBot.create_for_repository(:vector_resource)
+        sibling = FactoryBot.create_for_repository(:vector_resource)
+        parent = FactoryBot.create_for_repository(:vector_resource, title: "New Parent", member_ids: [sibling.id, resource.id])
 
         visit "/catalog/#{resource.id}"
         parent_row = page.find("tr[data-resource-id]")
@@ -163,8 +163,8 @@ RSpec.feature "Related Resources", js: true do
     end
 
     it "can attach and detach a parent raster" do
-      resource = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
-      parent = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
+      resource = FactoryBot.create_for_repository(:raster_resource)
+      parent = FactoryBot.create_for_repository(:raster_resource)
 
       # attach
       visit "/catalog/#{resource.id}"
@@ -191,8 +191,8 @@ RSpec.feature "Related Resources", js: true do
 
   context "on a raster resource show page" do
     it "can attach and detach a child raster" do
-      parent = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
-      child = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
+      parent = FactoryBot.create_for_repository(:raster_resource)
+      child = FactoryBot.create_for_repository(:raster_resource)
 
       # attach
       visit "/catalog/#{parent.id}"
@@ -219,8 +219,8 @@ RSpec.feature "Related Resources", js: true do
     end
 
     it "can attach and detach a child vector" do
-      parent = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
-      child = persister.save(resource: FactoryBot.create_for_repository(:vector_resource))
+      parent = FactoryBot.create_for_repository(:raster_resource)
+      child = FactoryBot.create_for_repository(:vector_resource)
 
       # attach
       visit "/catalog/#{parent.id}"
@@ -246,8 +246,8 @@ RSpec.feature "Related Resources", js: true do
     end
 
     it "can attach and detach a parent raster" do
-      resource = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
-      parent = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
+      resource = FactoryBot.create_for_repository(:raster_resource)
+      parent = FactoryBot.create_for_repository(:raster_resource)
 
       # attach
       visit "/catalog/#{resource.id}"
@@ -272,8 +272,8 @@ RSpec.feature "Related Resources", js: true do
     end
 
     it "can attach and detach a parent scanned map" do
-      resource = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
-      parent = persister.save(resource: FactoryBot.create_for_repository(:scanned_map))
+      resource = FactoryBot.create_for_repository(:raster_resource)
+      parent = FactoryBot.create_for_repository(:scanned_map)
 
       # attach
       visit "/catalog/#{resource.id}"
@@ -300,8 +300,8 @@ RSpec.feature "Related Resources", js: true do
 
   context "on a scanned map resource show page" do
     it "can attach and detach a child scanned map" do
-      parent = persister.save(resource: FactoryBot.create_for_repository(:scanned_map))
-      child = persister.save(resource: FactoryBot.create_for_repository(:scanned_map))
+      parent = FactoryBot.create_for_repository(:scanned_map)
+      child = FactoryBot.create_for_repository(:scanned_map)
 
       # attach
       visit "/catalog/#{parent.id}"
@@ -326,8 +326,8 @@ RSpec.feature "Related Resources", js: true do
     end
 
     it "can attach and detach a child raster" do
-      parent = persister.save(resource: FactoryBot.create_for_repository(:scanned_map))
-      child = persister.save(resource: FactoryBot.create_for_repository(:raster_resource))
+      parent = FactoryBot.create_for_repository(:scanned_map)
+      child = FactoryBot.create_for_repository(:raster_resource)
 
       # attach
       visit "/catalog/#{parent.id}"
@@ -354,8 +354,8 @@ RSpec.feature "Related Resources", js: true do
     end
 
     it "can attach and detach a parent scanned map" do
-      resource = persister.save(resource: FactoryBot.create_for_repository(:scanned_map))
-      parent = persister.save(resource: FactoryBot.create_for_repository(:scanned_map))
+      resource = FactoryBot.create_for_repository(:scanned_map)
+      parent = FactoryBot.create_for_repository(:scanned_map)
 
       # attach
       visit "/catalog/#{resource.id}"
