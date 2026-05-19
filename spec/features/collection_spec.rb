@@ -21,6 +21,7 @@ RSpec.feature "Collection" do
     expect(page).to have_field "Restricted viewers"
     expect(page).to have_field "Tagline", with: collection.tagline
     expect(page).to have_field "Banner image url", with: collection.banner_image_url
+    expect(page).to have_button "Load"
 
     # renders rich text editor for description
     element = find("trix-editor > div")
