@@ -70,4 +70,11 @@ RSpec.describe CollectionChangeSet do
       expect(change_set.primary_terms).to include :restricted_viewers
     end
   end
+
+  describe "#banner_image_url" do
+    it "is single-valued and not required" do
+      expect(change_set.multiple?(:banner_image_url)).to eq false
+      expect(change_set.required?(:banner_image_url)).to eq false
+    end
+  end
 end
