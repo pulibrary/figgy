@@ -1,47 +1,84 @@
 <template>
-  <div>
-    <label>Banner Image URL</label>
-    <input id="image-cropper-url" type="text" v-model="infoUrl" />
-    <button type="button" class="btn btn-outline-secondary"
-      @click="loadUrl($event)">Load</button>
-  </div>
-  <div>
-    <div class="lux-osd">
-      <div
-        :id="viewerId"
-        class="lux-viewport"
-      />
+  <div class="image-cropper">
+    <div class="form-group">
+      <label for="image-cropper-url">Banner image source</label>
+      <div class="input-group">
+        <input
+          id="image-cropper-url"
+          v-model="infoUrl"
+          type="text"
+          class="form-control"
+          placeholder="IIIF info.json or image URL"
+        />
+        <div class="input-group-append">
+          <button type="button" class="btn btn-outline-secondary" @click="loadUrl($event)">
+            Load
+          </button>
+        </div>
+      </div>
+      <small class="form-text text-muted">
+        Drag the highlighted rectangle to choose the crop region.
+      </small>
+    </div>
+
+    <div class="osd-container">
+      <div :id="viewerId" class="osd-viewport" />
     </div>
   </div>
 </template>
 
 <script>
-/* here's another one
-https://iiif-cloud.princeton.edu/iiif/2/51%2F13%2F9e%2F51139e35a5bc49ec9c474c8e6f4fbe0b%2Fintermediate_file/info.json
-*/
+
 import * as AnnotoriousOSD from '@annotorious/openseadragon'
 import '@annotorious/openseadragon/annotorious-openseadragon.css'
 import OpenSeadragon from 'openseadragon'
 import { mapState } from 'vuex'
-/**
- * This is the Persistence and Deep Zoom pieces of the Order Manager interface.
- * Note: use `yarn add openseadragon` for deep zoom to work.
- */
+
+const ASPECT_RATIO = 1.5
+const CROP_ANNOTATION_ID = 'crop-annotation'
+
+function parseUrl (raw) {
+  if (!raw) return { infoUrl: '', savedRegion: null }
+
+  if (raw.endsWith('/info.json')) {
+    return { infoUrl: raw, savedRegion: null }
+  }
+
+  let rawComponents = raw.split("/")
+  let iiifComponents = rawComponents.slice(-4)
+  let urlComponents = rawComponents.slice(0, -4)
+  const infoUrl = `${urlComponents.join("/")}/info.json`
+  const region = iiifComponents[0].split(",")
+
+  // IIIF region has x,y,w,h
+  if (region.length === 4) {
+    return {
+      infoUrl: infoUrl,
+      savedRegion: {
+        x: parseInt(region[0], 10),
+        y: parseInt(region[1], 10),
+        w: parseInt(region[2], 10),
+        h: parseInt(region[3], 10)
+      }
+    }
+  }
+
+  // No region, just return URL
+  return { infoUrl: infoUrl, savedRegion: null }
+}
+
 export default {
-  name: 'Controls',
+  name: 'ImageCropper',
   status: 'ready',
   release: '1.0.0',
   type: 'Pattern',
   metaInfo: {
-    title: 'OrderManager Controls',
+    title: 'IIIF ImageCropper',
     htmlAttrs: {
       lang: 'en'
     }
   },
   props: {
-    /**
-     * The html element name used for the component.
-     */
     viewerId: {
       type: String,
       default: 'viewer'
@@ -52,11 +89,14 @@ export default {
     }
   },
   data: function () {
+    const parsed = parseUrl(this.url)
     return {
       anno: null,
       viewer: null,
       osdId: this.viewerId,
-      infoUrl: this.url
+      infoUrl: parsed.infoUrl,
+      initialRegion: parsed.savedRegion,
+      imageSize: null,
     }
   },
   computed: {
@@ -73,7 +113,7 @@ export default {
           pinchRotate: true
         },
         showRotationControl: true,
-        tileSources: [this.infoUrl]
+        tileSources: this.infoUrl ? [this.infoUrl] : []
       })
 
       this.anno = AnnotoriousOSD.createOSDAnnotator(this.viewer, {
@@ -82,16 +122,39 @@ export default {
       })
 
       this.viewer.addHandler('open', () => {
+        // Clear any previous annotations
+        this.anno.clearAnnotations();
+
         const item = this.viewer.world.getItemAt(0);
         const size = item.getContentSize();
-        const smallestSide = size['x'] > size['y'] ? size['y'] : size['x']
-        const boxSize = smallestSide/2;
-        const imageCenter = this.viewer.world.getItemAt(0).viewportToImageCoordinates(this.viewer.viewport.getCenter());
+        this.imageSize = size;
+        let x, y, w, h
+        if (this.initialRegion) {
+          // Restore the saved crop
+          ({ x, y, w, h } = this.initialRegion)
+        } else {
+          // Generate default crop selector with proper aspect ratio
+          const smallestSide = size['x'] > size['y'] ? size['y'] : size['x']
+          h = smallestSide / 2
+          w = h * ASPECT_RATIO
+          if (w > size['x']) {
+            w = size['x']
+            h = w / ASPECT_RATIO
+          }
+          const imageCenter = item.viewportToImageCoordinates(this.viewer.viewport.getCenter());
+          x = imageCenter['x'] - (w / 2)
+          y = imageCenter['y'] - (h / 2)
+        }
 
-        const x = imageCenter['x'] - (boxSize/2)
-        const y = imageCenter['y'] - (boxSize/2)
-        this.anno.addAnnotation({
-        id: 'annotation',
+        this.anno.addAnnotation(this.buildAnnotation(x,y,w,h))
+        this.anno.setSelected(CROP_ANNOTATION_ID);
+      });
+      this.anno.on('updateAnnotation', selected => this.updateAnnotationHandler(selected));
+    },
+
+    buildAnnotation: function (x,y,w,h) {
+      return {
+        id: CROP_ANNOTATION_ID,
         target: {
           selector: {
             type: 'RECTANGLE',
@@ -99,40 +162,66 @@ export default {
               bounds: {
                 minX: x,
                 minY: y,
-                maxX: boxSize + x,
-                maxY: boxSize + y
+                maxX: w + x,
+                maxY: h + y
               },
               x,
               y,
-              w: boxSize,
-              h: boxSize,
+              w,
+              h,
             }
           }
-        }});
-        this.anno.setSelected('annotation');
-      });
-      this.anno.on('updateAnnotation', selected => this.updateArea(selected));
-      this.anno.on('viewportIntersect', selected => this.updateArea(selected));
+        }
+      }
     },
-    updateArea: function (selected) {
-      const annotation = Array.isArray(selected) ? selected[0] : selected;
+
+    updateAnnotationHandler: function () {
+      this.clampAnnotation()
+      this.updateCollectionBannerUrl()
+    },
+
+    clampAnnotation: function () {
+      const annotation = this.anno.getAnnotationById(CROP_ANNOTATION_ID);
+      const geometry = annotation['target']['selector']['geometry'];
+
+      // Set height so it is no larger than the image size
+      let h = Math.min(geometry.h, this.imageSize.y)
+
+      // Calculate the width from the aspect ratio
+      let w = h * ASPECT_RATIO
+
+      // Adjust the width and height if the width is larger than the image size
+      if (w > this.imageSize.x) {
+        w = this.imageSize.x
+        h = w / ASPECT_RATIO
+      }
+
+      // Keep the crop selector within the bounds of the image
+      // See: https://github.com/dominictobias/react-image-crop/blob/master/src/utils.ts#L11
+      // See: https://github.com/dominictobias/react-image-crop/blob/master/src/utils.ts#L123
+      const x = Math.min(Math.max(geometry.x, 0), this.imageSize.x - w)
+      const y = Math.min(Math.max(geometry.y, 0), this.imageSize.y - h)
+
+      // Update the annotation with new values
+      const newAnnotation = this.buildAnnotation(x, y, w, h)
+      this.anno.updateAnnotation(newAnnotation)
+    },
+
+    updateCollectionBannerUrl: function () {
+      const annotation = this.anno.getAnnotationById(CROP_ANNOTATION_ID);
       const geometry = annotation['target']['selector']['geometry'];
       const x = geometry['x'] < 0 ? 0 : parseInt(geometry['x']);
       const y = geometry['y'] < 0 ? 0 : parseInt(geometry['y']);
-      var region = [x, y, parseInt(geometry['w']), parseInt(geometry['h'])]
-      let rotation = this.viewer.viewport.getRotation();
-      // Note: rotation is broken, we probably want to get this from Annotorious and not the viewport
-      console.log('rotation: ' + rotation)
-      // if you rotate more than once the rotation is over 360.
-      // If you click rotate 5 times, the result is 450, this is not in line with IIIF
-      // if you rotate left the number is in negative, i.e. -90 for one click left
-      rotation = rotation < 0 ? (rotation + (360 * (parseInt(Math.abs(rotation/360) + 1)))) : rotation - (360 * parseInt(rotation/360)) 
-      rotation = rotation == 360 ? 0 : rotation;
-      var region_url = `${this.infoUrl.replace("info.json", "")}${region.join(",")}/full/${Math.abs(rotation)}/default.jpg`
-      console.log(region_url)
+      const region = [x, y, parseInt(geometry['w']), parseInt(geometry['h'])]
+      const region_url = `${this.infoUrl.replace("info.json", "")}${region.join(",")}/full/0/default.jpg`
+      document.getElementById('collection_banner_image_url').value = region_url
     },
+
     loadUrl: function () {
-      this.viewer.open(this.infoUrl)
+      const parsed = parseUrl(this.infoUrl)
+      this.infoUrl = parsed.infoUrl
+      this.initialRegion = parsed.savedRegion
+      if (this.infoUrl) this.viewer.open(this.infoUrl)
     }
   },
   mounted: function () {
@@ -142,48 +231,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-small {
-  font-size: 1rem;
-  font-weight: 400;
-}
-#replace-file-button {
-  padding: 1.5rem;
-  display: inline-block;
-}
-.lux-is-hidden {
-  display: none;
-}
-.lux-bg {
-  background: #f9f9f9;
-  margin-left: -30px;
-  margin-right: -30px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.image-cropper {
+  margin-bottom: 1rem;
 }
 
-.lux-osd {
-  background: #fff;
-  height: 900px;
-  width: 600px;
-  border: solid black 2px;
+.osd-container {
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  width: 100%;
+  // Match the 1.5:1 banner aspect ratio so the viewport echoes the saved crop.
+  aspect-ratio: 1.5 / 1;
+  min-height: 320px;
+  overflow: hidden;
 }
 
-.lux-osd-wrapper {
-  background: #fff;
-  flex-basis: 40%;
-  border-radius: 4px;
-  border: 2px solid #9ecaed;
-  box-shadow: 0 0 10px #9ecaed;
-  padding: 10px;
-}
-
-h3.lux-osd-title {
-  font-size: 18px;
-}
-
-.lux-viewport {
+.osd-viewport {
   height: 100%;
   width: 100%;
 }

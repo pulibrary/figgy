@@ -7,11 +7,11 @@
     "lint": "yarn run eslint app/javascript/**/*.vue"
   },
   "dependencies": {
-    "@annotorious/openseadragon": "^3.8.2",
     "@google-cloud/pubsub": "^0.31.0",
     "@google-cloud/storage": "^5.8.4",
     "@mapnik/mapnik": "^4.6",
     "@rails/actioncable": "^7.2.0",
+    "@annotorious/openseadragon": "^3.8.2",
     "@samvera/clover-iiif": "^2.13.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "ajv": "^8.18.0",
