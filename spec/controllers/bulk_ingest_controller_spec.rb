@@ -313,47 +313,22 @@ RSpec.describe BulkIngestController do
     end
   end
 
-  describe "full unstubbed ingest of an LAE ingest" do
-    with_queue_adapter :inline
-    let(:barcode1) { "32101075851400" }
-    let(:barcode2) { "32101075851418" }
-    let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
-    let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
-    let(:query_service) { metadata_adapter.query_service }
-    let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
-    before do
-      folder1
-      folder2
-      stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851400/jsonld").and_return(status: 404)
-      stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851418/jsonld").and_return(status: 404)
-    end
-    it "ingests images into the existing ephemera resources" do
-      attributes =
-        {
-          resource_type: "ephemera_folder",
-          ingest_directory: "examples/lae"
-        }
-
-      post :bulk_ingest, params: { resource_type: "ephemera_folder", **attributes }
-      reloaded1 = query_service.find_by(id: folder1.id)
-      reloaded2 = query_service.find_by(id: folder2.id)
-
-      # 6 files, 2 extras get made because the PDF generates two derivatives and
-      # attaches them.
-      expect(reloaded1.member_ids.length).to eq 8
-      expect(reloaded2.member_ids.length).to eq 2
-
-      file_sets = query_service.find_members(resource: reloaded1)
-      expect(file_sets.flat_map(&:mime_type).to_a).to eq ["image/tiff", "audio/mpeg", "audio/x-wav", "video/mp4", "image/tiff", "application/pdf", "image/tiff", "image/tiff"]
-
-      file_sets = query_service.find_members(resource: reloaded2)
-      expect(file_sets.flat_map(&:title).to_a).to eq ["1", "2"]
-    end
-
-    context "when there is not an ephemera folder with a matching barcode" do
-      let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
-
-      it "doesn't error" do
+  context "with ephemera ingest" do
+    describe "full unstubbed ingest of an LAE ingest" do
+      with_queue_adapter :inline
+      let(:barcode1) { "32101075851400" }
+      let(:barcode2) { "32101075851418" }
+      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
+      let(:folder2) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode2]) }
+      let(:query_service) { metadata_adapter.query_service }
+      let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+      before do
+        folder1
+        folder2
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851400/jsonld").and_return(status: 404)
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/32101075851418/jsonld").and_return(status: 404)
+      end
+      it "ingests images into the existing ephemera resources" do
         attributes =
           {
             resource_type: "ephemera_folder",
@@ -361,10 +336,65 @@ RSpec.describe BulkIngestController do
           }
 
         post :bulk_ingest, params: { resource_type: "ephemera_folder", **attributes }
-        reloaded = query_service.find_by(id: folder.id)
+        reloaded1 = query_service.find_by(id: folder1.id)
+        reloaded2 = query_service.find_by(id: folder2.id)
 
-        # does not attach any files
-        expect(reloaded.member_ids.length).to eq 0
+        # 6 files, 2 extras get made because the PDF generates two derivatives and
+        # attaches them.
+        expect(reloaded1.member_ids.length).to eq 8
+        expect(reloaded2.member_ids.length).to eq 2
+
+        file_sets = query_service.find_members(resource: reloaded1)
+        expect(file_sets.flat_map(&:mime_type).to_a).to eq ["image/tiff", "audio/mpeg", "audio/x-wav", "video/mp4", "image/tiff", "application/pdf", "image/tiff", "image/tiff"]
+
+        file_sets = query_service.find_members(resource: reloaded2)
+        expect(file_sets.flat_map(&:title).to_a).to eq ["1", "2"]
+      end
+
+      context "when there is not an ephemera folder with a matching barcode" do
+        let(:folder) { FactoryBot.create_for_repository(:ephemera_folder) }
+
+        it "doesn't error" do
+          attributes =
+            {
+              resource_type: "ephemera_folder",
+              ingest_directory: "examples/lae"
+            }
+
+          post :bulk_ingest, params: { resource_type: "ephemera_folder", **attributes }
+          reloaded = query_service.find_by(id: folder.id)
+
+          # does not attach any files
+          expect(reloaded.member_ids.length).to eq 0
+        end
+      end
+    end
+
+    describe "LAE ingest with MVWs" do
+      with_queue_adapter :inline
+      let(:barcode1) { "32101115043224" }
+      let(:folder1) { FactoryBot.create_for_repository(:ephemera_folder, barcode: [barcode1]) }
+      let(:query_service) { metadata_adapter.query_service }
+      let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
+      before do
+        folder1
+        stub_request(:get, "https://bibdata.princeton.edu/bibliographic/#{barcode1}/jsonld").and_return(status: 404)
+      end
+      it "ingests images into the existing ephemera resources" do
+        attributes =
+          {
+            resource_type: "ephemera_folder",
+            ingest_directory: "examples/lae/MVWs"
+          }
+
+        post :bulk_ingest, params: { resource_type: "ephemera_folder", **attributes }
+        reloaded1 = query_service.find_by(id: folder1.id)
+
+        expect(reloaded1.member_ids.length).to eq 2
+
+        members = Wayfinder.for(reloaded1).members
+        expect(members.count).to eq 2
+        expect(members.map(&:internal_resource).uniq).to eq ["ephemera_folder"]
       end
     end
   end
