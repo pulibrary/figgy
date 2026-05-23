@@ -23,7 +23,7 @@ RSpec.describe GdalCharacterizationService::Vector do
       file_set = valid_file_set
       new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
       expect(new_file_set.original_file.mime_type).to eq ["application/vnd.geo+json"]
-      expect(new_file_set.original_file.geometry).to eq ["Multi Polygon"]
+      expect(new_file_set.original_file.geometry).to eq ["MultiPolygon"]
     end
 
     it "populates checksum, size, and geometry" do
@@ -54,7 +54,7 @@ RSpec.describe GdalCharacterizationService::Vector do
       file_set = valid_file_set
       new_file_set = described_class.new(file_set: file_set, persister: persister).characterize(save: false)
       expect(new_file_set.original_file.mime_type).to eq ["application/vnd.geo+json"]
-      expect(new_file_set.original_file.geometry).to eq ["Multi Polygon"]
+      expect(new_file_set.original_file.geometry).to eq ["MultiPolygon"]
     end
   end
 

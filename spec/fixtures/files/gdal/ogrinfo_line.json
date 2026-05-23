@@ -1,0 +1,254 @@
+{
+  "description":"/Users/eliotj/Downloads/railroad2004",
+  "driverShortName":"ESRI Shapefile",
+  "driverLongName":"ESRI Shapefile",
+  "layers":[
+    {
+      "name":"railroad",
+      "metadata":{
+        "":{
+          "DBF_DATE_LAST_UPDATE":"2004-05-21"
+        },
+        "SHAPEFILE":{
+          "ENCODING_FROM_LDID":"ISO-8859-1",
+          "LDID_VALUE":"87",
+          "SOURCE_ENCODING":"ISO-8859-1"
+        }
+      },
+      "geometryFields":[
+        {
+          "name":"",
+          "type":"LineString",
+          "nullable":true,
+          "extent":[
+            913557.58879884903,
+            125930.64707553876,
+            1060140.8159581227,
+            272873.05330644269
+          ],
+          "coordinateSystem":{
+            "wkt":"PROJCRS[\"NAD83 / New York Long Island (ftUS)\",\n    BASEGEOGCRS[\"NAD83\",\n        DATUM[\"North American Datum 1983\",\n            ELLIPSOID[\"GRS 1980\",6378137,298.257222101,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4269]],\n    CONVERSION[\"SPCS83 New York Long Island zone (US Survey feet)\",\n        METHOD[\"Lambert Conic Conformal (2SP)\",\n            ID[\"EPSG\",9802]],\n        PARAMETER[\"Latitude of false origin\",40.1666666666667,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8821]],\n        PARAMETER[\"Longitude of false origin\",-74,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8822]],\n        PARAMETER[\"Latitude of 1st standard parallel\",41.0333333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Latitude of 2nd standard parallel\",40.6666666666667,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8824]],\n        PARAMETER[\"Easting at false origin\",984250,\n            LENGTHUNIT[\"US survey foot\",0.304800609601219],\n            ID[\"EPSG\",8826]],\n        PARAMETER[\"Northing at false origin\",0,\n            LENGTHUNIT[\"US survey foot\",0.304800609601219],\n            ID[\"EPSG\",8827]]],\n    CS[Cartesian,2],\n        AXIS[\"easting (X)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"US survey foot\",0.304800609601219]],\n        AXIS[\"northing (Y)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"US survey foot\",0.304800609601219]],\n    USAGE[\n        SCOPE[\"Engineering survey, topographic mapping.\"],\n        AREA[\"United States (USA) - New York - counties of Bronx; Kings; Nassau; New York; Queens; Richmond; Suffolk.\"],\n        BBOX[40.47,-74.26,41.3,-71.8]],\n    ID[\"EPSG\",2263]]",
+            "projjson":{
+              "$schema":"https://proj.org/schemas/v0.7/projjson.schema.json",
+              "type":"ProjectedCRS",
+              "name":"NAD83 / New York Long Island (ftUS)",
+              "base_crs":{
+                "name":"NAD83",
+                "datum":{
+                  "type":"GeodeticReferenceFrame",
+                  "name":"North American Datum 1983",
+                  "ellipsoid":{
+                    "name":"GRS 1980",
+                    "semi_major_axis":6378137,
+                    "inverse_flattening":298.257222101
+                  }
+                },
+                "coordinate_system":{
+                  "subtype":"ellipsoidal",
+                  "axis":[
+                    {
+                      "name":"Geodetic latitude",
+                      "abbreviation":"Lat",
+                      "direction":"north",
+                      "unit":"degree"
+                    },
+                    {
+                      "name":"Geodetic longitude",
+                      "abbreviation":"Lon",
+                      "direction":"east",
+                      "unit":"degree"
+                    }
+                  ]
+                },
+                "id":{
+                  "authority":"EPSG",
+                  "code":4269
+                }
+              },
+              "conversion":{
+                "name":"SPCS83 New York Long Island zone (US Survey feet)",
+                "method":{
+                  "name":"Lambert Conic Conformal (2SP)",
+                  "id":{
+                    "authority":"EPSG",
+                    "code":9802
+                  }
+                },
+                "parameters":[
+                  {
+                    "name":"Latitude of false origin",
+                    "value":40.1666666666667,
+                    "unit":"degree",
+                    "id":{
+                      "authority":"EPSG",
+                      "code":8821
+                    }
+                  },
+                  {
+                    "name":"Longitude of false origin",
+                    "value":-74,
+                    "unit":"degree",
+                    "id":{
+                      "authority":"EPSG",
+                      "code":8822
+                    }
+                  },
+                  {
+                    "name":"Latitude of 1st standard parallel",
+                    "value":41.0333333333333,
+                    "unit":"degree",
+                    "id":{
+                      "authority":"EPSG",
+                      "code":8823
+                    }
+                  },
+                  {
+                    "name":"Latitude of 2nd standard parallel",
+                    "value":40.6666666666667,
+                    "unit":"degree",
+                    "id":{
+                      "authority":"EPSG",
+                      "code":8824
+                    }
+                  },
+                  {
+                    "name":"Easting at false origin",
+                    "value":984250,
+                    "unit":{
+                      "type":"LinearUnit",
+                      "name":"US survey foot",
+                      "conversion_factor":0.304800609601219
+                    },
+                    "id":{
+                      "authority":"EPSG",
+                      "code":8826
+                    }
+                  },
+                  {
+                    "name":"Northing at false origin",
+                    "value":0,
+                    "unit":{
+                      "type":"LinearUnit",
+                      "name":"US survey foot",
+                      "conversion_factor":0.304800609601219
+                    },
+                    "id":{
+                      "authority":"EPSG",
+                      "code":8827
+                    }
+                  }
+                ]
+              },
+              "coordinate_system":{
+                "subtype":"Cartesian",
+                "axis":[
+                  {
+                    "name":"Easting",
+                    "abbreviation":"X",
+                    "direction":"east",
+                    "unit":{
+                      "type":"LinearUnit",
+                      "name":"US survey foot",
+                      "conversion_factor":0.304800609601219
+                    }
+                  },
+                  {
+                    "name":"Northing",
+                    "abbreviation":"Y",
+                    "direction":"north",
+                    "unit":{
+                      "type":"LinearUnit",
+                      "name":"US survey foot",
+                      "conversion_factor":0.304800609601219
+                    }
+                  }
+                ]
+              },
+              "scope":"Engineering survey, topographic mapping.",
+              "area":"United States (USA) - New York - counties of Bronx; Kings; Nassau; New York; Queens; Richmond; Suffolk.",
+              "bbox":{
+                "south_latitude":40.47,
+                "west_longitude":-74.26,
+                "north_latitude":41.3,
+                "east_longitude":-71.8
+              },
+              "id":{
+                "authority":"EPSG",
+                "code":2263
+              }
+            },
+            "dataAxisToSRSAxisMapping":[
+              1,
+              2
+            ]
+          }
+        }
+      ],
+      "featureCount":11610,
+      "fields":[
+        {
+          "name":"SOURCEDATE",
+          "type":"String",
+          "width":25,
+          "nullable":true,
+          "uniqueConstraint":false
+        },
+        {
+          "name":"NAME",
+          "type":"String",
+          "width":32,
+          "nullable":true,
+          "uniqueConstraint":false
+        },
+        {
+          "name":"SOURCETYPE",
+          "type":"String",
+          "width":15,
+          "nullable":true,
+          "uniqueConstraint":false
+        },
+        {
+          "name":"SOURCE_ID",
+          "type":"Integer64",
+          "width":11,
+          "nullable":true,
+          "uniqueConstraint":false
+        },
+        {
+          "name":"MODIFIED",
+          "type":"String",
+          "width":25,
+          "nullable":true,
+          "uniqueConstraint":false
+        },
+        {
+          "name":"FEAT_CODE",
+          "type":"Integer",
+          "width":4,
+          "nullable":true,
+          "uniqueConstraint":false
+        },
+        {
+          "name":"FEAT_DESC",
+          "type":"String",
+          "width":50,
+          "nullable":true,
+          "uniqueConstraint":false
+        },
+        {
+          "name":"EXPORTED",
+          "type":"String",
+          "width":12,
+          "nullable":true,
+          "uniqueConstraint":false
+        }
+      ]
+    }
+  ],
+  "metadata":{
+  },
+  "domains":{
+  },
+  "relationships":{
+  }
+}
