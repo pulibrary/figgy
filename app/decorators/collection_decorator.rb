@@ -1,6 +1,6 @@
 class CollectionDecorator < Valkyrie::ResourceDecorator
   delegate :members, :parents, :collections, :members_count, to: :wayfinder
-  display Schema::Common.attributes, :owners, :restricted_viewers, :rendered_manifest_url, :rendered_dpul_url
+  display Schema::Common.attributes, :owners, :restricted_viewers, :rendered_manifest_url, :rendered_dpul_url, :rendered_banner_image
 
   def title
     Array(super).first
@@ -42,6 +42,11 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
 
     def rendered_manifest_url
       rendered_link(helpers.manifest_collection_url(self))
+    end
+
+    def rendered_banner_image
+      return if banner_image_url.blank?
+      "<img style=\"width: 100%;\" src=\"#{banner_image_url}\" />".html_safe
     end
 
     def rendered_link(url)

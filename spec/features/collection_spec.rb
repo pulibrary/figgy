@@ -30,4 +30,23 @@ RSpec.feature "Collection" do
     element = find("trix-editor > div")
     expect(element.text).to eq collection.description.first
   end
+
+  context "with a banner image url" do
+    scenario "viewing a collection" do
+      collection = FactoryBot.create_for_repository(:collection)
+      visit solr_document_path(id: collection.id)
+      expect(page).to have_text "Rendered Banner Image"
+      expect(page).to have_css "li.rendered_banner_image > img"
+    end
+  end
+
+  context "without a banner image url" do
+    scenario "viewing a collection" do
+      collection = FactoryBot.create_for_repository(:collection, banner_image_url: nil)
+      visit solr_document_path(id: collection.id)
+
+      expect(page).not_to have_text "Rendered Banner Image"
+      expect(page).not_to have_css "li.rendered_banner_image > img"
+    end
+  end
 end
