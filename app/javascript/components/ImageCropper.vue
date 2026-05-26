@@ -28,32 +28,22 @@
 </template>
 
 <script>
-
-import * as AnnotoriousOSD from '@annotorious/openseadragon'
-import '@annotorious/openseadragon/annotorious-openseadragon.css'
 import OpenSeadragon from 'openseadragon'
-import { mapState } from 'vuex'
 
 const ASPECT_RATIO = 1.5
-const CROP_ANNOTATION_ID = 'crop-annotation'
 
 function parseUrl (raw) {
   if (!raw) return { infoUrl: '', savedRegion: null }
+  if (raw.endsWith('/info.json')) return { infoUrl: raw, savedRegion: null }
 
-  if (raw.endsWith('/info.json')) {
-    return { infoUrl: raw, savedRegion: null }
-  }
+  const rawComponents = raw.split('/')
+  const iiifComponents = rawComponents.slice(-4)
+  const infoUrl = `${rawComponents.slice(0, -4).join('/')}/info.json`
+  const region = iiifComponents[0].split(',')
 
-  let rawComponents = raw.split("/")
-  let iiifComponents = rawComponents.slice(-4)
-  let urlComponents = rawComponents.slice(0, -4)
-  const infoUrl = `${urlComponents.join("/")}/info.json`
-  const region = iiifComponents[0].split(",")
-
-  // IIIF region has x,y,w,h
   if (region.length === 4) {
     return {
-      infoUrl: infoUrl,
+      infoUrl,
       savedRegion: {
         x: parseInt(region[0], 10),
         y: parseInt(region[1], 10),
@@ -62,9 +52,7 @@ function parseUrl (raw) {
       }
     }
   }
-
-  // No region, just return URL
-  return { infoUrl: infoUrl, savedRegion: null }
+  return { infoUrl, savedRegion: null }
 }
 
 export default {
@@ -91,130 +79,135 @@ export default {
   data: function () {
     const parsed = parseUrl(this.url)
     return {
-      anno: null,
       viewer: null,
-      osdId: this.viewerId,
+      selector: null,
       infoUrl: parsed.infoUrl,
       initialRegion: parsed.savedRegion,
-      imageSize: null,
+      imageSize: null
     }
   },
-  computed: {
+  mounted: async function () {
+    // We need a global OSD for this plugin before we load it
+    window.OpenSeadragon = OpenSeadragon
+    await import('openseadragon-areaselector/src/areaselector.js')
+    this.initOSD()
+  },
+  beforeUnmount: function () {
+    if (this.viewer) this.viewer.destroy()
   },
   methods: {
     initOSD: function () {
       this.viewer = OpenSeadragon({
-        id: this.osdId,
+        id: this.viewerId,
         showNavigationControl: false,
-        gestureSettingsMouse: {
-          clickToZoom: false
-        },
-        gestureSettingsTouch: {
-          pinchRotate: true
-        },
-        showRotationControl: true,
+        gestureSettingsMouse: { clickToZoom: false },
+        preserveOverlays: true,
         tileSources: this.infoUrl ? [this.infoUrl] : []
       })
+      this.viewer.addHandler('open', this.onOpen)
+    },
 
-      this.anno = AnnotoriousOSD.createOSDAnnotator(this.viewer, {
-        autoSave: true,
-        drawingEnabled: false,
+    onOpen: function () {
+      const item = this.viewer.world.getItemAt(0)
+      this.imageSize = item.getContentSize()
+
+      const initialImg = this.initialRegion
+        ? this.fitAspect(this.initialRegion)
+        : this.defaultRect()
+      const initialViewPort = this.imageToViewportRect(initialImg)
+      const boundaryViewport = this.imageToViewportRect({
+        x: 0, y: 0, w: this.imageSize.x, h: this.imageSize.y
       })
 
-      this.viewer.addHandler('open', () => {
-        // Clear any previous annotations
-        this.anno.clearAnnotations();
-
-        const item = this.viewer.world.getItemAt(0);
-        const size = item.getContentSize();
-        this.imageSize = size;
-        let x, y, w, h
-        if (this.initialRegion) {
-          // Restore the saved crop
-          ({ x, y, w, h } = this.initialRegion)
-        } else {
-          // Generate default crop selector with proper aspect ratio
-          const smallestSide = size['x'] > size['y'] ? size['y'] : size['x']
-          h = smallestSide / 2
-          w = h * ASPECT_RATIO
-          if (w > size['x']) {
-            w = size['x']
-            h = w / ASPECT_RATIO
-          }
-          const imageCenter = item.viewportToImageCoordinates(this.viewer.viewport.getCenter());
-          x = imageCenter['x'] - (w / 2)
-          y = imageCenter['y'] - (h / 2)
-        }
-
-        this.anno.addAnnotation(this.buildAnnotation(x,y,w,h))
-        this.anno.setSelected(CROP_ANNOTATION_ID);
-      });
-      this.anno.on('updateAnnotation', selected => this.updateAnnotationHandler(selected));
-    },
-
-    buildAnnotation: function (x,y,w,h) {
-      return {
-        id: CROP_ANNOTATION_ID,
-        target: {
-          selector: {
-            type: 'RECTANGLE',
-            geometry: {
-              bounds: {
-                minX: x,
-                minY: y,
-                maxX: w + x,
-                maxY: h + y
-              },
-              x,
-              y,
-              w,
-              h,
-            }
-          }
-        }
+      if (this.selector) {
+        // Reset existing selector after hitting the load button
+        this.selector.boundary = boundaryViewport
+        this.selector.setLocation(initialViewPort)
+      } else {
+        this.selector = this.viewer.activateAreaSelector({
+          rect: initialViewPort,
+          boundary: boundaryViewport,
+          handleSize: 12,
+          handleOffset: 6,
+          borderWidth: 2,
+        })
+        // Ensures the selector box is styled correctly
+        this.selector.element.style.width = '100%'
+        this.selector.element.style.height = '100%'
+        this.selector.redraw()
+        this.selector.addHandler('redraw', this.onRedraw)
       }
+
+      this.updateHiddenField(initialImg)
     },
 
-    updateAnnotationHandler: function () {
-      this.clampAnnotation()
-      this.updateCollectionBannerUrl()
-    },
-
-    clampAnnotation: function () {
-      const annotation = this.anno.getAnnotationById(CROP_ANNOTATION_ID);
-      const geometry = annotation['target']['selector']['geometry'];
-
-      // Set height so it is no larger than the image size
-      let h = Math.min(geometry.h, this.imageSize.y)
-
-      // Calculate the width from the aspect ratio
+    // Default selector at the correct aspect ratio
+    defaultRect: function () {
+      const smallest = Math.min(this.imageSize.x, this.imageSize.y)
+      let h = smallest / 2
       let w = h * ASPECT_RATIO
-
-      // Adjust the width and height if the width is larger than the image size
       if (w > this.imageSize.x) {
         w = this.imageSize.x
         h = w / ASPECT_RATIO
       }
-
-      // Keep the crop selector within the bounds of the image
-      // See: https://github.com/dominictobias/react-image-crop/blob/master/src/utils.ts#L11
-      // See: https://github.com/dominictobias/react-image-crop/blob/master/src/utils.ts#L123
-      const x = Math.min(Math.max(geometry.x, 0), this.imageSize.x - w)
-      const y = Math.min(Math.max(geometry.y, 0), this.imageSize.y - h)
-
-      // Update the annotation with new values
-      const newAnnotation = this.buildAnnotation(x, y, w, h)
-      this.anno.updateAnnotation(newAnnotation)
+      return {
+        x: (this.imageSize.x - w) / 2,
+        y: (this.imageSize.y - h) / 2,
+        w,
+        h
+      }
     },
 
-    updateCollectionBannerUrl: function () {
-      const annotation = this.anno.getAnnotationById(CROP_ANNOTATION_ID);
-      const geometry = annotation['target']['selector']['geometry'];
-      const x = geometry['x'] < 0 ? 0 : parseInt(geometry['x']);
-      const y = geometry['y'] < 0 ? 0 : parseInt(geometry['y']);
-      const region = [x, y, parseInt(geometry['w']), parseInt(geometry['h'])]
-      const region_url = `${this.infoUrl.replace("info.json", "")}${region.join(",")}/full/0/default.jpg`
-      document.getElementById('collection_banner_image_url').value = region_url
+    // Recalculate selector rectangle so it conforms to aspect ratio
+    fitAspect: function (rect) {
+      let h = rect.h
+      let w = h * ASPECT_RATIO
+      if (w > this.imageSize.x) {
+        w = this.imageSize.x
+        h = w / ASPECT_RATIO
+      }
+      return { x: rect.x, y: rect.y, w, h }
+    },
+
+    // Ensure that the selector is always at the correct aspect ratio
+    onRedraw: function () {
+      // convert viewport coordinates to image coordinates
+      const img = this.viewportToImageRect(this.selector.rect)
+      const fixed = this.fitAspect(img)
+
+      // If the fitAspect ratio changes the selector size by a minimum value,
+      // then reset the selector location before updating the banner url
+      if (Math.abs(fixed.w - img.w) > 0.5 || Math.abs(fixed.h - img.h) > 0.5) {
+        this.selector.setLocation(this.imageToViewportRect(fixed))
+        this.updateHiddenField(this.viewportToImageRect(this.selector.rect))
+      } else {
+        this.updateHiddenField(img)
+      }
+    },
+
+    imageToViewportRect: function (r) {
+      return this.viewer.viewport.imageToViewportRectangle(
+        new OpenSeadragon.Rect(r.x, r.y, r.w, r.h)
+      )
+    },
+
+    viewportToImageRect: function (viewportRect) {
+      const r = this.viewer.viewport.viewportToImageRectangle(viewportRect)
+      return { x: r.x, y: r.y, w: r.width, h: r.height }
+    },
+
+    updateHiddenField: function (rect) {
+      if (!this.infoUrl) return
+      // Round values to whole numbers
+      const region = [
+        Math.round(rect.x),
+        Math.round(rect.y),
+        Math.round(rect.w),
+        Math.round(rect.h)
+      ]
+      const base = this.infoUrl.replace('info.json', '')
+      const field = document.getElementById('collection_banner_image_url')
+      if (field) field.value = `${base}${region.join(',')}/full/0/default.jpg`
     },
 
     loadUrl: function () {
@@ -223,9 +216,6 @@ export default {
       this.initialRegion = parsed.savedRegion
       if (this.infoUrl) this.viewer.open(this.infoUrl)
     }
-  },
-  mounted: function () {
-    this.initOSD()
   }
 }
 </script>
@@ -240,7 +230,6 @@ export default {
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   width: 100%;
-  // Match the 1.5:1 banner aspect ratio so the viewport echoes the saved crop.
   aspect-ratio: 1.5 / 1;
   min-height: 320px;
   overflow: hidden;
@@ -250,4 +239,12 @@ export default {
   height: 100%;
   width: 100%;
 }
+
+// We need the :deep selector to override css in the osd plugin
+// https://vuejs.org/api/sfc-css-features.html#deep-selectors
+:deep(.openseadragon-areaselector) {
+  // Set the selector color
+  border-color: yellow !important;
+}
+
 </style>
