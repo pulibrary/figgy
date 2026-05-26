@@ -20,8 +20,11 @@ RSpec.feature "Collection" do
     expect(page).to have_content "Owners"
     expect(page).to have_field "Restricted viewers"
     expect(page).to have_field "Tagline", with: collection.tagline
-    expect(page).to have_field "Banner image url", with: collection.banner_image_url
     expect(page).to have_button "Load"
+
+    # Has hidden collection banner image url field
+    element = find('#collection_banner_image_url', visible: false)
+    expect(element.value).to eq collection.banner_image_url
 
     # renders rich text editor for description
     element = find("trix-editor > div")

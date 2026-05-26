@@ -52,7 +52,7 @@ RSpec.describe CollectionChangeSet do
 
   describe "#primary_terms" do
     it "returns the primary terms" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :publish, :source_metadata_identifier, :owners, :restricted_viewers, :description, :tagline]
+      expect(change_set.primary_terms).to eq [:title, :slug, :publish, :source_metadata_identifier, :owners, :restricted_viewers, :description, :tagline, :banner_image_url]
     end
   end
 
