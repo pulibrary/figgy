@@ -14,6 +14,9 @@
           <button type="button" class="btn btn-outline-secondary" @click="loadUrl($event)">
             Load
           </button>
+          <button type="button" class="btn btn-outline-secondary" @click="clearUrl">
+            Clear
+          </button>
         </div>
       </div>
       <small class="form-text text-muted">
@@ -215,6 +218,18 @@ export default {
       this.infoUrl = parsed.infoUrl
       this.initialRegion = parsed.savedRegion
       if (this.infoUrl) this.viewer.open(this.infoUrl)
+    },
+
+    clearUrl: function () {
+      this.infoUrl = ''
+      this.initialRegion = null
+      const field = document.getElementById('collection_banner_image_url')
+      if (field) field.value = ''
+      if (this.selector) {
+        this.viewer.removeOverlay(this.selector.element)
+        this.selector = null
+      }
+      this.viewer.close()
     }
   }
 }
