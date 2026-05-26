@@ -77,6 +77,10 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    hiddenFieldId: {
+      type: String,
+      default: ''
     }
   },
   data: function () {
@@ -209,7 +213,7 @@ export default {
         Math.round(rect.h)
       ]
       const base = this.infoUrl.replace('info.json', '')
-      const field = document.getElementById('collection_banner_image_url')
+      const field = document.getElementById(this.hiddenFieldId)
       if (field) field.value = `${base}${region.join(',')}/full/0/default.jpg`
     },
 
@@ -223,7 +227,7 @@ export default {
     clearUrl: function () {
       this.infoUrl = ''
       this.initialRegion = null
-      const field = document.getElementById('collection_banner_image_url')
+      const field = document.getElementById(this.hiddenFieldId)
       if (field) field.value = ''
       if (this.selector) {
         this.viewer.removeOverlay(this.selector.element)
