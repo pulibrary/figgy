@@ -32,6 +32,7 @@
 
 <script>
 import OpenSeadragon from 'openseadragon'
+import { parseUrl } from "../helpers/imageCropperHelpers.js"
 
 const ASPECT_RATIO = 1.5
 
@@ -61,7 +62,7 @@ export default {
     }
   },
   data: function () {
-    const parsed = this.parseUrl(this.url)
+    const parsed = parseUrl(this.url)
     return {
       viewer: null,
       selector: null,
@@ -195,7 +196,7 @@ export default {
     },
 
     loadUrl: function () {
-      const parsed = this.parseUrl(this.infoUrl)
+      const parsed = parseUrl(this.infoUrl)
       this.infoUrl = parsed.infoUrl
       this.initialRegion = parsed.savedRegion
       if (this.infoUrl) this.viewer.open(this.infoUrl)
@@ -212,28 +213,6 @@ export default {
       }
       this.viewer.close()
     },
-    parseUrl: function (raw) {
-      if (!raw) return { infoUrl: '', savedRegion: null }
-      if (raw.endsWith('/info.json')) return { infoUrl: raw, savedRegion: null }
-
-      const rawComponents = raw.split('/')
-      const iiifComponents = rawComponents.slice(-4)
-      const infoUrl = `${rawComponents.slice(0, -4).join('/')}/info.json`
-      const region = iiifComponents[0].split(',')
-
-      if (region.length === 4) {
-        return {
-          infoUrl,
-          savedRegion: {
-            x: parseInt(region[0], 10),
-            y: parseInt(region[1], 10),
-            w: parseInt(region[2], 10),
-            h: parseInt(region[3], 10)
-          }
-        }
-      }
-      return { infoUrl, savedRegion: null }
-    }
   }
 }
 </script>
