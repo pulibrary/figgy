@@ -29,4 +29,24 @@ describe("ImageCropper.vue", () => {
         "savedRegion": null,
       })
   })
+
+  it('parses a full IIIF image api url', () => {
+    expect(
+      wrapper.vm.parseUrl('https://iiif-cloud.princeton.edu/iiif/2/74%2Fea%2Fee%2F74eaee0426ab49a6923dd6bcc401a334%2Fintermediate_file/full/full/0/default.jpg')
+    ).toEqual(
+      {
+        "infoUrl": "https://iiif-cloud.princeton.edu/iiif/2/74%2Fea%2Fee%2F74eaee0426ab49a6923dd6bcc401a334%2Fintermediate_file/info.json",
+        "savedRegion": null,
+      })
+  })
+
+  it('parses a cropped IIIF image api url', () => {
+    expect(
+      wrapper.vm.parseUrl('https://iiif-cloud.princeton.edu/iiif/2/74%2Fea%2Fee%2F74eaee0426ab49a6923dd6bcc401a334%2Fintermediate_file/266,869,1598,1066/full/0/default.jpg')
+    ).toEqual(
+      {
+        "infoUrl": "https://iiif-cloud.princeton.edu/iiif/2/74%2Fea%2Fee%2F74eaee0426ab49a6923dd6bcc401a334%2Fintermediate_file/info.json",
+        "savedRegion": { "h": 1066, "w": 1598, "x": 266, "y": 869 }
+      })
+  })
 })
