@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-12">
+    <%= f.hidden_field :banner_image_url, input_html: { type: 'text', class: 'form-control' }, required: f.object.required?(key) %>
+    <image-cropper
+      url="<%= f.object.banner_image_url %>"
+      hidden-field-id="<%= "#{f.object.model_name.param_key}_banner_image_url" %>"
+    />
+  </div>
+</div>

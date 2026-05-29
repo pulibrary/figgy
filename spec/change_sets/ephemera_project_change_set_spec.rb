@@ -27,6 +27,13 @@ RSpec.describe EphemeraProjectChangeSet do
     end
   end
 
+  describe "#banner_image_url" do
+    it "is single-valued and not required" do
+      expect(change_set.multiple?(:banner_image_url)).to eq false
+      expect(change_set.required?(:banner_image_url)).to eq false
+    end
+  end
+
   describe "#language_options" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id]) }
     let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id]) }
@@ -54,7 +61,7 @@ RSpec.describe EphemeraProjectChangeSet do
 
   describe "#primary_terms" do
     it "exposes the title, slug, and top_language as the primary terms for Ephemera Projects" do
-      expect(change_set.primary_terms).to eq [:title, :slug, :publish, :contributor_uids, :top_language, :tagline, :description]
+      expect(change_set.primary_terms).to eq [:title, :slug, :publish, :contributor_uids, :top_language, :tagline, :description, :banner_image_url]
     end
   end
 

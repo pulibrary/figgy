@@ -1,5 +1,5 @@
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
-  display :title
+  display :rendered_banner_image
   delegate :members, :query_service, :decorated_folders_with_genres, to: :wayfinder
 
   # TODO: Rename to decorated_ephemera_boxes
@@ -59,5 +59,10 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
     # @return [Hash] the exhibit metadata hash
     def iiif_manifest_exhibit
       { exhibit: slug }
+    end
+
+    def rendered_banner_image
+      return if banner_image_url.blank?
+      "<img style=\"width: 100%;\" src=\"#{banner_image_url}\" />".html_safe
     end
 end
