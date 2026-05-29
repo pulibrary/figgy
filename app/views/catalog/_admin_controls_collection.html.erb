@@ -1,0 +1,13 @@
+<div class="admin-controls">
+  <% if can?(:update, resource) %>
+    <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-light' %>
+  <% end %>
+
+  <%= link_to "View all #{decorated_resource.members_count} items in this collection", facet_search_url(field: "member_of_collection_titles_ssim", value: decorated_resource.title), class: "btn btn-secondary" %>
+  <%= link_to "View ARK report", collections_ark_report_path, class: 'btn btn-secondary' %>
+  <%= link_to "Bulk Edit", bulk_edit_resources_edit_url(f: { member_of_collection_titles_ssim: resource.title }), class: 'btn btn-primary' %>
+
+  <% if can?(:destroy, resource) %>
+    <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+  <% end %>
+</div>

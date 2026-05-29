@@ -10,6 +10,7 @@ class Collection < Resource
   attribute :restricted_viewers, Valkyrie::Types::Set
   attribute :publish, Valkyrie::Types::Bool.optional
   attribute :tagline, Valkyrie::Types::String.optional
+  attribute :banner_image_url, Valkyrie::Types::String.optional
 
   def thumbnail_id; end
 
