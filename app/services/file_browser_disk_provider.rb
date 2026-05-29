@@ -34,7 +34,8 @@ class FileBrowserDiskProvider
 
     def valid_children
       root.join(base).children.select do |child|
-        !child.basename.to_s.start_with?(".")
+        !child.basename.to_s.start_with?(".") &&
+        !BulkIngestService.ignored_file_names.include?(child.basename.to_s)
       end
     end
 end
@@ -101,7 +102,8 @@ class Entry
   def valid_children
     @valid_children ||=
       file_path.children.select do |child|
-        !child.basename.to_s.start_with?(".")
+        !child.basename.to_s.start_with?(".") &&
+        !BulkIngestService.ignored_file_names.include?(child.basename.to_s)
       end
   end
 end
