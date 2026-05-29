@@ -9,6 +9,12 @@ class BulkIngestService
     @logger = logger
   end
 
+  # Files to ignore when running bulk ingest.
+  # Also used in FileBrowserDiskProvider
+  def self.ignored_file_names
+    ["Thumbs.db", "desktop.ini"]
+  end
+
   # Iterate through a list of directories and attach the files within each
   # @param base_directory [String] the path to the parent directory
   # @param property [String, nil] the resource property (when attaching files to existing resources)
@@ -221,15 +227,11 @@ class BulkIngestService
         end
       end
       file_paths.reject! { |x| x.basename.to_s.start_with?(".") }
-      file_paths.reject! { |x| ignored_file_names.include?(x.basename.to_s) }
+      file_paths.reject! { |x| self.class.ignored_file_names.include?(x.basename.to_s) }
 
       file_paths.sort!
 
       caption_files = Dir[path.join("*.vtt")]
       BulkFilePathConverter.new(file_paths: file_paths, parent_resource: parent_resource, preserve_file_names: preserve_file_names, caption_files: caption_files).to_a
-    end
-
-    def ignored_file_names
-      ["Thumbs.db", "desktop.ini"]
     end
 end
