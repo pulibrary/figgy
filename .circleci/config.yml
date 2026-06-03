@@ -35,7 +35,7 @@ commands:
           at: '~/figgy'
       - node/install:
           install-yarn: true
-          node-version: '22.11.0'
+          node-version: '24.16.0'
       - run:
           name: Check current version of node
           command: node -v
@@ -91,7 +91,7 @@ jobs:
       - checkout
       - node/install:
           install-yarn: true
-          node-version: '22.11.0'
+          node-version: '24.16.0'
       - run:
           name: Check current version of node
           command: node -v
@@ -201,7 +201,7 @@ jobs:
           at: '~/figgy'
       - node/install:
           install-yarn: true
-          node-version: '22.11.0'
+          node-version: '24.16.0'
       - run:
           name: Check current version of node
           command: node -v
