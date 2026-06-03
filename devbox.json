@@ -51,8 +51,8 @@
     "mediainfo": "latest",
     "ffmpeg": "8.0",
     "ocrmypdf": "latest",
-    "nodejs": {
-      "version": "22.11.0",
+    "nodejs-slim": {
+      "version": "24.15.0",
       "outputs": [
         "out",
         "libv8"

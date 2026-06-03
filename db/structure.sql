@@ -842,6 +842,13 @@ CREATE INDEX index_orm_resources_on_updated_at ON public.orm_resources USING btr
 
 
 --
+-- Name: index_orm_resources_on_updated_at_and_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_updated_at_and_id ON public.orm_resources USING btree (updated_at, id);
+
+
+--
 -- Name: index_preservation_audits_on_ids_from_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -992,6 +999,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260603175418'),
 ('20260109173200'),
 ('20251208215153'),
 ('20251204175843'),
