@@ -26,7 +26,9 @@ export default defineConfig({
       }
     },
     alias: {
-      '@/': './app/javascript'
+      '@/': './app/javascript',
+      // This resolves an issue vitest and how Clover bundles uuid@9
+      uuid: resolve(__dirname, 'node_modules/@samvera/clover-iiif/node_modules/uuid/dist/esm-browser/index.js')
     }
   },
   plugins: [

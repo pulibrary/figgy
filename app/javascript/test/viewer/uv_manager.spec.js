@@ -74,8 +74,8 @@ describe('UVManager', () => {
       } else { return null }
     })
 
-    // This makes it so global.UV.URLDataProvider.get returns our mock data
-    const provider = vi.fn().mockImplementation(() => {
+    // This makes it so global.UV.URLDataProvider.get returns our mock data.
+    const provider = vi.fn().mockImplementation(function () {
       return { get: getResult }
     })
     global.UV = { URLDataProvider: provider }
