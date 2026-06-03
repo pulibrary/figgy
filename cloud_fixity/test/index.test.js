@@ -34,8 +34,8 @@ const topic = vi.fn(function(name) {
   return { publishJSON: publishFunction }
 })
 
-mock('@google-cloud/storage', { Storage: vi.fn().mockImplementation(() => ({ bucket })) })
-mock('@google-cloud/pubsub', { PubSub: vi.fn().mockImplementation(() => ({ topic })) })
+mock('@google-cloud/storage', { Storage: vi.fn().mockImplementation(function () { return { bucket } }) })
+mock('@google-cloud/pubsub', { PubSub: vi.fn().mockImplementation(function () { return { topic } }) })
 
 const checkFixity = require('..').checkFixity
 
