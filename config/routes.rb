@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   mount Hydra::RoleManagement::Engine => "/"
   mount Blacklight::Engine => "/"
 
-  resource :catalog, only: [:index], as: "catalog", path: "/catalog", controller: "catalog" do
+  resource :catalog, only: [], as: "catalog", path: "/catalog", controller: "catalog" do
     concerns :searchable
     concerns :range_searchable
   end

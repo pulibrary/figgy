@@ -10,7 +10,7 @@ gem "aws-sdk-s3"
 gem "bagit", "~> 0.6"
 # Pin to prevent passenger error
 gem "base64", "0.1.1"
-gem "blacklight", "~> 7.33"
+gem "blacklight", "~> 7.33", github: "projectblacklight/blacklight", branch: "rails-8-1-blacklight-7"
 gem "blacklight_range_limit", "8.5.0"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
@@ -79,7 +79,7 @@ gem "prawn"
 gem "puma"
 gem "rack", "~> 3.1.20"
 gem "rack-cors", require: "rack/cors"
-gem "rails", "~> 7.2.0"
+gem "rails", "~> 8.0.0"
 gem "rdf-rdfxml"
 gem "recipient_interceptor"
 gem "redis", ">= 3", "< 5"
@@ -104,8 +104,8 @@ gem "valkyrie-derivatives", git: "https://github.com/samvera-labs/valkyrie-deriv
 gem "valkyrie-sequel", "3.0.0"
 gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
-gem "vite_rails", "3.0.17"
-gem "vite_ruby", "3.8.0"
+gem "vite_rails", "~> 3.0.0"
+gem "vite_ruby", "~> 3.8.0"
 gem "whenever", "~> 1.0"
 
 source "https://gems.contribsys.com/" do
