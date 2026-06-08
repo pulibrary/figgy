@@ -22,7 +22,7 @@ module Figgy
   class Application < Rails::Application
     config.load_defaults "7.1"
     # Enabled because of https://github.com/heartcombo/devise/pull/5462
-    config.action_controller.raise_on_open_redirects = false
+    config.action_controller.action_on_open_redirect = :raise
     config.action_controller.forgery_protection_origin_check = false
     config.assets.quiet = true
     config.generators do |generate|
