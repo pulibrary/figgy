@@ -39,7 +39,7 @@ gem "google-cloud-pubsub", "2.23.0"
 gem "google-cloud-storage", "1.38.0"
 gem "graphiql-rails", "1.4.10", group: :development
 gem "graphql", "~> 1.13.19"
-gem "health-monitor-rails", "12.4.0"
+gem "health-monitor-rails"
 gem "honeybadger"
 gem "hydra-access-controls", github: "samvera/hydra-head", branch: "main"
 gem "hydra-derivatives", github: "samvera/hydra-derivatives", branch: "main"
