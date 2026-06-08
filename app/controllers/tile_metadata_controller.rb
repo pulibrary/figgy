@@ -9,7 +9,7 @@ class TileMetadataController < ApplicationController
   def tilejson
     tilejson_path = TilePath.new(find_resource(params[:id])).tilejson
     if tilejson_path
-      redirect_to tilejson_path
+      redirect_to tilejson_path, allow_other_host: true
     else
       not_found
     end
