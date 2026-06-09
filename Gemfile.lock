@@ -6,23 +6,6 @@ GIT
       devise
 
 GIT
-  remote: https://github.com/projectblacklight/blacklight.git
-  revision: 7810b5035b4e2e05f990da571d7e0559c5331459
-  branch: rails-8-1-blacklight-7
-  specs:
-    blacklight (7.41.0)
-      deprecation
-      globalid
-      hashdiff
-      i18n (>= 1.7.0)
-      jbuilder (~> 2.7)
-      kaminari (>= 0.15)
-      ostruct (>= 0.3.2)
-      rails (>= 6.1, < 9)
-      view_component (>= 2.74, < 4)
-      zeitwerk
-
-GIT
   remote: https://github.com/pulibrary/mediainfo.git
   revision: 58f3e304f01009b459954b82d0675562106b1ac8
   branch: further_sanitize_track_names
@@ -279,6 +262,17 @@ GEM
     benchmark-ips (2.14.0)
     bigdecimal (3.3.1)
     bindex (0.8.1)
+    blacklight (7.42.0)
+      deprecation
+      globalid
+      hashdiff
+      i18n (>= 1.7.0)
+      jbuilder (~> 2.7)
+      kaminari (>= 0.15)
+      ostruct (>= 0.3.2)
+      rails (>= 6.1, < 9)
+      view_component (>= 2.74, < 4)
+      zeitwerk
     blacklight-access_controls (6.1.0)
       blacklight (> 6.0, < 9)
       cancancan (>= 1.8)
@@ -1188,7 +1182,7 @@ DEPENDENCIES
   base64 (= 0.1.1)
   bcrypt_pbkdf
   benchmark-ips
-  blacklight (~> 7.33)!
+  blacklight (~> 7.42)
   blacklight_range_limit (= 8.5.0)
   bootsnap
   bootstrap (~> 4.0)

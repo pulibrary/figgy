@@ -10,7 +10,7 @@ gem "aws-sdk-s3"
 gem "bagit", "~> 0.6"
 # Pin to prevent passenger error
 gem "base64", "0.1.1"
-gem "blacklight", "~> 7.33", github: "projectblacklight/blacklight", branch: "rails-8-1-blacklight-7"
+gem "blacklight", "~> 7.42"
 gem "blacklight_range_limit", "8.5.0"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
