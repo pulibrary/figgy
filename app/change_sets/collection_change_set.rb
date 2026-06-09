@@ -7,6 +7,7 @@ class CollectionChangeSet < ChangeSet
   property :source_metadata_identifier, required: true, multiple: false
   property :tagline, multiple: false, required: false
   property :banner_image_url, multiple: false, required: false
+  property :banner_image_id, multiple: false, required: false
   property :description, multiple: false, required: false
   property :visibility, multiple: false, required: false
   property :owners, multiple: true, required: false

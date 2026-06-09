@@ -37,7 +37,8 @@ class ChangeSetPersister
         CreateProxyFileSets,
         ApplyAuthToken,
         CacheParentId,
-        UpdateCloudFilePermissions
+        UpdateCloudFilePermissions,
+        ApplyBannerImageId
       ],
       after_save: [
         UpdateAuthToken,
