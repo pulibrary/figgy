@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.cache_classes = false
+  config.enable_reloading = false
   config.eager_load = false
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
@@ -23,4 +23,5 @@ Rails.application.configure do
   # Mocking login only works with lax cookies.
   config.action_dispatch.cookies_same_site_protection = :lax
   config.active_record.dump_schema_after_migration = false
+  config.assets.check_precompiled_asset = false
 end

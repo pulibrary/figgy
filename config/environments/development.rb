@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.cache_classes = false
+  config.enable_reloading = false
   config.eager_load = false
   config.consider_all_requests_local = true
   if Rails.root.join("tmp", "caching-dev.txt").exist?

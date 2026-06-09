@@ -53,7 +53,6 @@ commands:
             zip -1 -r solr_config.zip ./*
             curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://solr:SolrRocks@127.0.0.1:8984/solr/admin/configs?action=UPLOAD&name=figgy"
             curl -H 'Content-type: application/json' http://solr:SolrRocks@127.0.0.1:8984/api/collections/  -d '{"name": "figgy-core-test", "config": "figgy", "numShards": 1}'
-      - run: bundle exec rake db:environment:set
       - run: bundle exec rake db:migrate
   post-test-steps:
     steps:
