@@ -27,13 +27,15 @@ class ChangeSetPersister
       end
 
       def extract_id_from_url(url)
+        # Ensure the url is fully decoded (no escaped slashes)
+        decoded = URI.decode_www_form_component(url)
+
         # Get the url path components as an array
-        path = url.gsub(Figgy.config["pyramidal_url"], "").split("/")
-        # Decode the iiif id and get the figgy file id. Example:
-        #   20%2F2b%2Ff5%2F202bf5e644d14b78a8183ea9219c5d4e%2Fintermediate_file ->
-        #   20/2b/f5/202bf5e644d14b78a8183ea9219c5d4e/intermediate_file ->
-        #   202bf5e644d14b78a8183ea9219c5d4e
-        id = URI.decode_www_form_component(path[0]).split("/")[3]
+        path = decoded.gsub(Figgy.config["pyramidal_url"], "").split("/").reject(&:empty?)
+
+        # Figgy image id is the fourth component of the path
+        id = path[3]
+
         # Convert string back into a UUID
         id.gsub(/\A(.{8})(.{4})(.{4})(.{4})(.{12})\z/, '\1-\2-\3-\4-\5')
       end
