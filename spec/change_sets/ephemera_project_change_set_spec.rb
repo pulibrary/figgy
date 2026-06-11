@@ -34,6 +34,13 @@ RSpec.describe EphemeraProjectChangeSet do
     end
   end
 
+  describe "#banner_image_id" do
+    it "is single-valued and not required" do
+      expect(change_set.multiple?(:banner_image_id)).to eq false
+      expect(change_set.required?(:banner_image_id)).to eq false
+    end
+  end
+
   describe "#language_options" do
     let(:resource) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [ephemera_field.id]) }
     let(:ephemera_field) { FactoryBot.create_for_repository(:ephemera_field, member_of_vocabulary_id: [ephemera_vocabulary.id]) }

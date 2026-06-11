@@ -11,6 +11,7 @@ class Collection < Resource
   attribute :publish, Valkyrie::Types::Bool.optional
   attribute :tagline, Valkyrie::Types::String.optional
   attribute :banner_image_url, Valkyrie::Types::String.optional
+  attribute :banner_image_id, Valkyrie::Types::String.optional
 
   def thumbnail_id; end
 

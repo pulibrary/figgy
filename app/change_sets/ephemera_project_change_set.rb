@@ -8,6 +8,7 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   property :description, multiple: false, required: false
   property :publish, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :banner_image_url, multiple: false, required: false
+  property :banner_image_id, multiple: false, required: false
 
   validates :title, :slug, presence: true
 
