@@ -36,7 +36,7 @@ RSpec.feature "Collection" do
     # Submit the form
     click_button "Save"
     # Expect the banner_image_url to be the same
-    expect(page).to have_css 'li.rendered_banner_image > img[src="http://localhost:8182/pyramidals/iiif/2/te%2Fst%2Fe5%2Fteste5365600450db52dbe4d7f92b8cc%2Fintermediate_file/642,2316,3854,2569/full/0/default.jpg"]'
+    expect(page).to have_css 'li.rendered_banner_image > img[src="http://localhost:8182/pyramidals/iiif/2/te%2Fst%2Fe5%2Fteste5365600450db52dbe4d7f92b8cc%2Fintermediate_file/642,2316,3854,2569/750,/0/default.jpg"]'
   end
 
   context "viewing a collection" do
