@@ -24,9 +24,11 @@ module ThumbnailHelper
     document = document.try(:resource) || document.try(:model) || document
     value = send(figgy_thumbnail_method(document), document, image_options)
     value
-  rescue TypeError # This error is raised by the QueryService
+  rescue TypeError # Error raised by the QueryService in iiif_thumbnail_path
     Rails.logger.error("Unable to retrieve the resource with the ID #{document.id}")
     default_icon_fallback
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    Honeybadger.notify("Unable to retrieve the resource with the ID #{document.id} - probably a record in Solr but not in the database")
   end
 
   def geo_thumbnail?(document)
