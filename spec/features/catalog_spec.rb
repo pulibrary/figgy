@@ -122,4 +122,21 @@ RSpec.feature "Scanned Resources" do
       expect(page).not_to have_css("#facet-parent_box_id_ssi-header")
     end
   end
+
+  describe "when a resource is in solr but not in the database" do
+    it "it renders the search results without erroring and notifies Honeybadger" do
+      allow(Honeybadger).to receive(:notify)
+      r1 = FactoryBot.create_for_repository(:scanned_resource, title: "test123")
+      r2 = FactoryBot.create_for_repository(:scanned_resource, title: "test456")
+      change_set_persister.save(change_set: ChangeSet.for(r1))
+      change_set_persister.save(change_set: ChangeSet.for(r2))
+      pg_adapter = Valkyrie::MetadataAdapter.find(:postgres)
+      pg_csp = ChangeSetPersister.new(metadata_adapter: pg_adapter, storage_adapter: Valkyrie.config.storage_adapter)
+      pg_csp.delete(change_set: ChangeSet.for(r2))
+
+      visit "/catalog?q="
+      expect(page).to have_content "test123"
+      expect(Honeybadger).to have_received(:notify).with("Unable to retrieve the resource with the ID #{r2.id} - probably a record in Solr but not in the database")
+    end
+  end
 end
