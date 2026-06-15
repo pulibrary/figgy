@@ -192,7 +192,7 @@ export default {
       ]
       const base = this.infoUrl.replace('info.json', '')
       const field = document.getElementById(this.hiddenFieldId)
-      if (field) field.value = `${base}${region.join(',')}/full/0/default.jpg`
+      if (field) field.value = `${base}${region.join(',')}/750,/0/default.jpg`
     },
 
     loadUrl: function () {
