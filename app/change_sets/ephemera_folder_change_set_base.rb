@@ -66,6 +66,10 @@ class EphemeraFolderChangeSetBase < ChangeSet
 
   delegate :human_readable_type, to: :model
 
+  # Append to Collections
+  property :append_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID), virtual: true
+  property :remove_collection_ids, multiple: true, required: false, type: Types::Strict::Array.of(Valkyrie::Types::ID), virtual: true
+
   def primary_terms
     {
       "" => [
