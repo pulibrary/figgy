@@ -51,6 +51,18 @@ describe BulkUpdateJob do
       expect(r2.member_of_collection_ids).to be_empty
     end
 
+    it "appends to and removes from collections for EphemeraFolders" do
+      folder = FactoryBot.create_for_repository(:ephemera_folder)
+      collection = FactoryBot.create_for_repository(:collection)
+      described_class.perform_now(ids: [folder.id.to_s], email: user.email, args: { append_collection_ids: [collection.id.to_s] }, time: Time.current, search_params: {})
+      r1 = query_service.find_by(id: folder.id)
+      expect(r1.member_of_collection_ids).to eq [collection.id]
+
+      described_class.perform_now(ids: [folder.id.to_s], email: user.email, args: { remove_collection_ids: [collection.id.to_s] }, time: Time.current, search_params: {})
+      r1 = query_service.find_by(id: folder.id)
+      expect(folder.member_of_collection_ids).to be_empty
+    end
+
     it "doesn't change values not specified" do
       described_class.perform_now(ids: ids, email: user.email, args: more_args, time: Time.current, search_params: {})
       r1 = query_service.find_by(id: resource1.id)
