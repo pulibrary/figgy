@@ -29,8 +29,8 @@ class CollectionChangeSet < ChangeSet
       ],
       "Digital Collections Settings" => [
         :publish,
-        :description,
         :tagline,
+        :description,
         :banner_image_url
       ]
     }

@@ -16,7 +16,20 @@ class EphemeraProjectChangeSet < Valkyrie::ChangeSet
   validates_with UniqueSlugValidator
 
   def primary_terms
-    [:title, :slug, :publish, :contributor_uids, :top_language, :tagline, :description, :banner_image_url]
+    {
+      "" => [
+        :title,
+        :slug,
+        :contributor_uids,
+        :top_language
+      ],
+      "Digital Collections Settings" => [
+        :publish,
+        :tagline,
+        :description,
+        :banner_image_url
+      ]
+    }
   end
 
   def top_language=(top_language_values)

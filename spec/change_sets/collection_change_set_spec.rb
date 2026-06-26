@@ -53,7 +53,7 @@ RSpec.describe CollectionChangeSet do
   describe "#primary_terms" do
     it "returns the primary terms" do
       expect(change_set.primary_terms[""]).to eq [:title, :slug, :source_metadata_identifier, :owners, :restricted_viewers]
-      expect(change_set.primary_terms["Digital Collections Settings"]).to eq [:publish, :description, :tagline, :banner_image_url]
+      expect(change_set.primary_terms["Digital Collections Settings"]).to eq [:publish, :tagline, :description, :banner_image_url]
     end
   end
 
@@ -68,7 +68,7 @@ RSpec.describe CollectionChangeSet do
     it "is multi-valued and not required" do
       expect(change_set.multiple?(:restricted_viewers)).to eq true
       expect(change_set.required?(:restricted_viewers)).to eq false
-      expect(change_set.primary_terms).to include :restricted_viewers
+      expect(change_set.primary_terms[""]).to include :restricted_viewers
     end
   end
 
