@@ -139,4 +139,18 @@ RSpec.feature "Scanned Resources" do
       expect(Honeybadger).to have_received(:notify).with("Unable to retrieve the resource with the ID #{r2.id} - probably a record in Solr but not in the database")
     end
   end
+
+  describe "highlighted facet" do
+    it "does shows on the search result page" do
+      r1 = FactoryBot.create_for_repository(:scanned_resource, featurable: "0")
+      r2 = FactoryBot.create_for_repository(:scanned_resource, featurable: "1")
+      change_set_persister.save(change_set: ChangeSet.for(r1))
+      change_set_persister.save(change_set: ChangeSet.for(r2))
+
+      visit "/catalog?q="
+      expect(page).to have_css("#facet-featurable_ssim-header")
+      expect(page).to have_css("#facet-featurable_ssim a.facet-select", text: "Yes")
+      expect(page).to have_css("#facet-featurable_ssim a.facet-select", text: "No")
+    end
+  end
 end

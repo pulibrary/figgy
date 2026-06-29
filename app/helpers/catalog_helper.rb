@@ -6,6 +6,11 @@ module CatalogHelper
     value == "true" ? "Yes" : "No"
   end
 
+  # Convert 0 and 1 boolean values to Yes/No
+  def display_binary_boolean(value)
+    value == "1" ? "Yes" : "No"
+  end
+
   # Generates the markup for search result items
   # @param args [Array<Object>]
   # @return [String] the markup

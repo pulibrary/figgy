@@ -152,6 +152,7 @@ class CatalogController < ApplicationController
       segments: true
     }
     config.add_facet_field "file_type_ssim", label: "File Type"
+    config.add_facet_field "featurable_ssim", label: "Highlighted", helper_method: :display_binary_boolean
     config.add_facet_fields_to_solr_request!
 
     config.add_results_collection_tool(:sort_widget)
