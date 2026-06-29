@@ -46,12 +46,22 @@ RSpec.feature "Collection" do
       expect(page).to have_text "Rendered Banner Image"
       expect(page).to have_css "li.rendered_banner_image > img"
     end
+
     scenario "without a banner image url" do
       collection = FactoryBot.create_for_repository(:collection, banner_image_url: nil)
       visit solr_document_path(id: collection.id)
 
       expect(page).not_to have_text "Rendered Banner Image"
       expect(page).not_to have_css "li.rendered_banner_image > img"
+    end
+
+    scenario "with a highlighted item" do
+      collection = FactoryBot.create_for_repository(:collection)
+      r = FactoryBot.create_for_repository(:scanned_resource, title: "Featured Resource", member_of_collection_ids: [collection.id], featurable: "1")
+      ChangeSetPersister.default.save(change_set: ChangeSet.for(r))
+      visit solr_document_path(id: collection.id)
+      click_link "View Highlighted Items"
+      expect(page).to have_text "Featured Resource"
     end
   end
 end
