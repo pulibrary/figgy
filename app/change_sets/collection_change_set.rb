@@ -19,7 +19,21 @@ class CollectionChangeSet < ChangeSet
   validates_with SourceMetadataIdentifierOrTitleValidator
 
   def primary_terms
-    [:title, :slug, :publish, :source_metadata_identifier, :owners, :restricted_viewers, :description, :tagline, :banner_image_url]
+    {
+      "" => [
+        :title,
+        :slug,
+        :source_metadata_identifier,
+        :owners,
+        :restricted_viewers
+      ],
+      "Digital Collections Settings" => [
+        :publish,
+        :tagline,
+        :description,
+        :banner_image_url
+      ]
+    }
   end
 
   def preserve?
