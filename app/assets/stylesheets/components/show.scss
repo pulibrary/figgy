@@ -3,7 +3,7 @@ body.blacklight-catalog-show #content {
   @extend .order-first;
 }
 
-.relationships, .attributes {
+.relationships, .attributes, .digital-collections-metadata {
   tbody th {
     width: 20%;
   }

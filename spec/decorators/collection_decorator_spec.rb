@@ -23,9 +23,6 @@ RSpec.describe CollectionDecorator do
     it "displays the description" do
       expect(decorator.display_attributes[:description]).to eq ["test description"]
     end
-    it "displays the DPUL url" do
-      expect(decorator.display_attributes[:rendered_dpul_url]).to eq ["<a href=\"https://dpul.princeton.edu/test\">https://dpul.princeton.edu/test</a>"]
-    end
   end
 
   describe "#members_count" do

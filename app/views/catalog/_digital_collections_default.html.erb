@@ -1,0 +1,15 @@
+<% if resource.is_a?(Collection) || resource.is_a?(EphemeraProject) %>
+  <div id="digital_collections" class="card digital-collections-affix">
+    <div class="card-header">
+      <h2 class="card-title">
+        Digital Collections
+      </h2>
+    </div>
+    <div id="digital_collections_collapse" class="card-body">
+      <% decorator = resource.decorate %>
+      <dl class="digital-collections-metadata">
+        <%= decorator.digital_collections_attributes %>
+      </dl>
+    </div>
+  </div>
+<% end %>
