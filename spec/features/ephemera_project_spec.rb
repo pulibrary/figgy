@@ -52,5 +52,15 @@ RSpec.feature "Ephemera Project" do
       expect(page).not_to have_text "Rendered Banner Image"
       expect(page).not_to have_css "li.rendered_banner_image > img"
     end
+    scenario "with a highlighted item" do
+      folder = FactoryBot.create_for_repository(:ephemera_folder, title: "Featured Folder", featurable: "0")
+      project = FactoryBot.create_for_repository(:ephemera_project, member_ids: [folder.id])
+      visit edit_ephemera_folder_path(id: folder.id)
+      check "Feature in Digital Collections"
+      click_button "Save"
+      visit solr_document_path(id: project.id)
+      click_link "View Highlighted Items"
+      expect(page).to have_text "Featured Folder"
+    end
   end
 end

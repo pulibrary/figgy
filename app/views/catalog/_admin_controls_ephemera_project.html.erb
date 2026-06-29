@@ -1,0 +1,9 @@
+  <div class="admin-controls">
+    <% if can?(:update, resource) %>
+      <%= link_to "Edit This #{resource.human_readable_type}", main_app.polymorphic_path([:edit, resource]), class: 'btn btn-light' %>
+    <% end %>
+    <%= link_to "View Highlighted Items", search_catalog_url(f: { ephemera_project_ssim: resource.title, featurable_ssim: "1" }) , class: 'btn btn-secondary' %>
+    <% if can?(:destroy, resource) %>
+      <%= link_to "Delete This #{resource.human_readable_type}", main_app.polymorphic_path([resource]), class: 'btn btn-danger pull-right', data: { confirm: "Delete this #{resource.human_readable_type}?" }, method: :delete %>
+    <% end %>
+  </div>
