@@ -66,6 +66,7 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
     def digital_collections_rows
       [
         rendered_dc_url,
+        rendered_dpul_url,
         rendered_banner_image
       ]
     end

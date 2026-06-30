@@ -47,6 +47,8 @@ RSpec.feature "Ephemera Project" do
       expect(page).to have_css "td.rendered_banner_image > img"
       expect(page).to have_text "Digital Collections URL"
       expect(page).to have_css "td.rendered_dc_url > a[href=\"https://digital-collections.princeton.edu/collections/test_project-1234\"]"
+      expect(page).to have_text "DPUL URL"
+      expect(page).to have_css "td.rendered_dpul_url > a[href=\"https://dpul.princeton.edu/test_project-1234\"]"
     end
 
     scenario "when unpublished and without a banner image url" do
