@@ -1,7 +1,7 @@
 class CollectionDecorator < Valkyrie::ResourceDecorator
+  include DigitalCollectionsMetadata
   delegate :members, :parents, :collections, :members_count, to: :wayfinder
-  display Schema::Common.attributes, :owners, :restricted_viewers, :rendered_manifest_url, :rendered_dpul_url, :rendered_banner_image
-
+  display Schema::Common.attributes, :owners, :restricted_viewers
   def title
     Array(super).first
   end
@@ -36,20 +36,14 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
       { exhibit: slug }
     end
 
-    def rendered_dpul_url
-      rendered_link("https://dpul.princeton.edu/#{slug}")
-    end
-
-    def rendered_manifest_url
-      rendered_link(helpers.manifest_collection_url(self))
-    end
-
-    def rendered_banner_image
-      return if banner_image_url.blank?
-      "<img style=\"width: 100%;\" src=\"#{banner_image_url}\" />".html_safe
-    end
-
-    def rendered_link(url)
-      "<a href=\"#{url}\">#{url}</a>".html_safe
+    # Rows to include in the digital collections metadata panel on the show
+    # page. Logic in DigitalCollectionsMetadata class.
+    def digital_collections_rows
+      [
+        rendered_dc_url,
+        rendered_dpul_url,
+        rendered_manifest_url,
+        rendered_banner_image
+      ]
     end
 end

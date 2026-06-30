@@ -182,6 +182,7 @@ class CatalogController < ApplicationController
     config.show.partials += [:workflow_controls]
     config.show.partials += [:playlists]
     config.show.partials += [:vocabulary_nav]
+    config.show.partials += [:digital_collections]
     config.show.partials += [:members]
     config.show.partials += [:categories]
     config.show.partials += [:terms]

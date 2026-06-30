@@ -1,5 +1,5 @@
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
-  display :rendered_banner_image
+  include DigitalCollectionsMetadata
   delegate :members, :query_service, :decorated_folders_with_genres, to: :wayfinder
 
   # TODO: Rename to decorated_ephemera_boxes
@@ -61,8 +61,13 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
       { exhibit: slug }
     end
 
-    def rendered_banner_image
-      return if banner_image_url.blank?
-      "<img style=\"width: 100%;\" src=\"#{banner_image_url}\" />".html_safe
+    # Rows to include in the digital collections metadata panel on the show
+    # page. Logic in DigitalCollectionsMetadata class.
+    def digital_collections_rows
+      [
+        rendered_dc_url,
+        rendered_dpul_url,
+        rendered_banner_image
+      ]
     end
 end

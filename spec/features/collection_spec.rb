@@ -36,23 +36,31 @@ RSpec.feature "Collection" do
     # Submit the form
     click_button "Save"
     # Expect the banner_image_url to be the same
-    expect(page).to have_css 'li.rendered_banner_image > img[src="https://iiif-cloud.princeton.edu/iiif/2/60%2Fb5%2Fe5%2F60b5e5365600450db52dbe4d7f92b8cc%2Fintermediate_file/642,2316,3854,2569/750,/0/default.jpg"]'
+    expect(page).to have_css 'td.rendered_banner_image > img[src="https://iiif-cloud.princeton.edu/iiif/2/60%2Fb5%2Fe5%2F60b5e5365600450db52dbe4d7f92b8cc%2Fintermediate_file/642,2316,3854,2569/750,/0/default.jpg"]'
   end
 
   context "viewing a collection" do
-    scenario "with a banner image url" do
-      collection = FactoryBot.create_for_repository(:collection)
+    scenario "when published with a banner image url" do
+      collection = FactoryBot.create_for_repository(:collection, publish: true)
       visit solr_document_path(id: collection.id)
-      expect(page).to have_text "Rendered Banner Image"
-      expect(page).to have_css "li.rendered_banner_image > img"
+      expect(page).to have_text "Banner Image"
+      expect(page).to have_css "td.rendered_banner_image > img"
+      expect(page).to have_text "Digital Collections URL"
+      expect(page).to have_css "td.rendered_dc_url > a[href=\"https://digital-collections.princeton.edu/collections/test\"]"
+      expect(page).to have_text "DPUL URL"
+      expect(page).to have_css "td.rendered_dpul_url > a[href=\"https://dpul.princeton.edu/test\"]"
+      expect(page).to have_text "IIIF Manifest URL"
+      expect(page).to have_link href: /collections\/.*\/manifest/\
     end
 
-    scenario "without a banner image url" do
-      collection = FactoryBot.create_for_repository(:collection, banner_image_url: nil)
+    scenario "when unpublished and without a banner image url" do
+      collection = FactoryBot.create_for_repository(:collection, banner_image_url: nil, publish: false)
       visit solr_document_path(id: collection.id)
 
-      expect(page).not_to have_text "Rendered Banner Image"
-      expect(page).not_to have_css "li.rendered_banner_image > img"
+      expect(page).not_to have_text "Banner Image"
+      expect(page).not_to have_css "td.rendered_banner_image > img"
+      expect(page).not_to have_text "Digital Collections URL"
+      expect(page).not_to have_css "td.rendered_dc_url > a[href=\"https://digital-collections.princeton.edu/collections/test\"]"
     end
 
     scenario "with a highlighted item" do
