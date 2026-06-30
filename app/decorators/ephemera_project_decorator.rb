@@ -1,4 +1,5 @@
 class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
+  include DigitalCollectionsMetadata
   delegate :members, :query_service, :decorated_folders_with_genres, to: :wayfinder
 
   # TODO: Rename to decorated_ephemera_boxes
@@ -52,21 +53,6 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
     super.merge iiif_manifest_exhibit
   end
 
-  def digital_collections_attributes
-    rows = [
-      rendered_dc_url,
-      rendered_banner_image
-    ].compact.join("\n")
-
-    <<~HTML.html_safe
-      <table class="table digital-collections-metadata">
-        <tbody>
-          #{rows}
-        </tbody>
-      </table>
-    HTML
-  end
-
   private
 
     # Generate the Hash for the IIIF Manifest metadata exposing the slug as an "Exhibit" property
@@ -75,27 +61,12 @@ class EphemeraProjectDecorator < Valkyrie::ResourceDecorator
       { exhibit: slug }
     end
 
-    def rendered_dc_url
-      return unless publish
-      <<~HTML
-        <tr>
-          <th>Digital Collections URL</th>
-          <td class="rendered_dc_url">#{rendered_link("https://digital-collections.princeton.edu/collections/#{slug}")}</td>
-        </tr>
-      HTML
-    end
-
-    def rendered_banner_image
-      return if banner_image_url.blank?
-      <<~HTML
-        <tr>
-          <th>Banner Image</th>
-          <td class="rendered_banner_image"><img style="width: 50%;" src="#{banner_image_url}" /></td>
-        </tr>
-      HTML
-    end
-
-    def rendered_link(url)
-      "<a href=\"#{url}\">#{url}</a>".html_safe
+    # Rows to include in the digital collections metadata panel on the show
+    # page. Logic in DigitalCollectionsMetadata class.
+    def digital_collections_rows
+      [
+        rendered_dc_url,
+        rendered_banner_image
+      ]
     end
 end

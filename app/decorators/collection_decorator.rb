@@ -1,4 +1,5 @@
 class CollectionDecorator < Valkyrie::ResourceDecorator
+  include DigitalCollectionsMetadata
   delegate :members, :parents, :collections, :members_count, to: :wayfinder
   display Schema::Common.attributes, :owners, :restricted_viewers
   def title
@@ -27,23 +28,6 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
     end
   end
 
-  def digital_collections_attributes
-    rows = [
-      rendered_dc_url,
-      rendered_dpul_url,
-      rendered_manifest_url,
-      rendered_banner_image
-    ].compact.join("\n")
-
-    <<~HTML.html_safe
-      <table class="table digital-collections-metadata">
-        <tbody>
-          #{rows}
-        </tbody>
-      </table>
-    HTML
-  end
-
   private
 
     # Generate the Hash for the IIIF Manifest metadata exposing the slug as an "Exhibit" property
@@ -52,45 +36,14 @@ class CollectionDecorator < Valkyrie::ResourceDecorator
       { exhibit: slug }
     end
 
-    def rendered_dc_url
-      return unless publish
-      <<~HTML
-        <tr>
-          <th>Digital Collections URL</th>
-          <td class="rendered_dc_url">#{rendered_link("https://digital-collections.princeton.edu/collections/#{slug}")}</td>
-        </tr>
-      HTML
-    end
-
-    def rendered_dpul_url
-      <<~HTML
-        <tr>
-          <th>DPUL URL</th>
-          <td class="rendered_dpul_url">#{rendered_link("https://dpul.princeton.edu/#{slug}")}</td>
-        </tr>
-      HTML
-    end
-
-    def rendered_manifest_url
-      <<~HTML
-        <tr>
-          <th>IIIF Manifest URL</th>
-          <td class="rendered_manifest_url">#{rendered_link(helpers.manifest_collection_url(self))}</td>
-        </tr>
-      HTML
-    end
-
-    def rendered_banner_image
-      return if banner_image_url.blank?
-      <<~HTML
-        <tr>
-          <th>Banner Image</th>
-          <td class="rendered_banner_image"><img style="width: 50%;" src="#{banner_image_url}" /></td>
-        </tr>
-      HTML
-    end
-
-    def rendered_link(url)
-      "<a href=\"#{url}\">#{url}</a>".html_safe
+    # Rows to include in the digital collections metadata panel on the show
+    # page. Logic in DigitalCollectionsMetadata class.
+    def digital_collections_rows
+      [
+        rendered_dc_url,
+        rendered_dpul_url,
+        rendered_manifest_url,
+        rendered_banner_image
+      ]
     end
 end
