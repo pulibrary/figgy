@@ -147,9 +147,18 @@ export default class UVManager {
     uvElement.addEventListener(
       "click",
       (event) => {
-        /* … */
         uvElement.dispatchEvent(uvClick)
-        window.plausible('UniversalViewer Click')
+        const data = {
+          x: event.x,
+          y: event.y,
+          target: event.target.outerHTML
+        }
+        const message = {
+          event: "universal-viewer-click",
+          data: data
+        }
+
+        window.parent.postMessage(message, "*");
       },
       false,
     );

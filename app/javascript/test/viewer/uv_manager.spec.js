@@ -112,6 +112,10 @@ describe('UVManager', () => {
     window.plausible = vi.fn()
   }
 
+  function mockPostMessage() {
+    window.parent.postMessage = vi.fn()
+  }
+
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -169,12 +173,12 @@ describe('UVManager', () => {
       expect(window.plausible).toHaveBeenCalledWith('Download', { props: { url: 'http://example.com' } })
     })
 
-    it('sends an event to Plausible when the Universal Viewer container is clicked', async () => {
+    it('sends an event message when the Universal Viewer container is clicked', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
       mockUvProvider()
       mockManifests(200)
-      mockPlausible()
+      mockPostMessage()
       stubQuery({
         type: 'html',
         content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
@@ -190,8 +194,13 @@ describe('UVManager', () => {
       const uvManager = new UVManager()
       await uvManager.initialize()
       document.getElementById('uv').click()
-      // This triggers a Plausible custom event.
-      expect(window.plausible).toHaveBeenCalledWith('UniversalViewer Click')
+      // This triggers an event message
+      const data = {
+        x: 0,
+        y: 0,
+        target: "<div id=\"uv\" class=\"uv\"></div>"
+      }
+      expect(window.parent.postMessage).toHaveBeenCalledWith({event: "universal-viewer-click", data: data}, "*")
     })
 
     it('passes on an auth token to graphql', async () => {
