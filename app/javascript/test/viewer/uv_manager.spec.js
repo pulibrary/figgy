@@ -108,10 +108,6 @@ describe('UVManager', () => {
     )
   }
 
-  function mockPlausible () {
-    window.plausible = vi.fn()
-  }
-
   function mockPostMessage() {
     window.parent.postMessage = vi.fn()
   }
@@ -126,7 +122,6 @@ describe('UVManager', () => {
       mockJquery()
       mockUvProvider()
       mockManifests(200)
-      mockPlausible()
       stubQuery({
         type: 'html',
         content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
@@ -147,12 +142,12 @@ describe('UVManager', () => {
       expect(leafletSpy).not.toHaveBeenCalled()
     })
 
-    it('sends an event to Plausible when downloading something', async () => {
+    it('sends an event message when downloading something', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
       mockUvProvider()
       mockManifests(200)
-      mockPlausible()
+      mockPostMessage()
       stubQuery({
         type: 'html',
         content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
@@ -169,8 +164,12 @@ describe('UVManager', () => {
       await uvManager.initialize()
       // window.open is how UV initializes a download.
       window.open('http://example.com')
-      // This triggers a Plausible custom event.
-      expect(window.plausible).toHaveBeenCalledWith('Download', { props: { url: 'http://example.com' } })
+
+      // This triggers an event message
+      const data = {
+        url: "http://example.com"
+      }
+      expect(window.parent.postMessage).toHaveBeenCalledWith({event: "universal-viewer-download", data: data}, "*")
     })
 
     it('sends an event message when the Universal Viewer container is clicked', async () => {

@@ -135,7 +135,12 @@ export default class UVManager {
   remapWindowOpen () {
     const cachedOpen = window.open
     window.open = function (url, target, features) {
-      window.plausible('Download', { props: { url } })
+      const message = {
+        event: "universal-viewer-download",
+        data: { url: url }
+      }
+
+      window.parent.postMessage(message, "*");
       cachedOpen(url, target, features)
     }
   }
