@@ -112,6 +112,10 @@ describe('UVManager', () => {
     window.parent.postMessage = vi.fn()
   }
 
+  function mockWindowOpen() {
+    window.open = vi.fn()
+  }
+
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -148,6 +152,7 @@ describe('UVManager', () => {
       mockUvProvider()
       mockManifests(200)
       mockPostMessage()
+      mockWindowOpen()
       stubQuery({
         type: 'html',
         content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",

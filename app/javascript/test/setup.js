@@ -3,6 +3,10 @@ import _ from 'lodash'
 vi.unmock('lodash')
 _.debounce = vi.fn((fn) => fn);
 
+// Stub HTMLCanvasElement.prototype.getContext used in OpenSeaDragon
+// to prevent "Not implemented" errors during tests.
+HTMLCanvasElement.prototype.getContext = vi.fn()
+
 // jsdom doesn't let you mock window.location anymore, so replace that
 // implementation for all tests so we can mock it. Solution found here:
 // https://www.benmvp.com/blog/mocking-window-location-methods-jest-jsdom/
