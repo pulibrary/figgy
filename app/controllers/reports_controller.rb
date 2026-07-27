@@ -100,7 +100,7 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       format.json do
-        render json: PulfalightReportGenerator.json_report(collection: params[:collection])
+        render json: pulfalight_report(params[:collection])
       end
     end
   end
@@ -124,6 +124,12 @@ class ReportsController < ApplicationController
 
     def find_resource(id)
       query_service.find_by(id: Valkyrie::ID.new(id))
+    end
+
+    def pulfalight_report(collection)
+      Rails.cache.fetch("pulfalight_report_#{collection}", expires_in: 30.minutes) do
+        PulfalightReportGenerator.json_report(collection: collection)
+      end
     end
 
     def query_service
