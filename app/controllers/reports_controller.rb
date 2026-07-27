@@ -95,6 +95,16 @@ class ReportsController < ApplicationController
     end
   end
 
+  def pulfalight_records
+    authorize! :show, :pulfalight_report
+
+    respond_to do |format|
+      format.json do
+        render json: PulfalightReportGenerator.json_report(collection: params[:collection])
+      end
+    end
+  end
+
   private
 
     def resource_hash(resource)

@@ -80,6 +80,70 @@ RSpec.describe ReportsController, type: :controller do
     end
   end
 
+  describe "GET #pulfalight_records" do
+    before do
+      sign_in(user) if user
+    end
+
+    context "when not logged in" do
+      let(:user) { nil }
+      it "doesn't let folks see it" do
+        get :pulfalight_records, format: "json", params: { collection: "C0652" }
+
+        expect(response).to be_forbidden
+      end
+    end
+
+    context "when using an auth token with the `pulfalight_sync` group" do
+      let(:user) { nil }
+      it "renders" do
+        auth_token = AuthToken.create!(group: ["pulfalight_sync"], label: "Pulfalight Sync Token").token
+        stub_findingaid(pulfa_id: "C0652_c0383")
+        FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "C0652_c0383", archival_collection_code: "C0652", identifier: "test1")
+
+        get :pulfalight_records, format: "json", params: { collection: "C0652", auth_token: auth_token }
+
+        expect(response).to be_successful
+        expect(JSON.parse(response.body).length).to eq 1
+      end
+    end
+
+    it "provides a JSON dump of all records in the requested collection" do
+      stub_findingaid(pulfa_id: "C0652_c0383")
+      stub_findingaid(pulfa_id: "C0652_c0377")
+      stub_findingaid(pulfa_id: "C0652_c0389")
+      stub_findingaid(pulfa_id: "AC044_c0003")
+      portion_record = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "C0652_c0383", archival_collection_code: "C0652", identifier: "test1", is_portion: true, portion_note: "Part")
+      private_record = FactoryBot.create_for_repository(:complete_private_scanned_resource, source_metadata_identifier: "C0652_c0377", archival_collection_code: "C0652", identifier: "test2")
+      _pending_record = FactoryBot.create_for_repository(:pending_scanned_resource, source_metadata_identifier: "C0652_c0389", archival_collection_code: "C0652")
+      _other_collection = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "AC044_c0003", archival_collection_code: "AC044", identifier: "test4")
+
+      get :pulfalight_records, format: "json", params: { collection: "C0652" }
+      json = JSON.parse(response.body)
+
+      # Only records in C0652 in a complete state are returned.
+      expect(json.keys).to contain_exactly "C0652_c0383", "C0652_c0377"
+      expect(json["C0652_c0383"]).to include(
+        {
+          "ark" => "http://arks.princeton.edu/test1",
+          "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{portion_record.id}/manifest",
+          "is_portion" => true,
+          "portion_note" => "Part",
+          "visibility" => { "value" => "open", "label" => "open", "definition" => "Open to the world. Anyone can view." }
+        }
+      )
+      expect(json["C0652_c0377"]).to include(
+        {
+          "ark" => "http://arks.princeton.edu/test2",
+          "iiif_manifest_url" => "http://www.example.com/concern/scanned_resources/#{private_record.id}/manifest",
+          "is_portion" => false,
+          "portion_note" => nil,
+          "visibility" => { "value" => "restricted", "label" => "private", "definition" => "Only privileged users of this application can view." }
+        }
+      )
+    end
+  end
+
   describe "GET #ephemera_data" do
     let(:project) { FactoryBot.create_for_repository(:ephemera_project, member_ids: [box.id, boxless.id]) }
     let(:box) { FactoryBot.create_for_repository(:ephemera_box, member_ids: [folder.id]) }

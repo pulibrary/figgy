@@ -21,6 +21,7 @@ class Ability
     end
 
     can :show, :mms_report if current_user.groups.include?("catalog_sync")
+    can :show, :pulfalight_report if current_user.groups.include?("pulfalight_sync")
     cannot [:create, :update, :destroy], :all if Figgy.read_only_mode
     cannot [:create, :update, :destroy], :all if Figgy.index_read_only?
   end
