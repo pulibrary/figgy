@@ -95,6 +95,20 @@ class ReportsController < ApplicationController
     end
   end
 
+  def pulfalight_records
+    authorize! :show, :pulfalight_report
+
+    if params[:collection]
+      respond_to do |format|
+        format.json do
+          render json: pulfalight_report(params[:collection])
+        end
+      end
+    else
+      head :bad_request
+    end
+  end
+
   private
 
     def resource_hash(resource)
@@ -114,6 +128,12 @@ class ReportsController < ApplicationController
 
     def find_resource(id)
       query_service.find_by(id: Valkyrie::ID.new(id))
+    end
+
+    def pulfalight_report(collection)
+      Rails.cache.fetch("pulfalight_report_#{collection}", expires_in: 30.minutes) do
+        PulfalightReportGenerator.json_report(collection: collection)
+      end
     end
 
     def query_service
