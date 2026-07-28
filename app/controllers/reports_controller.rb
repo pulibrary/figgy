@@ -98,10 +98,14 @@ class ReportsController < ApplicationController
   def pulfalight_records
     authorize! :show, :pulfalight_report
 
-    respond_to do |format|
-      format.json do
-        render json: pulfalight_report(params[:collection])
+    if params[:collection]
+      respond_to do |format|
+        format.json do
+          render json: pulfalight_report(params[:collection])
+        end
       end
+    else
+      head :bad_request
     end
   end
 

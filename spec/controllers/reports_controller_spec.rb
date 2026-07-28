@@ -94,6 +94,14 @@ RSpec.describe ReportsController, type: :controller do
       end
     end
 
+    context "when the request does not include the collection parameter" do
+      it "returns a 400" do
+        get :pulfalight_records, format: "json"
+
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
     context "when using an auth token with the `pulfalight_sync` group" do
       let(:user) { nil }
       it "renders" do
