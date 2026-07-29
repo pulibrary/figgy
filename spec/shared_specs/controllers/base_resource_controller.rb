@@ -34,7 +34,8 @@ RSpec.shared_examples "a ResourcesController" do |*flags|
         expect(response.body).to have_field "Rights Note"
         expect(response.body).to have_field "Local identifier"
         expect(response.body).to have_field "Is Portion"
-        expect(response.body).to have_field "Portion Note"
+        # Portion Note is disabled unless Is Portion is checked
+        expect(response.body).to have_field "Portion Note", disabled: true
         expect(response.body).to have_field "Navigation Date", class: "timepicker"
         expect(response.body).to have_selector "##{model_name}_append_id[value='#{parent.id}']", visible: false
         expect(response.body).not_to have_select "Collections", name: "#{model_name}[member_of_collection_ids][]", options: [collection.title.first]

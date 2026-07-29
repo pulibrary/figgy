@@ -167,7 +167,9 @@ RSpec.feature "FileSet" do
       click_link "Attach Selene Resource"
       expect(page).to have_field "Title"
       expect(page).to have_text "Ingest Folder"
-      expect(page).to have_field "Portion Note"
+      expect(page).to have_field "Is Portion"
+      # Portion Note is disabled unless Is Portion is checked
+      expect(page).to have_field "Portion Note", disabled: true
       expect(page).not_to have_button "Find Ingest Folder"
     end
   end

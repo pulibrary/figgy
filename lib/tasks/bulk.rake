@@ -63,6 +63,7 @@ namespace :figgy do
       identifier = ENV["OBJID"] # will be the ark for the resource
       title = ENV["TITLE"]
       note = ENV["NOTE"]
+      is_portion = note.present?
 
       abort "usage: rake figgy:bulk:ingest DIR=/path/to/files BIB=1234567 COLL=collid LOCAL_ID=local_id REPLACES=replaces FILTER=file_filter MODEL=ResourceClass" unless dir && Dir.exist?(dir)
 
@@ -97,7 +98,8 @@ namespace :figgy do
             replaces: replaces,
             identifier: identifier,
             title: title,
-            portion_note: note
+            portion_note: note,
+            is_portion: is_portion
           )
         else
           IngestFolderJob.perform_now(
@@ -110,8 +112,8 @@ namespace :figgy do
             replaces: replaces,
             identifier: identifier,
             title: title,
-            portion_note: note
-
+            portion_note: note,
+            is_portion: is_portion
           )
         end
       rescue => e

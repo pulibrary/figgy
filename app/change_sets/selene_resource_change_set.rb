@@ -11,8 +11,8 @@ class SeleneResourceChangeSet < ChangeSet
   property :read_groups, multiple: true, required: false
   property :change_set, require: true, default: "selene_resource"
   property :depositor, multiple: false, require: false
-
   property :pending_uploads, multiple: true, required: false
+  property :is_portion, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :portion_note, multiple: false, required: false
   property :meters_per_pixel, multiple: false, required: true, type: ::Types::Params::Float.optional
 
@@ -31,6 +31,7 @@ class SeleneResourceChangeSet < ChangeSet
     [
       :title,
       :ingest_path,
+      :is_portion,
       :portion_note,
       :change_set,
       :append_id,

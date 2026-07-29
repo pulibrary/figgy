@@ -27,12 +27,23 @@ RSpec.feature "Scanned Resources" do
       scenario "users see a warning if they try to use duplicate barcodes", js: true do
         visit new_scanned_resource_path
         page.fill_in "scanned_resource_source_metadata_identifier", with: "9946125963506421"
-        find("#scanned_resource_portion_note").click
+        find("#scanned_resource_is_portion").click
         expect(page).to have_content "This ID is already in use"
 
         page.fill_in "scanned_resource_source_metadata_identifier", with: "9985434293506421"
         page.fill_in "scanned_resource_portion_note", with: "Test another note"
         expect(page).not_to have_content "This ID is already in use"
+      end
+
+      scenario "the portion note is disabled until is portion is selected", js: true do
+        visit new_scanned_resource_path
+        expect(page).to have_field "scanned_resource_portion_note", disabled: true
+
+        find("#scanned_resource_is_portion").click
+        expect(page).to have_field "scanned_resource_portion_note", disabled: false
+
+        find("#scanned_resource_is_portion").click
+        expect(page).to have_field "scanned_resource_portion_note", disabled: true
       end
 
       scenario "users can only upload files using the file manager interface" do

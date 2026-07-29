@@ -36,6 +36,9 @@ RSpec.feature "SimpleChangeSets" do
     expect(page).to have_field "Rights Note"
     expect(page).to have_field "Local identifier"
     expect(page).to have_css '.select[for="scanned_resource_pdf_type"]', text: "PDF Type"
+    # Portion Note is disabled unless Is Portion is checked
+    expect(page).to have_field "Portion Note", disabled: true
+    find("#scanned_resource_is_portion").click
     expect(page).to have_field "Portion Note"
     expect(page).to have_field "Navigation Date"
     expect(page).to have_css '.select[for="scanned_resource_member_of_collection_ids"]', text: "Collections"
@@ -100,6 +103,7 @@ RSpec.feature "SimpleChangeSets" do
         rights_statement: RightsStatements.copyright_not_evaluated.to_s,
         rights_note: "test rights note",
         local_identifier: "test ID",
+        is_portion: true,
         portion_note: "test portion note",
         nav_date: "01/01/1970",
         member_of_collection_ids: [collection.id],
