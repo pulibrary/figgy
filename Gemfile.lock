@@ -750,7 +750,7 @@ GEM
       faraday (< 3)
       faraday-follow_redirects (>= 0.3.0, < 2)
       rexml
-    oj (3.16.13)
+    oj (3.17.3)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     omniauth (2.1.2)
