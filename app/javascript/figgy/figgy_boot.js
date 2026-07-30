@@ -35,6 +35,7 @@ export default class Initializer {
     this.sortable_placeholder()
     this.initialize_multi_fields()
     this.initialize_embargo_date_select()
+    this.initialize_portion_note_toggle()
     this.download_notifier = new DownloadNotifier()
 
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
@@ -222,6 +223,16 @@ export default class Initializer {
         $('#embargo-date-picker').hide();
       }
     });
+  }
+
+  initialize_portion_note_toggle() {
+    const $checkbox = $('input.is-portion')
+    const $note = $('.portion-note')
+    if ($checkbox.length === 0 || $note.length === 0) return
+
+    $checkbox.change(function() {
+      $note.prop('disabled', !this.checked)
+    })
   }
 
   do_confetti() {

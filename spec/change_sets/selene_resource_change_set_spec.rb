@@ -46,6 +46,7 @@ RSpec.describe SeleneResourceChangeSet do
   describe "#primary_terms" do
     it "required selene metadata" do
       expect(change_set.primary_terms).to include :ingest_path
+      expect(change_set.primary_terms).to include :is_portion
       expect(change_set.primary_terms).to include :portion_note
       expect(change_set.primary_terms).to include :change_set
     end

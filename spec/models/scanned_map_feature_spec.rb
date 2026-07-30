@@ -16,7 +16,8 @@ RSpec.feature "ScannedMaps" do
     expect(page).to have_field "Rights Note"
     expect(page).to have_css ".select[for='scanned_map_pdf_type']", text: "PDF Type"
     expect(page).to have_field "Is Portion"
-    expect(page).to have_field "Portion Note"
+    # Portion Note is disabled unless Is Portion is checked
+    expect(page).to have_field "Portion Note", disabled: true
     expect(page).to have_field "Local identifier"
     expect(page).to have_css ".select[for='scanned_map_holding_location']", text: "Holding Location"
     expect(page).to have_css ".select[for='scanned_map_member_of_collection_ids']", text: "Collections"
