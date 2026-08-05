@@ -11,6 +11,7 @@ class EphemeraFolderChangeSetBase < ChangeSet
 
   include VisibilityProperty
   include DateRangeProperty
+  include FeaturableProperty
   property :title, multiple: false, required: true
   property :sort_title, required: false
   property :alternative_title, multiple: true, required: false
@@ -44,7 +45,6 @@ class EphemeraFolderChangeSetBase < ChangeSet
   property :append_id, virtual: true, multiple: false, required: false
   property :keywords, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
-  property :featurable, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :published_at, multiple: false, required: false
 
   property :start_canvas, required: false

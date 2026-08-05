@@ -5,7 +5,6 @@ FactoryBot.define do
     read_groups { "public" }
     pdf_type { ["gray"] }
     state { "pending" }
-    featurable { true }
     to_create do |instance|
       Valkyrie.config.metadata_adapter.persister.save(resource: instance)
     end
