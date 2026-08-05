@@ -6,9 +6,10 @@ module CatalogHelper
     value == "true" ? "Yes" : "No"
   end
 
-  # Convert 0 and 1 boolean values to Yes/No
-  def display_binary_boolean(value)
-    value == "1" ? "Yes" : "No"
+  # @param resource [Valkyrie::Resource] collection or ephemera project
+  # @return [String]
+  def highlighted_items_url(resource)
+    search_catalog_url(f: { featurable_ssim: ["id-#{resource.id}"] })
   end
 
   # Generates the markup for search result items

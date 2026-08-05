@@ -65,7 +65,7 @@ RSpec.feature "Collection" do
 
     scenario "with a highlighted item" do
       collection = FactoryBot.create_for_repository(:collection)
-      r = FactoryBot.create_for_repository(:scanned_resource, title: "Featured Resource", member_of_collection_ids: [collection.id], featurable: "1")
+      r = FactoryBot.create_for_repository(:scanned_resource, title: "Featured Resource", member_of_collection_ids: [collection.id], featurable: [collection.id])
       ChangeSetPersister.default.save(change_set: ChangeSet.for(r))
       visit solr_document_path(id: collection.id)
       click_link "View Highlighted Items"

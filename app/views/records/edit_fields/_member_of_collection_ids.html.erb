@@ -3,7 +3,7 @@
               collection: @collections.sort_by { |title| title.to_s },
               label_method: :title,
               value_method: :id,
-              input_html: { multiple: f.object.multiple?(key) },
+              input_html: { multiple: f.object.multiple?(key), class: "member-of-collection-ids" },
               include_blank: false,
               required: f.object.required?(key) %>
 <% end %>

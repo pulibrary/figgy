@@ -152,7 +152,13 @@ class CatalogController < ApplicationController
       segments: true
     }
     config.add_facet_field "file_type_ssim", label: "File Type"
-    config.add_facet_field "featurable_ssim", label: "Highlighted", helper_method: :display_binary_boolean
+    # Ids of featurable collections. We want to be able to facet on them in
+    # queries, but use the "highlights" facet field for display
+    config.add_facet_field "featurable_ssim", show: false
+    config.add_facet_field "highlighted", label: "Highlighted", query: {
+      highlighted: { label: "Yes", fq: "featurable_ssim:[* TO *]" },
+      not_highlighted: { label: "No", fq: "*:* -featurable_ssim:[* TO *]" }
+    }
     config.add_facet_fields_to_solr_request!
 
     config.add_results_collection_tool(:sort_widget)

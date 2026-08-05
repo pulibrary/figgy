@@ -33,7 +33,7 @@ class EphemeraFolder < Resource
   attribute :date_range
   attribute :ocr_language, Valkyrie::Types::Set
   attribute :keywords, Valkyrie::Types::Set
-  attribute :featurable, Valkyrie::Types::Bool.optional
+  attribute :featurable, Valkyrie::Types::Set.of(Valkyrie::Types::ID)
 
   attribute :start_canvas
   attribute :viewing_direction
