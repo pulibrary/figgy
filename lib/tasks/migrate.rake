@@ -191,6 +191,12 @@ namespace :figgy do
       Migrations::IsPortionMigrator.call
     end
 
+    desc "Convert the boolean featurable flag into collection and ephemera project ids"
+    task featurable: :environment do
+      migrated = Migrations::FeaturableMigrator.call
+      puts "Migrated featurable for #{migrated} resources"
+    end
+
     private
 
       # Construct or retrieve the memoized logger for STDOUT

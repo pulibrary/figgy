@@ -152,7 +152,10 @@ class CatalogController < ApplicationController
       segments: true
     }
     config.add_facet_field "file_type_ssim", label: "File Type"
-    config.add_facet_field "featurable_ssim", label: "Highlighted", helper_method: :display_binary_boolean
+    # Holds the ids of the collections and ephemera projects a resource is
+    # highlighted in. Those ids are meaningless in a facet list, so this is
+    # configured only so the "View Highlighted Items" links can filter on it.
+    config.add_facet_field "featurable_ssim", label: "Highlighted", show: false
     config.add_facet_fields_to_solr_request!
 
     config.add_results_collection_tool(:sort_widget)

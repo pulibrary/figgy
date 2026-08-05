@@ -14,7 +14,8 @@ RSpec.feature "Scanned Map" do
 
     # Access and display section
     expect(page).to have_content "Access and Display"
-    expect(page).to have_checked_field "Feature in Digital Collections"
+    expect(page).to have_content "Feature in Digital Collections"
+    expect(page).to have_content "Add this resource to a collection to make it available for highlighting."
     expect(page).to have_content "Embargo Date"
   end
 

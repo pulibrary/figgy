@@ -1,1 +1,13 @@
-<%= f.input :featurable, as: :boolean, required: f.object.required?(:featurable) %>
+<%# The checkboxes are rendered by FeaturableCollections (app/javascript/figgy) %>
+<%# so that the list can follow edits to the collections select without a round trip. %>
+<div class="form-group featurable-collections"
+     data-featurable-input-name="<%= "#{f.object_name}[featurable][]" %>"
+     data-featurable-selected="<%= Array.wrap(f.object.featurable).map(&:to_s).to_json %>"
+     data-featurable-options="<%= f.object.featurable_options.to_json %>"
+     data-featurable-collection-select=".member-of-collection-ids"
+     data-featurable-empty-message="Add this resource to a collection to make it available for highlighting.">
+  <label class="form-control-label"><%= t("simple_form.labels.defaults.featurable") %></label>
+  <%# Ensures an empty list is submitted when every box is unchecked. %>
+  <input type="hidden" name="<%= "#{f.object_name}[featurable][]" %>" value="">
+  <div class="featurable-collections-options"></div>
+</div>

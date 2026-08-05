@@ -15,8 +15,55 @@ RSpec.feature "Scanned Resource" do
 
     # Access and display section
     expect(page).to have_content "Access and Display"
-    expect(page).to have_checked_field "Feature in Digital Collections"
+    expect(page).to have_content "Feature in Digital Collections"
+    expect(page).to have_content "Add this resource to a collection to make it available for highlighting."
     expect(page).to have_content "Embargo Date"
+  end
+
+  scenario "highlighting a resource in specific collections", js: true do
+    collection1 = FactoryBot.create_for_repository(:collection, title: "First Collection")
+    collection2 = FactoryBot.create_for_repository(:collection, title: "Second Collection")
+    resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection1.id])
+    visit edit_scanned_resource_path(id: resource.id)
+
+    # Only the collections the resource belongs to are offered.
+    within ".featurable-collections" do
+      expect(page).to have_field "First Collection", type: "checkbox"
+      expect(page).not_to have_field "Second Collection", type: "checkbox"
+      check "First Collection"
+    end
+
+    # Adding a collection adds a checkbox without a round trip.
+    collection_dropdown = page.find(:css, '[data-id="scanned_resource_member_of_collection_ids"]')
+    collection_dropdown.click
+    within first("div.dropdown-menu.show") do
+      find("a[role='option']", text: "Second Collection").click
+    end
+    collection_dropdown.click # close the dropdown
+    within ".featurable-collections" do
+      expect(page).to have_field "Second Collection", type: "checkbox", checked: false
+      expect(page).to have_field "First Collection", type: "checkbox", checked: true
+    end
+
+    click_button "Save"
+    expect(page).to have_content "Title"
+
+    reloaded = ChangeSetPersister.default.query_service.find_by(id: resource.id)
+    expect(reloaded.featurable.map(&:to_s)).to eq [collection1.id.to_s]
+  end
+
+  scenario "editing a resource that still has the old boolean featurable value", js: true do
+    collection = FactoryBot.create_for_repository(:collection, title: "Legacy Collection")
+    resource = FactoryBot.create_for_repository(
+      :scanned_resource,
+      member_of_collection_ids: [collection.id],
+      featurable: "1"
+    )
+    visit edit_scanned_resource_path(id: resource.id)
+
+    within ".featurable-collections" do
+      expect(page).to have_field "Legacy Collection", type: "checkbox", checked: false
+    end
   end
 
   scenario "creating a new resource", js: true do

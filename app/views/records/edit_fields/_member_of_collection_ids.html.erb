@@ -1,9 +1,11 @@
 <% if !resource_has_parents?(f.object.resource, params) || f.object.kind_of?(EphemeraFolderChangeSetBase) %>
+  <%# The member-of-collection-ids class is how the featurable checkboxes find %>
+  <%# the current set of collections. %>
   <%= f.input :member_of_collection_ids,
               collection: @collections.sort_by { |title| title.to_s },
               label_method: :title,
               value_method: :id,
-              input_html: { multiple: f.object.multiple?(key) },
+              input_html: { multiple: f.object.multiple?(key), class: "member-of-collection-ids" },
               include_blank: false,
               required: f.object.required?(key) %>
 <% end %>

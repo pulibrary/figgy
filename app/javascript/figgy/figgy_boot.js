@@ -13,6 +13,7 @@ import ParentResourcesTables from './relationships/parent_resources_table'
 import BulkLabeler from './bulk_labeler/bulk_label'
 import BoundingBoxSelector from './bounding_box_selector'
 import FieldManager from './field_manager'
+import FeaturableCollections from './featurable_collections'
 import Confetti from 'canvas-confetti'
 import DownloadNotifier from './download_notifier'
 import Trix from "trix"
@@ -36,6 +37,7 @@ export default class Initializer {
     this.initialize_multi_fields()
     this.initialize_embargo_date_select()
     this.initialize_portion_note_toggle()
+    this.initialize_featurable_collections()
     this.download_notifier = new DownloadNotifier()
 
     // Incompatibility in Blacklight with newer versions of jQuery seem to be
@@ -223,6 +225,12 @@ export default class Initializer {
         $('#embargo-date-picker').hide();
       }
     });
+  }
+
+  initialize_featurable_collections() {
+    document.querySelectorAll('.featurable-collections').forEach((element) =>
+      new FeaturableCollections(element)
+    )
   }
 
   initialize_portion_note_toggle() {
