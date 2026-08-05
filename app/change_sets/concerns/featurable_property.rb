@@ -2,13 +2,19 @@
 # Digital Collections collection or project.
 module FeaturableProperty
   extend ActiveSupport::Concern
+
+  # `featurable` used to be a single boolean. Resources that haven't been
+  # migrated yet still hold one of these values rather than a list of ids.
+  # @see Migrations::FeaturableMigrator
+  LEGACY_VALUES = ["0", "1", "true", "false"].freeze
+
   included do
     property :featurable, multiple: true, required: false, default: [], type: Types::Strict::Array.of(Valkyrie::Types::ID)
 
     # Ensures that previous featurable values are not returned so the edit page
     # works as expected. Can be removed once all the resources have been migrated.
     def featurable
-      Array.wrap(super).reject { |value| ["0", "1", "true", "false"].include?(value.to_s) }
+      Array.wrap(super).reject { |value| FeaturableProperty::LEGACY_VALUES.include?(value.to_s) }
     end
 
     def featurable_options

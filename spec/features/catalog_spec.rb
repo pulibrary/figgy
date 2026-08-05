@@ -164,5 +164,61 @@ RSpec.feature "Scanned Resources" do
       expect(page).to have_content "Highlighted resource"
       expect(page).not_to have_content "Unhighlighted resource"
     end
+
+    it "offers a Yes/No filter derived from the ids" do
+      collection = FactoryBot.create_for_repository(:collection)
+      highlighted = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Highlighted resource",
+        member_of_collection_ids: [collection.id],
+        featurable: [collection.id]
+      )
+      other = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Unhighlighted resource",
+        member_of_collection_ids: [collection.id]
+      )
+      change_set_persister.save(change_set: ChangeSet.for(highlighted))
+      change_set_persister.save(change_set: ChangeSet.for(other))
+
+      visit "/catalog?q="
+      expect(page).to have_css("#facet-highlighted-header")
+
+      visit "/catalog?q=&f[highlighted][]=highlighted"
+      expect(page).to have_content "Highlighted resource"
+      expect(page).not_to have_content "Unhighlighted resource"
+
+      visit "/catalog?q=&f[highlighted][]=not_highlighted"
+      expect(page).to have_content "Unhighlighted resource"
+      expect(page).not_to have_content "Highlighted resource"
+    end
+
+    # A resource that still holds the old boolean has no highlight targets yet,
+    # so it counts as "No" until Migrations::FeaturableMigrator has run.
+    it "does not count an unmigrated boolean as highlighted" do
+      collection = FactoryBot.create_for_repository(:collection)
+      legacy_false = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Legacy false resource",
+        member_of_collection_ids: [collection.id],
+        featurable: "0"
+      )
+      legacy_true = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Legacy true resource",
+        member_of_collection_ids: [collection.id],
+        featurable: "1"
+      )
+      change_set_persister.save(change_set: ChangeSet.for(legacy_false))
+      change_set_persister.save(change_set: ChangeSet.for(legacy_true))
+
+      visit "/catalog?q=&f[highlighted][]=highlighted"
+      expect(page).not_to have_content "Legacy false resource"
+      expect(page).not_to have_content "Legacy true resource"
+
+      visit "/catalog?q=&f[highlighted][]=not_highlighted"
+      expect(page).to have_content "Legacy false resource"
+      expect(page).to have_content "Legacy true resource"
+    end
   end
 end

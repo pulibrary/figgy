@@ -7,6 +7,18 @@ class CatalogController < ApplicationController
   include TokenAuth
   layout "application"
 
+  # Matches resources highlighted in at least one collection or ephemera
+  # project. Resources that haven't been migrated off the old boolean still
+  # carry a value in featurable_ssim, so those values are excluded here --
+  # otherwise a legacy `false` would count as highlighted. They appear either
+  # bare (indexed while `featurable` was still a boolean) or with Valkyrie's
+  # "id-" prefix (reindexed since), so both forms are excluded.
+  # @see Migrations::FeaturableMigrator
+  HIGHLIGHTED_FQ = begin
+    legacy_values = FeaturableProperty::LEGACY_VALUES.flat_map { |value| ["\"#{value}\"", "\"id-#{value}\""] }
+    "featurable_ssim:[* TO *] AND -featurable_ssim:(#{legacy_values.join(' OR ')})"
+  end
+
   before_action :notify_read_only, :notify_index_read_only
 
   def notify_index_read_only
@@ -156,6 +168,13 @@ class CatalogController < ApplicationController
     # highlighted in. Those ids are meaningless in a facet list, so this is
     # configured only so the "View Highlighted Items" links can filter on it.
     config.add_facet_field "featurable_ssim", label: "Highlighted", show: false
+    # Derives a Yes/No facet from featurable_ssim at query time so that no
+    # reindex is needed. A resource counts as highlighted when it holds at
+    # least one collection or ephemera project id.
+    config.add_facet_field "highlighted", label: "Highlighted", query: {
+      highlighted: { label: "Yes", fq: HIGHLIGHTED_FQ },
+      not_highlighted: { label: "No", fq: "*:* -(#{HIGHLIGHTED_FQ})" }
+    }
     config.add_facet_fields_to_solr_request!
 
     config.add_results_collection_tool(:sort_widget)
