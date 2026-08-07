@@ -15,8 +15,35 @@ RSpec.feature "Scanned Resource" do
 
     # Access and display section
     expect(page).to have_content "Access and Display"
-    expect(page).to have_checked_field "Feature in Digital Collections"
+    expect(page).to have_content "Feature in Digital Collections"
+    expect(page).to have_content "Add this resource to a collection to make it available for highlighting."
     expect(page).to have_content "Embargo Date"
+  end
+
+  scenario "highlighting a resource", js: true do
+    collection1 = FactoryBot.create_for_repository(:collection, title: "First Collection")
+    collection2 = FactoryBot.create_for_repository(:collection, title: "Second Collection")
+    resource = FactoryBot.create_for_repository(:scanned_resource, member_of_collection_ids: [collection1.id])
+    visit edit_scanned_resource_path(id: resource.id)
+
+    # Only the collections the resource is a member of are displayed
+    within ".featurable-collections" do
+      expect(page).to have_field "First Collection", type: "checkbox"
+      expect(page).not_to have_field "Second Collection", type: "checkbox"
+      check "First Collection"
+    end
+
+    # Adding a collection adds a checkbox to the featurable section
+    dropdown = page.find(:css, '[data-id="scanned_resource_member_of_collection_ids"]')
+    dropdown.click
+    within first("div.dropdown-menu.show") do
+      find("a[role='option']", text: "Second Collection").click
+    end
+    dropdown.click
+    within ".featurable-collections" do
+      expect(page).to have_field "Second Collection", type: "checkbox", checked: false
+      expect(page).to have_field "First Collection", type: "checkbox", checked: true
+    end
   end
 
   scenario "creating a new resource", js: true do

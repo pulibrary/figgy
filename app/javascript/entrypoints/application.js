@@ -18,6 +18,7 @@ import Initializer from '../figgy/figgy_boot'
 import LocalUploader from '../components/local_uploader.vue'
 import HealthReport from '../components/health_report.vue'
 import ImageCropper from '../components/ImageCropper.vue'
+import FeaturableCollections from '../components/featurable_collections.vue'
 
 const app = {
     data () {
@@ -53,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .component('struct-manager', StructManager)
       .component('health-report', HealthReport)
       .component('image-cropper', ImageCropper)
+      .component('featurable-collections', FeaturableCollections)
       .mount(elements[i])
   }
 

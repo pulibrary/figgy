@@ -5,6 +5,7 @@ class ScannedResourceChangeSet < ChangeSet
 
   include VisibilityProperty
   include RemoteMetadataProperty
+  include FeaturableProperty
   property :title, multiple: true, required: true, default: []
   property :source_metadata_identifier, required: true, multiple: false
   property :downloadable, multiple: false, require: true, default: "public"
@@ -34,7 +35,6 @@ class ScannedResourceChangeSet < ChangeSet
   property :identifier, multiple: false, require: false
   property :series, multiple: true, required: false
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
-  property :featurable, multiple: false, required: false, type: Valkyrie::Types::Bool
   property :published_at, multiple: false, required: false
   property :notice_type, multiple: false, required: false
   # Harmful content note

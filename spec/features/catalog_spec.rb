@@ -141,16 +141,56 @@ RSpec.feature "Scanned Resources" do
   end
 
   describe "highlighted facet" do
-    it "does shows on the search result page" do
-      r1 = FactoryBot.create_for_repository(:scanned_resource, featurable: "0")
-      r2 = FactoryBot.create_for_repository(:scanned_resource, featurable: "1")
-      change_set_persister.save(change_set: ChangeSet.for(r1))
-      change_set_persister.save(change_set: ChangeSet.for(r2))
+    it "featurable_ssim does not show on the search result page, but can still be filtered on" do
+      collection = FactoryBot.create_for_repository(:collection)
+      highlighted = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Highlighted resource",
+        member_of_collection_ids: [collection.id],
+        featurable: [collection.id]
+      )
+      not_highlighted = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Unhighlighted resource",
+        member_of_collection_ids: [collection.id]
+      )
+      change_set_persister.save(change_set: ChangeSet.for(highlighted))
+      change_set_persister.save(change_set: ChangeSet.for(not_highlighted))
 
       visit "/catalog?q="
-      expect(page).to have_css("#facet-featurable_ssim-header")
-      expect(page).to have_css("#facet-featurable_ssim a.facet-select", text: "Yes")
-      expect(page).to have_css("#facet-featurable_ssim a.facet-select", text: "No")
+      expect(page).not_to have_css("#facet-featurable_ssim-header")
+
+      visit "/catalog?q=&f[featurable_ssim][]=id-#{collection.id}"
+      expect(page).to have_content "Highlighted resource"
+      expect(page).not_to have_content "Unhighlighted resource"
+    end
+
+    it "renders a Yes/No filter from presence or absence of ids in featurable field" do
+      collection = FactoryBot.create_for_repository(:collection)
+      highlighted = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Highlighted resource",
+        member_of_collection_ids: [collection.id],
+        featurable: [collection.id]
+      )
+      not_highlighted = FactoryBot.create_for_repository(
+        :scanned_resource,
+        title: "Unhighlighted resource",
+        member_of_collection_ids: [collection.id]
+      )
+      change_set_persister.save(change_set: ChangeSet.for(highlighted))
+      change_set_persister.save(change_set: ChangeSet.for(not_highlighted))
+
+      visit "/catalog?q="
+      expect(page).to have_css("#facet-highlighted-header")
+
+      visit "/catalog?q=&f[highlighted][]=highlighted"
+      expect(page).to have_content "Highlighted resource"
+      expect(page).not_to have_content "Unhighlighted resource"
+
+      visit "/catalog?q=&f[highlighted][]=not_highlighted"
+      expect(page).to have_content "Unhighlighted resource"
+      expect(page).not_to have_content "Highlighted resource"
     end
   end
 end
