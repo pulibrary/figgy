@@ -154,7 +154,7 @@ class CatalogController < ApplicationController
     config.add_facet_field "file_type_ssim", label: "File Type"
     # Ids of featurable collections. We want to be able to facet on them in
     # queries, but use the "highlights" facet field for display
-    config.add_facet_field "featurable_ssim", show: false
+    config.add_facet_field "featurable_ssim", label: "Featurable", show: false
     config.add_facet_field "highlighted", label: "Highlighted", query: {
       highlighted: { label: "Yes", fq: "featurable_ssim:[* TO *]" },
       not_highlighted: { label: "No", fq: "*:* -featurable_ssim:[* TO *]" }
