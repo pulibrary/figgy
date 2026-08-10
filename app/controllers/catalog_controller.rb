@@ -156,8 +156,7 @@ class CatalogController < ApplicationController
     # queries, but use the "highlights" facet field for display
     config.add_facet_field "featurable_ssim", label: "Featurable", show: false
     config.add_facet_field "highlighted", label: "Highlighted", query: {
-      highlighted: { label: "Yes", fq: "featurable_ssim:[* TO *]" },
-      not_highlighted: { label: "No", fq: "*:* -featurable_ssim:[* TO *]" }
+      highlighted: { label: "Yes", fq: "featurable_ssim:[* TO *]" }
     }
     config.add_facet_fields_to_solr_request!
 

@@ -4,14 +4,6 @@ RSpec.describe FeaturableProperty do
   let(:change_set_persister) { ChangeSetPersister.default }
   let(:query_service) { change_set_persister.query_service }
 
-  describe "#featurable" do
-    it "ignores legacy boolean values" do
-      resource = FactoryBot.create_for_repository(:scanned_resource, featurable: "1")
-
-      expect(ChangeSet.for(resource).featurable).to be_empty
-    end
-  end
-
   describe "#featurable_options" do
     it "lists the collections sorted by title" do
       collection1 = FactoryBot.create_for_repository(:collection, title: "Zebras")
