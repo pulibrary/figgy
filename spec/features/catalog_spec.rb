@@ -165,7 +165,7 @@ RSpec.feature "Scanned Resources" do
       expect(page).not_to have_content "Unhighlighted resource"
     end
 
-    it "renders a Yes/No filter from presence or absence of ids in featurable field" do
+    it "renders a Highlighter filter that shows the presence of ids in featurable field" do
       collection = FactoryBot.create_for_repository(:collection)
       highlighted = FactoryBot.create_for_repository(
         :scanned_resource,
@@ -187,10 +187,6 @@ RSpec.feature "Scanned Resources" do
       visit "/catalog?q=&f[highlighted][]=highlighted"
       expect(page).to have_content "Highlighted resource"
       expect(page).not_to have_content "Unhighlighted resource"
-
-      visit "/catalog?q=&f[highlighted][]=not_highlighted"
-      expect(page).to have_content "Unhighlighted resource"
-      expect(page).not_to have_content "Highlighted resource"
     end
   end
 end
