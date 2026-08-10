@@ -6,12 +6,6 @@ module FeaturableProperty
   included do
     property :featurable, multiple: true, required: false, default: [], type: Types::Strict::Array.of(Valkyrie::Types::ID)
 
-    # Ensures that previous featurable values are not returned so the edit page
-    # works as expected. Can be removed once all the resources have been migrated.
-    def featurable
-      Array.wrap(super).reject { |value| ["0", "1"].include?(value.to_s) }
-    end
-
     def featurable_options
       (featurable_collections + featurable_ephemera_projects).map do |target|
         { "id" => target.id.to_s, "label" => Array.wrap(target.title).first.to_s }
