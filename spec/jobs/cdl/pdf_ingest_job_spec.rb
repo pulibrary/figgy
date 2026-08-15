@@ -32,7 +32,7 @@ RSpec.describe CDL::PDFIngestJob, run_real_derivatives: true, run_real_character
 
       expect { described_class.perform_now(file_name: "991234563506421.pdf") }.to raise_error "No PDF Found: 991234563506421.pdf"
 
-      resources = query_service.find_all_of_model(model: ScannedResource)
+      resources = query_service.find_all_of_model(model: ScannedResource).to_a
       expect(resources.length).to eq 0
       expect(File.exist?(pdf_path)).to eq true
     end

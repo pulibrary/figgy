@@ -31,8 +31,8 @@ RSpec.describe CloudFixityJob do
       old_event = FactoryBot.create_for_repository(:cloud_fixity_event, resource_id: resource.id, child_id: SecureRandom.uuid, child_property: "metadata_node", current: true)
       described_class.perform_now(status: "SUCCESS", preservation_object_id: resource.id.to_s, child_id: resource.metadata_node.id.to_s, child_property: "metadata_node")
 
-      events = query_service.find_all_of_model(model: Event)
-      expect(events.to_a.length).to eq 2
+      events = query_service.find_all_of_model(model: Event).to_a
+      expect(events.length).to eq 2
       old_event = events.find { |e| e.id == old_event.id }
       new_event = events.reject { |e| e.id == old_event.id }.last
       expect(new_event.type).to eq "cloud_fixity"

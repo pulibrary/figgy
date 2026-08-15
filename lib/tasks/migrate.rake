@@ -42,7 +42,7 @@ namespace :figgy do
     task ephemera_folders: :environment do
       resources(model: EphemeraFolder).each do |resource|
         cs = ChangeSet.for(resource)
-        logger.info "Migrating folders within the box #{resource.id}..."
+        migration_logger.info "Migrating folders within the box #{resource.id}..."
         change_set_persister.save(change_set: cs)
       end
     end
@@ -66,7 +66,7 @@ namespace :figgy do
 
       usage = "usage: rake migrate:gnib_directory PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
       abort usage unless project && image_root && md_root && Dir.exist?(image_root) && Dir.exist?(md_root)
-      logger.info "Ingesting GNIB records from #{md_root}"
+      migration_logger.info "Ingesting GNIB records from #{md_root}"
       change_set_persister = ChangeSetPersister.new(
         metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
         storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
@@ -78,9 +78,9 @@ namespace :figgy do
         subdir_name = File.dirname(md_path).match(/^.*pudl0066\/(.*)$/)[1]
         image_path = File.join(image_root, subdir_name, File.basename(md_path, ".*"))
         change_set_persister.buffer_into_index do |buffered_changeset_persister|
-          output = IngestEphemeraMODS::IngestGnibMODS.new(project, md_path, image_path, buffered_changeset_persister, logger).ingest
+          output = IngestEphemeraMODS::IngestGnibMODS.new(project, md_path, image_path, buffered_changeset_persister, migration_logger).ingest
         end
-        logger.info "Imported #{md_path} from pulstore: #{output.id}"
+        migration_logger.info "Imported #{md_path} from pulstore: #{output.id}"
       end
     end
 
@@ -92,7 +92,7 @@ namespace :figgy do
 
       usage = "usage: rake migrate:pudl0125 PROJECT=project_id METADATA=/path/to/mods_records IMAGES=/path/to/images"
       abort usage unless project && image_root && md_root && Dir.exist?(image_root) && Dir.exist?(md_root)
-      logger.info "Ingesting Moscow election records from #{md_root}"
+      migration_logger.info "Ingesting Moscow election records from #{md_root}"
       change_set_persister = ChangeSetPersister.new(
         metadata_adapter: Valkyrie::MetadataAdapter.find(:indexing_persister),
         storage_adapter: Valkyrie::StorageAdapter.find(:disk_via_copy)
@@ -104,9 +104,9 @@ namespace :figgy do
         subdir_name = File.dirname(md_path).match(/^.*pudl0125\/(.*)$/)[1]
         image_path = File.join(image_root, subdir_name, File.basename(md_path, ".*"))
         change_set_persister.buffer_into_index do |buffered_changeset_persister|
-          output = IngestEphemeraMODS::IngestGnibMODS.new(project, md_path, image_path, buffered_changeset_persister, logger).ingest
+          output = IngestEphemeraMODS::IngestGnibMODS.new(project, md_path, image_path, buffered_changeset_persister, migration_logger).ingest
         end
-        logger.info "Imported #{md_path} from pulstore: #{output.id}"
+        migration_logger.info "Imported #{md_path} from pulstore: #{output.id}"
       end
     end
 
@@ -131,8 +131,8 @@ namespace :figgy do
         end
 
       collections.each do |collection|
-        logger.info "Removing collection from child members in #{collection.id}..."
-        Migrations::ChildResourceCollectionMigrator.new(collection_id: collection.id, logger: logger).run
+        migration_logger.info "Removing collection from child members in #{collection.id}..."
+        Migrations::ChildResourceCollectionMigrator.new(collection_id: collection.id, logger: migration_logger).run
       end
     end
 
@@ -195,7 +195,7 @@ namespace :figgy do
 
       # Construct or retrieve the memoized logger for STDOUT
       # @return [Logger]
-      def logger
+      def migration_logger
         @logger ||= Logger.new(STDOUT)
       end
 

@@ -91,7 +91,7 @@ RSpec.describe CollectionsController, type: :controller do
           expect(response).to render_template("base/new")
 
           # Does not create the collection
-          collections = query_service.find_all_of_model(model: Collection)
+          collections = query_service.find_all_of_model(model: Collection).to_a
           expect(collections).to be_empty
         end
       end

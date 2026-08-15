@@ -1604,7 +1604,7 @@ RSpec.describe ChangeSetPersister do
         resource = FactoryBot.create_for_repository(:event)
         change_set_persister.delete(change_set: ChangeSet.for(resource))
 
-        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker).to_a
         expect(deletion_markers).to be_blank
       end
     end
@@ -1642,7 +1642,7 @@ RSpec.describe ChangeSetPersister do
         expect(file_set.primary_file.original_filename).to eq ["example.tif"]
 
         # Expect deletion_marker to be gone
-        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker)
+        deletion_markers = change_set_persister.query_service.find_all_of_model(model: DeletionMarker).to_a
         expect(deletion_markers.length).to eq 0
       end
     end

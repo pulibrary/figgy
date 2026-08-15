@@ -162,7 +162,7 @@ class ResourcesController < ApplicationController
   end
 
   def load_collections
-    @collections = query_service.find_all_of_model(model: Collection).map(&:decorate) || []
+    @collections = query_service.find_all_of_model(model: Collection).map(&:decorate).to_a || []
   end
 
   # Check if the resource class is the same as the resource class set for the

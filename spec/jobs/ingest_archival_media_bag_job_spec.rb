@@ -56,7 +56,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "creates one Recording for the barcode and one for the component ID" do
-      expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 2
+      expect(query_service.find_all_of_model(model: ScannedResource).count).to eq 2
     end
 
     it "adds desired metadata to the Recording" do
@@ -67,7 +67,7 @@ RSpec.describe IngestArchivalMediaBagJob do
 
     it "for each component id-based Recording puts it on the collection" do
       collection = query_service.find_all_of_model(model: Collection).first
-      expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).count).to eq 1
     end
   end
 
@@ -212,7 +212,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "uses the existing collection" do
-      expect(query_service.find_all_of_model(model: Collection).size).to eq 1
+      expect(query_service.find_all_of_model(model: Collection).count).to eq 1
     end
   end
 
@@ -222,9 +222,9 @@ RSpec.describe IngestArchivalMediaBagJob do
     end
 
     it "creates a collection for you" do
-      expect(query_service.find_all_of_model(model: Collection).size).to eq 1
+      expect(query_service.find_all_of_model(model: Collection).count).to eq 1
       collection = query_service.find_all_of_model(model: Collection).first
-      expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).count).to eq 1
     end
   end
 
@@ -243,7 +243,7 @@ RSpec.describe IngestArchivalMediaBagJob do
     it "doesn't try to use that other resource as an archival media collection" do
       collection = query_service.find_all_of_model(model: Collection).first
 
-      expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).size).to eq 1
+      expect(query_service.find_inverse_references_by(resource: collection, property: :member_of_collection_ids).count).to eq 1
     end
   end
 

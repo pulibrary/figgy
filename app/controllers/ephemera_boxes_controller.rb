@@ -36,6 +36,6 @@ class EphemeraBoxesController < ResourcesController
     end
 
     def load_collections
-      @collections = query_service.find_all_of_model(model: Collection).map(&:decorate)
+      @collections = query_service.find_all_of_model(model: Collection).map(&:decorate).to_a
     end
 end

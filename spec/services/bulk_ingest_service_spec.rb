@@ -338,7 +338,7 @@ RSpec.describe BulkIngestService do
         )
         resources = Wayfinder.for(coll).members
         expect(resources.length).to eq 1
-        expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 2
+        expect(query_service.find_all_of_model(model: ScannedResource).count).to eq 2
         file_set = query_service.find_all_of_model(model: FileSet).find { |fs| fs.side&.include? "1" }
         expect(file_set.barcode).to contain_exactly "32101047382401"
         expect(file_set.side).to contain_exactly "1"
@@ -362,8 +362,8 @@ RSpec.describe BulkIngestService do
         )
         resources = Wayfinder.for(coll).members
         expect(resources.length).to eq 1
-        expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 1
-        expect(query_service.find_all_of_model(model: FileSet).size).to eq 1
+        expect(query_service.find_all_of_model(model: ScannedResource).count).to eq 1
+        expect(query_service.find_all_of_model(model: FileSet).count).to eq 1
         file_set = query_service.find_all_of_model(model: FileSet).first
         expect(file_set.file_metadata.size).to eq 4
         expect(file_set.file_metadata.flat_map(&:use)).to contain_exactly(
@@ -394,8 +394,8 @@ RSpec.describe BulkIngestService do
         )
         resources = Wayfinder.for(coll).members
         expect(resources.length).to eq 1
-        expect(query_service.find_all_of_model(model: ScannedResource).size).to eq 1
-        expect(query_service.find_all_of_model(model: FileSet).size).to eq 1
+        expect(query_service.find_all_of_model(model: ScannedResource).count).to eq 1
+        expect(query_service.find_all_of_model(model: FileSet).count).to eq 1
         file_set = query_service.find_all_of_model(model: FileSet).first
         expect(file_set.file_metadata.size).to eq 5
         expect(file_set.file_metadata.flat_map(&:use)).to contain_exactly(
