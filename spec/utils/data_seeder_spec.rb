@@ -44,8 +44,8 @@ RSpec.describe DataSeeder do
 
       scanned_maps = query_service.find_all_of_model(model: ScannedMap)
       # held_by must be populated or the events can't be generated.
-      expect(scanned_maps.flat_map(&:held_by).compact.length).to eq 12
-      expect(scanned_maps.flat_map(&:held_by).uniq).to eq ["Princeton"]
+      expect(scanned_maps.flat_map(&:held_by).to_a.compact.length).to eq 12
+      expect(scanned_maps.flat_map(&:held_by).to_a.uniq).to eq ["Princeton"]
 
       seeder.wipe_metadata!
       expect(Valkyrie::MetadataAdapter.find(:indexing_persister).query_service.find_all.count).to eq 0
@@ -59,8 +59,8 @@ RSpec.describe DataSeeder do
     it "adds ephemera objects without boxes" do
       seeder.generate_ephemera_project(n_boxes: 0)
       expect(query_service.find_all_of_model(model: EphemeraProject).count).to eq 1
-      expect(query_service.find_all_of_model(model: EphemeraBox).size).to eq 0
-      expect(query_service.find_all_of_model(model: EphemeraFolder).size).to eq 3
+      expect(query_service.find_all_of_model(model: EphemeraBox).count).to eq 0
+      expect(query_service.find_all_of_model(model: EphemeraFolder).count).to eq 3
     end
 
     it "adds ephemera objects with boxes" do

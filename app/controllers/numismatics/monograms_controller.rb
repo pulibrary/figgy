@@ -32,8 +32,7 @@ module Numismatics
     private
 
       def load_numismatic_monograms
-        @numismatic_monograms = query_service.find_all_of_model(model: Numismatics::Monogram).map(&:decorate)
-        [] if @numismatic_monograms.to_a.blank?
+        @numismatic_monograms = query_service.find_all_of_model(model: Numismatics::Monogram).map(&:decorate).to_a
       end
   end
 end

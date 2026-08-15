@@ -444,7 +444,7 @@ RSpec.describe BulkIngestController do
 
       post :bulk_ingest, params: { resource_type: "scanned_resource", **attributes }
 
-      resources = adapter.query_service.find_all_of_model(model: ScannedResource)
+      resources = adapter.query_service.find_all_of_model(model: ScannedResource).to_a
       expect(resources.length).to eq 3
       resource = resources.find { |res| res.member_ids.length == 2 }
       expect(resource.source_metadata_identifier).to eq ["991234563506421"]

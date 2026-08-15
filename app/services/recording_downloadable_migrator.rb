@@ -2,7 +2,7 @@ class RecordingDownloadableMigrator
   def self.call
     recordings = query_service.custom_queries.find_by_property(property: :change_set, value: "recording")
     playlists = query_service.find_all_of_model(model: Playlist)
-    resources = recordings + playlists
+    resources = recordings.to_a + playlists.to_a
     progress_bar = ProgressBar.create(
       format: "%a %e %P% Processed: %c from %C",
       total: resources.count
