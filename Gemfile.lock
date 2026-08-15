@@ -82,25 +82,6 @@ GIT
       rails (>= 6.1, < 9)
 
 GIT
-  remote: https://github.com/samvera/valkyrie
-  revision: 40dc581f7e944825ceac59845cf60a16d5ac235c
-  specs:
-    valkyrie (3.5.1)
-      activemodel
-      activesupport
-      dry-struct
-      dry-types (~> 1.0)
-      faraday (>= 0.9, < 3, != 2.0.0)
-      faraday-multipart
-      json
-      json-ld
-      railties
-      rdf (~> 3.0, >= 3.3.2)
-      rdf-vocab
-      reform (~> 2.2)
-      reform-rails
-
-GIT
   remote: https://github.com/yob/pdf-reader.git
   revision: b58039dd03921d3cac21386a0ffad17b925247e3
   specs:
@@ -1106,6 +1087,20 @@ GEM
     uri (1.1.1)
     useragent (0.16.11)
     validatable (1.6.7)
+    valkyrie (3.6.1)
+      activemodel
+      activesupport
+      dry-struct
+      dry-types (~> 1.0)
+      faraday (>= 0.9, < 3, != 2.0.0)
+      faraday-multipart
+      json
+      json-ld
+      railties
+      rdf (~> 3.0, >= 3.3.2)
+      rdf-vocab
+      reform (~> 2.2)
+      reform-rails
     valkyrie-sequel (3.0.0)
       oj (~> 3.0)
       sequel (~> 5.0)
@@ -1296,7 +1291,7 @@ DEPENDENCIES
   timecop
   title
   tus-server (~> 2.3)
-  valkyrie (~> 3.5.1)!
+  valkyrie (~> 3.6)
   valkyrie-derivatives!
   valkyrie-sequel (= 3.0.0)
   valkyrie-shrine
