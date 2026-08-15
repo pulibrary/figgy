@@ -7,7 +7,7 @@
     "lint": "yarn run eslint app/javascript/**/*.vue"
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^0.32.0",
+    "@google-cloud/pubsub": "^5.0.0",
     "@google-cloud/storage": "^5.8.4",
     "@mapnik/mapnik": "^4.6",
     "@rails/actioncable": "^7.2.0",
