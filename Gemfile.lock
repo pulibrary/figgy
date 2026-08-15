@@ -325,6 +325,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
+    cgi (0.5.2)
     childprocess (5.1.0)
       logger (~> 1.5)
     chronic (0.10.2)
@@ -357,12 +358,14 @@ GEM
     database_cleaner-sequel (2.0.2)
       database_cleaner-core (~> 2.0.0)
       sequel
-    datadog (2.7.1)
-      datadog-ruby_core_source (~> 3.3)
-      libdatadog (~> 14.1.0.1.0)
-      libddwaf (~> 1.15.0.0.0)
+    datadog (2.32.0)
+      cgi
+      datadog-ruby_core_source (~> 3.5, >= 3.5.2)
+      libdatadog (~> 30.0.0.1.0)
+      libddwaf (~> 1.30.0.0.0)
+      logger
       msgpack
-    datadog-ruby_core_source (3.5.0)
+    datadog-ruby_core_source (3.5.4)
     date (3.5.1)
     debug (1.11.1)
       irb (~> 1.10)
@@ -460,9 +463,9 @@ GEM
       net-http (~> 0.5)
     faraday-retry (2.4.0)
       faraday (~> 2.0)
-    ffi (1.17.3-arm64-darwin)
-    ffi (1.17.3-x86_64-darwin)
-    ffi (1.17.3-x86_64-linux-gnu)
+    ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86_64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
     filewatcher (1.1.1)
       optimist (~> 3.0)
     flutie (2.2.1)
@@ -670,9 +673,14 @@ GEM
     leaflet-rails (1.9.5)
       actionpack (>= 4.2.0)
       railties (>= 4.2.0)
-    libdatadog (14.1.0.1.0)
-    libdatadog (14.1.0.1.0-x86_64-linux)
-    libddwaf (1.15.0.0.2)
+    libdatadog (30.0.0.1.0)
+    libdatadog (30.0.0.1.0-arm64-darwin)
+    libdatadog (30.0.0.1.0-x86_64-linux)
+    libddwaf (1.30.0.0.2-arm64-darwin)
+      ffi (~> 1.0)
+    libddwaf (1.30.0.0.2-x86_64-darwin)
+      ffi (~> 1.0)
+    libddwaf (1.30.0.0.2-x86_64-linux)
       ffi (~> 1.0)
     link_header (0.0.8)
     lint_roller (1.1.0)
@@ -715,7 +723,7 @@ GEM
       drb (~> 2.0)
       prism (~> 1.5)
     modernizr-rails (2.7.1)
-    msgpack (1.8.0)
+    msgpack (1.8.4)
     multi_json (1.19.1)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
@@ -1199,7 +1207,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   database_cleaner-sequel
-  datadog (~> 2.7.1)
+  datadog (~> 2.32.0)
   debug
   devise (>= 4.6.0)
   devise-guests!
