@@ -1,0 +1,70 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "group:allNonMajor",
+    "customManagers:dockerfileVersions"
+  ],
+  "enabledManagers": [
+    "bundler",
+    "nodenv",
+    "npm",
+    "github-actions"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "minimumReleaseAge": "14 days",
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "enabled": false,
+      "matchPackageNames": [
+        "/postgres/"
+      ]
+    },
+    {
+      "matchManagers": [
+        "bundler"
+      ],
+      "rangeStrategy": "update-lockfile"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^.tool-versions$/"
+      ],
+      "matchStrings": [
+        "\\s+(?<currentValue>\\S+)\\s*#\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(\\s+versioning=(?<versioning>\\S+))?(\\s+registryUrl=(?<registryUrl>\\S+))?\\s*\\n"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^.circleci/config.yml$/"
+      ],
+      "matchStrings": [
+        "node-version:.*'(?<currentValue>.*?)'"
+      ],
+      "datasourceTemplate": "node-version",
+      "depNameTemplate": "node"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^.circleci/config.yml$/"
+      ],
+      "matchStrings": [
+        "cimg/ruby:(?<currentValue>.*?)-"
+      ],
+      "datasourceTemplate": "ruby-version",
+      "depNameTemplate": "ruby"
+    }
+  ],
+  "prHourlyLimit": 3
+}
