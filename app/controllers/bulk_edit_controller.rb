@@ -38,7 +38,7 @@ class BulkEditController < ApplicationController
     end
 
     def load_collections
-      @collections = Valkyrie.config.metadata_adapter.query_service.find_all_of_model(model: Collection).map(&:decorate) || []
+      @collections = Valkyrie.config.metadata_adapter.query_service.find_all_of_model(model: Collection).map(&:decorate).to_a || []
     end
 
     def load_removable_collections

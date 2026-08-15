@@ -915,7 +915,7 @@ CREATE INDEX index_users_on_uid ON public.users USING btree (uid);
 -- Name: mms_id_substring_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX mms_id_substring_idx ON public.orm_resources USING btree ("substring"(((metadata -> 'source_metadata_identifier'::text) ->> 0), 1, 2)) WHERE ((internal_resource)::text <> ALL ((ARRAY['FileSet'::character varying, 'PreservationObject'::character varying, 'DeletionMarker'::character varying, 'Event'::character varying, 'EphemeraTerm'::character varying])::text[]));
+CREATE INDEX mms_id_substring_idx ON public.orm_resources USING btree ("substring"(((metadata -> 'source_metadata_identifier'::text) ->> 0), 1, 2)) WHERE ((internal_resource)::text <> ALL (ARRAY[('FileSet'::character varying)::text, ('PreservationObject'::character varying)::text, ('DeletionMarker'::character varying)::text, ('Event'::character varying)::text, ('EphemeraTerm'::character varying)::text]));
 
 
 --

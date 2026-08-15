@@ -42,6 +42,7 @@ exports[`OrderManagerToolbar.vue > has the expected html structure 1`] = `
       max="500"
       min="40"
       type="range"
+      value="300"
     />
     <lux-icon-base-stub
       class="lux-svg-icon"
