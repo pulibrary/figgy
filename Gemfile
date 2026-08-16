@@ -11,7 +11,7 @@ gem "bagit", "~> 0.6"
 # Pin to prevent passenger error
 gem "base64", "0.3.0"
 gem "blacklight", "~> 7.42"
-gem "blacklight_range_limit", "8.5.0"
+gem "blacklight_range_limit", "9.2.0"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
