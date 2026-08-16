@@ -3,4 +3,6 @@
 Rails.application.config.after_initialize do
   Vips.block("VipsForeignLoadPdf", false)
   Vips.block("VipsForeignLoadMagick7File", false)
+  Vips.block("VipsForeignLoadMagick7", false)
+  Vips.block("VipsForeignLoadMagick", false)
 end
