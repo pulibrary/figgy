@@ -73,7 +73,8 @@
     "lsof":           "latest",
     "clang":          "latest",
     "libintl":        "latest",
-    "gettext":        "latest"
+    "gettext":        "latest",
+    "gnumake":        "latest"
   },
   "shell": {
     "init_hook": [
