@@ -14,7 +14,7 @@ gem "blacklight", "~> 7.42"
 gem "blacklight_range_limit", "8.5.0"
 gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
-gem "bootstrap_form", "~> 4.5.0"
+gem "bootstrap_form", "~> 5.6.0"
 gem "bunny"
 gem "capistrano-passenger"
 gem "capistrano-rails"

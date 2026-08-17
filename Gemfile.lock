@@ -259,9 +259,9 @@ GEM
     bootstrap (4.6.2.1)
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.16.1, < 2)
-    bootstrap_form (4.5.0)
-      actionpack (>= 5.2)
-      activemodel (>= 5.2)
+    bootstrap_form (5.6.1)
+      actionpack (>= 7.2)
+      activemodel (>= 7.2)
     builder (3.3.0)
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
@@ -1218,7 +1218,7 @@ DEPENDENCIES
   blacklight_range_limit (= 8.5.0)
   bootsnap
   bootstrap (~> 4.0)
-  bootstrap_form (~> 4.5.0)
+  bootstrap_form (~> 5.6.0)
   bundler-audit
   bunny
   capistrano-passenger
