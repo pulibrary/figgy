@@ -256,9 +256,8 @@ GEM
       view_component (>= 2.54, < 4)
     bootsnap (1.25.0)
       msgpack (~> 1.5)
-    bootstrap (4.6.2.1)
-      autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 1.16.1, < 2)
+    bootstrap (5.3.8)
+      popper_js (>= 2.11.8, < 3)
     bootstrap_form (4.5.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -415,7 +414,8 @@ GEM
     ed25519 (1.4.0)
     erb (6.0.7)
     erubi (1.13.1)
-    execjs (2.10.0)
+    execjs (2.10.2)
+      json (>= 2)
     ezid-client (1.11.0)
       hashie (~> 3.4, >= 3.4.3)
       nokogiri
@@ -769,7 +769,7 @@ GEM
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
-    popper_js (1.16.1)
+    popper_js (2.11.8)
     pp (0.6.4)
       prettyprint
     prawn (2.5.0)
@@ -1217,7 +1217,7 @@ DEPENDENCIES
   blacklight (~> 7.42)
   blacklight_range_limit (= 8.5.0)
   bootsnap
-  bootstrap (~> 4.0)
+  bootstrap (~> 5.0)
   bootstrap_form (~> 4.5.0)
   bundler-audit
   bunny
