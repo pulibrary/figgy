@@ -11,7 +11,7 @@
     "@google-cloud/storage": "^5.8.4",
     "@mapnik/mapnik": "^4.6",
     "@rails/actioncable": "^7.2.0",
-    "@samvera/clover-iiif": "^2.13.0",
+    "@samvera/clover-iiif": "^3.0.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "ajv": "^8.18.0",
     "apollo-boost": "^0.4.0",
