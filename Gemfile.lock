@@ -299,6 +299,7 @@ GEM
     capybara-screenshot (1.0.27)
       capybara (>= 1.0, < 4)
       launchy
+    cgi (0.5.2)
     childprocess (5.1.0)
       logger (~> 1.5)
     chronic (0.10.2)
@@ -337,12 +338,14 @@ GEM
     database_cleaner-sequel (2.0.2)
       database_cleaner-core (~> 2.0.0)
       sequel
-    datadog (2.7.1)
-      datadog-ruby_core_source (~> 3.3)
-      libdatadog (~> 14.1.0.1.0)
-      libddwaf (~> 1.15.0.0.0)
+    datadog (2.32.0)
+      cgi
+      datadog-ruby_core_source (~> 3.5, >= 3.5.2)
+      libdatadog (~> 30.0.0.1.0)
+      libddwaf (~> 1.30.0.0.0)
+      logger
       msgpack
-    datadog-ruby_core_source (3.5.0)
+    datadog-ruby_core_source (3.5.5)
     date (3.5.1)
     debug (1.11.1)
       irb (~> 1.10)
@@ -597,7 +600,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    jquery-ui-rails (6.0.1)
+    jquery-ui-rails (8.0.0)
       railties (>= 3.2.16)
     json (2.21.2)
     json-canonicalization (1.0.0)
@@ -612,7 +615,7 @@ GEM
     json-schema (6.2.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
-    jwt (3.1.2)
+    jwt (3.2.0)
       base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -651,9 +654,14 @@ GEM
     leaflet-rails (1.9.5)
       actionpack (>= 4.2.0)
       railties (>= 4.2.0)
-    libdatadog (14.1.0.1.0)
-    libdatadog (14.1.0.1.0-x86_64-linux)
-    libddwaf (1.15.0.0.2)
+    libdatadog (30.0.0.1.0)
+    libdatadog (30.0.0.1.0-arm64-darwin)
+    libdatadog (30.0.0.1.0-x86_64-linux)
+    libddwaf (1.30.0.0.2-arm64-darwin)
+      ffi (~> 1.0)
+    libddwaf (1.30.0.0.2-x86_64-darwin)
+      ffi (~> 1.0)
+    libddwaf (1.30.0.0.2-x86_64-linux)
       ffi (~> 1.0)
     link_header (0.0.8)
     lint_roller (1.1.0)
@@ -733,7 +741,7 @@ GEM
       faraday-follow_redirects (>= 0.3.0, < 2)
       rexml
     observer (0.1.2)
-    oj (3.16.13)
+    oj (3.17.3)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     omniauth (2.1.4)
@@ -850,7 +858,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rbs (4.1.3)
+    rbs (4.2.0)
       logger
       prism (>= 1.6.0)
       tsort
@@ -1232,7 +1240,7 @@ DEPENDENCIES
   dartsass-sprockets
   database_cleaner
   database_cleaner-sequel
-  datadog (~> 2.7.1)
+  datadog (~> 2.32.0)
   debug
   devise (>= 4.6.0)
   devise-guests!
@@ -1264,7 +1272,7 @@ DEPENDENCIES
   jbuilder
   jquery-datatables
   jquery-rails
-  jquery-ui-rails (~> 6.0)
+  jquery-ui-rails (~> 8.0)
   json-schema
   lazily
   lcsort (>= 0.9.1)
