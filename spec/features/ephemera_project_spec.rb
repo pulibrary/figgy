@@ -66,6 +66,7 @@ RSpec.feature "Ephemera Project" do
       visit edit_ephemera_folder_path(id: folder.id)
       check project.title.first
       click_button "Save"
+      expect(page).to have_link "Edit This Ephemera Folder"
       visit solr_document_path(id: project.id)
       click_link "View Highlighted Items"
       expect(page).to have_text "Featured Folder"
