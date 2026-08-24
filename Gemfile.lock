@@ -1146,7 +1146,7 @@ GEM
       aws-sdk-s3 (~> 1)
       shrine (>= 2.0, < 4.0)
       valkyrie (> 1.0)
-    view_component (3.26.0)
+    view_component (3.27.0)
       activesupport (>= 5.2.0, < 8.2)
       concurrent-ruby (~> 1)
       method_source (~> 1.0)
