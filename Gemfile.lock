@@ -687,7 +687,8 @@ GEM
     loofah (2.25.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    m3u8 (0.8.2)
+    m3u8 (1.9.0)
+      bigdecimal
     mail (2.9.1)
       logger
       mini_mime (>= 0.1.1)
@@ -1348,4 +1349,4 @@ DEPENDENCIES
   whenever (~> 1.0)
 
 BUNDLED WITH
-   4.0.19
+  4.0.19
