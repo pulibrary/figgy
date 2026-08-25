@@ -15,6 +15,7 @@
     "enabled": true
   },
   "minimumReleaseAge": "14 days",
+  "rangeStrategy": "pin",
   "packageRules": [
     {
       "matchDatasources": [
@@ -29,7 +30,7 @@
       "matchManagers": [
         "bundler"
       ],
-      "rangeStrategy": "update-lockfile"
+      "rangeStrategy": "pin"
     }
   ],
   "customManagers": [
