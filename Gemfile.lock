@@ -375,7 +375,6 @@ GEM
       base64 (>= 0.2)
       logger (~> 1.6)
       simpleidn (~> 0.2.1)
-    docile (1.4.1)
     docopt (0.5.0)
     dotenv (3.2.0)
     dotenv-rails (3.2.0)
@@ -1047,12 +1046,7 @@ GEM
     simple_form (5.4.1)
       actionpack (>= 7.0)
       activemodel (>= 7.0)
-    simplecov (0.22.0)
-      docile (~> 1.1)
-      simplecov-html (~> 0.11)
-      simplecov_json_formatter (~> 0.1)
-    simplecov-html (0.13.2)
-    simplecov_json_formatter (0.1.4)
+    simplecov (1.1.0)
     simpleidn (0.2.3)
     slop (4.10.1)
     solargraph (0.60.1)
@@ -1348,4 +1342,4 @@ DEPENDENCIES
   whenever (~> 1.0)
 
 BUNDLED WITH
-   4.0.19
+  4.0.19
