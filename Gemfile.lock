@@ -195,7 +195,7 @@ GEM
     afm (1.0.0)
     airbrussh (1.6.0)
       sshkit (>= 1.6.1, != 1.7.0)
-    amq-protocol (2.5.0)
+    amq-protocol (2.8.0)
     arabic-letter-connector (0.1.1)
     archivesspace-client (0.1.8)
       httparty (~> 0.14)
@@ -272,8 +272,9 @@ GEM
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
       thor (~> 1.0)
-    bunny (2.24.0)
-      amq-protocol (~> 2.3)
+    bunny (3.1.0)
+      amq-protocol (~> 2.7)
+      logger (~> 1, >= 1.7)
       sorted_set (~> 1, >= 1.0.2)
     byebug (13.0.0)
       reline (>= 0.6.0)
@@ -867,7 +868,7 @@ GEM
       logger
       prism (>= 1.6.0)
       tsort
-    rbtree (0.4.6)
+    rbtree (0.4.7)
     rdf (3.3.4)
       bcp47_spec (~> 0.2)
       bigdecimal (~> 3.1, >= 3.1.5)
@@ -1025,7 +1026,6 @@ GEM
     sequel_pg (1.18.2)
       pg (>= 0.18.0, != 1.2.0)
       sequel (>= 4.38.0)
-    set (1.1.2)
     shrine (3.6.0)
       content_disposition (~> 1.0)
       down (~> 5.1)
@@ -1087,9 +1087,8 @@ GEM
       rbs (>= 3.0, < 5)
       sorbet-runtime
       yard
-    sorted_set (1.0.3)
+    sorted_set (1.1.0)
       rbtree
-      set (~> 1.0)
     spring (4.7.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -1348,4 +1347,4 @@ DEPENDENCIES
   whenever (~> 1.0)
 
 BUNDLED WITH
-   4.0.19
+  4.0.19
