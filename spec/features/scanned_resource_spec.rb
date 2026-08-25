@@ -108,4 +108,18 @@ RSpec.feature "Scanned Resource" do
     expect(selene.visibility).to eq scanned_resource.visibility
     expect(selene.state).to eq scanned_resource.state
   end
+
+  context "when looking at a resource with derivatives" do
+    with_queue_adapter :inline
+    scenario "show page with a viewer", js: true, run_real_derivatives: true do
+      file = fixture_file_upload("files/example.tif", "image/tiff")
+      resource = FactoryBot.create_for_repository(:pending_scanned_resource, files: [file])
+
+      visit solr_document_path(id: resource.id)
+
+      within_frame(find(".uv-container > iframe")) do
+        expect(page).to have_selector("#uv #content .openseadragon-canvas")
+      end
+    end
+  end
 end
