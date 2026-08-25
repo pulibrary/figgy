@@ -446,8 +446,9 @@ GEM
     ffi (1.17.4-arm64-darwin)
     ffi (1.17.4-x86_64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
-    filewatcher (1.1.1)
-      optimist (~> 3.0)
+    filewatcher (3.0.1)
+      logger (~> 1.7)
+      module_methods (~> 1.0)
     flutie (2.2.1)
     font-awesome-rails (4.7.0.9)
       railties (>= 3.2, < 9.0)
@@ -705,6 +706,7 @@ GEM
       drb (~> 2.0)
       prism (~> 1.5)
     modernizr-rails (2.7.1)
+    module_methods (1.0.0)
     msgpack (1.8.4)
     multi_json (1.19.1)
     multi_xml (0.9.1)
@@ -758,7 +760,6 @@ GEM
     openseadragon (0.9.0)
       rails (> 6.1.0)
     openssl (4.0.2)
-    optimist (3.2.1)
     orm_adapter (0.5.0)
     os (1.1.4)
     ostruct (0.6.3)
@@ -1251,7 +1252,7 @@ DEPENDENCIES
   ezid-client (= 1.11.0)
   factory_bot_rails
   faker
-  filewatcher (~> 1.0)
+  filewatcher (~> 3.0)
   flutie
   font-awesome-rails
   foreman

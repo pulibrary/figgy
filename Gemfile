@@ -31,7 +31,7 @@ gem "dnsruby"
 gem "draper"
 gem "ezid-client", "1.11.0" # v1.9.0 introduces response errors in our tests/stubbing
 gem "faker"
-gem "filewatcher", "~> 1.0"
+gem "filewatcher", "~> 3.0"
 gem "flutie"
 gem "font-awesome-rails"
 gem "google-cloud-pubsub", "2.23.0"
