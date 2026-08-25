@@ -34,7 +34,7 @@ module Bagit
     end
 
     def id
-      @id ||= Valkyrie::ID.new(Digest::MD5.hexdigest("bagit://#{base_path}"))
+      @id ||= Valkyrie::ID.new(Digest::SHA256.hexdigest("bagit://#{base_path}"))
     end
 
     class NestedMetadataAdapter < Bagit::MetadataAdapter
