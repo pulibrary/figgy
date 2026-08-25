@@ -75,7 +75,7 @@ class ImagemagickCharacterizationService
   end
 
   def mime_type
-    `file --b --mime-type #{Shellwords.escape(filename)}`.strip
+    IO.popen(["file", "--b", "--mime-type", filename.to_s], &:read).strip
   end
 
   def vips_image
