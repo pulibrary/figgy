@@ -179,6 +179,22 @@ in [preservation_documentation.md](/docs/technical/preservation/google_pub_sub.m
 1. `gcloud config set project pulibrary-figgy-storage-1`
 1. `cap [staging/production] deploy:google_cloud_function`
 
+### Testing Cloud Fixity
+
+1. Update dependencies
+1. Deploy to staging
+1. [View Functions](https://console.cloud.google.com/functions/list?authuser=1&project=pulibrary-figgy-storage-1)
+1. Click checkFixityStaging
+1. Click "Logs"
+1. In your shell, do `bundle exec cap staging rails:console`
+1. In Console: `CloudFixity::FixityRequestor.queue_resource_check!(id: "532a944d-3d22-447c-a3bf-d10f05e153b8")`
+1. Refresh "Logs", look for success.
+1. Refresh `https://figgy-staging.princeton.edu/catalog/532a944d-3d22-447c-a3bf-d10f05e153b8`, you should see "Last Success: Today's Date" under Cloud Fixity.
+
+If all that works, you're good.
+
+**NOTE**: If Staging is wiped and you need a new example, just ingest and mark complete any item, then replace the IDs above with a FileSet ID.
+
 ### ArchivesSpace Synchronization and TiTiler functionality
 
 Figgy will persist DAOs to ArchivesSpace on completion of finding aid resources.
