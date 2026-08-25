@@ -41,6 +41,7 @@ RSpec.describe EventGenerator::GeoblacklightEventGenerator do
     end
     context "with a record updated as part of a bulk  operation" do
       before do
+        allow(ENV).to receive(:[]).and_call_original
         allow(ENV).to receive(:[]).with("BULK").and_return("true")
       end
 
