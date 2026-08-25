@@ -38,7 +38,7 @@ class HlsManifest
   end
 
   def playlist
-    @playlist ||= M3u8::Playlist.read(binary_file.io)
+    @playlist ||= M3u8::Playlist.from_h(M3u8::Playlist.read(binary_file.io).to_h)
   end
 
   def binary_file
