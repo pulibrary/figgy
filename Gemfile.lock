@@ -93,7 +93,13 @@ GIT
       ttfunk
 
 GEM
-  remote: https://gem.coop/
+  remote: https://gems.contribsys.com/
+  specs:
+    sidekiq-pro (8.0.3)
+      sidekiq (>= 8.0.8, < 9)
+
+GEM
+  remote: https://rubygems.org/
   specs:
     Ascii85 (2.0.1)
     aasm (6.0.0)
@@ -1193,12 +1199,6 @@ GEM
       yard (~> 0.9)
     zeitwerk (2.8.3)
 
-GEM
-  remote: https://gems.contribsys.com/
-  specs:
-    sidekiq-pro (8.0.3)
-      sidekiq (>= 8.0.8, < 9)
-
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
@@ -1348,4 +1348,4 @@ DEPENDENCIES
   whenever (~> 1.0)
 
 BUNDLED WITH
-   2.6.9
+   4.0.19
