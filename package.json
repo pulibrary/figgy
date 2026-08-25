@@ -17,7 +17,7 @@
     "canvas-confetti": "^1.6.0",
     "core-js": "^3.16.2",
     "flush-promises": "^1.0.2",
-    "graphql": "^16.8.1",
+    "graphql": "^17.0.0",
     "graphql-tag": "^2.9.2",
     "hls.js": "1.6.17",
     "leaflet": "^1.7.1",
