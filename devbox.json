@@ -73,7 +73,8 @@
     "lsof":           "latest",
     "clang":          "latest",
     "libintl":        "latest",
-    "gettext":        "latest"
+    "gettext":        "latest",
+    "openssl":        "latest"
   },
   "shell": {
     "init_hook": [
