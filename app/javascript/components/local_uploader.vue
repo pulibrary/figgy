@@ -16,9 +16,9 @@ import Uppy from '@uppy/core'
 import DragDrop from '@uppy/drag-drop'
 import StatusBar from '@uppy/status-bar'
 import Tus from '@uppy/tus'
-import '@uppy/core/dist/style.css'
-import '@uppy/drag-drop/dist/style.css'
-import '@uppy/status-bar/dist/style.css'
+import '@uppy/core/css/style.css'
+import '@uppy/drag-drop/css/style.css'
+import '@uppy/status-bar/css/style.css'
 const TUS_ENDPOINT = '/local_file_upload/'
 
 export default {
