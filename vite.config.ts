@@ -43,5 +43,18 @@ export default defineConfig({
         return { define: {  __VUE_PROD_DEVTOOLS__: true }  }
       },
     },
+    {
+      // Force openseadragon to not use requirejs, since when we load both Clover & UV
+      // (since UV is in uv.js), it complains.
+      name: 'openseadragon-disable-amd',
+      transform(code, id) {
+        if (id.includes('openseadragon') && code.includes("typeof define === 'function' && define.amd")) {
+          return code.replace(
+            "if (typeof define === 'function' && define.amd) {",
+            'if (false) {'
+          )
+        }
+      }
+    },
   ]
 })
