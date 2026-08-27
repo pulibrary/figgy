@@ -32,7 +32,7 @@ export default class BoundingBoxSelector {
       scrollWheelZoom: false
     }).fitBounds(initialBounds)
 
-    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png', {
       maxZoom: 18
     }).addTo(map)
     L.Control.geocoder({ position: 'topleft' }).addTo(map)
