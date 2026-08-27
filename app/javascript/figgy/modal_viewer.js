@@ -1,3 +1,5 @@
+import OpenSeadragon from 'openseadragon'
+import navImages from './osd_nav_images'
 export default class ModalViewer {
   constructor() {
     this.element = $(this.selector)
@@ -16,7 +18,16 @@ export default class ModalViewer {
       } else {
         osd_viewer.html("")
         new_source.appendTo(osd_viewer)
-        this.osd = osd_viewer.openseadragon()
+        let sources = osd_viewer.find('source[media="openseadragon"]');
+        sources = $.map(sources, function(e) {
+          return $(e).attr('src')
+        })
+        this.osd = OpenSeadragon({
+          element: osd_viewer[0],
+          prefixUrl: '',
+          navImages: navImages,
+          tileSources: sources
+        })
       }
       return true
     })

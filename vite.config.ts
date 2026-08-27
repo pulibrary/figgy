@@ -13,7 +13,12 @@ export default defineConfig({
     }
   },
   build: {
-    cssMinify: 'esbuild'
+    cssMinify: 'esbuild',
+    // Force OSD images to work, it was returning base64.
+    assetsInlineLimit: (filePath) =>
+      filePath.includes('openseadragon/build/openseadragon/images/')
+        ? false
+        : undefined
   },
   test: {
     globals: true,
