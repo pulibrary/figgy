@@ -53,6 +53,20 @@ RSpec.feature "File Manager" do
     end
   end
 
+  context "when there's a thumbnail" do
+    with_queue_adapter :inline
+    it "can be clicked on to zoom in", js: true, run_real_characterization: true, run_real_derivatives: true do
+      file = fixture_file_upload("files/example.tif", "image/tiff")
+      resource = FactoryBot.create_for_repository(:complete_scanned_resource, files: [file])
+
+      visit polymorphic_path [:file_manager, resource]
+
+      page.execute_script("arguments[0].click();", find("*[data-modal-manifest]", visible: false).native)
+
+      expect(page).to have_selector ".openseadragon-canvas canvas"
+    end
+  end
+
   context "with a derivative file" do
     let(:riiif_helper) { instance_double(ManifestBuilder::RiiifHelper) }
     let(:riiif_helper_class) { class_double(ManifestBuilder::RiiifHelper).as_stubbed_const(transfer_nested_constants: true) }

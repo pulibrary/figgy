@@ -31,8 +31,6 @@
 //= require jquery-ui/widgets/selectable
 //= require jqueryui-timepicker-addon
 //= require nestedSortable/jquery.mjs.nestedSortable
-//= require openseadragon/openseadragon
-//= require openseadragon/jquery
 //= require bootstrap_select_dropdown
 //= require cocoon
 //= require blacklight_range_limit
