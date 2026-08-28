@@ -5210,12 +5210,7 @@ openseadragon-areaselector@^0.2.1:
   resolved "https://registry.yarnpkg.com/openseadragon-areaselector/-/openseadragon-areaselector-0.2.1.tgz#2f73f291729495a515cebecc2967e324d01cd703"
   integrity sha512-XRQXJbGnBAgKXybU5dh8Jr1/22zON+Spa1RVl0yOY0L+Scirxn/2sNL4QiQFWIPMQLebfrZBeTonKmMaN3hurw==
 
-openseadragon@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-5.0.1.tgz#ad3aaccc6c0f733c3153131e9af05bc2e17a1952"
-  integrity sha512-a/hjouW9i3UfWxRADVYN2MyRhXMGnE7x9VVL7/4jXCcDLFyO4UM5o4RStYtqa5BfaHw/wMNAaD2WbxQF8f1pJg==
-
-openseadragon@^6.1.0:
+openseadragon@^6.0.0, openseadragon@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-6.1.0.tgz#aebb222a1ab94b0df52d15230dd21b17090d5e23"
   integrity sha512-S2kEBO6zd2pbUByMVZ6PkEldvXHbB2kemL3tAhSltnHyjpArJPgXeM/AH/g8qsoXHy9pMHzx63XyJftE556MbA==
