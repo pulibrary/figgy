@@ -196,10 +196,11 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     amq-protocol (2.8.0)
     arabic-letter-connector (0.1.1)
-    archivesspace-client (0.1.8)
+    archivesspace-client (0.6.0)
+      dry-cli (~> 0.7)
       httparty (~> 0.14)
+      jbuilder (~> 2.12)
       json (~> 2.0)
-      nokogiri (~> 1.10)
     ast (2.4.3)
     autoprefixer-rails (10.4.21.0)
       execjs (~> 2)
@@ -328,7 +329,7 @@ GEM
       rexml
     crass (1.0.7)
     csv (3.3.6)
-    dalli (5.0.6)
+    dalli (5.1.0)
       logger
     dartsass-sprockets (3.2.1)
       railties (>= 4.0.0)
@@ -345,10 +346,10 @@ GEM
     database_cleaner-sequel (2.0.2)
       database_cleaner-core (~> 2.0.0)
       sequel
-    datadog (2.32.0)
+    datadog (2.41.0)
       cgi
-      datadog-ruby_core_source (~> 3.5, >= 3.5.2)
-      libdatadog (~> 30.0.0.1.0)
+      datadog-ruby_core_source (~> 3.5, >= 3.5.4)
+      libdatadog (~> 40.0.0.1.0)
       libddwaf (~> 1.30.0.0.0)
       logger
       msgpack
@@ -392,7 +393,7 @@ GEM
       request_store (>= 1.0)
       ruby2_keywords
     drb (2.2.3)
-    dry-cli (1.4.1)
+    dry-cli (0.7.0)
     dry-core (1.2.0)
       concurrent-ruby (~> 1.0)
       logger
@@ -667,9 +668,9 @@ GEM
     leaflet-rails (1.9.5)
       actionpack (>= 4.2.0)
       railties (>= 4.2.0)
-    libdatadog (30.0.0.1.0)
-    libdatadog (30.0.0.1.0-arm64-darwin)
-    libdatadog (30.0.0.1.0-x86_64-linux)
+    libdatadog (40.0.0.1.0)
+    libdatadog (40.0.0.1.0-arm64-darwin)
+    libdatadog (40.0.0.1.0-x86_64-linux)
     libddwaf (1.30.0.0.2-arm64-darwin)
       ffi (~> 1.0)
     libddwaf (1.30.0.0.2-x86_64-darwin)
@@ -1244,7 +1245,7 @@ DEPENDENCIES
   dartsass-sprockets
   database_cleaner
   database_cleaner-sequel
-  datadog (~> 2.32.0)
+  datadog (~> 2.41.0)
   debug
   devise (>= 4.6.0)
   devise-guests!
