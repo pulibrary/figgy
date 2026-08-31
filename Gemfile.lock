@@ -255,10 +255,6 @@ GEM
       blacklight (> 6.0, < 9)
       cancancan (>= 1.8)
       deprecation (~> 1.0)
-    blacklight_range_limit (8.5.0)
-      blacklight (>= 7.25.2, < 9)
-      deprecation
-      view_component (>= 2.54, < 4)
     bootsnap (1.25.0)
       msgpack (~> 1.5)
     bootstrap (4.6.2.1)
@@ -1224,7 +1220,6 @@ DEPENDENCIES
   bcrypt_pbkdf
   benchmark-ips
   blacklight (~> 7.42)
-  blacklight_range_limit (= 8.5.0)
   bootsnap
   bootstrap (~> 4.0)
   bootstrap_form (~> 4.5.0)

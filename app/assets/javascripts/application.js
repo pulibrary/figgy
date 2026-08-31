@@ -33,5 +33,4 @@
 //= require nestedSortable/jquery.mjs.nestedSortable
 //= require bootstrap_select_dropdown
 //= require cocoon
-//= require blacklight_range_limit
 //= require_tree .

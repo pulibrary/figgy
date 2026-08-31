@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   mount HealthMonitor::Engine, at: "/"
   concern :searchable, Blacklight::Routes::Searchable.new
-  concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   concern :exportable, Blacklight::Routes::Exportable.new
 
   if Rails.env.development?
@@ -45,7 +44,6 @@ Rails.application.routes.draw do
 
   resource :catalog, only: [], as: "catalog", path: "/catalog", controller: "catalog" do
     concerns :searchable
-    concerns :range_searchable
   end
 
   # Keep this below the concerns :searchable or catalog controller will try to
