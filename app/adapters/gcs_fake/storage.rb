@@ -7,9 +7,17 @@ class GcsFake::Storage < Valkyrie::Storage::Disk
     DecoratedFile.new(output)
   end
 
+  # We need an upload that does streams, since GCS copies streams.
+  def upload(file:, original_filename:, resource: nil, **_extra_arguments)
+    new_path = path_generator.generate(resource: resource, file: file, original_filename: original_filename)
+    FileUtils.mkdir_p(new_path.parent)
+    file_mover.call(file, new_path)
+    find_by(id: Valkyrie::ID.new("#{protocol}#{new_path}"))
+  end
+
   class DecoratedFile < SimpleDelegator
     def io
-      DecoratedIo.new(super, self)
+      @io ||= DecoratedIo.new(super, self)
     end
 
     class DecoratedIo < SimpleDelegator

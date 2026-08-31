@@ -1407,6 +1407,7 @@ RSpec.describe ChangeSetPersister do
         output = change_set_persister.save(change_set: change_set)
         expect(Wayfinder.for(output).preservation_object.metadata_node.use).to eq [::PcdmUse::PreservedMetadata]
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).to eq true
+        expect(File.read(disk_preservation_path.join(resource.id.to_s, "#{resource.id}.json"))).not_to eq ""
         expect(File.exist?(disk_preservation_path.join(resource.id.to_s, "data", resource.member_ids.first.to_s, "#{resource.member_ids.first}.json"))).to eq true
       end
     end

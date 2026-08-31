@@ -133,7 +133,7 @@ Rails.application.config.to_prepare do
     Valkyrie::StorageAdapter.register(
       GcsFake::Storage.new(
         base_path: Figgy.config["disk_preservation_path"],
-        file_mover: FileUtils.method(:cp),
+        file_mover: FileUtils.method(:copy_stream),
         path_generator: Preserver::NestedStoragePath
       ),
       :google_cloud_storage

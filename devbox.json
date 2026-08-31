@@ -7,7 +7,7 @@
     "FONTCONFIG_PATH":         "$PWD/.devbox/nix/profile/default/etc/fonts"
   },
   "packages": {
-    "ruby":   "3.2.6",
+    "ruby":   "3.4.8",
     "libffi": "latest",
     "vips": {
       "version": "latest",
