@@ -16,17 +16,16 @@ module CloudFixity
     end
 
     def run!
-      topic = pubsub.topic(self.class.pubsub_topic)
-      subscription = topic.subscription(self.class.pubsub_subscription)
+      subscriber = pubsub.subscriber(self.class.pubsub_subscription)
 
-      subscriber = subscription.listen do |message|
+      listener = subscriber.listen do |message|
         message.acknowledge!
         data = JSON.parse(message.data.to_s, symbolize_names: true)
         CloudFixityJob.perform_later(status: data[:status], preservation_object_id: data[:resource_id], child_property: data[:child_property], child_id: data[:child_id])
       end
 
       # Start background threads that will call block passed to listen.
-      subscriber.start
+      listener.start
 
       # Fade into a deep sleep as worker will run indefinitely
       sleep
@@ -53,10 +52,10 @@ module CloudFixity
       preservation_count = query_service.custom_queries.count_all_of_model(model: PreservationObject)
       limit = (preservation_count / divisor).ceil
       resources = query_service.custom_queries.find_random_resources_by_model(limit: limit, model: PreservationObject)
-      topic = pubsub.topic(pubsub_topic)
+      publisher = pubsub.publisher(pubsub_topic)
       resources.each_slice(100).each do |resource_slice|
-        topic.publish do |publisher|
-          queue_resources(resource_slice, publisher)
+        publisher.publish do |batch|
+          queue_resources(resource_slice, batch)
         end
       end
       Rails.logger.info "Enqueued #{limit} PreservationObjects for Cloud Fixity Checking"
@@ -66,9 +65,9 @@ module CloudFixity
       resource = query_service.find_by(id: Valkyrie::ID.new(id))
       preservation_object = Wayfinder.for(resource).try(:preservation_object)
       return unless preservation_object
-      topic = pubsub.topic(pubsub_topic)
-      topic.publish do |publisher|
-        queue_resources([preservation_object], publisher)
+      publisher = pubsub.publisher(pubsub_topic)
+      publisher.publish do |batch|
+        queue_resources([preservation_object], batch)
       end
       Rails.logger.info "Enqueued PreservationObject #{preservation_object.id} for Cloud Fixity Checking"
     end

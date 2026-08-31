@@ -4,10 +4,10 @@ RSpec.describe CloudFixity do
   with_queue_adapter :inline
 
   let(:pubsub) { instance_double(Google::Cloud::Pubsub::Project) }
-  let(:topic) { instance_double(Google::Cloud::Pubsub::Topic) }
-  let(:subscription) { instance_double(Google::Cloud::Pubsub::Subscription) }
+  let(:publisher) { instance_double(Google::Cloud::PubSub::Publisher) }
   let(:message) { instance_double(Google::Cloud::Pubsub::ReceivedMessage) }
   let(:batch_publisher) { instance_double(Google::Cloud::PubSub::BatchPublisher) }
+  let(:listener) { instance_double(Google::Cloud::PubSub::MessageListener) }
   let(:json) do
     {
       status: "SUCCESS",
@@ -16,7 +16,7 @@ RSpec.describe CloudFixity do
       child_property: :metadata_node
     }.to_json
   end
-  let(:subscriber) { instance_double(Google::Cloud::Pubsub::Subscriber) }
+  let(:subscriber) { instance_double(Google::Cloud::PubSub::Subscriber) }
   let(:metadata_adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:query_service) { metadata_adapter.query_service }
 
@@ -27,14 +27,14 @@ RSpec.describe CloudFixity do
 
     stub_ezid
     allow(Google::Cloud::Pubsub).to receive(:new).and_return(pubsub)
-    allow(pubsub).to receive(:topic).and_return(topic)
-    allow(topic).to receive(:subscription).and_return(subscription)
-    allow(topic).to receive(:publish).and_yield(batch_publisher)
+    allow(pubsub).to receive(:publisher).and_return(publisher)
+    allow(pubsub).to receive(:subscriber).and_return(subscriber)
+    allow(publisher).to receive(:publish).and_yield(batch_publisher)
     allow(batch_publisher).to receive(:publish)
     allow(message).to receive(:data).and_return(json)
     allow(message).to receive(:acknowledge!)
-    allow(subscriber).to receive(:start)
-    allow(subscription).to receive(:listen).and_yield(message).and_return(subscriber)
+    allow(listener).to receive(:start)
+    allow(subscriber).to receive(:listen).and_yield(message).and_return(listener)
     allow_any_instance_of(CloudFixity::Worker).to receive(:sleep)
   end
 
@@ -58,8 +58,7 @@ RSpec.describe CloudFixity do
       end
 
       it "generates Events in response to messages published with the subscribes to the figgy-staging-fixity-status topic" do
-        expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-status")
-        expect(topic).to have_received(:subscription).with("figgy-staging-fixity-status")
+        expect(pubsub).to have_received(:subscriber).with("figgy-staging-fixity-status")
 
         cloud_event = query_service.custom_queries.find_fixity_events(status: Event::SUCCESS, type: :cloud_fixity)
         expect(cloud_event).not_to be_empty
@@ -103,7 +102,7 @@ RSpec.describe CloudFixity do
       CloudFixity::FixityRequestor.queue_daily_check!(annual_percent: 10)
 
       expect(Valkyrie::MetadataAdapter.find(:postgres).query_service.custom_queries).to have_received(:find_random_resources_by_model).with(limit: 3, model: PreservationObject)
-      expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-request")
+      expect(pubsub).to have_received(:publisher).with("figgy-staging-fixity-request")
       expect(batch_publisher).to have_received(:publish).exactly(2).times
       expect(batch_publisher).to have_received(:publish).with(
         {
@@ -144,7 +143,7 @@ RSpec.describe CloudFixity do
 
       CloudFixity::FixityRequestor.queue_resource_check!(id: resource.id.to_s)
 
-      expect(pubsub).to have_received(:topic).with("figgy-staging-fixity-request")
+      expect(pubsub).to have_received(:publisher).with("figgy-staging-fixity-request")
       expect(batch_publisher).to have_received(:publish).exactly(2).times
       expect(batch_publisher).to have_received(:publish).with(
         {
