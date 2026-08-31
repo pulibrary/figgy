@@ -81,7 +81,9 @@ gem "rack-cors", require: "rack/cors"
 gem "rails", "~> 8.1.0"
 gem "rdf-rdfxml"
 gem "recipient_interceptor"
-gem "redis", ">= 3", "< 6.0.1"
+# Pinned to <6 because of Rails
+# https://github.com/rails/rails/blob/v8.1.3.1/actioncable/lib/action_cable/subscription_adapter/redis.rb
+gem "redis", ">= 3", "< 6"
 gem "redis-namespace"
 gem "reform"
 gem "riiif"
