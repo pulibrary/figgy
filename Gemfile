@@ -38,7 +38,7 @@ gem "google-cloud-pubsub", "2.23.0"
 # This breaks PreserveResourceJob somewhere between 1.39 and 1.44.
 gem "google-cloud-storage", "1.62.0"
 gem "graphiql-rails", "1.10.5", group: :development
-gem "graphql", "~> 1.13.19"
+gem "graphql", "~> 2.6.0"
 gem "health-monitor-rails"
 gem "honeybadger"
 gem "hydra-access-controls", github: "samvera/hydra-head", branch: "main"
@@ -150,7 +150,7 @@ group :test do
   gem "database_cleaner"
   gem "database_cleaner-sequel"
   gem "formulaic"
-  gem "rspec-graphql_matchers", "~> 1.4.0"
+  gem "rspec-graphql_matchers", "2.0.0.pre.rc.0"
   gem "rspec_junit_formatter"
   gem "selenium-webdriver"
   gem "simplecov", require: false

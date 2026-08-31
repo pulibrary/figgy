@@ -126,7 +126,7 @@ RSpec.describe Mutations::UpdateResource do
     allow(ability).to receive(:can?).with(:update, anything).and_return(update_permission)
     allow(ability).to receive(:can?).with(:read, anything).and_return(read_permission)
     context = { ability: ability, change_set_persister: GraphqlController.change_set_persister }
-    ctx = GraphQL::Query::Context.new(query: NullQueryWithDataloader.new, values: context, object: nil, schema: FiggySchema)
+    ctx = GraphQL::Query::Context.new(query: NullQueryWithDataloader.new, values: context, schema: FiggySchema)
     described_class.new(object: nil, context: ctx, field: nil)
   end
 end
