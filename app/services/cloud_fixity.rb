@@ -1,10 +1,6 @@
 module CloudFixity
   require "google/cloud/pubsub"
   class Worker
-    def self.pubsub_topic
-      @pubsub_topic ||= Figgy.config["fixity_status_topic"]
-    end
-
     def self.pubsub_subscription
       @pubsub_subscription ||= Figgy.config["fixity_status_topic"]
     end
