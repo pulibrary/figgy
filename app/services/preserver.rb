@@ -132,6 +132,7 @@ class Preserver
       local_checksum = metadata_node.checksum.first
       local_checksum_hex = [local_checksum.md5].pack("H*")
       local_md5_checksum = Base64.strict_encode64(local_checksum_hex)
+      temp_metadata_file.rewind
 
       uploaded_file = storage_adapter.upload(
         file: temp_metadata_file.io,
