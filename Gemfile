@@ -150,7 +150,7 @@ group :test do
   gem "database_cleaner"
   gem "database_cleaner-sequel"
   gem "formulaic"
-  gem "rspec-graphql_matchers", "~> 1.4.0"
+  gem "rspec-graphql_matchers", "2.0.0.pre.rc.0"
   gem "rspec_junit_formatter"
   gem "selenium-webdriver"
   gem "simplecov", require: false
