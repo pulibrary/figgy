@@ -7,7 +7,7 @@ module AspaceStubbing
   def stub_aspace_repositories
     path = Rails.root.join("spec", "fixtures", "aspace", "repositories.json")
     cache_path(uri: "/repositories?page=1", path: path)
-    stub_request(:get, "https://aspace.test.org/staff/api/repositories?page=1")
+    stub_request(:get, "https://aspace.test.org/staff/api/repositories?page=1&page_size=50")
       .to_return(status: 200, body: File.open(path), headers: { "Content-Type": "application/json" })
   end
 

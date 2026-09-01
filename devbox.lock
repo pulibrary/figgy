@@ -472,6 +472,114 @@
         }
       }
     },
+    "gnumake@latest": {
+      "last_modified": "2026-08-27T07:16:00Z",
+      "resolved": "github:NixOS/nixpkgs/c27cdad491a991b11ed731760aa2ef8db0cb0410#gnumake",
+      "source": "devbox-search",
+      "version": "4.4.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vw6ljpyd8nnql72sbf8nx6dgvdvgnwml-gnumake-4.4.1",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/z2xa5yy1xhq30sasnbmwi0l8n84zqwpb-gnumake-4.4.1-man",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/dfbwcmnw5jvmij32y6ir6xrsgay96q85-gnumake-4.4.1-doc"
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/1pg3wc0xxajpirhqjrdnvvndirh49bcw-gnumake-4.4.1-info"
+            }
+          ],
+          "store_path": "/nix/store/vw6ljpyd8nnql72sbf8nx6dgvdvgnwml-gnumake-4.4.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/clk5g7jn42zc3ydwz2xrv50wjvswh2j7-gnumake-4.4.1",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/aqbbbk5k348k0g1nfv15153rvdmml3dh-gnumake-4.4.1-man",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/6ay3jj11iqkbab7309vssz67r6mr0c0p-gnumake-4.4.1-debug"
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/r1a35igf2l6b6r02qvpiayfsw3nssi2w-gnumake-4.4.1-doc"
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/mvl7q4ww27zhlcbgq4fbn68h3ms76isa-gnumake-4.4.1-info"
+            }
+          ],
+          "store_path": "/nix/store/clk5g7jn42zc3ydwz2xrv50wjvswh2j7-gnumake-4.4.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0bg5b97b9hbhz8907bfcrch1i116xppa-gnumake-4.4.1",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/wb4yn3d7vmi1hr4f8pz38rjvcl7f70ma-gnumake-4.4.1-man",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/3b9cjf16jx4ncpp3b4k6m8q01nxsrw1n-gnumake-4.4.1-doc"
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/rriz5p4q8a6sca7sw3p3js1m5dl09ia8-gnumake-4.4.1-info"
+            }
+          ],
+          "store_path": "/nix/store/0bg5b97b9hbhz8907bfcrch1i116xppa-gnumake-4.4.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/7ydf0dzbsq7w35bxifci2mslm76pw1qf-gnumake-4.4.1",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/hnx4nm22wyl3qs52d66syyldypfyc88q-gnumake-4.4.1-man",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/hplrxi8g1pxnr6s17s369vwcy3382q33-gnumake-4.4.1-debug"
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/ajv6150dm72i5w9y0p23mgnghdp5h9m5-gnumake-4.4.1-doc"
+            },
+            {
+              "name": "info",
+              "path": "/nix/store/59p81ss2y7c2gc1khjr26z4ygzrmmymz-gnumake-4.4.1-info"
+            }
+          ],
+          "store_path": "/nix/store/7ydf0dzbsq7w35bxifci2mslm76pw1qf-gnumake-4.4.1"
+        }
+      }
+    },
     "imagemagick6@latest": {
       "last_modified": "2025-05-12T14:38:58Z",
       "resolved": "github:NixOS/nixpkgs/eaeed9530c76ce5f1d2d8232e08bec5e26f18ec1#imagemagick6",

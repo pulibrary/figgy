@@ -74,7 +74,8 @@
     "clang":          "latest",
     "libintl":        "latest",
     "gettext":        "latest",
-    "openssl":        "latest"
+    "openssl":        "latest",
+    "gnumake":        "latest"
   },
   "shell": {
     "init_hook": [

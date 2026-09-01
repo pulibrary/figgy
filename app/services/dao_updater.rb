@@ -38,7 +38,7 @@ class DaoUpdater
     payload = archival_object.source
     payload["instances"] = archival_object.non_figgy_instances
     payload["instances"] += [new_instance]
-    aspace_client.post(archival_object.uri, payload.to_json)
+    aspace_client.post(archival_object.uri, payload)
   end
 
   def new_instance
@@ -58,11 +58,11 @@ class DaoUpdater
   end
 
   def update_digital_object(found_digital_object)
-    aspace_client.post(found_digital_object["uri"], new_dao.merge("lock_version" => found_digital_object["lock_version"]).to_json).parsed
+    aspace_client.post(found_digital_object["uri"], new_dao.merge("lock_version" => found_digital_object["lock_version"])).parsed
   end
 
   def create_digital_object
-    result = aspace_client.post("/repositories/#{archival_object.repository_id}/digital_objects", new_dao.to_json)
+    result = aspace_client.post("/repositories/#{archival_object.repository_id}/digital_objects", new_dao)
     result.parsed
   end
 
