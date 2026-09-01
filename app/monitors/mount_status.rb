@@ -13,8 +13,6 @@ class MountStatus < HealthMonitor::Providers::Base
       "/mnt/diglibdata/hydra_binaries",
       "/mnt/hydra_sources/ingest_scratch",
       "/mnt/hydra_sources/pudl",
-      "/mnt/hydra_sources/archives",
-      "/mnt/hydra_sources/archives_bd",
       "/mnt/hydra_sources/maplab",
       "/mnt/hydra_sources/bitcur-archives",
       "/mnt/hydra_sources/studio_new",
