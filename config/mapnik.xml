@@ -1,4 +1,4 @@
-<Map background-color="white" srs="+init=epsg:4326" >
+<Map background-color="#00000000" srs="+init=epsg:4326" >
   <Style name="features" filter-mode="first">
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>

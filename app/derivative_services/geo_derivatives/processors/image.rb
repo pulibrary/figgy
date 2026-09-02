@@ -7,7 +7,7 @@ module GeoDerivatives
       included do
         # Uses imagemagick to resize an image and convert it to the output format.
         # Keeps the aspect ratio of the original image and adds padding to
-        # to the output image. The file extension is the output format.
+        # the output image. The file extension is the output format.
         # @param in_path [String] file input path
         # @param out_path [String] processor output file path.
         # @param options [Hash] creation options
@@ -21,7 +21,7 @@ module GeoDerivatives
           convert << "-extent"
           convert << size
           convert << "-background"
-          convert << "white"
+          convert << "none"
           convert << "-gravity"
           convert << "center"
           convert << out_path
@@ -50,7 +50,7 @@ module GeoDerivatives
           MiniMagick::Tool::Convert.new do |convert|
             convert << "-size"
             convert << options[:output_size].tr(" ", "x")
-            convert << "xc:white"
+            convert << "xc:none"
             convert << in_path
             convert << "-gravity"
             convert << "center"
