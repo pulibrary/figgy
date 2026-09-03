@@ -50,6 +50,16 @@ class RasterResourceDerivativeService
     generate_mosaic unless deleted_files.empty?
   end
 
+  # Deletes only the thumbnail file
+  def cleanup_thumbnail_derivatives
+    deleted_files = []
+    resource.file_metadata.select(&:thumbnail_file?).each do |file|
+      storage_adapter.delete(id: file.file_identifiers.first)
+      deleted_files << file.id
+    end
+    cleanup_derivative_metadata(derivatives: deleted_files)
+  end
+
   def create_derivatives
     run_derivatives
     create_local_derivatives
@@ -66,6 +76,21 @@ class RasterResourceDerivativeService
   ensure
     FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
     File.unlink(temporary_display_output.path) if File.exist?(temporary_display_output.path)
+    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
+  end
+
+  # Rebuilds only the thumbnail
+  def create_thumbnail_derivatives
+    run_thumbnail_derivatives
+    create_local_derivatives
+    update_error_message(message: nil) if primary_file.error_message.present?
+  rescue StandardError => error
+    change_set_persister.after_rollback.add do
+      update_error_message(message: error.message)
+    end
+    raise error
+  ensure
+    FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
     File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
   end
 
@@ -120,6 +145,13 @@ class RasterResourceDerivativeService
   def run_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
       filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
+    )
+  end
+
+  # generates only the thumbnail file
+  def run_thumbnail_derivatives
+    GeoDerivatives::Runners::RasterDerivatives.create(
+      filename, outputs: [instructions_for_thumbnail]
     )
   end
 

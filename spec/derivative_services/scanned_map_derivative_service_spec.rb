@@ -68,6 +68,33 @@ RSpec.describe ScannedMapDerivativeService do
     end
   end
 
+  describe "#create_thumbnail_derivatives" do
+    it "regenerates the thumbnail without rebuilding other derivatives" do
+      resource = query_service.find_by(id: valid_resource.id)
+      original_pyramidal = resource.pyramidal_derivative
+      original_thumbnail = resource.file_metadata.find(&:thumbnail_file?)
+
+      derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
+      derivative_service.new(id: valid_resource.id).create_thumbnail_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      new_thumbnail = reloaded.file_metadata.find(&:thumbnail_file?)
+
+      expect(reloaded.pyramidal_derivative.id).to eq original_pyramidal.id
+      expect(new_thumbnail.id).not_to eq original_thumbnail.id
+      expect(reloaded.file_metadata.select(&:thumbnail_file?).count).to eq 1
+    end
+  end
+
+  describe "#cleanup_thumbnail_derivatives" do
+    it "only deletes the thumbnail" do
+      derivative_service.new(id: valid_change_set.id).cleanup_thumbnail_derivatives
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
+      expect(reloaded.pyramidal_derivative).not_to be_blank
+    end
+  end
+
   describe "#cleanup_derivatives" do
     it "deletes the attached fileset when the resource is deleted" do
       derivative_service.new(id: valid_change_set.id).cleanup_derivatives

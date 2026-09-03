@@ -51,6 +51,15 @@ class VectorResourceDerivativeService
     cleanup_derivative_metadata(derivatives: deleted_files)
   end
 
+  def cleanup_thumbnail_derivatives
+    deleted_files = []
+    resource.file_metadata.select(&:thumbnail_file?).each do |file|
+      storage_adapter.delete(id: file.file_identifiers.first)
+      deleted_files << file.id
+    end
+    cleanup_derivative_metadata(derivatives: deleted_files)
+  end
+
   def create_derivatives
     run_derivatives
     create_local_derivatives
@@ -65,6 +74,21 @@ class VectorResourceDerivativeService
   ensure
     FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
     File.unlink(temporary_cloud_output.path) if File.exist?(temporary_cloud_output.path)
+    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
+  end
+
+  # Rebuilds the thumbnail only
+  def create_thumbnail_derivatives
+    run_thumbnail_derivatives
+    create_local_derivatives
+    update_error_message(message: nil) if primary_file.error_message.present?
+  rescue StandardError => error
+    change_set_persister.after_rollback.add do
+      update_error_message(message: error.message)
+    end
+    raise error
+  ensure
+    FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
     File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
   end
 
@@ -118,6 +142,12 @@ class VectorResourceDerivativeService
   def run_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
       filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
+    )
+  end
+
+  def run_thumbnail_derivatives
+    GeoDerivatives::Runners::VectorDerivatives.create(
+      filename, outputs: [instructions_for_thumbnail]
     )
   end
 
