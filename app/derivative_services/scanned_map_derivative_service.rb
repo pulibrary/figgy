@@ -55,6 +55,14 @@ class ScannedMapDerivativeService
     thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
   end
 
+  def create_thumbnail_derivatives
+    thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
+  end
+
+  def cleanup_thumbnail_derivatives
+    thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
+  end
+
   def thumbnail_derivative_service
     ThumbnailDerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
   end

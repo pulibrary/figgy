@@ -60,13 +60,52 @@ RSpec.describe VectorResourceDerivativeService do
       expect(cloud_vector_file_set.use).to eq([::PcdmUse::CloudDerivative])
       expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
       image = Vips::Image.new_from_file(thumbnail_file.io.path)
-      # Generate the avg of the image bands to ensure it's the correct
-      # thumbnail. This is mostly white, but not -all- white.
-      expect(image.avg.round).to eq 250
       expect(cloud_vector_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
 
+
+      # Test that the thumbnail background is transparent
+      expect(image.has_alpha?).to be true
+      alpha = image.extract_band(3)
+      expect(alpha.getpoint(0, 0).first).to eq 0
+
+      # Test that not all pixels are transparent and that
+      # mapnik actually generated a thumbnail
+      expect(alpha.max).to be > 0
+
       # Ensure that temporary files and directories are cleaned up
+      expect(Dir.empty?(temp_dir)).to be true
+    end
+
+    it "can regenerate the thumbnail without rebuilding other derivatives" do
+      cloud_file_service = instance_double(CloudFilePermissionsService, run: nil)
+      allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
+
+      resource = query_service.find_by(id: valid_resource.id)
+      original_cloud_file = resource.file_metadata.find(&:cloud_derivative?)
+      original_thumbnail = resource.file_metadata.find(&:thumbnail_file?)
+
+      derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
+      derivative_service.new(id: valid_resource.id).create_thumbnail_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      new_thumbnail = reloaded.file_metadata.find(&:thumbnail_file?)
+
+      expect(reloaded.file_metadata.find(&:cloud_derivative?).id).to eq original_cloud_file.id
+      expect(new_thumbnail.id).not_to eq original_thumbnail.id
+      expect(File.exist?(Valkyrie::StorageAdapter.find_by(id: new_thumbnail.file_identifiers.first).io.path)).to be true
+      expect(Dir.empty?(temp_dir)).to be true
+    end
+
+    it "stores an error message on the file set when regenerating the thumbnail fails" do
+      valid_resource
+      allow(GeoDerivatives::Runners::VectorDerivatives).to receive(:create).and_raise("mapnik failed")
+      service = derivative_service.new(id: valid_resource.id)
+
+      expect { service.create_thumbnail_derivatives }.to raise_error(RuntimeError, "mapnik failed")
+
+      file_set = query_service.find_by(id: valid_resource.id)
+      expect(file_set.primary_file.error_message).to include(/mapnik failed/)
       expect(Dir.empty?(temp_dir)).to be true
     end
   end

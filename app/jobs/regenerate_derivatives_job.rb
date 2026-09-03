@@ -1,11 +1,18 @@
 class RegenerateDerivativesJob < ApplicationJob
   delegate :query_service, to: :metadata_adapter
 
-  def perform(file_set_id)
+  def perform(file_set_id, thumbnail_only: false)
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     messenger.derivatives_deleted(file_set)
-    Valkyrie::Derivatives::DerivativeService.for(id: file_set.id).cleanup_derivatives
-    Valkyrie::Derivatives::DerivativeService.for(id: file_set.id).create_derivatives
+    if thumbnail_only
+      # Only certain derivative services support regenerating thumbnails
+      return unless derivative_service_for(file_set).respond_to?(:create_thumbnail_derivatives)
+      derivative_service_for(file_set).cleanup_thumbnail_derivatives
+      derivative_service_for(file_set).create_thumbnail_derivatives
+    else
+      derivative_service_for(file_set).cleanup_derivatives
+      derivative_service_for(file_set).create_derivatives
+    end
     # fetch it again; it's out of date after derivatives are saved
     file_set = query_service.find_by(id: Valkyrie::ID.new(file_set_id))
     file_set.processing_status = "processed"
@@ -26,4 +33,10 @@ class RegenerateDerivativesJob < ApplicationJob
   def change_set_persister
     ChangeSetPersister.default
   end
+
+  private
+
+    def derivative_service_for(file_set)
+      Valkyrie::Derivatives::DerivativeService.for(id: file_set.id)
+    end
 end

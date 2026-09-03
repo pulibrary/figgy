@@ -68,6 +68,37 @@ RSpec.describe RasterResourceDerivativeService do
       # Ensure that temporary files and directories are cleaned up
       expect(Dir.empty?(temp_dir)).to be true
     end
+
+    it "can regenerate the thumbnail without rebuilding other derivatives" do
+      cloud_file_service = instance_double(CloudFilePermissionsService, run: nil)
+      allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
+
+      resource = query_service.find_by(id: valid_resource.id)
+      original_cloud_file = resource.file_metadata.find(&:cloud_derivative?)
+      original_thumbnail = resource.file_metadata.find(&:thumbnail_file?)
+
+      derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
+      derivative_service.new(id: valid_resource.id).create_thumbnail_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      new_thumbnail = reloaded.file_metadata.find(&:thumbnail_file?)
+
+      expect(reloaded.file_metadata.find(&:cloud_derivative?).id).to eq original_cloud_file.id
+      expect(new_thumbnail.id).not_to eq original_thumbnail.id
+      expect(Dir.empty?(temp_dir)).to be true
+    end
+
+    it "stores an error message on the file set when regenerating the thumbnail fails" do
+      valid_resource
+      allow(GeoDerivatives::Runners::RasterDerivatives).to receive(:create).and_raise("gdal failed")
+      service = derivative_service.new(id: valid_resource.id)
+
+      expect { service.create_thumbnail_derivatives }.to raise_error(RuntimeError, "gdal failed")
+
+      file_set = query_service.find_by(id: valid_resource.id)
+      expect(file_set.primary_file.error_message).to include(/gdal failed/)
+      expect(Dir.empty?(temp_dir)).to be true
+    end
   end
 
   context "with a geotiff with an unsafe filename" do
@@ -131,6 +162,25 @@ RSpec.describe RasterResourceDerivativeService do
       resource.original_file.error_message = ["it went poorly"]
       persister.save(resource: resource)
       derivative_service.new(id: resource.id).cleanup_derivatives
+
+      resource = query_service.find_by(id: valid_resource.id)
+      expect(resource.original_file.error_message).to be_empty
+    end
+  end
+
+  describe "#cleanup_thumbnail_derivatives" do
+    it "only deletes the thumbnail" do
+      derivative_service.new(id: valid_change_set.id).cleanup_thumbnail_derivatives
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
+      expect(reloaded.file_metadata.select(&:cloud_derivative?)).not_to be_empty
+    end
+
+    it "deletes the error_message" do
+      resource = query_service.find_by(id: valid_resource.id)
+      resource.original_file.error_message = ["it went poorly"]
+      persister.save(resource: resource)
+      derivative_service.new(id: resource.id).cleanup_thumbnail_derivatives
 
       resource = query_service.find_by(id: valid_resource.id)
       expect(resource.original_file.error_message).to be_empty

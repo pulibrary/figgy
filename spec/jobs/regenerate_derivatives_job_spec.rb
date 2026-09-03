@@ -25,6 +25,42 @@ RSpec.describe RegenerateDerivativesJob do
       end
     end
 
+    context "when regenerating thumbnails only" do
+      let(:derivatives_service) { instance_double(VectorResourceDerivativeService) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+      let(:generator) { instance_double(EventGenerator, derivatives_deleted: nil, derivatives_created: nil) }
+
+      before do
+        allow(Valkyrie::Derivatives::DerivativeService).to receive(:for).with(id: file_set.id).and_return(derivatives_service)
+        allow(derivatives_service).to receive(:create_thumbnail_derivatives)
+        allow(derivatives_service).to receive(:cleanup_thumbnail_derivatives)
+        allow(EventGenerator).to receive(:new).and_return(generator)
+      end
+
+      it "regenerates the thumbnail" do
+        described_class.perform_now(file_set.id, thumbnail_only: true)
+        expect(derivatives_service).to have_received(:cleanup_thumbnail_derivatives)
+        expect(derivatives_service).to have_received(:create_thumbnail_derivatives)
+      end
+    end
+
+    context "when regenerating thumbnails only for a service which doesn't build thumbnails" do
+      let(:derivatives_service) { instance_double(Valkyrie::Derivatives::DerivativeService) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set) }
+
+      before do
+        allow(Valkyrie::Derivatives::DerivativeService).to receive(:for).with(id: file_set.id).and_return(derivatives_service)
+        allow(derivatives_service).to receive(:cleanup_derivatives)
+        allow(derivatives_service).to receive(:create_derivatives)
+      end
+
+      it "doesn't regenerate any derivatives" do
+        described_class.perform_now(file_set.id, thumbnail_only: true)
+        expect(derivatives_service).not_to have_received(:cleanup_derivatives)
+        expect(derivatives_service).not_to have_received(:create_derivatives)
+      end
+    end
+
     context "when a file set was 'in process'" do
       with_queue_adapter :inline
       let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
