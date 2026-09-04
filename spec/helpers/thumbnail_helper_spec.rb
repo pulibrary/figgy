@@ -32,32 +32,40 @@ RSpec.describe ThumbnailHelper do
     end
 
     context "when given a vector resource" do
-      let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
-      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [::PcdmUse::ThumbnailImage]) }
-      let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
+      let(:thumbnail_file) { FileMetadata.new(id: Valkyrie::ID.new("test_id"), use: [::PcdmUse::ThumbnailImage]) }
+      let(:pyramidal_file) { FileMetadata.new(id: Valkyrie::ID.new("pyramidal_id"), use: [::PcdmUse::ServiceFile], mime_type: ["image/tiff"]) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file, pyramidal_file]) }
       let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
 
       before do
         allow(file_set).to receive(:parent).and_return(vector_resource)
       end
 
-      it "returns the path to the thumbnail derivative image" do
-        expect(helper.figgy_thumbnail_path(vector_resource)).to include download_path(file_set.id, thumbnail_file_id)
+      it "returns a iiif url for the pyramidal thumbnail" do
+        expect(helper.figgy_thumbnail_path(vector_resource)).to include "full/!200,150/0/default.png"
       end
     end
 
     context "when given a fileset with a vector resource parent" do
-      let(:thumbnail_file_id) { Valkyrie::ID.new("test_id") }
-      let(:thumbnail_file) { FileMetadata.new(id: thumbnail_file_id, use: [::PcdmUse::ThumbnailImage]) }
-      let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
+      let(:thumbnail_file) { FileMetadata.new(id: Valkyrie::ID.new("test_id"), use: [::PcdmUse::ThumbnailImage]) }
+      let(:pyramidal_file) { FileMetadata.new(id: Valkyrie::ID.new("pyramidal_id"), use: [::PcdmUse::ServiceFile], mime_type: ["image/tiff"]) }
+      let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file, pyramidal_file]) }
       let(:vector_resource) { FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id]) }
 
       before do
         allow(file_set).to receive(:parent).and_return(vector_resource)
       end
 
-      it "returns the path to the thumbnail derivative image" do
-        expect(helper.figgy_thumbnail_path(file_set)).to include download_path(file_set.id, thumbnail_file_id)
+      it "returns a iiif url for the pyramidal thumbnail" do
+        expect(helper.figgy_thumbnail_path(file_set)).to include "full/!200,150/0/default.png"
+      end
+
+      context "when the file set has no pyramidal derivative" do
+        let(:file_set) { FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file]) }
+
+        it "falls back to the default image" do
+          expect(helper.figgy_thumbnail_path(file_set)).to include "default"
+        end
       end
     end
 

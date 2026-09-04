@@ -36,12 +36,20 @@ class VectorResourceDerivativeService
     IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copy_before_ingest: true)
   end
 
+  def pyramidal_derivative_service(source_path: nil)
+    GeoPyramidalDerivativeService.new(
+      id: id,
+      change_set_persister: change_set_persister.with(storage_adapter: pyramidal_storage_adapter),
+      source_path: source_path
+    )
+  end
+
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
   # Please note that this simply deletes the files themselves from storage
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    vector_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? || file.cloud_derivative? }
+    vector_derivatives = resource.file_metadata.select { |file| file.thumbnail_file? || file.cloud_derivative? }
     vector_derivatives.each do |file|
       # Delete the entire directory to remove unzipped display derivatives
       id = File.dirname(file.file_identifiers.first.to_s)
@@ -49,6 +57,7 @@ class VectorResourceDerivativeService
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
+    cleanup_pyramidal_derivatives
   end
 
   def cleanup_thumbnail_derivatives
@@ -58,11 +67,17 @@ class VectorResourceDerivativeService
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
+    cleanup_pyramidal_derivatives
+  end
+
+  def cleanup_pyramidal_derivatives
+    pyramidal_derivative_service.cleanup_derivatives
   end
 
   def create_derivatives
     run_derivatives
     create_local_derivatives
+    create_pyramidal_derivatives
     create_cloud_derivatives
     update_cloud_acl
     update_error_message(message: nil) if primary_file.error_message.present?
@@ -72,15 +87,14 @@ class VectorResourceDerivativeService
     end
     raise error
   ensure
-    FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
-    File.unlink(temporary_cloud_output.path) if File.exist?(temporary_cloud_output.path)
-    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
+    cleanup_temporary_files
   end
 
   # Rebuilds the thumbnail only
   def create_thumbnail_derivatives
     run_thumbnail_derivatives
     create_local_derivatives
+    create_pyramidal_derivatives
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
     change_set_persister.after_rollback.add do
@@ -88,12 +102,22 @@ class VectorResourceDerivativeService
     end
     raise error
   ensure
+    cleanup_temporary_files
+  end
+
+  def cleanup_temporary_files
+    [@temporary_cloud_output, @temporary_thumbnail_output, @temporary_pyramidal_output].each do |output|
+      File.unlink(output.path) if output && File.exist?(output.path)
+    end
     FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
-    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
   end
 
   def cloud_storage_adapter
     Valkyrie::StorageAdapter.find(:cloud_geo_derivatives)
+  end
+
+  def pyramidal_storage_adapter
+    Valkyrie::StorageAdapter.find(:pyramidal_derivatives)
   end
 
   def file_object
@@ -128,6 +152,13 @@ class VectorResourceDerivativeService
     }
   end
 
+  def instructions_for_pyramidal_thumbnail
+    instructions_for_thumbnail.merge(
+      size: "1600x1200",
+      url: URI("file://#{temporary_pyramidal_output.path}")
+    )
+  end
+
   def parent
     decorator = FileSetDecorator.new(change_set)
     decorator.parent
@@ -141,13 +172,13 @@ class VectorResourceDerivativeService
 
   def run_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
     )
   end
 
   def run_thumbnail_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_thumbnail]
+      filename, outputs: [instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
     )
   end
 
@@ -161,6 +192,10 @@ class VectorResourceDerivativeService
 
   def temporary_thumbnail_output
     @temporary_thumbnail_output ||= Tempfile.new("vector_thumb", temporary_working_directory)
+  end
+
+  def temporary_pyramidal_output
+    @temporary_pyramidal_output ||= Tempfile.new(["vector_pyramidal", ".png"], temporary_working_directory)
   end
 
   def update_cloud_acl
@@ -215,6 +250,17 @@ class VectorResourceDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         @resource = buffered_persister.save(change_set: change_set)
       end
+    end
+
+    def create_pyramidal_derivatives
+      return unless missing_pyramidal_derivative?
+      pyramidal_derivative_service(source_path: temporary_pyramidal_output.path).create_derivatives
+      @resource = query_service.find_by(id: id)
+      @change_set = ChangeSet.for(resource)
+    end
+
+    def missing_pyramidal_derivative?
+      resource.file_metadata.find_all(&:derivative?).empty?
     end
 
     def create_cloud_derivatives

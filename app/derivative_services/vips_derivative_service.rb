@@ -83,15 +83,19 @@ class VipsDerivativeService
   def run_derivatives
     vips_image.tiffsave(
       temporary_output.path.to_s,
-      compression: :jpeg,
+      compression: compression,
       tile: true,
       pyramid: true,
       Q: 90,
-      tile_width: 1024,
-      tile_height: 1024,
+      tile_width: TILE_SIZE,
+      tile_height: TILE_SIZE,
       strip: true
     )
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
+  end
+
+  def compression
+    :jpeg
   end
 
   def vips_image
@@ -153,7 +157,11 @@ class VipsDerivativeService
   end
 
   def build_file
-    IoDecorator.new(temporary_output, "intermediate_file.tif", "image/tiff", use, upload_options: upload_options)
+    IoDecorator.new(temporary_output, derivative_filename, "image/tiff", use, upload_options: upload_options)
+  end
+
+  def derivative_filename
+    "intermediate_file.tif"
   end
 
   def upload_options

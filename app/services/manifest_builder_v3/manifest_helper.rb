@@ -36,12 +36,13 @@ class ManifestBuilderV3
     ##
     # Retrieve the base URL for Riiif
     # @param [String] id identifier for the image resource
+    # @param file_metadata [FileMetadata, nil] the pyramidal derivative
     # @return [String]
-    def manifest_image_path(resource)
+    def manifest_image_path(resource, file_metadata = nil)
       if (Rails.env.development? && Figgy.config["pyramidals_bucket"].blank?) || Rails.env.test?
         ManifestBuilder::RiiifHelper.new.base_url(resource.id)
       else
-        ManifestBuilder::PyramidalHelper.new.base_url(resource)
+        ManifestBuilder::PyramidalHelper.new.base_url(resource, file_metadata)
       end
     end
 
@@ -49,9 +50,11 @@ class ManifestBuilderV3
     # Retrieve the URL path for an image served over the Riiif
     # @param [FileSet] resource A FileSet to generate a
     #   thumbnail URL from.
+    # @param size [String] IIIF size parameter
+    # @param format [String] IIIF output format
     # @return [String]
-    def manifest_image_thumbnail_path(resource)
-      "#{manifest_image_path(resource)}/full/!200,150/0/default.jpg"
+    def manifest_image_thumbnail_path(resource, size: "!200,150", format: "jpg")
+      "#{manifest_image_path(resource, resource.try(:pyramidal_thumbnail))}/full/#{size}/0/default.#{format}"
     end
 
     def manifest_image_medium_path(resource)

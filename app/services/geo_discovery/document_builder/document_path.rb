@@ -38,14 +38,17 @@ module GeoDiscovery
       def thumbnail
         file_set = thumbnail_file_set
         return unless file_set
-        thumbnail_file = file_set.thumbnail_files.try(:first)
-        id = thumbnail_file.id.to_s if thumbnail_file
-        return unless id
-        path = url_helpers.download_path(resource_id: file_set.id.to_s, id: id)
-        "#{protocol}://#{host}#{path}"
+        return unless file_set.pyramidal_thumbnail || file_set.pyramidal_derivative
+        manifest_helper.manifest_image_thumbnail_path(file_set, size: "!400,300", format: "png")
+      rescue Valkyrie::Persistence::ObjectNotFoundError
+        nil
       end
 
       private
+
+        def manifest_helper
+          @manifest_helper ||= ManifestBuilder::ManifestHelper.new
+        end
 
         # Retrieve the default options for URL's
         # @return [Hash]

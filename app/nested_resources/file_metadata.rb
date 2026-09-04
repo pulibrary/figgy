@@ -70,6 +70,11 @@ class FileMetadata < Valkyrie::Resource
     use.include?(::PcdmUse::ThumbnailImage)
   end
 
+  # A reduced-resolution pyramidal tiff derivative, served via IIIF image api
+  def thumbnail_derivative?
+    use.include?(::PcdmUse::ThumbnailServiceFile)
+  end
+
   def preservation_file?
     use.include?(::PcdmUse::PreservationFile) ||
       use.include?(::PcdmUse::PreservationMasterFile)

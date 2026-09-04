@@ -58,6 +58,29 @@ RSpec.describe ScannedMapDerivativeService do
     expect(thumbnails.count).to eq 1
   end
 
+  describe "the pyramidal thumbnail derivative" do
+    it "it is generated in addition to the fullsize pyramidal derivative" do
+      resource = query_service.find_by(id: valid_resource.id)
+      full_resolution = resource.pyramidal_derivative
+      thumbnail = resource.pyramidal_thumbnail
+
+      expect(thumbnail).not_to be_nil
+      expect(thumbnail.id).not_to eq full_resolution.id
+      expect(thumbnail.use).to eq [::PcdmUse::ThumbnailServiceFile]
+      expect(thumbnail.mime_type).to eq ["image/tiff"]
+      expect(full_resolution.use).to eq [::PcdmUse::ServiceFile]
+    end
+
+    it "is removed by cleanup_thumbnail_derivatives" do
+      derivative_service.new(id: valid_change_set.id).cleanup_thumbnail_derivatives
+
+      reloaded = query_service.find_by(id: valid_resource.id)
+      expect(reloaded.pyramidal_thumbnail).to be_nil
+      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
+      expect(reloaded.pyramidal_derivative).not_to be_nil
+    end
+  end
+
   context "when given a bad tiff" do
     let(:file) { fixture_file_upload("files/bad.tif", "image/tiff") }
 

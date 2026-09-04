@@ -45,21 +45,23 @@ class ScannedMapDerivativeService
 
   def create_derivatives
     vips_derivative_service.create_derivatives if vips_derivative_service.valid?
-    thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
+    create_thumbnail_derivatives
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
   # (see ImageDerivativeService#cleanup_derivatives)
   def cleanup_derivatives
     vips_derivative_service.cleanup_derivatives if vips_derivative_service.valid?
-    thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
+    cleanup_thumbnail_derivatives
   end
 
   def create_thumbnail_derivatives
+    pyramidal_thumbnail_derivative_service.create_derivatives if pyramidal_thumbnail_derivative_service.valid?
     thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
   end
 
   def cleanup_thumbnail_derivatives
+    pyramidal_thumbnail_derivative_service.cleanup_derivatives if pyramidal_thumbnail_derivative_service.valid?
     thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
   end
 
@@ -69,6 +71,10 @@ class ScannedMapDerivativeService
 
   def vips_derivative_service
     VipsDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
+  end
+
+  def pyramidal_thumbnail_derivative_service
+    PyramidalThumbnailDerivativeService.new(id: id, change_set_persister: pyramidal_change_set_persister(change_set_persister))
   end
 
   def pyramidal_change_set_persister(change_set_persister)

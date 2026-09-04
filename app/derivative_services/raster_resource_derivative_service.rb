@@ -36,18 +36,31 @@ class RasterResourceDerivativeService
     IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copy_before_ingest: true)
   end
 
+  def pyramidal_derivative_service(source_path: nil)
+    GeoPyramidalDerivativeService.new(
+      id: id,
+      change_set_persister: change_set_persister.with(storage_adapter: pyramidal_storage_adapter),
+      source_path: source_path
+    )
+  end
+
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
   # Please note that this simply deletes the files themselves from storage
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    raster_derivatives = resource.file_metadata.select { |file| file.derivative? || file.thumbnail_file? || file.cloud_derivative? }
+    raster_derivatives = resource.file_metadata.select { |file| file.thumbnail_file? || file.cloud_derivative? }
     raster_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
+    cleanup_pyramidal_derivatives
     generate_mosaic unless deleted_files.empty?
+  end
+
+  def cleanup_pyramidal_derivatives
+    pyramidal_derivative_service.cleanup_derivatives
   end
 
   # Deletes only the thumbnail file
@@ -58,11 +71,13 @@ class RasterResourceDerivativeService
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
+    cleanup_pyramidal_derivatives
   end
 
   def create_derivatives
     run_derivatives
     create_local_derivatives
+    create_pyramidal_derivatives
     create_cloud_derivatives
     update_cloud_acl
     generate_mosaic
@@ -74,15 +89,14 @@ class RasterResourceDerivativeService
     raise error
 
   ensure
-    FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
-    File.unlink(temporary_display_output.path) if File.exist?(temporary_display_output.path)
-    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
+    cleanup_temporary_files
   end
 
   # Rebuilds only the thumbnail
   def create_thumbnail_derivatives
     run_thumbnail_derivatives
     create_local_derivatives
+    create_pyramidal_derivatives
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
     change_set_persister.after_rollback.add do
@@ -90,8 +104,14 @@ class RasterResourceDerivativeService
     end
     raise error
   ensure
+    cleanup_temporary_files
+  end
+
+  def cleanup_temporary_files
+    [@temporary_display_output, @temporary_thumbnail_output, @temporary_pyramidal_output].each do |output|
+      File.unlink(output.path) if output && File.exist?(output.path)
+    end
     FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
-    File.unlink(temporary_thumbnail_output.path) if File.exist?(temporary_thumbnail_output.path)
   end
 
   def cloud_storage_adapter
@@ -130,6 +150,13 @@ class RasterResourceDerivativeService
     }
   end
 
+  def instructions_for_pyramidal_thumbnail
+    instructions_for_thumbnail.merge(
+      size: "1600x1200",
+      url: URI("file://#{temporary_pyramidal_output.path}")
+    )
+  end
+
   def parent
     decorator = FileSetDecorator.new(change_set)
     decorator.parent
@@ -144,14 +171,14 @@ class RasterResourceDerivativeService
   # generates the derivatives used for local/cloud display and thumbnail files
   def run_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
-      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
     )
   end
 
   # generates only the thumbnail file
   def run_thumbnail_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
-      filename, outputs: [instructions_for_thumbnail]
+      filename, outputs: [instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
     )
   end
 
@@ -167,6 +194,10 @@ class RasterResourceDerivativeService
     @temporary_thumbnail_output ||= Tempfile.new("raster_thumb", temporary_working_directory)
   end
 
+  def temporary_pyramidal_output
+    @temporary_pyramidal_output ||= Tempfile.new(["raster_pyramidal", ".png"], temporary_working_directory)
+  end
+
   def update_cloud_acl
     parent = Wayfinder.for(change_set.model).parent
     cloud_file = change_set.model.cloud_derivative_files.first
@@ -176,6 +207,10 @@ class RasterResourceDerivativeService
 
   def use_thumbnail
     [::PcdmUse::ThumbnailImage]
+  end
+
+  def pyramidal_storage_adapter
+    Valkyrie::StorageAdapter.find(:pyramidal_derivatives)
   end
 
   def use_cloud_derivative
@@ -241,6 +276,19 @@ class RasterResourceDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         @resource = buffered_persister.save(change_set: change_set)
       end
+    end
+
+    def create_pyramidal_derivatives
+      return unless missing_pyramidal_derivative?
+      pyramidal_derivative_service(source_path: temporary_pyramidal_output.path).create_derivatives
+      # The pyramidal service persists the file itself, so refresh the memoized
+      # resource before anything else builds a change set from it.
+      @resource = query_service.find_by(id: id)
+      @change_set = ChangeSet.for(resource)
+    end
+
+    def missing_pyramidal_derivative?
+      resource.file_metadata.find_all(&:derivative?).empty?
     end
 
     def create_cloud_derivatives

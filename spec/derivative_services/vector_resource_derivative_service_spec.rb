@@ -77,6 +77,26 @@ RSpec.describe VectorResourceDerivativeService do
       expect(Dir.empty?(temp_dir)).to be true
     end
 
+    it "creates a pyramidal thumbnail" do
+      cloud_file_service = instance_double(CloudFilePermissionsService, run: nil)
+      allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
+
+      resource = query_service.find_by(id: valid_resource.id)
+      pyramidal = resource.pyramidal_derivative
+
+      expect(pyramidal).not_to be_nil
+      expect(pyramidal.use).to eq [::PcdmUse::ServiceFile]
+      expect(pyramidal.mime_type).to eq ["image/tiff"]
+
+      pyramidal_file = Valkyrie::StorageAdapter.find_by(id: pyramidal.file_identifiers.first)
+      image = Vips::Image.new_from_file(pyramidal_file.io.path)
+      expect(image.has_alpha?).to be true
+      expect(image.extract_band(image.bands - 1).getpoint(0, 0).first).to eq 0
+
+      # Ensure that temporary files and directories are cleaned up
+      expect(Dir.empty?(temp_dir)).to be true
+    end
+
     it "can regenerate the thumbnail without rebuilding other derivatives" do
       cloud_file_service = instance_double(CloudFilePermissionsService, run: nil)
       allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)

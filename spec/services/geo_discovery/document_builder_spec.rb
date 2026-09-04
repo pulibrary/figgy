@@ -176,7 +176,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
       it "has correct references" do
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs["http://schema.org/thumbnailUrl"]).to match(/downloads/)
+        expect(refs["http://schema.org/thumbnailUrl"]).to match(/\/full\/!400,300\/0\/default\.png/)
         expect(refs["http://iiif.io/api/image"]).to match(/image-service/)
         expect(refs["http://iiif.io/api/presentation#manifest"]).to match(/concern\/scanned_maps/)
         expect(refs["http://iiif.io/api/image"]).to match(/image-service/)
@@ -323,7 +323,7 @@ describe GeoDiscovery::DocumentBuilder, skip_fixity: true do
 
       it "returns document with thumbnail and iiif refs" do
         refs = JSON.parse(document["dct_references_s"])
-        expect(refs["http://schema.org/thumbnailUrl"]).to match(/downloads/)
+        expect(refs["http://schema.org/thumbnailUrl"]).to match(/\/full\/!400,300\/0\/default\.png/)
         expect(refs["http://iiif.io/api/presentation#manifest"]).to match(/concern\/scanned_maps/)
         expect(refs["http://iiif.io/api/image"]).to match(/image-service/)
       end
