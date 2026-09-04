@@ -32,10 +32,6 @@ class RasterResourceDerivativeService
                        copy_before_ingest: true)
   end
 
-  def build_thumbnail_file
-    IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copy_before_ingest: true)
-  end
-
   def pyramidal_derivative_service(source_path: nil)
     GeoPyramidalDerivativeService.new(
       id: id,
@@ -76,7 +72,6 @@ class RasterResourceDerivativeService
 
   def create_derivatives
     run_derivatives
-    create_local_derivatives
     create_pyramidal_derivatives
     create_cloud_derivatives
     update_cloud_acl
@@ -95,7 +90,6 @@ class RasterResourceDerivativeService
   # Rebuilds only the thumbnail
   def create_thumbnail_derivatives
     run_thumbnail_derivatives
-    create_local_derivatives
     create_pyramidal_derivatives
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
@@ -108,7 +102,7 @@ class RasterResourceDerivativeService
   end
 
   def cleanup_temporary_files
-    [@temporary_display_output, @temporary_thumbnail_output, @temporary_pyramidal_output].each do |output|
+    [@temporary_display_output, @temporary_pyramidal_output].each do |output|
       File.unlink(output.path) if output && File.exist?(output.path)
     end
     FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
@@ -144,17 +138,10 @@ class RasterResourceDerivativeService
       label: :thumbnail,
       id: resource.id,
       format: "png",
-      size: "200x150",
-      url: URI("file://#{temporary_thumbnail_output.path}"),
+      size: "1600x1200",
+      url: URI("file://#{temporary_pyramidal_output.path}"),
       working_dir: temporary_working_directory
     }
-  end
-
-  def instructions_for_pyramidal_thumbnail
-    instructions_for_thumbnail.merge(
-      size: "1600x1200",
-      url: URI("file://#{temporary_pyramidal_output.path}")
-    )
   end
 
   def parent
@@ -171,14 +158,14 @@ class RasterResourceDerivativeService
   # generates the derivatives used for local/cloud display and thumbnail files
   def run_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
-      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
     )
   end
 
   # generates only the thumbnail file
   def run_thumbnail_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
-      filename, outputs: [instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
+      filename, outputs: [instructions_for_thumbnail]
     )
   end
 
@@ -190,10 +177,6 @@ class RasterResourceDerivativeService
     @temporary_display_output ||= Tempfile.new("raster_display", temporary_working_directory)
   end
 
-  def temporary_thumbnail_output
-    @temporary_thumbnail_output ||= Tempfile.new("raster_thumb", temporary_working_directory)
-  end
-
   def temporary_pyramidal_output
     @temporary_pyramidal_output ||= Tempfile.new(["raster_pyramidal", ".png"], temporary_working_directory)
   end
@@ -203,10 +186,6 @@ class RasterResourceDerivativeService
     cloud_file = change_set.model.cloud_derivative_files.first
     key = cloud_file.file_identifiers.first.to_s.gsub("cloud-geo-derivatives-shrine://", "")
     CloudFilePermissionsService.new(resource: parent, key: key).run
-  end
-
-  def use_thumbnail
-    [::PcdmUse::ThumbnailImage]
   end
 
   def pyramidal_storage_adapter
@@ -268,16 +247,6 @@ class RasterResourceDerivativeService
       end
     end
 
-    def create_local_derivatives
-      return unless missing_thumbnail?
-      @resource = query_service.find_by(id: id)
-      @change_set = ChangeSet.for(resource)
-      change_set.files = [build_thumbnail_file]
-      change_set_persister.buffer_into_index do |buffered_persister|
-        @resource = buffered_persister.save(change_set: change_set)
-      end
-    end
-
     def create_pyramidal_derivatives
       return unless missing_pyramidal_derivative?
       pyramidal_derivative_service(source_path: temporary_pyramidal_output.path).create_derivatives
@@ -304,9 +273,5 @@ class RasterResourceDerivativeService
 
     def missing_cloud_derivative?
       resource.file_metadata.find_all { |fm| fm.use == use_cloud_derivative }.empty?
-    end
-
-    def missing_thumbnail?
-      resource.file_metadata.find_all { |fm| fm.use == use_thumbnail }.empty?
     end
 end

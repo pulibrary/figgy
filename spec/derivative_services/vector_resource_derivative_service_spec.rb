@@ -46,32 +46,20 @@ RSpec.describe VectorResourceDerivativeService do
       FileUtils.rmtree(temp_dir)
     end
 
-    it "creates a thumbnail in the derivatives directory and also stores to the cloud" do
+    it "stores the display vector to the cloud" do
       cloud_file_service = instance_double(CloudFilePermissionsService)
       allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
       allow(cloud_file_service).to receive(:run)
 
       resource = query_service.find_by(id: valid_resource.id)
-      thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
-      thumbnail_file = Valkyrie::StorageAdapter.find_by(id: thumbnails.first.file_identifiers.first)
       cloud_vector_file_set = resource.file_metadata.find(&:cloud_derivative?)
       cloud_vector_file = Valkyrie::StorageAdapter.find_by(id: cloud_vector_file_set.file_identifiers.first)
 
       expect(cloud_vector_file_set.use).to eq([::PcdmUse::CloudDerivative])
-      expect(thumbnail_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["derivative_path"]).to_s)
-      image = Vips::Image.new_from_file(thumbnail_file.io.path)
       expect(cloud_vector_file.io.path).to start_with(Rails.root.join("tmp", Figgy.config["test_cloud_geo_derivative_path"]).to_s)
       expect(cloud_file_service).to have_received(:run)
 
-
-      # Test that the thumbnail background is transparent
-      expect(image.has_alpha?).to be true
-      alpha = image.extract_band(3)
-      expect(alpha.getpoint(0, 0).first).to eq 0
-
-      # Test that not all pixels are transparent and that
-      # mapnik actually generated a thumbnail
-      expect(alpha.max).to be > 0
+      expect(resource.file_metadata.select(&:thumbnail_file?)).to be_empty
 
       # Ensure that temporary files and directories are cleaned up
       expect(Dir.empty?(temp_dir)).to be true
@@ -103,13 +91,13 @@ RSpec.describe VectorResourceDerivativeService do
 
       resource = query_service.find_by(id: valid_resource.id)
       original_cloud_file = resource.file_metadata.find(&:cloud_derivative?)
-      original_thumbnail = resource.file_metadata.find(&:thumbnail_file?)
+      original_thumbnail = resource.pyramidal_derivative
 
       derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
       derivative_service.new(id: valid_resource.id).create_thumbnail_derivatives
 
       reloaded = query_service.find_by(id: valid_resource.id)
-      new_thumbnail = reloaded.file_metadata.find(&:thumbnail_file?)
+      new_thumbnail = reloaded.pyramidal_derivative
 
       expect(reloaded.file_metadata.find(&:cloud_derivative?).id).to eq original_cloud_file.id
       expect(new_thumbnail.id).not_to eq original_thumbnail.id

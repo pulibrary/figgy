@@ -32,10 +32,6 @@ class VectorResourceDerivativeService
                        copy_before_ingest: true)
   end
 
-  def build_thumbnail_file
-    IngestableFile.new(file_path: temporary_thumbnail_output.path, mime_type: "image/png", use: use_thumbnail, original_filename: "thumbnail.png", copy_before_ingest: true)
-  end
-
   def pyramidal_derivative_service(source_path: nil)
     GeoPyramidalDerivativeService.new(
       id: id,
@@ -76,7 +72,6 @@ class VectorResourceDerivativeService
 
   def create_derivatives
     run_derivatives
-    create_local_derivatives
     create_pyramidal_derivatives
     create_cloud_derivatives
     update_cloud_acl
@@ -93,7 +88,6 @@ class VectorResourceDerivativeService
   # Rebuilds the thumbnail only
   def create_thumbnail_derivatives
     run_thumbnail_derivatives
-    create_local_derivatives
     create_pyramidal_derivatives
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
@@ -106,7 +100,7 @@ class VectorResourceDerivativeService
   end
 
   def cleanup_temporary_files
-    [@temporary_cloud_output, @temporary_thumbnail_output, @temporary_pyramidal_output].each do |output|
+    [@temporary_cloud_output, @temporary_pyramidal_output].each do |output|
       File.unlink(output.path) if output && File.exist?(output.path)
     end
     FileUtils.rmtree(temporary_working_directory) if Dir.exist?(temporary_working_directory)
@@ -146,17 +140,10 @@ class VectorResourceDerivativeService
       label: :thumbnail,
       id: resource.id,
       format: "png",
-      size: "200x150",
-      url: URI("file://#{temporary_thumbnail_output.path}"),
+      size: "1600x1200",
+      url: URI("file://#{temporary_pyramidal_output.path}"),
       working_dir: temporary_working_directory
     }
-  end
-
-  def instructions_for_pyramidal_thumbnail
-    instructions_for_thumbnail.merge(
-      size: "1600x1200",
-      url: URI("file://#{temporary_pyramidal_output.path}")
-    )
   end
 
   def parent
@@ -172,13 +159,13 @@ class VectorResourceDerivativeService
 
   def run_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
     )
   end
 
   def run_thumbnail_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_thumbnail, instructions_for_pyramidal_thumbnail]
+      filename, outputs: [instructions_for_thumbnail]
     )
   end
 
@@ -188,10 +175,6 @@ class VectorResourceDerivativeService
 
   def temporary_cloud_output
     @temporary_cloud_output ||= Tempfile.new("vector_cloud", temporary_working_directory)
-  end
-
-  def temporary_thumbnail_output
-    @temporary_thumbnail_output ||= Tempfile.new("vector_thumb", temporary_working_directory)
   end
 
   def temporary_pyramidal_output
@@ -207,10 +190,6 @@ class VectorResourceDerivativeService
 
   def use_cloud_derivative
     [::PcdmUse::CloudDerivative]
-  end
-
-  def use_thumbnail
-    [::PcdmUse::ThumbnailImage]
   end
 
   def valid?
@@ -242,16 +221,6 @@ class VectorResourceDerivativeService
       end
     end
 
-    def create_local_derivatives
-      return unless missing_thumbnail?
-      @resource = query_service.find_by(id: id)
-      @change_set = ChangeSet.for(resource)
-      change_set.files = [build_thumbnail_file]
-      change_set_persister.buffer_into_index do |buffered_persister|
-        @resource = buffered_persister.save(change_set: change_set)
-      end
-    end
-
     def create_pyramidal_derivatives
       return unless missing_pyramidal_derivative?
       pyramidal_derivative_service(source_path: temporary_pyramidal_output.path).create_derivatives
@@ -276,9 +245,5 @@ class VectorResourceDerivativeService
 
     def missing_cloud_derivative?
       resource.file_metadata.find_all { |fm| fm.use == use_cloud_derivative }.empty?
-    end
-
-    def missing_thumbnail?
-      resource.file_metadata.find_all { |fm| fm.use == use_thumbnail }.empty?
     end
 end

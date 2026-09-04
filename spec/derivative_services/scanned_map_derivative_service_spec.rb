@@ -51,11 +51,10 @@ RSpec.describe ScannedMapDerivativeService do
     end
   end
 
-  it "creates a pyramidal tiff and a thumbnail" do
+  it "creates a pyramidal tiff" do
     resource = query_service.find_by(id: valid_resource.id)
-    thumbnails = resource.file_metadata.find_all { |f| f.label == ["thumbnail.png"] }
     expect(resource.pyramidal_derivative).not_to be_blank
-    expect(thumbnails.count).to eq 1
+    expect(resource.file_metadata.select(&:thumbnail_file?)).to be_empty
   end
 
   describe "the pyramidal thumbnail derivative" do
@@ -95,17 +94,16 @@ RSpec.describe ScannedMapDerivativeService do
     it "regenerates the thumbnail without rebuilding other derivatives" do
       resource = query_service.find_by(id: valid_resource.id)
       original_pyramidal = resource.pyramidal_derivative
-      original_thumbnail = resource.file_metadata.find(&:thumbnail_file?)
+      original_thumbnail = resource.pyramidal_thumbnail
 
       derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
       derivative_service.new(id: valid_resource.id).create_thumbnail_derivatives
 
       reloaded = query_service.find_by(id: valid_resource.id)
-      new_thumbnail = reloaded.file_metadata.find(&:thumbnail_file?)
 
       expect(reloaded.pyramidal_derivative.id).to eq original_pyramidal.id
-      expect(new_thumbnail.id).not_to eq original_thumbnail.id
-      expect(reloaded.file_metadata.select(&:thumbnail_file?).count).to eq 1
+      expect(reloaded.pyramidal_thumbnail.id).not_to eq original_thumbnail.id
+      expect(reloaded.file_metadata.count(&:thumbnail_derivative?)).to eq 1
     end
   end
 
