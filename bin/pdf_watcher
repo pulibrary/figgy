@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
-# Monkey patch the Filewatcher gem `update_spinner` method to trigger a
-# callback proc. The method is called after each filesystem check which makes
+# Monkey patch the Filewatcher gem `before_watching_sleep` method to trigger a
+# callback proc. The method is called before each filesystem check which makes
 # it useful triggering any file-related logic that needs to occur between checks.
 class Filewatcher
   attr_accessor :update_proc
-  def update_spinner(_label)
+  def before_watching_sleep
     update_proc.call
   end
 end
@@ -19,7 +19,7 @@ class PdfWatcher
   # @param logger [Logger]
   # @param file_wait_time [Integer] time in seconds to wait after last file event
   attr_reader :logger, :file_wait_time, :files_queue
-  def initialize(logger: Logger.new(STDOUT), file_wait_time: 60)
+  def initialize(logger: Logger.new(STDOUT), file_wait_time: ENV.fetch("PDF_WATCHER_FILE_WAIT_TIME", 60).to_i)
     @logger = logger
     @file_wait_time = file_wait_time
     @files_queue = {}
@@ -42,6 +42,8 @@ class PdfWatcher
     Proc.new do
       completed_files = files_queue.select { |k,v| Time.now > v + file_wait_time }
       completed_files.each do |file_path, time|
+        # Log entry mostly added for tests.
+        logger.info "PdfWatcher Enqueued CreateOcrRequestJob for: #{file_path}"
         CreateOcrRequestJob.perform_later(file_path: file_path)
         files_queue.delete(file_path)
       end
@@ -49,19 +51,21 @@ class PdfWatcher
   end
 
   def watch
-    fw = Filewatcher.new(ocr_in_path, spinner: true, immediate: true, every: true)
+    fw = Filewatcher.new(ocr_in_path, immediate: true)
     # Set the proc that filewatcher will call between filesystem checks
     fw.update_proc = process_files
-    fw.watch do |file_path, event|
-      # Check if file is a PDF and the base filename only contains numbers
-      next unless /^\d+$/ =~ File.basename(file_path, ".pdf")
-      if event == :created || event == :updated
-        logger.info "PdfWatcher file event '#{event}': #{file_path}"
-        # Add or update file in files_queue with event time stamp
-        files_queue[file_path] = Time.now
-      elsif event == :deleted
-        # Delete file_path from files_queue if it exists
-        files_queue.delete(file_path)
+    logger.info "PdfWatcher watching #{ocr_in_path}"
+    fw.watch do |changes|
+      changes.each do |file_path, event|
+        # Check if file is a PDF and the base filename only contains numbers
+        next unless /^\d+$/ =~ File.basename(file_path, ".pdf")
+        if event == :created || event == :updated
+          # Add or update file in files_queue with event time stamp
+          files_queue[file_path] = Time.now
+        elsif event == :deleted
+          # Delete file_path from files_queue if it exists
+          files_queue.delete(file_path)
+        end
       end
     end
   end
