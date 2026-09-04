@@ -272,8 +272,8 @@ GEM
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
       thor (~> 1.0)
-    bunny (3.1.0)
-      amq-protocol (~> 2.7)
+    bunny (3.2.0)
+      amq-protocol (~> 2.8)
       logger (~> 1, >= 1.7)
       sorted_set (~> 1, >= 1.0.2)
     byebug (13.0.0)
@@ -1014,7 +1014,7 @@ GEM
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
-    rubyzip (3.4.1)
+    rubyzip (3.5.0)
     sass-embedded (1.102.0-arm64-darwin)
       google-protobuf (~> 4.31)
     sass-embedded (1.102.0-x86_64-darwin)
@@ -1094,7 +1094,7 @@ GEM
     sorted_set (1.1.0)
       rbtree
     spring (4.7.0)
-    sprockets (4.3.0)
+    sprockets (4.4.0)
       concurrent-ruby (~> 1.1)
       logger
       rack (>= 2.2.4, < 4)
@@ -1184,7 +1184,7 @@ GEM
       actionview (>= 8.0.0)
       bindex (>= 0.4.0)
       railties (>= 8.0.0)
-    webmock (3.26.2)
+    webmock (3.26.3)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
