@@ -256,7 +256,7 @@ test:
   archivespace_password: "password"
   plausible_api_key: "plausible_api_key"
   cdl_in_path: <%= Rails.root.join("tmp", "test_cdl_in") %>
-  ocr_in_path: <%= Rails.root.join("tmp", "test_ocr_in#{ENV["TEST_ENV_NUMBER"]}") %>
+  ocr_in_path: <%= ENV["OCR_ILLIAD_IN_PATH"] || Rails.root.join("tmp", "test_ocr_in#{ENV["TEST_ENV_NUMBER"]}") %>
   ocr_out_path: <%= Rails.root.join("tmp", "test_ocr_out#{ENV["TEST_ENV_NUMBER"]}") %>
   repository_path: <%= Rails.root.join("tmp", "test_files#{ENV["TEST_ENV_NUMBER"]}") %>
   fallback_repository_path: <%= Rails.root.join("tmp", "test_files_fallback#{ENV["TEST_ENV_NUMBER"]}") %>
