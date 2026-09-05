@@ -19,7 +19,7 @@
     "flush-promises": "^1.0.2",
     "graphql": "^17.0.0",
     "graphql-tag": "2.12.7",
-    "hls.js": "1.7.0",
+    "hls.js": "1.7.1",
     "leaflet": "^1.7.1",
     "lodash": "^4.18.1",
     "lux-design-system": "^7.12.0",
