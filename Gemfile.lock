@@ -913,8 +913,8 @@ GEM
       reline
     recipient_interceptor (0.3.3)
       mail
-    redis (5.4.1)
-      redis-client (>= 0.22.0)
+    redis (6.0.0)
+      redis-client (= 0.30.1)
     redis-client (0.30.1)
       connection_pool
     redis-namespace (1.11.0)
@@ -1313,7 +1313,7 @@ DEPENDENCIES
   rails-controller-testing
   rdf-rdfxml
   recipient_interceptor
-  redis (>= 3, < 6)
+  redis (>= 3, < 7)
   redis-namespace
   reform
   riiif
