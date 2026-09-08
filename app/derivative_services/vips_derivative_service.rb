@@ -27,12 +27,19 @@ class VipsDerivativeService
     end
   end
 
-  attr_reader :change_set_persister, :id
+  attr_reader :change_set_persister, :id, :source_path, :compression, :derivative_filename, :use, :max_resolution
   delegate :mime_type, to: :target_file
   delegate :query_service, to: :change_set_persister
-  def initialize(id:, change_set_persister:)
+  def initialize(id:, change_set_persister:, source_path: nil, compression: :jpeg,
+                 derivative_filename: "intermediate_file.tif", use: [::PcdmUse::ServiceFile],
+                 max_resolution: nil)
     @id = id
     @change_set_persister = change_set_persister
+    @source_path = source_path
+    @compression = compression
+    @derivative_filename = derivative_filename
+    @use = use
+    @max_resolution = max_resolution
   end
 
   def resource
@@ -55,6 +62,7 @@ class VipsDerivativeService
   end
 
   def valid?
+    return File.exist?(filename) if source_path
     valid_mime_types.include?(mime_type.first)
   end
 
@@ -83,12 +91,12 @@ class VipsDerivativeService
   def run_derivatives
     vips_image.tiffsave(
       temporary_output.path.to_s,
-      compression: :jpeg,
+      compression: compression,
       tile: true,
       pyramid: true,
       Q: 90,
-      tile_width: 1024,
-      tile_height: 1024,
+      tile_width: TILE_SIZE,
+      tile_height: TILE_SIZE,
       strip: true
     )
     raise "Unable to store pyramidal TIFF for #{filename}!" unless File.exist?(temporary_output.path)
@@ -103,17 +111,31 @@ class VipsDerivativeService
   end
 
   def resize(image)
-    if image.height >= REDUCTION_THRESHOLD || image.width >= REDUCTION_THRESHOLD
+    width = image.get("width")
+    height = image.get("height")
+    return image.resize(reduced_scale(width, height)) if max_resolution
+
+    if height >= REDUCTION_THRESHOLD || width >= REDUCTION_THRESHOLD
       # Scale the image down by 50% to improve performance
       image.resize(0.5)
-    elsif image.height < TILE_SIZE || image.width < TILE_SIZE
+    elsif height < TILE_SIZE || width < TILE_SIZE
       # Scale the image up so both dimensions are above the pyramidal tile size
-      relevant_dimension = TILE_SIZE - image.height > TILE_SIZE - image.width ? image.height : image.width
+      relevant_dimension = TILE_SIZE - height > TILE_SIZE - width ? height : width
       image.resize(TILE_SIZE.to_f / relevant_dimension.to_f)
     else
       # No need to resize
       image
     end
+  end
+
+  def reduced_scale(width, height)
+    # Calculate the scale along the longest edge (the larger of width or height)
+    requested = max_resolution.to_f / [width, height].max
+    # Calculate the smallest scale allowed. The thumbnail can never be
+    # below the the pyramidal image tile size or the tiff will be corrupted
+    smallest_allowed  = TILE_SIZE.to_f / [width, height].min
+    # Choose the larger of the two values
+    [requested, smallest_allowed].max
   end
 
   def image_from_file(filename)
@@ -144,7 +166,7 @@ class VipsDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    target_derivatives = resource.file_metadata.select { |file| file.derivative? && (file.mime_type.include?("image/tiff") || file.mime_type.include?("image/jp2")) }
+    target_derivatives = resource.file_metadata.select { |file| target_derivative?(file) }
     target_derivatives.each do |file|
       storage_adapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
@@ -152,8 +174,12 @@ class VipsDerivativeService
     cleanup_derivative_metadata(derivatives: deleted_files)
   end
 
+  def target_derivative?(file)
+    (file.use & use).any? && (file.mime_type.include?("image/tiff") || file.mime_type.include?("image/jp2"))
+  end
+
   def build_file
-    IoDecorator.new(temporary_output, "intermediate_file.tif", "image/tiff", use, upload_options: upload_options)
+    IoDecorator.new(temporary_output, derivative_filename, "image/tiff", use, upload_options: upload_options)
   end
 
   def upload_options
@@ -164,18 +190,15 @@ class VipsDerivativeService
 
     {
       metadata: {
-        "width" => pyramidal_image.width.to_s,
-        "height" => pyramidal_image.height.to_s,
+        "width" => pyramidal_image.get("width").to_s,
+        "height" => pyramidal_image.get("height").to_s,
         "pages" => pyramidal_image.get("n-pages").to_s
       }
     }
   end
 
-  def use
-    [::PcdmUse::ServiceFile]
-  end
-
   def filename
+    return Pathname.new(source_path) if source_path
     Pathname.new(file_object.disk_path)
   end
 

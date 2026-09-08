@@ -106,8 +106,8 @@ class Ability
   end
 
   def download_file_with_metadata?(resource)
-    # Geo thumbnails/metadata are always downloadable no matter what.
-    return true if geo_thumbnail?(resource) || geo_metadata?(resource)
+    # Geo metadata is always downloadable no matter what.
+    return true if geo_metadata?(resource)
     file_set = query_service.find_by(id: resource.file_set_id)
     if resource.file_metadata.derivative? || resource.file_metadata.derivative_partial? || resource.file_metadata.caption?
       can?(:read, file_set)
@@ -119,12 +119,6 @@ class Ability
   # Geo metadata is always downloadable
   def geo_metadata?(resource)
     ControlledVocabulary::GeoMetadataFormat.new.include?(resource.mime_type)
-  end
-
-  # Geo thumbnails are always downloadable
-  def geo_thumbnail?(resource)
-    return true if /thumbnail/.match?(resource.original_name)
-    false
   end
 
   # The search builder uses this to enumerate actual names of states

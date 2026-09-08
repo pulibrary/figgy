@@ -1117,7 +1117,7 @@ describe Ability do
       end
 
       it {
-        is_expected.to be_able_to(:download, thumbnail_file)
+        is_expected.not_to be_able_to(:download, thumbnail_file)
         is_expected.to be_able_to(:download, metadata_file)
         is_expected.not_to be_able_to(:download, vector_file)
       }

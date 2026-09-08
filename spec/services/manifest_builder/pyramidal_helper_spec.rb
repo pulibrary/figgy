@@ -16,6 +16,20 @@ RSpec.describe ManifestBuilder::PyramidalHelper do
         expect(pyramidal_helper.base_url(file_set)).to eq "http://localhost:8182/pyramidals/iiif/2/#{path.gsub('/', '%2F')}"
       end
     end
+    context "when given a thumbnail derivative" do
+      it "builds the URL from the thumbnail rather than the full-resolution tiff" do
+        thumbnail = FileMetadata.new(
+          id: Valkyrie::ID.new(SecureRandom.uuid),
+          use: [::PcdmUse::ThumbnailServiceFile],
+          mime_type: ["image/tiff"],
+          file_identifiers: ["disk://#{Figgy.config['pyramidal_derivative_path']}/ab/cd/thumbnail.tif"]
+        )
+
+        expect(pyramidal_helper.base_url(file_set, thumbnail)).to end_with "ab%2Fcd%2Fthumbnail"
+        expect(pyramidal_helper.base_url(file_set, thumbnail)).not_to eq pyramidal_helper.base_url(file_set)
+      end
+    end
+
     context "when something goes wrong finding the path" do
       it "returns nil" do
         allow(file_set.pyramidal_derivative).to receive(:file_identifiers).and_raise(StandardError)

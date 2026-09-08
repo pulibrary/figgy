@@ -67,6 +67,13 @@ class FileSet < Resource
     end
   end
 
+  # A pyramidal tiff derivative for use as thumbnail, served via IIIF
+  def pyramidal_thumbnail
+    file_metadata.find do |file|
+      file.thumbnail_derivative? && file.mime_type.include?("image/tiff")
+    end
+  end
+
   def derivative_partial_files
     file_metadata.select(&:derivative_partial?)
   end
