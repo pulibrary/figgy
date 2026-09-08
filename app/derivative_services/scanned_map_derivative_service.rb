@@ -70,6 +70,8 @@ class ScannedMapDerivativeService
 
   # Reduced resolution pyramidal tiff to use as a thumbnail.
   # Allows us to use IIIF image URLs as thumbnails for restricted content.
+  # max_resolution is used to set a lower resolution so that IIIF image paths
+  # for restricted scanned maps are not shared in public GeoBlacklight documents.
   def pyramidal_thumbnail_derivative_service
     VipsDerivativeService.new(
       id: id,

@@ -32,6 +32,8 @@ class VectorResourceDerivativeService
                        copy_before_ingest: true)
   end
 
+  # Compression is set to :deflate rather than the default :jpeg so that
+  # thumbnails have an alpha channel and a transparent background.
   def pyramidal_derivative_service(source_path: nil)
     VipsDerivativeService.new(
       id: id,
