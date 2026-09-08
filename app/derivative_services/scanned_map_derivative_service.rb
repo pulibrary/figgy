@@ -45,33 +45,59 @@ class ScannedMapDerivativeService
 
   def create_derivatives
     vips_derivative_service.create_derivatives if vips_derivative_service.valid?
-    thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
+    create_thumbnail_derivatives
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
   # (see ImageDerivativeService#cleanup_derivatives)
   def cleanup_derivatives
     vips_derivative_service.cleanup_derivatives if vips_derivative_service.valid?
-    thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
+    cleanup_thumbnail_derivatives
   end
 
   def create_thumbnail_derivatives
-    thumbnail_derivative_service.create_derivatives if thumbnail_derivative_service.valid?
+    pyramidal_thumbnail_derivative_service.create_derivatives if pyramidal_thumbnail_derivative_service.valid?
   end
 
   def cleanup_thumbnail_derivatives
-    thumbnail_derivative_service.cleanup_derivatives if thumbnail_derivative_service.valid?
-  end
-
-  def thumbnail_derivative_service
-    ThumbnailDerivativeService::Factory.new(change_set_persister: change_set_persister).new(id: id)
+    pyramidal_thumbnail_derivative_service.cleanup_derivatives if pyramidal_thumbnail_derivative_service.valid?
+    cleanup_static_thumbnails
   end
 
   def vips_derivative_service
     VipsDerivativeService::Factory.new(change_set_persister: pyramidal_change_set_persister(change_set_persister)).new(id: id)
   end
 
+  # Reduced resolution pyramidal tiff to use as a thumbnail.
+  # Allows us to use IIIF image URLs as thumbnails for restricted content.
+  def pyramidal_thumbnail_derivative_service
+    VipsDerivativeService.new(
+      id: id,
+      change_set_persister: pyramidal_change_set_persister(change_set_persister),
+      derivative_filename: "thumbnail.tif",
+      use: [::PcdmUse::ThumbnailServiceFile],
+      max_resolution: VipsDerivativeService::TILE_SIZE
+    )
+  end
+
   def pyramidal_change_set_persister(change_set_persister)
     change_set_persister.with(storage_adapter: Valkyrie::StorageAdapter.find(:pyramidal_derivatives))
   end
+
+  private
+
+    def cleanup_static_thumbnails
+      file_set = query_service.find_by(id: id)
+      static_thumbnails = file_set.file_metadata.select(&:thumbnail_file?)
+      return if static_thumbnails.empty?
+
+      static_thumbnails.each do |file|
+        change_set_persister.storage_adapter.delete(id: file.file_identifiers.first)
+      end
+      deleted_ids = static_thumbnails.map(&:id)
+      file_set.file_metadata = file_set.file_metadata.reject { |file| deleted_ids.include?(file.id) }
+      change_set_persister.buffer_into_index do |buffered_persister|
+        buffered_persister.save(change_set: ChangeSet.for(file_set))
+      end
+    end
 end

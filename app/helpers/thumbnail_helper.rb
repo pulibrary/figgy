@@ -57,13 +57,14 @@ module ThumbnailHelper
   end
 
   def build_geo_thumbnail_path(document, image_options = {})
-    thumbnail_id = document.thumbnail_files.first.try :id
-    return default_path unless thumbnail_id
+    return default_path unless document.pyramidal_derivative
 
-    url = download_path document.id, thumbnail_id
+    url = ManifestBuilder::ManifestHelper.new.manifest_image_thumbnail_path(document, format: "png")
     return default_path if url.blank?
 
     image_tag url, image_options.merge(onerror: default_icon_fallback)
+  rescue Valkyrie::Persistence::ObjectNotFoundError
+    default_path
   end
 
   def iiif_thumbnail_path(document, image_options = {})

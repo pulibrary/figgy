@@ -9,6 +9,7 @@ class PcdmUse
   Caption = RDF::URI.new("http://pcdm.org/use#Caption")
   CloudDerivative = RDF::URI.new("http://pcdm.org/use#CloudDerivative")
   ThumbnailImage = RDF::URI.new("http://pcdm.org/use#ThumbnailImage")
+  ThumbnailServiceFile = RDF::URI.new("http://pcdm.org/use#ThumbnailServiceFile")
   # Deprecated
   PreservationMasterFile = RDF::URI.new("http://pcdm.org/use#PreservationMasterFile")
 end
