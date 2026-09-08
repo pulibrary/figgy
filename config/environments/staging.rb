@@ -7,6 +7,6 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
   config.action_mailer.raise_delivery_errors = true
   config.active_storage.service = :local
-  config.cache_store = :mem_cache_store, "figgy-web-staging1.princeton.edu", { value_max_bytes: 3_000_000 }
+  config.cache_store = :mem_cache_store, "nomad-ingress-staging.lib.princeton.edu:10002", { value_max_bytes: 3_000_000 }
   config.action_cable.allowed_request_origins = ["https://figgy-staging.princeton.edu"]
 end

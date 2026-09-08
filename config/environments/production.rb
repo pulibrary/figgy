@@ -28,7 +28,7 @@ Rails.application.configure do
   }
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.active_storage.service = :local
-  config.cache_store = :mem_cache_store, "figgy-web-prod1.princeton.edu", { value_max_bytes: 3_000_000 }
+  config.cache_store = :mem_cache_store, "nomad-ingress-production.lib.princeton.edu:10003", { value_max_bytes: 3_000_000 }
   config.action_cable.allowed_request_origins = ["https://figgy.princeton.edu"]
   config.action_cable.allow_same_origin_as_host = true
   config.action_cable.url = "/cable"
