@@ -593,7 +593,7 @@ class ManifestBuilder
     # @param format [String] IIIF output format
     # @return [String]
     def manifest_image_thumbnail_path(resource, size: "!200,150", format: "jpg")
-      "#{manifest_image_path(resource, resource.try(:pyramidal_thumbnail))}/full/#{size}/0/default.#{format}"
+      "#{manifest_image_path(resource, resource.try(:thumbnail_derivative_files)&.first)}/full/#{size}/0/default.#{format}"
     end
 
     def manifest_image_medium_path(resource)

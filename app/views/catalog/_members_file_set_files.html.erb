@@ -39,6 +39,12 @@
               <%= render partial: 'file_detail', locals: { file: file } %>
             </tr>
           <% end %>
+          <% resource.thumbnail_derivative_files.each do |file| %>
+            <tr>
+              <td><span class="badge badge-info">Thumbnail Derivative File</span>&nbsp;<%= file.label.first %></td>
+              <%= render partial: 'file_detail', locals: { file: file } %>
+            </tr>
+          <% end %>
           <% resource.cloud_derivative_files.each do |file| %>
             <tr>
               <td><span class="badge badge-info">Cloud Derivative File</span>&nbsp;<%= file.label.first %></td>

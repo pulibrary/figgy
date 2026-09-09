@@ -61,7 +61,7 @@ RSpec.describe ScannedMapDerivativeService do
     it "it is generated in addition to the fullsize pyramidal derivative" do
       resource = query_service.find_by(id: valid_resource.id)
       full_resolution = resource.pyramidal_derivative
-      thumbnail = resource.pyramidal_thumbnail
+      thumbnail = resource.thumbnail_derivative_files.first
 
       expect(thumbnail).not_to be_nil
       expect(thumbnail.id).not_to eq full_resolution.id
@@ -74,7 +74,7 @@ RSpec.describe ScannedMapDerivativeService do
       derivative_service.new(id: valid_change_set.id).cleanup_thumbnail_derivatives
 
       reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.pyramidal_thumbnail).to be_nil
+      expect(reloaded.thumbnail_derivative_files).to be_empty
       expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
       expect(reloaded.pyramidal_derivative).not_to be_nil
     end
@@ -94,7 +94,7 @@ RSpec.describe ScannedMapDerivativeService do
     it "regenerates the thumbnail without rebuilding other derivatives" do
       resource = query_service.find_by(id: valid_resource.id)
       original_pyramidal = resource.pyramidal_derivative
-      original_thumbnail = resource.pyramidal_thumbnail
+      original_thumbnail = resource.thumbnail_derivative_files.first
 
       derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
       derivative_service.new(id: valid_resource.id).create_thumbnail_derivatives
@@ -102,7 +102,7 @@ RSpec.describe ScannedMapDerivativeService do
       reloaded = query_service.find_by(id: valid_resource.id)
 
       expect(reloaded.pyramidal_derivative.id).to eq original_pyramidal.id
-      expect(reloaded.pyramidal_thumbnail.id).not_to eq original_thumbnail.id
+      expect(reloaded.thumbnail_derivative_files.first.id).not_to eq original_thumbnail.id
       expect(reloaded.file_metadata.count(&:thumbnail_derivative?)).to eq 1
     end
   end

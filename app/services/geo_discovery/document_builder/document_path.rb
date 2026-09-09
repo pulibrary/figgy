@@ -38,7 +38,7 @@ module GeoDiscovery
       def thumbnail
         file_set = thumbnail_file_set
         return unless file_set
-        return unless file_set.pyramidal_thumbnail || file_set.pyramidal_derivative
+        return unless file_set.thumbnail_derivative_files.any? || file_set.pyramidal_derivative
         manifest_helper.manifest_image_thumbnail_path(file_set, size: "!400,300", format: "png")
       rescue Valkyrie::Persistence::ObjectNotFoundError
         nil
