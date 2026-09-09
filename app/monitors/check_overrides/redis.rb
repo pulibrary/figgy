@@ -4,6 +4,6 @@ class CheckOverrides::Redis < HealthMonitor::Providers::Base
   end
 
   def redis
-    ConnectionPool.new(size: 1) { ::Redis.new(url: RedisConfig.url) }
+    ConnectionPool.new(size: 1) { ::Redis.new(RedisConfig.config) }
   end
 end
