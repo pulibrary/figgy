@@ -11,7 +11,7 @@ production: &production
   port: <%= ENV['FIGGY_REDIS_PORT'] || '6379' %>
   db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
 staging:
-  name: 'figgyredis'
+  name: 'redis-staging'
   password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
   sentinel_password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
   sentinels:
