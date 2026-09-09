@@ -6,8 +6,9 @@ RSpec.describe "catalog/_members_file_set" do
   let(:derivative_file_partial) { FileMetadata.new(id: "test-derivative-file-partial", use: [::PcdmUse::ServiceFilePartial]) }
   let(:cloud_derivative_file) { FileMetadata.new(id: "test-cloud-derivative-file", label: "display_raster.tiff", use: [::PcdmUse::CloudDerivative], mime_type: "application/x-mpegURL") }
   let(:thumbnail_file) { FileMetadata.new(id: "test-thumbnail-file", use: [::PcdmUse::ThumbnailImage]) }
+  let(:thumbnail_derivative_file) { FileMetadata.new(id: "test-thumbnail-derivative-file", label: "thumbnail.tif", use: [::PcdmUse::ThumbnailServiceFile], mime_type: "image/tiff") }
   let(:file_set) do
-    FactoryBot.create_for_repository(:file_set, file_metadata: [original_file, derivative_file, thumbnail_file, derivative_file_partial, cloud_derivative_file])
+    FactoryBot.create_for_repository(:file_set, file_metadata: [original_file, derivative_file, thumbnail_file, thumbnail_derivative_file, derivative_file_partial, cloud_derivative_file])
   end
   let(:parent) { FactoryBot.create_for_repository(:scanned_resource, member_ids: [file_set.id]) }
   let(:solr) { Valkyrie::MetadataAdapter.find(:index_solr) }
@@ -45,6 +46,9 @@ RSpec.describe "catalog/_members_file_set" do
   it "hides the download link for thumbnail files" do
     expect(rendered).not_to have_link "Download", href: download_path(resource_id: file_set.id, id: thumbnail_file.id)
   end
+  it "hides the download link for thumbnail derivative files" do
+    expect(rendered).not_to have_link "Download", href: download_path(resource_id: file_set.id, id: thumbnail_derivative_file.id)
+  end
 
   context "as an admin. user" do
     let(:user) { FactoryBot.create(:admin) }
@@ -78,8 +82,10 @@ RSpec.describe "catalog/_members_file_set" do
       expect(rendered).to have_text "display_raster.tiff"
     end
 
-    it "renders the download link for thumbnail files" do
-      expect(rendered).to have_link "Download", href: download_path(resource_id: file_set.id, id: thumbnail_file.id)
+    it "renders the title and download link for thumbnail derivative files" do
+      expect(rendered).to have_text "Thumbnail Derivative File"
+      expect(rendered).to have_text "thumbnail.tif"
+      expect(rendered).to have_link "Download", href: download_path(resource_id: file_set.id, id: thumbnail_derivative_file.id)
     end
 
     it "renders a summary for derivative partials" do
