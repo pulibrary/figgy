@@ -4616,10 +4616,10 @@ lru-cache@^11.0.0, lru-cache@^11.1.0, lru-cache@^11.2.1, lru-cache@^11.5.2:
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.5.2.tgz#00e16665c90c620fba14a3c368732a976493f760"
   integrity sha512-4pfM1Ff0x50o0tQwb5ucw/RzNyD0/YJME6IVcStalZuMWxdt3sR3huStTtxz4PUmvZfRguvDejasvQ2kifR11g==
 
-lux-design-system@^7.12.0:
-  version "7.13.0"
-  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-7.13.0.tgz#f343f01d5c250842a82b1d972e370c22f2bb7c7e"
-  integrity sha512-gMdB/UvCk8IB6DOrzbynM1X4z+Xo/7H1LIAwlYrdVSwsjnt2vP3qXq8yHEvfyQTuZy6kcRGVpfY08l0agJ0/8A==
+lux-design-system@^7.14.0:
+  version "7.14.0"
+  resolved "https://registry.yarnpkg.com/lux-design-system/-/lux-design-system-7.14.0.tgz#43b9731cb037a04532ad1601f6973c659fadc62a"
+  integrity sha512-rUW6hiWB7MkqKtgHrHO4gMOrJXXcl8+uBqKKXCL/8PyWuwvCB9aF/LfFD0cv6PoWWetjkYhhabv8HQ8scfALhA==
   dependencies:
     core-js "^3.8.3"
     register-service-worker "^1.7.2"
