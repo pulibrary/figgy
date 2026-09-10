@@ -10,7 +10,7 @@
     "@mapnik/mapnik": "^4.6",
     "@rails/actioncable": "^7.2.0",
     "@samvera/clover-iiif": "^3.0.0",
-    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue": "^6.0.0",
     "ajv": "^8.18.0",
     "apollo-boost": "0.4.9",
     "axios": "^1.18.0",
