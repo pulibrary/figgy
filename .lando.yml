@@ -22,7 +22,7 @@ services:
     type: postgres:15
     portforward: true
   redis:
-    type: redis:7
+    type: redis:8
     portforward: true
   chrome:
     type: compose

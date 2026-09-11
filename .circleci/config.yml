@@ -22,7 +22,7 @@ executors:
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: quay.io/pulibrary/ci-solr:9.9-v1.0.0
         command: server/scripts/ci-start.sh
-      - image: redis:7
+      - image: redis:8
     resource_class: large
     environment:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress

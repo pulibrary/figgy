@@ -11,4 +11,16 @@ production: &production
   port: <%= ENV['FIGGY_REDIS_PORT'] || '6379' %>
   db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
 staging:
-  <<: *production
+  name: 'redis-staging'
+  password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
+  sentinel_password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
+  sentinels:
+    - host: "nomad-client-staging4.lib.princeton.edu"
+      port: 26379
+      db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
+    - host: "dpul-collections-staging1.lib.princeton.edu"
+      port: 26379
+      db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
+    - host: "dpul-collections-staging2.lib.princeton.edu"
+      port: 26379
+      db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
