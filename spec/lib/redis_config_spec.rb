@@ -13,7 +13,6 @@ RSpec.describe RedisConfig do
       it "returns a config with sentinels" do
         expect(described_class.config[:sentinels]).not_to be_blank
         expect(described_class.config[:sentinels][0][:host]).not_to be_blank
-        binding.pry
       end
     end
   end
