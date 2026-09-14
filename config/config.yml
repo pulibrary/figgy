@@ -106,7 +106,6 @@ defaults: &defaults
     server: 'amqp://localhost:5672'
     exchange:
       figgy: "figgy_events"
-      geoblacklight: "gbl_events"
       orangelight: "orangelight_events"
   vocabulary_namespace: <%= ENV.fetch('FIGGY_VOCAB_NS', 'https://figgy.princeton.edu/ns/') %>
   devise:
@@ -234,6 +233,8 @@ defaults: &defaults
         - 'audio/mpeg'
         - 'video/mp4'
   pulfalight_unpublished_token: <%= ENV["PULFALIGHT_UNPUBLISHED_TOKEN"] %>
+  pulmap:
+    solr_url: <%= ENV["PULMAP_SOLR_URL"] || "http://127.0.0.1:8983/solr/pulmap-core-dev" %>
 
 development:
   <<: *defaults
@@ -270,6 +271,8 @@ test:
   pyramidal_url: 'http://localhost:8182/pyramidals/iiif/2/'
   events:
     log_file: '/dev/null'
+  pulmap:
+    solr_url: <%= ENV["PULMAP_SOLR_URL"] || "http://127.0.0.1:8984/solr/pulmap-core-test" %>
   devise:
     omniauth:
       cas:
@@ -295,11 +298,12 @@ production:
   pyramidals_bucket: "iiif-image-production"
   cloud_geo_bucket: "figgy-geo-production"
   enable_pyramidal_access: <%= ENV["FIGGY_PYRAMIDAL_ACCESS"].present? || false %>
+  pulmap:
+    solr_url: <%= ENV["PULMAP_SOLR_URL"] %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
       figgy: "figgy_events"
-      geoblacklight: "gbl_events"
       orangelight: "orangelight_events"
 
 staging:
@@ -314,9 +318,10 @@ staging:
   fallback_stream_derivatives_path: "/opt/repository/fallback_stream_derivatives"
   bag_path: <%= ENV["FIGGY_BAG_PATH"] || Rails.root.join("tmp", "bags") %>
   pudl_root: <%= ENV["FIGGY_PUDL_ROOT"]  %>
+  pulmap:
+    solr_url: <%= ENV["PULMAP_SOLR_URL"] %>
   events:
     server: <%= ENV['FIGGY_RABBIT_SERVER'] || 'amqp://localhost:5672' %>
     exchange:
       figgy: "figgy_events"
-      geoblacklight: "gbl_events"
       orangelight: "orangelight_events"

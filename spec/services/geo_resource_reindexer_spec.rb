@@ -20,25 +20,36 @@ RSpec.describe GeoResourceReindexer do
   end
 
   describe "#reindex_geoblacklight" do
-    let(:messenger) { instance_double(EventGenerator) }
+    let(:messenger) { instance_double(EventGenerator::GeoblacklightEventGenerator) }
 
     before do
-      allow(EventGenerator).to receive(:new).and_return(messenger)
+      allow(EventGenerator::GeoblacklightEventGenerator).to receive(:new).and_return(messenger)
+      allow(messenger).to receive(:valid?).and_return(true)
       allow(messenger).to receive(:record_updated)
     end
 
     context "with a valid geo resource" do
-      it "sends an updated record message" do
+      it "sends an updated record message as part of a bulk operation" do
         described_class.reindex_geoblacklight(logger: logger)
+        expect(EventGenerator::GeoblacklightEventGenerator).to have_received(:new).with(bulk: true)
         expect(messenger).to have_received(:record_updated)
       end
     end
 
-    context "with a geo resource that throws an exception" do
-      let(:resource) { instance_double(VectorResource, state: "complete") }
-
+    context "with a geo resource that can't build a valid document" do
       before do
-        allow(EventGenerator).to receive(:new).and_raise("error")
+        allow(messenger).to receive(:valid?).and_return(false)
+      end
+
+      it "does not send an updated record message" do
+        described_class.reindex_geoblacklight(logger: logger)
+        expect(messenger).not_to have_received(:record_updated)
+      end
+    end
+
+    context "with a geo resource that throws an exception" do
+      before do
+        allow(EventGenerator::GeoblacklightEventGenerator).to receive(:new).and_raise("error")
       end
 
       it "does not send an updated record message" do

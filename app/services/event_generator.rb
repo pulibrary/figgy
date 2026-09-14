@@ -12,7 +12,7 @@ class EventGenerator
     @generators ||= CompositeGenerator.new(
       [
         ManifestEventGenerator.new(Figgy.messaging_client),
-        GeoblacklightEventGenerator.new(Figgy.geoblacklight_messaging_client),
+        GeoblacklightEventGenerator.new(),
         OrangelightEventGenerator.new(Figgy.orangelight_messaging_client)
       ]
     )

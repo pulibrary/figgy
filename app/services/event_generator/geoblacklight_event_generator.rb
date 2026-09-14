@@ -1,9 +1,10 @@
 class EventGenerator
   class GeoblacklightEventGenerator
-    attr_reader :rabbit_exchange
+    attr_reader :bulk
 
-    def initialize(rabbit_exchange)
-      @rabbit_exchange = rabbit_exchange
+    # @param bulk [Boolean] controls if solr is commited after each update
+    def initialize(bulk: false)
+      @bulk = bulk
     end
 
     def derivatives_created(record); end
@@ -13,9 +14,7 @@ class EventGenerator
     def record_created(record); end
 
     def record_deleted(record)
-      publish_message(
-        delete_message("DELETED", record)
-      )
+      PulmapDeleteJob.perform_later(slug: slug(record), commit: commit?)
     end
 
     def record_updated(record)
@@ -23,9 +22,7 @@ class EventGenerator
       if state == "takedown"
         record_deleted(record)
       elsif state == "complete"
-        publish_message(
-          message("UPDATED", record)
-        )
+        PulmapIndexJob.perform_later(document: document(record), commit: commit?)
       end
     end
 
@@ -43,32 +40,12 @@ class EventGenerator
 
     private
 
-      def publish_message(message)
-        rabbit_exchange.publish(message.to_json)
+      def commit?
+        !bulk
       end
 
-      def message(type, record)
-        base_message(type, record).merge("doc" => document_generator(record))
-      end
-
-      def delete_message(type, record)
-        base_message(type, record).merge("id" => slug(record))
-      end
-
-      def base_message(type, record)
-        {
-          "id" => record.id.to_s,
-          "event" => type,
-          "bulk" => bulk_value
-        }
-      end
-
-      def bulk_value
-        if ENV["BULK"]
-          "true"
-        else
-          "false"
-        end
+      def document(record)
+        document_generator(record).to_json
       end
 
       def document_generator(record)
