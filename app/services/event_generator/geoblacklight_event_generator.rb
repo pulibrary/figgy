@@ -14,7 +14,7 @@ class EventGenerator
     def record_created(record); end
 
     def record_deleted(record)
-      PulmapDeleteJob.set(queue: sidekiq_queue).perform_later(slug: slug(record), commit: commit?)
+      PulmapDeleteJob.perform_later(slug: slug(record), commit: commit?)
     end
 
     def record_updated(record)
@@ -22,7 +22,7 @@ class EventGenerator
       if state == "takedown"
         record_deleted(record)
       elsif state == "complete"
-        PulmapIndexJob.set(queue: sidekiq_queue).perform_later(document: document(record), commit: commit?)
+        PulmapIndexJob.perform_later(document: document(record), commit: commit?)
       end
     end
 
@@ -39,14 +39,6 @@ class EventGenerator
     end
 
     private
-
-      def sidekiq_queue
-        if bulk
-          :super_low
-        else
-          :high
-        end
-      end
 
       def commit?
         !bulk
