@@ -1,4 +1,4 @@
-# 10. Resource Auto Completion
+# 11. Resource Auto Completion
 
 Date: 2023-04-18
 

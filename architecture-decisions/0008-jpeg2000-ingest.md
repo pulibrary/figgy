@@ -1,4 +1,4 @@
-# 7. JPEG2000 Ingest
+# 8. JPEG2000 Ingest
 
 Date: 2020-04-24
 

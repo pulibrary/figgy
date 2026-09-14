@@ -21,7 +21,7 @@ no longer handles any indexing tasks.
 
 ## Consequences
 
-- Users may notice a slower updates in Pulmap if there are a many jobs queued
+- Users may notice slower updates in Pulmap if there are a many jobs queued
 ahead in queues with high priority.
 - The process for bulk re-indexing remains the same. Running:
 ```
