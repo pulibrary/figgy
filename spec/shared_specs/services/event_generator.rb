@@ -13,11 +13,6 @@ RSpec.shared_examples "an EventGenerator" do
     expect(event_generator).to respond_to(*composite_methods).with(1).argument
   end
 
-  it "takes a rabbit exchange client as an argument" do
-    obj = event_generator.class.new(Figgy.messaging_client)
-    expect(obj.rabbit_exchange.amqp_url).to eq Figgy.messaging_client.amqp_url
-  end
-
   describe "#valid?" do
     context "when given a record it handles" do
       it "returns true" do

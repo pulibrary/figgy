@@ -25,6 +25,7 @@ class GeoResourceReindexer
     all_geo_resources.each do |resources|
       resources.each do |resource|
         decorator = resource.decorate
+        next unless messenger.valid?(decorator)
         messenger.record_updated(decorator)
         logger.info("Indexed into GeoBlacklight: #{resource.id}")
       rescue StandardError => e
@@ -80,7 +81,7 @@ class GeoResourceReindexer
     end
 
     def messenger
-      EventGenerator.new
+      @messenger ||= EventGenerator::GeoblacklightEventGenerator.new(bulk: true)
     end
 
     def query_service

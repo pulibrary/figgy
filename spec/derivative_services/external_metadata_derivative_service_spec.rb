@@ -8,7 +8,6 @@ RSpec.describe ExternalMetadataDerivativeService do
   let(:derivative_service) do
     ExternalMetadataDerivativeService::Factory.new(change_set_persister: change_set_persister)
   end
-  let(:event_generator) { EventGenerator::GeoblacklightEventGenerator.new(nil) }
   let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
