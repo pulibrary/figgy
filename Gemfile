@@ -126,7 +126,7 @@ group :development, :test do
   gem "awesome_print"
   gem "bcrypt_pbkdf"
   gem "bundler-audit", require: false
-  gem "debug"
+  gem "debug", require: "debug/prelude"
   gem "dotenv-rails"
   gem "ed25519"
   gem "factory_bot_rails"
