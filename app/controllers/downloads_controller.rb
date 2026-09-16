@@ -30,7 +30,7 @@ class DownloadsController < ApplicationController
   def send_hls
     manifest = HlsManifest.for(file_set: resource, file_metadata: file_desc, as: params[:as], auth_token: params[:auth_token])
     add_cors_headers
-    render plain: manifest.to_s
+    render plain: manifest.to_s, content_type: "application/x-mpegURL"
   end
 
   def send_fgdc

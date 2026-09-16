@@ -218,6 +218,7 @@ RSpec.describe DownloadsController do
         get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s, as: "stream", auth_token: token.token, format: "m3u8" }
 
         expect(response).to be_successful
+        expect(response.media_type).to eq "application/x-mpegURL"
         playlist = M3u8::Playlist.read(response.body)
         expect(playlist.items.length).to eq 1
         expect(playlist.items[0].uri).to eq "/downloads/#{output.id}/file/#{output.file_metadata.first.id}.m3u8?auth_token=#{token.token}"
