@@ -144,7 +144,7 @@ RSpec.describe DownloadsController do
         playlist = M3u8::Playlist.read(response.body)
         expect(playlist.target).to eq 6
         expect(playlist.items.length).to eq 1
-        expect(playlist.items[0].segment).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}"
+        expect(playlist.items[0].segment).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_metadata.id}"
       end
     end
 
@@ -188,9 +188,9 @@ RSpec.describe DownloadsController do
 
           playlist = M3u8::Playlist.read(response.body)
           expect(playlist.items.length).to eq 4
-          expect(playlist.items[0].uri).to eq "/downloads/#{file_set.id}/file/#{file_metadata.id}.m3u8"
+          expect(playlist.items[0].uri).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{file_metadata.id}.m3u8"
           expect(playlist.items[0].subtitles).to eq "subs"
-          expect(playlist.items[1].uri).to eq "/downloads/#{file_set.id}/file/#{caption_metadata.id}/stream.m3u8"
+          expect(playlist.items[1].uri).to eq "http://www.example.com/downloads/#{file_set.id}/file/#{caption_metadata.id}/stream.m3u8"
           expect(playlist.items[1].characteristics).to eq "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
           expect(playlist.items[1].name).to eq "English (Original)"
           expect(playlist.items[1].language).to eq "eng"
@@ -221,7 +221,7 @@ RSpec.describe DownloadsController do
         expect(response.media_type).to eq "application/x-mpegURL"
         playlist = M3u8::Playlist.read(response.body)
         expect(playlist.items.length).to eq 1
-        expect(playlist.items[0].uri).to eq "/downloads/#{output.id}/file/#{output.file_metadata.first.id}.m3u8?auth_token=#{token.token}"
+        expect(playlist.items[0].uri).to eq "http://www.example.com/downloads/#{output.id}/file/#{output.file_metadata.first.id}.m3u8?auth_token=#{token.token}"
       end
     end
 

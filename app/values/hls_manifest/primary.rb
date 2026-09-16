@@ -22,7 +22,7 @@ class HlsManifest::Primary
       profile: "high",
       subtitles: "subs",
       bandwidth: 540,
-      uri: helper.download_path(file_set.id, file_metadata.id, auth_token: auth_token, format: "m3u8")
+      uri: helper.download_url(file_set.id, file_metadata.id, auth_token: auth_token, format: "m3u8")
     )
   end
 
@@ -36,7 +36,7 @@ class HlsManifest::Primary
         autoselect: true,
         characteristics: accessibility_characteristics,
         language: caption_language(caption_metadata),
-        uri: helper.download_path(file_set.id, caption_metadata.id, as: "stream", auth_token: auth_token, format: "m3u8")
+        uri: helper.download_url(file_set.id, caption_metadata.id, as: "stream", auth_token: auth_token, format: "m3u8")
       )
     end
   end
