@@ -122,6 +122,28 @@ RSpec.describe AvDerivativeService do
       expect(derivative_partials.length).to eq 1
       expect(derivative_partials[0].mime_type).to eq ["video/MP2T"]
     end
+
+    context "with an HDR video" do
+      let(:file) { fixture_file_upload("files/hdr.mp4", "video/mp4") }
+
+      it "sets the colors to bt709 in the derivative partials" do
+        derivative_service.new(id: valid_change_set.id).create_derivatives
+
+        reloaded = query_service.find_by(id: valid_resource.id)
+        partial = reloaded.derivative_partial_files.first
+
+        # Get the color settings for the derivative partial
+        path = Valkyrie::StorageAdapter.find_by(id: partial.file_identifiers.first).disk_path
+        stdout, _stderr, status = Open3.capture3(
+          "ffprobe", "-v", "error", "-select_streams", "v:0",
+          "-show_entries", "stream=color_transfer", "-of", "csv=p=0",
+          path.to_s
+        )
+
+        colors = stdout.split
+        expect(colors).to eq ["bt709", "bt709"]
+      end
+    end
   end
 
   describe "#cleanup_derivatives" do

@@ -22,8 +22,18 @@ class HlsManifest::Primary
       profile: "high",
       subtitles: subtitles,
       bandwidth: 5400,
+      width: width,
+      height: height,
       uri: helper.download_url(file_set.id, file_metadata.id, auth_token: auth_token, format: "m3u8")
     )
+  end
+
+  def width
+    file_set.primary_file&.width&.first.presence&.to_i
+  end
+
+  def height
+    file_set.primary_file&.height&.first.presence&.to_i
   end
 
   def attach_captions

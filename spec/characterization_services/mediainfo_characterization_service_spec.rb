@@ -29,6 +29,8 @@ RSpec.describe MediainfoCharacterizationService do
     allow(track_attributes).to receive(:duration).and_return(23_123)
     allow(track_attributes).to receive(:count).and_return 1
     allow(track_attributes).to receive(:filesize).and_return 1
+    allow(track_attributes).to receive(:width).and_return nil
+    allow(track_attributes).to receive(:height).and_return nil
     allow(tracks).to receive(:track_types).and_return(["general"])
 
     allow(tracks).to receive(:general).and_return(track_attributes)
@@ -79,6 +81,8 @@ RSpec.describe MediainfoCharacterizationService do
       allow(audio_track_attributes).to receive(:duration).and_return(261)
       allow(audio_track_attributes).to receive(:count).and_return 1
       allow(audio_track_attributes).to receive(:filesize).and_return 1
+      allow(audio_track_attributes).to receive(:width).and_return nil
+      allow(audio_track_attributes).to receive(:height).and_return nil
 
       allow(tracks).to receive(:track_types).and_return(["audio"])
       allow(tracks).to receive(:audio).and_return(audio_track_attributes)
@@ -121,6 +125,8 @@ RSpec.describe MediainfoCharacterizationService do
       allow(video_track_attributes).to receive(:duration).and_return(984)
       allow(video_track_attributes).to receive(:count).and_return 1
       allow(video_track_attributes).to receive(:filesize).and_return 1
+      allow(video_track_attributes).to receive(:width).and_return 1920
+      allow(video_track_attributes).to receive(:height).and_return 1080
 
       allow(audio_track_attributes).to receive(:encoded_date).and_return Time.zone.parse("UTC 2009-03-30 19:49:13")
       allow(audio_track_attributes).to receive(:producer).and_return("Test Producer")
@@ -128,6 +134,8 @@ RSpec.describe MediainfoCharacterizationService do
       allow(audio_track_attributes).to receive(:duration).and_return(261)
       allow(audio_track_attributes).to receive(:count).and_return 1
       allow(audio_track_attributes).to receive(:filesize).and_return 1
+      allow(audio_track_attributes).to receive(:width).and_return nil
+      allow(audio_track_attributes).to receive(:height).and_return nil
       allow(tracks).to receive(:track_types).and_return(["video", "audio"])
 
       allow(tracks).to receive(:video).and_return(video_track_attributes)
@@ -145,6 +153,8 @@ RSpec.describe MediainfoCharacterizationService do
       expect(new_file_set.original_file.producer).to eq ["Test Video Producer"]
       expect(new_file_set.original_file.source_media_type).to eq ["DAV"]
       expect(new_file_set.original_file.duration).to eq ["0.984"]
+      expect(new_file_set.original_file.width).to eq ["1920"]
+      expect(new_file_set.original_file.height).to eq ["1080"]
     end
   end
 
