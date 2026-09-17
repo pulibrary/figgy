@@ -27,7 +27,7 @@ class HlsManifest
     @file_set = file_set
     @file_metadata = file_metadata
     @auth_token = auth_token
-    playlist.target = file_set.primary_file.duration.first.to_i + 1
+    playlist.type = "VOD"
     apply_auth_token if auth_token.present?
   end
 

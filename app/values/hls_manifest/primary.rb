@@ -9,12 +9,12 @@ class HlsManifest::Primary
     @file_set = file_set
     @file_metadata = file_metadata
     @auth_token = auth_token
-    attach_av_track
     attach_captions
+    attach_av_track
   end
 
   def playlist
-    @playlist ||= M3u8::Playlist.new
+    @playlist ||= M3u8::Playlist.new(version: 4, independent_segments: true)
   end
 
   def attach_av_track
@@ -44,13 +44,19 @@ class HlsManifest::Primary
   def caption_language(caption_metadata)
     iso_codes = caption_metadata.caption_language
 
-    return iso_codes.first if iso_codes.count == 1
+    return language_tag(iso_codes.first) if iso_codes.count == 1
     nil
+  end
+
+  # HLS requires two letter language tags
+  # If a code has no two letter form, then use the the three letter tag
+  def language_tag(iso_code)
+    ISO_639.find(iso_code)&.alpha2.presence || iso_code
   end
 
   # Says via HLS that the subtitles should be treated as captions in HLS.
   def accessibility_characteristics
-    "public.accessibility.describes-spoken-dialog,public.accessibility.describes-music-and-sound"
+    "public.accessibility.transcribes-spoken-dialog,public.accessibility.describes-music-and-sound"
   end
 
   def helper

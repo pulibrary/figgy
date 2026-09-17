@@ -31,6 +31,8 @@ class DownloadsController < ApplicationController
     manifest = HlsManifest.for(file_set: resource, file_metadata: file_desc, as: params[:as], auth_token: params[:auth_token])
     add_cors_headers
     render plain: manifest.to_s, content_type: "application/x-mpegURL"
+    # Apple HLS wants the mimetype to render without `charset=utf-8`
+    response.charset = false
   end
 
   def send_fgdc
