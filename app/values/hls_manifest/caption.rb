@@ -26,7 +26,7 @@ class HlsManifest::Caption
   def attach_caption
     playlist.items << M3u8::SegmentItem.new(
       duration: duration,
-      segment: helper.download_path(file_set.id, file_metadata.id, auth_token: auth_token)
+      segment: helper.download_url(file_set.id, file_metadata.id, auth_token: auth_token)
     )
   end
 

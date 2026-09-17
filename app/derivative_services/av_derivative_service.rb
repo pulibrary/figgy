@@ -56,7 +56,8 @@ class AvDerivativeService
     hls_file = dir.join("hls.m3u8")
     content = File.read(hls_file)
     built_files.each do |file, id|
-      content.gsub!(file, helper.download_url(resource.id, id))
+      url = helper.download_url(resource.id, id) + ".ts"
+      content.gsub!(file, url)
     end
     File.open(hls_file, "w") do |f|
       f.puts content

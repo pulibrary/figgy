@@ -20,9 +20,9 @@ class HlsManifest::Primary
   def attach_av_track
     playlist.items << M3u8::PlaylistItem.new(
       profile: "high",
-      subtitles: "subs",
-      bandwidth: 540,
-      uri: helper.download_path(file_set.id, file_metadata.id, auth_token: auth_token, format: "m3u8")
+      subtitles: subtitles,
+      bandwidth: 5400,
+      uri: helper.download_url(file_set.id, file_metadata.id, auth_token: auth_token, format: "m3u8")
     )
   end
 
@@ -36,7 +36,7 @@ class HlsManifest::Primary
         autoselect: true,
         characteristics: accessibility_characteristics,
         language: caption_language(caption_metadata),
-        uri: helper.download_path(file_set.id, caption_metadata.id, as: "stream", auth_token: auth_token, format: "m3u8")
+        uri: helper.download_url(file_set.id, caption_metadata.id, as: "stream", auth_token: auth_token, format: "m3u8")
       )
     end
   end
@@ -55,5 +55,9 @@ class HlsManifest::Primary
 
   def helper
     @helper ||= ManifestBuilder::ManifestHelper.new
+  end
+
+  def subtitles
+    "subs" if file_set.captions.count > 0
   end
 end
