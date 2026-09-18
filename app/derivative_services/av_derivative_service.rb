@@ -73,7 +73,7 @@ class AvDerivativeService
     if resource.video?
       [
         "-c:v", "libx264", # encode video with H.264
-        "-vf", "format=yuv420p", # needed for Firefox. See: https://trac.ffmpeg.org/wiki/Encode/H.264#Encodingfordumbplayers
+        "-vf", video_filter,
         "-crf", "20", # video quality from 0-51
         "-preset", "slow" # slow encoding for better compression of video
       ] # encode video with H.264
@@ -83,6 +83,33 @@ class AvDerivativeService
         "-vn" # Disable video (the album art)
       ]
     end
+  end
+
+  # Convert to yuv420p for SDR content
+  #   See: https://trac.ffmpeg.org/wiki/Encode/H.264#Encodingfordumbplayers
+  # Implement zscale tone-mapping for HDR content
+  #   See: https://ffmpeg.org/ffmpeg-filters.html#tonemap-1
+  #   See: http://www.ffmpeglab.com/articles/ffmpeg-color-spacing.html
+  def video_filter
+    return "format=yuv420p" unless hdr_source?
+    "zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709," \
+      "tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p"
+  end
+
+  # Determines if a video is HDR or SDR
+  def hdr_source?
+    # These brightness curves indicate that the original video is HDR
+    ["smpte2084", "arib-std-b67"].include?(brightness_curve)
+  end
+
+  # Get the brighness curve values for the original video
+  def brightness_curve
+      stdout, _stderr, status = Open3.capture3(
+        "ffprobe", "-v", "error", "-select_streams", "v:0",
+        "-show_entries", "stream=color_transfer", "-of", "csv=p=0",
+        file_object.disk_path.to_s
+      )
+      status.success? ? stdout.strip : ""
   end
 
   def generate_hls_derivatives(dir)

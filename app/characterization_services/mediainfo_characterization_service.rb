@@ -49,6 +49,8 @@ class MediainfoCharacterizationService
       producer: media.producer,
       source_media_type: media.originalsourceform,
       duration: duration.to_s, # Floats are not supported as Valkyrie::Types (update: now they are),
+      width: media.width&.to_s,
+      height: media.height&.to_s,
       checksum: MultiChecksum.for(@file_object),
       size: media.filesize,
       mime_type: mime_type,

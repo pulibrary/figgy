@@ -122,6 +122,47 @@ RSpec.describe AvDerivativeService do
       expect(derivative_partials.length).to eq 1
       expect(derivative_partials[0].mime_type).to eq ["video/MP2T"]
     end
+
+    context "with an HDR video" do
+      let(:file) { fixture_file_upload("files/hdr.mp4", "video/mp4") }
+
+      it "sets the colors to bt709 in the derivative partials" do
+        derivative_service.new(id: valid_change_set.id).create_derivatives
+
+        reloaded = query_service.find_by(id: valid_resource.id)
+        partial = reloaded.derivative_partial_files.first
+
+        # Get the color settings for the derivative partial
+        path = Valkyrie::StorageAdapter.find_by(id: partial.file_identifiers.first).disk_path
+        stdout, _stderr, status = Open3.capture3(
+          "ffprobe", "-v", "error", "-select_streams", "v:0",
+          "-show_entries", "stream=color_transfer", "-of", "csv=p=0",
+          path.to_s
+        )
+
+        colors = stdout.split
+        expect(colors).to eq ["bt709", "bt709"]
+      end
+    end
+  end
+
+  describe "#video_filter" do
+    subject(:service) { derivative_service.new(id: valid_change_set.id) }
+
+    it "converts to yuv420p with SDR video" do
+      allow(service).to receive(:brightness_curve).and_return("bt709")
+      expect(service.video_filter).to eq "format=yuv420p"
+    end
+
+    it "converts to yuv420p and applies tone mapping to HDR video" do
+      allow(service).to receive(:brightness_curve).and_return("smpte2084")
+      expect(service.video_filter).to include("tonemap")
+      expect(service.video_filter).to include("format=yuv420p")
+
+      allow(service).to receive(:brightness_curve).and_return("arib-std-b67")
+      expect(service.video_filter).to include("tonemap")
+      expect(service.video_filter).to include("format=yuv420p")
+    end
   end
 
   describe "#cleanup_derivatives" do
