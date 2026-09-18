@@ -170,6 +170,7 @@ export default class UVManager {
   }
 
   createClover () {
+    this.forceHlsJs()
     const uvElement = document.getElementById('uv')
     // Show hidden viewer element
     uvElement.style.display = 'block'
@@ -177,6 +178,16 @@ export default class UVManager {
     const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false, showIIIFBadge: false } })
 
     root.render(clover)
+  }
+
+  // Force Chrome to use HLS.js instead of native player.
+  // Can be removed once the native Chrome HLS video player supports captions.
+  forceHlsJs () {
+    const originalCanPlayType = HTMLMediaElement.prototype.canPlayType;
+    HTMLMediaElement.prototype.canPlayType = function (type) {
+      if (/mpegurl/i.test(type)) return "";
+      return originalCanPlayType.call(this, type);
+    };
   }
 
   addViewerIcons () {
