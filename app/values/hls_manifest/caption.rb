@@ -14,7 +14,8 @@ class HlsManifest::Caption
     @playlist ||= M3u8::Playlist.new(
       target: duration,
       version: 3,
-      sequence: 0
+      sequence: 0,
+      type: "VOD"
     )
   end
 
