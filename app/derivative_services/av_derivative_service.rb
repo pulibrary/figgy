@@ -73,10 +73,9 @@ class AvDerivativeService
     if resource.video?
       [
         "-c:v", "libx264", # encode video with H.264
-        "-vf", "format=yuv420p", # needed for Firefox. See: https://trac.ffmpeg.org/wiki/Encode/H.264#Encodingfordumbplayers
+        "-vf", video_filter,
         "-crf", "20", # video quality from 0-51
-        "-preset", "slow", # slow encoding for better compression of video
-        *hdr_specific_flags
+        "-preset", "slow" # slow encoding for better compression of video
       ] # encode video with H.264
     else
       # Audio sometimes has cover art - just ignore it.
@@ -86,14 +85,15 @@ class AvDerivativeService
     end
   end
 
-  # When we set format=yuv420p to convert high definition video into a format
-  # that browsers can play, we must force ffmpeg to use standard definition
-  # color settings. Otherwise Safari refuses to decode the resulting video files.
-  # We need to explicitly specify the color standard that ffmepg outputs for
-  # SDR video derivatives.
-  def hdr_specific_flags
-    return [] unless hdr_source?
-    ["-x264-params", "colorprim=bt709:transfer=bt709:colormatrix=bt709"]
+  # Convert to yuv420p for SDR content
+  #   See: https://trac.ffmpeg.org/wiki/Encode/H.264#Encodingfordumbplayers
+  # Implement zscale tone-mapping for HDR content
+  #   See: https://ffmpeg.org/ffmpeg-filters.html#tonemap-1
+  #   See: http://www.ffmpeglab.com/articles/ffmpeg-color-spacing.html
+  def video_filter
+    return "format=yuv420p" unless hdr_source?
+    "zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709," \
+      "tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p"
   end
 
   # Determines if a video is HDR or SDR

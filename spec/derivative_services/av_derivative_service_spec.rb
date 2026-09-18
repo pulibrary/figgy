@@ -146,6 +146,25 @@ RSpec.describe AvDerivativeService do
     end
   end
 
+  describe "#video_filter" do
+    subject(:service) { derivative_service.new(id: valid_change_set.id) }
+
+    it "converts to yuv420p with SDR video" do
+      allow(service).to receive(:brightness_curve).and_return("bt709")
+      expect(service.video_filter).to eq "format=yuv420p"
+    end
+
+    it "converts to yuv420p and applies tone mapping to HDR video" do
+      allow(service).to receive(:brightness_curve).and_return("smpte2084")
+      expect(service.video_filter).to include("tonemap")
+      expect(service.video_filter).to include("format=yuv420p")
+
+      allow(service).to receive(:brightness_curve).and_return("arib-std-b67")
+      expect(service.video_filter).to include("tonemap")
+      expect(service.video_filter).to include("format=yuv420p")
+    end
+  end
+
   describe "#cleanup_derivatives" do
     before do
       derivative_service.new(id: valid_change_set.id).create_derivatives
