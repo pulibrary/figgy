@@ -28,7 +28,16 @@ class HlsManifest
     @file_metadata = file_metadata
     @auth_token = auth_token
     playlist.type = "VOD"
+    playlist.target = target_duration
     apply_auth_token if auth_token.present?
+  end
+
+  # M3u8 gem requires a whole number duration. Round the durations up to
+  # nearest whole number and choose the max unless the duration is rounded down
+  # to 0 (which happens for short videos). In that case, return a duration of 1.
+  def target_duration
+    duration = playlist.items.filter_map { |item| item.try(:duration)&.round }.max
+    [duration, 1].max
   end
 
   def apply_auth_token

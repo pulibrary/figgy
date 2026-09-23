@@ -292,6 +292,25 @@ RSpec.describe DownloadsController do
         expect(playlist.type).to eq "VOD"
         expect(playlist.target).to eq 1
       end
+
+      context "when a playlist has segments with decimal value durations" do
+        it "rounds the max duration up to nearest integer and can be read without error" do
+          sign_in(user)
+          change_set_persister = ChangeSetPersister.default
+          file_set = FactoryBot.create_for_repository(:file_set)
+          file = fixture_file_upload("files/hls_playlist_decimal_segments.m3u8", "application/x-mpegURL")
+          change_set = ChangeSet.for(file_set)
+          change_set.files = [file]
+          output = change_set_persister.save(change_set: change_set)
+
+          get :show, params: { resource_id: output.id.to_s, id: output.file_metadata.first.id.to_s }
+
+          expect(response).to be_successful
+          playlist = M3u8::Playlist.read(response.body)
+          expect(playlist.target).to eq 13
+          expect(playlist).to be_valid
+        end
+      end
     end
 
     context "with a FileSet proxied as member of multiple Playlists" do
