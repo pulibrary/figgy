@@ -116,11 +116,13 @@ class EphemeraFolderChangeSetBase < ChangeSet
   end
 
   def valid?
+    set_skip_validation_for_only_member_ids
     return true if skip_validation == true
     super
   end
 
   def validate(params)
+    set_skip_validation_for_only_member_ids
     result = super
     return true if skip_validation == true
     result
@@ -171,6 +173,14 @@ class EphemeraFolderChangeSetBase < ChangeSet
       true
     rescue Valkyrie::Persistence::ObjectNotFoundError
       false
+    end
+
+    def set_skip_validation_for_only_member_ids
+      return unless changed.keys == ["member_ids"]
+      MemberValidator.new.validate(self)
+      if errors[:member_ids].blank?
+        self.skip_validation = true
+      end
     end
 
     def coerce_string_value(value)

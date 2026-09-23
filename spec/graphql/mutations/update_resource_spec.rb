@@ -72,6 +72,29 @@ RSpec.describe Mutations::UpdateResource do
         output = mutation.resolve(id: resource.id, member_ids: [member1.id.to_s, member2.id.to_s, member3.id.to_s])
         expect(output[:errors]).to eq ["Member ids can only be used to re-order."]
       end
+
+      it "works for re-ordering an invalid draft EphemeraFolder" do
+        member1 = FactoryBot.create_for_repository(:file_set)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:ephemera_folder, title: nil, member_ids: [member1.id, member2.id])
+        mutation = create_mutation
+
+        output = mutation.resolve(id: resource.id, member_ids: [member2.id.to_s, member1.id.to_s])
+        expect(output[:errors]).to be_nil
+        expect(output[:resource].member_ids).to eq [member2.id, member1.id]
+      end
+
+      it "fails when giving a bad ID for an EphemeraFolder" do
+        member1 = FactoryBot.create_for_repository(:file_set)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:ephemera_folder, member_ids: [member1.id, member2.id])
+        mutation = create_mutation
+
+        output = mutation.resolve(id: resource.id, member_ids: [member2.id.to_s, member1.id.to_s, "bananas"])
+        expect(output[:errors]).not_to be_nil
+        expect(output[:resource].member_ids).to eq [member1.id, member2.id]
+      end
+
       it "works for re-ordering" do
         member1 = FactoryBot.create_for_repository(:file_set)
         member2 = FactoryBot.create_for_repository(:file_set)
