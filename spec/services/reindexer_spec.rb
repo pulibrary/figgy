@@ -9,7 +9,15 @@ RSpec.describe Reindexer do
 
   before do
     allow(ProgressBar).to receive(:create).and_return(progress_bar)
+  end
+
+  around do |test|
+    existing_log_level = Valkyrie.logger.level
     Valkyrie.logger.level = Logger::ERROR
+
+    test.call
+
+    Valkyrie.logger.level = existing_log_level
   end
 
   describe ".reindex_all" do

@@ -9,7 +9,10 @@ class ExportService
   def self.export_pdf(resource, filename: "#{resource.id}.pdf")
     fn = "#{export_base}/#{filename}"
     mtime = File.exist?(fn) && File.mtime(fn)
-    Rails.logger.info("Skipping fresh PDF: #{fn}") && return if mtime && mtime > resource.updated_at
+    if mtime && mtime > resource.updated_at
+      Rails.logger.info("Skipping fresh PDF: #{fn}")
+      return
+    end
 
     pdf_desc = PDFService.new(change_set_persister).find_or_generate(resource_id: resource.id)
     file = Valkyrie.config.storage_adapter.find_by(id: pdf_desc.file_identifiers.first.id)
