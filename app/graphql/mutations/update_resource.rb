@@ -14,7 +14,7 @@ class Mutations::UpdateResource < Mutations::BaseMutation
 
   def resolve(id:, **type_attributes)
     resource = query_service.find_by(id: id)
-    attributes = self.attributes(type_attributes)
+    attributes = self.attributes(type_attributes, resource)
     if ability.can?(:update, resource)
       update_resource(resource, attributes)
     else
@@ -25,9 +25,13 @@ class Mutations::UpdateResource < Mutations::BaseMutation
     end
   end
 
-  def attributes(type_attributes)
+  def attributes(type_attributes, resource)
     type_attributes[:title] = type_attributes[:label] if type_attributes[:label].present?
     type_attributes[:start_canvas] = type_attributes[:start_page] if type_attributes[:start_page].present?
+    # GraphQL can only update fields for ordering/displaying. EphemeraFolders
+    # can be invalid, as they can be saved as drafts. Without this users are
+    # unable to re-order/structure draft Folders.
+    type_attributes[:skip_validation] = true if resource.is_a?(EphemeraFolder)
     type_attributes.compact
   end
 
