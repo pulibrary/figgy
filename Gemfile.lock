@@ -30,7 +30,7 @@ GIT
 
 GIT
   remote: https://github.com/samvera/active_fedora.git
-  revision: 3ce77e394d586de523c91af2c59a2aeb1fa2a6b3
+  revision: 1578819e7aa9726ab21fc4557f443d4e8c5fb541
   branch: main
   specs:
     active-fedora (16.0.0)
@@ -43,7 +43,7 @@ GIT
       faraday-follow_redirects
       ldp (>= 0.7.0, < 2)
       mutex_m
-      rsolr (>= 1.1.2, < 3)
+      rsolr (>= 1.1.2, < 4)
       ruby-progressbar (~> 1.0)
 
 GIT
@@ -194,7 +194,7 @@ GEM
     afm (1.0.0)
     airbrussh (1.6.2)
       sshkit (>= 1.6.1, != 1.7.0)
-    amq-protocol (2.8.0)
+    amq-protocol (2.9.0)
     arabic-letter-connector (0.1.1)
     archivesspace-client (0.6.0)
       dry-cli (~> 0.7)
@@ -206,8 +206,8 @@ GEM
       execjs (~> 2)
     awesome_print (1.9.2)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1282.0)
-    aws-sdk-core (3.254.1)
+    aws-partitions (1.1285.0)
+    aws-sdk-core (3.255.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -215,11 +215,12 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.130.0)
-      aws-sdk-core (~> 3, >= 3.254.0)
+      rexml (~> 3.4, >= 3.4.2)
+    aws-sdk-kms (1.131.0)
+      aws-sdk-core (~> 3, >= 3.255.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.229.0)
-      aws-sdk-core (~> 3, >= 3.254.1)
+    aws-sdk-s3 (1.231.0)
+      aws-sdk-core (~> 3, >= 3.255.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
@@ -260,7 +261,7 @@ GEM
       blacklight (>= 7.25.2, < 9)
       deprecation
       view_component (>= 2.54, < 4)
-    bootsnap (1.25.0)
+    bootsnap (1.26.0)
       msgpack (~> 1.5)
     bootstrap (4.6.2.1)
       autoprefixer-rails (>= 9.1.0)
@@ -272,8 +273,8 @@ GEM
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
       thor (~> 1.0)
-    bunny (3.2.0)
-      amq-protocol (~> 2.8)
+    bunny (3.3.0)
+      amq-protocol (~> 2.9)
       logger (~> 1, >= 1.7)
       sorted_set (~> 1, >= 1.0.2)
     byebug (13.0.0)
@@ -492,7 +493,7 @@ GEM
       retriable (>= 3.1, < 5.0)
     google-apis-iamcredentials_v1 (0.28.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-storage_v1 (0.66.0)
+    google-apis-storage_v1 (0.67.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-cloud-core (1.9.0)
       google-cloud-env (>= 1.0, < 3.a)
@@ -524,13 +525,13 @@ GEM
       google-cloud-errors (~> 1.0)
       grpc-google-iam-v1 (~> 1.11)
     google-logging-utils (0.2.0)
-    google-protobuf (4.36.0-arm64-darwin)
+    google-protobuf (4.36.1-arm64-darwin)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.0-x86_64-darwin)
+    google-protobuf (4.36.1-x86_64-darwin)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.0-x86_64-linux-gnu)
+    google-protobuf (4.36.1-x86_64-linux-gnu)
       bigdecimal
       rake (~> 13.3)
     googleapis-common-protos (1.9.0)
@@ -549,17 +550,17 @@ GEM
       signet (>= 0.16, < 2.a)
     graphiql-rails (1.10.5)
       railties
-    graphql (2.6.9)
+    graphql (2.6.10)
       base64
       fiber-storage
       logger
-    grpc (1.83.0-arm64-darwin)
+    grpc (1.83.1-arm64-darwin)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
-    grpc (1.83.0-x86_64-darwin)
+    grpc (1.83.1-x86_64-darwin)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
-    grpc (1.83.0-x86_64-linux-gnu)
+    grpc (1.83.1-x86_64-linux-gnu)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
     grpc-google-iam-v1 (1.12.0)
@@ -576,7 +577,7 @@ GEM
       logger
       ostruct
     htmlentities (4.4.2)
-    http_logger (1.0.2)
+    http_logger (1.0.3)
     httparty (0.24.2)
       csv
       mini_mime (>= 1.0.0)
@@ -595,7 +596,7 @@ GEM
       activesupport
     iiif_manifest (1.6.0)
       activesupport (>= 4)
-    image_processing (2.0.3)
+    image_processing (2.1.0)
     io-console (0.9.2)
     irb (1.18.0)
       pp (>= 0.6.0)
@@ -722,14 +723,14 @@ GEM
     modernizr-rails (2.7.1)
     module_methods (1.0.0)
     msgpack (1.8.4)
-    multi_json (1.21.1)
+    multi_json (1.21.2)
     multi_xml (0.9.1)
       bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
     mutex_m (0.3.0)
     net-http (0.9.1)
       uri (>= 0.11.1)
-    net-imap (0.6.6)
+    net-imap (0.6.7)
       date
       net-protocol
     net-pop (0.1.2)
@@ -775,7 +776,7 @@ GEM
     orm_adapter (0.5.0)
     os (1.1.4)
     ostruct (0.6.3)
-    parallel (2.1.0)
+    parallel (2.2.0)
     parallel_tests (5.7.0)
       parallel
     parlour (9.1.2)
@@ -824,7 +825,7 @@ GEM
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
-    rack-proxy (1.0.1)
+    rack-proxy (2.0.0)
       rack (>= 2.0, < 4)
     rack-session (2.1.2)
       base64 (>= 0.1.0)
@@ -935,7 +936,7 @@ GEM
       uber (< 0.2.0)
     request_store (1.7.0)
       rack (>= 1.4)
-    responders (3.2.0)
+    responders (3.2.1)
       actionpack (>= 7.0)
       railties (>= 7.0)
     retriable (3.8.0)
@@ -978,7 +979,7 @@ GEM
     rspec-support (3.13.7)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.90.0)
+    rubocop (1.91.0)
       json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -1014,26 +1015,26 @@ GEM
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
-    rubyzip (3.5.0)
-    sass-embedded (1.103.1-arm64-darwin)
+    rubyzip (3.6.0)
+    sass-embedded (1.104.0-arm64-darwin)
       google-protobuf (~> 4.31)
-    sass-embedded (1.103.1-x86_64-darwin)
+    sass-embedded (1.104.0-x86_64-darwin)
       google-protobuf (~> 4.31)
-    sass-embedded (1.103.1-x86_64-linux-gnu)
+    sass-embedded (1.104.0-x86_64-linux-gnu)
       google-protobuf (~> 4.31)
     sassc-embedded (1.80.9)
       sass-embedded (~> 1.80)
     scanf (1.0.0)
     securerandom (0.4.1)
-    selenium-webdriver (4.47.0)
+    selenium-webdriver (4.49.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sequel (5.107.0)
+    sequel (5.108.0)
       bigdecimal
-    sequel_pg (1.19.0)
+    sequel_pg (1.20.0)
       pg (>= 0.18.0, != 1.2.0)
       sequel (>= 4.38.0)
     shrine (3.9.0)
@@ -1056,7 +1057,7 @@ GEM
     simple_form (5.4.1)
       actionpack (>= 7.0)
       activemodel (>= 7.0)
-    simplecov (1.1.1)
+    simplecov (1.2.0)
     simpleidn (0.2.3)
     slop (4.10.1)
     solargraph (0.60.1)
@@ -1083,7 +1084,7 @@ GEM
       yard (~> 0.9, >= 0.9.24)
       yard-activesupport-concern (~> 0.0)
       yard-solargraph (~> 0.1)
-    sorbet-runtime (0.6.13444)
+    sorbet-runtime (0.6.13492)
     sord (7.1.0)
       commander (~> 5.0)
       parlour (~> 9.1)
@@ -1172,7 +1173,7 @@ GEM
     vite_rails (3.11.1)
       railties (>= 5.1, < 9)
       vite_ruby (~> 3.0, >= 3.2.2)
-    vite_ruby (3.10.4)
+    vite_ruby (3.10.5)
       dry-cli (>= 0.7, < 2)
       logger (~> 1.6)
       mutex_m
@@ -1184,7 +1185,7 @@ GEM
       actionview (>= 8.0.0)
       bindex (>= 0.4.0)
       railties (>= 8.0.0)
-    webmock (3.26.3)
+    webmock (3.26.4)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
