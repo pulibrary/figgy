@@ -7,6 +7,18 @@ RSpec.feature "Collection" do
     sign_in user
   end
 
+  scenario "editing a collection in firefox", js: true, driver: :custom_firefox do
+    collection = FactoryBot.create_for_repository(:collection)
+    visit edit_collection_path(id: collection.id)
+
+    fill_in "Tagline", with: "This is a short tagline."
+
+    # Submit the form
+    click_button "Save"
+
+    expect(page).to have_link "Edit This Collection"
+  end
+
   scenario "editing a collection", js: true do
     collection = FactoryBot.create_for_repository(:collection)
     visit edit_collection_path(id: collection.id)
