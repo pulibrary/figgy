@@ -7,20 +7,26 @@ test:
   port: <%= ENV["lando_redis_conn_port"] || 6379 %>
   db: 0
 production: &production
-  host: <%= ENV['FIGGY_REDIS_URL'] || 'localhost' %>
-  port: <%= ENV['FIGGY_REDIS_PORT'] || '6379' %>
+  name: 'redis-production'
+  password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
+  sentinel_password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
   db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
+  sentinels:
+    - host: "nomad-client-prod1.lib.princeton.edu"
+      port: 26379
+    - host: "nomad-client-prod5.lib.princeton.edu"
+      port: 26379
+    - host: "nomad-client-prod3.lib.princeton.edu"
+      port: 26379
 staging:
   name: 'redis-staging'
   password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
   sentinel_password: <%= ENV['FIGGY_REDIS_PASSWORD'] %>
+  db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
   sentinels:
     - host: "nomad-client-staging4.lib.princeton.edu"
       port: 26379
-      db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
     - host: "dpul-collections-staging1.lib.princeton.edu"
       port: 26379
-      db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>
     - host: "dpul-collections-staging2.lib.princeton.edu"
       port: 26379
-      db: <%= ENV['FIGGY_REDIS_DB'] || 0 %>

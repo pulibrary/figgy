@@ -6,8 +6,8 @@ if Rails.env.development? || Rails.env.staging?
   Rack::MiniProfiler.config.authorization_mode = :allow_authorized
   if Rails.env.staging?
     require "redis"
-    config = YAML.safe_load(ERB.new(IO.read(Rails.root.join("config", "redis.yml"))).result, [], [], true)[Rails.env].with_indifferent_access
-    Rack::MiniProfiler.config.storage_options = { host: config[:host], port: config[:port], db: config[:db] }
+    require_relative "redis_config"
+    Rack::MiniProfiler.config.storage_options = RedisConfig.config
     Rack::MiniProfiler.config.storage = Rack::MiniProfiler::RedisStore
   end
 end
