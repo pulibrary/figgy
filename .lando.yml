@@ -37,7 +37,7 @@ services:
         SE_NODE_OVERRIDE_MAX_SESSIONS_FIREFOX: "true"
       logging:
         driver: none
-      shm_size: 2G
+      shm_size: 3G
       ports:
         - "4445:4444"
         - "5900:5900"
