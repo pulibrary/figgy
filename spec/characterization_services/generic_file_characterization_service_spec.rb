@@ -1,7 +1,7 @@
 require "rails_helper"
 require "valkyrie/derivatives/specs/shared_specs"
 
-RSpec.describe TikaFileCharacterizationService do
+RSpec.describe GenericFileCharacterizationService do
   it_behaves_like "a Valkyrie::Derivatives::FileCharacterizationService"
 
   let(:file_characterization_service) { described_class }
@@ -29,7 +29,16 @@ RSpec.describe TikaFileCharacterizationService do
   end
 
   it "characterizes a sample file" do
-    described_class.new(file_set: valid_file_set, persister: persister).characterize
+    new_file_set = described_class.new(file_set: valid_file_set, persister: persister).characterize
+    expect(new_file_set.original_file).to have_attributes(
+      mime_type: ["image/tiff"],
+      size: ["196882"]
+    )
+    expect(new_file_set.original_file.checksum.first).to have_attributes(
+      sha256: "547c81b080eb2d7c09e363a670c46960ac15a6821033263867dd59a31376509c",
+      md5: "2a28fb702286782b2cbf2ed9a5041ab1",
+      sha1: "1b95e65efc3aefeac1f347218ab6f193328d70f5"
+    )
   end
 
   context "when given a file with an apostrophe", run_real_characterization: true do
@@ -37,20 +46,6 @@ RSpec.describe TikaFileCharacterizationService do
     it "works" do
       described_class.new(file_set: valid_file_set, persister: persister).characterize
     end
-  end
-
-  it "sets the height attribute for a file_set on characterize " do
-    t_file_set = valid_file_set
-    t_file_set.original_file.height = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.height).not_to be_empty
-  end
-
-  it "sets the width attribute for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.width = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.width).not_to be_empty
   end
 
   it "saves to the persister by default on characterize" do
@@ -63,57 +58,6 @@ RSpec.describe TikaFileCharacterizationService do
     allow(persister).to receive(:save).and_return(valid_file_set)
     described_class.new(file_set: valid_file_set, persister: persister).characterize(save: false)
     expect(persister).not_to have_received(:save)
-  end
-
-  it "sets the mime_type for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.mime_type = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.mime_type).not_to be_empty
-  end
-
-  it "sets the checksum for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.checksum = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    checksum = new_file_set.original_file.checksum
-    expect(checksum.count).to eq 1
-    expect(checksum.first).to be_a MultiChecksum
-  end
-
-  it "sets the bits per sample attribute for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.width = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.bits_per_sample).not_to be_empty
-  end
-
-  it "sets the x resolution attribute for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.width = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.x_resolution).not_to be_empty
-  end
-
-  it "sets the y resolution attribute for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.width = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.y_resolution).not_to be_empty
-  end
-
-  it "sets the camera model attribute for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.width = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.camera_model).not_to be_empty
-  end
-
-  it "sets the software attribute for a file_set on characterize" do
-    t_file_set = valid_file_set
-    t_file_set.original_file.width = nil
-    new_file_set = described_class.new(file_set: t_file_set, persister: persister).characterize(save: false)
-    expect(new_file_set.original_file.software).not_to be_empty
   end
 
   context "when a file set contains a preservation file and an intermediate file" do
@@ -129,25 +73,25 @@ RSpec.describe TikaFileCharacterizationService do
     end
   end
 
-  context "when provided with a file that can not be processed by Tika", run_real_characterization: true do
+  context "when provided with a file that can't be processed by anything else", run_real_characterization: true do
     let(:file) { fixture_file_upload("files/empty.tif", "image/tiff") }
     let(:invalid_file_set) { book_members.first }
 
-    it "adds an error message to the file set and raises an error" do
-      expect { described_class.new(file_set: invalid_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
+    it "just adds basic info" do
+      described_class.new(file_set: invalid_file_set, persister: persister).characterize
       file_set = query_service.find_by(id: invalid_file_set.id)
       expect(file_set.file_metadata[0].width).to be_empty
-      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+      expect(file_set.file_metadata[0].size).to eq ["0"]
     end
   end
 
   context "when characterization fails and then succeeds" do
     it "removes any previous error messages" do
-      allow(RubyTikaApp).to receive(:new).and_raise("Error")
+      allow(Vips::Image).to receive(:new_from_file).and_raise("Error")
       expect { described_class.new(file_set: valid_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
       file_set = query_service.find_by(id: valid_file_set.id)
       expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
-      allow(RubyTikaApp).to receive(:new).and_call_original
+      allow(Vips::Image).to receive(:new_from_file).and_call_original
       described_class.new(file_set: file_set, persister: persister).characterize
       file_set = query_service.find_by(id: valid_file_set.id)
       expect(file_set.file_metadata[0].error_message).to be_empty
