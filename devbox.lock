@@ -931,7 +931,7 @@
     },
     "nodejs-slim@24.15.0": {
       "last_modified": "2026-05-27T10:28:13Z",
-      "plugin_version": "0.0.2",
+      "plugin_version": "0.0.5",
       "resolved": "github:NixOS/nixpkgs/4100e830e085863741bc69b156ec4ccd53ab5be0#nodejs-slim",
       "source": "devbox-search",
       "version": "24.15.0",
@@ -1649,7 +1649,7 @@
     },
     "python@3.9.1": {
       "last_modified": "2024-09-10T15:01:03Z",
-      "plugin_version": "0.0.4",
+      "plugin_version": "0.0.5",
       "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#python39",
       "source": "devbox-search",
       "version": "3.9.19",

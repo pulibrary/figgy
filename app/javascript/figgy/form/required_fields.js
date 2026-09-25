@@ -17,7 +17,9 @@ export class RequiredFields {
   // Reassign requiredFields because fields may have been added or removed.
   reload() {
     // ":input" matches all input, select or textarea fields.
-    this.requiredFields = this.form.find(':input[required]')
+    // Collections use trix as a wysiywg editor that has a required field in it,
+    // ignore that one.
+    this.requiredFields = this.form.find(':input[required]').not('trix-toolbar :input')
     this.requiredFields.change(this.callback)
   }
 }

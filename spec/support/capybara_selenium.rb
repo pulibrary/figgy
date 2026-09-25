@@ -15,7 +15,7 @@ if !ENV["CI"]
   browser = :remote
 end
 
-Capybara.register_driver(:selenium) do |app|
+Capybara.register_driver(:custom_chrome) do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new(
     args: %w[--disable-gpu --disable-setuid-sandbox --window-size=1920,1080]
   )
@@ -31,5 +31,21 @@ Capybara.register_driver(:selenium) do |app|
                                  url: selenium_url)
 end
 
-Capybara.javascript_driver = :selenium
+Capybara.register_driver(:custom_firefox) do |app|
+  browser_options = ::Selenium::WebDriver::Firefox::Options.new(
+    args: %w[--width 1920 --height 1080]
+  )
+  browser_options.add_argument("--headless") unless ENV["RUN_IN_BROWSER"] == "true"
+
+  http_client = Selenium::WebDriver::Remote::Http::Default.new
+  http_client.read_timeout = 120
+  http_client.open_timeout = 120
+  Capybara::Selenium::Driver.new(app,
+                                 browser: ENV["CI"] ? :firefox : :remote,
+                                 options: browser_options,
+                                 http_client: http_client,
+                                 url: selenium_url)
+end
+
+Capybara.javascript_driver = :custom_chrome
 Capybara.default_max_wait_time = 15

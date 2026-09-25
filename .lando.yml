@@ -28,14 +28,18 @@ services:
     type: compose
     app_mount: false
     services:
-      image: selenium/standalone-chromium:151.0
+      image: selenium/standalone-all-browsers:4.49
       environment:
         START_XVFB: "true"
-        SE_NODE_MAX_SESSIONS: 20
+        SE_NODE_MAX_SESSIONS: 40
         SE_NODE_OVERRIDE_MAX_SESSIONS: "true"
+        SE_NODE_MAX_SESSIONS_CHROME: 20
+        SE_NODE_OVERRIDE_MAX_SESSIONS_CHROME: "true"
+        SE_NODE_MAX_SESSIONS_FIREFOX: 20
+        SE_NODE_OVERRIDE_MAX_SESSIONS_FIREFOX: "true"
       logging:
         driver: none
-      shm_size: 2G
+      shm_size: 3G
       ports:
         - "4445:4444"
         - "5900:5900"
