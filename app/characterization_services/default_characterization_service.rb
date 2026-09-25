@@ -15,7 +15,7 @@ class DefaultCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    GenericFileCharacterizationService.new(file_set: file_set, persister: persister).characterize
+    GenericFileCharacterizationService.new(file_set: file_set, persister: persister).characterize(save: save)
   end
 
   def valid?

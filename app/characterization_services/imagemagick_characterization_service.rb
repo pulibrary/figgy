@@ -71,7 +71,7 @@ class ImagemagickCharacterizationService
   end
 
   def file_size
-    File.size(filename)
+    File.size(filename).to_s
   end
 
   def mime_type
@@ -103,7 +103,7 @@ class ImagemagickCharacterizationService
   # Determine whether or not this FileSet is valid for this characterization
   # @return [TrueClass, FalseClass]
   def valid?
-    image_resource? && supported_format?
+    supported_format?
   end
 
   # Class for updating characterization attributes on the FileNode

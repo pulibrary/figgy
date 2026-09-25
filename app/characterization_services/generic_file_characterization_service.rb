@@ -15,7 +15,6 @@ class GenericFileCharacterizationService
   # @example characterize a file and do not persist the changes
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
-    original_characterizer = Valkyrie::Derivatives::FileCharacterizationService.for(file_set: @file_set, persister: @persister)
     [:original_file, :intermediate_file, :preservation_file].each do |type|
       target_file = @file_set.try(type)
       next unless target_file
@@ -29,9 +28,9 @@ class GenericFileCharacterizationService
     end
     # Now that we've set the generic attributes, see if our mime_type
     # identification gets us a new and better characterizer.
-    new_characterizer = Valkyrie::Derivatives::FileCharacterizationService.for(file_set: @file_set, persister: @persister)
+    extra_characterizer = optional_characterization_services.find(&:valid?)
     begin
-      new_characterizer.characterize(save: false) unless new_characterizer.class == original_characterizer.class
+      extra_characterizer&.characterize(save: false)
     # Inherit any error handling.
     rescue => e
       @characterization_error = e
@@ -39,6 +38,14 @@ class GenericFileCharacterizationService
     @file_set = persister.save(resource: @file_set) if save
     raise @characterization_error if @characterization_error
     @file_set
+  end
+
+  def optional_characterization_services
+    [
+      ImagemagickCharacterizationService.new(file_set: @file_set, persister: @persister),
+      MediainfoCharacterizationService.new(file_set: @file_set, persister: @persister),
+      PDFCharacterizationService.new(file_set: @file_set, persister: @persister)
+    ]
   end
 
   def file_characterization_attributes
