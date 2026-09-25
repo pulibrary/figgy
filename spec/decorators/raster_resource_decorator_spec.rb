@@ -208,7 +208,6 @@ RSpec.describe RasterResourceDecorator do
 
   context "with no non-imported or imported coverage and a raster file" do
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
-    let(:tika_output) { tika_geotiff_output }
     let(:resource) do
       FactoryBot.create_for_repository(
         :raster_resource,

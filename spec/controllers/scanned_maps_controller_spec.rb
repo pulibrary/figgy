@@ -380,7 +380,6 @@ RSpec.describe ScannedMapsController, type: :controller do
     with_queue_adapter :inline
     let(:user) { FactoryBot.create(:admin) }
     let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml") }
-    let(:tika_output) { tika_xml_output }
 
     it "extracts fgdc metadata into scanned map" do
       scanned_map = FactoryBot.create_for_repository(:scanned_map, files: [file])

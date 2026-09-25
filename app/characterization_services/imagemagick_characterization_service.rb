@@ -82,18 +82,6 @@ class ImagemagickCharacterizationService
     Vips::Image.new_from_file(filename.to_s)
   end
 
-  # Retrieve the Resource to which the FileSet is attached
-  # @return [Resource]
-  def parent
-    Wayfinder.for(@file_set).parent
-  end
-
-  # Determine whether or not this FileSet belongs to an image resource
-  # @return [TrueClass, FalseClass]
-  def image_resource?
-    parent.respond_to?(:image_resource?) && parent.image_resource?
-  end
-
   # Determine whether or not the media type of the FileSet is supported for characterization
   # @return [TrueClass, FalseClass]
   def supported_format?

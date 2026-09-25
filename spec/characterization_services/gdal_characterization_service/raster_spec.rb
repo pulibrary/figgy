@@ -17,7 +17,6 @@ RSpec.describe GdalCharacterizationService::Raster do
 
   context "with a geotiff" do
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
-    let(:tika_output) { tika_geotiff_output }
 
     it "sets the correct mime_type on the file_set on characterize" do
       file_set = valid_file_set
@@ -51,7 +50,6 @@ RSpec.describe GdalCharacterizationService::Raster do
 
   context "with a geotiff containing a single quote in the name" do
     let(:file) { fixture_file_upload("files/raster/geo'tiff.tif", "image/tiff") }
-    let(:tika_output) { tika_geotiff_output }
 
     it "sets the correct mime_type on the file_set on characterize" do
       file_set = valid_file_set
@@ -62,7 +60,6 @@ RSpec.describe GdalCharacterizationService::Raster do
 
   context "with a geotiff with an unsafe filename" do
     let(:file) { fixture_file_upload("files/raster/geotiff_&_unsafe.tif", "image/tiff") }
-    let(:tika_output) { tika_geotiff_output }
 
     it "sets the correct mime_type on the file_set on characterize" do
       file_set = valid_file_set
@@ -73,7 +70,6 @@ RSpec.describe GdalCharacterizationService::Raster do
 
   context "with an arcgrid file" do
     let(:file) { fixture_file_upload("files/raster/arcgrid.zip", "application/zip") }
-    let(:tika_output) { tika_arcgrid_output }
 
     it "sets the correct mime_type on the file_set on characterize" do
       file_set = valid_file_set

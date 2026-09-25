@@ -20,7 +20,6 @@ RSpec.describe ExternalMetadataDerivativeService do
   let(:parent_resource_members) { query_service.find_members(resource: parent_resource) }
   let(:valid_resource) { parent_resource_members.first }
   let(:valid_change_set) { ChangeSet.for(valid_resource) }
-  let(:tika_output) { tika_xml_output }
   let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do

@@ -61,7 +61,6 @@ RSpec.describe GenericFileCharacterizationService do
   end
 
   context "when a file set contains a preservation file and an intermediate file" do
-    let(:tika_output) { tika_shapefile_output }
     it "characterizes both files" do
       preservation = fixture_file_with_use("files/vector/shapefile.zip", "application/zip", ::PcdmUse::PreservationFile)
       resource = FactoryBot.create_for_repository(:simple_resource, files: [preservation])
