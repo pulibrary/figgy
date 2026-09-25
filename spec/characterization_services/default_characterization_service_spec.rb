@@ -24,14 +24,14 @@ RSpec.describe DefaultCharacterizationService do
     expect(new_file_set.original_file.width).to include "200"
   end
 
-  let(:tika_file_characterization_service) { instance_double(GenericFileCharacterizationService) }
-  it "characterizes using Tika" do
-    allow(tika_file_characterization_service).to receive(:characterize)
-    allow(GenericFileCharacterizationService).to receive(:new).and_return(tika_file_characterization_service)
+  let(:file_characterization_service) { instance_double(GenericFileCharacterizationService) }
+  it "characterizes using generic characterization" do
+    allow(file_characterization_service).to receive(:characterize)
+    allow(GenericFileCharacterizationService).to receive(:new).and_return(file_characterization_service)
     file_set = valid_file_set
 
     described_class.new(file_set: file_set, persister: persister).characterize(save: false)
-    expect(tika_file_characterization_service).to have_received(:characterize)
+    expect(file_characterization_service).to have_received(:characterize)
   end
 
   describe "#valid?" do

@@ -359,8 +359,6 @@ RSpec.describe DownloadsController do
           mime_type: 'application/zip; ogr-format="ESRI Shapefile"'
         )
       end
-      # Shared output context for stubbing tika
-      let(:tika_output) { tika_xml_output }
 
       it "modifies inserts an onlink value into the file" do
         get :show, params: { resource_id: fgdc_file_set.id.to_s, id: fgdc_file_set.file_metadata.first.id.to_s }

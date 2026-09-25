@@ -17,7 +17,6 @@ RSpec.describe GdalCharacterizationService::Vector do
 
   context "with a geojson file" do
     let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
-    let(:tika_output) { tika_geojson_output }
 
     it "sets the correct mime_type and geometry attributes on the file_set on characterize" do
       file_set = valid_file_set
@@ -48,7 +47,6 @@ RSpec.describe GdalCharacterizationService::Vector do
 
   context "with a geojson file containing a single quote in the name" do
     let(:file) { fixture_file_upload("files/vector/g'eo.json", "application/vnd.geo+json") }
-    let(:tika_output) { tika_geojson_output }
 
     it "sets the correct mime_type and geometry attributes on the file_set on characterize" do
       file_set = valid_file_set
@@ -60,7 +58,6 @@ RSpec.describe GdalCharacterizationService::Vector do
 
   context "with a geojson file with an unsafe filename" do
     let(:file) { fixture_file_upload("files/vector/geo_&_unsafe.json", "application/vnd.geo+json") }
-    let(:tika_output) { tika_geojson_output }
 
     it "sets the correct mime_type and geometry attributes on the file_set on characterize" do
       file_set = valid_file_set

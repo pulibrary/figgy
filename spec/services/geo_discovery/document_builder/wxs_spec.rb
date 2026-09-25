@@ -12,7 +12,6 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
   let(:metadata_adapter) { Valkyrie.config.metadata_adapter }
   let(:query_service) { metadata_adapter.query_service }
   let(:file) { fixture_file_upload("files/vector/shapefile.zip", 'application/zip; ogr-format="ESRI Shapefile"') }
-  let(:tika_output) { tika_shapefile_output }
 
   before do
     change_set_persister.save(change_set: change_set)
@@ -54,7 +53,6 @@ describe GeoDiscovery::DocumentBuilder::Wxs do
     let(:geo_work) { FactoryBot.create_for_repository(:raster_resource, visibility: visibility) }
     let(:change_set) { RasterResourceChangeSet.new(geo_work, files: [file]) }
     let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
-    let(:tika_output) { tika_geotiff_output }
 
     context "with a public document" do
       let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }

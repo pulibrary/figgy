@@ -247,7 +247,6 @@ RSpec.describe ScannedResourcesController, type: :controller do
       end
 
       context "when ingesting a directory with WAV files" do
-        let(:tika_output) { tika_wav_output }
         it "can create and import audio reserves" do
           post :create, params: {
             scanned_resource: {

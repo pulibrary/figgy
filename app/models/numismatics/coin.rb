@@ -78,10 +78,5 @@ module Numismatics
         file.mime_type == ["application/pdf"]
       end
     end
-
-    # Characterize images.
-    def image_resource?
-      true
-    end
   end
 end

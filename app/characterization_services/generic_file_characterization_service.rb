@@ -63,10 +63,6 @@ class GenericFileCharacterizationService
     Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
   end
 
-  def tika_config
-    Rails.root.join("config", "tika-config.xml").to_s
-  end
-
   def mime_type
     `file --b --mime-type #{Shellwords.escape(filename)}`.strip
   end

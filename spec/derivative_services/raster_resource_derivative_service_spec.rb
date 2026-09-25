@@ -20,7 +20,6 @@ RSpec.describe RasterResourceDerivativeService do
   let(:decorated_raster_resources) { query_service.find_members(resource: raster_resource) }
   let(:valid_resource) { decorated_raster_resources.first }
   let(:valid_change_set) { ChangeSet.for(valid_resource) }
-  let(:tika_output) { tika_geotiff_output }
   let(:valid_id) { valid_change_set.id }
 
   before do
