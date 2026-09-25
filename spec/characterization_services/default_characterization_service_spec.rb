@@ -7,7 +7,7 @@ RSpec.describe DefaultCharacterizationService do
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
-  let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  let(:file) { fixture_file_upload("files/example.tif", "application/octet-stream") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:book) do
     change_set_persister.save(change_set: ScannedResourceChangeSet.new(ScannedResource.new, files: [file]))
@@ -22,21 +22,16 @@ RSpec.describe DefaultCharacterizationService do
 
     expect(new_file_set.original_file.height).to include "287"
     expect(new_file_set.original_file.width).to include "200"
-    expect(new_file_set.original_file.bits_per_sample).to include "8"
-    expect(new_file_set.original_file.x_resolution).to include "1120.0"
-    expect(new_file_set.original_file.y_resolution).to include "1120.0"
-    expect(new_file_set.original_file.camera_model).to include "P65+"
-    expect(new_file_set.original_file.software).to include "Adobe Photoshop CS5.1 Macintosh"
   end
 
-  let(:tika_file_characterization_service) { instance_double(TikaFileCharacterizationService) }
-  it "characterizes using Tika" do
-    allow(tika_file_characterization_service).to receive(:characterize)
-    allow(TikaFileCharacterizationService).to receive(:new).and_return(tika_file_characterization_service)
+  let(:file_characterization_service) { instance_double(GenericFileCharacterizationService) }
+  it "characterizes using generic characterization" do
+    allow(file_characterization_service).to receive(:characterize)
+    allow(GenericFileCharacterizationService).to receive(:new).and_return(file_characterization_service)
     file_set = valid_file_set
 
     described_class.new(file_set: file_set, persister: persister).characterize(save: false)
-    expect(tika_file_characterization_service).to have_received(:characterize)
+    expect(file_characterization_service).to have_received(:characterize)
   end
 
   describe "#valid?" do

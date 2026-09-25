@@ -27,8 +27,6 @@ RSpec.describe ManifestBuilderV3 do
     context "with proxies to FileSets", run_real_characterization: true do
       with_queue_adapter :inline
 
-      let(:tika_output) { tika_wav_output }
-
       let(:file1) { fixture_file_upload("files/audio_file.wav") }
       let(:file2) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }
       let(:file3) { fixture_file_upload("av/la_demo_bag/data/32101047382484_1_pm.wav") }

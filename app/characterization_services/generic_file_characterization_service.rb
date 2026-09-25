@@ -1,6 +1,4 @@
-# Class for Apache Tika based file characterization service
-# defines the Apache Tika based characterization service a ValkyrieFileCharacterization service
-class TikaFileCharacterizationService
+class GenericFileCharacterizationService
   attr_reader :file_set, :persister
   def initialize(file_set:, persister:)
     @file_set = file_set
@@ -28,28 +26,33 @@ class TikaFileCharacterizationService
         target_file.error_message = ["Error during characterization: #{e.message}"]
       end
     end
+    # Now that we've set the generic attributes, see if our mime_type
+    # identification gets us a new and better characterizer.
+    extra_characterizer = optional_characterization_services.find(&:valid?)
+    begin
+      extra_characterizer&.characterize(save: false)
+    # Inherit any error handling.
+    rescue => e
+      @characterization_error = e
+    end
     @file_set = persister.save(resource: @file_set) if save
     raise @characterization_error if @characterization_error
     @file_set
   end
 
-  def json_output
-    "[#{RubyTikaApp.new(filename.to_s.gsub("'", %q('"'"')), tika_config).to_json.gsub('}{', '},{')}]"
+  def optional_characterization_services
+    [
+      ImagemagickCharacterizationService.new(file_set: @file_set, persister: @persister),
+      MediainfoCharacterizationService.new(file_set: @file_set, persister: @persister),
+      PDFCharacterizationService.new(file_set: @file_set, persister: @persister)
+    ]
   end
 
   def file_characterization_attributes
-    result = JSON.parse(json_output).last
     {
-      width: result["tiff:ImageWidth"],
-      height: result["tiff:ImageLength"],
-      mime_type: result["Content-Type"],
+      mime_type: mime_type,
       checksum: MultiChecksum.for(@file_object),
-      size: result["Content-Length"],
-      bits_per_sample: result["tiff:BitsPerSample"],
-      x_resolution: result["tiff:XResolution"],
-      y_resolution: result["tiff:YResolution"],
-      camera_model: result["Model"],
-      software: result["Software"],
+      size: @file_object.size.to_s,
       error_message: [] # Ensure any previous error messages are removed
     }
   end
@@ -60,8 +63,8 @@ class TikaFileCharacterizationService
     Pathname.new(@file_object.io.path) if @file_object.io.respond_to?(:path) && File.exist?(@file_object.io.path)
   end
 
-  def tika_config
-    Rails.root.join("config", "tika-config.xml").to_s
+  def mime_type
+    `file --b --mime-type #{Shellwords.escape(filename)}`.strip
   end
 
   def valid?

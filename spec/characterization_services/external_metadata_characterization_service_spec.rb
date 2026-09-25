@@ -14,8 +14,6 @@ RSpec.describe ExternalMetadataCharacterizationService do
   end
   let(:map_members) { query_service.find_members(resource: map) }
   let(:valid_file_set) { map_members.first }
-  # Shared output context for stubbing tika
-  let(:tika_output) { tika_xml_output }
 
   it "characterizes a sample file" do
     described_class.new(file_set: valid_file_set, persister: persister).characterize

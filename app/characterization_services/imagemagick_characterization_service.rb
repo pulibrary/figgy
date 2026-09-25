@@ -71,7 +71,7 @@ class ImagemagickCharacterizationService
   end
 
   def file_size
-    File.size(filename)
+    File.size(filename).to_s
   end
 
   def mime_type
@@ -80,18 +80,6 @@ class ImagemagickCharacterizationService
 
   def vips_image
     Vips::Image.new_from_file(filename.to_s)
-  end
-
-  # Retrieve the Resource to which the FileSet is attached
-  # @return [Resource]
-  def parent
-    Wayfinder.for(@file_set).parent
-  end
-
-  # Determine whether or not this FileSet belongs to an image resource
-  # @return [TrueClass, FalseClass]
-  def image_resource?
-    parent.respond_to?(:image_resource?) && parent.image_resource?
   end
 
   # Determine whether or not the media type of the FileSet is supported for characterization
@@ -103,7 +91,7 @@ class ImagemagickCharacterizationService
   # Determine whether or not this FileSet is valid for this characterization
   # @return [TrueClass, FalseClass]
   def valid?
-    image_resource? && supported_format?
+    supported_format?
   end
 
   # Class for updating characterization attributes on the FileNode

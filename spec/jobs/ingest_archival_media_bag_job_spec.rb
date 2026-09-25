@@ -121,8 +121,6 @@ RSpec.describe IngestArchivalMediaBagJob do
   end
 
   context "when the bag contains a PBCore XML file" do
-    let(:tika_output) { tika_xml_pbcore_output }
-
     before do
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
     end
@@ -134,8 +132,6 @@ RSpec.describe IngestArchivalMediaBagJob do
   end
 
   context "when the bag contains a JPEG image file", run_real_characterization: true do
-    let(:tika_output) { tika_jpeg_output }
-
     before do
       described_class.perform_now(collection_component: collection_cid, bag_path: bag_path, user: user, member_of_collection_ids: [FactoryBot.create_for_repository(:collection).id])
     end
@@ -147,7 +143,6 @@ RSpec.describe IngestArchivalMediaBagJob do
   end
 
   context "when the bag does not contain an image file", run_real_characterization: true do
-    let(:tika_output) { tika_jpeg_output }
     let(:bag_path) { Rails.root.join("spec", "fixtures", "av", "la_c0652_2017_05_bag3") }
 
     before do

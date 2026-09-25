@@ -38,13 +38,6 @@ class Resource < Valkyrie::Resource
     @model_name ||= super
   end
 
-  # Determines if this is an image resource
-  # Used to determine the right characterization service
-  # @return [TrueClass, FalseClass]
-  def image_resource?
-    false
-  end
-
   # Determines if this is a geospatial resource
   # @return [TrueClass, FalseClass]
   def geo_resource?
