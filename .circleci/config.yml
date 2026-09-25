@@ -30,8 +30,8 @@ executors:
 commands:
   pre-test-steps:
     steps:
-      - browser-tools/install-chrome
-      - browser-tools/install-firefox
+      - browser-tools/install_chrome
+      - browser-tools/install_firefox
       - attach_workspace:
           at: '~/figgy'
       - node/install:
@@ -89,8 +89,8 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
     resource_class: large
     steps:
-      - browser-tools/install-chrome
-      - browser-tools/install-firefox
+      - browser-tools/install_chrome
+      - browser-tools/install_firefox
       - checkout
       - node/install:
           install-yarn: true
@@ -199,8 +199,8 @@ jobs:
           PSQL_PAGER: ''
     resource_class: large
     steps:
-      - browser-tools/install-chrome
-      - browser-tools/install-firefox
+      - browser-tools/install_chrome
+      - browser-tools/install_firefox
       - attach_workspace:
           at: '~/figgy'
       - node/install:
