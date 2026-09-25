@@ -21,9 +21,8 @@ namespace :figgy do
       ids = ENV["ID"]
       abort "usage: rake export:files ID=[object ids, comma separated]" unless ids
 
-      @logger = Logger.new(STDOUT)
       ids.split(",").each do |id|
-        logger.info "Exporting #{id} to disk"
+        bulk_logger.info "Exporting #{id} to disk"
         ExportFilesJob.perform_now(id)
       end
     end
@@ -33,9 +32,8 @@ namespace :figgy do
       ids = ENV["ID"]
       abort "usage: rake export:pdf ID=[object ids, comma separated]" unless ids
 
-      @logger = Logger.new(STDOUT)
       ids.split(",").each do |id|
-        logger.info "Exporting #{id} to disk as PDF"
+        bulk_logger.info "Exporting #{id} to disk as PDF"
         ExportPDFJob.perform_now(id)
       end
     end
@@ -71,6 +69,10 @@ namespace :figgy do
       Dir.mkdir output_dir unless File.directory? output_dir
       exporter = CicognaraMarc.new(cico_collection_id: coll, out_dir: output_dir)
       exporter.run
+    end
+
+    def bulk_logger
+      @bulk_logger ||= Logger.new(STDOUT)
     end
   end
 end
