@@ -31,7 +31,7 @@ class GenericFileCharacterizationService
     # identification gets us a new and better characterizer.
     new_characterizer = Valkyrie::Derivatives::FileCharacterizationService.for(file_set: @file_set, persister: @persister)
     begin
-      new_characterizer.characterize(save: false) unless new_characterizer.class != original_characterizer.class
+      new_characterizer.characterize(save: false) unless new_characterizer.class == original_characterizer.class
     # Inherit any error handling.
     rescue => e
       @characterization_error = e
