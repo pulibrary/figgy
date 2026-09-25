@@ -84,6 +84,15 @@ RSpec.describe GenericFileCharacterizationService do
     end
   end
 
+  context "when characterization fails" do
+    it "sets an error message" do
+      allow(MultiChecksum).to receive(:for).and_raise("Error")
+      expect { described_class.new(file_set: valid_file_set, persister: persister).characterize }.to raise_error(RuntimeError)
+      file_set = query_service.find_by(id: valid_file_set.id)
+      expect(file_set.file_metadata[0].error_message.first).to start_with "Error during characterization:"
+    end
+  end
+
   context "when characterization fails and then succeeds" do
     it "removes any previous error messages" do
       allow(Vips::Image).to receive(:new_from_file).and_raise("Error")
