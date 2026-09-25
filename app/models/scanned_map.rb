@@ -39,6 +39,11 @@ class ScannedMap < Resource
     true
   end
 
+  # ScannedMaps can have images.
+  def image_resource?
+    true
+  end
+
   def title
     imported_title = primary_imported_metadata.title.presence || []
     attributes[:title].presence || imported_title
