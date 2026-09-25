@@ -29,10 +29,10 @@ RSpec.describe DefaultCharacterizationService do
     expect(new_file_set.original_file.software).to include "Adobe Photoshop CS5.1 Macintosh"
   end
 
-  let(:tika_file_characterization_service) { instance_double(TikaFileCharacterizationService) }
+  let(:tika_file_characterization_service) { instance_double(GenericFileCharacterizationService) }
   it "characterizes using Tika" do
     allow(tika_file_characterization_service).to receive(:characterize)
-    allow(TikaFileCharacterizationService).to receive(:new).and_return(tika_file_characterization_service)
+    allow(GenericFileCharacterizationService).to receive(:new).and_return(tika_file_characterization_service)
     file_set = valid_file_set
 
     described_class.new(file_set: file_set, persister: persister).characterize(save: false)
