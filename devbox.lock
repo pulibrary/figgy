@@ -49,6 +49,44 @@
         }
       }
     },
+    "corepack@latest": {
+      "last_modified": "2026-08-29T00:50:12Z",
+      "resolved": "github:NixOS/nixpkgs/e8be7818e19ada32105a8af937a6a473b38167ca#corepack",
+      "source": "devbox-search",
+      "version": "0.36.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/in629grvxkp2jp2wg1zh8kdy99d3kj6p-corepack-0.36.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/in629grvxkp2jp2wg1zh8kdy99d3kj6p-corepack-0.36.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vc5806djvzy5lsqwl81lj7hm7qbwnfsx-corepack-0.36.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/vc5806djvzy5lsqwl81lj7hm7qbwnfsx-corepack-0.36.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/38dz8c239sr5nrbqz3z4fkc8rnl6vigy-corepack-0.36.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/38dz8c239sr5nrbqz3z4fkc8rnl6vigy-corepack-0.36.0"
+        }
+      }
+    },
     "ffmpeg@8.0": {
       "last_modified": "2026-01-14T12:51:35Z",
       "resolved": "github:NixOS/nixpkgs/13868c071cc73a5e9f610c47d7bb08e5da64fdd5#ffmpeg",
