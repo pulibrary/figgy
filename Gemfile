@@ -105,7 +105,7 @@ gem "valkyrie-sequel", "3.0.1"
 gem "valkyrie-shrine"
 gem "view_component", require: "view_component/engine"
 gem "vite_rails", "~> 3.11.0"
-gem "vite_ruby", "~> 3.10.0"
+gem "vite_ruby", "~> 3.11.0"
 gem "whenever", "~> 1.0"
 
 source "https://gems.contribsys.com/" do
