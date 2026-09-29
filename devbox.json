@@ -76,7 +76,8 @@
     "gettext":        "latest",
     "openssl":        "latest",
     "gnumake":        "latest",
-    "corepack":       "latest"
+    "corepack":       "latest",
+    "git":            "latest"
   },
   "shell": {
     "init_hook": [
