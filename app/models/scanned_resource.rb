@@ -52,12 +52,6 @@ class ScannedResource < Resource
     imported_metadata&.first&.title.presence || __attributes__[:title]
   end
 
-  # Determines if this is an image resource
-  # @return [TrueClass, FalseClass]
-  def image_resource?
-    change_set != "recording"
-  end
-
   def recording?
     change_set == "recording"
   end

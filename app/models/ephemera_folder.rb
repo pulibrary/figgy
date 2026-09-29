@@ -87,8 +87,4 @@ class EphemeraFolder < Resource
   def linked_resource
     LinkedData::LinkedEphemeraFolder.new(resource: self)
   end
-
-  def image_resource?
-    true
-  end
 end

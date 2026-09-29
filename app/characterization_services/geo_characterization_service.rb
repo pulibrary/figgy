@@ -17,8 +17,8 @@ class GeoCharacterizationService
   #   Valkyrie::Derivatives::FileCharacterizationService.for(file_set, persister).characterize(save: false)
   def characterize(save: true)
     if scanned_map_characterization_service.valid?
-      # Run tika on scanned maps only
-      @file_set = TikaFileCharacterizationService.new(file_set: file_set, persister: persister).characterize
+      # Run vips characterization on scanned maps only
+      @file_set = GenericFileCharacterizationService.new(file_set: file_set, persister: persister).characterize
       @file_set = scanned_map_characterization_service.characterize
     end
     @file_set = vector_characterization_service.characterize if vector_characterization_service.valid?

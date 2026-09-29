@@ -13,8 +13,6 @@ RSpec.describe GeoMetadataExtractor do
   let(:change_set) { ScannedMapChangeSet.new(map) }
   let(:map_members) { query_service.find_members(resource: map) }
   let(:file_set) { map_members.first }
-  # Shared output context for stubbing tika
-  let(:tika_output) { tika_xml_output }
 
   context "with fgdc metadata" do
     let(:file) { fixture_file_upload("files/geo_metadata/fgdc.xml", "application/xml") }

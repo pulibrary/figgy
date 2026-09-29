@@ -20,7 +20,6 @@ RSpec.describe VectorResourceDerivativeService do
   let(:decorated_vector_resources) { query_service.find_members(resource: vector_resource) }
   let(:valid_resource) { decorated_vector_resources.first }
   let(:valid_change_set) { ChangeSet.for(valid_resource) }
-  let(:tika_output) { tika_shapefile_output }
   let(:valid_id) { valid_change_set.id }
 
   describe "#valid?" do
