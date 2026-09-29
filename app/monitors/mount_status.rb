@@ -14,7 +14,6 @@ class MountStatus < HealthMonitor::Providers::Base
       "/mnt/hydra_sources/ingest_scratch",
       "/mnt/hydra_sources/pudl",
       "/mnt/hydra_sources/maplab",
-      "/mnt/hydra_sources/bitcur-archives",
       "/mnt/hydra_sources/studio_new",
       "/mnt/hydra_sources/marquand",
       "/mnt/hydra_sources/mendel",
