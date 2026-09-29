@@ -66,7 +66,7 @@ class MediainfoCharacterizationService
   # @return [TrueClass, FalseClass]
   def valid?
     return false if preservation_file.nil?
-    (parent.try(:recording?) || parent.try(:image_resource?)) && supported_format?
+    supported_format?
   end
 
   private
@@ -79,12 +79,6 @@ class MediainfoCharacterizationService
 
     def extension
       preservation_file&.original_filename&.first&.downcase
-    end
-
-    # Retrieve the parent resource of the FileSet
-    # @return [Resource]
-    def parent
-      @parent ||= Wayfinder.for(file_set).parent
     end
 
     # Determines the location of the file on disk for the file_set
@@ -117,10 +111,6 @@ class MediainfoCharacterizationService
     # Retrieves the primary binary file in this FileSet
     # @return [FileNode]
     def preservation_file
-      if parent.try(:image_resource?)
-        @file_set.primary_file
-      else
-        @file_set.preservation_file || @file_set.primary_file
-      end
+      @file_set.preservation_file || @file_set.primary_file
     end
 end
