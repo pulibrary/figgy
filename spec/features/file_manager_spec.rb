@@ -82,24 +82,13 @@ RSpec.feature "File Manager" do
         allow(file_set).to receive(:original_file).and_return(original_file)
         allow(create_derivatives_class).to receive(:perform_later).and_return(success: true)
       end
-      xscenario "users regenerate derivatives for a file set" do
+      scenario "users can regenerate derivatives for a file set", js: true do
         visit polymorphic_path [:file_manager, resource]
 
-        expect(page).to have_selector("form.rederive button")
-        click_button "Regenerate Derivatives"
+        within(find(".info")) do
+          click_link "Regenerate Derivatives"
+        end
         expect(page).to have_selector ".alert-success .text", text: "Derivatives are being regenerated"
-      end
-      context "when the derivative service fails" do
-        before do
-          allow(create_derivatives_class).to receive(:perform_later).and_raise(Hydra::Derivatives::TimeoutError)
-        end
-        xscenario "users cannot regenerate derivatives for a file set" do
-          visit polymorphic_path [:file_manager, resource]
-
-          expect(page).to have_selector("form.rederive button")
-          click_button "Regenerate Derivatives"
-          expect(page).to have_selector ".alert-danger .text", text: "Derivatives cannot be regenerated"
-        end
       end
     end
   end

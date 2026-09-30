@@ -26,53 +26,66 @@
       <div class="spacer">
       </div>
     </div>
-  <div class="fm_errors">
-    <% if f.object.model.error_message.present? %>
-      <div class="fm_error warn">
-        <lux-icon-base width="24"  height="24" icon-name="warning" icon-color="#f8a000">
-          <lux-icon-alert></lux-icon-alert>
-        </lux-icon-base>
-        <span>
-          <% if node.model_name.singular == "file_set" %>
-            <% if geo_metadata_file?(node) %>
+
+    <div class="card_footer">
+      <% if f.object.model.error_message.present? %>
+        <div class="info_block warn">
+          <lux-icon-base width="24"  height="24" icon-name="warning" icon-color="#f8a000">
+            <lux-icon-alert></lux-icon-alert>
+          </lux-icon-base>
+          <span>
+            <% if node.model_name.singular == "file_set" %>
+              <% if geo_metadata_file?(node) %>
                 Metadata Extraction Failed |  <a class="rederive" href="<%= scanned_maps_extract_metadata_path(file_set_id: node.id) %>">Extract Metadata</a>
-            <% else %>
+              <% else %>
                 Derivatives Failed | <a class="rederive" href="<%= derivatives_file_set_path(node) %>">Regenerate</a>
+              <% end %>
             <% end %>
-          <% end %>
-        </span>
-      </div>
-    <% end %>
-    <% if local_fixity_failure_ids.include?(f.object.id) %>
-      <div class="fm_error err">
-        <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
-          <lux-icon-denied></lux-icon-denied>
-        </lux-icon-base>
-        <span>
-          Local Fixity Failed
-        </span>
-      </div>
-    <% end %>
-    <% if cloud_fixity_failure_ids.include?(f.object.id) %>
-      <div class="fm_error err">
-        <lux-icon-base width="24" height="24" icon-name="error" icon-color="red">
-          <lux-icon-denied></lux-icon-denied>
-        </lux-icon-base>
-        <span>
-          Cloud Fixity Failed
-        </span>
-      </div>
-    <% end %>
-    <% if f.object.resource.missing_captions? %>
-      <div class="fm_error err">
-        <lux-icon-base width="24" height="24" icon-name="error" icon-color="red">
-          <lux-icon-denied></lux-icon-denied>
-        </lux-icon-base>
-        <span>
-          <%= link_to "Attach Missing Captions", new_caption_file_set_file_metadata_path(file_set_id: f.object.id) %>
-        </span>
-      </div>
-    <% end %>
-  </div>
+          </span>
+        </div>
+      <% else %>
+        <div class="info_block info">
+          <span>
+            <% if node.model_name.singular == "file_set" %>
+              <% unless geo_metadata_file?(node) %>
+                <a class="rederive" href="<%= derivatives_file_set_path(node) %>">Regenerate Derivatives</a>
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+
+      <% if local_fixity_failure_ids.include?(f.object.id) %>
+        <div class="info_block err">
+          <lux-icon-base width="24"  height="24" icon-name="error" icon-color="red">
+            <lux-icon-denied></lux-icon-denied>
+          </lux-icon-base>
+          <span>
+            Local Fixity Failed
+          </span>
+        </div>
+      <% end %>
+      <% if cloud_fixity_failure_ids.include?(f.object.id) %>
+        <div class="info_block err">
+          <lux-icon-base width="24" height="24" icon-name="error" icon-color="red">
+            <lux-icon-denied></lux-icon-denied>
+          </lux-icon-base>
+          <span>
+            Cloud Fixity Failed
+          </span>
+        </div>
+      <% end %>
+      <% if f.object.resource.missing_captions? %>
+        <div class="info_block err">
+          <lux-icon-base width="24" height="24" icon-name="error" icon-color="red">
+            <lux-icon-denied></lux-icon-denied>
+          </lux-icon-base>
+          <span>
+            <%= link_to "Attach Missing Captions", new_caption_file_set_file_metadata_path(file_set_id: f.object.id) %>
+          </span>
+        </div>
+      <% end %>
+
+    </div>
   <% end %>
 </div>
