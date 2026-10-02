@@ -2,17 +2,10 @@
 # yarn lockfile v1
 
 
-"@google-cloud/paginator@^7.0.0":
+"@google-cloud/paginator@^7.0.0", "@google-cloud/paginator@^7.0.1":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/paginator/-/paginator-7.1.0.tgz#84dd03fc0537151f7a3a2404ad7b02058064ae9c"
   integrity sha512-PNCXdAQgNoQODZuqyhmkN2nUpB2q9UFzawZ1oyCDyEyhcheRoCKJJhSKhEIeKpM/NCLnC6Q4We4HEkGCwNDnCA==
-  dependencies:
-    extend "^3.0.2"
-
-"@google-cloud/paginator@^7.0.1":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/paginator/-/paginator-7.0.1.tgz#321e139a357c5a1c561b8a9e3937a316c40dc9ad"
-  integrity sha512-k32cWlHAF8yTgg8rciLI8mPMI6UzuJdKp53YRxISRwMFxUl2FYplvs+Mr2UHxKn0W7rXsqZnUZy73AOJFDP8iA==
   dependencies:
     extend "^3.0.2"
 
@@ -21,25 +14,15 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/precise-date/-/precise-date-6.1.0.tgz#869bc2c5d773e238f2210f9a8d67c09f94756d8b"
   integrity sha512-Tz39EQeR6uku5G9tVvuCUNcreR7qfg7qAkWFaTqC/7KOIlDR0gCB5BaNPWnTzow1N2PqjyET+xNbdc+q22di0g==
 
-"@google-cloud/projectify@^6.0.0":
+"@google-cloud/projectify@^6.0.0", "@google-cloud/projectify@^6.0.1":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/projectify/-/projectify-6.1.0.tgz#c0256a9fd90872794c7d2d35fe1b4dff240c57d8"
   integrity sha512-tKAx9q6vTtbgZcqCojKWK8k6Dy2XBsE7BkNrrBsblxNXrKImYnljqeGfYh9qnTrlTjC9F19pTyCkGcl3pFMW/w==
 
-"@google-cloud/projectify@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/projectify/-/projectify-6.0.1.tgz#e53661c5ac448326efd984f90ed0123b8659970d"
-  integrity sha512-zA3o4l87UJ56odT/e9PcT4n2bqVnrp6dg9vI75DoGGbl0/YJemX8Fta7454htECt07eALxxc4iaAbrX3T+QulA==
-
-"@google-cloud/promisify@^6.0.0":
+"@google-cloud/promisify@^6.0.0", "@google-cloud/promisify@^6.0.1":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-6.1.0.tgz#93d83ab3936a3f84bc0739f78fc4bad65aeb50aa"
   integrity sha512-H+Rytzi5zYMyoAmU/zgYLgq7fJ9FY4QQEg4k6gfFx/RY1COJ2xxyIfe8bZ62lqEbWM1DJH7IYETqTFmqNtuUhQ==
-
-"@google-cloud/promisify@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-6.0.1.tgz#6cc04969e0f6326c612c72f8ccfd445d87f9d07e"
-  integrity sha512-lpN2AtoQ/iimp7jjm5zJFWbpW7OJc5qWmQdt59CI4ENeoIRIx+yf2ShSR2kanQfjFOshA74eSbimXXuRaSCUVg==
 
 "@google-cloud/pubsub-api@^0.3.0":
   version "0.3.0"
@@ -73,9 +56,9 @@
     p-defer "^3.0.0"
 
 "@google-cloud/storage@^8.0.0":
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-8.1.0.tgz#ecc6f33ca95b6698e44621d23483ac58e3b9f5c7"
-  integrity sha512-iFDlOGBzmzTelslzcf0yTpoqloyfTUi448PxJXvjtbvGqtc2ftT8HUSl5+sKQPRz70y64ha5FqojDhABP103EA==
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-8.2.0.tgz#8ac3df400a125026f0ef6d8cafa9a5f0af9d2ac2"
+  integrity sha512-7ckgSjeEprV92VrlLjpYFA3PFerflvFtF7Ea86oQXGNCprGZq5rtpAVK0zgWnCy+44mLjms42M7MiWa433gz2A==
   dependencies:
     "@google-cloud/paginator" "^7.0.1"
     "@google-cloud/projectify" "^6.0.1"
@@ -120,10 +103,10 @@
   resolved "https://registry.yarnpkg.com/@js-sdsl/ordered-map/-/ordered-map-4.4.2.tgz#9299f82874bab9e4c7f9c48d865becbfe8d6907c"
   integrity sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==
 
-"@nodable/entities@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@nodable/entities/-/entities-3.0.0.tgz#694703bc864d30eaed55c2e3def00dbd61493670"
-  integrity sha512-8L9xFeTYKhm49xfIypoe2W5wV1m/3Z58kT+7kR9A8OyFxcPduI4VmxaUMQyKYrRjUoLLSXv6EKKID5Tvj9cUVw==
+"@nodable/entities@^3.0.1":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@nodable/entities/-/entities-3.1.0.tgz#2ab366e0e607fdef8d65c5d84c58d191812bbd4b"
+  integrity sha512-LsS/DjHr+uDM647Gru/cA8+J3a3HfhttwCKLyuoyN7yXTFCxKBtSgMQBvrW9yNPa2/zDRUNuGPaH5QUFoa4arQ==
 
 "@opentelemetry/api@^1.9.0", "@opentelemetry/api@~1.9.0":
   version "1.9.1"
@@ -553,11 +536,11 @@ fast-xml-builder@^1.2.0:
     xml-naming "^0.3.0"
 
 fast-xml-parser@^5.3.4:
-  version "5.11.1"
-  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-5.11.1.tgz#0ee672fcce1710c38185b8290d77e98806ff0bfb"
-  integrity sha512-TBw6K/fxoQGGjCmZDw9w/ZwP3uDcnTM4YH/g+PFRWr8sbe5idXtxNN6vITh4+1ruCZaho6uBFurElsA7F0zzgw==
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-5.11.2.tgz#0d4987adf4e7934af11d82a73b2841eca9928a42"
+  integrity sha512-R9iDuNrQYeQut46cn2r2wHKn4HYzVDvDm5J1wW+koZewykv0yuO2HChTYeZtrULyHIDM9cj9TUXloCsueCQUog==
   dependencies:
-    "@nodable/entities" "^3.0.0"
+    "@nodable/entities" "^3.0.1"
     fast-xml-builder "^1.2.0"
     is-unsafe "^2.0.0"
     path-expression-matcher "^1.6.2"
