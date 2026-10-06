@@ -4,6 +4,10 @@ class ViewerConfiguration < ActiveSupport::HashWithIndifferentAccess
   # @return [Hash]
   def self.default_values
     {
+      "options" =>
+      {
+        "pagingEnabled" => false
+      },
       "modules" =>
       {
         "pagingHeaderPanel" =>
