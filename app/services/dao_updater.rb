@@ -6,7 +6,7 @@ class DaoUpdater
   end
 
   def update!
-    return unless decorated_resource.public_readable_state?
+    return unless decorated_resource.public_readable_state? || existing_dao
 
     # Assign digital object to Archival Object.
     link_digital_object
@@ -22,6 +22,14 @@ class DaoUpdater
 
   def archival_object
     @archival_object ||= aspace_client.find_archival_object_by_component_id(component_id: change_set.source_metadata_identifier)
+  end
+
+  def existing_dao
+    @existing_dao ||=
+      begin
+        found = aspace_client.get("/repositories/#{archival_object.repository_id}/find_by_id/digital_objects?digital_object_id[]=#{change_set.resource.id}&resolve[]=digital_objects").parsed
+        found["digital_objects"].first&.fetch("_resolved")
+      end
   end
 
   def digital_object
@@ -51,14 +59,15 @@ class DaoUpdater
   end
 
   def update_or_create_digital_object
-    found = aspace_client.get("/repositories/#{archival_object.repository_id}/find_by_id/digital_objects?digital_object_id[]=#{change_set.resource.id}&resolve[]=digital_objects").parsed
-    found = found["digital_objects"].first&.fetch("_resolved")
-    return update_digital_object(found) if found
-    create_digital_object
+    if existing_dao
+      update_digital_object
+    else
+      create_digital_object
+    end
   end
 
-  def update_digital_object(found_digital_object)
-    aspace_client.post(found_digital_object["uri"], new_dao.merge("lock_version" => found_digital_object["lock_version"])).parsed
+  def update_digital_object
+    aspace_client.post(existing_dao["uri"], new_dao.merge("lock_version" => existing_dao["lock_version"])).parsed
   end
 
   def create_digital_object
@@ -71,16 +80,20 @@ class DaoUpdater
       "jsonmodel_type" => "digital_object_component",
       "digital_object_id" => change_set.id.to_s,
       "title" => embed.link_label,
-      "publish" => !decorated_resource.private_visibility?,
+      "publish" => publish?,
       "file_versions" => [
         embed.to_dao.merge(
           {
-            "publish" => !decorated_resource.private_visibility?,
+            "publish" => publish?,
             "jsonmodel_type" => "file_version"
           }
         )
       ]
     }
+  end
+
+  def publish?
+    decorated_resource.public_readable_state? && !decorated_resource.private_visibility?
   end
 
   def aspace_client

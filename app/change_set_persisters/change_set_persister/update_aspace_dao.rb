@@ -8,7 +8,6 @@ class ChangeSetPersister
 
     def run
       return unless pulfa_record?
-      return unless change_set.resource.decorate.public_readable_state?
       UpdateDaoJob.perform_later(change_set.id.to_s)
     end
 
