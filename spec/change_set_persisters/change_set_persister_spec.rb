@@ -1790,6 +1790,9 @@ RSpec.describe ChangeSetPersister do
     it "reorganizes" do
       stub_findingaid(pulfa_id: "C0652")
       stub_findingaid(pulfa_id: "C0652_c0377")
+      stub_aspace_login
+      stub_find_archival_object_not_found(component_id: "C0652")
+      stub_find_archival_object_not_found(component_id: "C0652_c0377")
       coll = FactoryBot.create_for_repository(:archival_media_collection, source_metadata_identifier: "C0652")
       barcode_resource = FactoryBot.create_for_repository(:recording, local_identifier: "32101047382401")
       FactoryBot.create_for_repository(
