@@ -8,6 +8,7 @@ class ManifestBuilder
 
     def apply(manifest)
       sequence["viewingHint"] = manifest["viewingHint"]
+      sequence["viewingDirection"] = manifest["viewingDirection"]
       start_canvas_builder.new(work).apply(sequence)
       super
     end
