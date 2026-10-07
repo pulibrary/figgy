@@ -54,6 +54,42 @@ RSpec.describe ChangeSetPersister::UpdateAspaceDao do
     expect(mocked_archival_object_update).to have_been_made
   end
 
+  it "unpublishes the DAO when a previously complete item is made private" do
+    stub_aspace_login
+    stub_find_archival_object(component_id: "MC001.01_c000001")
+    stub_findingaid(pulfa_id: "MC001.01_c000001")
+    stub_ezid
+    stub_find_digital_object_by_figgy_id(already_exists: true)
+    mocked_digital_object_update = stub_digital_object_update
+    stub_archival_object_update(archival_object_id: "260330")
+    change_set_persister = ChangeSetPersister.default
+    resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "MC001.01_c000001")
+    change_set = ChangeSet.for(resource)
+    change_set.validate(visibility: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
+
+    change_set_persister.save(change_set: change_set)
+
+    expect(mocked_digital_object_update.with { |req| req.body.include?('"publish":false') }).to have_been_made
+  end
+
+  it "unpublishes the DAO when a previously complete public item is taken down" do
+    stub_aspace_login
+    stub_find_archival_object(component_id: "MC001.01_c000001")
+    stub_findingaid(pulfa_id: "MC001.01_c000001")
+    stub_ezid
+    stub_find_digital_object_by_figgy_id(already_exists: true)
+    mocked_digital_object_update = stub_digital_object_update
+    stub_archival_object_update(archival_object_id: "260330")
+    change_set_persister = ChangeSetPersister.default
+    resource = FactoryBot.create_for_repository(:complete_open_scanned_resource, source_metadata_identifier: "MC001.01_c000001")
+    change_set = ChangeSet.for(resource)
+    change_set.validate(state: "takedown")
+
+    change_set_persister.save(change_set: change_set)
+
+    expect(mocked_digital_object_update.with { |req| req.body.include?('"publish":false') }).to have_been_made
+  end
+
   it "updates ASpace even if a digital object already exists" do
     stub_aspace_login
     stub_find_archival_object(component_id: "MC001.01_c000001")

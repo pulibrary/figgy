@@ -3,15 +3,19 @@ require "rails_helper"
 RSpec.describe DaoUpdater do
   describe "#update!" do
     context "when the resource is not complete" do
-      it "does nothing" do
-        resource = FactoryBot.create_for_repository(:scanned_resource, state: "pending")
+      it "doesn't create a DAO if one doesn't exist" do
+        stub_aspace_login
+        stub_find_archival_object(component_id: "MC001.01_c000001")
+        stub_findingaid(pulfa_id: "MC001.01_c000001")
+        stub_find_digital_object_by_figgy_id(already_exists: false)
+        mocked_digital_object_create = stub_create_digital_object
+        resource = FactoryBot.create_for_repository(:scanned_resource, state: "pending", source_metadata_identifier: "MC001.01_c000001")
         change_set_persister = instance_double(ChangeSetPersister)
 
         updater = described_class.new(change_set: ChangeSet.for(resource), change_set_persister: change_set_persister)
-
-        # We haven't stubbed ASpace, so webmock will error if it tries to do
-        # something.
         updater.update!
+
+        expect(mocked_digital_object_create).not_to have_been_made
       end
     end
     context "when no resource is found in ASpace and it's a collection ID" do
