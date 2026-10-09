@@ -32,6 +32,14 @@
                 </div>
               </div>
               <div class="form-group">
+                <div class="form-check">
+                  <%= check_box_tag 'low_priority', "1", false, class: "form-check-input" %>
+                  <label class="form-check-label" for="low_priority">
+                    Low Priority (other bulk ingests will run first)
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
                 <div class="form-check" >
                   <%= check_box_tag 'complete_when_processed', "1", true, class: "form-check-input" %>
                   <label class="form-check-label" for="complete_when_processed">

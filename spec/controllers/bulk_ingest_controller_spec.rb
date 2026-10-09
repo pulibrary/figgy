@@ -54,6 +54,12 @@ RSpec.describe BulkIngestController do
         expect(assigns(:collections)).to eq [[collection.title.first, collection.id.to_s]]
       end
 
+      it "displays a low priority checkbox" do
+        get :show, params: { resource_type: "scanned_resource" }
+
+        expect(response.body).to have_field "low_priority", checked: false
+      end
+
       it "doesn't display extra options for ephemera folders" do
         get :show, params: { resource_type: "ephemera_folder" }
 
@@ -135,6 +141,18 @@ RSpec.describe BulkIngestController do
               depositor: user.uid
             )
           )
+      end
+
+      it "uses bulk_low when low_priority is set" do
+        stub_ingest_folder_job
+        stub_catalog(bib_id: "991234563506421")
+        stub_catalog(bib_id: "9946093213506421")
+        stub_catalog(bib_id: "9917912613506421")
+
+        post :bulk_ingest, params: { resource_type: "scanned_resource", ingest_directory: "studio_new/DPUL/Santa/ready", low_priority: "1" }
+
+        expect(IngestFolderJob).to have_received(:set).with(queue: :bulk_low).at_least(:once)
+        expect(IngestFolderJob).not_to have_received(:set).with(queue: :bulk)
       end
     end
 
