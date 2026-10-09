@@ -1,15 +1,16 @@
 # Used for ingesting a directory which is mounted on the server.
 class LocalIngester
-  attr_reader :resource_class_name, :attributes, :ingest_directory
-  def initialize(resource_class_name:, attributes:, ingest_directory: nil)
+  attr_reader :resource_class_name, :attributes, :ingest_directory, :queue
+  def initialize(resource_class_name:, attributes:, ingest_directory: nil, queue: :bulk)
     @resource_class_name = resource_class_name
     @attributes = attributes
     @ingest_directory = ingest_directory
+    @queue = queue
   end
 
   def ingest
     ingest_paths.each do |path|
-      IngestFolderJob.set(queue: :bulk).perform_later(
+      IngestFolderJob.set(queue: queue).perform_later(
         directory: path.to_s,
         file_filters: file_filters,
         class_name: resource_class_name,

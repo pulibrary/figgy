@@ -85,8 +85,17 @@ class BulkIngestController < ApplicationController
       LocalIngester.new(
         resource_class_name: resource_class_name,
         attributes: attributes,
-        ingest_directory: params[:ingest_directory]
+        ingest_directory: params[:ingest_directory],
+        queue: queue
       )
+    end
+
+    def queue
+      if params[:low_priority] == "1"
+        :bulk_low
+      else
+        :bulk
+      end
     end
 
     def files_to_upload?
