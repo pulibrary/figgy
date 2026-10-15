@@ -34,9 +34,9 @@ class FindDeepChildrenWithProperty
           jsonb_array_elements(f.metadata->'member_ids') AS g(member)
           WHERE f.internal_resource <> 'FileSet'
         )
-        select #{count ? 'COUNT(*) AS count' : 'member.*'} from deep_ids
-        JOIN orm_resources member ON member.id = deep_ids.id
-        WHERE member.internal_resource = :model
+        select #{count ? 'COUNT(*) AS count' : 'member.*'} from orm_resources member
+        WHERE member.id = ANY(ARRAY(SELECT id FROM deep_ids))
+        AND member.internal_resource = :model
         #{'AND member.metadata @> :property_query' if filter_property}
     SQL
   end
