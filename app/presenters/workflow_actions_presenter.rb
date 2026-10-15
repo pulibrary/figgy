@@ -26,7 +26,8 @@ class WorkflowActionsPresenter
   private
 
     def enable_final_state?
-      workflow.final_state? || !InProcessOrPending.for(resource)
+      return @enable_final_state if defined?(@enable_final_state)
+      @enable_final_state = workflow.final_state? || !InProcessOrPending.for(resource)
     end
 
     def input_html

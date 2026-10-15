@@ -947,6 +947,13 @@ CREATE INDEX orm_resources_first_issue_number_idx ON public.orm_resources USING 
 
 
 --
+-- Name: orm_resources_in_process_file_sets_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX orm_resources_in_process_file_sets_idx ON public.orm_resources USING btree (id) WHERE (((internal_resource)::text = 'FileSet'::text) AND (metadata @> '{"processing_status": ["in process"]}'::jsonb));
+
+
+--
 -- Name: preserved_object_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -999,6 +1006,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20261015160000'),
 ('20260603175418'),
 ('20260109173200'),
 ('20251208215153'),
