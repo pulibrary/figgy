@@ -39,7 +39,7 @@
             data-query-url="<%= solr_document_path(id: resource.id) %>"
             data-resource-type="<%= ActiveModel::Naming.param_key(decorated_resource.model.class) %>"
             data-member-type="<%= member_type %>"
-            data-members="<%= decorated_resource.members.map { |member| member.id.to_s } %>"
+            data-members="<%= decorated_resource.persisted_member_ids %>"
           >
             <thead>
               <tr>
