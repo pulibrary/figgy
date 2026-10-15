@@ -35,5 +35,17 @@ RSpec.describe FindDeepChildrenWithProperty do
 
       expect(output).to eq 3
     end
+    it "counts all children of a given model if not given a property" do
+      fs1 = FactoryBot.create_for_repository(:file_set, processing_status: "in process")
+      fs2 = FactoryBot.create_for_repository(:file_set, processing_status: "processed")
+      fs3 = FactoryBot.create_for_repository(:file_set)
+      FactoryBot.create_for_repository(:file_set)
+      volume1 = FactoryBot.create_for_repository(:scanned_resource, member_ids: fs1.id)
+      volume2 = FactoryBot.create_for_repository(:scanned_resource, member_ids: [fs2.id])
+      mvw = FactoryBot.create_for_repository(:scanned_resource, member_ids: [volume1.id, volume2.id, fs3.id])
+
+      expect(query.find_deep_children_with_property(resource: mvw, model: FileSet, count: true)).to eq 3
+      expect(query.find_deep_children_with_property(resource: mvw, model: ScannedResource, count: true)).to eq 2
+    end
   end
 end

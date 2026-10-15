@@ -10,15 +10,17 @@ class FindDeepChildrenWithProperty
     @query_service = query_service
   end
 
-  def find_deep_children_with_property(resource:, model:, property:, value:, count: false)
+  def find_deep_children_with_property(resource:, model:, property: nil, value: nil, count: false)
+    query = relationship_query(count, filter_property: property)
+    params = { id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json }
     if count
-      query_service.connection[relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json].first[:count]
+      query_service.connection[query, params].first[:count]
     else
-      run_query(relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json)
+      run_query(query, params)
     end
   end
 
-  def relationship_query(count = false)
+  def relationship_query(count = false, filter_property: nil)
     <<-SQL
         WITH RECURSIVE deep_ids(id) AS (
           SELECT (b.member->>'id')::UUID
@@ -35,7 +37,7 @@ class FindDeepChildrenWithProperty
         select #{count ? 'COUNT(*) AS count' : 'member.*'} from deep_ids
         JOIN orm_resources member ON member.id = deep_ids.id
         WHERE member.internal_resource = :model
-        AND member.metadata @> :property_query
+        #{'AND member.metadata @> :property_query' if filter_property}
     SQL
   end
 end
