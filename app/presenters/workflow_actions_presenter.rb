@@ -2,15 +2,16 @@ class WorkflowActionsPresenter
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper
 
-  def self.for(form)
-    new(form: form).render
+  def self.for(form, wayfinder: nil)
+    new(form: form, wayfinder: wayfinder).render
   end
 
-  attr_reader :change_set, :form, :resource
-  def initialize(form:)
+  attr_reader :change_set, :form, :resource, :wayfinder
+  def initialize(form:, wayfinder: nil)
     @form = form
     @change_set = form.object
     @resource = change_set.resource
+    @wayfinder = wayfinder
   end
 
   def render
@@ -26,7 +27,8 @@ class WorkflowActionsPresenter
   private
 
     def enable_final_state?
-      workflow.final_state? || !InProcessOrPending.for(resource)
+      return @enable_final_state if defined?(@enable_final_state)
+      @enable_final_state = workflow.final_state? || !InProcessOrPending.for(resource, wayfinder: wayfinder)
     end
 
     def input_html

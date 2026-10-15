@@ -20,7 +20,7 @@ class ScannedResourceWayfinder < BaseWayfinder
   end
 
   def processed_file_sets_count
-    @processed_file_sets_count ||= query_service.custom_queries.find_deep_children_with_property(resource: resource, model: FileSet, property: :processing_status, value: "processed", count: true)
+    @processed_file_sets_count ||= query_service.custom_queries.find_deep_children_with_property(resource: resource, model: FileSet, count: true) - in_process_file_sets_count
   end
 
   def members_with_parents

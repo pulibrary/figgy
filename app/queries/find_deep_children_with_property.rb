@@ -10,32 +10,34 @@ class FindDeepChildrenWithProperty
     @query_service = query_service
   end
 
-  def find_deep_children_with_property(resource:, model:, property:, value:, count: false)
+  def find_deep_children_with_property(resource:, model:, property: nil, value: nil, count: false)
+    query = relationship_query(count, filter_property: property)
+    params = { id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json }
     if count
-      query_service.connection[relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json].first[:count]
+      query_service.connection[query, params].first[:count]
     else
-      run_query(relationship_query(count), id: resource.id.to_s, model: model.to_s, property_query: { property => Array.wrap(value) }.to_json)
+      run_query(query, params)
     end
   end
 
-  def relationship_query(count = false)
+  def relationship_query(count = false, filter_property: nil)
     <<-SQL
-        WITH RECURSIVE deep_members AS (
-          select member.*
+        WITH RECURSIVE deep_ids(id) AS (
+          SELECT (b.member->>'id')::UUID
           FROM orm_resources a,
           jsonb_array_elements(a.metadata->'member_ids') AS b(member)
-          JOIN orm_resources member ON (b.member->>'id')::UUID = member.id
           WHERE a.id = :id
           UNION
-          SELECT mem.*
-          FROM deep_members f,
+          SELECT (g.member->>'id')::UUID
+          FROM deep_ids d
+          JOIN orm_resources f ON f.id = d.id,
           jsonb_array_elements(f.metadata->'member_ids') AS g(member)
-          JOIN orm_resources mem ON (g.member->>'id')::UUID = mem.id
-          WHERE f.metadata @> '{"member_ids": [{}]}'
+          WHERE f.internal_resource <> 'FileSet'
         )
-        select #{count ? 'COUNT(*) AS count' : '*'} from deep_members
-        WHERE internal_resource = :model
-        AND metadata @> :property_query
+        select #{count ? 'COUNT(*) AS count' : 'member.*'} from deep_ids
+        JOIN orm_resources member ON member.id = deep_ids.id
+        WHERE member.internal_resource = :model
+        #{'AND member.metadata @> :property_query' if filter_property}
     SQL
   end
 end

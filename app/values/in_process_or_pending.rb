@@ -1,11 +1,12 @@
 class InProcessOrPending
-  def self.for(resource)
-    new(resource).call
+  def self.for(resource, wayfinder: nil)
+    new(resource, wayfinder: wayfinder).call
   end
 
-  attr_reader :resource
-  def initialize(resource)
+  attr_reader :resource, :wayfinder
+  def initialize(resource, wayfinder: nil)
     @resource = resource
+    @wayfinder = wayfinder
   end
 
   def call
@@ -14,7 +15,17 @@ class InProcessOrPending
 
   def in_process?
     return false unless resource.id
-    in_process_file_sets.count.positive?
+    in_process_file_sets_count.positive?
+  end
+
+  def in_process_file_sets_count
+    @in_process_file_sets_count ||= wayfinder.try(:in_process_file_sets_count) || query_service.custom_queries.find_deep_children_with_property(
+      resource: resource,
+      model: "FileSet",
+      property: :processing_status,
+      value: "in process",
+      count: true
+    )
   end
 
   def in_process_file_sets
