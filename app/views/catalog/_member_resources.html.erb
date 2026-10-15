@@ -60,7 +60,7 @@
                 <% resource_url = solr_document_path(id: resource.id) %>
                 <tr data-resource-id="<%= resource.id.to_s %>">
                   <% unless hide_thumbnail %>
-                    <td><%= link_to figgy_thumbnail_path(resource, { class: 'thumbnail-inner', onerror: default_icon_fallback }), resource_url %></td>
+                    <td><%= link_to image_tag(thumbnail_path(resource.id), class: 'thumbnail-inner', loading: 'lazy', onerror: default_icon_fallback), resource_url %></td>
                   <% end %>
                   <td><%= resource.first_title %></td>
                   <td><%= resource.created_at %></td>
