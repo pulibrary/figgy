@@ -15,8 +15,9 @@ function stubChildLoad () {
   global.fetch = vi.fn(() =>
     Promise.resolve({
       status: 200,
-      json: () => Promise.resolve(
-        [
+      json: () => Promise.resolve({
+        'selectable': true,
+        'children': [
           {
             'label': 'SubSubSubdir1',
             'path': '/Dir1/Subdir1/SubSubdir1/SubSubSubdir1',
@@ -27,7 +28,7 @@ function stubChildLoad () {
             'children': []
           }
         ]
-      )
+      })
     })
   )
 }
@@ -174,6 +175,16 @@ test('dynamically loads child nodes when list-focused', async () => {
   await wrapper.findAll('.item-label span').at(2).trigger('click')
   await flushPromises()
   expect(wrapper.vm.tree[0].children[0].children[0].children.length).toEqual(1)
+})
+
+test('sets selectable on a folder from its loaded response', async () => {
+  stubChildLoad()
+  const wrapper = mount(FileBrowser, { propsData: { startTree: startChildren(), mode: 'directoryIngest' } })
+  await wrapper.findAll('.item-label').at(1).trigger('click')
+  await wrapper.findAll('.item-label span').at(2).trigger('click')
+  await flushPromises()
+  expect(wrapper.vm.tree[0].children[0].children[0].selectable).toEqual(true)
+  expect(wrapper.get('.actions a').classes()).not.toContain('disabled')
 })
 
 test('handles bad data when loading', async () => {

@@ -29,7 +29,7 @@ RSpec.describe "FileBrowser/Disk" do
             expanded: false,
             expandable: true,
             selected: false,
-            selectable: true,
+            selectable: false,
             loaded: false,
             children: []
           },
@@ -41,7 +41,7 @@ RSpec.describe "FileBrowser/Disk" do
             expanded: false,
             expandable: true,
             selected: false,
-            selectable: true,
+            selectable: false,
             loaded: false,
             children: []
           },
@@ -53,7 +53,7 @@ RSpec.describe "FileBrowser/Disk" do
             expanded: false,
             expandable: true,
             selected: false,
-            selectable: true,
+            selectable: false,
             loaded: false,
             children: []
           }
@@ -71,6 +71,13 @@ RSpec.describe "FileBrowser/Disk" do
     end
     context "when logged in as staff" do
       let(:user) { FactoryBot.create(:staff) }
+      it "returns whether the requested directory is selectable" do
+        get "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421')}.json"
+
+        expect(response).to be_successful
+        json = JSON.parse(response.body, symbolize_names: true)
+        expect(json[:selectable]).to eq true
+      end
       it "can return directories with spaces in it" do
         get "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421/Vol 2')}.json"
         expect(response).to be_successful
@@ -84,7 +91,8 @@ RSpec.describe "FileBrowser/Disk" do
 
         expect(response).to be_successful
         json = JSON.parse(response.body, symbolize_names: true)
-        expect(json).to eq(
+        expect(json[:selectable]).to eq true
+        expect(json[:children]).to eq(
           [
             {
               label: "991234563506421",
@@ -118,7 +126,7 @@ RSpec.describe "FileBrowser/Disk" do
               expanded: false,
               expandable: true,
               selected: false,
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             }

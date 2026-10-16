@@ -12,7 +12,8 @@ class FileBrowser::DiskController < ApplicationController
     authorize! :create, ScannedResource
     respond_to do |format|
       format.json do
-        render json: FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"], base: CGI.unescape(params[:id]), entry_type: entry_type)
+        provider = FileBrowserDiskProvider.new(root: Figgy.config["ingest_folder_path"], base: CGI.unescape(params[:id]), entry_type: entry_type)
+        render json: { selectable: provider.selectable?, children: provider }
       end
     end
   end

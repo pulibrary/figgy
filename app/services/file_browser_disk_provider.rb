@@ -16,6 +16,10 @@ class FileBrowserDiskProvider
     files.map(&:as_json)
   end
 
+  def selectable?
+    entry_klass.new(file_path: root.join(base), root: root).selectable?
+  end
+
   private
 
     def entry_klass
@@ -65,7 +69,7 @@ class Entry
       expanded: false,
       expandable: true,
       selected: false,
-      selectable: selectable?,
+      selectable: false,
       loaded: false,
       children: []
     }
@@ -122,7 +126,7 @@ class SeleneEntry < Entry
       expanded: false,
       expandable: true,
       selected: false,
-      selectable: selectable?,
+      selectable: false,
       loaded: false,
       children: []
     }

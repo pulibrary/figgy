@@ -16,7 +16,7 @@ RSpec.describe FileBrowserDiskProvider do
               expanded: false,
               expandable: true,
               selected: false,
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             },
@@ -28,7 +28,7 @@ RSpec.describe FileBrowserDiskProvider do
               expanded: false,
               expandable: true,
               selected: false,
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             },
@@ -40,7 +40,7 @@ RSpec.describe FileBrowserDiskProvider do
               expanded: false,
               expandable: true,
               selected: false,
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             },
@@ -52,7 +52,7 @@ RSpec.describe FileBrowserDiskProvider do
               expanded: false,
               expandable: true,
               selected: false,
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             },
@@ -64,9 +64,7 @@ RSpec.describe FileBrowserDiskProvider do
               expanded: false,
               expandable: true,
               selected: false,
-              # This is arguable - right now true because there are only
-              # directories as children.
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             }
@@ -112,7 +110,7 @@ RSpec.describe FileBrowserDiskProvider do
               expanded: false,
               expandable: true,
               selected: false,
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             }
@@ -147,27 +145,24 @@ RSpec.describe FileBrowserDiskProvider do
         expect(provider.as_json).to eq([])
       end
       it "doesn't mark empty directories as selectable" do
-        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL")
+        provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/A123456")
 
-        expect(provider.as_json.first).to eq(
-          {
-            label: "A123456",
-            path: "studio_new/DPUL/A123456",
-            loadChildrenPath: "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/A123456')}.json",
-            entry_type: "default",
-            expanded: false,
-            expandable: true,
-            selected: false,
-            selectable: false,
-            loaded: false,
-            children: []
-          }
-        )
+        expect(provider.selectable?).to eq false
+      end
+
+      it "marks directories containing only directories as selectable" do
+        expect(described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/Santa/ready/9946093213506421").selectable?).to eq true
+        expect(described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/Santa/ready/991234563506421").selectable?).to eq false
       end
     end
 
     context "with a Selene entry" do
       it "marks folders with Selene files and structure as selectable" do
+        expect(described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/selene-example", entry_type: "selene").selectable?).to eq true
+        expect(described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL", entry_type: "selene").selectable?).to eq false
+      end
+
+      it "returns the folders as Selene entries" do
         provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new", entry_type: "selene")
         expect(provider.as_json).to eq(
           [
@@ -191,7 +186,7 @@ RSpec.describe FileBrowserDiskProvider do
               expanded: false,
               expandable: true,
               selected: false,
-              selectable: true,
+              selectable: false,
               loaded: false,
               children: []
             }

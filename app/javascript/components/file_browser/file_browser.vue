@@ -74,7 +74,8 @@ export default {
       )
         .then((response) => response.json())
         .then((response) => {
-          child.children = response
+          child.children = response.children
+          child.selectable = response.selectable
           child.loaded = true
         })
         .catch(_ => { child.expanded = false })
