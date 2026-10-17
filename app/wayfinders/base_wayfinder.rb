@@ -226,6 +226,10 @@ class BaseWayfinder
     @first_member ||= query_service.find_by(id: resource.member_ids.first)
   end
 
+  def persisted_member_ids
+    @persisted_member_ids ||= query_service.custom_queries.find_persisted_member_ids(resource: resource)
+  end
+
   # Special case of loading the first member, but suppressing it unless it's a
   # pdf file.
   def source_pdf
