@@ -145,7 +145,7 @@ RSpec.describe ManifestBuilderV3 do
     end
     let(:output) { manifest_builder.build }
 
-    it "generates the Ranges for the audio FileSets" do
+    it "generates the Ranges and renderings for the audio FileSets" do
       expect(output).to be_kind_of Hash
       expect(output["@context"]).to include "http://iiif.io/api/presentation/3/context.json"
       expect(output["type"]).to eq "Manifest"
@@ -177,6 +177,10 @@ RSpec.describe ManifestBuilderV3 do
       range_canvases = child_ranges.first["items"]
       expect(range_canvases.length).to eq 1
       expect(range_canvases.first).to include "label" => { "eng" => ["32101047382401_1_pm.wav"] }
+
+      # Downloads
+      renderings = output["items"].flat_map { |canvas| canvas["rendering"] }.map { |rendering| rendering["format"] }
+      expect(renderings).to eq ["audio/x-wav", "audio/x-wav"]
 
       # Poster Canvas is generated in multi-volume resources
       expect(output["posterCanvas"]["width"]).to eq 200
