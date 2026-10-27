@@ -68,9 +68,9 @@ class Embed
         "Download"
       elsif mosaic?
         "Mosaic"
-      elsif file_set&.video?
+      elsif media_file_set&.video?
         "Video"
-      elsif file_set&.audio?
+      elsif media_file_set&.audio?
         "Audio"
       else
         "Image"
@@ -136,6 +136,19 @@ class Embed
 
     def file_set
       @file_set ||= Wayfinder.for(resource).file_sets.first
+    end
+
+    # FileSet used to determine the media type. Multi-volume works (e.g. a
+    # multi-volume Recording) have no FileSets of their own, so fall back to
+    # the first volume's FileSet.
+    def media_file_set
+      @media_file_set ||= file_set || first_volume_file_set
+    end
+
+    def first_volume_file_set
+      volume = Wayfinder.for(resource).try(:scanned_resources)&.first
+      return unless volume
+      Wayfinder.for(volume).file_sets.first
     end
 
     def mosaic?

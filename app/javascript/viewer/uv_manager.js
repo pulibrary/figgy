@@ -41,7 +41,7 @@ export default class UVManager {
     if (mediaType === 'Video' || mediaType === 'Audio') {
       // Display the title if it's a Playlist - that's rendered outside the
       // context of a page.
-      this.createClover(graphqlData.__typename === 'Playlist')
+      this.createClover(mediaType, graphqlData.__typename === 'Playlist')
     } else {
       this.createUV(graphqlData)
     }
@@ -170,13 +170,18 @@ export default class UVManager {
     );
   }
 
-  createClover (showTitle = false) {
+  createClover (mediaType, showTitle = false) {
     this.forceHlsJs()
     const uvElement = document.getElementById('uv')
     // Show hidden viewer element
     uvElement.style.display = 'block'
     const root = ReactDOM.createRoot(uvElement)
-    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
+    let clover
+    if (mediaType === 'Video') {
+      clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
+    } else {
+      clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: true, defaultTab: "manifest-contents"}, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
+    }
     root.render(clover)
   }
 
