@@ -180,10 +180,9 @@ export default class UVManager {
       const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
     } else {
       // Render clover with the information panel open and contents tab selected
-      const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: true, defaultTab: "manifest-contents"}, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false, showMediaSearch: false } })
+      const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: true, defaultTab: "manifest-contents"}, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
 
-      // Apply css spefically for Clover playing audio resources.
-      // - Hides the content slider pane - we already display the content tab 
+      // Apply css specifically for Clover playing audio resources.
       // - Fixes confusing content tab header numbering with MVW resources.
       uvElement.classList.toggle('clover-audio', true)
       root.render(clover)

@@ -85,11 +85,6 @@ h1 {
 
 // Styling for audio resources
 .clover-audio {
-  // Hide the content slider.
-  // .clover-viewer-media-sequence {
-  //   display: none;
-  // }
-
   // Only number the leaf entries in the contents. Resolves a confusing situation
   // where the higher level headings are numbered relative to their first leaf entry.
   .clover-viewer-contents-item:has(> .clover-viewer-contents-list)

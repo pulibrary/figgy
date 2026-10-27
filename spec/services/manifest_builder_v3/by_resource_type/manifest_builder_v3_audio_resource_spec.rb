@@ -182,6 +182,11 @@ RSpec.describe ManifestBuilderV3 do
       renderings = output["items"].flat_map { |canvas| canvas["rendering"] }.map { |rendering| rendering["format"] }
       expect(renderings).to eq ["audio/x-wav", "audio/x-wav"]
 
+      # Audio canvas thumbnails use an image from the parent volume, if present
+      image_file_set = Wayfinder.for(volume1).file_sets.find(&:image?)
+      expect(first_canvas["thumbnail"].first["id"]).to eq "http://www.example.com/image-service/#{image_file_set.id}/full/!200,150/0/default.jpg"
+      expect(last_canvas["thumbnail"]).to be_nil
+
       # Poster Canvas is generated in multi-volume resources
       expect(output["posterCanvas"]["width"]).to eq 200
 
