@@ -38,8 +38,10 @@ export default class UVManager {
   // Determine which viewer to render based on the media type
   renderViewer (graphqlData) {
     const mediaType = graphqlData.embed.mediaType
-    if (mediaType === 'Video') {
-      this.createClover()
+    if (mediaType === 'Video' || mediaType === 'Audio') {
+      // Display the title if it's a Playlist - that's rendered outside the
+      // context of a page.
+      this.createClover(graphqlData.__typename === 'Playlist')
     } else {
       this.createUV(graphqlData)
     }
@@ -110,7 +112,6 @@ export default class UVManager {
     this.remapWindowOpen()
     this.bindResizeUV()
     this.tabManager.onTabSelect(() => setTimeout(() => this.resizeUV(), 100))
-    this.processTitle(graphqlData)
     this.uvElement.show()
     this.uv = createUV('#uv', {
       root: 'uv',
@@ -169,14 +170,13 @@ export default class UVManager {
     );
   }
 
-  createClover () {
+  createClover (showTitle = false) {
     this.forceHlsJs()
     const uvElement = document.getElementById('uv')
     // Show hidden viewer element
     uvElement.style.display = 'block'
     const root = ReactDOM.createRoot(uvElement)
-    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false, showIIIFBadge: false } })
-
+    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
     root.render(clover)
   }
 
@@ -268,17 +268,6 @@ export default class UVManager {
     } else {
       return this.urlDataProvider.get('config')
     }
-  }
-
-  processTitle (graphqlData) {
-    if (graphqlData === undefined || graphqlData.__typename !== 'Playlist') {
-      return
-    }
-    const title = graphqlData.label
-    const titleElement = document.getElementById('title')
-    titleElement.textContent = title
-    titleElement.style.display = 'block'
-    this.resizeUV()
   }
 
   resizeUV () {
