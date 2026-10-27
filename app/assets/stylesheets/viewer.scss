@@ -83,6 +83,11 @@ h1 {
   position: initial;
 }
 
+// Hide the Clover slider widget for audio resources
+.clover-audio .clover-slider {
+  display: none;
+}
+
 .intrinsic-container iframe {
   position: absolute;
   top: 0;

@@ -167,6 +167,7 @@ describe('UVManager', () => {
       const spy = vi.spyOn(uvManager, 'createClover')
       await uvManager.initialize()
       expect(spy).toHaveBeenCalled()
+      expect(document.getElementById('uv').classList).toContain('clover-audio')
       // buildLeaflet viewer is not called when media type is Audio
       expect(leafletSpy).not.toHaveBeenCalled()
     })
@@ -367,6 +368,7 @@ describe('UVManager', () => {
       const spy = vi.spyOn(uvManager, 'createClover')
       await uvManager.initialize()
       expect(spy).toHaveBeenCalled()
+      expect(document.getElementById('uv').classList).not.toContain('clover-audio')
     })
 
     it('loads a UV and Leafet viewer for a mosiac', async () => {

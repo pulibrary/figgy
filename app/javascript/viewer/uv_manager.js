@@ -176,13 +176,16 @@ export default class UVManager {
     // Show hidden viewer element
     uvElement.style.display = 'block'
     const root = ReactDOM.createRoot(uvElement)
-    let clover
     if (mediaType === 'Video') {
-      clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
+      const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
     } else {
-      clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: true, defaultTab: "manifest-contents"}, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
+      const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: true, defaultTab: "manifest-contents"}, background: 'white', withCredentials: true, showTitle: showTitle, showIIIFBadge: false } })
+
+      // Hide the content slider pane for audio resources. We already display the
+      // content tab on the information pane.
+      uvElement.classList.toggle('clover-audio', true)
+      root.render(clover)
     }
-    root.render(clover)
   }
 
   // Force Chrome to use HLS.js instead of native player.
