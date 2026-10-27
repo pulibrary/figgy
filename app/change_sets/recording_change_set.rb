@@ -21,6 +21,7 @@ class RecordingChangeSet < ChangeSet
   property :embargo_date, multiple: false, required: false, type: ::Types::EmbargoDate.optional
   property :notice_type, multiple: false, required: false
   property :depositor, multiple: false, require: false
+  property :thumbnail_id, multiple: false, required: false, type: Valkyrie::Types::ID.optional
 
   # Virtual Attributes
   property :files, virtual: true, multiple: true, required: false

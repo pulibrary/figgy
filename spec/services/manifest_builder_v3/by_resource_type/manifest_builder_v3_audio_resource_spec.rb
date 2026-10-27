@@ -83,6 +83,23 @@ RSpec.describe ManifestBuilderV3 do
         # Validate manifest
         expect(JSON::Validator.fully_validate(schema, output)).to be_empty
       end
+
+      context "and the resource's thumbnail is set to a later image" do
+        let(:second_image_file) { fixture_file_upload("files/example.tif") }
+        let(:change_set) { ScannedResourceChangeSet.new(scanned_resource, files: [file, image_file, second_image_file], downloadable: "none") }
+
+        it "uses the thumbnail image for the canvas thumbnail and accompanyingCanvas", run_real_characterization: true do
+          resource = change_set_persister.save(change_set: change_set)
+          thumbnail_file_set = Wayfinder.for(resource).file_sets.select(&:image?).last
+          resource_change_set = ScannedResourceChangeSet.new(resource)
+          resource_change_set.thumbnail_id = thumbnail_file_set.id
+          change_set_persister.save(change_set: resource_change_set)
+
+          canvas = manifest_builder.build["items"][0]
+          expect(canvas["thumbnail"].first["id"]).to include thumbnail_file_set.id.to_s
+          expect(canvas.dig("accompanyingCanvas", "items", 0, "items", 0, "body", "id")).to include thumbnail_file_set.id.to_s
+        end
+      end
     end
 
     context "with multiple files" do
@@ -181,6 +198,16 @@ RSpec.describe ManifestBuilderV3 do
       # Downloads
       renderings = output["items"].flat_map { |canvas| canvas["rendering"] }.map { |rendering| rendering["format"] }
       expect(renderings).to eq ["audio/x-wav", "audio/x-wav"]
+
+      # Audio canvas thumbnails use an image from the parent, if present
+      image_file_set = Wayfinder.for(volume1).file_sets.find(&:image?)
+      expect(first_canvas["thumbnail"].first["id"]).to eq "http://www.example.com/image-service/#{image_file_set.id}/full/!200,150/0/default.jpg"
+      expect(last_canvas["thumbnail"]).to be_nil
+
+      # The same image is used as the accompanying canvas
+      accompanying_body = first_canvas.dig("accompanyingCanvas", "items", 0, "items", 0, "body")
+      expect(accompanying_body["id"]).to eq "http://www.example.com/image-service/#{image_file_set.id}/full/1000,/0/default.jpg"
+      expect(last_canvas).not_to have_key "accompanyingCanvas"
 
       # Poster Canvas is generated in multi-volume resources
       expect(output["posterCanvas"]["width"]).to eq 200

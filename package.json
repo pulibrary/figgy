@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@mapnik/mapnik": "^4.6",
+    "@nulib/clover": "^4.1.0",
     "@rails/actioncable": "^7.2.0",
-    "@samvera/clover-iiif": "^3.0.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "ajv": "^8.18.0",
     "apollo-boost": "0.4.9",
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.1.1",
+    "@vitest/eslint-plugin": "^1.0.1",
     "@vue/test-utils": "^2.4.5",
     "dotenv": "^17.0.0",
     "esbuild": "^0.28.2",
@@ -51,7 +52,6 @@
     "eslint-plugin-n": "^18.0.0",
     "eslint-plugin-node": "^11.1",
     "eslint-plugin-promise": "^7.0.0",
-    "@vitest/eslint-plugin": "^1.0.1",
     "eslint-plugin-vitest-globals": "^1.5",
     "eslint-plugin-vue": "^9.25.0",
     "globals": "^17.0.0",

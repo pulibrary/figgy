@@ -249,6 +249,25 @@ RSpec.describe Types::ScannedResourceType do
           )
         end
       end
+      context "and it's a multi-volume audio recording" do
+        let(:volume) do
+          FactoryBot.create_for_repository(
+            :recording_with_audio_file,
+            state: "complete"
+          )
+        end
+        let(:scanned_resource) do
+          FactoryBot.create_for_repository(
+            :recording,
+            state: "complete",
+            member_ids: [volume.id]
+          )
+        end
+        it "returns media_type Audio" do
+          stub_ezid
+          expect(type.embed[:media_type]).to eq "Audio"
+        end
+      end
 
       context "and it's a scanned map with raster children" do
         subject(:type) { make_graphql_object(described_class, scanned_map, { ability: ability }) }
