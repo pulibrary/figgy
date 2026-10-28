@@ -13,6 +13,19 @@ RSpec.describe RetryingDiskAdapter do
   end
   let(:inner_adapter) { Valkyrie::StorageAdapter.find(:disk_via_copy) }
   let(:file) { fixture_file_upload("files/example.tif", "image/tiff") }
+  context "when the original filename would store the file outside of the base path" do
+    it "refuses to upload it" do
+      Dir.mktmpdir do |dir|
+        storage_adapter = described_class.new(Valkyrie::Storage::Disk.new(base_path: "#{dir}/files", file_mover: FileUtils.method(:cp)))
+        resource = ScannedResource.new(id: SecureRandom.uuid)
+
+        expect { storage_adapter.upload(file: file, resource: resource, original_filename: "../../../../../escaped.tif") }.to raise_error(/stored outside of/)
+        expect { storage_adapter.upload(file: file, resource: resource, original_filename: "#{dir}/escaped.tif") }.to raise_error(/stored outside of/)
+        expect(Dir.glob("#{dir}/**/escaped.tif")).to be_empty
+        expect(storage_adapter.upload(file: file, resource: resource, original_filename: "test.tif").id.to_s).to start_with "disk://#{dir}/files/"
+      end
+    end
+  end
   context "when upload fails because of an Errno::EPIPE" do
     it "retries" do
       counts = 0

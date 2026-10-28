@@ -672,6 +672,33 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(reloaded.member_ids.length).to eq 0
       end
 
+      it "only uses the last segment of uppy file names, so they can't write outside the repository" do
+        FileUtils.rm_f(Rails.root.join("tmp", "escaped_upload.tif"))
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: {
+          id: resource.id,
+          metadata_ingest_files: [
+            {
+              id: "disk://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/1",
+              filename: Rails.root.join("tmp", "escaped_upload.tif").to_s,
+              type: "image/tiff"
+            }.to_json,
+            {
+              id: "disk://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/1",
+              filename: "../../../..",
+              type: "image/tiff"
+            }.to_json
+          ]
+        }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+        expect(reloaded.member_ids.length).to eq 1
+        file_set = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded).first
+        expect(file_set.primary_file.original_filename).to eq ["escaped_upload.tif"]
+        expect(file_set.primary_file.file_identifiers.first.to_s).to start_with "disk://#{Figgy.config['repository_path']}/"
+        expect(File.exist?(Rails.root.join("tmp", "escaped_upload.tif"))).to eq false
+      end
+
       context "the user selects hidden files" do
         it "filters the uploads" do
           resource = FactoryBot.create_for_repository(:scanned_resource)

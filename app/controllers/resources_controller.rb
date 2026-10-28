@@ -291,12 +291,15 @@ class ResourcesController < ApplicationController
       return if params[:metadata_ingest_files].blank?
       params[:metadata_ingest_files].map do |metadata|
         metadata = JSON.parse(metadata, symbolize_names: true)
+        # Strip out all the path info.
+        file_name = File.basename(metadata[:filename].to_s)
+        next if file_name.blank? || file_name.start_with?(".", "/")
         file = ingest_adapter.find_by(id: IngestFolderPath.new.storage_id(metadata[:id]))
         PendingUpload.new(
           id: SecureRandom.uuid,
           storage_adapter_id: file.id,
           created_at: Time.current,
-          file_name: metadata[:filename],
+          file_name: file_name,
           type: metadata[:type]
         )
       rescue
