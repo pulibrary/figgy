@@ -195,6 +195,7 @@ class ResourcesController < ApplicationController
 
   # Used for submissions from the FileBrowser in the File Manager interface.
   def server_upload
+    authorize! :server_upload, resource
     change_set_persister.buffer_into_index do |buffered_changeset_persister|
       change_set.validate(pending_uploads: change_set.pending_uploads + new_pending_uploads)
       buffered_changeset_persister.save(change_set: change_set)

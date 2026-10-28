@@ -706,6 +706,35 @@ RSpec.describe ScannedResourcesController, type: :controller do
     end
   end
 
+  describe "POST /concern/scanned_resources/:id/server_upload without edit access" do
+    let(:ingest_files) { ["disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"] }
+
+    context "when not logged in" do
+      it "doesn't upload anything" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: { id: resource.id, ingest_files: ingest_files }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+        expect(response).to redirect_to "/users/auth/cas"
+        expect(reloaded.member_ids).to be_empty
+        expect(reloaded.pending_uploads).to be_blank
+      end
+    end
+
+    context "when logged in as a user who can't edit the resource" do
+      let(:user) { FactoryBot.create(:campus_patron) }
+      it "doesn't upload anything" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: { id: resource.id, ingest_files: ingest_files, format: :json }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+        expect(response).to be_forbidden
+        expect(reloaded.member_ids).to be_empty
+        expect(reloaded.pending_uploads).to be_blank
+      end
+    end
+  end
+
   describe "GET /concern/scanned_resources/save_and_ingest/:id" do
     let(:user) { FactoryBot.create(:admin) }
     it "returns JSON for whether a directory exists" do
