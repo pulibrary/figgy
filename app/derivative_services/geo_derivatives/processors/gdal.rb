@@ -10,11 +10,11 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.translate(in_path, out_path, options)
-          outsize = "-outsize #{options[:output_size].split(' ').first} 0"
-          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES #{outsize} -expand rgb -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
+          outsize = ["-outsize", options[:output_size].split(" ").first, "0"]
+          execute "gdal_translate", "-q", "-ot", "Byte", "-of", "GTiff", "-co", "TILED=YES", *outsize, "-expand", "rgb", "-co", "COMPRESS=DEFLATE", in_path, out_path
         rescue StandardError
           # Try without expanding rgb
-          execute "gdal_translate -q -ot Byte -of GTiff -co TILED=YES #{outsize} -co COMPRESS=DEFLATE \"#{in_path}\" #{out_path}"
+          execute "gdal_translate", "-q", "-ot", "Byte", "-of", "GTiff", "-co", "TILED=YES", *outsize, "-co", "COMPRESS=DEFLATE", in_path, out_path
         end
 
         # Executes a gdalwarp command. Used to transform a raster
@@ -24,9 +24,9 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.warp(in_path, out_path, options)
-          execute "gdalwarp -q -t_srs #{options[:output_srid]} "\
-                  "\"#{in_path}\" #{out_path} "\
-                  "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=IF_SAFER"
+          execute "gdalwarp", "-q", "-t_srs", options[:output_srid],
+                  in_path, out_path,
+                  "-co", "TILED=YES", "-co", "COMPRESS=LZW", "-co", "BIGTIFF=IF_SAFER"
         end
 
         # Executes a gdal_translate command. Used to compress
@@ -35,8 +35,8 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.compress(in_path, out_path, options)
-          execute "gdal_translate -q -ot Byte -a_srs #{options[:output_srid]} "\
-                    "\"#{in_path}\" #{out_path} -co COMPRESS=JPEG -co JPEG_QUALITY=90"
+          execute "gdal_translate", "-q", "-ot", "Byte", "-a_srs", options[:output_srid],
+                  in_path, out_path, "-co", "COMPRESS=JPEG", "-co", "JPEG_QUALITY=90"
         end
 
         # Translates three band rgb into single band wth pseudo-color table
@@ -44,10 +44,10 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.rgb2pct(in_path, out_path, _options)
-          execute "rgb2pct.py \"#{in_path}\" #{out_path}"
+          execute "rgb2pct.py", in_path, out_path
         rescue StandardError
           # Copy file if it's already a single band
-          execute "cp \"#{in_path}\" #{out_path}"
+          execute "cp", in_path, out_path
         end
 
         # Translates single band tiff to rbg(a)
@@ -55,8 +55,8 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.rgba(in_path, out_path, _options)
-          execute "gdal_translate -expand rgba \"#{in_path}\" #{out_path} "\
-                  "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=IF_SAFER"
+          execute "gdal_translate", "-expand", "rgba", in_path, out_path,
+                  "-co", "TILED=YES", "-co", "COMPRESS=LZW", "-co", "BIGTIFF=IF_SAFER"
         end
 
         # Executes a single gdalwarp command that both reprojects and writes
@@ -66,10 +66,10 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.warp_to_cog(in_path, out_path, options)
-          execute "gdalwarp -q -t_srs #{options[:output_srid]} "\
-                  "\"#{in_path}\" #{out_path} -of COG -ot Byte "\
-                  "-co COMPRESS=LZW -co BLOCKSIZE=256 "\
-                  "-co TILING_SCHEME=GoogleMapsCompatible"
+          execute "gdalwarp", "-q", "-t_srs", options[:output_srid],
+                  in_path, out_path, "-of", "COG", "-ot", "Byte",
+                  "-co", "COMPRESS=LZW", "-co", "BLOCKSIZE=256",
+                  "-co", "TILING_SCHEME=GoogleMapsCompatible"
         end
 
         # Executes a gdal_rasterize command. Used to rasterize vector
@@ -78,8 +78,8 @@ module GeoDerivatives
         # #param options [Hash] creation options
         # @param out_path [String] processor output file path
         def self.rasterize(in_path, out_path, options)
-          execute "gdal_rasterize -q -burn 0 -init 255 -ot Byte -ts "\
-                    "#{options[:output_size]} -of GTiff \"#{in_path}\" #{out_path}"
+          execute "gdal_rasterize", "-q", "-burn", "0", "-init", "255", "-ot", "Byte",
+                  "-ts", *options[:output_size].split(" "), "-of", "GTiff", in_path, out_path
         end
       end
     end
