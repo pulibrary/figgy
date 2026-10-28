@@ -272,7 +272,7 @@ class ResourcesController < ApplicationController
             (params[:ingest_files] || []).map do |ingest_file|
               # Skip hidden files.
               next if ingest_file.split("/").last.start_with?(".")
-              file = Valkyrie::StorageAdapter.find_by(id: ingest_file)
+              file = ingest_adapter.find_by(id: IngestFolderPath.new.storage_id(ingest_file))
               PendingUpload.new(
                 id: SecureRandom.uuid,
                 storage_adapter_id: file.id,
@@ -290,7 +290,7 @@ class ResourcesController < ApplicationController
       return if params[:metadata_ingest_files].blank?
       params[:metadata_ingest_files].map do |metadata|
         metadata = JSON.parse(metadata, symbolize_names: true)
-        file = Valkyrie::StorageAdapter.find_by(id: metadata[:id])
+        file = ingest_adapter.find_by(id: IngestFolderPath.new.storage_id(metadata[:id]))
         PendingUpload.new(
           id: SecureRandom.uuid,
           storage_adapter_id: file.id,
@@ -301,5 +301,11 @@ class ResourcesController < ApplicationController
       rescue
         nil
       end.compact
+    end
+
+    # Only files from the ingest folder can be uploaded, never other storage
+    # adapters.
+    def ingest_adapter
+      Valkyrie::StorageAdapter.find(:ingest_adapter)
     end
 end

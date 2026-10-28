@@ -33,7 +33,7 @@ class FileBrowserDiskProvider
     end
 
     def valid_children
-      root.join(base).children.select do |child|
+      IngestFolderPath.new(root: root).resolve(base).children.select do |child|
         !child.basename.to_s.start_with?(".") &&
         !BulkIngestService.ignored_file_names.include?(child.basename.to_s)
       end

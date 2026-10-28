@@ -651,6 +651,27 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(reloaded.member_ids.length).to eq 1
       end
 
+      it "doesn't upload files that traverse out of the mounted path" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: {
+          id: resource.id,
+          ingest_files: [
+            "disk://#{Figgy.config['ingest_folder_path']}/../files/example.tif"
+          ],
+          metadata_ingest_files: [
+            {
+              id: "disk://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/../../../files/example.tif",
+              filename: "test.tif",
+              type: "image/tiff"
+            }.to_json
+          ]
+        }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 0
+      end
+
       context "the user selects hidden files" do
         it "filters the uploads" do
           resource = FactoryBot.create_for_repository(:scanned_resource)

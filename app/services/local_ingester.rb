@@ -43,9 +43,10 @@ class LocalIngester
 
   # Get all paths which aren't a parent of another path.
   def ingest_paths
-    path = Pathname.new(Figgy.config["ingest_folder_path"]).join(ingest_directory)
-    return [] unless path.exist?
+    path = IngestFolderPath.new.resolve(ingest_directory)
     path.children.select(&:directory?)
+  rescue IngestFolderPath::InvalidPath
+    []
   end
 
   def source_metadata_id_from_path(path)

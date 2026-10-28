@@ -1,4 +1,6 @@
 class FileBrowser::DiskController < ApplicationController
+  rescue_from IngestFolderPath::InvalidPath, with: -> { head :not_found }
+
   def index
     authorize! :create, ScannedResource
     respond_to do |format|
