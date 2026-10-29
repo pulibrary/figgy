@@ -24,23 +24,24 @@ class ScannedResourcesController < ResourcesController
 
   def validate_selene_ingest_path
     return if params[:ingest_path].blank? || change_set_param != "selene_resource"
-    base = Pathname.new(Figgy.config["ingest_folder_path"])
-    ingest_path = base.join(params[:ingest_path])
-    return if SeleneIngestPathService.new(ingest_path).validate
+    return if SeleneIngestPathService.new(selene_ingest_path).validate
+    redirect_back(fallback_location: root_path, notice: "Selene file structure invalid")
+  rescue IngestFolderPath::InvalidPath
     redirect_back(fallback_location: root_path, notice: "Selene file structure invalid")
   end
 
   def handle_save_and_ingest(obj)
     return unless params[:save_and_ingest_path].present? && params[:commit] == "Save and Ingest"
     locator = IngestFolderLocator.new(id: params[:scanned_resource][:source_metadata_identifier], search_directory: ingest_folder)
-    IngestFolderJob.perform_later(directory: locator.root_path.join(params[:save_and_ingest_path]).to_s, property: "id", id: obj.id.to_s)
+    path = IngestFolderPath.new(root: locator.root_path).resolve(params[:save_and_ingest_path])
+    IngestFolderJob.perform_later(directory: path.to_s, property: "id", id: obj.id.to_s)
+  rescue IngestFolderPath::InvalidPath
+    nil
   end
 
   def handle_extract_selene_data(obj)
     return unless obj.selene? && params[:ingest_path].present?
-    base = Pathname.new(Figgy.config["ingest_folder_path"])
-    ingest_path = base.join(params[:ingest_path])
-    mpp = SeleneIngestPathService.new(ingest_path).meters_per_pixel
+    mpp = SeleneIngestPathService.new(selene_ingest_path).meters_per_pixel
     change_set = ChangeSet.for(obj)
     change_set.validate(meters_per_pixel: mpp)
     return unless change_set.valid?
@@ -51,8 +52,7 @@ class ScannedResourcesController < ResourcesController
 
   def handle_upload_selene_files(obj)
     return unless obj.selene? && params[:ingest_path].present?
-    path = Pathname.new(Figgy.config["ingest_folder_path"]).join(params[:ingest_path])
-    IngestFolderJob.perform_later(directory: path.to_s, property: "id", id: obj.id.to_s, preserve_file_names: true)
+    IngestFolderJob.perform_later(directory: selene_ingest_path.to_s, property: "id", id: obj.id.to_s, preserve_file_names: true)
   end
 
   def struct_manager
@@ -121,6 +121,10 @@ class ScannedResourcesController < ResourcesController
   end
 
   private
+
+    def selene_ingest_path
+      IngestFolderPath.new.resolve(params[:ingest_path])
+    end
 
     def auth_token_param
       params[:auth_token]

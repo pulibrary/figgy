@@ -100,6 +100,17 @@ RSpec.describe BulkIngestController do
       end
     end
 
+    context "when the ingest directory is outside the ingest folder" do
+      it "doesn't ingest anything" do
+        ingest_folder_stub = stub_ingest_folder_job
+
+        post :bulk_ingest, params: { resource_type: "scanned_resource", ingest_directory: "../av" }
+        post :bulk_ingest, params: { resource_type: "scanned_resource", ingest_directory: Rails.root.join("spec", "fixtures").to_s }
+
+        expect(ingest_folder_stub).not_to have_received(:perform_later)
+      end
+    end
+
     context "Many Multi-volume works with a parent directory" do
       it "ingests 2 multi-volume works" do
         attributes =

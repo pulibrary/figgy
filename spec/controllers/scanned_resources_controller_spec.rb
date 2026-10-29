@@ -225,6 +225,35 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(members.flat_map(&:title)).to eq ["1", "2"]
       end
 
+      context "when the save and ingest path is outside the search directory" do
+        before do
+          allow(IngestFolderJob).to receive(:perform_later)
+          allow(Figgy.config).to receive(:[]).and_call_original
+          allow(Figgy.config).to receive(:[]).with("default_search_directory").and_return("music")
+        end
+
+        [
+          "../studio_new/DPUL/Santa/ready/991234563506421",
+          Rails.root.join("spec", "fixtures", "staged_files", "studio_new", "DPUL", "Santa", "ready", "991234563506421").to_s
+        ].each do |save_and_ingest_path|
+          it "creates the resource without ingesting #{save_and_ingest_path}" do
+            post :create, params: {
+              scanned_resource: {
+                source_metadata_identifier: "991234563506421",
+                rights_statement: RightsStatements.copyright_not_evaluated.to_s,
+                visibility: "restricted"
+              },
+              save_and_ingest_path: save_and_ingest_path,
+              commit: "Save and Ingest"
+            }
+
+            expect(response).to be_redirect
+            expect(response.location).to start_with "http://test.host/catalog/"
+            expect(IngestFolderJob).not_to have_received(:perform_later)
+          end
+        end
+      end
+
       it "can create and import a MVW" do
         post :create, params: {
           scanned_resource: {
@@ -316,6 +345,40 @@ RSpec.describe ScannedResourcesController, type: :controller do
           query_service = ChangeSetPersister.default.query_service
           resources = query_service.find_all_of_model(model: ScannedResource)
           expect(resources.count).to eq 0
+        end
+      end
+
+      context "when creating a new Selene Resource with a path outside the ingest folder" do
+        let(:outside_path) { Rails.root.join("tmp", "selene-escape") }
+        before do
+          FileUtils.rm_rf(outside_path)
+          FileUtils.cp_r(Rails.root.join("spec", "fixtures", "staged_files", "studio_new", "selene-example"), outside_path)
+        end
+        after do
+          FileUtils.rm_rf(outside_path)
+        end
+
+        it "does not create a resource or ingest the files" do
+          allow(IngestFolderJob).to receive(:perform_later)
+          relative_path = outside_path.relative_path_from(Pathname.new(Figgy.config["ingest_folder_path"])).to_s
+
+          [relative_path, outside_path.to_s].each do |ingest_path|
+            post :create, params: {
+              scanned_resource: {
+                change_set: "selene_resource",
+                title: "Selene"
+              },
+              ingest_path: ingest_path
+            }
+
+            expect(response).to be_redirect
+            expect(response.location).not_to start_with "http://test.host/catalog/"
+            expect(flash[:notice]).to eq("Selene file structure invalid")
+          end
+
+          query_service = ChangeSetPersister.default.query_service
+          expect(query_service.find_all_of_model(model: ScannedResource).count).to eq 0
+          expect(IngestFolderJob).not_to have_received(:perform_later)
         end
       end
     end
@@ -651,6 +714,54 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(reloaded.member_ids.length).to eq 1
       end
 
+      it "doesn't upload files that traverse out of the mounted path" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: {
+          id: resource.id,
+          ingest_files: [
+            "disk://#{Figgy.config['ingest_folder_path']}/../files/example.tif"
+          ],
+          metadata_ingest_files: [
+            {
+              id: "disk://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/../../../files/example.tif",
+              filename: "test.tif",
+              type: "image/tiff"
+            }.to_json
+          ]
+        }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+
+        expect(reloaded.member_ids.length).to eq 0
+      end
+
+      it "only uses the last segment of uppy file names, so they can't write outside the repository" do
+        FileUtils.rm_f(Rails.root.join("tmp", "escaped_upload.tif"))
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: {
+          id: resource.id,
+          metadata_ingest_files: [
+            {
+              id: "disk://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/1",
+              filename: Rails.root.join("tmp", "escaped_upload.tif").to_s,
+              type: "image/tiff"
+            }.to_json,
+            {
+              id: "disk://#{Figgy.config['ingest_folder_path']}/ingest_scratch/local_uploads/1",
+              filename: "../../../..",
+              type: "image/tiff"
+            }.to_json
+          ]
+        }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+        expect(reloaded.member_ids.length).to eq 1
+        file_set = Valkyrie.config.metadata_adapter.query_service.find_members(resource: reloaded).first
+        expect(file_set.primary_file.original_filename).to eq ["escaped_upload.tif"]
+        expect(file_set.primary_file.file_identifiers.first.to_s).to start_with "disk://#{Figgy.config['repository_path']}/"
+        expect(File.exist?(Rails.root.join("tmp", "escaped_upload.tif"))).to eq false
+      end
+
       context "the user selects hidden files" do
         it "filters the uploads" do
           resource = FactoryBot.create_for_repository(:scanned_resource)
@@ -681,6 +792,35 @@ RSpec.describe ScannedResourcesController, type: :controller do
           expect(response).to be_redirect
           expect(reloaded.member_ids.length).to eq 0
         end
+      end
+    end
+  end
+
+  describe "POST /concern/scanned_resources/:id/server_upload without edit access" do
+    let(:ingest_files) { ["disk://#{Figgy.config['ingest_folder_path']}/examples/bulk_ingest/991234563506421/vol1/color.tif"] }
+
+    context "when not logged in" do
+      it "doesn't upload anything" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: { id: resource.id, ingest_files: ingest_files }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+        expect(response).to redirect_to "/users/auth/cas"
+        expect(reloaded.member_ids).to be_empty
+        expect(reloaded.pending_uploads).to be_blank
+      end
+    end
+
+    context "when logged in as a user who can't edit the resource" do
+      let(:user) { FactoryBot.create(:campus_patron) }
+      it "doesn't upload anything" do
+        resource = FactoryBot.create_for_repository(:scanned_resource)
+        post :server_upload, params: { id: resource.id, ingest_files: ingest_files, format: :json }
+
+        reloaded = adapter.query_service.find_by(id: resource.id)
+        expect(response).to be_forbidden
+        expect(reloaded.member_ids).to be_empty
+        expect(reloaded.pending_uploads).to be_blank
       end
     end
   end

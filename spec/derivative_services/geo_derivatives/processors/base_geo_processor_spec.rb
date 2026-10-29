@@ -25,6 +25,40 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
   let(:file_name) { "files/geo.tif" }
   let(:options) { { output_size: "150 150" } }
 
+  describe ".execute" do
+    it "doesn't run arguments through a shell" do
+      Dir.mktmpdir do |dir|
+        expect { processor.class.execute("ls", "#{dir}/x$(touch #{dir}/pwned)") }.to raise_error(/Unable to execute command/)
+        expect(File.exist?("#{dir}/pwned")).to eq false
+      end
+    end
+
+    it "refuses a single command string, which would need a shell" do
+      expect { processor.class.execute("ls /tmp") }.to raise_error ArgumentError
+    end
+
+    it "unzips files with shell syntax in their names without running it" do
+      zip_processor = Class.new do
+        include Hydra::Derivatives::Processors::ShellBasedProcessor
+        include GeoDerivatives::Processors::BaseGeoProcessor
+        include GeoDerivatives::Processors::Zip
+      end
+      fixture = Rails.root.join("spec", "fixtures", "files", "vector", "shapefile.zip")
+      Dir.mktmpdir do |dir|
+        Dir.chdir(dir) do
+          zip_path = "#{dir}/i3925$(touch pwned).zip"
+          FileUtils.cp(fixture, zip_path)
+          unzipped = []
+
+          zip_processor.unzip(zip_path, "#{dir}/output.png") { |out| unzipped = Dir.children(out) }
+
+          expect(unzipped).to include(a_string_ending_with(".shp"))
+          expect(File.exist?("#{dir}/pwned")).to eq false
+        end
+      end
+    end
+  end
+
   describe "#run_commands" do
     let(:method_queue) { [:translate, :warp, :compress] }
 
@@ -64,45 +98,45 @@ RSpec.describe GeoDerivatives::Processors::BaseGeoProcessor do
 
     describe "#translate" do
       it "executes a gdal_translate command, scaling the intermediate to the thumbnail width" do
-        command = "gdal_translate -q -ot Byte -of GTiff -co TILED=YES -outsize 150 0 -expand rgb -co COMPRESS=DEFLATE \"files/geo.tif\" output/geo.png"
+        command = ["gdal_translate", "-q", "-ot", "Byte", "-of", "GTiff", "-co", "TILED=YES", "-outsize", "150", "0", "-expand", "rgb", "-co", "COMPRESS=DEFLATE", "files/geo.tif", "output/geo.png"]
         processor.class.translate(file_name, output_file, options)
-        expect(processor.class).to have_received(:execute).with command
+        expect(processor.class).to have_received(:execute).with(*command)
       end
     end
 
     describe "#warp" do
       it "executes a reproject command with a compressed intermediate" do
-        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png " \
-                  "-co TILED=YES -co COMPRESS=LZW -co BIGTIFF=IF_SAFER"
+        command = ["gdalwarp", "-q", "-t_srs", "EPSG:4326", "files/geo.tif", "output/geo.png",
+                   "-co", "TILED=YES", "-co", "COMPRESS=LZW", "-co", "BIGTIFF=IF_SAFER"]
         processor.class.warp(file_name, output_file, options)
-        expect(processor.class).to have_received(:execute).with command
+        expect(processor.class).to have_received(:execute).with(*command)
       end
     end
 
     describe "#warp_to_cog" do
       it "reprojects and writes a COG in a single gdalwarp command" do
-        command = "gdalwarp -q -t_srs EPSG:4326 \"files/geo.tif\" output/geo.png " \
-                  "-of COG -ot Byte " \
-                  "-co COMPRESS=LZW -co BLOCKSIZE=256 " \
-                  "-co TILING_SCHEME=GoogleMapsCompatible"
+        command = ["gdalwarp", "-q", "-t_srs", "EPSG:4326", "files/geo.tif", "output/geo.png",
+                   "-of", "COG", "-ot", "Byte",
+                   "-co", "COMPRESS=LZW", "-co", "BLOCKSIZE=256",
+                   "-co", "TILING_SCHEME=GoogleMapsCompatible"]
         processor.class.warp_to_cog(file_name, output_file, options)
-        expect(processor.class).to have_received(:execute).with command
+        expect(processor.class).to have_received(:execute).with(*command)
       end
     end
 
     describe "#compress" do
       it "returns a gdal_translate command with a compress option" do
-        command = "gdal_translate -q -ot Byte -a_srs EPSG:4326 \"files/geo.tif\" output/geo.png -co COMPRESS=JPEG -co JPEG_QUALITY=90"
+        command = ["gdal_translate", "-q", "-ot", "Byte", "-a_srs", "EPSG:4326", "files/geo.tif", "output/geo.png", "-co", "COMPRESS=JPEG", "-co", "JPEG_QUALITY=90"]
         processor.class.compress(file_name, output_file, options)
-        expect(processor.class).to have_received(:execute).with command
+        expect(processor.class).to have_received(:execute).with(*command)
       end
     end
 
     describe "#rasterize" do
       it "executes a rasterize command" do
-        command = "gdal_rasterize -q -burn 0 -init 255 -ot Byte -ts 150 150 -of GTiff \"files/geo.tif\" output/geo.png"
+        command = ["gdal_rasterize", "-q", "-burn", "0", "-init", "255", "-ot", "Byte", "-ts", "150", "150", "-of", "GTiff", "files/geo.tif", "output/geo.png"]
         processor.class.rasterize(file_name, output_file, options)
-        expect(processor.class).to have_received(:execute).with command
+        expect(processor.class).to have_received(:execute).with(*command)
       end
     end
   end

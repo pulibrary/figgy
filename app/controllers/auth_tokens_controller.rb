@@ -1,6 +1,6 @@
 class AuthTokensController < ApplicationController
   before_action :set_auth_token, only: [:show, :edit, :update, :destroy]
-  authorize_resource only: [:new, :edit, :create, :update, :destroy]
+  authorize_resource only: [:new, :index, :show, :edit, :create, :update, :destroy]
 
   # GET /auth_tokens
   def index

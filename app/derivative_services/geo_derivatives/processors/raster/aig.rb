@@ -31,8 +31,8 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.translate(in_path, out_path, options)
-          execute "gdal_translate -scale #{options[:min_max]} 255 0 "\
-                    "-q -ot Byte -of GTiff \"#{in_path}\" #{out_path}"
+          execute "gdal_translate", "-scale", *options[:min_max].split(" "), "255", "0",
+                  "-q", "-ot", "Byte", "-of", "GTiff", in_path, out_path
         end
       end
     end

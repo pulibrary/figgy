@@ -75,6 +75,13 @@ RSpec.describe "FileBrowser/Disk" do
         get "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/Santa/ready/9946093213506421/Vol 2')}.json"
         expect(response).to be_successful
       end
+      it "doesn't return directories outside the ingest folder" do
+        get "/file_browser/disk/default/#{CGI.escape('/etc')}.json"
+        expect(response).to be_not_found
+
+        get "/file_browser/disk/default/#{CGI.escape('../files')}.json"
+        expect(response).to be_not_found
+      end
       it "can return directories with periods in it" do
         get "/file_browser/disk/default/#{CGI.escape('studio_new/DPUL/Santa/test.1')}.json"
         expect(response).to be_successful

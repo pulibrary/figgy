@@ -19,6 +19,13 @@ RSpec.describe Bagit::StorageAdapter do
   before do
     FileUtils.rm_rf(Rails.root.join("tmp", "bags"))
   end
+  describe "#handles?" do
+    it "doesn't handle any IDs, since files are found via a bag instance" do
+      adapter = described_class.new(base_path: Rails.root.join("tmp", "bags"))
+
+      expect(adapter.handles?(id: "bag://123456789/data/test.tif")).to eq false
+    end
+  end
   it "creates bag manifests on upload and deletes entries on delete" do
     output_file = storage_adapter.upload(file: file, original_filename: "test.tif", resource: ScannedResource.new)
     sha256_manifest = File.read(storage_adapter.bag_path.join("manifest-sha256.txt")).split("\n")

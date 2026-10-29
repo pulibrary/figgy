@@ -10,12 +10,12 @@ module GeoDerivatives
         def self.vector_thumbnail(in_path, out_path, options)
           size = options[:output_size].split(" ").map(&:to_i)
           Dir.glob("#{in_path}/*.shp").each do |shape_path|
-            execute mapnik_command(size[0], size[1], shape_path, out_path)
+            execute(*mapnik_command(size[0], size[1], shape_path, out_path))
           end
         end
 
         def self.mapnik_command(width, height, shape_path, out_path)
-          "bin/mapnik_thumbnail.cjs #{width} #{height} #{out_path} '#{stylesheet(shape_path)}'"
+          ["bin/mapnik_thumbnail.cjs", width, height, out_path, stylesheet(shape_path)]
         end
 
         def self.stylesheet(shapefile_path)

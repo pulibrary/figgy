@@ -4,6 +4,19 @@ module GeoDerivatives
       extend ActiveSupport::Concern
 
       included do
+        # Runs a command without a shell. Paths include uploaded file names, so
+        # they must be passed as separate arguments or they could inject
+        # shell commands. Replaces Hydra's execute, which runs a shell string.
+        # @param command [Array] optional env hash, then the command and its
+        #   arguments
+        def self.execute(*command)
+          raise ArgumentError, "Pass the command and its arguments separately" if command.reject { |arg| arg.is_a?(Hash) }.length < 2
+          command = command.map { |arg| arg.is_a?(Hash) ? arg : arg.to_s }
+          _stdout, stderr, status = Open3.capture3(*command)
+          return if status.success?
+          raise "Unable to execute command \"#{command.reject { |arg| arg.is_a?(Hash) }.join(' ')}\". Exit code: #{status.exitstatus}\nError message: #{stderr}"
+        end
+
         # Chains together and recursively runs a set of commands.
         # Except for the last command in the queue, a temp file
         # is created as output and is then fed into the input of the next.

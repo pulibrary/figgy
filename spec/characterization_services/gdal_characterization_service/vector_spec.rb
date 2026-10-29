@@ -101,6 +101,25 @@ RSpec.describe GdalCharacterizationService::Vector do
     end
   end
 
+  describe "#unzip_original_file" do
+    it "unzips files with shell syntax in their names without running it" do
+      fixture = Rails.root.join("spec", "fixtures", "files", "vector", "shapefile.zip")
+      Dir.mktmpdir do |dir|
+        Dir.chdir(dir) do
+          zip_path = "#{dir}/i3925$(touch pwned).zip"
+          FileUtils.cp(fixture, zip_path)
+          service = described_class.new(file_set: nil, persister: nil)
+          allow(service).to receive(:filename).and_return(Pathname.new(zip_path))
+
+          service.unzip_original_file
+
+          expect(Dir.children(service.zip_file_directory)).to include(a_string_ending_with(".shp"))
+          expect(File.exist?("#{dir}/pwned")).to eq false
+        end
+      end
+    end
+  end
+
   describe "#valid?" do
     let(:decorator) { instance_double(FileSetDecorator, parent: parent) }
 

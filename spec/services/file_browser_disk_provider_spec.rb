@@ -141,6 +141,11 @@ RSpec.describe FileBrowserDiskProvider do
         )
       end
 
+      it "doesn't list directories outside of the root" do
+        expect { described_class.new(root: Figgy.config["ingest_folder_path"], base: "/etc").as_json }.to raise_error IngestFolderPath::InvalidPath
+        expect { described_class.new(root: Figgy.config["ingest_folder_path"], base: "../files").as_json }.to raise_error IngestFolderPath::InvalidPath
+      end
+
       it "doesn't return hidden files" do
         provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/A123456")
 

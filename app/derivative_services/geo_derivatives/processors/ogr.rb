@@ -10,9 +10,9 @@ module GeoDerivatives
         # #param options [Hash] creation options
         # @param out_path [String] processor output file path
         def self.reproject(in_path, out_path, options)
-          execute "env OGR_ENABLE_PARTIAL_REPROJECTION=YES env SHAPE_ENCODING= ogr2ogr -q "\
-                  "-nln #{options[:id]} -f 'ESRI Shapefile' -t_srs #{options[:output_srid]} "\
-                  "-skipfailures -preserve_fid '#{out_path}' '#{in_path}'"
+          execute({ "OGR_ENABLE_PARTIAL_REPROJECTION" => "YES", "SHAPE_ENCODING" => "" }, "ogr2ogr", "-q",
+                  "-nln", options[:id], "-f", "ESRI Shapefile", "-t_srs", options[:output_srid],
+                  "-skipfailures", "-preserve_fid", out_path, in_path)
         end
 
         # Executes a ogr2ogr command. Used to reproject a
@@ -21,9 +21,9 @@ module GeoDerivatives
         # #param options [Hash] creation options
         # @param out_path [String] processor output file path
         def self.cloud_reproject(in_path, out_path, options)
-          execute "env OGR_ENABLE_PARTIAL_REPROJECTION=YES env ogr2ogr -q "\
-                  "-nln #{options[:id]} -f FlatGeobuf -t_srs EPSG:4326 "\
-                  "-skipfailures -preserve_fid '#{out_path}.fgb' '#{in_path}'"
+          execute({ "OGR_ENABLE_PARTIAL_REPROJECTION" => "YES" }, "ogr2ogr", "-q",
+                  "-nln", options[:id], "-f", "FlatGeobuf", "-t_srs", "EPSG:4326",
+                  "-skipfailures", "-preserve_fid", "#{out_path}.fgb", in_path)
         end
       end
     end

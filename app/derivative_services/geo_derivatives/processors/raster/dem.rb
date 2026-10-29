@@ -20,8 +20,7 @@ module GeoDerivatives
         # @param out_path [String] processor output file path
         # @param options [Hash] creation options
         def self.hillshade(in_path, out_path, _options)
-          execute "gdaldem hillshade -q "\
-                    "-of GTiff \"#{in_path}\" #{out_path}"
+          execute "gdaldem", "hillshade", "-q", "-of", "GTiff", in_path, out_path
         end
       end
     end

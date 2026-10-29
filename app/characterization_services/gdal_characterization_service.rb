@@ -65,7 +65,7 @@ class GdalCharacterizationService
 
   # Uncompresses a zipped file and sets dataset_path variable to the resulting directory.
   def unzip_original_file
-    system %(unzip -qq -o -j "#{filename}" -d #{zip_file_directory}) unless File.directory?(zip_file_directory)
+    Open3.capture3("unzip", "-qq", "-o", "-j", filename.to_s, "-d", zip_file_directory) unless File.directory?(zip_file_directory)
     @dataset_path = zip_file_directory
   end
 
