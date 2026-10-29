@@ -225,6 +225,35 @@ RSpec.describe ScannedResourcesController, type: :controller do
         expect(members.flat_map(&:title)).to eq ["1", "2"]
       end
 
+      context "when the save and ingest path is outside the search directory" do
+        before do
+          allow(IngestFolderJob).to receive(:perform_later)
+          allow(Figgy.config).to receive(:[]).and_call_original
+          allow(Figgy.config).to receive(:[]).with("default_search_directory").and_return("music")
+        end
+
+        [
+          "../studio_new/DPUL/Santa/ready/991234563506421",
+          Rails.root.join("spec", "fixtures", "staged_files", "studio_new", "DPUL", "Santa", "ready", "991234563506421").to_s
+        ].each do |save_and_ingest_path|
+          it "creates the resource without ingesting #{save_and_ingest_path}" do
+            post :create, params: {
+              scanned_resource: {
+                source_metadata_identifier: "991234563506421",
+                rights_statement: RightsStatements.copyright_not_evaluated.to_s,
+                visibility: "restricted"
+              },
+              save_and_ingest_path: save_and_ingest_path,
+              commit: "Save and Ingest"
+            }
+
+            expect(response).to be_redirect
+            expect(response.location).to start_with "http://test.host/catalog/"
+            expect(IngestFolderJob).not_to have_received(:perform_later)
+          end
+        end
+      end
+
       it "can create and import a MVW" do
         post :create, params: {
           scanned_resource: {
@@ -316,6 +345,40 @@ RSpec.describe ScannedResourcesController, type: :controller do
           query_service = ChangeSetPersister.default.query_service
           resources = query_service.find_all_of_model(model: ScannedResource)
           expect(resources.count).to eq 0
+        end
+      end
+
+      context "when creating a new Selene Resource with a path outside the ingest folder" do
+        let(:outside_path) { Rails.root.join("tmp", "selene-escape") }
+        before do
+          FileUtils.rm_rf(outside_path)
+          FileUtils.cp_r(Rails.root.join("spec", "fixtures", "staged_files", "studio_new", "selene-example"), outside_path)
+        end
+        after do
+          FileUtils.rm_rf(outside_path)
+        end
+
+        it "does not create a resource or ingest the files" do
+          allow(IngestFolderJob).to receive(:perform_later)
+          relative_path = outside_path.relative_path_from(Pathname.new(Figgy.config["ingest_folder_path"])).to_s
+
+          [relative_path, outside_path.to_s].each do |ingest_path|
+            post :create, params: {
+              scanned_resource: {
+                change_set: "selene_resource",
+                title: "Selene"
+              },
+              ingest_path: ingest_path
+            }
+
+            expect(response).to be_redirect
+            expect(response.location).not_to start_with "http://test.host/catalog/"
+            expect(flash[:notice]).to eq("Selene file structure invalid")
+          end
+
+          query_service = ChangeSetPersister.default.query_service
+          expect(query_service.find_all_of_model(model: ScannedResource).count).to eq 0
+          expect(IngestFolderJob).not_to have_received(:perform_later)
         end
       end
     end
