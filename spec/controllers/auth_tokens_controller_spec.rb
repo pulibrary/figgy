@@ -36,7 +36,7 @@ RSpec.describe AuthTokensController, type: :controller do
 
   let(:user) { FactoryBot.create(:admin) }
   before do
-    sign_in user
+    sign_in user if user
   end
 
   describe "GET #index" do
@@ -45,6 +45,13 @@ RSpec.describe AuthTokensController, type: :controller do
       get :index, params: {}
       expect(response).to be_successful
     end
+    context "when not logged in" do
+      let(:user) { nil }
+      it "fails" do
+        get :index, params: {}
+        expect(response).to redirect_to "/users/auth/cas"
+      end
+    end
   end
 
   describe "GET #show" do
@@ -52,6 +59,22 @@ RSpec.describe AuthTokensController, type: :controller do
       auth_token = AuthToken.create! valid_attributes
       get :show, params: { id: auth_token.to_param }
       expect(response).to be_successful
+    end
+    context "when not logged in" do
+      let(:user) { nil }
+      it "fails" do
+        auth_token = AuthToken.create! valid_attributes
+        get :show, params: { id: auth_token.to_param }
+        expect(response).to redirect_to "/users/auth/cas"
+      end
+    end
+    context "when logged in as staff" do
+      let(:user) { FactoryBot.create(:staff) }
+      it "fails" do
+        auth_token = AuthToken.create! valid_attributes
+        get :show, params: { id: auth_token.to_param }
+        expect(response).to redirect_to root_url
+      end
     end
   end
 

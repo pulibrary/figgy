@@ -44,6 +44,7 @@ class Ability
       obj.depositor == [current_user.uid]
     end
     cannot [:create, :destroy], Role
+    cannot [:manage], AuthToken
   end
 
   def anonymous_permissions
