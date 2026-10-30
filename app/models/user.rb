@@ -34,6 +34,10 @@ class User < ApplicationRecord
     groups.include?("staff")
   end
 
+  def read_all?
+    groups.include?("read_all")
+  end
+
   def campus_patron?
     persisted? && provider == "cas"
   end

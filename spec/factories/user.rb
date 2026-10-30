@@ -12,6 +12,10 @@ FactoryBot.define do
       roles { [Role.where(name: "staff").first_or_create] }
     end
 
+    factory :read_all do
+      roles { [Role.where(name: "read_all").first_or_create] }
+    end
+
     factory :campus_patron do
       # All CAS users are campus patrons.
     end
