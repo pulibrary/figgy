@@ -47,19 +47,8 @@ class ManifestBuilderV3
       # Audio and video FileSets have no image derivatives, so use an image
       # FileSet from their parent resource (e.g. a scan of the tape) instead.
       def thumbnail_resource
-        @thumbnail_resource ||= begin
-          file_set = record.resource.to_model
-          file_set.try(:av?) ? parent_image_file_set(file_set) : record.resource
-        end
-      end
-
-      # Prefer the parent's selected thumbnail, falling back to its first image.
-      def parent_image_file_set(file_set)
-        parent = Wayfinder.for(file_set).parent
-        return unless parent
-        image_file_sets = Array.wrap(Wayfinder.for(parent).try(:file_sets)).select(&:image?)
-        thumbnail_ids = Array.wrap(parent.try(:thumbnail_id))
-        image_file_sets.find { |member| thumbnail_ids.include?(member.id) } || image_file_sets.first
+        @thumbnail_resource ||=
+          record.resource.to_model.try(:av?) ? record.try(:av_image_file_set) : record.resource
       end
 
       def helper

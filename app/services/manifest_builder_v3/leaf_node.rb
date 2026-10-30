@@ -59,6 +59,16 @@ class ManifestBuilderV3
       )
     end
 
+    ##
+    # Image FileSet used to represent an audio or video FileSet (e.g. a scan of
+    # the tape), taken from the FileSet's parent resource. Prefers the parent's
+    # selected thumbnail, falling back to its first image.
+    # @return [FileSet, nil]
+    def av_image_file_set
+      return @av_image_file_set if defined?(@av_image_file_set)
+      @av_image_file_set = find_av_image_file_set
+    end
+
     def download_url
       return if derivative.nil?
       if helper.token_authorizable?(parent_node.resource)
@@ -93,6 +103,16 @@ class ManifestBuilderV3
 
       def derivative
         resource.derivative_file
+      end
+
+      def find_av_image_file_set
+        file_set = resource.to_model
+        return unless file_set.try(:av?)
+        parent = Wayfinder.for(file_set).parent
+        return unless parent
+        image_file_sets = Array.wrap(Wayfinder.for(parent).try(:file_sets)).select(&:image?)
+        thumbnail_ids = Array.wrap(parent.try(:thumbnail_id))
+        image_file_sets.find { |member| thumbnail_ids.include?(member.id) } || image_file_sets.first
       end
 
       ##
