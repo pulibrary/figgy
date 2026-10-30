@@ -113,4 +113,13 @@ class RasterResourceDecorator < Valkyrie::ResourceDecorator
       model.human_readable_type
     end
   end
+
+  # Overridden because we don't care if the object isn't visible - downloadable
+  # takes precedence for raster resources.
+  def downloadable?
+    return false unless respond_to?(:downloadable)
+    return visible? && public_readable_state? if downloadable.nil?
+
+    downloadable&.include?("public")
+  end
 end

@@ -844,8 +844,10 @@ describe Ability do
       let(:query_service) { adapter.query_service }
       let(:file) { fixture_file_upload("files/vector/geo.json", "application/vnd.geo+json") }
       let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
-      let(:decorated_vector_resources) { query_service.find_members(resource: vector_resource) }
-      let(:file_set) { decorated_vector_resources.first }
+      let(:vector_resource) do
+        change_set_persister.save(change_set: VectorResourceChangeSet.new(campus_only_vector_resource, files: [file]))
+      end
+      let(:file_set) { query_service.find_members(resource: vector_resource).first }
       let(:vector_file) do
         DownloadsController::FileWithMetadata.new(
           id: "1234",
@@ -856,15 +858,43 @@ describe Ability do
           file_metadata: file_set.file_metadata.first
         )
       end
-      let(:vector_resource) do
-        change_set_persister.save(change_set: VectorResourceChangeSet.new(campus_only_vector_resource, files: [file]))
-      end
       before do
         stub_ezid
       end
 
       it {
         is_expected.to be_able_to(:download, vector_file)
+      }
+    end
+
+    context "with a campus only raster resource" do
+      let(:campus_only_raster_resource) { FactoryBot.create_for_repository(:complete_campus_only_raster_resource, user: creating_user) }
+      let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+      let(:storage_adapter) { Valkyrie.config.storage_adapter }
+      let(:persister) { adapter.persister }
+      let(:query_service) { adapter.query_service }
+      let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff; gdal-format=GTiff") }
+      let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
+      let(:raster_resource) do
+        change_set_persister.save(change_set: RasterResourceChangeSet.new(campus_only_raster_resource, files: [file]))
+      end
+      let(:file_set) { query_service.find_members(resource: raster_resource).first }
+      let(:raster_file) do
+        DownloadsController::FileWithMetadata.new(
+          id: "1234",
+          file: "",
+          mime_type: "image/tiff; gdal-format=GTiff",
+          original_name: "geotiff.tiff",
+          file_set_id: file_set.id,
+          file_metadata: file_set.file_metadata.first
+        )
+      end
+      before do
+        stub_ezid
+      end
+
+      it {
+        is_expected.to be_able_to(:download, raster_file)
       }
     end
   end
