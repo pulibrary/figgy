@@ -106,7 +106,7 @@ class ApplicationController < ActionController::Base
   end
 
   def full_viewer_capability?(resource)
-    resource.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin?))
+    resource.decorate.downloadable? || (!current_user.nil? && (current_user.staff? || current_user.admin? || current_user.read_all?))
   end
 
   # GET /viewer/exhibit/config

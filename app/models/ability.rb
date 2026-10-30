@@ -47,6 +47,12 @@ class Ability
     cannot [:manage], AuthToken
   end
 
+  def read_all_permissions
+    can [:read, :download, :manifest, :discover, :pdf, :color_pdf], :all
+    can :read, Valkyrie::Resource
+    can :discover, Valkyrie::Resource
+  end
+
   def anonymous_permissions
     can :pdf, curation_concerns do |resource|
       ["color", "gray"].include?(Array(resource.pdf_type).first)
@@ -134,11 +140,11 @@ class Ability
   end
 
   def roles
-    ["anonymous", "campus_patron", "admin", "staff"]
+    ["anonymous", "campus_patron", "admin", "staff", "read_all"]
   end
 
   def universal_reader?
-    current_user.staff? || current_user.admin?
+    current_user.staff? || current_user.admin? || current_user.read_all?
   end
 
   def read_permissions

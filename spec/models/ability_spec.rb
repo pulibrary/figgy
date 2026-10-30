@@ -287,6 +287,7 @@ describe Ability do
 
   let(:admin_user) { FactoryBot.create(:admin) }
   let(:staff_user) { FactoryBot.create(:staff) }
+  let(:read_all_user) { FactoryBot.create(:read_all) }
   let(:other_staff_user) { FactoryBot.create(:staff) }
   let(:netid_user) { FactoryBot.create(:user) }
   let(:reading_room_user) { FactoryBot.create(:reading_room_user) }
@@ -1151,6 +1152,93 @@ describe Ability do
         }
       end
     end
+  end
+
+  describe "as a read_all user" do
+    let(:creating_user) { other_staff_user }
+    let(:current_user) { read_all_user }
+
+    let(:adapter) { Valkyrie::MetadataAdapter.find(:indexing_persister) }
+    let(:query_service) { adapter.query_service }
+
+    it {
+      is_expected.to be_able_to(:read, open_scanned_resource)
+      is_expected.to be_able_to(:read, private_scanned_resource)
+      is_expected.to be_able_to(:read, takedown_scanned_resource)
+      is_expected.to be_able_to(:read, flagged_scanned_resource)
+      is_expected.to be_able_to(:read, ocr_request)
+      is_expected.to be_able_to(:read, closed_file_set)
+      is_expected.to be_able_to(:show, report)
+      is_expected.to be_able_to(:pdf, open_scanned_resource)
+      is_expected.to be_able_to(:color_pdf, open_scanned_resource)
+      is_expected.to be_able_to(:download, staff_file)
+      is_expected.to be_able_to(:manifest, open_scanned_resource)
+      is_expected.to be_able_to(:read, pending_scanned_resource)
+      is_expected.to be_able_to(:manifest, pending_scanned_resource)
+      is_expected.to be_able_to(:read, reading_room_scanned_resource)
+      is_expected.to be_able_to(:manifest, reading_room_scanned_resource)
+      is_expected.to be_able_to(:read, campus_ip_scanned_resource)
+      is_expected.to be_able_to(:manifest, campus_ip_scanned_resource)
+      is_expected.to be_able_to(:discover, open_scanned_resource)
+      is_expected.to be_able_to(:discover, pending_scanned_resource)
+      is_expected.to be_able_to(:discover, reading_room_scanned_resource)
+      is_expected.to be_able_to(:discover, campus_ip_scanned_resource)
+      is_expected.to be_able_to(:read, :graphql)
+      is_expected.to be_able_to(:download, no_public_download_open_file)
+      is_expected.to be_able_to(:download, token_downloadable_audio_file)
+      is_expected.not_to be_able_to(:create, ScannedResource.new)
+      is_expected.not_to be_able_to(:create, FileSet.new)
+      is_expected.not_to be_able_to(:create, OcrRequest.new)
+      is_expected.not_to be_able_to(:edit, open_scanned_resource)
+      is_expected.not_to be_able_to(:edit, private_scanned_resource)
+      is_expected.not_to be_able_to(:edit, takedown_scanned_resource)
+      is_expected.not_to be_able_to(:edit, flagged_scanned_resource)
+      is_expected.not_to be_able_to(:edit, ocr_request)
+      is_expected.not_to be_able_to(:update, open_scanned_resource)
+      is_expected.not_to be_able_to(:update, private_scanned_resource)
+      is_expected.not_to be_able_to(:update, takedown_scanned_resource)
+      is_expected.not_to be_able_to(:update, flagged_scanned_resource)
+      is_expected.not_to be_able_to(:update, ocr_request)
+      is_expected.not_to be_able_to(:destroy, staff_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, staff_file)
+      is_expected.not_to be_able_to(:destroy, ocr_request)
+      is_expected.not_to be_able_to(:destroy, open_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, private_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, takedown_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, flagged_scanned_resource)
+      is_expected.not_to be_able_to(:destroy, admin_file)
+      is_expected.not_to be_able_to(:destroy, other_staff_file)
+      is_expected.not_to be_able_to(:create, Role.new)
+      is_expected.not_to be_able_to(:destroy, role)
+      is_expected.not_to be_able_to(:refresh_remote_metadata, :json_document)
+      is_expected.not_to be_able_to(:file_manager, open_scanned_resource)
+
+      # Resources with embargo_date
+      is_expected.to be_able_to(:read, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:manifest, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:discover, out_of_embargo_scanned_resource)
+      is_expected.to be_able_to(:read, embargoed_scanned_resource)
+      is_expected.to be_able_to(:manifest, embargoed_scanned_resource)
+      is_expected.to be_able_to(:discover, embargoed_scanned_resource)
+      is_expected.to be_able_to(:read, embargoed_mvw)
+      is_expected.to be_able_to(:manifest, embargoed_mvw)
+      is_expected.to be_able_to(:discover, embargoed_mvw)
+      is_expected.to be_able_to(:read, embargoed_mvw_child)
+      is_expected.to be_able_to(:manifest, embargoed_mvw_child)
+      is_expected.to be_able_to(:discover, embargoed_mvw_child)
+
+      # Video resources.
+      is_expected.to be_able_to(:read, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video_and_captions)
+      is_expected.to be_able_to(:read, scanned_resource_with_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_video)
+      is_expected.to be_able_to(:read, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:manifest, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:discover, scanned_resource_with_silent_video)
+      is_expected.to be_able_to(:download, video_caption)
+    }
   end
 
   describe "token auth" do
