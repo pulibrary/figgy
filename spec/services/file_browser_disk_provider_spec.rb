@@ -146,6 +146,26 @@ RSpec.describe FileBrowserDiskProvider do
         expect { described_class.new(root: Figgy.config["ingest_folder_path"], base: "../files").as_json }.to raise_error IngestFolderPath::InvalidPath
       end
 
+      it "lists symlinked directories which point outside of the ingest folder" do
+        Dir.mktmpdir do |dir|
+          FileUtils.mkdir_p(["#{dir}/ingest", "#{dir}/bitcur-archives"])
+          FileUtils.touch("#{dir}/bitcur-archives/01.tif")
+          File.symlink("#{dir}/bitcur-archives", "#{dir}/ingest/linked")
+          provider = described_class.new(root: "#{dir}/ingest", base: "linked")
+
+          expect(provider.as_json).to eq(
+            [
+              {
+                label: "01.tif",
+                path: "disk://#{dir}/ingest/linked/01.tif",
+                expandable: false,
+                selectable: true
+              }
+            ]
+          )
+        end
+      end
+
       it "doesn't return hidden files" do
         provider = described_class.new(root: Figgy.config["ingest_folder_path"], base: "studio_new/DPUL/A123456")
 
