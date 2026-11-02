@@ -39,13 +39,31 @@ RSpec.describe IngestFolderPath do
       end
     end
 
-    it "rejects symlinks which point out of the ingest folder" do
+    it "allow symlinks which point out of the ingest folder" do
       Dir.mktmpdir do |dir|
-        FileUtils.mkdir_p("#{dir}/ingest")
-        File.symlink("/etc", "#{dir}/ingest/link")
+        FileUtils.mkdir_p(["#{dir}/ingest", "#{dir}/bitcur-archives/project"])
+        FileUtils.touch("#{dir}/bitcur-archives/project/file.tif")
+        File.symlink("#{dir}/bitcur-archives", "#{dir}/ingest/link")
+        ingest_root = Pathname.new("#{dir}/ingest")
+        folder_path = described_class.new(root: ingest_root)
 
-        expect { described_class.new(root: "#{dir}/ingest").resolve("link/hosts") }.to raise_error described_class::InvalidPath
+        expect(folder_path.resolve("link")).to eq ingest_root.join("link")
+        expect(folder_path.resolve("link/project/file.tif")).to eq ingest_root.join("link", "project", "file.tif")
+        expect(folder_path.resolve("disk://#{ingest_root}/link/project")).to eq ingest_root.join("link", "project")
       end
+    end
+
+    it "rejects using .. to move out of the ingest folder through a symlink" do
+      Dir.mktmpdir do |dir|
+        FileUtils.mkdir_p(["#{dir}/ingest", "#{dir}/bitcur-archives"])
+        File.symlink("#{dir}/bitcur-archives", "#{dir}/ingest/link")
+
+        expect { described_class.new(root: "#{dir}/ingest").resolve("link/../..") }.to raise_error described_class::InvalidPath
+      end
+    end
+
+    it "re-raises File.expand_path ArgumentErrors as InvalidPath errors" do
+      expect { ingest_folder_path.resolve("~") }.to raise_error described_class::InvalidPath
     end
 
     it "rejects paths which don't exist" do
