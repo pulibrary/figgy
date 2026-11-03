@@ -128,4 +128,29 @@ RSpec.describe "Catalog requests", type: :request do
       end
     end
   end
+
+  describe "#thumbnail" do
+    before do
+      sign_in FactoryBot.create(:admin)
+    end
+
+    it "redirects to the resource's thumbnail" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
+
+      get "/catalog/#{scanned_resource.id}/thumbnail"
+
+      expect(response).to have_http_status(:redirect)
+      expect(response.location).to include file_set.id.to_s
+    end
+
+    it "redirects to the default image when there's no thumbnail" do
+      scanned_resource = FactoryBot.create_for_repository(:scanned_resource)
+
+      get "/catalog/#{scanned_resource.id}/thumbnail"
+
+      expect(response).to have_http_status(:redirect)
+      expect(response.location).to include "default"
+    end
+  end
 end

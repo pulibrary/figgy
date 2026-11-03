@@ -161,6 +161,41 @@ RSpec.describe ThumbnailHelper do
     end
   end
 
+  describe "#figgy_thumbnail_url" do
+    it "returns the thumbnail URL from a nested thumbnail" do
+      file_set = FactoryBot.create_for_repository(:file_set)
+      book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: file_set.id)
+      parent_book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: book.id)
+
+      url = helper.figgy_thumbnail_url(parent_book)
+
+      expect(url).to include file_set.id.to_s
+      expect(url).to end_with "full/!200,150/0/default.jpg"
+    end
+
+    it "returns a png URL for geo resources" do
+      thumbnail_file = FileMetadata.new(id: Valkyrie::ID.new("test_id"), use: [::PcdmUse::ThumbnailImage])
+      pyramidal_file = FileMetadata.new(id: Valkyrie::ID.new("pyramidal_id"), use: [::PcdmUse::ServiceFile], mime_type: ["image/tiff"])
+      file_set = FactoryBot.create_for_repository(:file_set, file_metadata: [thumbnail_file, pyramidal_file])
+      vector_resource = FactoryBot.create_for_repository(:vector_resource, thumbnail_id: file_set.id, member_ids: [file_set.id])
+
+      expect(helper.figgy_thumbnail_url(vector_resource)).to end_with "full/!200,150/0/default.png"
+    end
+
+    it "returns nil when the thumbnail doesn't exist" do
+      allow(Valkyrie.logger).to receive(:warn).and_return(nil)
+      book = FactoryBot.create_for_repository(:scanned_resource, thumbnail_id: Valkyrie::ID.new("busted"))
+
+      expect(helper.figgy_thumbnail_url(book)).to be_nil
+    end
+
+    it "returns nil when there's no thumbnail" do
+      book = FactoryBot.create_for_repository(:scanned_resource)
+
+      expect(helper.figgy_thumbnail_url(book)).to be_nil
+    end
+  end
+
   describe "#geo_file_set" do
     let(:file_set) { FactoryBot.create_for_repository(:file_set) }
     let(:raster_resource) { FactoryBot.create_for_repository(:raster_resource, thumbnail_id: file_set.id) }
