@@ -28,6 +28,8 @@ Rails.application.configure do
   }
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.active_storage.service = :local
+  # these are aliases to the dev load balancer, configured only via DNS. the port is
+  # set up in https://github.com/pulibrary/princeton_ansible/blob/main/roles/nginxplus/files/conf/stream/dev/nomad-proxy.conf
   config.cache_store = :mem_cache_store, "nomad-ingress-production.lib.princeton.edu:10003", { value_max_bytes: 3_000_000 }
   config.action_cable.allowed_request_origins = ["https://figgy.princeton.edu"]
   config.action_cable.allow_same_origin_as_host = true
