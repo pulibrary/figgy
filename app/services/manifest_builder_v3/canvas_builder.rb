@@ -4,7 +4,8 @@ class ManifestBuilderV3
       super
       canvas["local_identifier"] = record.local_identifier.first if record.try(:local_identifier).present?
       canvas["viewingHint"] = record.viewing_hint.first if record.try(:viewing_hint).present?
-      canvas["thumbnail"] = build_thumbnail_values
+      thumbnail = build_thumbnail_values
+      canvas["thumbnail"] = thumbnail if thumbnail
       rendering_builder.new(record).apply(canvas)
       accompanying_canvas_builder.new(record).apply(canvas)
     end
@@ -30,9 +31,10 @@ class ManifestBuilderV3
     private
 
       def build_thumbnail_values
+        return unless thumbnail_resource
         [
           {
-            "id" => helper.manifest_image_thumbnail_path(record.resource),
+            "id" => helper.manifest_image_thumbnail_path(thumbnail_resource),
             "type" => "Image",
             "format" => "image/jpeg",
             "width" => 200
@@ -40,6 +42,12 @@ class ManifestBuilderV3
         ]
       rescue
         nil
+      end
+
+      # If the resource is audio or video, look for an av image FileSet to use as a thumbnail
+      def thumbnail_resource
+        @thumbnail_resource ||=
+          record.resource.to_model.try(:av?) ? record.try(:av_image_file_set) : record.resource
       end
 
       def helper

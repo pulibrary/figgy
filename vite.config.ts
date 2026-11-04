@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
 import RubyPlugin from 'vite-plugin-ruby'
 import vue from '@vitejs/plugin-vue'
 import { compression } from 'vite-plugin-compression2'
@@ -18,24 +17,21 @@ export default defineConfig({
     assetsInlineLimit: (filePath) =>
       filePath.includes('openseadragon/build/openseadragon/images/')
         ? false
-        : undefined
+        : undefined,
+    rolldownOptions: {
+      onwarn (warning, defaultHandler) {
+        // Skip verbose warnings about "use client" that aren't relevant in Figgy
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('"use client"')) return
+        defaultHandler(warning)
+      }
+    }
   },
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./test/setup.js'],
-    server: {
-      deps: {
-        // Work around an issue with react-lazy-load-image-component, included
-        // as part of Clover since v2.12.0.
-        // See: https://github.com/vitest-dev/vitest/issues/4852
-        inline: ['@samvera/clover-iiif']
-      }
-    },
     alias: {
-      '@/': './app/javascript',
-      // This resolves an issue vitest and how Clover bundles uuid@9
-      uuid: resolve(__dirname, 'node_modules/@samvera/clover-iiif/node_modules/uuid/dist/esm-browser/index.js')
+      '@/': './app/javascript'
     }
   },
   plugins: [

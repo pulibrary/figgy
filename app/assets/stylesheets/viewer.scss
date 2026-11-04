@@ -76,8 +76,29 @@ h1 {
 
 .intrinsic-container {
   position: relative;
-  // height: 0;
   overflow: hidden;
+}
+
+#viewer-container {
+  position: initial;
+}
+
+// Styling for clover viewer
+.uv.clover-viewer {
+  background-color: white;
+  height: 100vh;
+
+  // Do not display audio range start times.
+  // For Figgy manifests, these are set to 0:00
+  .clover-contents-time {
+    display: none;
+  }
+
+  // Hide the player's chapters button.
+  // It's not useful with our audio and video manifests.
+  .clover-canvas button[id^="chapters-"] {
+    display: none;
+  }
 }
 
 .intrinsic-container iframe {

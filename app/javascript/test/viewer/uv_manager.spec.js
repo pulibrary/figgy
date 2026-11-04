@@ -121,7 +121,7 @@ describe('UVManager', () => {
   })
 
   describe('initialize', () => {
-    it('loads a viewer and title for a playlist', async () => {
+    it('loads a clover viewer for audio', async () => {
       document.body.innerHTML = initialHTML
       mockJquery()
       mockUvProvider()
@@ -130,19 +130,22 @@ describe('UVManager', () => {
         type: 'html',
         content: "<iframe src='https://figgy.princeton.edu/viewer#?manifest=https://figgy.princeton.edu/concern/scanned_resources/78e15d09-3a79-4057-b358-4fde3d884bbb/manifest'></iframe>",
         status: 'authorized',
-        mediaType: 'Image'
-      },
-      null,
-      'Test Playlist',
-      'Playlist'
-      )
+        mediaType: 'Audio'
+      })
+
+      // Mock ResizeObserver
+      global.ResizeObserver = class { observe () {} unobserve () {} disconnect () {} }
 
       // Initialize
       const uvManager = new UVManager()
       const leafletSpy = vi.spyOn(LeafletViewer.prototype, 'loadLeaflet')
+      const spy = vi.spyOn(uvManager, 'createClover')
+      const openSpy = vi.spyOn(uvManager, 'openCloverPanelSection')
       await uvManager.initialize()
-      expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
-      // buildLeaflet viewer is not called when media type is Image
+      expect(spy).toHaveBeenCalled()
+      expect(document.getElementById('uv').classList).toContain('clover-viewer')
+      expect(openSpy).toHaveBeenCalledWith(document.getElementById('uv'), 'contents')
+      // buildLeaflet viewer is not called when media type is Audio
       expect(leafletSpy).not.toHaveBeenCalled()
     })
 
@@ -226,7 +229,6 @@ describe('UVManager', () => {
       // Initialize
       const uvManager = new UVManager()
       await uvManager.initialize()
-      expect(document.getElementById('title').innerHTML).toBe('Test Playlist')
       expect(global.fetch.mock.calls[0][0]).toBe('/graphql?auth_token=12')
       expect(JSON.parse(global.fetch.mock.calls[0][1].body).query).toMatch('resource(id: "12345")')
     })
@@ -336,13 +338,16 @@ describe('UVManager', () => {
       })
 
       // Mock ResizeObserver
-      global.ResizeObserver = vi.fn().mockImplementation(() => ({ observe: vi.fn() }))
+      global.ResizeObserver = class { observe () {} unobserve () {} disconnect () {} }
 
       // Initialize
       const uvManager = new UVManager()
       const spy = vi.spyOn(uvManager, 'createClover')
+      const openSpy = vi.spyOn(uvManager, 'openCloverPanelSection')
       await uvManager.initialize()
       expect(spy).toHaveBeenCalled()
+      // openCloverPanelSection is only called for audio resources
+      expect(openSpy).not.toHaveBeenCalled()
     })
 
     it('loads a UV and Leafet viewer for a mosiac', async () => {

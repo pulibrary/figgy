@@ -7,7 +7,8 @@ import LeafletViewer from './leaflet_viewer'
 import TabManager from './tab_manager'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Viewer from '@samvera/clover-iiif/viewer'
+import Viewer from '@nulib/clover'
+import '@nulib/clover/styles.css'
 
 export default class UVManager {
   async initialize () {
@@ -38,8 +39,8 @@ export default class UVManager {
   // Determine which viewer to render based on the media type
   renderViewer (graphqlData) {
     const mediaType = graphqlData.embed.mediaType
-    if (mediaType === 'Video') {
-      this.createClover()
+    if (mediaType === 'Video' || mediaType === 'Audio') {
+      this.createClover(mediaType)
     } else {
       this.createUV(graphqlData)
     }
@@ -54,7 +55,6 @@ export default class UVManager {
       query: `{
         resource(id: "` + this.figgyId + `"){
           id,
-          __typename,
           label,
           embed {
             type,
@@ -110,7 +110,6 @@ export default class UVManager {
     this.remapWindowOpen()
     this.bindResizeUV()
     this.tabManager.onTabSelect(() => setTimeout(() => this.resizeUV(), 100))
-    this.processTitle(graphqlData)
     this.uvElement.show()
     this.uv = createUV('#uv', {
       root: 'uv',
@@ -169,15 +168,41 @@ export default class UVManager {
     );
   }
 
-  createClover () {
+  createClover (mediaType) {
     this.forceHlsJs()
     const uvElement = document.getElementById('uv')
     // Show hidden viewer element
     uvElement.style.display = 'block'
-    const root = ReactDOM.createRoot(uvElement)
-    const clover = React.createElement(Viewer, { iiifContent: this.manifest, options: { canvasHeight: 'auto', informationPanel: { open: false }, background: 'white', withCredentials: true, showTitle: false, showIIIFBadge: false } })
+    //Add clover-specific styling
+    uvElement.classList.add('clover-viewer')
+    const isAudio = mediaType !== 'Video'
+    const clover = React.createElement(Viewer, {
+      iiifContent: this.manifest,
+      request: { credentials: 'include' },
+      header: false,
+      fill: true,
+      defaultPanelOpen: isAudio
+    })
+    ReactDOM.createRoot(uvElement).render(clover)
+    // For audio resources, open the contents section by default
+    if (isAudio) this.openCloverPanelSection(uvElement, 'contents')
+  }
 
-    root.render(clover)
+  openCloverPanelSection (node, section) {
+    // Create a MutationObserver to watch for the rendering of a panel section button.
+    // If the button is rendered, then click it to open.
+    const observer = new MutationObserver(() => {
+      const selector = `button.clover-sections-button[data-value="${section}"]`
+      const button = node.querySelector(selector)
+      if (button) {
+        button.click()
+        observer.disconnect()
+      }
+    })
+    // Run the mutation observer
+    observer.observe(node, { childList: true, subtree: true })
+    // Set a timeout to cancel the observer if the button is never rendered
+    setTimeout(() => observer.disconnect(), 10000)
   }
 
   // Force Chrome to use HLS.js instead of native player.
@@ -268,17 +293,6 @@ export default class UVManager {
     } else {
       return this.urlDataProvider.get('config')
     }
-  }
-
-  processTitle (graphqlData) {
-    if (graphqlData === undefined || graphqlData.__typename !== 'Playlist') {
-      return
-    }
-    const title = graphqlData.label
-    const titleElement = document.getElementById('title')
-    titleElement.textContent = title
-    titleElement.style.display = 'block'
-    this.resizeUV()
   }
 
   resizeUV () {
