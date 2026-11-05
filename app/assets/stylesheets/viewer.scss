@@ -99,6 +99,12 @@ h1 {
   .clover-canvas button[id^="chapters-"] {
     display: none;
   }
+
+  // Hide the item title in the items panel.
+  // It is duplicate information.
+  .clover-template-default-rail-header {
+    display: none;
+  }
 }
 
 .intrinsic-container iframe {

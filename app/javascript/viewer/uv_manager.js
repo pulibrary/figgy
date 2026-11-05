@@ -181,7 +181,9 @@ export default class UVManager {
       request: { credentials: 'include' },
       header: false,
       fill: true,
-      defaultPanelOpen: isAudio
+      defaultPanelOpen: isAudio,
+      // Use the simpler items pager layout
+      items: 'pager'
     })
     ReactDOM.createRoot(uvElement).render(clover)
     // For audio resources, open the contents section by default
