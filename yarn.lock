@@ -733,10 +733,10 @@
     "@parcel/watcher-win32-arm64" "2.6.0"
     "@parcel/watcher-win32-x64" "2.6.0"
 
-"@rails/actioncable@^7.2.0":
-  version "7.2.400"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.2.400.tgz#90a795664cf5a7efcd93d791dc90951bef13bd7d"
-  integrity sha512-rxVBAeaekdA0G8HOl+rQZVKU5XVMM7Wnat+0PLz+qDy1HCe+YCjvrAYaqU9gP5XtXbhz0SLGm/iub3EwCcP5pw==
+"@rails/actioncable@^8.0.0":
+  version "8.1.401"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.1.401.tgz#59b5e7c6c3f39a97bd78f7e5ffc132057231af28"
+  integrity sha512-eZdEy9UmnsaeDHr5G5nFhdgsaMo9EZVq2JMAjqtNmVDqnKWHwvTMt0Ah1CWBf7g7BDLR3WCDgHS2aOhbpjqkWw==
 
 "@rolldown/binding-android-arm-eabi@1.2.16":
   version "1.2.16"
