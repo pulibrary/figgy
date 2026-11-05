@@ -27,7 +27,7 @@
     "openseadragon": "^6.0.0",
     "openseadragon-areaselector": "^0.2.1",
     "path": "^0.12.7",
-    "postcss-import": "^16.1.0",
+    "postcss-import": "^17.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.74.1",
