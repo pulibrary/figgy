@@ -149,8 +149,6 @@ export default {
       let thumbnail = null
       if (checked) {
         thumbnail = this.gallery.selected[0].id
-      } else {
-        thumbnail = null
       }
       this.$store.dispatch('updateThumbnail', thumbnail)
     },
