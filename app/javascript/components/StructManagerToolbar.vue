@@ -183,7 +183,7 @@ export default {
       } else {
         let folders = JSON.parse(JSON.stringify(this.tree.structure.folders))
         let parent = this.findParentFolderById(folders, this.tree.selected)
-        let pos = null
+        let pos
         if (parent) {
           pos = parent.folders.indexOf(this.tree.selected)
         } else { // if it's null that means the parent is the root node
@@ -202,8 +202,8 @@ export default {
       } else {
         let folders = JSON.parse(JSON.stringify(this.tree.structure.folders))
         let parent = this.findParentFolderById(folders, this.tree.selected)
-        let pos = null
-        let item_count = null 
+        let pos
+        let item_count
         if (parent) {
           item_count = parent.folders.length 
           pos = parent.folders.indexOf(this.tree.selected)

@@ -2512,7 +2512,7 @@ eslint-plugin-vitest-globals@^1.5:
   resolved "https://registry.yarnpkg.com/eslint-plugin-vitest-globals/-/eslint-plugin-vitest-globals-1.6.1.tgz#9530bbe1f2bfc9c051874cdac279badd0b80d097"
   integrity sha512-ydMvr96XRaT913a8gy8TY/LLyGB49Wmj0+x/FCbaWSpWMSaWDLG63/5zSLLrdSGXJ0PTjWpYZOZ61YBuzNyyTw==
 
-eslint-plugin-vue@^10.0.0:
+eslint-plugin-vue@^10.12.0:
   version "10.12.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-10.12.0.tgz#e3196ce9f4831b7e4424febb2d74c7a30f6fbce2"
   integrity sha512-YsrHHtMaxjWqmxr/Kv9yXUfakUlbTCWtIBvr9eounzj6ZsGJdz1I4UuTIHkhzKHes793Cwo3PGTcvsoBqNyzCA==
