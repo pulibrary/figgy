@@ -65,7 +65,7 @@ gem "mime-types"
 gem "mini_magick"
 gem "modernizr-rails"
 # Pin because capistrano raises an error at >= 7.2
-gem "net-ssh", "~> 7.3"
+gem "net-ssh", "~> 8.0"
 gem "normalize-rails"
 gem "oai"
 gem "omniauth", "2.3.1"
