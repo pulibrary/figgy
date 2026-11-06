@@ -139,9 +139,9 @@
     "@opentelemetry/semantic-conventions" "^1.29.0"
 
 "@opentelemetry/semantic-conventions@^1.29.0":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.44.0.tgz#c99123b8f2259fc4ce98d2409aae3c4931c10d1a"
-  integrity sha512-E3JkOlMBi3N8OGGkbl7tFyqk2MAS6/lySRZBK3Mu7AzjF1fT8oIChH9ChE48SUWzDn9Kdwta+G/p5LJ4xW4CLQ==
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.45.0.tgz#9c246898ce8d92e511f79c1d83bbc57476087bc4"
+  integrity sha512-aOP45mbcOKbQVvFWfQmgoOPT8R2iwbbbgl83k4CujGV9BrJhFr3qG55MFpwFs4YLabpuW3HhzUY9eQxPlDqaZw==
 
 "@opentelemetry/semantic-conventions@~1.39.0":
   version "1.39.0"
