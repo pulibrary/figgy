@@ -254,7 +254,7 @@ GEM
       blacklight (>= 7.25.2, < 9)
       deprecation
       view_component (>= 2.54, < 4)
-    bootsnap (1.26.0)
+    bootsnap (1.26.1)
       msgpack (~> 1.5)
     bootstrap (4.6.2.1)
       autoprefixer-rails (>= 9.1.0)
@@ -266,7 +266,7 @@ GEM
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
       thor (~> 1.0)
-    bunny (3.4.0)
+    bunny (3.5.0)
       amq-protocol (~> 2.9)
       logger (~> 1, >= 1.7)
       openssl (>= 3.3)
@@ -341,11 +341,11 @@ GEM
     database_cleaner-sequel (2.0.2)
       database_cleaner-core (~> 2.0.0)
       sequel
-    datadog (2.46.0)
+    datadog (2.47.0)
       cgi
       datadog-ruby_core_source (~> 3.5, >= 3.5.6)
-      libdatadog (~> 46.0.0.1.1)
-      libddwaf (~> 1.30.0.0.0)
+      libdatadog (~> 46.1.0.1.1)
+      libddwaf (~> 1.30.0.1.0)
       logger
       msgpack
     datadog-ruby_core_source (3.5.6)
@@ -663,14 +663,14 @@ GEM
     leaflet-rails (1.9.5)
       actionpack (>= 4.2.0)
       railties (>= 4.2.0)
-    libdatadog (46.0.0.1.1)
-    libdatadog (46.0.0.1.1-arm64-darwin)
-    libdatadog (46.0.0.1.1-x86_64-linux)
-    libddwaf (1.30.0.0.2-arm64-darwin)
+    libdatadog (46.1.0.1.1)
+    libdatadog (46.1.0.1.1-arm64-darwin)
+    libdatadog (46.1.0.1.1-x86_64-linux)
+    libddwaf (1.30.0.1.0-arm64-darwin)
       ffi (~> 1.0)
-    libddwaf (1.30.0.0.2-x86_64-darwin)
+    libddwaf (1.30.0.1.0-x86_64-darwin)
       ffi (~> 1.0)
-    libddwaf (1.30.0.0.2-x86_64-linux)
+    libddwaf (1.30.0.1.0-x86_64-linux)
       ffi (~> 1.0)
     link_header (0.0.8)
     lint_roller (1.1.0)
@@ -1239,7 +1239,7 @@ DEPENDENCIES
   dartsass-sprockets
   database_cleaner
   database_cleaner-sequel
-  datadog (~> 2.46.0)
+  datadog (~> 2.47.0)
   debug
   devise (>= 4.6.0)
   devise-guests!
