@@ -1,4 +1,4 @@
-source "https://rubygems.org", cooldown: 14
+source "https://rubygems.org", cooldown: 4
 
 gem "aasm"
 # TODO: Get rid of this we don't use it.

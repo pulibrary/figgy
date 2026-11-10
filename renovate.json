@@ -11,10 +11,15 @@
     "npm",
     "github-actions"
   ],
+  "timezone": "America/New_York",
   "lockFileMaintenance": {
-    "enabled": true
+    "enabled": true,
+    "automerge": true,
+    "schedule": [
+      "* 20-23 * * 1"
+    ]
   },
-  "minimumReleaseAge": "14 days",
+  "minimumReleaseAge": "4 days",
   "packageRules": [
     {
       "matchDatasources": [
@@ -30,6 +35,13 @@
         "bundler"
       ],
       "rangeStrategy": "update-lockfile"
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
     }
   ],
   "customManagers": [
