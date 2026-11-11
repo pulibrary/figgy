@@ -225,10 +225,6 @@ class VipsDerivativeService
       end
     end
 
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:pyramidal_derivatives)
-    end
-
     # Updates error message property on the original file.
     def update_error_message(message:)
       resource = change_set_persister.query_service.find_by(id: self.resource.id)
