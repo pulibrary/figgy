@@ -24,7 +24,7 @@ gem "coffee-rails"
 # pinning connection_pool due to https://github.com/rails/rails/pull/56292
 gem "connection_pool", "< 4"
 gem "dalli"
-gem "datadog", "~> 2.47.0"
+gem "datadog", "~> 2.48.0"
 gem "devise", ">= 4.6.0"
 gem "devise-guests", git: "https://github.com/cbeer/devise-guests.git"
 gem "dnsruby"
@@ -34,7 +34,7 @@ gem "faker"
 gem "filewatcher", "~> 3.0"
 gem "flutie"
 gem "font-awesome-rails"
-gem "google-cloud-pubsub", "3.5.0"
+gem "google-cloud-pubsub", "3.5.1"
 # This breaks PreserveResourceJob somewhere between 1.39 and 1.44.
 gem "google-cloud-storage", "1.62.1"
 gem "graphiql-rails", "1.10.5", group: :development
