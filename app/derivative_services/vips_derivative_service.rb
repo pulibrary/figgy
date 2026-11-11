@@ -168,7 +168,7 @@ class VipsDerivativeService
     deleted_files = []
     target_derivatives = resource.file_metadata.select { |file| target_derivative?(file) }
     target_derivatives.each do |file|
-      storage_adapter.delete(id: file.file_identifiers.first)
+      Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
@@ -223,10 +223,6 @@ class VipsDerivativeService
       change_set_persister.buffer_into_index do |buffered_persister|
         buffered_persister.save(change_set: updated_change_set)
       end
-    end
-
-    def storage_adapter
-      @storage_adapter ||= Valkyrie::StorageAdapter.find(:pyramidal_derivatives)
     end
 
     # Updates error message property on the original file.

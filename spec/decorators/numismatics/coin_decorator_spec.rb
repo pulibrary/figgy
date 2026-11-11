@@ -49,9 +49,8 @@ RSpec.describe Numismatics::CoinDecorator do
   describe "#pdf_file" do
     context "when there is a pdf and it exists" do
       before do
-        allow(derivs).to receive(:find_by).with(id: file_id).and_return(file_id)
+        allow(Valkyrie::StorageAdapter).to receive(:find_by).with(id: file_id).and_return(file_id)
       end
-      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
       let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
       let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
       let(:coin) { FactoryBot.create_for_repository(:coin, file_metadata: [pdf_file]) }
@@ -62,9 +61,8 @@ RSpec.describe Numismatics::CoinDecorator do
 
     context "when there is a pdf but it does not exist" do
       before do
-        allow(derivs).to receive(:find_by).with(id: file_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
+        allow(Valkyrie::StorageAdapter).to receive(:find_by).with(id: file_id).and_raise(Valkyrie::StorageAdapter::FileNotFound)
       end
-      let(:derivs)   { Valkyrie::StorageAdapter.find(:derivatives) }
       let(:file_id)  { Valkyrie::ID.new("disk:///tmp/stubbed.tif") }
       let(:pdf_file) { FileMetadata.new mime_type: "application/pdf", file_identifiers: [file_id] }
       let(:coin) { FactoryBot.create_for_repository(:coin, file_metadata: [pdf_file]) }

@@ -37,14 +37,10 @@ class ChangeSetPersister
         @pdf_file_identifier ||= pdf_file.file_identifiers.first
       end
 
-      def storage_adapter
-        Valkyrie.config.storage_adapter
-      end
-
       def pdf_file_exists?
-        pdf_file_binary = storage_adapter.find_by(id: pdf_file_identifier)
+        pdf_file_binary = Valkyrie::StorageAdapter.find_by(id: pdf_file_identifier)
         !pdf_file_binary.nil?
-      rescue Valkyrie::StorageAdapter::FileNotFound => error
+      rescue Valkyrie::StorageAdapter::FileNotFound, Valkyrie::StorageAdapter::AdapterNotFoundError => error
         Valkyrie.logger.error("Failed to locate the file for the PDF FileMetadata: #{pdf_file_identifier}: #{error}")
         false
       end
