@@ -54,7 +54,14 @@ RSpec.describe ChangeSetPersister::CleanupPdfs do
       end
     end
     context "with a ScannedResource with PDF metadata attached with existing files" do
-      let(:file_identifiers) { [Valkyrie::ID.new("disk://#{File.expand_path(__FILE__)}")] }
+      let(:uploaded_file) do
+        Valkyrie::StorageAdapter.find(:disk_via_copy).upload(
+          file: fixture_file_upload("files/sample.pdf", "application/pdf"),
+          original_filename: "sample.pdf",
+          resource: ScannedResource.new(id: SecureRandom.uuid)
+        )
+      end
+      let(:file_identifiers) { [uploaded_file.id] }
       let(:resource) { FactoryBot.create(:scanned_resource, file_metadata: [pdf_file]) }
       it "keeps the metadata and does not attempt to delete the missing files" do
         change_set.validate(file_metadata: [pdf_file])

@@ -49,7 +49,7 @@ class RasterResourceDerivativeService
     deleted_files = []
     raster_derivatives = resource.file_metadata.select { |file| file.thumbnail_file? || file.cloud_derivative? }
     raster_derivatives.each do |file|
-      storage_adapter.delete(id: file.file_identifiers.first)
+      Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
@@ -65,7 +65,7 @@ class RasterResourceDerivativeService
   def cleanup_thumbnail_derivatives
     deleted_files = []
     resource.file_metadata.select(&:thumbnail_file?).each do |file|
-      storage_adapter.delete(id: file.file_identifiers.first)
+      Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)

@@ -94,7 +94,7 @@ class ScannedMapDerivativeService
       return if static_thumbnails.empty?
 
       static_thumbnails.each do |file|
-        change_set_persister.storage_adapter.delete(id: file.file_identifiers.first)
+        Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
       end
       deleted_ids = static_thumbnails.map(&:id)
       file_set.file_metadata = file_set.file_metadata.reject { |file| deleted_ids.include?(file.id) }

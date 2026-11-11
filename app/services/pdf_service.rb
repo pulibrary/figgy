@@ -36,8 +36,8 @@ class PDFService
   private
 
     def binary_exists_for?(file_desc)
-      storage_adapter.find_by(id: file_desc.file_identifiers.first).present?
-    rescue Valkyrie::StorageAdapter::FileNotFound => error
+      Valkyrie::StorageAdapter.find_by(id: file_desc.file_identifiers.first).present?
+    rescue Valkyrie::StorageAdapter::FileNotFound, Valkyrie::StorageAdapter::AdapterNotFoundError => error
       Valkyrie.logger.error("Failed to locate the file for the PDF FileMetadata: #{file_desc.file_identifiers.first}: #{error}")
       false
     end

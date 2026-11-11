@@ -82,8 +82,8 @@ class EphemeraFolderDecorator < Valkyrie::ResourceDecorator
 
   def pdf_file
     pdf = file_metadata.find { |x| x.mime_type == ["application/pdf"] }
-    pdf if pdf && Valkyrie::StorageAdapter.find(:derivatives).find_by(id: pdf.file_identifiers.first)
-  rescue Valkyrie::StorageAdapter::FileNotFound
+    pdf if pdf && Valkyrie::StorageAdapter.find_by(id: pdf.file_identifiers.first)
+  rescue Valkyrie::StorageAdapter::FileNotFound, Valkyrie::StorageAdapter::AdapterNotFoundError
     nil
   end
 

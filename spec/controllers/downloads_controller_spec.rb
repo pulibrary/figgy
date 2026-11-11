@@ -157,7 +157,7 @@ RSpec.describe DownloadsController do
           file_set = Wayfinder.for(output).file_sets.first
           file_metadata = file_set.file_metadata.find(&:hls_manifest?)
           # Move file over to fallback adapter.
-          file = Valkyrie.config.storage_adapter.find_by(id: file_metadata.file_identifiers.first)
+          file = Valkyrie::StorageAdapter.find_by(id: file_metadata.file_identifiers.first)
           new_path = Pathname.new(file.disk_path.to_s.gsub(Figgy.config["stream_derivatives_path"], Figgy.config["fallback_stream_derivatives_path"]))
           FileUtils.mkdir_p(new_path.parent)
           FileUtils.mv(file.disk_path, new_path)

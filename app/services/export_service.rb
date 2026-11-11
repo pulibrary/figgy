@@ -15,7 +15,7 @@ class ExportService
     end
 
     pdf_desc = PDFService.new(change_set_persister).find_or_generate(resource_id: resource.id)
-    file = Valkyrie.config.storage_adapter.find_by(id: pdf_desc.file_identifiers.first.id)
+    file = Valkyrie::StorageAdapter.find_by(id: pdf_desc.file_identifiers.first.id)
     FileUtils.mkdir_p(export_base)
     File.open(fn, "w") { |dest| IO.copy_stream(file, dest) }
   end
@@ -55,7 +55,7 @@ class ExportService
   end
 
   def self.export_file(fileset, prefix)
-    file = Valkyrie.config.storage_adapter.find_by(id: fileset.primary_file.file_identifiers.first.id)
+    file = Valkyrie::StorageAdapter.find_by(id: fileset.primary_file.file_identifiers.first.id)
     FileUtils.mkdir_p("#{export_base}/#{prefix}")
     File.open(file_path(fileset, prefix), "w") { |dest| IO.copy_stream(file, dest) }
   end

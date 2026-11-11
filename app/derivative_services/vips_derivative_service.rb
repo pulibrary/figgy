@@ -168,7 +168,7 @@ class VipsDerivativeService
     deleted_files = []
     target_derivatives = resource.file_metadata.select { |file| target_derivative?(file) }
     target_derivatives.each do |file|
-      storage_adapter.delete(id: file.file_identifiers.first)
+      Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
