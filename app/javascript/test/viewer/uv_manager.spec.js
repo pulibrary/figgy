@@ -1,6 +1,7 @@
 import UVManager from '../../viewer/uv_manager'
 import LeafletViewer from '../../viewer/leaflet_viewer'
 import jQ from 'jquery'
+import { act } from 'react'
 vi.mock('viewer/cdl_timer')
 describe('UVManager', () => {
   const initialHTML =
@@ -141,7 +142,7 @@ describe('UVManager', () => {
       const leafletSpy = vi.spyOn(LeafletViewer.prototype, 'loadLeaflet')
       const spy = vi.spyOn(uvManager, 'createClover')
       const openSpy = vi.spyOn(uvManager, 'openCloverPanelSection')
-      await uvManager.initialize()
+      await act(() => uvManager.initialize())
       expect(spy).toHaveBeenCalled()
       expect(document.getElementById('uv').classList).toContain('clover-viewer')
       expect(openSpy).toHaveBeenCalledWith(document.getElementById('uv'), 'contents')
@@ -344,7 +345,7 @@ describe('UVManager', () => {
       const uvManager = new UVManager()
       const spy = vi.spyOn(uvManager, 'createClover')
       const openSpy = vi.spyOn(uvManager, 'openCloverPanelSection')
-      await uvManager.initialize()
+      await act(() => uvManager.initialize())
       expect(spy).toHaveBeenCalled()
       // openCloverPanelSection is only called for audio resources
       expect(openSpy).not.toHaveBeenCalled()
