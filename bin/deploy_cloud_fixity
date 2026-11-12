@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+ENV=$1
+case "$ENV" in
+  staging)
+    BUCKET=figgy-staging-preservation
+    SERVICE_ACCOUNT=figgy-staging@pulibrary-figgy-storage-1.iam.gserviceaccount.com ;;
+  production)
+    BUCKET=figgy-preservation
+    SERVICE_ACCOUNT=figgy-preservation-production@pulibrary-figgy-storage-1.iam.gserviceaccount.com ;;
+  *)
+    echo "Usage: bin/deploy_cloud_fixity [staging|production]"
+    exit 1 ;;
+esac
+
+cd "$(dirname "$0")/../cloud_fixity"
+gcloud beta functions deploy "checkFixity${ENV}" --runtime nodejs22 \
+  --set-env-vars "BUCKET=${BUCKET},FIXITY_STATUS_TOPIC=figgy-${ENV}-fixity-status,FIXITY_REQUEST_TOPIC=figgy-${ENV}-fixity-request" \
+  --trigger-topic "figgy-${ENV}-fixity-request" --service-account "$SERVICE_ACCOUNT" \
+  --entry-point checkFixity --max-instances 100

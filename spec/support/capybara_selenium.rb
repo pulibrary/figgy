@@ -17,7 +17,7 @@ end
 
 Capybara.register_driver(:custom_chrome) do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new(
-    args: %w[--disable-gpu --disable-setuid-sandbox --window-size=1920,1080]
+    args: %w[--disable-gpu --no-sandbox --window-size=1920,1080]
   )
   browser_options.add_argument("--headless") unless ENV["RUN_IN_BROWSER"] == "true"
 

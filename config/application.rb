@@ -62,7 +62,11 @@ module Figgy
     config.action_controller.default_protect_from_forgery = false
 
     config.rails_semantic_logger.appenders do |appenders|
-      appenders.add(file_name: "log/#{Rails.env}.log", formatter: :json)
+      if ENV["RAILS_LOG_TO_STDOUT"].present?
+        appenders.add(io: $stdout, formatter: :json)
+      else
+        appenders.add(file_name: "log/#{Rails.env}.log", formatter: :json)
+      end
     end
   end
 end

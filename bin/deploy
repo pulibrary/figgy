@@ -1,0 +1,66 @@
+#!/bin/bash
+ENV=$1
+BRANCH_NAME="${BRANCH:-main}"
+REPOSITORY="${REPO:-figgy}"
+JOB_NAME="${JOBNAME:-figgy}"
+
+# Make sure we're on VPN
+if ! nslookup nomad-host-prod1.lib.princeton.edu 2>&1 > /dev/null
+then
+  echo "Unable to connect to nomad-host-prod1. Ensure you're on VPN."
+  exit 1
+fi
+
+## Get Github Token
+if ! command -v gh &> /dev/null
+then
+  if [ -z "$GITHUB_TOKEN" ]
+  then
+    echo "gh must be installed or a token passed with GITHUB_TOKEN. Run 'brew install gh'."
+    exit 1
+  fi
+fi
+
+GH_TOKEN="${GITHUB_TOKEN:-$(gh auth token 2> /dev/null)}"
+
+if [ "$GH_TOKEN" = "" ]
+then
+  echo "Github token not set. Run 'gh auth login' and follow the directions."
+  exit 1
+fi
+
+if [[ -z "${ENV}" ]];
+then
+  echo "Missing Environment. Command: 'BRANCH=main ./bin/deploy staging'."
+  exit
+fi
+
+# Create Github Deployment
+DEPLOY_OUTPUT=$(curl -s -X POST -H "Accept: application/vnd.github+json-H" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${GH_TOKEN}" --data "{\"ref\":\"${BRANCH_NAME}\",\"description\":\"Deploy from Nomad script\", \"auto_merge\": false, \"environment\": \"${ENV}\", \"required_contexts\": [] }" "https://api.github.com/repos/pulibrary/${REPOSITORY}/deployments")
+regex='"id": ([0-9]+),'
+[[ $DEPLOY_OUTPUT =~ $regex ]]
+DEPLOY_ID=${BASH_REMATCH[1]}
+
+if [[ -z "${DEPLOY_ID}" ]]
+then
+  echo "Unable to fetch Deploy ID."
+  exit 1
+fi
+
+# Create "Started" Deployment Status
+curl -s -X POST -H "Accept: application/vnd.github+json-H" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${GH_TOKEN}" --data "{\"environment\":\"${ENV}\",\"state\":\"in_progress\",\"log_url\": \"https://nomad.lib.princeton.edu/ui/jobs/${JOB_NAME}-${ENV}\", \"description\":\"Deployment started.\"}" "https://api.github.com/repos/pulibrary/${REPOSITORY}/deployments/${DEPLOY_ID}/statuses" > /dev/null
+
+# Deploy using nomad-host-prod1, which has the nomad management key.
+ssh deploy@nomad-host-prod1.lib.princeton.edu << EOF
+  curl -H 'Cache-Control: no-cache' -s "https://raw.githubusercontent.com/pulibrary/${REPOSITORY}/${BRANCH_NAME}/config/deploy/${ENV}.hcl" | nomad job run -var "branch_or_sha=sha-$(git ls-remote https://github.com/pulibrary/${REPOSITORY}.git ${BRANCH_NAME} | awk '{ print substr($1,1,7) }')" -
+EOF
+retcode=$?
+
+if [ $retcode -eq 0 ]
+then
+  # Create "Completed Successfully" Deployment Status
+  curl -s -X POST -H "Accept: application/vnd.github+json-H" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${GH_TOKEN}" --data "{\"environment\":\"${ENV}\",\"state\":\"success\",\"log_url\": \"https://nomad.lib.princeton.edu/ui/jobs/${JOB_NAME}-${ENV}\", \"description\":\"Deployment finished successfully.\"}" "https://api.github.com/repos/pulibrary/${REPOSITORY}/deployments/${DEPLOY_ID}/statuses" > /dev/null
+else
+  # Create "Failed" Deployment Status
+  curl -s -X POST -H "Accept: application/vnd.github+json-H" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Bearer ${GH_TOKEN}" --data "{\"environment\":\"${ENV}\",\"state\":\"failure\",\"log_url\": \"https://nomad.lib.princeton.edu/ui/jobs/${JOB_NAME}-${ENV}\", \"description\":\"Deployment failed.\"}" "https://api.github.com/repos/pulibrary/${REPOSITORY}/deployments/${DEPLOY_ID}/statuses" > /dev/null
+fi

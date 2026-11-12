@@ -2,7 +2,7 @@
 
 A digital repository application in use at Princeton University Library for storing and managing digital representations of manuscripts, ephemera, vector, and raster data for export into a variety of front-end displays.
 
-[![CircleCI](https://circleci.com/gh/pulibrary/figgy.svg?style=svg)](https://circleci.com/gh/pulibrary/figgy)
+[![CI](https://github.com/pulibrary/figgy/actions/workflows/ci.yml/badge.svg)](https://github.com/pulibrary/figgy/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/pulibrary/figgy)
 [![Browserstack](./browserstack-logo.svg)](https://www.browserstack.com/)
 
@@ -177,7 +177,7 @@ in [preservation_documentation.md](/docs/technical/preservation/google_pub_sub.m
 1. `gcloud components install beta`
 1. `gcloud auth login`
 1. `gcloud config set project pulibrary-figgy-storage-1`
-1. `cap [staging/production] deploy:google_cloud_function`
+1. `bin/deploy_cloud_fixity [staging/production]`
 
 ### Testing Cloud Fixity
 
@@ -186,7 +186,7 @@ in [preservation_documentation.md](/docs/technical/preservation/google_pub_sub.m
 1. [View Functions](https://console.cloud.google.com/functions/list?authuser=1&project=pulibrary-figgy-storage-1)
 1. Click checkFixityStaging
 1. Click "Logs"
-1. In your shell, do `bundle exec cap staging rails:console`
+1. In your shell, do `nomad alloc exec -job figgy-staging -task web bin/rails console`
 1. In Console: `CloudFixity::FixityRequestor.queue_resource_check!(id: "532a944d-3d22-447c-a3bf-d10f05e153b8")`
 1. Refresh "Logs", look for success.
 1. Refresh `https://figgy-staging.princeton.edu/catalog/532a944d-3d22-447c-a3bf-d10f05e153b8`, you should see "Last Success: Today's Date" under Cloud Fixity.
@@ -214,8 +214,7 @@ There are two types of read-only mode.
 ##### Read-only Mode
 
 Read-only mode disables writing to the Postgres database. Use princeton_ansible to activate it:
-* change the `figgy_read_only_mode` value in the relevant group_vars file (example: https://github.com/pulibrary/princeton_ansible/blob/9ccaadf336ddac973c4c18e836d46d445f15d38f/group_vars/figgy/staging.yml#L30)
-* run the figgy playbook on the relevant environment using the command line switch `--tags=site_config` (this will also restart the site and all the workers; visit it in browser to confirm)
+* set `FIGGY_READ_ONLY_MODE` to `true` in the environment's Nomad variables (managed in princeton_ansible). Changing the variable restarts the site and all the workers; visit it in browser to confirm.
 
 Known issue: In read-only mode users cannot download pdfs (unless they've been cached). See #2866
 
@@ -232,19 +231,18 @@ To enable:
    production or staging and deploy the branch.
 1. Deploy `main` again when reindexing is complete.
 
-## Maintaining CircleCI base image
+## Deployment
 
-We maintain a Figgy Docker image for use in CircleCI. The Dockerfile is
-located in the `.circleci` directory. To update a package, dependency, or ruby
-version, make edits to the Dockerfile. Then build and push the image to Docker Hub using
-the following steps (be sure to increment the version):
+Figgy runs on Nomad. GitHub Actions builds `ghcr.io/pulibrary/figgy:sha-<short sha>`
+from the `Dockerfile` on every push, and runs the test suite inside the `ci` target
+of the same Dockerfile.
 
-```
-cd .circleci/
-docker login # login to docker hub
-docker buildx build --push --platform linux/arm64,linux/amd64 -t pulibrary/ci-figgy:{version} . -f ./.circleci/Dockerfile
-docker push pulibrary/ci-figgy:{version}
-```
+To deploy (requires VPN): `BRANCH=main bin/deploy [staging/production]`
+
+Job definitions are in `config/deploy/*.hcl`. Secrets are Nomad variables at
+`nomad/jobs/figgy-[staging/production]`, managed in princeton_ansible.
+
+To get a console: `nomad alloc exec -job figgy-[staging/production] -task web bin/rails console`
 
 ## More
 Valkyrie Documentation:
