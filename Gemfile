@@ -16,9 +16,6 @@ gem "bootsnap", require: false
 gem "bootstrap", "~> 4.0"
 gem "bootstrap_form", "~> 4.5.0"
 gem "bunny"
-gem "capistrano-passenger"
-gem "capistrano-rails"
-gem "capistrano-rails-console"
 gem "cocoon"
 gem "coffee-rails"
 # pinning connection_pool due to https://github.com/rails/rails/pull/56292
@@ -64,8 +61,6 @@ gem "mediainfo", "~> 1.0", github: "pulibrary/mediainfo", branch: "further_sanit
 gem "mime-types"
 gem "mini_magick"
 gem "modernizr-rails"
-# Pin because capistrano raises an error at >= 7.2
-gem "net-ssh", "~> 8.0"
 gem "normalize-rails"
 gem "oai"
 gem "omniauth", "2.3.1"
@@ -123,11 +118,9 @@ end
 
 group :development, :test do
   gem "awesome_print"
-  gem "bcrypt_pbkdf"
   gem "bundler-audit", require: false
   gem "debug", require: "debug/prelude"
   gem "dotenv-rails"
-  gem "ed25519"
   gem "factory_bot_rails"
   gem "parallel_tests"
   gem "pdf-reader", github: "yob/pdf-reader"

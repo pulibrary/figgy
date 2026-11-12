@@ -15,5 +15,5 @@ jobs:
           account: pulibrary
           image-names: figgy
           token: ${{ secrets.GITHUB_TOKEN }}
-          image-tags: "!ci !main"
+          image-tags: "!main"
           cut-off: 2w
