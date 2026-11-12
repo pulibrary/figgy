@@ -134,10 +134,19 @@ RSpec.describe RasterResourceDerivativeService do
   context "with a non-geo tiff" do
     let(:file) { fixture_file_upload("files/example.tif", "image/tif") }
 
+    it "generates derivatives without an error" do
+      file_set = query_service.find_by(id: valid_resource.id)
+      expect(file_set.primary_file.error_message).to be_blank
+      expect(file_set.file_metadata.find(&:cloud_derivative?)).to be_present
+    end
+  end
+
+  context "when generating derivatives fails" do
     it "stores an error message on the fileset" do
-      expect { valid_resource }.to raise_error(RuntimeError)
+      allow(GeoDerivatives::Runners::RasterDerivatives).to receive(:create).and_raise("gdal failed")
+      expect { valid_resource }.to raise_error(RuntimeError, "gdal failed")
       file_set = query_service.find_all_of_model(model: FileSet).first
-      expect(file_set.original_file.error_message).to include(/gdalwarp -q -t_srs EPSG:3857/)
+      expect(file_set.original_file.error_message).to include(/gdal failed/)
     end
   end
 
