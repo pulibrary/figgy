@@ -120,6 +120,8 @@ jobs:
           curl -sf -H "Content-type: application/json" http://solr:8984/api/collections/ -d '{"name": "figgy-core-test", "config": "figgy", "numShards": 1}'
           bin/rails db:migrate
       - name: Run rspec
+        env:
+          HOME: /root
         run: |
           if [ "${{ matrix.group }}" = flaky ]; then
             bundle exec rspec --tag flaky

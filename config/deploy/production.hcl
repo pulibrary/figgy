@@ -64,53 +64,8 @@ locals {
     RESTRICTED_GEODATA_URL = 'https://geodata-restricted.lib.princeton.edu'
     NODE_OPTIONS = '--openssl-legacy-provider'
     PLAUSIBLE_API_KEY = '{{ .PLAUSIBLE_API_KEY }}'
-    SMB_PLUM = '{{ .SMB_PLUM }}'
-    SMB_PUDL = '{{ .SMB_PUDL }}'
-    SMB_MAPLAB = '{{ .SMB_MAPLAB }}'
-    SMB_NUMIS = '{{ .SMB_NUMIS }}'
-    SMB_STUDIO = '{{ .SMB_STUDIO }}'
-    SMB_MARQUAND = '{{ .SMB_MARQUAND }}'
-    SMB_MENDEL = '{{ .SMB_MENDEL }}'
-    SMB_MUDD = '{{ .SMB_MUDD }}'
-    SMB_MICROFORMS = '{{ .SMB_MICROFORMS }}'
-    SMB_ILLIAD = '{{ .SMB_ILLIAD }}'
     {{- end -}}
   EOF
-  nfs_options = "addr=tigerdata-nfs.princeton.edu,nfsvers=3,mountport=2049,port=2049,nolock,proto=tcp"
-  mounts = {
-    "/opt/repository/files"                      = { type = "nfs", device = ":/figgy/production/files", o = local.nfs_options }
-    "/opt/repository/derivatives"                = { type = "nfs", device = ":/figgy/production/derivatives", o = local.nfs_options }
-    "/opt/repository/stream_derivatives"         = { type = "nfs", device = ":/figgy/production/stream_derivatives", o = local.nfs_options }
-    "/opt/repository/fallback_files"             = { type = "cifs", device = "//diglibdata1.princeton.edu/hydra/binaries/figgy_production", o = "addr=diglibdata1.princeton.edu,uid=1001,gid=33,$${SMB_PLUM}" }
-    "/opt/repository/fallback_stream_derivatives" = { type = "cifs", device = "//diglibdata1.princeton.edu/hydra/binaries/figgy_stream_derivatives", o = "addr=diglibdata1.princeton.edu,uid=1001,gid=33,$${SMB_PLUM}" }
-    "/mnt/diglibdata/hydra_binaries"             = { type = "cifs", device = "//diglibdata1.princeton.edu/hydra/binaries", o = "addr=diglibdata1.princeton.edu,uid=1001,gid=33,$${SMB_PLUM}" }
-    "/mnt/diglibdata/pudl"                       = { type = "cifs", device = "//diglibdata1.princeton.edu/pudl", o = "addr=diglibdata1.princeton.edu,uid=1001,gid=33,$${SMB_PUDL}" }
-    "/mnt/hydra_sources/ingest_scratch"          = { type = "cifs", device = "//diglibdata1.princeton.edu/hydra/binaries/ingest_scratch", o = "addr=diglibdata1.princeton.edu,uid=1001,gid=33,$${SMB_PLUM}" }
-    "/mnt/hydra_sources/pudl"                    = { type = "cifs", device = "//diglibdata1.princeton.edu/pudl", o = "addr=diglibdata1.princeton.edu,uid=1001,$${SMB_PUDL}" }
-    "/mnt/hydra_sources/maplab"                  = { type = "cifs", device = "//diglibdata1.princeton.edu/maplab", o = "addr=diglibdata1.princeton.edu,uid=1001,$${SMB_MAPLAB}" }
-    "/mnt/hydra_sources/music"                   = { type = "cifs", device = "//diglibdata1.princeton.edu/music", o = "addr=diglibdata1.princeton.edu,uid=1001,gid=33,$${SMB_PLUM}" }
-    "/mnt/hydra_sources/numismatics"             = { type = "cifs", device = "//diglibdata1.princeton.edu/numismatics", o = "addr=diglibdata1.princeton.edu,uid=1001,gid=33,$${SMB_NUMIS}" }
-    "/mnt/hydra_sources/studio_new"              = { type = "cifs", device = "//lib-dps-server.princeton.edu/studio", o = "addr=lib-dps-server.princeton.edu,uid=1001,$${SMB_STUDIO}" }
-    "/mnt/hydra_sources/marquand"                = { type = "cifs", device = "//lib-dps-server.princeton.edu/marquand", o = "addr=lib-dps-server.princeton.edu,uid=1001,$${SMB_MARQUAND}" }
-    "/mnt/hydra_sources/mendel"                  = { type = "cifs", device = "//lib-dps-server.princeton.edu/mendel", o = "addr=lib-dps-server.princeton.edu,uid=1001,$${SMB_MENDEL}" }
-    "/mnt/hydra_sources/mudd"                    = { type = "cifs", device = "//lib-dps-server.princeton.edu/mudd", o = "addr=lib-dps-server.princeton.edu,uid=1001,$${SMB_MUDD}" }
-    "/mnt/hydra_sources/microforms"              = { type = "cifs", device = "//lib-dps-server.princeton.edu/microforms", o = "addr=lib-dps-server.princeton.edu,uid=1001,$${SMB_MICROFORMS}" }
-    "/mnt/hydra_sources/archives"                = { type = "nfs", device = ":/pul/archives", o = local.nfs_options }
-    "/mnt/hydra_sources/archives_bd"             = { type = "nfs", device = ":/pul/archives_bd", o = local.nfs_options }
-    "/mnt/hydra_sources/bitcur-archives"         = { type = "nfs", device = ":/pul/bitcur-archives", o = local.nfs_options }
-    "/mnt/hosted_illiad/RequestScans"            = { type = "cifs", device = "//lib-fileshare.princeton.edu/RequestScans", o = "addr=lib-fileshare.princeton.edu,uid=1001,gid=33,$${SMB_ILLIAD}" }
-  }
-  docker_mounts = [for target, options in local.mounts : {
-    type   = "volume"
-    target = target
-    source = "${NOMAD_ALLOC_ID}${replace(target, "/", "-")}"
-    volume_options = {
-      driver_config = {
-        name    = "local"
-        options = [options]
-      }
-    }
-  }]
   google_credentials = "{{ with nomadVar \"nomad/jobs/figgy-production\" }}{{ .GOOGLE_CLOUD_CREDENTIALS_BASE64 | base64Decode }}{{ end }}"
 }
 
@@ -128,6 +83,14 @@ job "figgy-production" {
       dns {
         servers = ["172.17.0.1", "128.112.129.209", "8.8.8.8", "8.8.4.4"]
       }
+    }
+    volume "repository" {
+      type   = "host"
+      source = "figgy-repository"
+    }
+    volume "mnt" {
+      type   = "host"
+      source = "figgy-mnt"
     }
     service {
       name = "${local.job_name}-web"
@@ -168,7 +131,16 @@ job "figgy-production" {
         userns_mode = "host"
         ports      = ["http"]
         force_pull = true
-        mount      = local.docker_mounts
+      }
+      volume_mount {
+        volume           = "repository"
+        destination      = "/opt/repository"
+        propagation_mode = "host-to-task"
+      }
+      volume_mount {
+        volume           = "mnt"
+        destination      = "/mnt"
+        propagation_mode = "host-to-task"
       }
       template {
         destination = "${NOMAD_SECRETS_DIR}/env.vars"
@@ -198,6 +170,14 @@ job "figgy-production" {
           servers = ["172.17.0.1", "128.112.129.209", "8.8.8.8", "8.8.4.4"]
         }
       }
+      volume "repository" {
+        type   = "host"
+        source = "figgy-repository"
+      }
+      volume "mnt" {
+        type   = "host"
+        source = "figgy-mnt"
+      }
       task "worker" {
         driver       = "docker"
         kill_timeout = "30s"
@@ -207,7 +187,16 @@ job "figgy-production" {
           command    = "bash"
           args       = ["-c", group.value.command]
           force_pull = true
-          mount      = local.docker_mounts
+        }
+        volume_mount {
+          volume           = "repository"
+          destination      = "/opt/repository"
+          propagation_mode = "host-to-task"
+        }
+        volume_mount {
+          volume           = "mnt"
+          destination      = "/mnt"
+          propagation_mode = "host-to-task"
         }
         template {
           destination = "${NOMAD_SECRETS_DIR}/env.vars"
