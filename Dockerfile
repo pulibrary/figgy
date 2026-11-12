@@ -29,6 +29,14 @@ ENV PATH="/opt/venv/bin:$PATH" \
     MEDIAINFO_PATH="/usr/bin/mediainfo"
 
 
+FROM base AS packages
+
+COPY --from=node /opt /opt
+RUN ln -s /opt/yarn-*/bin/yarn /usr/local/bin/yarn
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+
 FROM base AS build
 
 RUN apt-get update -qq && \
@@ -44,14 +52,12 @@ RUN --mount=type=secret,id=sidekiq_pro \
     BUNDLE_GEMS__CONTRIBSYS__COM="$(cat /run/secrets/sidekiq_pro)" bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
-
+COPY --from=packages /rails/node_modules node_modules
 COPY . .
-RUN mkdir -p log tmp && SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
+RUN mkdir -p log tmp/pids && SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile && rm -rf node_modules
 
 
-FROM base AS production
+FROM base AS runtime
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y nginx && \
@@ -59,7 +65,9 @@ RUN apt-get update -qq && \
     gem install -N foreman && \
     sed -i 's|pid /run|pid /rails/tmp/pids|' /etc/nginx/nginx.conf && \
     sed -i 's/access_log\s.*;/access_log \/dev\/stdout;/' /etc/nginx/nginx.conf && \
-    sed -i 's/error_log\s.*;/error_log \/dev\/stderr info;/' /etc/nginx/nginx.conf
+    sed -i 's/error_log\s.*;/error_log \/dev\/stderr info;/' /etc/nginx/nginx.conf && \
+    mkdir -p /opt/repository && \
+    chown 1001:1001 /var/lib/nginx /var/log/nginx/* /opt/repository
 
 COPY <<-"EOF" /etc/nginx/sites-available/default
 server {
@@ -102,19 +110,11 @@ rails: bin/rails server -p 3001
 EOF
 
 COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
-
-RUN mkdir -p /opt/repository tmp/pids log && \
-    chown 1001:1001 /var/lib/nginx /var/log/nginx/* && \
-    chown -R 1001:1001 tmp log /opt/repository
-USER 1001:1001
-
-EXPOSE 3000
-CMD ["foreman", "start", "--procfile=Procfile.prod"]
+COPY --from=packages /rails/node_modules/@mapnik /rails/node_modules/@mapnik
+COPY --from=packages /rails/node_modules/node-gyp-build /rails/node_modules/node-gyp-build
 
 
-FROM production AS ci
-USER root
+FROM runtime AS ci
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
@@ -125,8 +125,22 @@ COPY --from=node /opt /opt
 RUN ln -s /opt/yarn-*/bin/yarn /usr/local/bin/yarn
 
 ENV RAILS_ENV="test" BUNDLE_WITHOUT="" RAILS_LOG_TO_STDOUT="" CI="true"
+COPY Gemfile Gemfile.lock ./
 RUN --mount=type=secret,id=sidekiq_pro \
     BUNDLE_GEMS__CONTRIBSYS__COM="$(cat /run/secrets/sidekiq_pro)" bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
+COPY --from=packages /rails/node_modules /rails/node_modules
+COPY cloud_fixity/package.json cloud_fixity/yarn.lock cloud_fixity/
 RUN cd cloud_fixity && yarn install --frozen-lockfile
+
+COPY --from=build /rails /rails
+
+
+FROM runtime AS production
+
+COPY --from=build --chown=1001:1001 /rails /rails
+USER 1001:1001
+
+EXPOSE 3000
+CMD ["foreman", "start", "--procfile=Procfile.prod"]
