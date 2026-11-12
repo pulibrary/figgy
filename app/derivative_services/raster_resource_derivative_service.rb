@@ -47,7 +47,7 @@ class RasterResourceDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    raster_derivatives = resource.file_metadata.select { |file| file.thumbnail_file? || file.cloud_derivative? }
+    raster_derivatives = resource.file_metadata.select { |file| file.cloud_derivative? }
     raster_derivatives.each do |file|
       Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
@@ -59,17 +59,6 @@ class RasterResourceDerivativeService
 
   def cleanup_pyramidal_derivatives
     pyramidal_derivative_service.cleanup_derivatives
-  end
-
-  # Deletes only the thumbnail file
-  def cleanup_thumbnail_derivatives
-    deleted_files = []
-    resource.file_metadata.select(&:thumbnail_file?).each do |file|
-      Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
-      deleted_files << file.id
-    end
-    cleanup_derivative_metadata(derivatives: deleted_files)
-    cleanup_pyramidal_derivatives
   end
 
   def create_derivatives
@@ -85,20 +74,6 @@ class RasterResourceDerivativeService
     end
     raise error
 
-  ensure
-    cleanup_temporary_files
-  end
-
-  # Rebuilds only the thumbnail
-  def create_thumbnail_derivatives
-    run_thumbnail_derivatives
-    create_pyramidal_derivatives
-    update_error_message(message: nil) if primary_file.error_message.present?
-  rescue StandardError => error
-    change_set_persister.after_rollback.add do
-      update_error_message(message: error.message)
-    end
-    raise error
   ensure
     cleanup_temporary_files
   end
@@ -134,7 +109,9 @@ class RasterResourceDerivativeService
     }
   end
 
-  def instructions_for_thumbnail
+  # Renders the raster to a temporary png file used as a source for generating
+  # the pyramidal tiff used as a thumbnail image service.
+  def instructions_for_pyramidal_source
     {
       input_format: primary_file.mime_type.first,
       label: :thumbnail,
@@ -157,17 +134,10 @@ class RasterResourceDerivativeService
     "p-#{resource.id}"
   end
 
-  # generates the derivatives used for local/cloud display and thumbnail files
+  # generates the cloud display raster and the source image for the pyramidal thumbnail
   def run_derivatives
     GeoDerivatives::Runners::RasterDerivatives.create(
-      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
-    )
-  end
-
-  # generates only the thumbnail file
-  def run_thumbnail_derivatives
-    GeoDerivatives::Runners::RasterDerivatives.create(
-      filename, outputs: [instructions_for_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_pyramidal_source]
     )
   end
 

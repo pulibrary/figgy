@@ -49,7 +49,6 @@ class ScannedMapDerivativeService
   end
 
   # Removes Valkyrie::StorageAdapter::File member Objects for any given Resource (usually a FileSet)
-  # (see ImageDerivativeService#cleanup_derivatives)
   def cleanup_derivatives
     vips_derivative_service.cleanup_derivatives if vips_derivative_service.valid?
     cleanup_thumbnail_derivatives
@@ -61,7 +60,6 @@ class ScannedMapDerivativeService
 
   def cleanup_thumbnail_derivatives
     pyramidal_thumbnail_derivative_service.cleanup_derivatives if pyramidal_thumbnail_derivative_service.valid?
-    cleanup_static_thumbnails
   end
 
   def vips_derivative_service
@@ -85,21 +83,4 @@ class ScannedMapDerivativeService
   def pyramidal_change_set_persister(change_set_persister)
     change_set_persister.with(storage_adapter: Valkyrie::StorageAdapter.find(:pyramidal_derivatives))
   end
-
-  private
-
-    def cleanup_static_thumbnails
-      file_set = query_service.find_by(id: id)
-      static_thumbnails = file_set.file_metadata.select(&:thumbnail_file?)
-      return if static_thumbnails.empty?
-
-      static_thumbnails.each do |file|
-        Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
-      end
-      deleted_ids = static_thumbnails.map(&:id)
-      file_set.file_metadata = file_set.file_metadata.reject { |file| deleted_ids.include?(file.id) }
-      change_set_persister.buffer_into_index do |buffered_persister|
-        buffered_persister.save(change_set: ChangeSet.for(file_set))
-      end
-    end
 end

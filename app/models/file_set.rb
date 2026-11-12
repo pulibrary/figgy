@@ -84,10 +84,6 @@ class FileSet < Resource
     file_metadata.select(&:original_file?)
   end
 
-  def thumbnail_files
-    file_metadata.select(&:thumbnail_file?)
-  end
-
   def preservation_file
     file_metadata.find(&:preservation_file?)
   end
