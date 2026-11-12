@@ -111,7 +111,7 @@ locals {
       }
     }
   }]
-  google_credentials = "{{ with nomadVar \"nomad/jobs/figgy-production\" }}{{ .GOOGLE_CLOUD_CREDENTIALS_JSON }}{{ end }}"
+  google_credentials = "{{ with nomadVar \"nomad/jobs/figgy-production\" }}{{ .GOOGLE_CLOUD_CREDENTIALS_BASE64 | base64Decode }}{{ end }}"
 }
 
 job "figgy-production" {
