@@ -730,7 +730,7 @@ GEM
       net-ssh (>= 5.0.0, < 9.0.0)
     net-smtp (0.5.2)
       net-protocol
-    net-ssh (8.1.1)
+    net-ssh (8.1.2)
       logger
       openssl (>= 3.2.0)
     nio4r (2.7.5)
@@ -1077,7 +1077,7 @@ GEM
       yard (~> 0.9, >= 0.9.24)
       yard-activesupport-concern (~> 0.0)
       yard-solargraph (~> 0.1)
-    sorbet-runtime (0.6.13645)
+    sorbet-runtime (0.6.13646)
     sord (7.1.0)
       commander (~> 5.0)
       parlour (~> 9.1)
