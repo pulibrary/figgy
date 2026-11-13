@@ -46,8 +46,8 @@ RSpec.describe "Health Monitor", type: :request do
     end
 
     it "errors when solr is down" do
-      allow(Blacklight.default_index.connection).to receive(:uri).and_return(URI("http://example.com/bla"))
-      stub_request(:get, "http://example.com/solr/admin/cores?action=STATUS").to_return(body: { responseHeader: { status: 500 } }.to_json, headers: { "Content-Type" => "text/json" })
+      allow(Blacklight.default_index.connection).to receive(:uri).and_return(URI("http://example.com/solr/bla/"))
+      stub_request(:get, "http://example.com/solr/bla/admin/ping").to_return(body: { responseHeader: { status: 500 } }.to_json, headers: { "Content-Type" => "text/json" })
 
       get "/health.json?providers[]=solrstatus"
 
