@@ -12,7 +12,7 @@ RSpec.describe RasterResourceDerivativeService do
   let(:storage_adapter) { Valkyrie.config.storage_adapter }
   let(:persister) { adapter.persister }
   let(:query_service) { adapter.query_service }
-  let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tif") }
+  let(:file) { fixture_file_upload("files/raster/geotiff.tif", "image/tiff") }
   let(:change_set_persister) { ChangeSetPersister.new(metadata_adapter: adapter, storage_adapter: storage_adapter) }
   let(:raster_resource) do
     change_set_persister.save(change_set: RasterResourceChangeSet.new(RasterResource.new, files: [file]))
@@ -74,7 +74,9 @@ RSpec.describe RasterResourceDerivativeService do
       resource = query_service.find_by(id: valid_resource.id)
       pyramidal = resource.pyramidal_derivative
 
+      expect(resource.original_file.mime_type).to eq ["image/tiff; gdal-format=GTiff"]
       expect(pyramidal).not_to be_nil
+      expect(pyramidal.label).to eq ["thumbnail.tif"]
       expect(pyramidal.use).to eq [::PcdmUse::ServiceFile]
       expect(pyramidal.mime_type).to eq ["image/tiff"]
 
@@ -98,13 +100,14 @@ RSpec.describe RasterResourceDerivativeService do
     end
   end
 
-  context "with a non-geo tiff" do
-    let(:file) { fixture_file_upload("files/example.tif", "image/tif") }
+  context "when derivative generation fails" do
+    it "stores the error message on the file set and re-raises" do
+      allow(GeoDerivatives::Runners::RasterDerivatives).to receive(:create).and_raise("gdalwarp failed")
 
-    it "stores an error message on the fileset" do
-      expect { valid_resource }.to raise_error(RuntimeError)
+      expect { valid_resource }.to raise_error(RuntimeError, "gdalwarp failed")
+
       file_set = query_service.find_all_of_model(model: FileSet).first
-      expect(file_set.original_file.error_message).to include(/gdalwarp -q -t_srs EPSG:3857/)
+      expect(file_set.original_file.error_message).to include("gdalwarp failed")
     end
   end
 
