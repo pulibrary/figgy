@@ -49,21 +49,11 @@ class VectorResourceDerivativeService
   # File membership for the parent of the Valkyrie::StorageAdapter::File is removed using #cleanup_derivative_metadata
   def cleanup_derivatives
     deleted_files = []
-    vector_derivatives = resource.file_metadata.select { |file| file.thumbnail_file? || file.cloud_derivative? }
+    vector_derivatives = resource.file_metadata.select { |file| file.cloud_derivative? }
     vector_derivatives.each do |file|
       # Delete the entire directory to remove unzipped display derivatives
       id = File.dirname(file.file_identifiers.first.to_s)
       Valkyrie::StorageAdapter.delete(id: id)
-      deleted_files << file.id
-    end
-    cleanup_derivative_metadata(derivatives: deleted_files)
-    cleanup_pyramidal_derivatives
-  end
-
-  def cleanup_thumbnail_derivatives
-    deleted_files = []
-    resource.file_metadata.select(&:thumbnail_file?).each do |file|
-      Valkyrie::StorageAdapter.delete(id: file.file_identifiers.first)
       deleted_files << file.id
     end
     cleanup_derivative_metadata(derivatives: deleted_files)
@@ -79,20 +69,6 @@ class VectorResourceDerivativeService
     create_pyramidal_derivatives
     create_cloud_derivatives
     update_cloud_acl
-    update_error_message(message: nil) if primary_file.error_message.present?
-  rescue StandardError => error
-    change_set_persister.after_rollback.add do
-      update_error_message(message: error.message)
-    end
-    raise error
-  ensure
-    cleanup_temporary_files
-  end
-
-  # Rebuilds the thumbnail only
-  def create_thumbnail_derivatives
-    run_thumbnail_derivatives
-    create_pyramidal_derivatives
     update_error_message(message: nil) if primary_file.error_message.present?
   rescue StandardError => error
     change_set_persister.after_rollback.add do
@@ -138,7 +114,8 @@ class VectorResourceDerivativeService
     }
   end
 
-  def instructions_for_thumbnail
+  # Renders a temporary png to use as the source for a pyramidal thumbnail tiff
+  def instructions_for_pyramidal_source
     {
       input_format: primary_file.mime_type.first,
       label: :thumbnail,
@@ -161,15 +138,10 @@ class VectorResourceDerivativeService
     "p-#{resource.id}"
   end
 
+  # generates the cloud display vector and the source image for the pyramidal thumbnail
   def run_derivatives
     GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_cloud, instructions_for_thumbnail]
-    )
-  end
-
-  def run_thumbnail_derivatives
-    GeoDerivatives::Runners::VectorDerivatives.create(
-      filename, outputs: [instructions_for_thumbnail]
+      filename, outputs: [instructions_for_cloud, instructions_for_pyramidal_source]
     )
   end
 

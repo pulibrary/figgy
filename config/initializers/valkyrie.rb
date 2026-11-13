@@ -429,10 +429,10 @@ Rails.application.config.to_prepare do
   Valkyrie::Derivatives::FileCharacterizationService.services << NullCharacterizationService
   # PDFs
   Valkyrie::Derivatives::FileCharacterizationService.services << PDFCharacterizationService
-  # Register the service class for image asset characterization
-  Valkyrie::Derivatives::FileCharacterizationService.services << ImagemagickCharacterizationService
   # Register the service class for geospatial asset characterization
   Valkyrie::Derivatives::FileCharacterizationService.services << GeoCharacterizationService
+  # Register the service class for image asset characterization
+  Valkyrie::Derivatives::FileCharacterizationService.services << ImagemagickCharacterizationService
   # Register the service class for audiovisual asset characterization
   Valkyrie::Derivatives::FileCharacterizationService.services << MediainfoCharacterizationService
   # Register the service class for the default asset characterization

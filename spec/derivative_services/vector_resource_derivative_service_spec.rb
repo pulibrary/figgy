@@ -83,38 +83,6 @@ RSpec.describe VectorResourceDerivativeService do
       # Ensure that temporary files and directories are cleaned up
       expect(Dir.empty?(temp_dir)).to be true
     end
-
-    it "can regenerate the thumbnail without rebuilding other derivatives" do
-      cloud_file_service = instance_double(CloudFilePermissionsService, run: nil)
-      allow(CloudFilePermissionsService).to receive(:new).and_return(cloud_file_service)
-
-      resource = query_service.find_by(id: valid_resource.id)
-      original_cloud_file = resource.file_metadata.find(&:cloud_derivative?)
-      original_thumbnail = resource.pyramidal_derivative
-
-      derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
-      derivative_service.new(id: valid_resource.id).create_thumbnail_derivatives
-
-      reloaded = query_service.find_by(id: valid_resource.id)
-      new_thumbnail = reloaded.pyramidal_derivative
-
-      expect(reloaded.file_metadata.find(&:cloud_derivative?).id).to eq original_cloud_file.id
-      expect(new_thumbnail.id).not_to eq original_thumbnail.id
-      expect(File.exist?(Valkyrie::StorageAdapter.find_by(id: new_thumbnail.file_identifiers.first).io.path)).to be true
-      expect(Dir.empty?(temp_dir)).to be true
-    end
-
-    it "stores an error message on the file set when regenerating the thumbnail fails" do
-      valid_resource
-      allow(GeoDerivatives::Runners::VectorDerivatives).to receive(:create).and_raise("mapnik failed")
-      service = derivative_service.new(id: valid_resource.id)
-
-      expect { service.create_thumbnail_derivatives }.to raise_error(RuntimeError, "mapnik failed")
-
-      file_set = query_service.find_by(id: valid_resource.id)
-      expect(file_set.primary_file.error_message).to include(/mapnik failed/)
-      expect(Dir.empty?(temp_dir)).to be true
-    end
   end
 
   context "with an invalid shapefile" do
@@ -127,30 +95,10 @@ RSpec.describe VectorResourceDerivativeService do
     end
   end
 
-  describe "#cleanup_thumbnail_derivatives" do
-    it "removes a left over static thumbnails" do
-      resource = query_service.find_by(id: valid_resource.id)
-      tmp = Tempfile.new(["thumbnail", ".jpg"])
-      FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "large-jpg-test.jpg"), tmp.path)
-      uploaded = Valkyrie::StorageAdapter.find(:derivatives).upload(file: File.open(tmp.path), original_filename: "thumbnail.png", resource: resource)
-      resource.file_metadata += [
-        FileMetadata.new(id: SecureRandom.uuid, use: [::PcdmUse::ThumbnailImage],
-                         mime_type: ["image/jpeg"], file_identifiers: [uploaded.id])
-      ]
-      persister.save(resource: resource)
-
-      derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
-
-      reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
-    end
-  end
-
   describe "#cleanup_derivatives" do
     it "deletes the attached fileset when the resource is deleted" do
       derivative_service.new(id: valid_change_set.id).cleanup_derivatives
       reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
       expect(reloaded.file_metadata.select(&:cloud_derivative?)).to be_empty
     end
 

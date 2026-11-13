@@ -75,7 +75,6 @@ RSpec.describe ScannedMapDerivativeService do
 
       reloaded = query_service.find_by(id: valid_resource.id)
       expect(reloaded.thumbnail_derivative_files).to be_empty
-      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
       expect(reloaded.pyramidal_derivative).not_to be_nil
     end
   end
@@ -86,7 +85,7 @@ RSpec.describe ScannedMapDerivativeService do
     it "stores an error message on the fileset" do
       expect { derivative_service.new(id: valid_change_set.id).create_derivatives }.to raise_error(::Vips::Error)
       file_set = query_service.find_all_of_model(model: FileSet).first
-      expect(file_set.original_file.error_message).to include(/not a known file format/)
+      expect(file_set.original_file.error_message).to include(/Can not read TIFF directory count/)
     end
   end
 
@@ -104,32 +103,6 @@ RSpec.describe ScannedMapDerivativeService do
       expect(reloaded.pyramidal_derivative.id).to eq original_pyramidal.id
       expect(reloaded.thumbnail_derivative_files.first.id).not_to eq original_thumbnail.id
       expect(reloaded.file_metadata.count(&:thumbnail_derivative?)).to eq 1
-    end
-  end
-
-  describe "#cleanup_thumbnail_derivatives" do
-    it "removes leftover static thumbnails" do
-      resource = query_service.find_by(id: valid_resource.id)
-      tmp = Tempfile.new(["thumbnail", ".jpg"])
-      FileUtils.cp(Rails.root.join("spec", "fixtures", "files", "large-jpg-test.jpg"), tmp.path)
-      uploaded = Valkyrie::StorageAdapter.find(:derivatives).upload(file: File.open(tmp.path), original_filename: "thumbnail.png", resource: resource)
-      resource.file_metadata += [
-        FileMetadata.new(id: SecureRandom.uuid, use: [::PcdmUse::ThumbnailImage],
-                         mime_type: ["image/jpeg"], file_identifiers: [uploaded.id])
-      ]
-      persister.save(resource: resource)
-
-      derivative_service.new(id: valid_resource.id).cleanup_thumbnail_derivatives
-
-      reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
-    end
-
-    it "only deletes the thumbnail" do
-      derivative_service.new(id: valid_change_set.id).cleanup_thumbnail_derivatives
-      reloaded = query_service.find_by(id: valid_resource.id)
-      expect(reloaded.file_metadata.select(&:thumbnail_file?)).to be_empty
-      expect(reloaded.pyramidal_derivative).not_to be_blank
     end
   end
 

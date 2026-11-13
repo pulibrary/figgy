@@ -63,12 +63,6 @@
               <%= render partial: 'file_detail', locals: { file: file } %>
             </tr>
           <% end %>
-          <% resource.thumbnail_files.each do |file| %>
-            <tr>
-              <td><span class="badge badge-info">Thumbnail File</span>&nbsp;<%= file.label.first %></td>
-              <%= render partial: 'file_detail', locals: { file: file } %>
-            </tr>
-          <% end %>
           </tbody>
         </table>
       </div>
