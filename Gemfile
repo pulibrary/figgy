@@ -157,6 +157,6 @@ group :test do
 end
 
 gem "opentelemetry-sdk", "~> 1.13"
-gem "opentelemetry-instrumentation-all", "~> 0.100.0"
+gem "opentelemetry-instrumentation-all", "~> 0.101.0"
 
 gem "opentelemetry-exporter-otlp", "~> 0.37.0"
