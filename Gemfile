@@ -36,7 +36,7 @@ gem "flutie"
 gem "font-awesome-rails"
 gem "google-cloud-pubsub", "3.5.1"
 # This breaks PreserveResourceJob somewhere between 1.39 and 1.44.
-gem "google-cloud-storage", "1.62.1"
+gem "google-cloud-storage", "1.62.2"
 gem "graphiql-rails", "1.10.5", group: :development
 gem "graphql", "~> 2.6.0"
 gem "health-monitor-rails"
