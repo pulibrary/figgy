@@ -3352,9 +3352,9 @@ js-yaml@^5.4.1:
     argparse "^3.0.3"
 
 jsdom@^31.0.0:
-  version "31.0.0"
-  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-31.0.0.tgz#c501cc9bac28f7f82547df4607990a20ec848199"
-  integrity sha512-xAkhD9z1eyFC5+QUi9K24CaZJgdCQ2GOGLW1GdVDoQvkp/AxEH9TQ0pAplPOlIiV92hfcgnFOADZypbjgbBT6Q==
+  version "31.0.1"
+  resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-31.0.1.tgz#2f543cea1a4fb30bc5e00ed2a3e37153f82eff33"
+  integrity sha512-CbhJL8ZQg3eKswxSZth4QO9tW0jPIhmR0vtSXQSbKSfWbwIT6hoRc17wdHIVTQ43KI0mdV5iTJr3281IDgVZ5g==
   dependencies:
     "@exodus/bytes" "^1.16.0"
     bcp-47 "^2.1.2"
@@ -5107,17 +5107,17 @@ tinyqueue@^3.0.0:
   resolved "https://registry.yarnpkg.com/tinyqueue/-/tinyqueue-3.0.0.tgz#101ea761ccc81f979e29200929e78f1556e3661e"
   integrity sha512-gRa9gwYU3ECmQYv3lslts5hxuIa90veaEcxDYuu3QGOIAEM2mOZkVHp48ANJuu1CURtRdHKUBY5Lm1tHV+sD4g==
 
-tldts-core@^7.4.22:
-  version "7.4.22"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-7.4.22.tgz#ec943b1b199837938bf88edbc316eb6f61bdbe64"
-  integrity sha512-NRyhrlvJcTwvoRibE0dEZvp6C5RwV4RxpsX1zbkI1k7Fk2pzIhmQ+MvswJEd5KKl3VRFRMDTipXse/ejh/ld/w==
+tldts-core@^7.5.4:
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-7.5.4.tgz#345eaf1ab88fba31a83f1c0b5ceb307e39106c6c"
+  integrity sha512-9+4zWtKEDZ3V3FoZ1B97rv+5z5oqp7yeXGVze3CxgQ+CJro9do9DCPD00wxstYZDXDMXsurkBerFfiB6GYtPbA==
 
 tldts@^7.0.5:
-  version "7.4.22"
-  resolved "https://registry.yarnpkg.com/tldts/-/tldts-7.4.22.tgz#15a66e5ffdbf99c621f163fa59aa9d7f7b1c5d26"
-  integrity sha512-TmLwkCZ1GFMxGkKfg2ooQhPF8rDMuuXvJHSxFiOU1fofh27L6NaO5T9KSlQXCJX2eoSt14I8F4saSMILOmXmaQ==
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-7.5.4.tgz#b565cf15ad6729887c94e5508714f1f47dd19779"
+  integrity sha512-Rn2ABgjHZrA+jzqom5zhxA0hLohzYrIgfCPyhpTUxqsUrcsBYuab49LseR9waB9Jr8/MxdodvMHA91oRiGLO3Q==
   dependencies:
-    tldts-core "^7.4.22"
+    tldts-core "^7.5.4"
 
 tough-cookie@^6.0.2:
   version "6.1.0"
