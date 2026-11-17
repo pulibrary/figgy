@@ -78,9 +78,8 @@
                 v-model="tree.structure.label"
                 type="text"
                 class="folder-label-input"
-                @keyup="saveLabel"
-                @keydown.enter="hideLabelInput()"
-                @blur="hideLabelInput()"
+                @keydown.enter="saveLabel"
+                @blur="saveLabel"
               >
             </div>
           </template>
@@ -917,6 +916,7 @@ export default {
       this.$store.dispatch('saveStructureAJAX', this.resourceToSave)
     },
     saveLabel: function () {
+      this.hideLabelInput()
       this.$store.commit('SAVE_LABEL', this.tree.structure)
     },
     selectAllGallery: function () {

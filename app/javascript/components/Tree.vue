@@ -69,9 +69,8 @@
                   v-model="el.label"
                   type="text"
                   class="folder-label-input"
-                  @keyup="saveLabel(el)"
-                  @keydown.enter="hideLabelInput()"
-                  @blur="hideLabelInput()"
+                  @keydown.enter="saveLabel(el)"
+                  @blur="saveLabel(el)"
                 >
               </div>
             </template>
@@ -279,6 +278,7 @@ export default {
     saveLabel: function (el) {
       // need to stringify and parse to drop the observer that comes with Vue reactive data
       // folderList is the entire structure for the tree
+      this.hideLabelInput()
       const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
 
       const focusedFolder = this.findFolderById(folderList, el.id)
