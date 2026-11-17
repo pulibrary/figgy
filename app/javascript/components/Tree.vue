@@ -124,9 +124,8 @@
         </div>
       </div>
       <tree  
-        :showing="isShowing(el.id)"
+        v-if="!el.file && isShowing(el.id)"
         :collapse-list="collapseList"
-        v-if="!el.file"
         :json-data="el.folders"
         :viewing-direction="viewDir" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
