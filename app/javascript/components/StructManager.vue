@@ -78,8 +78,8 @@
                 v-model="tree.structure.label"
                 type="text"
                 class="folder-label-input"
-                @keydown.enter="saveLabel"
-                @blur="saveLabel"
+                @keydown.enter="hideLabelInput()"
+                @blur="hideLabelInput()"
               >
             </div>
           </template>
@@ -112,8 +112,10 @@
         </div>
         <tree  
           class="firstul"
-          :id="generateId()"
+          :id="rootTreeId"
           :collapse-list="collapseList"
+          :selected-ids="selectedIdsSet"
+          :disabled-ids="disabledIdsSet"
           :json-data="tree.structure.folders"
           :viewing-direction="viewingDirection"
           @delete-folder="deleteFolder"
@@ -267,6 +269,42 @@ export default {
     },
     saving () {
       return this.tree.saveState === 'SAVING'
+    },
+    selectedIdsSet () {
+      const ids = new Set()
+      if (!this.tree.selected) return ids
+
+      const collectIds = (node) => {
+        if (!node) return
+        if (node.id) ids.add(node.id)
+        if (node.folders?.length) {
+          node.folders.forEach(collectIds)
+        }
+      }
+
+      if (this.rootNodeSelected) {
+        collectIds(this.tree.structure)
+      } else {
+        const target = this.findFolderById(this.tree.structure.folders, this.tree.selected)
+        collectIds(target)
+      }
+      return ids
+    },
+    disabledIdsSet () {
+      const ids = new Set()
+      if (!this.tree.cut) return ids
+
+      const collectIds = (node) => {
+        if (!node) return
+        if (node.id) ids.add(node.id)
+        if (node.folders?.length) {
+          node.folders.forEach(collectIds)
+        }
+      }
+
+      const target = this.findFolderById(this.tree.structure.folders, this.tree.cut)
+      collectIds(target)
+      return ids
     }
   },
   watch: {
@@ -775,6 +813,7 @@ export default {
       this.clearClipboard()
     },
     hideLabelInput: function () {
+      this.saveLabel()
       this.editedFieldId = null
     },
     removeNestedObjectById: function (nestedArray, idToRemove) {
@@ -916,8 +955,11 @@ export default {
       this.$store.dispatch('saveStructureAJAX', this.resourceToSave)
     },
     saveLabel: function () {
-      this.hideLabelInput()
-      this.$store.commit('SAVE_LABEL', this.tree.structure)
+      this.$store.commit('SAVE_LABEL', {
+        id: this.tree.structure.id,
+        label: this.tree.structure.label
+      })
+      // this.$store.commit('SAVE_LABEL', this.tree.structure)
     },
     selectAllGallery: function () {
       this.$store.commit('SELECT', this.gallery.items)
