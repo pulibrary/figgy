@@ -14,6 +14,18 @@ RSpec.describe Wayfinder do
       end
     end
 
+    describe "#persisted_member_ids" do
+      it "returns member ids in order, skipping members that don't exist" do
+        member1 = FactoryBot.create_for_repository(:scanned_resource)
+        member2 = FactoryBot.create_for_repository(:file_set)
+        resource = FactoryBot.create_for_repository(:scanned_resource, member_ids: [member2.id, Valkyrie::ID.new(SecureRandom.uuid), member1.id])
+
+        wayfinder = described_class.for(resource)
+
+        expect(wayfinder.persisted_member_ids).to eq [member2.id.to_s, member1.id.to_s]
+      end
+    end
+
     describe "#child_deletion_markers" do
       it "returns all deletion_markers with the given parent_id" do
         stub_ezid

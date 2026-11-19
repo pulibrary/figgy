@@ -13,7 +13,7 @@ class Valkyrie::ResourceDecorator < ApplicationDecorator
            :source_metadata,
            :source_metadata_identifier,
            :title
-  delegate :members, :parents, to: :wayfinder
+  delegate :members, :parents, :persisted_member_ids, to: :wayfinder
 
   def wayfinder
     @wayfinder ||= Wayfinder.for(object)
