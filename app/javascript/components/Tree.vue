@@ -1,10 +1,10 @@
 <template>
   <VueDraggable 
-    v-show="showing"
+    v-if="showing"
     handle=".handle"
     class="drag-area"
     tag="ul" 
-    :id="generateId()" 
+    :id="listId" 
     v-model="list" 
     group="g1" 
     @start="onStart" 
@@ -69,9 +69,8 @@
                   v-model="el.label"
                   type="text"
                   class="folder-label-input"
-                  @keyup="saveLabel(el)"
-                  @keydown.enter="hideLabelInput()"
-                  @blur="hideLabelInput()"
+                  @keydown.enter="hideLabelInput(el)"
+                  @blur="hideLabelInput(el)"
                 >
               </div>
             </template>
@@ -124,9 +123,10 @@
         </div>
       </div>
       <tree  
-        :showing="isShowing(el.id)"
+        v-if="!el.file && isShowing(el.id)"
         :collapse-list="collapseList"
-        v-if="!el.file"
+        :selected-ids="selectedIds"
+        :disabled-ids="disabledIds"
         :json-data="el.folders"
         :viewing-direction="viewDir" 
         @drop-tree-item="$emit('drop-tree-item', $event)" 
@@ -143,7 +143,7 @@
 import { VueDraggable } from 'vue-draggable-plus'
 import mixin from './structMixins.js'
 import store from '../store/index.js'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 import IconDragHandle from './IconDragHandle.vue'
 
 export default {
@@ -185,14 +185,41 @@ export default {
       type: String,
       default: 'LEFTTORIGHT'
     },
+    selectedIds: {
+      type: Set,
+      default: () => new Set()
+    },
+    disabledIds: {
+      type: Set,
+      default: () => new Set()
+    },
   },
   data: function () {
     return {
+      listId: this.generateId(),
       list: JSON.parse(JSON.stringify(this.jsonData)),
       editedFieldId: null,
     }
   },
   computed: {
+    activeStore () {
+      return this.$store || store
+    },
+    tree () {
+      return this.activeStore.state.tree
+    },
+    gallery () {
+      return this.activeStore.state.gallery
+    },
+    zoom () {
+      return this.activeStore.state.zoom
+    },
+    selectedIdsSet () {
+      return this.activeStore.getters.selectedIdsSet || new Set()
+    },
+    disabledIdsSet () {
+      return this.activeStore.getters.disabledIdsSet || new Set()
+    },
     rootNodeSelected: function () {
       return this.tree.selected === this.tree.structure.id
     },
@@ -202,11 +229,6 @@ export default {
       }
       return 'ltr'
     },
-    ...mapState({
-      tree: state => store.state.tree,
-      gallery: state => store.state.gallery,
-      zoom: state => store.state.zoom
-    })
   },
   methods: {
     createFolder: function (folderId) {
@@ -222,28 +244,15 @@ export default {
       return 'arrow-down'
     },
     isDisabled: function (id) {
-      if (this.tree.cut) {
-        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        const cutTreeStructure = this.findFolderById(folderList, this.tree.cut)
-        const disabledTreeItems = this.extractIdsInStructure(cutTreeStructure)
-        // return true if id matches any of the ids in cutTreeStructure
-        return disabledTreeItems.includes(id)
-      }
-      return false
+      return this.disabledIds.has(id)
     },
     isSelected: function (id) {
       // To-Do: get Tree Items selected
       if (this.rootNodeSelected) {
         return true
       }
-      if (this.tree.selected) {
-        const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-        const selectedTreeStructure = this.findFolderById(folderList, this.tree.selected)
-        const selectedTreeItems = this.extractIdsInStructure(selectedTreeStructure)
-        // return true if id matches any of the ids in selectedTreeItems array
-        return selectedTreeItems.includes(id)
-      }
-      return false
+
+      return this.selectedIds.has(id)
     },
     isShowing: function (id) {
       if (this.collapseList.has(id)) {
@@ -273,25 +282,21 @@ export default {
       return result
     },
     select: function (id, event) {
-      store.commit('SELECT_TREEITEM', id)
       // tree and gallery items cannot be selected simultaneously, so deselect the gallery
-      store.commit('SELECT', [])
+      this.activeStore.commit('SELECT_TREEITEM', id)
+      this.activeStore.commit('SELECT', [])
     },
     saveLabel: function (el) {
-      // need to stringify and parse to drop the observer that comes with Vue reactive data
-      // folderList is the entire structure for the tree
-      const folderList = JSON.parse(JSON.stringify(this.tree.structure.folders))
-
-      const focusedFolder = this.findFolderById(folderList, el.id)
-      let structure = {
-        id: this.tree.structure.id,
-        folders: this.updateFolderLabel(folderList, focusedFolder),
-        label: this.tree.structure.label
-      }
-
-      store.commit('SAVE_LABEL', structure)
+      this.hideLabelInput()
+      this.activeStore.commit('SAVE_LABEL', {
+        id: el.id,
+        label: el.label
+      })
     },
-    hideLabelInput: function () {
+    hideLabelInput: function (el) {
+      if (el) {
+        this.saveLabel(el)
+      }
       this.editedFieldId = null
     },
     thumbnail: function (file) {
