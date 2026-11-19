@@ -287,18 +287,10 @@ export default {
       this.activeStore.commit('SELECT', [])
     },
     saveLabel: function (el) {
-      // performance debugging start time
-      console.time('saveLabel-total')
-
       this.hideLabelInput()
       this.activeStore.commit('SAVE_LABEL', {
         id: el.id,
         label: el.label
-      })
-
-      // end time for debugging performance: nextTick waits until Vue has finished updating the DOM
-      this.$nextTick(() => {
-        console.timeEnd('saveLabel-total')
       })
     },
     hideLabelInput: function (el) {

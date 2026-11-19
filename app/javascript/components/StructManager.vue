@@ -959,7 +959,6 @@ export default {
         id: this.tree.structure.id,
         label: this.tree.structure.label
       })
-      // this.$store.commit('SAVE_LABEL', this.tree.structure)
     },
     selectAllGallery: function () {
       this.$store.commit('SELECT', this.gallery.items)
