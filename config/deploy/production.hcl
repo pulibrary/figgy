@@ -64,6 +64,7 @@ locals {
     RESTRICTED_GEODATA_URL = 'https://geodata-restricted.lib.princeton.edu'
     NODE_OPTIONS = '--openssl-legacy-provider'
     PLAUSIBLE_API_KEY = '{{ .PLAUSIBLE_API_KEY }}'
+    OTEL_EXPORTER_OTLP_ENDPOINT = "http://{{ env "attr.unique.network.ip-address" }}:4318"
     {{- end -}}
   EOF
   google_credentials = "{{ with nomadVar \"nomad/jobs/figgy-production\" }}{{ .GOOGLE_CLOUD_CREDENTIALS_BASE64 | base64Decode }}{{ end }}"
