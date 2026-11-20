@@ -1,8 +1,9 @@
 import { mount } from '@vue/test-utils'
+import { reactive } from 'vue'
 import DirectoryContents from '../../components/file_browser/directory_contents.vue'
 
 const folder = () => {
-  return {
+  return reactive({
     'label': 'Subdir2',
     'path': '/Dir2/Subdir2',
     'expandable': true,
@@ -40,7 +41,7 @@ const folder = () => {
         'selectable': true
       }
     ]
-  }
+  })
 }
 
 const disabledFolder = () => {
