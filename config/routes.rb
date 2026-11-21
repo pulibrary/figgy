@@ -56,6 +56,14 @@ Rails.application.routes.draw do
   end
 
   get "/downloads/:resource_id/file/:id(/:as)", to: "downloads#show", as: :download
+
+  # Read-only WebDAV mount. See WebdavController.
+  scope format: false do
+    match "/dav(/*path)", to: "webdav#options", via: :options
+    match "/dav(/*path)", to: "webdav#propfind", via: :propfind
+    match "/dav(/*path)", to: "webdav#show", via: :get
+    match "/dav(/*path)", to: "webdav#read_only", via: [:post, :put, :patch, :delete, :mkcol, :proppatch, :copy, :move, :lock, :unlock]
+  end
   get "/manifests/:id/v3", to: "manifests#v3", as: :manifest_v3, defaults: { format: :json }
   get "/tilemetadata/:id", to: "tile_metadata#metadata", as: :tile_metadata, defaults: { format: :json }
   get "/tilemetadata/:id/tilejson", to: "tile_metadata#tilejson", as: :tile_metadata_tilejson, defaults: { format: :json }

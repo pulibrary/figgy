@@ -19,4 +19,9 @@ worker_timeout 3600
 
 preload_app!
 
+# Puma rejects methods outside a short list with a 501. The read-only WebDAV
+# mount at /dav (WebdavController) needs PROPFIND. Writes (MKCOL, LOCK, etc.)
+# still get rejected here, which is fine for a read-only share.
+supported_http_methods(Puma::Const::SUPPORTED_HTTP_METHODS + ["PROPFIND"])
+
 environment ENV.fetch("RACK_ENV", "development")
