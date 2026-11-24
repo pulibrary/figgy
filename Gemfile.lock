@@ -254,7 +254,7 @@ GEM
       blacklight (>= 7.25.2, < 9)
       deprecation
       view_component (>= 2.54, < 4)
-    bootsnap (1.26.1)
+    bootsnap (1.26.2)
       msgpack (~> 1.5)
     bootstrap (4.6.2.1)
       autoprefixer-rails (>= 9.1.0)
@@ -324,7 +324,7 @@ GEM
       rexml
     crass (1.0.8)
     csv (3.3.7)
-    dalli (5.3.4)
+    dalli (5.4.0)
       logger
     dartsass-sprockets (3.2.1)
       railties (>= 4.0.0)
@@ -1373,7 +1373,7 @@ GEM
       actionview (>= 8.0.0)
       bindex (>= 0.4.0)
       railties (>= 8.0.0)
-    webmock (3.35.0)
+    webmock (3.36.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
