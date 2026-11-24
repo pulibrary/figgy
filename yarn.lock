@@ -632,9 +632,9 @@
     proc-log "^7.0.0"
 
 "@nulib/clover@^4.1.0":
-  version "4.11.5"
-  resolved "https://registry.yarnpkg.com/@nulib/clover/-/clover-4.11.5.tgz#366bc1d0ab30b1365fddf7b5d296689d5b94a8fa"
-  integrity sha512-BRSX70CDy9jWKM54DOzpTsNgqurqEkPcnlka8l0giDpdcbkOlHSaZ9Z7o7gR4NmNz7lQOdRp0/gLYCBAZjzszw==
+  version "4.12.3"
+  resolved "https://registry.yarnpkg.com/@nulib/clover/-/clover-4.12.3.tgz#4994cef44c816c811bb68061d455cc72b30c9ef4"
+  integrity sha512-0l7xcPPgFyg7wtvJHxZgsxD/UjPcQ09uCVWW8kCKm5/pjwKrR4Ou5UCdZLN01zXBfJGa/tcIebk7/8zgFj7Sfg==
   dependencies:
     "@iiif/parser" "^4.0.3"
     "@iiif/presentation-3" "^1.1.3"
@@ -2112,7 +2112,14 @@ doctrine@^2.1.0:
   dependencies:
     esutils "^2.0.2"
 
-dompurify@^3.0.2, dompurify@^3.2.5:
+dompurify@^3.0.2:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.5.0.tgz#4df6b4440b60c8ce3de64d743a11aef9fd4a2891"
+  integrity sha512-LYC0ZkE8P1V42JsRYTwMdme/2ET8SpOc5AA2eOFjP/IadvRd2fwiT4TVz5vkfy0XUx12aS2UaRkTnfVPNOv9vw==
+  optionalDependencies:
+    "@types/trusted-types" "^2.0.7"
+
+dompurify@^3.2.5:
   version "3.4.18"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-3.4.18.tgz#82161003672c8780ad1db0335787e6aa6587e5d2"
   integrity sha512-ofe3wI/uNm68HInABYFJYqQxRw1EaKAjNdrFVKqjUY+UZurvNd2L/HuQe097s/4RivWiZyP6tT7aoT8atjfhwg==

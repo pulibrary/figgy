@@ -324,7 +324,7 @@ GEM
       rexml
     crass (1.0.8)
     csv (3.3.7)
-    dalli (5.3.3)
+    dalli (5.3.4)
       logger
     dartsass-sprockets (3.2.1)
       railties (>= 4.0.0)
