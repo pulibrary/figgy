@@ -40,10 +40,10 @@ GIT
 
 GIT
   remote: https://github.com/samvera/hydra-derivatives.git
-  revision: 08ec0a261e291ce63499c408ef1419b3ee67d136
+  revision: 8f70c0e7327b8f6e38c78d5854790b047547108a
   branch: main
   specs:
-    hydra-derivatives (4.1.0)
+    hydra-derivatives (4.1.1)
       active-fedora (>= 14.0)
       active-triples (>= 1.2)
       active_encode (~> 1.2)
@@ -198,8 +198,8 @@ GEM
       execjs (~> 2)
     awesome_print (1.9.2)
     aws-eventstream (1.4.1)
-    aws-partitions (1.1308.0)
-    aws-sdk-core (3.270.0)
+    aws-partitions (1.1309.0)
+    aws-sdk-core (3.271.0)
       aws-eventstream (~> 1, >= 1.4.1)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -273,7 +273,7 @@ GEM
       sorted_set (~> 1, >= 1.0.2)
     byebug (13.0.0)
       reline (>= 0.6.0)
-    cancancan (3.7.0)
+    cancancan (3.7.1)
     capistrano (3.20.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -404,7 +404,7 @@ GEM
       dry-types (~> 1.8, >= 1.8.2)
       ice_nine (~> 0.11)
       zeitwerk (~> 2.6)
-    dry-types (1.9.1)
+    dry-types (1.9.2)
       bigdecimal (>= 3.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0)
@@ -562,7 +562,7 @@ GEM
       googleapis-common-protos (~> 1.9)
       grpc (>= 1.84.1, < 2.a)
     hashdiff (1.2.2)
-    hashery (2.1.2)
+    hashery (2.2.2)
     hashie (3.6.0)
     health-monitor-rails (12.9.0)
       railties (>= 6.1)
@@ -961,7 +961,7 @@ GEM
       parser
       rainbow (~> 3.0)
       sorbet-runtime (>= 0.5)
-    parser (3.3.13.0)
+    parser (3.3.14.0)
       ast (~> 2.4.1)
       racc
     pdf-core (0.10.0)
@@ -1004,7 +1004,7 @@ GEM
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
-    rack-proxy (2.0.1)
+    rack-proxy (2.0.2)
       rack (>= 2.0, < 4)
     rack-session (2.1.2)
       base64 (>= 0.1.0)
@@ -1173,9 +1173,11 @@ GEM
       rubocop-ast (>= 1.49.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.51.0)
+    rubocop-ast (1.53.0)
+      ast (~> 2.4)
       parser (>= 3.3.7.2)
       prism (>= 1.7)
+      racc
     rubocop-performance (1.27.0)
       lint_roller (~> 1.1)
       rubocop (>= 1.89.0, < 2.0)
@@ -1270,7 +1272,7 @@ GEM
       yard (~> 0.9, >= 0.9.24)
       yard-activesupport-concern (~> 0.0)
       yard-solargraph (~> 0.1)
-    sorbet-runtime (0.6.13690)
+    sorbet-runtime (0.6.13704)
     sord (7.1.0)
       commander (~> 5.0)
       parlour (~> 9.1)
@@ -1376,10 +1378,10 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     websocket (1.2.11)
-    websocket-driver (0.8.2)
+    websocket-driver (0.9.0)
       base64
-      websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.5)
+      websocket-extensions (>= 0.2.0)
+    websocket-extensions (0.2.0)
     whenever (1.1.4)
       chronic (>= 0.6.3)
     xpath (3.2.0)
