@@ -149,7 +149,7 @@ By default, Figgy provides users with the ability to upload binaries from the lo
 
 ##### Preservation Configuration in Development
 
-Figgy uses Google Cloud Storage buckets for providing support for preserving certain resources.  Please find further documentation outlining the configuration for Google Cloud service authentication and permissions management [here](https://github.com/pulibrary/figgy/blob/master/GOOGLE_CLOUD_STORAGE.md).
+Figgy uses Google Cloud Storage buckets for providing support for preserving certain resources.  Please find further documentation outlining the configuration for Google Cloud service authentication and permissions management [here](/docs/technical/preservation/google_cloud_storage.md).
 
 By default, in development, preserved objects will be stored in the directory
 "tmp/cloud_backup." If you'd like to configure and test Google Cloud storage
