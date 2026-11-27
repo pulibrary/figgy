@@ -301,6 +301,12 @@ class CatalogController < ApplicationController
     end
   end
 
+  def thumbnail
+    thumbnail_resource = find_resource(params[:solr_document_id])
+    authorize! :read, thumbnail_resource
+    redirect_to helpers.figgy_thumbnail_url(thumbnail_resource) || helpers.image_path("default.png"), allow_other_host: true
+  end
+
   private
 
     def auth_token_param

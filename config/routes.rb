@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   default_url_options Rails.application.config.action_mailer.default_url_options
 
   get "catalog/:solr_document_id/pdf", to: "catalog#pdf", as: "pdf"
+  get "catalog/:solr_document_id/thumbnail", to: "catalog#thumbnail", as: "thumbnail"
 
   resources :bookmarks do
     concerns :exportable
